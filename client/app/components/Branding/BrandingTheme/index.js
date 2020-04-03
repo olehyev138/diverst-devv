@@ -22,6 +22,7 @@ import DiverstSwitch from 'components/Shared/DiverstSwitch';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
@@ -148,23 +149,40 @@ export function BrandingTheme(props) {
     logo_redirect_url: { default: '' },
   });
 
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        let payload;
-        if (values.use_secondary_color === false) // Don't send secondary color unless they choose to enable it
-          payload = omit(values, 'secondary_color');
-        else
-          payload = values;
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          let payload;
+          if (values.use_secondary_color === false) // Don't send secondary color unless they choose to enable it
+            payload = omit(values, 'secondary_color');
+          else
+            payload = values;
 
-        // Update theme through the enterprise controller
-        props.enterpriseAction({ theme_attributes: payload });
-      }}
+          // Update theme through the enterprise controller
+          props.enterpriseAction({ theme_attributes: payload });
+          handleClickOpen();
+        }}
 
-      render={formikProps => <BrandingThemeInner {...props} {...formikProps} />}
-    />
+        render={formikProps => <BrandingThemeInner {...props} {...formikProps} />}
+      />
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 
