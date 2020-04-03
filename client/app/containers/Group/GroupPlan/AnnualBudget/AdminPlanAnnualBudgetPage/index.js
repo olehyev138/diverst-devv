@@ -22,6 +22,8 @@ import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetB
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
 
@@ -92,6 +94,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -110,4 +113,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AdminAnnualBudgetPage);
+)(Conditional(
+  AdminAnnualBudgetPage,
+  ['permissions.manage_all_budgets'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage all budgets',
+));

@@ -65,12 +65,12 @@ class AnnualBudget < ApplicationRecord
 
   def can_be_reset?
     unless no_active_initiatives?
-      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
+      errors.add(:initiatives, 'expenses still have not all been')
       return false
     end
 
     unless no_open_budgets?
-      errors.add(:budget_items, 'There cannot be any open budgets')
+      errors.add(:budget_items, 'have not all been closed')
       return false
     end
 
