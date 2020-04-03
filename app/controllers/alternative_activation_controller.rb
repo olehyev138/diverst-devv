@@ -5,15 +5,15 @@ class AlternativeActivationController < ApplicationController
   end
 
   def activate
-    dob = params[:user][:dob]
-    notifications_email = params[:user][:notifications_email]
-    user = User.find_by(email: params[:user][:email])
+    dob = activation_params[:dob]
+    notifications_email = activation_params[:notifications_email]
+    user = User.find_by(email: activation_params[:email])
 
     if user.present?
       user_dob = user.birthday
 
       if user_dob == dob
-        user&.update notifications_email: params[:notifications_email]
+        user&.update notifications_email: activation_params[:notifications_email]
         flash[:notice] = 'You will receive an email shortly with a link to activate your account.'
         user&.invite!
         render :new
@@ -25,5 +25,11 @@ class AlternativeActivationController < ApplicationController
       flash[:alert] = 'Your account does not exists'
       render :new
     end
+  end
+
+  private
+
+  def activation_params
+    params.require(:user).permit(:notifications_email, :email, :dob)
   end
 end
