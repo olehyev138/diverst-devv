@@ -18,6 +18,8 @@ import {
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
+
 
 /* eslint-disable object-curly-newline */
 export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -202,16 +204,34 @@ export function CustomTextForm(props) {
     privacy_statement: { default: 'Privacy Statement TEST' }
   });
 
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.customTextAction(values);
-      }}
-    >
-      {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
-    </Formik>
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.customTextAction(values);
+          handleClickOpen();
+        }
+        }
+      >
+        {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
+      </Formik>
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 

@@ -67,6 +67,7 @@ module "backend" {
   sidekiq_password = var.sidekiq_password
 
   db_address  = module.db.db_address
+  db_name     = var.db_name
   db_port     = module.db.db_port
   db_username = var.db_username
   db_password = var.db_password
@@ -104,5 +105,10 @@ data "aws_instance" "app" {
   filter {
     name    = "tag:Name"
     values  = ["${var.env_name}-env"]
+  }
+
+  filter {
+    name    = "instance-state-name"
+    values  = ["running"]
   }
 }

@@ -18,6 +18,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -342,16 +343,33 @@ export function EnterpriseConfiguration(props) {
     time_zone: { default: null }
   });
 
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.enterpriseAction(mapFields(values, ['time_zone']));
-      }}
-    >
-      {formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}
-    </Formik>
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.enterpriseAction(mapFields(values, ['time_zone']));
+          handleClickOpen();
+        }}
+      >
+        {formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}
+      </Formik>
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 

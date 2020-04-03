@@ -26,7 +26,9 @@ import {
 import Select from 'components/Shared/DiverstSelect';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
+
 
 const styles = theme => ({
   noBottomPadding: {
@@ -80,16 +82,34 @@ export function BrandingHome(props) {
     home_message: { default: '' },
   });
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.enterpriseAction(values);
-      }}
+  const [open, setOpen] = React.useState(false);
 
-      render={formikProps => <BrandingHomeInner {...props} {...formikProps} />}
-    />
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  return (
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.enterpriseAction(values);
+          handleClickOpen();
+        }}
+
+        render={formikProps => <BrandingHomeInner {...props} {...formikProps} />}
+      />
+
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 
