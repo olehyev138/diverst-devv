@@ -30,7 +30,7 @@ resource "aws_elastic_beanstalk_application" "eb_app" {
 resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   name			      = "${var.env_name}-env"
   application		  = aws_elastic_beanstalk_application.eb_app.name
-  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.2 running Ruby 2.6 (Puma)"
+  solution_stack_name = var.solution_stack
   tier                = "WebServer"
 
   # Instance Profile
@@ -51,9 +51,9 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   # Healthcheck
   setting {
     namespace = "aws:elasticbeanstalk:environment:process:default"
-    name = "HealthCheckPath"
-    value = "/health"
-    resource = ""
+    name      = "HealthCheckPath"
+    value     = "/health"
+    resource  = ""
   }
 
   # Auto Scaling settings
@@ -68,18 +68,18 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
 
   # Maximum instances
   setting {
-    namespace = "aws:autoscaling:asg"
-    name = "MaxSize"
-    value = var.asg_max
-    resource = ""
+    namespace   = "aws:autoscaling:asg"
+    name        = "MaxSize"
+    value       = var.asg_max
+    resource    = ""
   }
 
   # EC2 Type
   setting {
-    namespace = "aws:ec2:instances"
-    name = "InstanceTypes"
-    value = var.ec2_type
-    resource = ""
+    namespace   = "aws:ec2:instances"
+    name        = "InstanceTypes"
+    value       = var.ec2_type
+    resource    = ""
   }
 
   # Load Balancer type
@@ -95,7 +95,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:ec2:vpc"
     name        = "ELBSubnets"
     value       = join(",", sort(var.sn_elb.*.id))
-    resource  = ""
+    resource    = ""
   }
 
   # Subnet for ASG EC2 instances
@@ -103,7 +103,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:ec2:vpc"
     name        = "Subnets"
     value       = join(",", sort(var.sn_app.*.id))
-    resource  = ""
+    resource    = ""
   }
 
   # Security group for load balancer - have to use both settings
@@ -111,14 +111,14 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:elbv2:loadbalancer"
     name        = "ManagedSecurityGroup"
     value       = var.sg_elb.id
-    resource  = ""
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elbv2:loadbalancer"
     name        = "SecurityGroups"
     value       = var.sg_elb.id
-    resource  = ""
+    resource    = ""
   }
 
   # Security group for ASG EC2 instances
@@ -126,7 +126,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:autoscaling:launchconfiguration"
     name        = "SecurityGroups"
     value       = var.sg_app.id
-    resource  = ""
+    resource    = ""
   }
 
   # Env Variables
@@ -134,87 +134,87 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_ENV"
     value       = "production"
-    resource  = ""
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_SKIP_MIGRATIONS"
     value       = "true"
-    resource  = ""
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_SKIP_ASSET_COMPILATION"
     value       = "true"
-    resource  = ""
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "PORT"
-    value        = "80"
-    resource  = ""
+    value       = "80"
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "REDIS_PROVIDER"
-    value        = "REDIS_URL"
-    resource  = ""
+    value       = "REDIS_URL"
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "REDIS_URL"
     value       = "redis://${var.job_store_endpoint}:6379/0"
-    resource  = ""
+    resource    = ""
   }
 
   # TODO: use vars & secrets
   setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name = "SIDEKIQ_DASHBOARD_USERNAME"
-    value = var.db_username
-    resource  = ""
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "SIDEKIQ_DASHBOARD_USERNAME"
+    value       = var.db_username
+    resource    = ""
   }
 
   # TODO: use vars & secrets
   setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name = "SIDEKIQ_DASHBOARD_PASSWORD"
-    value = var.db_password
-    resource  = ""
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "SIDEKIQ_DASHBOARD_PASSWORD"
+    value       = var.db_password
+    resource    = ""
   }
 
   # TODO: generate this & store somewhere proper
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_MASTER_KEY"
-    value        = "0cd095760c9ff9a780b97332b683bc3a"
-    resource  = ""
+    value       = "0cd095760c9ff9a780b97332b683bc3a"
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "S3_BUCKET_NAME"
-    value        = var.filestorage_bucket_id
-    resource  = ""
+    value       = var.filestorage_bucket_id
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "S3_REGION"
-    value        = var.region
-    resource  = ""
+    value       = var.region
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:autoscaling:launchconfiguration"
     name        = "EC2KeyName"
     value       = var.ssh_key_name
-    resource  = ""
+    resource    = ""
   }
 
   # Database env variables
@@ -222,28 +222,35 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_HOST"
-    value        = var.db_address
-    resource  = ""
+    value       = var.db_address
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "DATABASE_NAME"
+    value       = var.db_name
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_USERNAME"
-    value        = var.db_username
-    resource  = ""
+    value       = var.db_username
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_PASSWORD"
-    value        = var.db_password
-    resource  = ""
+    value       = var.db_password
+    resource    = ""
   }
 
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_PORT"
-    value        = var.db_port
-    resource  = ""
+    value       = var.db_port
+    resource    = ""
   }
 }

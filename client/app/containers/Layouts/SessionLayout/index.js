@@ -40,8 +40,7 @@ const SessionLayout = ({ component: Component, ...props }) => {
     const query = new URLSearchParams(props.location.search);
     const enterpriseId = query.get('enterpriseId');
 
-    if (!props.enterprise)
-      props.findEnterpriseBegin(enterpriseId ? { enterprise_id: enterpriseId } : {});
+    props.findEnterpriseBegin(enterpriseId ? { enterprise_id: enterpriseId } : {});
   }, []);
 
   if (authenticated) return <Redirect to={ROUTES.user.home.path()} />;

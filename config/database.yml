@@ -4,6 +4,7 @@ default: &default
   host: <%= ENV["DATABASE_HOST"] %>
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
+  database: <%= ENV["DATABASE_NAME"] || "diverst" %>
   username: <%= ENV["DATABASE_USERNAME"] || "root" %>
   password: <%= ENV["DATABASE_PASSWORD"] %>
   encoding: utf8mb4
@@ -24,4 +25,3 @@ test:
 
 production:
   <<: *default
-  database: diverst_production
