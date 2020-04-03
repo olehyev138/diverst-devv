@@ -22,13 +22,14 @@ import {
   selectIsFetchingPolicies,
   selectPoliciesTotal
 } from 'containers/User/UserPolicy/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 
 import {
   policiesUnmount, getPoliciesBegin,
 } from 'containers/User/UserPolicy/actions';
 
 import PolicyTemplatesList from 'components/GlobalSettings/PolicyTemplate/PolicyTemplatesList';
+import Conditional from 'components/Compositions/Conditional';
 
 const handlePolicyEdit = id => push(ROUTES.admin.system.users.policy_templates.edit.path(id));
 
@@ -102,6 +103,7 @@ const mapStateToProps = createStructuredSelector({
   policies: selectPaginatedPolicies(),
   policiesTotal: selectPoliciesTotal(),
   isFetching: selectIsFetchingPolicies(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -118,4 +120,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(PolicyTemplatesPage);
+)(Conditional(
+  PolicyTemplatesPage,
+  ['permissions.policy_templates_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage policy templates'
+));

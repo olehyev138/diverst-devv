@@ -27,7 +27,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import {permission} from "utils/permissionsHelpers";
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   userRoleListItem: {

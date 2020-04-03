@@ -24,8 +24,8 @@ import {
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
-import Conditional from "components/Compositions/Conditional";
-import {UserRoleListPage} from "containers/User/UserRole/UserRoleListPage";
+import Conditional from 'components/Compositions/Conditional';
+import { UserRoleListPage } from 'containers/User/UserRole/UserRoleListPage';
 
 export function UserRoleEditPage(props) {
   useInjectReducer({ key: 'roles', reducer });

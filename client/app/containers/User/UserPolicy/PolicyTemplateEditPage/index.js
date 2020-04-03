@@ -25,6 +25,7 @@ import {
 } from 'containers/User/UserPolicy/actions';
 
 import PolicyForm from 'components/GlobalSettings/PolicyTemplate/PolicyForm';
+import Conditional from 'components/Compositions/Conditional';
 
 export function PolicyEditPage(props) {
   useInjectReducer({ key: 'policies', reducer });
@@ -89,4 +90,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(PolicyEditPage);
+)(Conditional(
+  PolicyEditPage,
+  ['currentPolicy.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.system.users.policy_templates.index.path(),
+  'You don\'t have permission to edit this policy template'
+));

@@ -23,8 +23,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
-import Conditional from "components/Compositions/Conditional";
-import {UserRoleListPage} from "containers/User/UserRole/UserRoleListPage";
+import Conditional from 'components/Compositions/Conditional';
+import { UserRoleListPage } from 'containers/User/UserRole/UserRoleListPage';
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });

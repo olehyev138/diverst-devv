@@ -60,7 +60,7 @@ export function SystemUsersLinks(props) {
 
 SystemUsersLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object
 };
 

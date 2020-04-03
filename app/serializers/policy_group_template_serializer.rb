@@ -1,4 +1,6 @@
 class PolicyGroupTemplateSerializer < ApplicationRecordSerializer
+  attributes :permissions
+
   def serialize_all_fields
     true
   end

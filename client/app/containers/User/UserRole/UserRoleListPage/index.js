@@ -32,9 +32,9 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleList from 'components/User/UserRole/UserRoleList';
-import Conditional from "components/Compositions/Conditional";
-import {CampaignListPage} from "containers/Innovate/Campaign/CampaignListPage";
-import {selectPermissions} from "containers/Shared/App/selectors";
+import Conditional from 'components/Compositions/Conditional';
+import { CampaignListPage } from 'containers/Innovate/Campaign/CampaignListPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function UserRoleListPage(props) {
   useInjectReducer({ key: 'roles', reducer });
