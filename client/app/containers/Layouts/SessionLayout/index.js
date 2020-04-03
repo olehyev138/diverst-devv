@@ -18,6 +18,10 @@ import ApplicationLayout from '../ApplicationLayout';
 import AuthService from 'utils/authService';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from 'containers/Shared/App/messages';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
 const styles = theme => ({
   container: {
     height: '100%',
@@ -75,7 +79,7 @@ const SessionLayout = ({ component: Component, ...props }) => {
                     <br />
                     <br />
                     <Typography variant='h6' color='primary'>
-                      Unable to connect to server
+                      <DiverstFormattedMessage {...messages.errors.findEnterprise} />
                     </Typography>
                   </CardContent>
                 </Card>
