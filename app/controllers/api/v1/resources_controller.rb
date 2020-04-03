@@ -24,6 +24,6 @@ class Api::V1::ResourcesController < DiverstController
             :file,
             :resource_type,
             :group_id
-        )
+          )
   end
 end
