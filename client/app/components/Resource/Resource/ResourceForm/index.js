@@ -22,6 +22,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -91,24 +92,32 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
                   <Field
                     component={Switch}
                     color='primary'
-                    onChange={handleChange}
+                    onChange={(_, switchValue) => setFieldValue('resource_type', switchValue ? 'file' : 'url')}
                     disabled={props.isCommitting}
-                    id='type'
-                    name='type'
+                    id='resource_type'
+                    name='resource_type'
                     margin='normal'
-                    checked={values.type}
-                    value={values.type}
+                    checked={values.resource_type === 'file'}
+                    value={values.resource_type}
                   />
                 )}
                 label='URL / File'
               />
             </FormControl>
-            {values.type && (
-              <h3>
-                To Be Added: File Upload
-              </h3>
+            {values.resource_type === 'file' && (
+              <Field
+                component={DiverstFileInput}
+                fileName={props.resource && props.resource.file_file_name}
+                disabled={props.isCommitting}
+                fullWidth
+                id='file'
+                name='file'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.file} />}
+                value={values.file}
+              />
             )}
-            {!values.type && (
+            {values.resource_type === 'url' && (
               <Field
                 component={TextField}
                 onChange={handleChange}
@@ -148,7 +157,8 @@ export function ResourceForm(props) {
     title: { default: '' },
     folder: { default: props.currentFolder ? { value: props.currentFolder.id, label: props.currentFolder.name } : null, customKey: 'folder_id' },
     url: { default: '' },
-    type: { default: false },
+    file: { default: null },
+    resource_type: { default: 'url' },
     group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
   });
 
