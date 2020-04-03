@@ -1,0 +1,22 @@
+<h2>Get the activation link for your profile</h2>
+
+<%= simple_form_for(:user, url: alternative_activation_activate_path, html: { method: :post }) do |f| %>
+  <%= f.input :email, label: 'Employee ID', autofocus: true %>
+  <%= f.input :notifications_email, label: 'Email' %>
+  <%= f.input :dob, label: 'Date of Birth', placeholder: 'mm-dd' %>
+  <%= f.button :submit, value: "Send activation link" %>
+<% end %>
+
+<% content_for :links do %>
+  <div class="text-center">
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function(){
+    var primary_color = $('body').data('primary-color');
+    if( primary_color ) {
+      $('body').css('background', primary_color);
+    }
+  });
+</script>

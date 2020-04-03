@@ -154,6 +154,13 @@ class User < BaseClass
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  attr_accessor :dob
+
+  def birthday
+    field = enterprise.fields.find_by(title: 'Birthday')
+    info[field]
+  end
+
   def pending_rewards
     user_rewards.where(status: 0)
   end

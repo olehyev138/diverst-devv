@@ -1537,7 +1537,6 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
