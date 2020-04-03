@@ -62,6 +62,7 @@ class Api::V1::SessionsController < DiverstController
           rewards_manage: EnterprisePolicy.new(user, user.enterprise).diversity_manage?,
           archive_manage: EnterprisePolicy.new(user, user.enterprise).auto_archive_settings_manage?,
           posts_manage: EnterprisePolicy.new(user, user.enterprise).manage_posts?,
+          enterprise_manage: EnterprisePolicy.new(user, []).enterprise_manage?,
           manage_all_budgets: BudgetPolicy.new(user, []).manage_all_budgets?,
 
           edit_posts: GroupPolicy.new(user, Group).manage_all_groups? && EnterprisePolicy.new(user, user.enterprise).manage_posts?,

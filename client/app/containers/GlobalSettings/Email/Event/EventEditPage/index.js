@@ -26,6 +26,8 @@ import EventForm from 'components/GlobalSettings/Email/EventForm';
 import messages from 'containers/GlobalSettings/Email/Event/messages';
 import globalMessages from 'containers/Shared/App/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'mailEvents', reducer });
@@ -86,6 +88,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectFormEvent(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingEvent(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -103,4 +106,9 @@ export default compose(
   withConnect,
   injectIntl,
   memo,
-)(EventEditPage);
+)(Conditional(
+  EventEditPage,
+  ['permissions.emails_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage emails'
+));

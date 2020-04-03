@@ -16,7 +16,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectIsCommitting } from 'containers/GlobalSettings/CustomText/selectors';
-import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText, selectPermissions } from 'containers/Shared/App/selectors';
 
 import {
   updateCustomTextBegin,
@@ -25,6 +25,8 @@ import {
 import CustomTextForm from 'components/GlobalSettings/CustomText/CustomTextForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/CustomText/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { UserListPage } from 'containers/User/UsersPage';
 
 export function CustomTextEditPage(props) {
   useInjectReducer({ key: 'custom_text', reducer });
@@ -63,6 +65,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   customText: selectCustomText(),
   isCommitting: selectIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -78,4 +81,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CustomTextEditPage);
+)(Conditional(
+  CustomTextEditPage,
+  ['permissions.custom_text_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage custom texts'
+));

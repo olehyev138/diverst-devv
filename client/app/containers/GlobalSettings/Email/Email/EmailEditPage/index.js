@@ -16,7 +16,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { selectEmail, selectIsCommitting, selectIsFetchingEmail } from 'containers/GlobalSettings/Email/Email/selectors';
 
 import {
@@ -25,6 +25,8 @@ import {
 } from 'containers/GlobalSettings/Email/Email/actions';
 
 import EmailForm from 'components/GlobalSettings/Email/EmailForm';
+import Conditional from 'components/Compositions/Conditional';
+import { SSOSettingsPage } from 'containers/GlobalSettings/SSOSettingsPage';
 
 export function EmailEditPage(props) {
   useInjectReducer({ key: 'emails', reducer });
@@ -76,6 +78,7 @@ const mapStateToProps = createStructuredSelector({
   currentEmail: selectEmail(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingEmail(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -92,4 +95,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EmailEditPage);
+)(Conditional(
+  EmailEditPage,
+  ['permissions.emails_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage emails'
+));
