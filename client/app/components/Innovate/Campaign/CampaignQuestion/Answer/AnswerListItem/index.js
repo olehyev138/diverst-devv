@@ -36,7 +36,7 @@ AnswerListItem.propTypes = {
   currentAnswer: PropTypes.object,
   getQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   question: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,

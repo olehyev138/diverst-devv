@@ -80,7 +80,7 @@ CampaignQuestionShowPage.propTypes = {
   getQuestionBegin: PropTypes.func,
   updateQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   question: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,

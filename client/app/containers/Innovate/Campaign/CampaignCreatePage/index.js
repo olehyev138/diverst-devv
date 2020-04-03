@@ -26,6 +26,9 @@ import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { CampaignEditPage } from 'containers/Innovate/Campaign/CampaignEditPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function CampaignCreatePage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -64,6 +67,7 @@ CampaignCreatePage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
   isCommitting: selectIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -81,4 +85,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CampaignCreatePage);
+)(Conditional(
+  CampaignCreatePage,
+  ['permissions.campaigns_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to create campaigns'
+));
