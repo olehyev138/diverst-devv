@@ -2,9 +2,11 @@ env_name      = "testing"
 region        = "us-east-1"
 ssh_key_name  = "key_testing"
 
-backend_asg_min   = 1
-backend_asg_max   = 4
-backend_ec2_type  = "t2.small"
+
+backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.4 running Ruby 2.6 (Puma)"
+backend_asg_min         = 1
+backend_asg_max         = 4
+backend_ec2_type        = "t2.small"
 
 sidekiq_username = "admin"
 sidekiq_password = "8XS0WoHBdNBW4HPfa7kNh4*JZ2MGoo2%"
