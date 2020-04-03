@@ -15,8 +15,11 @@ class DiverstController < ApplicationController
 
   def error_json(e)
     json = { message: e.message }
-    json.merge({ attribute: e.attribute }) if e.respond_to?(:attribute)
-    json.merge({ backtrace: e.backtrace, cause: e.cause&.backtrace }) if Rails.env.development? || Rails.env.test?
+    json[:attribute] = e.attribute if e.respond_to?(:attribute)
+    if Rails.env.development? || Rails.env.test?
+      json[:backtrace] = e.backtrace
+      json[:cause] = e.cause&.backtrace
+    end
 
     json
   end

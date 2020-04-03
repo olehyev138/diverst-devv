@@ -29,8 +29,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
-import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 import Permission from 'components/Shared/DiverstPermission';
+import dig from 'object-dig';
 
 const styles = theme => ({
   grow: {
@@ -126,11 +126,11 @@ export class ApplicationHeader extends React.PureComponent {
   render() {
     const { menuAnchor } = this.state;
     const {
-      classes, enterprise, group, position, isAdmin, user, permissions
+      classes, group, position, isAdmin, user, permissions
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
-    const { adminPath } = permissions;
+    const adminPath = dig(permissions, 'adminPath');
 
     const renderMenu = (
       <Menu
