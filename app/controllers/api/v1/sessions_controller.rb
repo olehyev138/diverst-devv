@@ -60,6 +60,8 @@ class Api::V1::SessionsController < DiverstController
           emails_manage: EnterprisePolicy.new(user, user.enterprise).manage_branding?,
           integrations_manage: EnterprisePolicy.new(user, user.enterprise).sso_manage?,
           rewards_manage: EnterprisePolicy.new(user, user.enterprise).diversity_manage?,
+          archive_manage: EnterprisePolicy.new(user, user.enterprise).auto_archive_settings_manage?,
+          posts_manage: EnterprisePolicy.new(user, user.enterprise).manage_posts?,
 
           edit_posts: GroupPolicy.new(user, Group).manage_all_groups? && EnterprisePolicy.new(user, user.enterprise).manage_posts?,
       }

@@ -37,7 +37,7 @@ export default function Conditional(
   redirect = null,
   message = null,
   wait = false,
-  reducer = a => a.reduce((sum, v) => sum || v, false)
+  reducer = a => a.some(v => v)
 ) {
   const WrappedComponent = (props) => {
     const [first, setFirst] = useState(true);
