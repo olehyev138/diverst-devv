@@ -20,9 +20,10 @@ resource "aws_key_pair" "aws-tf-key" {
 module "prod" {
   source = "../base-prod"
 
-  backend_asg_min   = var.backend_asg_min
-  backend_asg_max   = var.backend_asg_max
-  backend_ec2_type  = var.backend_ec2_type
+  backend_solution_stack  = var.backend_solution_stack
+  backend_asg_min         = var.backend_asg_min
+  backend_asg_max         = var.backend_asg_max
+  backend_ec2_type        = var.backend_ec2_type
 
   sidekiq_username = var.sidekiq_username
   sidekiq_password = var.sidekiq_password
