@@ -23,6 +23,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
+import Conditional from "components/Compositions/Conditional";
+import {UserRoleListPage} from "containers/User/UserRole/UserRoleListPage";
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -76,4 +78,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(UserRoleCreatePage);
+)(Conditional(
+  UserRoleListPage,
+  ['permissions.policy_templates_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to create user roles'
+));

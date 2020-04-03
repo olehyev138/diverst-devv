@@ -27,6 +27,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import {permission} from "utils/permissionsHelpers";
 
 const styles = theme => ({
   userRoleListItem: {
@@ -77,21 +78,26 @@ export function UserRoleList(props, context) {
             dataArray={Object.values(props.userRoles)}
             dataTotal={props.userRoleTotal}
             columns={columns}
-            actions={[{
-              icon: () => <EditIcon />,
-              tooltip: intl.formatMessage(messages.edit),
-              onClick: (_, rowData) => {
-                props.handleVisitUserRoleEdit(rowData.id);
-              }
-            }, {
-              icon: () => <DeleteIcon />,
-              tooltip: intl.formatMessage(messages.delete),
-              onClick: (_, rowData) => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
-                  props.deleteUserRoleBegin(rowData.id);
-              }
-            }]}
+            actions={[
+              rowData => ({
+                icon: () => <EditIcon />,
+                tooltip: intl.formatMessage(messages.edit),
+                onClick: (_, rowData) => {
+                  props.handleVisitUserRoleEdit(rowData.id);
+                },
+                disabled: !permission(rowData, 'update?')
+              }),
+              rowData => ({
+                icon: () => <DeleteIcon />,
+                tooltip: intl.formatMessage(messages.delete),
+                onClick: (_, rowData) => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    props.deleteUserRoleBegin(rowData.id);
+                },
+                disabled: !permission(rowData, 'destroy?')
+              })
+            ]}
           />
         </Grid>
       </Grid>

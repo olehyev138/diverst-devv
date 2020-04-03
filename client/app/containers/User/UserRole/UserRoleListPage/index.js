@@ -32,6 +32,9 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleList from 'components/User/UserRole/UserRoleList';
+import Conditional from "components/Compositions/Conditional";
+import {CampaignListPage} from "containers/Innovate/Campaign/CampaignListPage";
+import {selectPermissions} from "containers/Shared/App/selectors";
 
 export function UserRoleListPage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -96,7 +99,8 @@ UserRoleListPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   userRoles: selectPaginatedUserRoles(),
   userRoleTotal: selectUserRoleTotal(),
-  isFetchingUserRoles: selectIsFetchingUserRoles()
+  isFetchingUserRoles: selectIsFetchingUserRoles(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -114,4 +118,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserRoleListPage);
+)(Conditional(
+  UserRoleListPage,
+  ['permissions.policy_templates_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage user roles'
+));
