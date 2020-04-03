@@ -18,11 +18,11 @@ class AlternativeActivationController < ApplicationController
         user&.invite!
         render :new
       else
-        flash[:alert] = 'Your account does not exists'
+        flash[:alert] = 'Incorrect credentials or account does not exists'
         render :new
       end
     else
-      flash[:alert] = 'Your account does not exists'
+      flash[:alert] = 'Incorrect credentials or account does not exists'
       render :new
     end
   end
