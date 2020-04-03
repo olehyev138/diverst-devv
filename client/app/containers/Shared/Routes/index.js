@@ -231,6 +231,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
 
       { /* Admin - System - GlobalSettings */ }
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />

@@ -812,6 +812,10 @@ export const ROUTES = {
       },
       globalSettings: {
         pathPrefix: '/admin/system/settings',
+        index: {
+          path: () => '/admin/system/settings',
+          titleMessage: messages.admin.system.globalSettings,
+        },
         fields: {
           index: {
             path: () => '/admin/system/settings/fields',
