@@ -23,8 +23,8 @@ Rails.application.routes.draw do
 
   resources :onboarding, only: [:index]
 
-  get 'nonsso_activation/new', to: 'nonsso_activation#new'
-  post 'nonsso_activation/activate', to: 'nonsso_activation#activate'
+  get 'alternative_activation/new', to: 'alternative_activation#new'
+  post 'alternative_activation/activate', to: 'alternative_activation#activate'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

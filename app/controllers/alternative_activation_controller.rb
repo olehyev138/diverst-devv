@@ -1,4 +1,4 @@
-class NonssoActivationController < ApplicationController
+class AlternativeActivationController < ApplicationController
   layout 'auth'
 
   def new
@@ -18,7 +18,7 @@ class NonssoActivationController < ApplicationController
         user&.invite!
         render :new
       else
-        flash[:alert] = 'Incorrect credentials'
+        flash[:alert] = 'Your account does not exists'
         render :new
       end
     else
