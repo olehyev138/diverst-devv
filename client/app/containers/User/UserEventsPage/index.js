@@ -12,13 +12,14 @@ import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
 import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents } from 'containers/User/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
+import Conditional from 'components/Compositions/Conditional';
 
 const EventTypes = Object.freeze({
   upcoming: 0,
@@ -182,7 +183,8 @@ const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoadingEvents(),
-  currentSession: selectUser()
+  currentSession: selectUser(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -198,4 +200,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EventsPage);
+)(Conditional(
+  EventsPage,
+  ['permissions.events_view'],
+  (props, rs) => ROUTES.user.home.path(),
+  'You don\'t have permission view events'
+));
