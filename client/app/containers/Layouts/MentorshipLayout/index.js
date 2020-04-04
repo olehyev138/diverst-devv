@@ -18,12 +18,18 @@ import dig from 'object-dig';
 
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
-import { selectMentoringInterests, selectUser as selectUserSession } from 'containers/Shared/App/selectors';
+import {
+  selectEnterprise,
+  selectMentoringInterests,
+  selectUser as selectUserSession
+} from 'containers/Shared/App/selectors';
 import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { CardContent, Grid } from '@material-ui/core';
 import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -111,6 +117,7 @@ const mapStateToProps = createStructuredSelector({
   userSession: selectUserSession(),
   user: selectUser(),
   formUser: selectFormUser(),
+  enterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {
@@ -129,4 +136,10 @@ export default compose(
   withConnect,
   memo,
   withStyles(styles),
-)(MentorshipLayout);
+)(Conditional(
+  MentorshipLayout,
+  ['enterprise.mentorship_module_enabled'],
+  (props, rs) => ROUTES.user.root.path(),
+  'Mentorship is not enabled',
+  true
+));

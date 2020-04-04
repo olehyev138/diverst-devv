@@ -49,6 +49,9 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import MentorList from 'components/Mentorship/MentorList';
+import Conditional from 'components/Compositions/Conditional';
+import dig from 'object-dig';
+import { selectUser } from 'containers/Mentorship/selectors';
 
 const Types = Object.freeze({
   current: 0,
@@ -227,6 +230,7 @@ const mapStateToProps = createStructuredSelector({
   mentees: selectPaginatedMentees(),
   mentorshipsTotal: selectMentorshipsTotal(),
   isFetchingMentorships: selectIsFetchingMentorships(),
+  user: selectUser(),
 });
 
 const mapDispatchToProps = {
@@ -245,4 +249,10 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(MentorsPage);
+)(Conditional(
+  MentorsPage,
+  ['user.permissions.show?'],
+  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  'You are not authorized to view this user\'s mentors or mentees',
+  true
+));
