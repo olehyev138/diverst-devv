@@ -26,10 +26,10 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import messages from 'containers/Session/LoginPage/messages';
-import {selectEnterprise, selectPermissions, selectUser} from "containers/Shared/App/selectors";
-import WithPermission from "components/Compositions/WithPermission";
-import dig from 'object-dig'
-import {permission} from "utils/permissionsHelpers";
+import { selectEnterprise, selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import WithPermission from 'components/Compositions/WithPermission';
+import dig from 'object-dig';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
