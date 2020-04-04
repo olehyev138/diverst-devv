@@ -147,8 +147,10 @@ export function EventsPage(props) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || EventsList;
+
   return (
-    <EventsList
+    <List
       events={props.events}
       eventsTotal={props.eventsTotal}
       currentTab={tab}
@@ -177,6 +179,7 @@ EventsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  listComponent: PropTypes.elementType,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -22,6 +22,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
+import EventsList from "components/Event/EventsList";
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
@@ -54,9 +55,11 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || NewsFeed;
+
   return (
     <React.Fragment>
-      <NewsFeed
+      <List
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
         defaultParams={params}
@@ -80,6 +83,7 @@ NewsFeedPage.propTypes = {
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  listComponent: PropTypes.elementType,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
