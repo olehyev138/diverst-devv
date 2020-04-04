@@ -19,6 +19,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import EventsPage from 'containers/Event/EventsPage';
+import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
 
 const styles = theme => ({
   title: {
@@ -35,6 +37,24 @@ const styles = theme => ({
 export class HomePage extends React.PureComponent {
   render() {
     const { classes } = this.props;
+
+    const events = (
+      <Paper>
+        <CardContent>
+          <Typography variant='h5' className={classes.title}>
+            Upcoming Events
+          </Typography>
+          <EventsPage
+            listComponent={EventsList}
+            loaderProps={{
+              transitionProps: {
+                direction: 'right',
+              },
+            }}
+          />
+        </CardContent>
+      </Paper>
+    );
 
     return (
       <React.Fragment>
