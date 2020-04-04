@@ -23,6 +23,9 @@ class Api::V1::SessionsController < DiverstController
           groups_manage: GroupPolicy.new(user, Group).manage?,
           groups_calendars: GroupPolicy.new(user, Group).calendar?,
 
+          news_view: NewsFeedLinkPolicy.new(user, NewsFeedLink).index?,
+          events_view: InitiativePolicy.new(user, Initiative).index?,
+
           segments_view: SegmentPolicy.new(user, Segment).index?,
           segments_create: SegmentPolicy.new(user, Segment).create?,
           segments_manage: SegmentPolicy.new(user, Segment).manage?,
