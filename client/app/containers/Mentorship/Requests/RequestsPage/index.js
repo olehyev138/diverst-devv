@@ -173,7 +173,6 @@ const mapStateToProps = createStructuredSelector({
   requestsTotal: selectRequestsTotal(),
   isFetchingRequests: selectIsFetchingRequests(),
   successfulChange: selectSuccessfulChange(),
-  user: selectUser(),
 });
 
 const mapDispatchToProps = {

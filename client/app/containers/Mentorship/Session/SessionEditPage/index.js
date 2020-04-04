@@ -16,12 +16,15 @@ import {
   getSessionBegin, sessionsUnmount, updateSessionBegin, createSessionBegin
 } from 'containers/Mentorship/Session/actions';
 
-import { selectFormSession } from 'containers/Mentorship/Session/selectors';
-import { selectMentoringInterests, selectMentoringTypes } from 'containers/Shared/App/selectors';
+import { selectFormSession, selectIsFetchingSession } from 'containers/Mentorship/Session/selectors';
+import { selectMentoringInterests, selectMentoringTypes, selectPermissions } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
+import dig from 'object-dig';
+import { MentorsPage } from 'containers/Mentorship/Requests/RequestsPage';
 
 export function SessionProfilePage(props) {
   useInjectReducer({ key: 'sessions', reducer });
@@ -72,6 +75,7 @@ SessionProfilePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   formSession: selectFormSession(),
+  isFormLoading: selectIsFetchingSession(),
   interestOptions: selectMentoringInterests(),
 });
 
@@ -91,4 +95,11 @@ export default compose(
   withConnect,
   injectIntl,
   memo,
-)(SessionProfilePage);
+)(Conditional(
+  SessionProfilePage,
+  ['type', 'formSession.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  'You are not authorized to edit this session',
+  false,
+  a => a[0] !== 'edit' || a.slice(1, 3).some(b => b)
+));

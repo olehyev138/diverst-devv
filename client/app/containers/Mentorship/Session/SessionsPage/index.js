@@ -26,6 +26,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SessionsList from 'components/Mentorship/SessionsList';
+import Conditional from 'components/Compositions/Conditional';
 
 const SessionTypes = Object.freeze({
   upcoming: 2,
@@ -188,4 +189,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SessionsPage);
+)(Conditional(
+  SessionsPage,
+  ['user.permissions.update?'],
+  (props, rs) => ROUTES.user.root.path(),
+  'You are not authorized to view this users sessions',
+));

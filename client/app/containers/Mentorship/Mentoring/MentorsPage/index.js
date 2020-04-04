@@ -230,7 +230,6 @@ const mapStateToProps = createStructuredSelector({
   mentees: selectPaginatedMentees(),
   mentorshipsTotal: selectMentorshipsTotal(),
   isFetchingMentorships: selectIsFetchingMentorships(),
-  user: selectUser(),
 });
 
 const mapDispatchToProps = {

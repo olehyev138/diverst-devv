@@ -55,8 +55,8 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     const userId1A = rs.params('user_id');
-    const userId1 = userId1A ? userId1A[0] : null;
-    const userId2 = dig(rest, 'userSession', 'id');
+    const userId1 = userId1A || null;
+    const userId2 = dig(rest, 'userSession', 'user_id');
 
     // const userId = userId1;
     const userId = userId1 || userId2;
@@ -67,7 +67,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
     return () => {
       other.userUnmount();
     };
-  }, [dig(rest, 'userSession', 'id')]);
+  }, [dig(rest, 'userSession', 'user_id')]);
 
   return (
     <UserLayout
