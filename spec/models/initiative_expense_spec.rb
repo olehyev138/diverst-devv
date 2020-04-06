@@ -21,33 +21,12 @@ RSpec.describe InitiativeExpense, type: :model do
     let!(:budget) { create(:approved_budget, group: group1, annual_budget_id: annual_budget1.id) }
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
-    let!(:initiative) { create(:initiative, owner_group_id: group1.id, annual_budget_id: annual_budget1.id, pillar: pillar,
+    let!(:initiative) { create(:initiative, owner_group_id: group1.id, pillar: pillar,
                                             estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
     }
-    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10, annual_budget_id: annual_budget1.id) }
-
-    it 'after_save, #update_annual_budget' do
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:save)
-    end
-
-    it 'after_destroy, #update_annual_budget' do
-      pending
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:destroy)
-    end
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10) }
 
     it 'sets expenses on annual_budget to 0 when expense is destroyed' do
-      pending
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
       expense.reload
       annual_budget1.reload
       expect(annual_budget1.expenses).to eq expense.amount
