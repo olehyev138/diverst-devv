@@ -61,6 +61,9 @@ export default defineMessages({
     stitle: {
       id: `${scope}.Sponsors.input.title`,
     },
+    smessage: {
+      id: `${scope}.Sponsors.input.message`,
+    },
     name: {
       id: `${scope}.Sponsors.list.name`,
     },

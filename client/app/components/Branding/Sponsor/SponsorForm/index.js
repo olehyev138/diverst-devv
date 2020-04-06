@@ -34,6 +34,7 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values);
   return (
     <Card>
       <Form>
@@ -65,6 +66,18 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 value={values.sponsor_title}
               />
             </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                id='sponsor_message'
+                name='sponsor_messsage'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.Sponsors.smessage} />}
+                value={values.sponsor_message}
+              />
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -92,7 +105,7 @@ export function SponsorForm(props) {
     id: { default: '' },
     sponsor_name: { default: '' },
     sponsor_title: { default: '' },
-    sponsorableId: 1,
+    sponsor_message: { default: ''},
   });
 
   return (
