@@ -119,7 +119,7 @@ class Group < BaseClass
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  has_attached_file :logo, params[:user][:user]: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
   validates_length_of :home_message, maximum: 65535
@@ -175,8 +175,8 @@ class Group < BaseClass
   scope :is_private,        -> { where(private: true) }
   scope :non_private,       -> { where(private: false) }
   # parents/children
-  scope :all_parents,     -> { where(parent_id: nil, private: false) }
-  scope :all_children,    -> { where.not(parent_id: nil, private: true) }
+  scope :all_parents,     -> { where(parent_id: nil) }
+  scope :all_children,    -> { where.not(parent_id: nil) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
