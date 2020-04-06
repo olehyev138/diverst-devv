@@ -389,6 +389,7 @@ exports[`<UserLinks /> Should render and match the snapshot 1`] = `
             "diverst.containers.App.dayOfWeek.thursday": "Thursday",
             "diverst.containers.App.dayOfWeek.tuesday": "Tuesday",
             "diverst.containers.App.dayOfWeek.wednesday": "Wednesday",
+            "diverst.containers.App.errors.findEnterprise": "Unable to connect to server",
             "diverst.containers.App.header.admin": "Admin",
             "diverst.containers.App.header.dashboard": "Dashboard",
             "diverst.containers.App.header.logout": "Log out",
