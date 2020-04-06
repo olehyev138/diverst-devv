@@ -870,6 +870,7 @@
   "diverst.components.DiverstFileInput.error": "Error uploading",
   "diverst.components.DiverstFileInput.finished": "Finished uploading",
   "diverst.components.DiverstFileInput.nofile": "No file selected",
+  "diverst.components.DiverstFileInput.deleteFileConfirm": "Are you sure you want to remove this file?",
   "diverst.components.DiverstTable.title": "Table",
   "diverst.components.ErrorBoundary.home": "Home",
   "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.",
