@@ -34,7 +34,7 @@ export function SponsorListPage(props) {
   const rs = new RouteService(useContext);
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc'
+    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
   });
 
   const links = {
@@ -102,6 +102,8 @@ const mapStateToProps = createStructuredSelector({
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
 });
+
+
 
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
