@@ -54,8 +54,12 @@ export function* createSponsors(action, sponsorableKey) {
     payload[sponsorableKey] = payload.sponsor.sponsorableId;
 
     const response = yield call(api.sponsors.create.bind(api.sponsors), payload);
+
     // Route to different location based on the call made
-    action.type === CREATE_GROUP_SPONSOR_BEGIN ? yield put(push(ROUTES.group.manage.sponsors.index.path(payload.sponsor.sponsorableId))) : yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
+    if (action.type === CREATE_GROUP_SPONSOR_BEGIN)
+      yield put(push(ROUTES.group.manage.sponsors.index.path(payload.sponsor.sponsorableId)));
+    else
+      yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
     yield put(createSponsorSuccess());
 

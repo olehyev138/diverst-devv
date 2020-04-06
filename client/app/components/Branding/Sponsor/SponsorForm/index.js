@@ -104,7 +104,7 @@ export function SponsorForm(props) {
     id: { default: '' },
     sponsor_name: { default: '' },
     sponsor_title: { default: '' },
-    sponsor_message: { default: ''},
+    sponsor_message: { default: '' },
   });
 
   return (

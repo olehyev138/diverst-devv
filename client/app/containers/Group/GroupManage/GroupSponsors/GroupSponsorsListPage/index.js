@@ -104,7 +104,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 
-
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
