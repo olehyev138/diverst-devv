@@ -108,7 +108,7 @@ const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: id => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
+  handleVisitSponsorEdit: (enterpriseId, id) => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
 });
 
 const withConnect = connect(

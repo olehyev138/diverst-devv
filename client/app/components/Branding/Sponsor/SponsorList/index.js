@@ -90,7 +90,7 @@ export function SponsorList(props) {
               icon: () => <EditIcon />,
               tooltip: intl.formatMessage(messages.Sponsors.edit),
               onClick: (_, rowData) => {
-                props.handleVisitSponsorEdit(rowData.id);
+                props.handleVisitSponsorEdit(rowData.sponsorable_id,rowData.id);
               }
             },
             {

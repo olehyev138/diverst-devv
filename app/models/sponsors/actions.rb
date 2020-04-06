@@ -4,7 +4,7 @@ module Sponsors::Actions
   end
   module ClassMethods
     def valid_scopes
-      ['group_sponsor','enterprise_sponsor']
+      ['group_sponsor', 'enterprise_sponsor']
     end
   end
 end

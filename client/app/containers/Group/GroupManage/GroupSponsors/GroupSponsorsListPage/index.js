@@ -39,7 +39,7 @@ export function GroupSponsorListPage(props) {
 
   const links = {
     sponsorNew: ROUTES.group.manage.sponsors.new.path(rs.params('group_id')),
-    sponsorEdit: id => ROUTES.admin.system.branding.sponsors.edit.path(id),
+    sponsorEdit: id => ROUTES.group.manage.sponsors.edit.path(rs.params('group_id'), id),
   };
 
   const sponsorId = rs.params('sponsor_id');
@@ -108,7 +108,7 @@ const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: id => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
+  handleVisitSponsorEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.sponsors.edit.path(groupId,id))),
 });
 
 const withConnect = connect(
