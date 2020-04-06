@@ -37,14 +37,16 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const childrenSelectAction = (searchKey = '') => {
+    props.getGroupsSuccess({ items: [] });
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      query_scopes: ['all_parents', 'no_children']
+      query_scopes: ['all_children']
     });
   };
 
   const parentSelectAction = (searchKey = '') => {
+    props.getGroupsSuccess({ items: [] });
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       query_scopes: ['all_parents']
@@ -226,6 +228,7 @@ GroupFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  getGroupsSuccess: PropTypes.func,
 };
 
 export default compose(
