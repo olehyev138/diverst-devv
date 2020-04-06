@@ -3,9 +3,9 @@ import produce from 'immer/dist/immer';
 import appReducer from 'containers/Shared/App/reducer';
 import {
   loginSuccess,
-  loginError,
   logoutSuccess,
   setUserData,
+  findEnterpriseError,
 }
   from 'containers/Shared/App/actions';
 
@@ -17,6 +17,7 @@ describe('appReducer', () => {
     state = {
       token: null,
       data: null,
+      findEnterpriseError: false,
     };
   });
 
@@ -57,5 +58,13 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, setUserData({ x: 'y' }, true))).toEqual(expected);
+  });
+
+  it('handles the findEnterpriseError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.findEnterpriseError = true;
+    });
+
+    expect(appReducer(state, findEnterpriseError())).toEqual(expected);
   });
 });

@@ -11,6 +11,10 @@ variable "ssh_key_name" {
 }
 
 # Backend
+variable "backend_solution_stack" {
+  type    = string
+}
+
 variable "backend_asg_min" {
   type    = number
 }
@@ -57,6 +61,10 @@ variable "db_apply_immediately" {
 }
 
 variable "db_maintenance_window" {
+  type    = string
+}
+
+variable "db_name" {
   type    = string
 }
 
