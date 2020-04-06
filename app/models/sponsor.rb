@@ -6,6 +6,9 @@ class Sponsor < ApplicationRecord
   validates_length_of :sponsor_title, maximum: 191
   validates_length_of :sponsor_name, maximum: 191
 
+  scope :group_sponsor, -> { where(sponsortable_type: 'Group') }
+  scope :enterprise_sponsor, -> { where(sponsortable_type: 'Enterprise') }
+
   # ActiveStorage
   has_one_attached :sponsor_media
 
