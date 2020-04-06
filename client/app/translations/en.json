@@ -30,6 +30,7 @@
   "diverst.containers.App.currency.placement": "start",
   "diverst.containers.App.currency.symbol": "$",
   "diverst.containers.App.currency.defaultSymbol": "$",
+  "diverst.containers.App.errors.findEnterprise": "Unable to connect to server",
   "diverst.containers.HomePage.header": "This is the HomePage container!",
   "diverst.containers.HomePage.news": "Your Latest News",
   "diverst.containers.HomePage.events": "Your Upcoming",
