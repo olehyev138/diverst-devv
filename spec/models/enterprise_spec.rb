@@ -148,7 +148,8 @@ RSpec.describe Enterprise, type: :model do
       let!(:enterprise) { build(:enterprise, custom_text: nil) }
 
       # TODO - fix
-      xit 'create a new custom_text' do
+      it 'create a new custom_text' do
+        pending
         expect(enterprise.custom_text).to be_an_instance_of(CustomText)
       end
     end
@@ -481,7 +482,7 @@ RSpec.describe Enterprise, type: :model do
 
 
   # re-write this for sponsor message
-  xdescribe '.cdo_message_email_html' do
+  describe '.cdo_message_email_html' do
     context 'when cdo_message_email is not nil' do
       let(:enterprise) { build_stubbed(:enterprise, cdo_message_email: "test \r\n test") }
 

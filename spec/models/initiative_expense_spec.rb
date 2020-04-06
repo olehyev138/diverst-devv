@@ -26,7 +26,7 @@ RSpec.describe InitiativeExpense, type: :model do
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10, annual_budget_id: annual_budget1.id) }
 
-    xit 'after_save, #update_annual_budget' do
+    it 'after_save, #update_annual_budget' do
       # TODO: skipping as budget implementation as changed - review
       pending 'skipping as budget implementation as changed - review'
 
@@ -34,7 +34,8 @@ RSpec.describe InitiativeExpense, type: :model do
       expense.run_callbacks(:save)
     end
 
-    xit 'after_destroy, #update_annual_budget' do
+    it 'after_destroy, #update_annual_budget' do
+      pending
       # TODO: skipping as budget implementation as changed - review
       pending 'skipping as budget implementation as changed - review'
 
@@ -42,7 +43,8 @@ RSpec.describe InitiativeExpense, type: :model do
       expense.run_callbacks(:destroy)
     end
 
-    xit 'sets expenses on annual_budget to 0 when expense is destroyed' do
+    it 'sets expenses on annual_budget to 0 when expense is destroyed' do
+      pending
       # TODO: skipping as budget implementation as changed - review
       pending 'skipping as budget implementation as changed - review'
 

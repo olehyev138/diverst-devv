@@ -72,7 +72,8 @@ RSpec.describe MentoringSession, type: :model do
 
   describe 'notify_users_on_update' do
     # TODO - broken callbacks
-    xit 'it calls the mailer method session_updated' do
+    it 'it calls the mailer method session_updated' do
+      pending
       allow(MentorMailer).to receive(:session_updated).and_call_original
 
       mentoring_session = create(:mentoring_session)

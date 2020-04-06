@@ -25,7 +25,8 @@ RSpec.describe GroupLeaderPostNotificationsJob, type: :job do
       end
 
       # TODO Fix MySQL errors on CircleCI with these tests
-      xit 'sends an email of notification to leader because pending_post_notifications_enabled is true' do
+      it 'sends an email of notification to leader because pending_post_notifications_enabled is true' do
+        pending
         news_link = create(:news_link, group: group)
         news_link.news_feed_link.approved = false
         news_link.news_feed_link.save!

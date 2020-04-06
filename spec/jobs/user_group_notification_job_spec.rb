@@ -265,7 +265,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let!(:another_social_link) { create(:social_link, group: group, updated_at: today, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
 
       # TODO Fix these tests
-      xit 'sends an email of notification to user' do
+      it 'sends an email of notification to user' do
+        pending
         Timecop.freeze(Date.today) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
@@ -287,7 +288,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         end
       end
 
-      xit 'sends an email of notification to user when user is in segment and items are not in segments' do
+      it 'sends an email of notification to user when user is in segment and items are not in segments' do
+        pending
         segment = create(:segment, groups: [group, second_group])
         create(:users_segment, user: user, segment: segment)
 
@@ -310,7 +312,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
 
-      xit 'sends an email of notification to user when user is in segment and items are in segment' do
+      it 'sends an email of notification to user when user is in segment and items are in segment' do
+        pending
         segment = create(:segment, groups: [group, second_group])
         create(:users_segment, user: user, segment: segment)
 
@@ -337,7 +340,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
 
-      xit 'send an email of notification only for events to user when user is not in segment and items are in segment' do
+      it 'send an email of notification only for events to user when user is not in segment and items are in segment' do
+        pending
         segment = create(:segment, groups: [group, second_group])
 
         create(:news_link_segment, news_link: news_link, segment: segment)

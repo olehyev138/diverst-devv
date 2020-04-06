@@ -400,7 +400,8 @@ RSpec.describe Initiative, type: :model do
 
   describe '#time_string' do
     # TODO: timestring doesnt exist
-    xit 'returns day and start/end time' do
+    it 'returns day and start/end time' do
+      pending
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
       expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
     end
