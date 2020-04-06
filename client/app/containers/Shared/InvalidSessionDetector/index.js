@@ -30,9 +30,7 @@ export function InvalidSessionDetector(props) {
     );
   }, []);
 
-  return (
-    <ThemeProvider />
-  );
+  return props.children;
 }
 
 InvalidSessionDetector.propTypes = {

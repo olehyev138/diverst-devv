@@ -33,6 +33,7 @@ import { translationMessages } from './i18n';
 import { store, history } from './configureStore';
 
 import { LastLocationProvider } from 'react-router-last-location';
+import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
 
 /* eslint-disable-next-line no-restricted-globals */
 history.listen((location) => {
@@ -53,7 +54,9 @@ const render = (messages) => {
       <LanguageProvider messages={messages}>
         <ConnectedRouter history={history}>
           <LastLocationProvider>
-            <InvalidSessionDetector />
+            <InvalidSessionDetector>
+              <ThemeProvider />
+            </InvalidSessionDetector>
           </LastLocationProvider>
         </ConnectedRouter>
       </LanguageProvider>
