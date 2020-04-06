@@ -25,7 +25,7 @@ module Activity::Actions
       [
           :joined_from,
           :joined_to,
-          :for_segment_ids
+          :for_group_ids
       ].map { |scope| scope.to_s }
     end
 
