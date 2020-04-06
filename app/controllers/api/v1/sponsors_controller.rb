@@ -4,11 +4,10 @@ class Api::V1::SponsorsController < DiverstController
         if params[:group_id].present?
           ['Group', params[:group_id]]
         else
-          ['Enterprise', params[:enterprise_id]]
+          ['Enterprise', current_user.enterprise.id ]
         end
     params[:sponsor][:sponsorable_type] = type
     params[:sponsor][:sponsorable_id] = id
-
     super
   end
 end

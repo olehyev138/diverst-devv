@@ -31,14 +31,13 @@ export function SponsorCreatePage(props) {
 
   useEffect(() => () => props.sponsorsUnmount(), []);
 
-  // TODO : CHANGE HARDCODED 123 IN SPONSORABLEID TO ENTERPRISE_ID
   return (
     <React.Fragment>
       <SponsorForm
         sponsorAction={props.createSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={123}
+        sponsorableId={null}
       />
     </React.Fragment>
   );
