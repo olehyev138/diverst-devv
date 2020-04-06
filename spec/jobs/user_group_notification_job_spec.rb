@@ -251,18 +251,18 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:yesterday) { (Date.today - 1.days).in_time_zone('UTC') }
 
       let!(:user_group) { create(:user_group, user: user, group: group) }
-      let!(:group_message) { create(:group_message, group: group, updated_at: day_before, owner: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
-      let!(:another_group_message) { create(:group_message, group: group, updated_at: yesterday, owner: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
+      let!(:group_message) { create(:group_message, group: group, updated_at: day_before, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_group_message) { create(:group_message, group: group, updated_at: yesterday, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: day_before, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
       let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: day_before, owner: user) }
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: yesterday, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link) { create(:news_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
-      let!(:another_news_link) { create(:news_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
-      let!(:social_link) { create(:social_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
-      let!(:another_social_link) { create(:social_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: {news_feed_id: group.news_feed.id }) }
+      let!(:news_link) { create(:news_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_news_link) { create(:news_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:social_link) { create(:social_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_social_link) { create(:social_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
 
       it 'sends an email of notification to user' do
         Timecop.freeze(Date.today) do

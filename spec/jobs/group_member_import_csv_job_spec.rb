@@ -8,7 +8,6 @@ RSpec.describe GroupMemberImportCSVJob, type: :job do
     let!(:csv_file) { create(:csv_file, import_file: file, group_id: group.id, user: user) }
 
     it 'imports the file and sends an email' do
-
       expect(group.members.count).to eq(0)
 
       subject.perform(csv_file.id)
