@@ -6,9 +6,7 @@ RSpec.describe GenericGraphsTopNewsByViewsDownloadJob, type: :job do
 
   describe '#perform' do
     context 'demo' do
-      # TODO Fix MySQL errors on CircleCI with these tests
       it 'creates a downloadable csv file' do
-        pending
         expect { subject.perform(user.id, enterprise.id, true, nil, nil) }
           .to change(CsvFile, :count).by(1)
       end
