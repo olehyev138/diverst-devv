@@ -56,9 +56,14 @@ const selectMentoringTypes = () => createSelector(
   }
 );
 
+const selectFindEnterpriseError = () => createSelector(
+  selectGlobal,
+  globalState => globalState.findEnterpriseError
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
   selectUser, selectCustomText, selectMentoringInterests,
-  selectMentoringTypes,
+  selectMentoringTypes, selectFindEnterpriseError
 };
