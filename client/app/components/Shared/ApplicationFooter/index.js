@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 const styles = theme => ({
   footer: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: 1,
     backgroundColor: theme.palette.primary.main,
     color: 'white',
   },

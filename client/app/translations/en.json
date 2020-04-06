@@ -30,6 +30,7 @@
   "diverst.containers.App.currency.placement": "start",
   "diverst.containers.App.currency.symbol": "$",
   "diverst.containers.App.currency.defaultSymbol": "$",
+  "diverst.containers.App.errors.findEnterprise": "Unable to connect to server",
   "diverst.containers.HomePage.header": "This is the HomePage container!",
   "diverst.containers.HomePage.news": "Your News",
   "diverst.containers.HomePage.events": "Your Events",
@@ -301,7 +302,7 @@
   "diverst.containers.AnnualBudget.adminList.actions.carryover": "Carryover",
   "diverst.containers.AnnualBudget.adminList.actions.reset": "Reset",
   "diverst.containers.AnnualBudget.adminList.actions.carryoverConfirm": "Are you sure you want to carryover the budget over.\n This cannot be undone",
-  "diverst.containers.AnnualBudget.adminList.actions.resetConfirm": "Are you sure you want to rest the budget over.\n This cannot be undone",
+  "diverst.containers.AnnualBudget.adminList.actions.resetConfirm": "Are you sure you want to reset the budget over.\n This cannot be undone",
   "diverst.containers.Budget.index.buttons.new": "New Budget Request",
   "diverst.containers.Budget.index.buttons.back": "Annual Budget Overview",
   "diverst.containers.Budget.index.columns.requested": "Requested",
@@ -874,5 +875,8 @@
   "diverst.components.DiverstFileInput.nofile": "No file selected",
   "diverst.components.DiverstTable.title": "Table",
   "diverst.components.ErrorBoundary.home": "Home",
-  "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center."
+  "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.",
+  "diverst.components.DiverstLogoutDialog.later": "Later",
+  "diverst.components.DiverstLogoutDialog.logout": "Log out",
+  "diverst.components.DiverstLogoutDialog.logoutmessage": "Please log out to view any changes that have been made to your enterprise settings."
 }

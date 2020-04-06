@@ -25,6 +25,7 @@ import DiverstLike from '../../../Shared/DiverstLike';
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -40,6 +41,9 @@ const styles = theme => ({
   },
   cardHeader: {
     paddingBottom: 0,
+  },
+  embedTwitter: {
+    width: '75%'
   }
 });
 
@@ -61,17 +65,24 @@ export function GroupMessageListItem(props) {
   }
 
   return (
-    <Card>
+    <React.Fragment>
       <CardHeader
         className={classes.cardHeader}
         avatar={(
           <Avatar>
-            {/* Replace this with the user icon */}
-            {String.fromCharCode(65 + Math.floor(Math.random() * 26))}
+            { groupMessage.owner.avatar ? (
+              <DiverstImg
+                data={groupMessage.owner.avatar_data}
+                maxWidth='100%'
+                maxHeight='240px'
+              />
+            ) : (
+              groupMessage.owner.first_name[0]
+            )}
           </Avatar>
         )}
         title={groupMessage.subject}
-        titleTypographyProps={{ variant: 'h5', display: 'inline' }}
+        titleTypographyProps={{ variant: 'body1', display: 'inline' }}
       />
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom>
@@ -181,7 +192,7 @@ export function GroupMessageListItem(props) {
           </CardActions>
         </Permission>
       )}
-    </Card>
+    </React.Fragment>
   );
 }
 
