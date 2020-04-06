@@ -142,7 +142,7 @@
 
             <h2>Explore your <%= resource.enterprise.custom_text.erg.pluralize %></h2>
 
-            <% resource.enterprise.groups.all_parents.where(private: false).each do |group| %>
+            <% resource.enterprise.groups.all_parents.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
                 <div class="flex-row">
                   <div class="flex-row__cell">
