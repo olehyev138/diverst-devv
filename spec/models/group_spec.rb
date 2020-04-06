@@ -624,7 +624,7 @@ RSpec.describe Group, type: :model do
     it 'returns expenses budget' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
-      budget = create(:approved, annual_budget_id: annual_budget.id)
+      budget = create(:approved_budget, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
@@ -768,7 +768,7 @@ RSpec.describe Group, type: :model do
     it 'returns title_with_leftover_amount' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved, :zero_budget, annual_budget: annual_budget)
+      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
       budget_item = budget.budget_items.first
       budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
       initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
