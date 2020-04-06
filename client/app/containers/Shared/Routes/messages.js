@@ -223,6 +223,12 @@ export default defineMessages({
       sponsors: {
         index: {
           id: `${scope}.group.manage.sponsors.index`,
+        },
+        new: {
+          id: `${scope}.group.manage.sponsors.new`,
+        },
+        edit: {
+          id: `${scope}.group.manage.sponsors.edit`,
         }
       },
       leaders: {

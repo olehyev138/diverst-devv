@@ -104,6 +104,8 @@
   "diverst.containers.Routes.group.manage.index": "Manage",
   "diverst.containers.Routes.group.manage.settings.index": "Settings",
   "diverst.containers.Routes.group.manage.sponsors.index": "Sponsors",
+  "diverst.containers.Routes.group.manage.sponsors.new": "New Sponsor",
+  "diverst.containers.Routes.group.manage.sponsors.edit": "Edit Sponsor",
   "diverst.containers.Routes.group.manage.leaders.index": "Leaders",
   "diverst.containers.Routes.group.manage.leaders.new": "New Leader",
   "diverst.containers.Routes.group.manage.leaders.edit": "Edit Leader",
