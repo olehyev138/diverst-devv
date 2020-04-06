@@ -337,7 +337,6 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       end
 
       it 'send an email of notification only for events to user when user is not in segment and items are in segment' do
-        pending
         segment = create(:segment, groups: [group, second_group])
 
         create(:news_link_segment, news_link: news_link, segment: segment)
