@@ -16,10 +16,11 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstTable from 'components/Shared/DiverstTable';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Segment/messages';
+import messages from 'containers/Group/GroupMembers/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
+import {DateTime} from "luxon";
 
 
 const styles = theme => ({
@@ -40,11 +41,27 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: '',
-      field: 'name',
-      query_field: 'name'
+      title: 'id',
+      field: 'id',
+      query_field: 'id'
     },
+    {
+      title: 'key',
+      field: 'key',
+      query_field: 'key'
+    },
+    {
+      title: 'date',
+      field: 'created_at',
+      query_field: 'created_at'
+    },
+
   ];
+  const [anchor, setAnchor] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchor(event.currentTarget);
+  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -52,19 +69,20 @@ export function LogList(props, context) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
+  console.log(props);
 
   return (
     <React.Fragment>
       <Card>
         <Formik
           initialValues={{
-            from: '',
-            to: '',
-            group: '',
+            from: props.logFrom,
+            to: props.logTo,
+            groupLabels: props.groupLabels,
           }}
           enableReinitialize
           onSubmit={(values) => {
-            // values.segmentIds = (values.segmentLabels || []).map(i => i.value);
+            values.groupIds = (values.groupLabels || []).map(i => i.value);
             props.handleFilterChange(values);
           }}
         >
@@ -102,23 +120,29 @@ export function LogList(props, context) {
                   <Grid item xs={3}>
                     <Field
                       component={DiverstDatePicker}
-                      disabled={props.isCommitting}
                       keyboardMode
                       fullWidth
+                      // maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
+                      maxDateMessage={<DiverstFormattedMessage {...messages.filter.fromMax} />}
                       id='from'
                       name='from'
-                      margin='dense'
+                      margin='normal'
+                      label=''
                     />
                   </Grid>
                   <Grid item xs={3}>
                     <Field
                       component={DiverstDatePicker}
-                      disabled={props.isCommitting}
                       keyboardMode
                       fullWidth
+                      minDate={formikProps.values.from ? formikProps.values.from : undefined}
+                      // maxDate={new Date()}
+                      minDateMessage={<DiverstFormattedMessage {...messages.filter.toMin} />}
+                      maxDateMessage={<DiverstFormattedMessage {...messages.filter.toMax} />}
                       id='to'
                       name='to'
-                      margin='dense'
+                      margin='normal'
+                      label=''
                     />
                   </Grid>
                   <Grid item xs={2}>
@@ -175,6 +199,12 @@ LogList.propTypes = {
   handleChangeScope: PropTypes.func,
   exportLogsBegin: PropTypes.func,
   handleFilterChange: PropTypes.func.isRequired,
+
+  params: PropTypes.object,
+  logFrom: PropTypes.instanceOf(DateTime),
+  logTo: PropTypes.instanceOf(DateTime),
+  groupLabels: PropTypes.array,
+
 };
 export default compose(
   injectIntl,
