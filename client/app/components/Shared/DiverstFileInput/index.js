@@ -2,9 +2,13 @@ import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 
-import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography, Box, CircularProgress } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography, Box, CircularProgress, IconButton } from '@material-ui/core';
 import UploadIcon from '@material-ui/icons/CloudUpload';
+import DeleteIcon from '@material-ui/icons/DeleteForever';
+
+import classNames from 'classnames';
 
 import { DirectUploadProvider } from 'react-activestorage-provider';
 
@@ -47,6 +51,10 @@ const styles = theme => ({
     '& *': {
       lineHeight: 1.75,
     },
+    textAlign: 'center',
+  },
+  fileInfoBoxWithFile: {
+    paddingRight: 2,
   },
   uploadProgress: {
     marginLeft: 8,
@@ -56,6 +64,10 @@ const styles = theme => ({
     marginLeft: 6,
     color: theme.palette.primary.main,
   },
+  deleteButton: {
+    marginLeft: 6,
+    color: theme.palette.error.main,
+  },
 });
 
 const inputRef = React.createRef();
@@ -63,7 +75,7 @@ const inputRef = React.createRef();
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
-  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, ...rest } = props;
+  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, ...rest } = props;
 
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -171,7 +183,7 @@ export function DiverstFileInput(props) {
                 </Grid>
                 <Grid item>
                   {!disabled && (
-                    <Box className={classes.fileInfoBox}>
+                    <Box className={classNames(classes.fileInfoBox, value && classes.fileInfoBoxWithFile)}>
                       {uploads.map((upload) => {
                         switch (upload.state) {
                           case 'waiting':
@@ -233,6 +245,22 @@ export function DiverstFileInput(props) {
                       {value && ready && (
                         <Typography variant='h6' className={classes.fileInfo} color='primary'>
                           {uploadedFile}
+                          {!required && (
+                            <IconButton
+                              className={classes.deleteButton}
+                              aria-label='delete'
+                              size='small'
+                              onClick={() => {
+                                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                                if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
+
+                                form.setFieldValue(props.id, null);
+                                setUploadedFile(null);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          )}
                         </Typography>
                       )}
 
@@ -279,9 +307,11 @@ DiverstFileInput.propTypes = {
   handleUploadError: PropTypes.func,
   fileName: PropTypes.string,
   inputProps: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   withStyles(styles),
+  injectIntl,
   memo,
 )(DiverstFileInput);
