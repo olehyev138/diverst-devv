@@ -482,7 +482,7 @@ RSpec.describe Enterprise, type: :model do
 
 
   # re-write this for sponsor message
-  describe '.cdo_message_email_html' do
+  describe '.cdo_message_email_html', skip: 'Deprecated' do
     context 'when cdo_message_email is not nil' do
       let(:enterprise) { build_stubbed(:enterprise, cdo_message_email: "test \r\n test") }
 
