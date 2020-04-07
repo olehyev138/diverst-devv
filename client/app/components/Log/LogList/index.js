@@ -20,7 +20,8 @@ import messages from 'containers/Group/GroupMembers/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
+import GroupSelector from 'components/Shared/GroupSelector';
 
 
 const styles = theme => ({
@@ -30,20 +31,28 @@ const styles = theme => ({
   logListItemDescription: {
     paddingTop: 8,
   },
-  errorButton: {
-    color: theme.palette.error.main,
-  },
 });
 
 export function LogList(props, context) {
   const { classes } = props;
   const { intl } = props;
 
+  const styles = theme => ({
+    selector: {
+      zIndex: theme.zIndex.drawer + 100,
+    },
+  });
+
   const columns = [
     {
       title: 'id',
       field: 'id',
       query_field: 'id'
+    },
+    {
+      title: 'owner_id',
+      field: 'owner_id',
+      query_field: 'owner_id'
     },
     {
       title: 'key',
@@ -57,11 +66,6 @@ export function LogList(props, context) {
     },
 
   ];
-  const [anchor, setAnchor] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchor(event.currentTarget);
-  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -69,7 +73,6 @@ export function LogList(props, context) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
-  console.log(props);
 
   return (
     <React.Fragment>
@@ -104,17 +107,11 @@ export function LogList(props, context) {
                 </Grid>
                 <Grid container spacing={3} alignItems='flex-start' justify='space-between'>
                   <Grid item xs={4}>
-                    <Field
-                      component={Select}
-                      fullWidth
-                      disabled={props.isCommitting}
-                      id='name'
-                      name='name'
-                      margin='dense'
-                      label='Filter by group'
-                      value=''
-                      // options={props.selectGroups}
-                      // onChange={value => props.changePage(value.value)}
+                    <GroupSelector
+                      classname={classes.selector}
+                      groupField='groupLabels'
+                      label=''
+                      {...formikProps}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -122,7 +119,7 @@ export function LogList(props, context) {
                       component={DiverstDatePicker}
                       keyboardMode
                       fullWidth
-                      // maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
+                      maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
                       maxDateMessage={<DiverstFormattedMessage {...messages.filter.fromMax} />}
                       id='from'
                       name='from'
@@ -136,7 +133,7 @@ export function LogList(props, context) {
                       keyboardMode
                       fullWidth
                       minDate={formikProps.values.from ? formikProps.values.from : undefined}
-                      // maxDate={new Date()}
+                      maxDate={new Date()}
                       minDateMessage={<DiverstFormattedMessage {...messages.filter.toMin} />}
                       maxDateMessage={<DiverstFormattedMessage {...messages.filter.toMax} />}
                       id='to'
@@ -199,7 +196,7 @@ LogList.propTypes = {
   handleChangeScope: PropTypes.func,
   exportLogsBegin: PropTypes.func,
   handleFilterChange: PropTypes.func.isRequired,
-
+  selectGroups: PropTypes.array,
   params: PropTypes.object,
   logFrom: PropTypes.instanceOf(DateTime),
   logTo: PropTypes.instanceOf(DateTime),
