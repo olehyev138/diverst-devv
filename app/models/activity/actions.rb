@@ -20,6 +20,16 @@ module Activity::Actions
       end
     end
 
+    def file_name(params)
+      partials = set_query_scopes(params).map do |scope|
+        parameter_name(scope)
+      end
+      partials.append 'Logs'
+
+      file_name = partials.map { |part| part.split(/[ .]/).join('_') }.join('_')
+      ActiveStorage::Filename.new(file_name).sanitized
+    end
+
     def valid_scopes
       [
           :joined_from,
