@@ -12,7 +12,6 @@ module Activity::Actions
           joined_to: -> (to) { "to #{to.to_time.strftime('%Y-%m-%d')}" },
           for_group_ids: -> (group_ids) { "of groups #{Group.where(id: group_ids).pluck(:name).join(', ')}" }
       }
-
       case scope
       when Array
         function_scope_map[scope.first.to_sym].call(*scope[1..-1]) || scope.first.to_s
@@ -28,6 +27,5 @@ module Activity::Actions
           :for_group_ids
       ].map { |scope| scope.to_s }
     end
-
   end
 end

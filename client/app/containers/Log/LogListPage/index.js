@@ -23,14 +23,19 @@ import { getLogsBegin, logUnmount, exportLogsBegin } from 'containers/Log/action
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import LogList from 'components/Log/LogList';
+import groupSaga from 'containers/Group/saga';
+import groupReducer from 'containers/Group/reducer';
 
 export function LogListPage(props) {
   useInjectReducer({ key: 'logs', reducer });
   useInjectSaga({ key: 'logs', saga });
+  useInjectReducer({ key: 'groups', reducer: groupReducer });
+  useInjectSaga({ key: 'groups', saga: groupSaga });
+
   const defaultParams = {
     count: 10, page: 0,
-    orderBy: 'logs.id', order: 'asc',
-    query_scopes: ['active']
+    orderBy: 'id', order: 'asc',
+    query_scopes: []
   };
 
   const [params, setParams] = useState(defaultParams);
@@ -57,6 +62,15 @@ export function LogListPage(props) {
     return queryScopes;
   };
 
+  const getLogs = (scopes, params = params) => {
+    const newParams = {
+      ...params,
+      query_scopes: scopes
+    };
+    props.getLogsBegin(newParams);
+    setParams(newParams);
+  };
+
   const exportLogs = () => {
     const newParams = {
       ...params,
@@ -64,14 +78,6 @@ export function LogListPage(props) {
     };
     props.exportLogsBegin(newParams);
   };
-
-  useEffect(() => {
-    props.getLogsBegin(params);
-
-    return () => {
-      props.logUnmount();
-    };
-  }, []);
 
   const handleFilterChange = (values) => {
     let from = null;
@@ -94,22 +100,28 @@ export function LogListPage(props) {
       setGroupIds(groupIds);
       setGroupLabels(values.groupLabels);
     }
+    getLogs(getScopes({ from, to, groupIds }, defaultParams));
   };
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getLogsBegin(newParams);
-    setParams(newParams);
+    getLogs(getScopes({}), newParams);
   };
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    props.getLogsBegin(newParams);
-    setParams(newParams);
+    getLogs(getScopes({}), newParams);
   };
 
+  useEffect(() => {
+    props.getLogsBegin(params);
+
+    return () => {
+      props.logUnmount();
+    };
+  }, []);
   return (
     <React.Fragment>
       <LogList
@@ -121,7 +133,6 @@ export function LogListPage(props) {
         exportLogsBegin={exportLogs}
         currentEnterprise={props.currentEnterprise}
         handleFilterChange={handleFilterChange}
-
         setParams={params}
         params={params}
         logFrom={from ? from[1] : null}
@@ -134,6 +145,7 @@ export function LogListPage(props) {
 }
 LogListPage.propTypes = {
   getLogsBegin: PropTypes.func.isRequired,
+  getGroupsBegin: PropTypes.func,
   logUnmount: PropTypes.func.isRequired,
   logs: PropTypes.object,
   logTotal: PropTypes.number,
