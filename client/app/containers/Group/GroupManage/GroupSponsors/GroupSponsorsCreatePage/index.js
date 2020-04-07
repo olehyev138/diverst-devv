@@ -8,9 +8,9 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Shared/Sponsors/reducer';
-import saga from 'containers/Shared/Sponsors/saga';
+import saga from '../groupsponsorsSaga';
 import {
-  createGroupSponsorBegin,
+  createSponsorBegin,
   sponsorsUnmount
 } from 'containers/Shared/Sponsors/actions';
 
@@ -33,7 +33,7 @@ export function SponsorCreatePage(props) {
   return (
     <React.Fragment>
       <SponsorForm
-        sponsorAction={props.createGroupSponsorBegin}
+        sponsorAction={props.createSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
         sponsorableId={props.currentGroup.id}
@@ -44,7 +44,7 @@ export function SponsorCreatePage(props) {
 
 SponsorCreatePage.propTypes = {
   intl: intlShape,
-  createGroupSponsorBegin: PropTypes.func,
+  createSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func,
   currentGroup: PropTypes.object,
 };
@@ -53,7 +53,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createGroupSponsorBegin,
+  createSponsorBegin,
   sponsorsUnmount
 };
 

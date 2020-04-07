@@ -12,7 +12,6 @@ import {
   DELETE_SPONSOR_BEGIN, DELETE_SPONSOR_SUCCESS, DELETE_SPONSOR_ERROR,
   SPONSORS_UNMOUNT
 } from 'containers/Shared/Sponsors/constants';
-import { CREATE_GROUP_SPONSOR_BEGIN, UPDATE_GROUP_SPONSOR_BEGIN } from '../../Group/GroupManage/GroupSponsors/constants';
 
 /* Sponsor listing */
 
@@ -69,13 +68,6 @@ export function createSponsorBegin(payload) {
   };
 }
 
-export function createGroupSponsorBegin(payload) {
-  return {
-    type: CREATE_GROUP_SPONSOR_BEGIN,
-    payload,
-  };
-}
-
 export function createSponsorSuccess(payload) {
   return {
     type: CREATE_SPONSOR_SUCCESS,
@@ -95,13 +87,6 @@ export function createSponsorError(error) {
 export function updateSponsorBegin(payload) {
   return {
     type: UPDATE_SPONSOR_BEGIN,
-    payload,
-  };
-}
-
-export function updateGroupSponsorBegin(payload) {
-  return {
-    type: UPDATE_GROUP_SPONSOR_BEGIN,
     payload,
   };
 }

@@ -12,7 +12,7 @@ import reducer from 'containers/Shared/Sponsors/reducer';
 import saga from 'containers/Shared/Sponsors/saga';
 import {
   getSponsorBegin,
-  updateGroupSponsorBegin,
+  updateSponsorBegin,
   sponsorsUnmount
 } from 'containers/Shared/Sponsors/actions';
 
@@ -46,7 +46,7 @@ export function GroupSponsorCreatePage(props) {
     <React.Fragment>
       <SponsorForm
         sponsor={props.sponsor}
-        sponsorAction={props.updateGroupSponsorBegin}
+        sponsorAction={props.updateSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
         sponsorableId={rs.params('group_sponsor_id')}
@@ -59,7 +59,7 @@ GroupSponsorCreatePage.propTypes = {
   intl: intlShape,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
-  updateGroupSponsorBegin: PropTypes.func,
+  updateSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func
 };
 
@@ -69,7 +69,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getSponsorBegin,
-  updateGroupSponsorBegin,
+  updateSponsorBegin,
   sponsorsUnmount
 };
 
