@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
-import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography, Box, CircularProgress, IconButton } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography, Box, CircularProgress, IconButton, Divider } from '@material-ui/core';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 
@@ -43,8 +43,8 @@ const styles = theme => ({
     borderColor: '#BBBBBB',
     borderStyle: 'solid',
     borderBottom: 'none !important',
-    paddingTop: 4,
-    paddingBottom: 3,
+    paddingTop: 0,
+    paddingBottom: 0,
     paddingLeft: 16,
     paddingRight: 16,
     boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
@@ -54,7 +54,14 @@ const styles = theme => ({
     textAlign: 'center',
   },
   fileInfoBoxWithFile: {
-    paddingRight: 2,
+    paddingRight: 6,
+  },
+  fileInfoDivider: {
+    display: 'inline-block'
+  },
+  fileInfoBoxTypography: {
+    paddingTop: 4,
+    paddingBottom: 3,
   },
   uploadProgress: {
     marginLeft: 8,
@@ -243,29 +250,42 @@ export function DiverstFileInput(props) {
                       })}
 
                       {value && ready && (
-                        <Typography variant='h6' className={classes.fileInfo} color='primary'>
-                          {uploadedFile}
-                          {!required && (
-                            <IconButton
-                              className={classes.deleteButton}
-                              aria-label='delete'
-                              size='small'
-                              onClick={() => {
-                                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                                if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
+                        <Grid container alignItems='center' wrap='nowrap'>
+                          <Grid item>
+                            <Box pr={1}>
+                              <Typography variant='h6' color='primary' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
+                                {uploadedFile}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                          <Divider orientation='vertical' flexItem />
+                          <Grid item>
+                            <Typography display='inline' variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
+                              {!required && (
+                                <IconButton
+                                  className={classes.deleteButton}
+                                  aria-label='delete'
+                                  size='small'
+                                  onClick={() => {
+                                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                                    if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
 
-                                form.setFieldValue(props.id, null);
-                                setUploadedFile(null);
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          )}
-                        </Typography>
+                                    form.setFieldValue(props.id, null);
+                                    setUploadedFile(null);
+                                  }}
+                                >
+                                  <Box className={classes.fileInfo}>
+                                    <DeleteIcon />
+                                  </Box>
+                                </IconButton>
+                              )}
+                            </Typography>
+                          </Grid>
+                        </Grid>
                       )}
 
                       {!value && ready && (
-                        <Typography variant='h6' className={classes.fileInfo} color='textSecondary'>
+                        <Typography variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)} color='textSecondary'>
                           <DiverstFormattedMessage {...messages.nofile} />
                         </Typography>
                       )}
