@@ -11,408 +11,408 @@ export const scope = 'diverst.containers.Permissions';
 export default defineMessages({
   layouts: {
     mentorship: {
-      id: 'diverst.containers.Permissions.layouts.mentorshipLayout'
+      id: `${scope}.layouts.mentorshipLayout`
     },
     eventManage: {
-      id: 'diverst.containers.Permissions.layouts.eventManageLayout'
+      id: `${scope}.layouts.eventManageLayout`
     },
     group: {
-      id: 'diverst.containers.Permissions.layouts.groupLayout'
+      id: `${scope}.layouts.groupLayout`
     }
   },
   globalSettings: {
     email: {
       email: {
         indexPage: {
-          id: 'diverst.containers.Permissions.globalSettings.email.email.emailsPage'
+          id: `${scope}.globalSettings.email.email.emailsPage`
         },
         editPage: {
-          id: 'diverst.containers.Permissions.globalSettings.email.email.emailEditPage'
+          id: `${scope}.globalSettings.email.email.emailEditPage`
         }
       },
       event: {
         editPage: {
-          id: 'diverst.containers.Permissions.globalSettings.email.event.eventEditPage'
+          id: `${scope}.globalSettings.email.event.eventEditPage`
         },
         indexPage: {
-          id: 'diverst.containers.Permissions.globalSettings.email.event.eventsPage'
+          id: `${scope}.globalSettings.email.event.eventsPage`
         }
       }
     },
     field: {
       indexPage: {
-        id: 'diverst.containers.Permissions.globalSettings.field.fieldsPage'
+        id: `${scope}.globalSettings.field.fieldsPage`
       }
     },
     SSOSettingsPage: {
-      id: 'diverst.containers.Permissions.globalSettings.SSOSettingsPage'
+      id: `${scope}.globalSettings.SSOSettingsPage`
     },
     customText: {
       editPage: {
-        id: 'diverst.containers.Permissions.globalSettings.customText.customTextEditPage'
+        id: `${scope}.globalSettings.customText.customTextEditPage`
       }
     },
     enterpriseConfiguration: {
       showPage: {
-        id: 'diverst.containers.Permissions.globalSettings.enterpriseConfiguration.enterpriseConfigurationPage'
+        id: `${scope}.globalSettings.enterpriseConfiguration.enterpriseConfigurationPage`
       }
     }
   },
   group: {
     categorizePage: {
-      id: 'diverst.containers.Permissions.group.groupCategorizePage'
+      id: `${scope}.group.groupCategorizePage`
     },
     outcome: {
       editPage: {
-        id: 'diverst.containers.Permissions.group.outcome.outcomeEditPage'
+        id: `${scope}.group.outcome.outcomeEditPage`
       },
       indexPage: {
-        id: 'diverst.containers.Permissions.group.outcome.outcomesPage'
+        id: `${scope}.group.outcome.outcomesPage`
       },
       createPage: {
-        id: 'diverst.containers.Permissions.group.outcome.outcomeCreatePage'
+        id: `${scope}.group.outcome.outcomeCreatePage`
       }
     },
     editPage: {
-      id: 'diverst.containers.Permissions.group.groupEditPage'
+      id: `${scope}.group.groupEditPage`
     },
     groupManage: {
       groupLeaders: {
         editPage: {
-          id: 'diverst.containers.Permissions.group.groupManage.groupLeaders.groupLeaderEditPage'
+          id: `${scope}.group.groupManage.groupLeaders.groupLeaderEditPage`
         },
         listPage: {
-          id: 'diverst.containers.Permissions.group.groupManage.groupLeaders.groupLeadersListPage'
+          id: `${scope}.group.groupManage.groupLeaders.groupLeadersListPage`
         },
         createPage: {
-          id: 'diverst.containers.Permissions.group.groupManage.groupLeaders.groupLeaderCreatePage'
+          id: `${scope}.group.groupManage.groupLeaders.groupLeaderCreatePage`
         }
       },
       groupSettingsPage: {
-        id: 'diverst.containers.Permissions.group.groupManage.groupSettingsPage'
+        id: `${scope}.group.groupManage.groupSettingsPage`
       }
     },
     createPage: {
-      id: 'diverst.containers.Permissions.group.groupCreatePage'
+      id: `${scope}.group.groupCreatePage`
     },
     groupCategories: {
       createPage: {
-        id: 'diverst.containers.Permissions.group.groupCategories.groupCategoriesCreatePage'
+        id: `${scope}.group.groupCategories.groupCategoriesCreatePage`
       },
       indexPage: {
-        id: 'diverst.containers.Permissions.group.groupCategories.groupCategoriesPage'
+        id: `${scope}.group.groupCategories.groupCategoriesPage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.group.groupCategories.groupCategoriesEditPage'
+        id: `${scope}.group.groupCategories.groupCategoriesEditPage`
       }
     },
     groupPlan: {
       annualBudget: {
         editPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.annualBudget.annualBudgetEditPage'
+          id: `${scope}.group.groupPlan.annualBudget.annualBudgetEditPage`
         },
         overviewPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.annualBudget.annualBudgetOverviewPage'
+          id: `${scope}.group.groupPlan.annualBudget.annualBudgetOverviewPage`
         },
         adminPlanPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.annualBudget.adminPlanAnnualBudgetPage'
+          id: `${scope}.group.groupPlan.annualBudget.adminPlanAnnualBudgetPage`
         }
       },
       budget: {
         showPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.budget.budgetPage'
+          id: `${scope}.group.groupPlan.budget.budgetPage`
         },
         indexPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.budget.budgetsPage'
+          id: `${scope}.group.groupPlan.budget.budgetsPage`
         },
         createPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.budget.budgetCreatePage'
+          id: `${scope}.group.groupPlan.budget.budgetCreatePage`
         }
       },
       kPI: {
         updatePage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.updatePage'
+          id: `${scope}.group.groupPlan.KPI.updatePage`
         },
         updatesPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.updatesPage'
+          id: `${scope}.group.groupPlan.KPI.updatesPage`
         },
         updateEditPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.updateEditPage'
+          id: `${scope}.group.groupPlan.KPI.updateEditPage`
         },
         kpiPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.kpiPage'
+          id: `${scope}.group.groupPlan.KPI.kpiPage`
         },
         updateCreatePage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.updateCreatePage'
+          id: `${scope}.group.groupPlan.KPI.updateCreatePage`
         },
         fieldsPage: {
-          id: 'diverst.containers.Permissions.group.groupPlan.KPI.fieldsPage'
+          id: `${scope}.group.groupPlan.KPI.fieldsPage`
         }
       }
     },
     userListPage: {
-      id: 'diverst.containers.Permissions.group.userGroupListPage'
+      id: `${scope}.group.userGroupListPage`
     },
     groupMembers: {
       createPage: {
-        id: 'diverst.containers.Permissions.group.groupMembers.groupMemberCreatePage'
+        id: `${scope}.group.groupMembers.groupMemberCreatePage`
       },
       listPage: {
-        id: 'diverst.containers.Permissions.group.groupMembers.groupMemberListPage'
+        id: `${scope}.group.groupMembers.groupMemberListPage`
       }
     },
     adminListPage: {
-      id: 'diverst.containers.Permissions.group.adminGroupListPage'
+      id: `${scope}.group.adminGroupListPage`
     }
   },
   analyze: {
     dashboards: {
       userPage: {
-        id: 'diverst.containers.Permissions.analyze.dashboards.userDashboardPage'
+        id: `${scope}.analyze.dashboards.userDashboardPage`
       },
       metricsDashboard: {
         createPage: {
-          id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.metricsDashboardCreatePage'
+          id: `${scope}.analyze.dashboards.metricsDashboard.metricsDashboardCreatePage`
         },
         showPage: {
-          id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.metricsDashboardPage'
+          id: `${scope}.analyze.dashboards.metricsDashboard.metricsDashboardPage`
         },
         customGraph: {
           createPage: {
-            id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.customGraph.customGraphCreatePage'
+            id: `${scope}.analyze.dashboards.metricsDashboard.customGraph.customGraphCreatePage`
           },
           editPage: {
-            id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.customGraph.customGraphEditPage'
+            id: `${scope}.analyze.dashboards.metricsDashboard.customGraph.customGraphEditPage`
           }
         },
         listPage: {
-          id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.metricsDashboardListPage'
+          id: `${scope}.analyze.dashboards.metricsDashboard.metricsDashboardListPage`
         },
         editPage: {
-          id: 'diverst.containers.Permissions.analyze.dashboards.metricsDashboard.metricsDashboardEditPage'
+          id: `${scope}.analyze.dashboards.metricsDashboard.metricsDashboardEditPage`
         }
       },
       groupPage: {
-        id: 'diverst.containers.Permissions.analyze.dashboards.groupDashboardPage'
+        id: `${scope}.analyze.dashboards.groupDashboardPage`
       }
     }
   },
   user: {
     userRole: {
       listPage: {
-        id: 'diverst.containers.Permissions.user.userRole.userRoleListPage'
+        id: `${scope}.user.userRole.userRoleListPage`
       },
       createPage: {
-        id: 'diverst.containers.Permissions.user.userRole.userRoleCreatePage'
+        id: `${scope}.user.userRole.userRoleCreatePage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.user.userRole.userRoleEditPage'
+        id: `${scope}.user.userRole.userRoleEditPage`
       }
     },
     importPage: {
-      id: 'diverst.containers.Permissions.user.usersImportPage'
+      id: `${scope}.user.usersImportPage`
     },
     indexPage: {
-      id: 'diverst.containers.Permissions.user.usersPage'
+      id: `${scope}.user.usersPage`
     },
     createPage: {
-      id: 'diverst.containers.Permissions.user.userCreatePage'
+      id: `${scope}.user.userCreatePage`
     },
     eventsPage: {
-      id: 'diverst.containers.Permissions.user.userEventsPage'
+      id: `${scope}.user.userEventsPage`
     },
     userPolicy: {
       policyTemplatesPage: {
-        id: 'diverst.containers.Permissions.user.userPolicy.policyTemplatesPage'
+        id: `${scope}.user.userPolicy.policyTemplatesPage`
       },
       policyTemplateEditPage: {
-        id: 'diverst.containers.Permissions.user.userPolicy.policyTemplateEditPage'
+        id: `${scope}.user.userPolicy.policyTemplateEditPage`
       }
     },
     editPage: {
-      id: 'diverst.containers.Permissions.user.userEditPage'
+      id: `${scope}.user.userEditPage`
     },
     newsFeedPage: {
-      id: 'diverst.containers.Permissions.user.userNewsFeedPage'
+      id: `${scope}.user.userNewsFeedPage`
     }
   },
   event: {
     showPage: {
-      id: 'diverst.containers.Permissions.event.eventPage'
+      id: `${scope}.event.eventPage`
     },
     editPage: {
-      id: 'diverst.containers.Permissions.event.eventEditPage'
+      id: `${scope}.event.eventEditPage`
     },
     createPage: {
-      id: 'diverst.containers.Permissions.event.eventCreatePage'
+      id: `${scope}.event.eventCreatePage`
     },
     indexPage: {
-      id: 'diverst.containers.Permissions.event.eventsPage'
+      id: `${scope}.event.eventsPage`
     }
   },
   branding: {
     themePage: {
-      id: 'diverst.containers.Permissions.branding.brandingThemePage'
+      id: `${scope}.branding.brandingThemePage`
     },
     homePage: {
-      id: 'diverst.containers.Permissions.branding.brandingHomePage'
+      id: `${scope}.branding.brandingHomePage`
     },
     sponsor: {
       editPage: {
-        id: 'diverst.containers.Permissions.branding.sponsor.sponsorEditPage'
+        id: `${scope}.branding.sponsor.sponsorEditPage`
       },
       createPage: {
-        id: 'diverst.containers.Permissions.branding.sponsor.sponsorCreatePage'
+        id: `${scope}.branding.sponsor.sponsorCreatePage`
       },
       listPage: {
-        id: 'diverst.containers.Permissions.branding.sponsor.sponsorListPage'
+        id: `${scope}.branding.sponsor.sponsorListPage`
       }
     }
   },
   segment: {
     listPage: {
-      id: 'diverst.containers.Permissions.segment.segmentListPage'
+      id: `${scope}.segment.segmentListPage`
     },
     showPage: {
-      id: 'diverst.containers.Permissions.segment.segmentPage'
+      id: `${scope}.segment.segmentPage`
     }
   },
   innovate: {
     campaign: {
       editPage: {
-        id: 'diverst.containers.Permissions.innovate.campaign.campaignEditPage'
+        id: `${scope}.innovate.campaign.campaignEditPage`
       },
       listPage: {
-        id: 'diverst.containers.Permissions.innovate.campaign.campaignListPage'
+        id: `${scope}.innovate.campaign.campaignListPage`
       },
       campaignQuestion: {
         showPage: {
-          id: 'diverst.containers.Permissions.innovate.campaign.campaignQuestion.campaignQuestionShowPage'
+          id: `${scope}.innovate.campaign.campaignQuestion.campaignQuestionShowPage`
         },
         createPage: {
-          id: 'diverst.containers.Permissions.innovate.campaign.campaignQuestion.campaignQuestionCreatePage'
+          id: `${scope}.innovate.campaign.campaignQuestion.campaignQuestionCreatePage`
         },
         editPage: {
-          id: 'diverst.containers.Permissions.innovate.campaign.campaignQuestion.campaignQuestionEditPage'
+          id: `${scope}.innovate.campaign.campaignQuestion.campaignQuestionEditPage`
         }
       },
       showPage: {
-        id: 'diverst.containers.Permissions.innovate.campaign.campaignShowPage'
+        id: `${scope}.innovate.campaign.campaignShowPage`
       },
       createPage: {
-        id: 'diverst.containers.Permissions.innovate.campaign.campaignCreatePage'
+        id: `${scope}.innovate.campaign.campaignCreatePage`
       }
     }
   },
   archive: {
     indexPage: {
-      id: 'diverst.containers.Permissions.archive.archivesPage'
+      id: `${scope}.archive.archivesPage`
     }
   },
   resource: {
     groupResource: {
       resourceCreatePage: {
-        id: 'diverst.containers.Permissions.resource.groupResource.resourceCreatePage'
+        id: `${scope}.resource.groupResource.resourceCreatePage`
       },
       resourceEditPage: {
-        id: 'diverst.containers.Permissions.resource.groupResource.resourceEditPage'
+        id: `${scope}.resource.groupResource.resourceEditPage`
       }
     },
     enterpriseFolder: {
       folderCreatePage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseFolder.folderCreatePage'
+        id: `${scope}.resource.enterpriseFolder.folderCreatePage`
       },
       folderPage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseFolder.folderPage'
+        id: `${scope}.resource.enterpriseFolder.folderPage`
       },
       foldersPage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseFolder.foldersPage'
+        id: `${scope}.resource.enterpriseFolder.foldersPage`
       },
       folderEditPage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseFolder.folderEditPage'
+        id: `${scope}.resource.enterpriseFolder.folderEditPage`
       }
     },
     groupFolder: {
       folderCreatePage: {
-        id: 'diverst.containers.Permissions.resource.groupFolder.folderCreatePage'
+        id: `${scope}.resource.groupFolder.folderCreatePage`
       },
       folderPage: {
-        id: 'diverst.containers.Permissions.resource.groupFolder.folderPage'
+        id: `${scope}.resource.groupFolder.folderPage`
       },
       foldersPage: {
-        id: 'diverst.containers.Permissions.resource.groupFolder.foldersPage'
+        id: `${scope}.resource.groupFolder.foldersPage`
       },
       folderEditPage: {
-        id: 'diverst.containers.Permissions.resource.groupFolder.folderEditPage'
+        id: `${scope}.resource.groupFolder.folderEditPage`
       }
     },
     enterpriseResource: {
       resourceCreatePage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseResource.resourceCreatePage'
+        id: `${scope}.resource.enterpriseResource.resourceCreatePage`
       },
       resourceEditPage: {
-        id: 'diverst.containers.Permissions.resource.enterpriseResource.resourceEditPage'
+        id: `${scope}.resource.enterpriseResource.resourceEditPage`
       }
     }
   },
   mentorship: {
     requests: {
       indexPage: {
-        id: 'diverst.containers.Permissions.mentorship.requests.requestsPage'
+        id: `${scope}.mentorship.requests.requestsPage`
       }
     },
     mentoring: {
       mentorsPage: {
-        id: 'diverst.containers.Permissions.mentorship.mentoring.mentorsPage'
+        id: `${scope}.mentorship.mentoring.mentorsPage`
       }
     },
     editProfilePage: {
-      id: 'diverst.containers.Permissions.mentorship.mentorshipEditProfilePage'
+      id: `${scope}.mentorship.mentorshipEditProfilePage`
     },
     session: {
       indexPage: {
-        id: 'diverst.containers.Permissions.mentorship.session.sessionsPage'
+        id: `${scope}.mentorship.session.sessionsPage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.mentorship.session.sessionEditPage'
+        id: `${scope}.mentorship.session.sessionEditPage`
       },
       showPage: {
-        id: 'diverst.containers.Permissions.mentorship.session.sessionPage'
+        id: `${scope}.mentorship.session.sessionPage`
       }
     }
   },
   news: {
     NewsFeedPage: {
-      id: 'diverst.containers.Permissions.news.newsFeedPage'
+      id: `${scope}.news.newsFeedPage`
     },
     socialLink: {
       createPage: {
-        id: 'diverst.containers.Permissions.news.socialLink.socialLinkCreatePage'
+        id: `${scope}.news.socialLink.socialLinkCreatePage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.news.socialLink.socialLinkEditPage'
+        id: `${scope}.news.socialLink.socialLinkEditPage`
       }
     },
     newsLink: {
       createPage: {
-        id: 'diverst.containers.Permissions.news.newsLink.newsLinkCreatePage'
+        id: `${scope}.news.newsLink.newsLinkCreatePage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.news.newsLink.newsLinkEditPage'
+        id: `${scope}.news.newsLink.newsLinkEditPage`
       },
       showPage: {
-        id: 'diverst.containers.Permissions.news.newsLink.newsLinkPage'
+        id: `${scope}.news.newsLink.newsLinkPage`
       }
     },
     groupMessage: {
       createPage: {
-        id: 'diverst.containers.Permissions.news.groupMessage.groupMessageCreatePage'
+        id: `${scope}.news.groupMessage.groupMessageCreatePage`
       },
       editPage: {
-        id: 'diverst.containers.Permissions.news.groupMessage.groupMessageEditPage'
+        id: `${scope}.news.groupMessage.groupMessageEditPage`
       },
       showPage: {
-        id: 'diverst.containers.Permissions.news.groupMessage.groupMessagePage'
+        id: `${scope}.news.groupMessage.groupMessagePage`
       }
     }
   }
