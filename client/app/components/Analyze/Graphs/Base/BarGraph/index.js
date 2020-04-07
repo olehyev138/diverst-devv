@@ -1,17 +1,12 @@
 import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { VegaLite } from 'react-vega';
 
 import {
   Grid, Paper, withStyles, Box,
   Button
 } from '@material-ui/core';
-
-import {
-  FlexibleWidthXYPlot, HorizontalBarSeries, VerticalGridLines, HorizontalGridLines,
-  Hint, XAxis, YAxis
-} from 'react-vis/';
-import 'react-vis/dist/style.css';
 
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
 
@@ -21,6 +16,49 @@ const styles = theme => ({
   },
 });
 
+const spec = {
+  $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+  width: 400,
+  height: 200,
+  padding: { left: 5, right: 5, top: 5, bottom: 5 },
+  data: { name: 'values' },
+
+  mark: {
+    type: 'bar',
+    stroke: 'black',
+    cursor: 'pointer',
+    tooltip: true
+  },
+  selection: {
+    highlight: { type: 'single', empty: 'none', on: 'mouseover' },
+    select: { type: 'multi' }
+  },
+
+  encoding: {
+    y: { field: 'y', type: 'nominal', title: 'Group' },
+    x: { field: 'x', type: 'quantitative', title: 'Members' },
+    fillOpacity: {
+      condition: { selection: 'select', value: 1 },
+      value: 0.3
+    },
+    strokeWidth: {
+      condition: [
+        {
+          test: {
+            and: [
+              { selection: 'select' },
+              "length(data(\"select_store\"))"
+            ]
+          },
+          value: 2
+        },
+        { selection: 'highlight', value: 1 }
+      ],
+      value: 0
+    }
+  }
+};
+
 export function BarGraph(props) {
   const { classes } = props;
   const [value, setValue] = useState(undefined);
@@ -28,35 +66,7 @@ export function BarGraph(props) {
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
-        <RangeSelector updateRange={props.updateRange} />
-        <Box mb={2} />
-        <FlexibleWidthXYPlot
-          yType='ordinal'
-          margin={{ left: 100 }}
-          height={500}
-          onMouseLeave={() => setValue(undefined)}
-          {...props}
-        >
-          <XAxis />
-          <YAxis
-            tickFormat={value => (value.length > 8) ? `${value.substring(0, 11)}...` : value}
-          />
-          <HorizontalGridLines />
-          <VerticalGridLines />
-          <HorizontalBarSeries
-            data={props.data}
-            barWidth={0.7}
-            onValueMouseOver={value => setValue(value)}
-            onValueClick={props.handleDrilldown || undefined}
-          />
-          {value && <Hint value={{ x: value.x, y: value.y }} />}
-        </FlexibleWidthXYPlot>
-        <Box mb={2} />
-        { props.isDrilldown && (
-          <Button onClick={() => props.handleDrilldown()}>
-            Back
-          </Button>
-        )}
+        <VegaLite spec={spec} data={{ values: (props.data && props.data.length !== 0) ? props.data : [] }} />
       </Paper>
     </React.Fragment>
   );
@@ -66,8 +76,6 @@ BarGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
   updateRange: PropTypes.func,
-  handleDrilldown: PropTypes.func,
-  isDrilldown: PropTypes.bool,
   metricsUnmount: PropTypes.func
 };
 
