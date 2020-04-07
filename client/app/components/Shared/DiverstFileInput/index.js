@@ -165,6 +165,7 @@ export function DiverstFileInput(props) {
                 className={classes.fileInput}
                 ref={inputRef}
                 disabled={disabled || !ready}
+                {/* eslint-disable-next-line no-return-assign */}
                 onClick={e => e.target.value = ''}
                 onChange={(e) => {
                   if (handleUploadBegin)
