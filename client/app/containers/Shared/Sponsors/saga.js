@@ -7,7 +7,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_SPONSORS_BEGIN, GET_SPONSOR_BEGIN, CREATE_SPONSOR_BEGIN,
   DELETE_SPONSOR_BEGIN, UPDATE_SPONSOR_BEGIN, UPDATE_SPONSOR_SUCCESS, UPDATE_SPONSOR_ERROR
-} from 'containers/Branding/Sponsor/constants';
+} from 'containers/Shared/Sponsors/constants';
 
 import {
   CREATE_GROUP_SPONSOR_BEGIN, UPDATE_GROUP_SPONSOR_BEGIN
@@ -17,7 +17,7 @@ import {
   getSponsorsSuccess, getSponsorsError, deleteSponsorSuccess,
   createSponsorError, deleteSponsorError, createSponsorSuccess,
   updateSponsorBegin, updateSponsorSuccess, updateSponsorError, getSponsorSuccess, getSponsorError,
-} from 'containers/Branding/Sponsor/actions';
+} from 'containers/Shared/Sponsors/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

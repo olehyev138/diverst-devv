@@ -7,14 +7,14 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectSponsor } from 'containers/Branding/Sponsor/selectors';
-import reducer from 'containers/Branding/Sponsor/reducer';
-import saga from 'containers/Branding/Sponsor/saga';
+import { selectSponsor } from 'containers/Shared/Sponsors/selectors';
+import reducer from 'containers/Shared/Sponsors/reducer';
+import saga from 'containers/Shared/Sponsors/saga';
 import {
   getSponsorBegin,
   updateGroupSponsorBegin,
   sponsorsUnmount
-} from 'containers/Branding/Sponsor/actions';
+} from 'containers/Shared/Sponsors/actions';
 
 import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';

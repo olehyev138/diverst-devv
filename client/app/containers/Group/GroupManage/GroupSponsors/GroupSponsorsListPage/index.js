@@ -8,18 +8,18 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Branding/Sponsor/reducer';
-import saga from 'containers/Branding/Sponsor/saga';
+import reducer from 'containers/Shared/Sponsors/reducer';
+import saga from 'containers/Shared/Sponsors/saga';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,
   sponsorsUnmount
-} from 'containers/Branding/Sponsor/actions';
+} from 'containers/Shared/Sponsors/actions';
 
 import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors
-} from 'containers/Branding/Sponsor/selectors';
+} from 'containers/Shared/Sponsors/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
