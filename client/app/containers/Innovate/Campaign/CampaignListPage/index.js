@@ -129,5 +129,5 @@ export default compose(
   CampaignListPage,
   ['permissions.campaigns_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage campaigns'
+  'innovate.campaign.listPage'
 ));

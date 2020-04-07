@@ -85,5 +85,5 @@ export default compose(
   NewsLinkCreatePage,
   ['currentGroup.permissions.news_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to post news links'
+  'news.newsLink.createPage'
 ));

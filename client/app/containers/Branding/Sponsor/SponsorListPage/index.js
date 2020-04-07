@@ -125,5 +125,5 @@ export default compose(
   SponsorListPage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage branding'
+  'branding.sponsor.listPage'
 ));

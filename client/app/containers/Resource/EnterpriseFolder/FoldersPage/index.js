@@ -134,5 +134,5 @@ export default compose(
   FoldersPage,
   ['permissions.enterprise_folders_view'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to view folders'
+  'resource.enterpriseFolder.foldersPage'
 ));

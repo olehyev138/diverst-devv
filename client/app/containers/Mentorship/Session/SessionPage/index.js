@@ -184,5 +184,5 @@ export default compose(
   SessionPage,
   ['session.permissions.update?', 'isFetchingSession'],
   (props, rs) => ROUTES.user.root.path(),
-  'Mentorship is not enabled',
+  'mentorship.session.showPage',
 ));

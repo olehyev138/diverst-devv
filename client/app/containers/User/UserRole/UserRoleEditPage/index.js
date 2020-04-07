@@ -95,5 +95,5 @@ export default compose(
   UserRoleEditPage,
   ['userRole.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.system.users.roles.index.path(),
-  'You don\'t have permission to edit this user roles'
+  'user.userRole.editPage'
 ));

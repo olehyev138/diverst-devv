@@ -129,5 +129,5 @@ export default compose(
   BudgetPage,
   ['budget.permissions.show?', 'isLoading'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'You don\'t have permission to view this budget requests'
+  'group.groupPlan.budget.showPage'
 ));

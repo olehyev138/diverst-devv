@@ -164,5 +164,5 @@ export default compose(
   UserListPage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage users'
+  'user.indexPage'
 ));

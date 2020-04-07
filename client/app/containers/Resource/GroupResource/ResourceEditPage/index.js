@@ -136,6 +136,6 @@ export default compose(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
   (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'You don\'t have permission to edit this resource',
+  'resource.groupResource.resourceEditPage',
   true
 ));

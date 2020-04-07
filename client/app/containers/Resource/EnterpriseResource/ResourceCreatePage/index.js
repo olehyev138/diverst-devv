@@ -112,5 +112,5 @@ export default compose(
   ResourceCreatePage,
   ['permissions.enterprise_folders_create'],
   (props, rs) => getFolderIndexPath('admin'),
-  'You don\'t have permission to create resources'
+  'resource.enterpriseResource.resourceCreatePage'
 ));

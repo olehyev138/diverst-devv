@@ -110,5 +110,5 @@ export default compose(
   OutcomesPage,
   ['currentGroup.permissions.update?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group outcomes'
+  'group.outcome.indexPage'
 ));

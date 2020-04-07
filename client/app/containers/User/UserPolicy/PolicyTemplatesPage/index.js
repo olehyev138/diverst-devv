@@ -124,5 +124,5 @@ export default compose(
   PolicyTemplatesPage,
   ['permissions.policy_templates_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage policy templates'
+  'user.userPolicy.policyTemplatesPage'
 ));

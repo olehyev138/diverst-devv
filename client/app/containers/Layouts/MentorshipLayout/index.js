@@ -140,6 +140,6 @@ export default compose(
   MentorshipLayout,
   ['enterprise.mentorship_module_enabled'],
   (props, rs) => ROUTES.user.root.path(),
-  'Mentorship is not enabled',
+  'layouts.mentorship',
   true
 ));

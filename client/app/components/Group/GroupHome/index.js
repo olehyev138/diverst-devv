@@ -52,6 +52,7 @@ export function GroupHome({ classes, ...props }) {
         <EventsPage
           currentGroup={props.currentGroup}
           listComponent={EventsList}
+          readonly
           loaderProps={{
             transitionProps: {
               direction: 'right',

@@ -117,5 +117,5 @@ export default compose(
   AdminAnnualBudgetPage,
   ['permissions.manage_all_budgets'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage all budgets',
+  'group.groupPlan.annualBudget.adminPlanPage',
 ));

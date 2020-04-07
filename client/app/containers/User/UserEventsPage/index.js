@@ -207,5 +207,5 @@ export default compose(
   EventsPage,
   ['permissions.events_view'],
   (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
-  'You don\'t have permission view events'
+  'user.eventsPage'
 ));

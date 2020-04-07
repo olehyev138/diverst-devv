@@ -110,5 +110,5 @@ export default compose(
   CustomGraphEditPage,
   ['currentCustomGraph.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'You don\'t have permission to update graph for this dashboard'
+  'analyze.dashboards.metricsDashboard.customGraph.editPage'
 ));

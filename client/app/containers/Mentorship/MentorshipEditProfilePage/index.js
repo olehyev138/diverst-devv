@@ -82,6 +82,6 @@ export default compose(
   MentorshipEditProfilePage,
   ['formUser.permissions.update?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'You are not authorized to edit this user',
+  'mentorship.editProfilePage',
   true
 ));

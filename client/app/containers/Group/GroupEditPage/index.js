@@ -93,5 +93,5 @@ export default compose(
   GroupCreatePage,
   ['group.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.manage.groups.index.path(),
-  'You don\'t have permission to edit this group'
+  'group.editPage'
 ));

@@ -76,5 +76,5 @@ export default compose(
   GroupMemberCreatePage,
   ['currentGroup.permissions.members_create?'],
   (props, rs) => ROUTES.group.members.index.path(rs.params('group_id')),
-  'You don\'t have permission to add members'
+  'group.groupMembers.createPage'
 ));

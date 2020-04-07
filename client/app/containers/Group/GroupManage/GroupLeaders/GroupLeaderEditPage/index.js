@@ -132,5 +132,5 @@ export default compose(
   GroupLeaderEditPage,
   ['currentGroup.permissions.leaders_manage?'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
-  'You don\'t have permission edit group leaders'
+  'group.groupManage.groupLeaders.editPage'
 ));

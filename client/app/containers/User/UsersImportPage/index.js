@@ -137,5 +137,5 @@ export default compose(
   UserImportPage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission import users'
+  'user.importPage'
 ));

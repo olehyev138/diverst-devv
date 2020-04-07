@@ -150,5 +150,5 @@ export default compose(
   EventsPage,
   ['currentGroup.permissions.events_view?'],
   (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission view this group\'s events'
+  'event.indexPage'
 ));

@@ -79,5 +79,5 @@ export default compose(
   SocialLinkCreatePage,
   ['currentGroup.permissions.news_create?', 'currentGroup.permissions.social_link_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to post social links'
+  'news.socialLink.createPage'
 ));

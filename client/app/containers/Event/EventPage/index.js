@@ -122,5 +122,5 @@ export default compose(
   EventPage,
   ['currentEvent.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
-  'You don\'t have permission to view this event'
+  'event.showPage'
 ));

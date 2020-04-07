@@ -77,5 +77,5 @@ export default compose(
   SSOSettingsPage,
   ['permissions.sso_authentication'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage sso authentication'
+  'globalSettings.SSOSettingsPage'
 ));

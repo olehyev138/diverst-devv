@@ -94,5 +94,5 @@ export default compose(
   PolicyEditPage,
   ['currentPolicy.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.system.users.policy_templates.index.path(),
-  'You don\'t have permission to edit this policy template'
+  'user.userPolicy.policyTemplateEditPage'
 ));

@@ -119,5 +119,5 @@ export default compose(
   GroupLeadersListPage,
   ['currentGroup.permissions.leaders_view?'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
-  'You don\'t have permission view group leaders'
+  'group.groupManage.groupLeaders.listPage'
 ));

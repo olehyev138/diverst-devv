@@ -145,5 +145,5 @@ export default compose(
   FoldersPage,
   ['currentGroup.permissions.resources_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission to view this group\'s resources'
+  'resource.groupFolder.foldersPage'
 ));

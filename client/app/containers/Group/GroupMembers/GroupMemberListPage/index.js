@@ -226,5 +226,5 @@ export default compose(
   GroupMemberListPage,
   ['currentGroup.permissions.members_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission to view group members'
+  'group.groupMembers.listPage'
 ));

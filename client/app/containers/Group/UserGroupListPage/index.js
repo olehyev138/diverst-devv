@@ -92,5 +92,5 @@ export default compose(
   UserGroupListPage,
   ['permissions.groups_view'],
   (props, rs) => ROUTES.user.home.path(),
-  'You don\'t have permission view groups',
+  'group.userListPage',
 ));

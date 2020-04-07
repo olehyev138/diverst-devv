@@ -117,5 +117,5 @@ export default compose(
   MetricsDashboardListPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to view custom dashboards'
+  'analyze.dashboards.metricsDashboard.listPage'
 ));

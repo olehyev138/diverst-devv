@@ -122,5 +122,5 @@ export default compose(
   UserRoleListPage,
   ['permissions.policy_templates_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage user roles'
+  'user.userRole.listPage'
 ));

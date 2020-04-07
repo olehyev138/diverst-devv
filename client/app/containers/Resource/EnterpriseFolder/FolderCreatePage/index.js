@@ -108,5 +108,5 @@ export default compose(
   (props, rs) => rs.location.fromFolder
     ? getFolderShowPath(rs.location.fromFolder.folder)
     : getFolderIndexPath('admin'),
-  'You don\'t have permission to create folders'
+  'resource.enterpriseFolder.folderCreatePage'
 ));

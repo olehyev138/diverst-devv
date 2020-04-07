@@ -196,5 +196,5 @@ export default compose(
   (props, rs) => rs.location.fromFolder
     ? getFolderShowPath(rs.location.fromFolder.folder)
     : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'You don\'t have permission to edit this folder'
+  'resource.groupFolder.folderEditPage'
 ));

@@ -102,5 +102,5 @@ export default compose(
   GroupMessageEditPage,
   ['currentNewsItem.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.messages.show.path(rs.params('group_id'), rs.params('item_id')),
-  'You don\'t have permission to edit this group message'
+  'news.groupMessage.editPage'
 ));

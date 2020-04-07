@@ -101,5 +101,5 @@ export default compose(
   NewsLinkPage,
   ['currentNewsItem.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to view this group message'
+  'news.newsLink.showPage'
 ));

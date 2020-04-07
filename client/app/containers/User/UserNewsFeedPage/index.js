@@ -117,5 +117,5 @@ export default compose(
   NewsFeedPage,
   ['permissions.news_view'],
   (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
-  'You don\'t have permission view news'
+  'user.newsFeedPage'
 ));

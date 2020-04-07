@@ -78,5 +78,5 @@ export default compose(
   BudgetCreatePage,
   ['currentGroup.permissions.budgets_create?'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'You don\'t have permission to make budget requests'
+  'group.groupPlan.budget.createPage'
 ));

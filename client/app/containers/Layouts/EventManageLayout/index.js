@@ -121,5 +121,5 @@ export default compose(
   EventManageLayout,
   ['event.permissions.update?', 'isLoading'],
   (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
-  'You don\'t have permission manage this event'
+  'layouts.eventManage'
 ));

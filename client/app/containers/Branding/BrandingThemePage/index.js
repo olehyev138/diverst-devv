@@ -85,5 +85,5 @@ export default compose(
   BrandingThemePage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage branding'
+  'branding.themePage'
 ));

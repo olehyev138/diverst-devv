@@ -193,5 +193,5 @@ export default compose(
   SessionsPage,
   ['user.permissions.update?'],
   (props, rs) => ROUTES.user.root.path(),
-  'You are not authorized to view this users sessions',
+  'mentorship.session.indexPage',
 ));

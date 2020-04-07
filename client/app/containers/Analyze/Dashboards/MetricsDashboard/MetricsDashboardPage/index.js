@@ -83,5 +83,5 @@ export default compose(
   MetricsDashboardPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.index.path(),
-  'You don\'t have permission to create view this dashboard'
+  'analyze.dashboards.metricsDashboard.showPage'
 ));

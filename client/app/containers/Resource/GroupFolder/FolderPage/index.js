@@ -296,5 +296,5 @@ export default compose(
   FolderPage,
   ['currentFolder.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.resources.index.path(rs.params('group_id')),
-  'You don\'t have permission view this folders'
+  'resource.groupFolder.folderPage'
 ));

@@ -99,5 +99,5 @@ export default compose(
   EmailEditPage,
   ['permissions.emails_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage emails'
+  'globalSettings.email.email.editPage'
 ));

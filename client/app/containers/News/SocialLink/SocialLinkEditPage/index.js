@@ -100,5 +100,5 @@ export default compose(
   SocialLinkEditPage,
   ['currentNewsItem.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to edit this social link'
+  'news.socialLink.editPage'
 ));

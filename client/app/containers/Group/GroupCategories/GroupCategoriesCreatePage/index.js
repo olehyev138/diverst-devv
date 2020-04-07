@@ -67,5 +67,5 @@ export default compose(
   GroupCategoriesCreatePage,
   ['permissions.groups_manage'],
   (props, rs) => ROUTES.admin.manage.groups.index.path(),
-  'You don\'t have permission manage group categories'
+  'group.groupCategories.createPage'
 ));

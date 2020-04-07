@@ -152,5 +152,5 @@ export default compose(
   FieldListPage,
   ['currentGroup.permissions.kpi_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group KPI'
+  'group.groupPlan.KPI.fieldsPage'
 ));

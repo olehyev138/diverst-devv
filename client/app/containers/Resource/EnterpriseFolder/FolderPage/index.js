@@ -292,5 +292,5 @@ export default compose(
   (props, rs) => (props, rs) => rs.location.fromFolder
     ? getFolderShowPath(rs.location.fromFolder.folder)
     : getFolderIndexPath('admin'),
-  'You don\'t have permission view this folders'
+  'resource.enterpriseFolder.folderPage'
 ));

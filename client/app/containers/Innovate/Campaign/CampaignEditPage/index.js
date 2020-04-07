@@ -109,5 +109,5 @@ export default compose(
   CampaignEditPage,
   ['campaign.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
-  'You don\'t have permission to edit this campaign'
+  'innovate.campaign.editPage'
 ));

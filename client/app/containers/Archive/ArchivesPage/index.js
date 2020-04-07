@@ -145,7 +145,7 @@ export default compose(
   ArchivePage,
   ['permissions.archive_manage', 'permissions.posts_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to view archived items',
+  'archive.indexPage',
   false,
   a => a.every(v => v)
 ));

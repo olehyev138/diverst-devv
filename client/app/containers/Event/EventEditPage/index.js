@@ -98,5 +98,5 @@ export default compose(
   EventEditPage,
   ['currentEvent.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
-  'You don\'t have permission to edit this event'
+  'event.editPage'
 ));

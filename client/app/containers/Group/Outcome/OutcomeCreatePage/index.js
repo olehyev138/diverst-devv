@@ -81,5 +81,5 @@ export default compose(
   OutcomeCreatePage,
   ['currentGroup.permissions.update?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to create group outcomes'
+  'group.outcome.createPage'
 ));

@@ -92,5 +92,5 @@ export default compose(
   AdminGroupListPage,
   ['permissions.groups_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage groups'
+  'group.adminListPage'
 ));

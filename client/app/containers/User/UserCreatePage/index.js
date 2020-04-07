@@ -88,5 +88,5 @@ export default compose(
   UserCreatePage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage policy templates'
+  'user.createPage'
 ));

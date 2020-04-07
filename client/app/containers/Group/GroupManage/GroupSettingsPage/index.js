@@ -58,5 +58,5 @@ export default compose(
   GroupSettingsPage,
   ['currentGroup.permissions.update?'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
-  'You don\'t have permission change group settings'
+  'group.groupManage.groupSettingsPage'
 ));

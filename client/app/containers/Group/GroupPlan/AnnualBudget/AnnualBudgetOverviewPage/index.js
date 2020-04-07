@@ -169,5 +169,5 @@ export default compose(
   AnnualBudgetsPage,
   ['currentGroup.permissions.annual_budgets_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission to view group members'
+  'group.groupPlan.annualBudget.overviewPage'
 ));

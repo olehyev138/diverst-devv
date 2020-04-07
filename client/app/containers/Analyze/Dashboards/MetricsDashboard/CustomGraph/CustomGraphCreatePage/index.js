@@ -120,5 +120,5 @@ export default compose(
   CustomGraphCreatePage,
   ['currentDashboard.permissions.update?', 'isLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'You don\'t have permission to create a graph for this dashboard'
+  'analyze.dashboards.metricsDashboard.customGraph.createPage'
 ));

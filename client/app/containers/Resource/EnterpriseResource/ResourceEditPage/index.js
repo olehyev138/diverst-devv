@@ -133,5 +133,5 @@ export default compose(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
   (props, rs) => getFolderIndexPath('admin'),
-  'You don\'t have permission to edit this resource'
+  'resource.enterpriseResource.resourceEditPage'
 ));

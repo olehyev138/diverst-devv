@@ -146,7 +146,7 @@ export default compose(
   SegmentPage,
   ['permissions.segments_create', '!edit', 'segment.permissions.update?', 'edit', 'isFormLoading', 'isFormLoading'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage segments',
+  'segment.showPage',
   true,
   a => a.reduce((sum, v, i) => {
     if (i % 2 === 0)

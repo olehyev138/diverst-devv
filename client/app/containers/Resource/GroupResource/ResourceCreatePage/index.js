@@ -116,5 +116,5 @@ export default compose(
   ResourceCreatePage,
   ['currentGroup.permissions.resources_create?'],
   (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'You don\'t have permission to create resources'
+  'resource.groupResource.resourceCreatePage'
 ));

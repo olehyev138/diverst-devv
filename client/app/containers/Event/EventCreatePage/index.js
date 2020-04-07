@@ -84,5 +84,5 @@ export default compose(
   EventCreatePage,
   ['currentGroup.permissions.events_create?'],
   (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
-  'You don\'t have permission to create events'
+  'event.createPage'
 ));

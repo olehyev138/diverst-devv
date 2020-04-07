@@ -252,6 +252,6 @@ export default compose(
   MentorsPage,
   ['user.permissions.show?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'You are not authorized to view this user\'s mentors or mentees',
+  'mentorship.mentoring.mentorsPage',
   true
 ));

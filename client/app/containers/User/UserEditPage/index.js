@@ -108,5 +108,5 @@ export default compose(
   UserEditPage,
   ['user.permissions.update?', 'isFormLoading'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission edit this'
+  'user.editPage'
 ));

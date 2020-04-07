@@ -127,5 +127,5 @@ export default compose(
   SegmentListPage,
   ['permissions.segments_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to manage segments'
+  'segment.listPage'
 ));

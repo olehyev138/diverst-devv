@@ -103,5 +103,5 @@ export default compose(
   OutcomeEditPage,
   ['currentOutcome.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to edit this pillar'
+  'group.outcome.editPage'
 ));

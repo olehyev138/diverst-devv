@@ -112,5 +112,5 @@ export default compose(
   CampaignQuestionShowPage,
   ['question.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'You don\'t have permission to view this question'
+  'innovate.campaign.campaignQuestion.showPage'
 ));

@@ -90,5 +90,5 @@ export default compose(
   CampaignQuestionCreatePage,
   ['campaign.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'You don\'t have permission to create questions for this campaign'
+  'innovate.campaign.campaignQuestion.createPage'
 ));

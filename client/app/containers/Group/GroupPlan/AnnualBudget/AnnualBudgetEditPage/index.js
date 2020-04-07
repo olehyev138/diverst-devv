@@ -85,5 +85,5 @@ export default compose(
   AnnualBudgetEditPage,
   ['currentGroup.permissions.annual_budgets_manage?'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'You don\'t have permission to view edit the group annual budget'
+  'group.groupPlan.annualBudget.editPage'
 ));

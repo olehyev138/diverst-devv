@@ -100,5 +100,5 @@ export default compose(
   NewsLinkEditPage,
   ['currentNewsItem.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.news_links.show.path(rs.params('group_id'), rs.params('item_id')),
-  'You don\'t have permission to edit this news link'
+  'news.newsLink.editPage'
 ));

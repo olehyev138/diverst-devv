@@ -82,5 +82,5 @@ export default compose(
   GroupMessageCreatePage,
   ['currentGroup.permissions.news_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to create group messages'
+  'news.groupMessage.createPage'
 ));

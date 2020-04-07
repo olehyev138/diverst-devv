@@ -121,5 +121,5 @@ export default compose(
   MetricsDashboardEditPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'You don\'t have permission to edit this dashboard'
+  'analyze.dashboards.metricsDashboard.editPage'
 ));

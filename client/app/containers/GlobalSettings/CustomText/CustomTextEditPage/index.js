@@ -85,5 +85,5 @@ export default compose(
   CustomTextEditPage,
   ['permissions.custom_text_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission manage custom texts'
+  'globalSettings.customText.editPage'
 ));

@@ -119,5 +119,5 @@ export default compose(
   GroupLeaderCreatePage,
   ['currentGroup.permissions.leaders_create?'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
-  'You don\'t have permission create group leaders'
+  'group.groupManage.groupLeaders.createPage'
 ));

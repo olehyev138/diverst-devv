@@ -112,5 +112,5 @@ export default compose(
   UserDashboardPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'You don\'t have permission to view group metrics'
+  'analyze.dashboards.groupPage'
 ));

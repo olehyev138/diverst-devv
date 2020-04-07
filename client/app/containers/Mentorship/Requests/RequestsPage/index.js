@@ -196,6 +196,6 @@ export default compose(
   MentorsPage,
   ['user.permissions.update?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'You are not authorized to view this user\'s requests',
+  'mentorship.requests.indexPage',
   true
 ));
