@@ -1,7 +1,7 @@
 /**
  *
  * GroupSelector
- *
+ * @Param groupType= parent,child or null(all groups)
  */
 
 import React, { memo } from 'react';
@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectGroups, selectAllSubgroups } from 'containers/Group/selectors';
+import { selectPaginatedSelectGroups, selectAllSubgroups, selectAllGroups } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -41,8 +41,7 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       label={label}
       isMulti
       fullWidth
-      // options={(groupType === 'parent') ? rest.parentgroups : ((groupType === 'children') ? rest.subgroups : rest.allgroups)}
-      options={(groupType === 'parent') ? rest.parentgroups : ((groupType === 'children') ? rest.subgroups : rest.parentgroups.concat(rest.subgroups))}
+      options={(groupType === 'parent') ? rest.parentgroups : ((groupType === 'children') ? rest.subgroups : rest.allgroups)}
       value={values[groupField]}
       onChange={value => setFieldValue(groupField, value)}
       onInputChange={value => groupSelectAction(value)}
@@ -68,6 +67,7 @@ GroupSelector.propTypes = {
 const mapStateToProps = createStructuredSelector({
   subgroups: selectAllSubgroups(),
   parentgroups: selectPaginatedSelectGroups(),
+  allgroups: selectAllGroups(),
 });
 
 const mapDispatchToProps = {
