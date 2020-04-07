@@ -10,7 +10,7 @@ import {
 } from 'containers/Branding/Sponsor/constants';
 
 import {
-  CREATE_GROUP_SPONSOR_BEGIN
+  CREATE_GROUP_SPONSOR_BEGIN, UPDATE_GROUP_SPONSOR_BEGIN
 } from '../../Group/GroupManage/GroupSponsors/constants';
 
 import {
@@ -92,7 +92,11 @@ export function* updateSponsor(action) {
     const payload = { sponsor: action.payload };
     const response = yield call(api.sponsors.update.bind(api.sponsors), payload.sponsor.id, payload);
 
-    yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
+    // Route to different location based on the call made
+    if (action.type === UPDATE_GROUP_SPONSOR_BEGIN)
+      yield put(push(ROUTES.group.manage.sponsors.index.path(payload.sponsor.sponsorableId)));
+    else
+      yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
     yield put(updateSponsorSuccess());
     yield put(showSnackbar({
       message: 'Sponsor updated',
@@ -113,6 +117,7 @@ export default function* sponsorsSaga() {
   yield takeLatest(GET_SPONSORS_BEGIN, getSponsors);
   yield takeLatest(GET_SPONSOR_BEGIN, getSponsor);
   yield takeLatest(UPDATE_SPONSOR_BEGIN, updateSponsor);
+  yield takeLatest(UPDATE_GROUP_SPONSOR_BEGIN, updateSponsor);
   yield takeLatest(CREATE_SPONSOR_BEGIN, action => createSponsors(action, 'enterprise_id'));
   yield takeLatest(CREATE_GROUP_SPONSOR_BEGIN, action => createSponsors(action, 'group_id'));
   yield takeLatest(DELETE_SPONSOR_BEGIN, deleteSponsors);

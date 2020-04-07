@@ -322,7 +322,6 @@ export default function Routes(props) {
       <GroupManageLayout  {...expandRoute(ROUTES.group.manage.sponsors.new)} component={GroupSponsorsCreatePage} />
       <GroupManageLayout  {...expandRoute(ROUTES.group.manage.sponsors.edit)} component={GroupSponsorsEditPage} />
       <GroupManageLayout  {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
-
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />

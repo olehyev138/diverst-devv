@@ -12,7 +12,7 @@ import reducer from 'containers/Branding/Sponsor/reducer';
 import saga from 'containers/Branding/Sponsor/saga';
 import {
   getSponsorBegin,
-  updateSponsorBegin,
+  updateGroupSponsorBegin,
   sponsorsUnmount
 } from 'containers/Branding/Sponsor/actions';
 
@@ -29,11 +29,12 @@ export function GroupSponsorCreatePage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(rs.params('group_sponsor_id')),
   };
   const { intl } = props;
+
   useEffect(() => {
-    props.getSponsorBegin({ id: rs.params('sponsor_id') });
+    props.getSponsorBegin({ id: rs.params('group_sponsor_id') });
 
     return () => {
       props.sponsorsUnmount();
@@ -45,9 +46,10 @@ export function GroupSponsorCreatePage(props) {
     <React.Fragment>
       <SponsorForm
         sponsor={props.sponsor}
-        sponsorAction={props.updateSponsorBegin}
+        sponsorAction={props.updateGroupSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
+        sponsorableId={rs.params('group_sponsor_id')}
       />
     </React.Fragment>
   );
@@ -57,7 +59,7 @@ GroupSponsorCreatePage.propTypes = {
   intl: intlShape,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
-  updateSponsorBegin: PropTypes.func,
+  updateGroupSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func
 };
 
@@ -67,7 +69,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getSponsorBegin,
-  updateSponsorBegin,
+  updateGroupSponsorBegin,
   sponsorsUnmount
 };
 

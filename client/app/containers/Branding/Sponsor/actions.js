@@ -12,7 +12,7 @@ import {
   DELETE_SPONSOR_BEGIN, DELETE_SPONSOR_SUCCESS, DELETE_SPONSOR_ERROR,
   SPONSORS_UNMOUNT
 } from 'containers/Branding/Sponsor/constants';
-import { CREATE_GROUP_SPONSOR_BEGIN } from '../../Group/GroupManage/GroupSponsors/constants';
+import { CREATE_GROUP_SPONSOR_BEGIN, UPDATE_GROUP_SPONSOR_BEGIN } from '../../Group/GroupManage/GroupSponsors/constants';
 
 /* Sponsor listing */
 
@@ -95,6 +95,13 @@ export function createSponsorError(error) {
 export function updateSponsorBegin(payload) {
   return {
     type: UPDATE_SPONSOR_BEGIN,
+    payload,
+  };
+}
+
+export function updateGroupSponsorBegin(payload) {
+  return {
+    type: UPDATE_GROUP_SPONSOR_BEGIN,
     payload,
   };
 }
