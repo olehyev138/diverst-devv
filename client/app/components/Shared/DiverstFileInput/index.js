@@ -23,7 +23,7 @@ const styles = theme => ({
     display: 'none',
   },
   uploadSection: {
-    paddingTop: 12,
+    marginTop: 12,
   },
   fileInfo: {
     fontSize: 16,
