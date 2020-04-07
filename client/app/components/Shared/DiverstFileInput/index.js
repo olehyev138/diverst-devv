@@ -165,6 +165,7 @@ export function DiverstFileInput(props) {
                 className={classes.fileInput}
                 ref={inputRef}
                 disabled={disabled || !ready}
+                onClick={e => e.target.value = ''}
                 onChange={(e) => {
                   if (handleUploadBegin)
                     handleUploadBegin(e);
