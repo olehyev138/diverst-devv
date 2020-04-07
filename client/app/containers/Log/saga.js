@@ -16,14 +16,10 @@ import {
 
 export function* getLogs(action) {
   try {
-    console.log(action.payload);
     const response = yield call(api.activities.all.bind(api.activities), action.payload);
-    console.log(response.data.page);
+
     yield put(getLogsSuccess(response.data.page));
   } catch (err) {
-    console.log('err');
-    console.log(err);
-    console.log(err.response);
     yield put(getLogsError(err));
 
     // TODO: intl message
@@ -34,13 +30,10 @@ export function* getLogs(action) {
 export function* exportLogs(action) {
   try {
     const response = yield call(api.activities.csvExport.bind(api.activities), action.payload);
-    console.log(response);
+
     yield put(exportLogsSuccess({}));
     yield put(showSnackbar({ message: 'Successfully exported logs', options: { variant: 'success' } }));
   } catch (err) {
-    console.log('err');
-    console.log(err);
-    console.log(err.response);
     yield put(exportLogsError(err));
 
     // TODO: intl message

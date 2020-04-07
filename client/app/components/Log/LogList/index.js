@@ -37,12 +37,6 @@ export function LogList(props, context) {
   const { classes } = props;
   const { intl } = props;
 
-  const styles = theme => ({
-    selector: {
-      zIndex: theme.zIndex.drawer + 100,
-    },
-  });
-
   const columns = [
     {
       title: 'id',
