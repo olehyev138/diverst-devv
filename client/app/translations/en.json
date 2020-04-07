@@ -875,6 +875,7 @@
   "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.",
   "diverst.containers.Permissions.layouts.mentorshipLayout": "Mentorship is not enabled",
   "diverst.containers.Permissions.layouts.eventManageLayout": "You don't have permission manage this event",
+  "diverst.containers.Permissions.layouts.groupLayout": "You don't have permission view this group",
   "diverst.containers.Permissions.globalSettings.email.email.emailsPage": "You don't have permission manage emails",
   "diverst.containers.Permissions.globalSettings.email.email.emailEditPage": "You don't have permission manage emails",
   "diverst.containers.Permissions.globalSettings.email.event.eventEditPage": "You don't have permission manage emails",

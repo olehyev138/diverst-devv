@@ -15,13 +15,15 @@ import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
-import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
+import { selectGroup, selectHasChanged, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import dig from 'object-dig';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
 import Scrollbar from 'components/Shared/Scrollbar';
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -96,6 +98,7 @@ GroupLayout.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
+  isFormLoading: selectGroupIsFormLoading(),
   groupHasChanged: selectHasChanged(),
 });
 
@@ -113,4 +116,9 @@ export default compose(
   withConnect,
   withStyles(styles),
   memo,
-)(GroupLayout);
+)(Conditional(
+  GroupLayout,
+  ['currentGroup.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.user.root.path(),
+  'layouts.group',
+));

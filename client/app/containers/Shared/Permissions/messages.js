@@ -15,6 +15,9 @@ export default defineMessages({
     },
     eventManage: {
       id: 'diverst.containers.Permissions.layouts.eventManageLayout'
+    },
+    group: {
+      id: 'diverst.containers.Permissions.layouts.groupLayout'
     }
   },
   globalSettings: {
