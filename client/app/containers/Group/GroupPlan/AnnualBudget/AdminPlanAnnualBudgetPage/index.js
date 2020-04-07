@@ -31,7 +31,7 @@ export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc', query_scopes: ['all_parents'] });
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };

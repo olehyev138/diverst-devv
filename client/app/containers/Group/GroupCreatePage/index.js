@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
-import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/Group/actions';
+import { createGroupBegin, getGroupsBegin, groupFormUnmount, getGroupsSuccess } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
@@ -32,6 +32,7 @@ export function GroupCreatePage(props) {
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}
+      getGroupsSuccess={props.getGroupsSuccess}
     />
   );
 }
@@ -41,6 +42,7 @@ GroupCreatePage.propTypes = {
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
+  getGroupsSuccess: PropTypes.func,
   groups: PropTypes.array,
   isCommitting: PropTypes.bool,
 };
@@ -54,7 +56,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   createGroupBegin,
   getGroupsBegin,
-  groupFormUnmount
+  getGroupsSuccess,
+  groupFormUnmount,
 };
 
 const withConnect = connect(

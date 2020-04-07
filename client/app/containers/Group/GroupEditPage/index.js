@@ -14,7 +14,8 @@ import RouteService from 'utils/routeHelpers';
 import { selectFormGroup, selectGroupIsCommitting, selectPaginatedSelectGroups, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import {
   getGroupBegin, getGroupsBegin,
-  updateGroupBegin, groupFormUnmount
+  updateGroupBegin, groupFormUnmount,
+  getGroupsSuccess,
 } from 'containers/Group/actions';
 
 import GroupForm from 'components/Group/GroupForm';
@@ -49,6 +50,7 @@ export function GroupEditPage(props) {
         buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
+        getGroupsSuccess={props.getGroupsSuccess}
       />
     </React.Fragment>
   );
@@ -62,6 +64,7 @@ GroupEditPage.propTypes = {
   getGroupsBegin: PropTypes.func,
   updateGroupBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
+  getGroupsSuccess: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 };
@@ -77,7 +80,8 @@ const mapDispatchToProps = {
   getGroupBegin,
   getGroupsBegin,
   updateGroupBegin,
-  groupFormUnmount
+  groupFormUnmount,
+  getGroupsSuccess,
 };
 
 const withConnect = connect(
