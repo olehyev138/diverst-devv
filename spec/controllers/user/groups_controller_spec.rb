@@ -21,7 +21,7 @@ RSpec.describe User::GroupsController, type: :controller do
         end
 
         it "return 1 of the current user's enterprise groups" do
-          expect(assigns[:groups]).to eq []
+          expect(assigns[:groups]).to eq [group]
         end
       end
     end
