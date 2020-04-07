@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -77,14 +77,13 @@ const styles = theme => ({
   },
 });
 
-const inputRef = React.createRef();
-
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
   const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, ...rest } = props;
 
   const [uploadedFile, setUploadedFile] = useState(null);
+  const inputRef = useRef();
 
   // Note: the fileName prop is only used for edit forms to show the existing file name
   useEffect(() => {
