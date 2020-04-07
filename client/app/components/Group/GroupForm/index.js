@@ -41,7 +41,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      query_scopes: ['all_children']
+      query_scopes: ['all_parents', 'no_children']
     });
   };
 
