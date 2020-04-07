@@ -174,7 +174,7 @@ export function DiverstFileInput(props) {
                 }}
                 {...inputProps}
               />
-              <Grid container spacing={1} className={classes.uploadSection} alignItems='center'>
+              <Grid container spacing={1} alignItems='center' className={classes.uploadSection}>
                 <Grid item>
                   <Button
                     className={classes.uploadButton}
