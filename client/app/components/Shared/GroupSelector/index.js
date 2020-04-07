@@ -41,7 +41,7 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       label={label}
       isMulti
       fullWidth
-      options={(groupType === 'parent') ? rest.parentgroups : ((groupType === 'children') ? rest.subgroups : rest.allgroups)}
+      options={rest.selectgroups}
       value={values[groupField]}
       onChange={value => setFieldValue(groupField, value)}
       onInputChange={value => groupSelectAction(value)}
@@ -59,6 +59,7 @@ GroupSelector.propTypes = {
   values: PropTypes.object.isRequired,
   groupType: PropTypes.string,
   getGroupsBegin: PropTypes.func.isRequired,
+  selectgroups: PropTypes.array,
   allgroups: PropTypes.array,
   parentgroups: PropTypes.array,
   subgroups: PropTypes.array,
@@ -66,7 +67,7 @@ GroupSelector.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   subgroups: selectAllSubgroups(),
-  parentgroups: selectPaginatedSelectGroups(),
+  selectgroups: selectPaginatedSelectGroups(),
   allgroups: selectAllGroups(),
 });
 

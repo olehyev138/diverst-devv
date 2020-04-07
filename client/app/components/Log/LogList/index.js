@@ -20,7 +20,7 @@ import messages from 'containers/Group/GroupMembers/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
 
 
