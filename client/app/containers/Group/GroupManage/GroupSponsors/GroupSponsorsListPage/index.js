@@ -32,17 +32,16 @@ export function GroupSponsorListPage(props) {
   useInjectSaga({ key: 'sponsors', saga });
 
   const rs = new RouteService(useContext);
+  const groupId = rs.params('group_id')[0];
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor']
+    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor'] , sponsorable_id: groupId
   });
 
   const links = {
-    sponsorNew: ROUTES.group.manage.sponsors.new.path(rs.params('group_id')),
-    sponsorEdit: id => ROUTES.group.manage.sponsors.edit.path(rs.params('group_id'), id),
+    sponsorNew: ROUTES.group.manage.sponsors.new.path(groupId),
+    sponsorEdit: id => ROUTES.group.manage.sponsors.edit.path(groupId),
   };
-
-  const sponsorId = rs.params('sponsor_id');
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
