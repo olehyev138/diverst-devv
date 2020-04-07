@@ -9,6 +9,8 @@ import NotAuthorizedPage from 'containers/Shared/NotAuthorizedPage';
 import PropTypes from 'prop-types';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Shared/Permissions/messages';
 
 function conditionalCheck(props, condition) {
   let parts;
@@ -41,7 +43,7 @@ export default function Conditional(
 ) {
   const WrappedComponent = (props) => {
     const [first, setFirst] = useState(true);
-    const show = valid(props, conditions, reducer) || (first && wait);
+    const show = valid(props, conditions, reducer);
     const rs = props.computedMatch
       ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
       : new RouteService(useContext);
@@ -49,12 +51,12 @@ export default function Conditional(
     const path = redirect && redirect(props, rs);
 
     useEffect(() => {
-      if (!show && path) {
+      if (!show && wait && first)
+        setFirst(false);
+      else if (!show && path) {
         props.redirectAction(path);
-        if (wait)
-          setFirst(false);
         if (message)
-          props.showSnackbar({ message, options: { variant: 'warning' } });
+          props.showSnackbar({ message: props.intl.formatMessage(conditionalCheck(messages, message)), options: { variant: 'warning' } });
       }
 
       return () => null;
@@ -69,6 +71,7 @@ export default function Conditional(
   };
 
   WrappedComponent.propTypes = {
+    intl: intlShape,
     showSnackbar: PropTypes.func,
     redirectAction: PropTypes.func,
     computedMatch: PropTypes.object,
@@ -86,6 +89,7 @@ export default function Conditional(
   );
 
   return compose(
-    withConnect
+    withConnect,
+    injectIntl,
   )(WrappedComponent);
 }
