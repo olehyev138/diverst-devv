@@ -24,7 +24,11 @@ $(document).on('ready page:load', function(){
           trigger: 'hover',
           content: event.description,
           container: '#calendar'
-      }).popover('toggle');
+      });
+      },
+
+      eventClick: function() {
+        $('.popover').remove();
       },
 
 
