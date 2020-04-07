@@ -144,13 +144,9 @@ export default compose(
   memo,
 )(Conditional(
   SegmentPage,
-  ['permissions.segments_create', '!edit', 'segment.permissions.update?', 'edit', 'isFormLoading', 'isFormLoading'],
+  ['edit', 'permissions.segments_create', 'segment.permissions.update?', 'isFormLoading'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   'segment.showPage',
   true,
-  a => a.reduce((sum, v, i) => {
-    if (i % 2 === 0)
-      return [sum, v];
-    return sum[0] || (sum[1] && v);
-  }, false)
+  a => a[3] || (a[0] ? a[2] : a[1])
 ));

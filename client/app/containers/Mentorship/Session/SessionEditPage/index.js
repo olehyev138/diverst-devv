@@ -99,5 +99,7 @@ export default compose(
   SessionProfilePage,
   ['type', 'formSession.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'mentorship.session.editPage' || a.slice(1, 3).some(b => b)
+  'mentorship.session.editPage',
+  false,
+  a => a[0] !== 'edit' || a.slice(1, 3).some(b => b)
 ));
