@@ -26,8 +26,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
+
 // messages
-import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
 export function CustomGraphCreatePage(props) {
@@ -50,6 +51,7 @@ export function CustomGraphCreatePage(props) {
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
       metricsDashboardId={metricsDashboardId[0]}
+      currentEnterprise={props.currentEnterprise}
       buttonText={intl.formatMessage(messages.create)}
       links={links}
       isCommitting={props.isCommitting}
