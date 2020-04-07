@@ -64,7 +64,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
           { currentGroup && <GroupLinks currentGroup={currentGroup} permission={permission} {...other} /> }
           <Scrollbar>
             <Fade in appear>
-              <Container>
+              <Container maxWidth='lg'>
                 <div className={classes.content}>
                   {currentGroup && (
                     <React.Fragment>

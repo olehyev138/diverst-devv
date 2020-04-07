@@ -29,7 +29,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
     transaction do
       models.each do |model|
         attachments = model.column_names.map do |c|
-          if c =~ /(.+)_file_name$/
+          if c =~ /(.+)_content_type$/
             $1
           end
         end.compact
@@ -40,11 +40,11 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
 
         model.find_each.each do |instance|
           attachments.each do |attachment|
-            if instance.send("#{attachment}_paperclip").path.blank?
+            if instance.send("#{attachment}_paperclip").path.blank? || instance.send(attachment).try(:attached?)
               next
             end
 
-            updated_at = instance.try(:updated_at).to_datetime || DateTime.current
+            updated_at = instance.try(:updated_at).try(:to_datetime) || DateTime.current
 
             active_storage_blob_statement.execute(
                 key(instance, attachment),
@@ -74,9 +74,8 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
   private
 
   def key(instance, attachment)
-    SecureRandom.uuid
-    # Alternatively:
-    # instance.send("#{attachment}_file_name")
+    # Use paperclip path as key so ActiveStorage can find them within S3
+    instance.send("#{attachment}_paperclip").path.delete_prefix('/')
   end
 
   def checksum(attachment)

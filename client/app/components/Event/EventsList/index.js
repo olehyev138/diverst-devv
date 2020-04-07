@@ -99,16 +99,18 @@ export function EventsList(props, context) {
             <Tab label={intl.formatMessage(messages.index.all)} />
           </ResponsiveTabs>
         )}
-        <ResponsiveTabs
-          value={props.currentTab}
-          onChange={props.handleChangeTab}
-          indicatorColor='primary'
-          textColor='primary'
-        >
-          <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-          <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-          <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
-        </ResponsiveTabs>
+        {props.onlyUpcoming || (
+          <ResponsiveTabs
+            value={props.currentTab}
+            onChange={props.handleChangeTab}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
+            <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+            <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+          </ResponsiveTabs>
+        )}
       </Paper>
       <br />
       <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
@@ -173,6 +175,7 @@ EventsList.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   readonly: PropTypes.bool,
+  onlyUpcoming: PropTypes.bool,
   loaderProps: PropTypes.object,
   currentGroup: PropTypes.object,
 };
