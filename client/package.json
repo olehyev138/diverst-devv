@@ -106,6 +106,7 @@
     "react-router-dom": "5.0.0",
     "react-router-last-location": "^2.0.1",
     "react-select": "^3.0.8",
+    "react-vega": "^7.3.0",
     "react-vis": "^1.11.7",
     "redux": "4.0.1",
     "redux-saga": "1.0.2",
@@ -113,6 +114,8 @@
     "sanitize.css": "8.0.0",
     "styled-components": "4.2.0",
     "styled-css-grid": "1.2.1",
+    "vega": "^5.10.1",
+    "vega-lite": "^4.9.0",
     "warning": "^4.0.3",
     "yup": "^0.27.0"
   },
