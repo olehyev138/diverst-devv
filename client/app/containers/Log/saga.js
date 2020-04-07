@@ -17,10 +17,9 @@ import {
 export function* getLogs(action) {
   try {
     const response = yield call(api.activities.all.bind(api.activities), action.payload);
-    console.log(response.data.page);
+
     yield put(getLogsSuccess(response.data.page));
   } catch (err) {
-    console.log(err.response);
     yield put(getLogsError(err));
 
     // TODO: intl message
