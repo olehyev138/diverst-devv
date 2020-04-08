@@ -49,6 +49,16 @@ export function LogList(props, context) {
       query_field: 'owner_id'
     },
     {
+      title: 'first name',
+      field: 'user.first_name',
+      query_field: 'owner_id'
+    },
+    {
+      title: 'last name',
+      field: 'user.last_name',
+      query_field: 'owner_id'
+    },
+    {
       title: 'key',
       field: 'key',
       query_field: 'key'
@@ -102,7 +112,6 @@ export function LogList(props, context) {
                 <Grid container spacing={3} alignItems='flex-start' justify='space-between'>
                   <Grid item xs={4}>
                     <GroupSelector
-                      classname={classes.selector}
                       groupField='groupLabels'
                       label=''
                       {...formikProps}

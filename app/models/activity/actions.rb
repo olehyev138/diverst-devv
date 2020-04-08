@@ -45,6 +45,5 @@ module Activity::Actions
     def base_preloads
       [ :user, user: User.base_attribute_preloads ]
     end
-
   end
 end
