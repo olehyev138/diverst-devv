@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import { selectSponsor } from '../../../Shared/Sponsors/selectors';
 import reducer from '../../../Shared/Sponsors/reducer';
-import saga from '../../../Shared/Sponsors/saga';
+import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
 import {
   getSponsorBegin,
   updateSponsorBegin,

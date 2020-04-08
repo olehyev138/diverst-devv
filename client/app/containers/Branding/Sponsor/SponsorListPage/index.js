@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Shared/Sponsors/reducer';
-import saga from 'containers/Shared/Sponsors/saga';
+import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,

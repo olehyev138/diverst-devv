@@ -8,7 +8,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from '../../../Shared/Sponsors/reducer';
-import saga from '../../../Shared/Sponsors/saga';
+import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
 import {
   createSponsorBegin,
   sponsorsUnmount

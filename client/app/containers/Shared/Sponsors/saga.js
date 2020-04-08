@@ -17,6 +17,12 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+// Used to identify where the call came from
+const keyTypes = Object.freeze({
+  groupSponsor: 'group_id',
+  enterpriseSponsor: 'enterprise_id',
+});
+
 export function* getSponsors(action) {
   try {
     const response = yield call(api.sponsors.all.bind(api.sponsors), action.payload);
@@ -45,13 +51,16 @@ export function* getSponsor(action) {
 }
 
 export function* createSponsors(action, sponsorableKey) {
-  console.log("Hello");
   try {
     const payload = { sponsor: action.payload };
     payload[sponsorableKey] = payload.sponsor.sponsorableId;
 
     const response = yield call(api.sponsors.create.bind(api.sponsors), payload);
 
+    if (sponsorableKey === keyTypes.groupSponsor)
+      yield put(push(ROUTES.group.manage.sponsors.index.path(payload.sponsor.sponsorableId)));
+    else
+      yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
 
     yield put(createSponsorSuccess());

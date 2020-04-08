@@ -8,7 +8,7 @@ import {
 
 
 export default function* sponsorsSaga() {
-  yield takeLatest(CREATE_SPONSOR_BEGIN, action => createSponsors(action, 'group_id'));
+  yield takeLatest(CREATE_SPONSOR_BEGIN, action => createSponsors(action, 'enterprise_id'));
   yield takeLatest(GET_SPONSORS_BEGIN, getSponsors);
   yield takeLatest(GET_SPONSOR_BEGIN, getSponsor);
   yield takeLatest(UPDATE_SPONSOR_BEGIN, updateSponsor);
