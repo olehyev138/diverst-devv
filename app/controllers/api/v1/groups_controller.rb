@@ -2,11 +2,6 @@ class Api::V1::GroupsController < DiverstController
   include Api::V1::Concerns::DefinesFields
   include Api::V1::Concerns::Updatable
 
-  def index
-    params.permit![:parent_id] = nil
-    super
-  end
-
   def create_field
     params[:field][:field_type] = 'regular'
     super
