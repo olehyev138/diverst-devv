@@ -23,8 +23,7 @@ import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import LogOwner from "../LogItem/LogOwner";
 
 const styles = theme => ({
   logListItem: {
@@ -41,26 +40,9 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: 'id',
-      field: 'id',
-      query_field: 'id'
-    },
-    {
       title: 'user',
       field: 'owner_id',
-      render: rowData => (
-        <Link
-          component={WrappedNavLink}
-          to={{
-            pathname: ROUTES.admin.system.users.edit.path(rowData.owner_id),
-            state: { id: rowData.owner_id }
-          }}
-        >
-          {rowData.user.first_name}
-          &ensp;
-          {rowData.user.last_name}
-        </Link>
-      )
+      render: rowData => <LogOwner rowData={rowData} />
     },
     {
       title: 'key',
@@ -69,7 +51,7 @@ export function LogList(props, context) {
     {
       title: 'date',
       field: 'created_at',
-      query_field: 'created_at'
+      query_field: 'created_at',
     },
 
   ];
