@@ -28,7 +28,12 @@ class ReactRoutesHelper
             copied_args = args
             mapped_parts = parts.map do |part|
               if part.start_with? ':'
-                copied_args.shift || part
+                arg = copied_args.shift
+                case arg
+                when -> (a) {a.respond_to?(:id)} then arg.id
+                when Integer, String then arg.to_s
+                else part
+                end
               else
                 part
               end
