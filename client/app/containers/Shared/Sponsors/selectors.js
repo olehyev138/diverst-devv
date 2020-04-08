@@ -8,6 +8,11 @@ const selectPaginatedSponsors = () => createSelector(
   sponsorsState => sponsorsState.sponsorList
 );
 
+const selectSponsors = () => createSelector(
+  selectSponsorsDomain,
+  sponsorsState => sponsorsState.sponsorList
+);
+
 const selectSponsorTotal = () => createSelector(
   selectSponsorsDomain,
   sponsorsState => sponsorsState.sponsorTotal
@@ -30,5 +35,5 @@ const selectIsCommitting = () => createSelector(
 
 export {
   selectSponsorsDomain, selectPaginatedSponsors, selectSponsor,
-  selectSponsorTotal, selectIsFetchingSponsors, selectIsCommitting
+  selectSponsorTotal, selectIsFetchingSponsors, selectIsCommitting, selectSponsors
 };
