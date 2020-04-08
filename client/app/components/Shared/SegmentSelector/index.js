@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
+import { selectPaginatedSelectSegments, selectIsLoading } from 'containers/Segment/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -41,6 +41,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
       label={label}
       isMulti
       fullWidth
+      isLoading={rest.isLoading}
       options={rest.segments}
       value={values[segmentField]}
       onChange={value => setFieldValue(segmentField, value)}
@@ -60,10 +61,12 @@ SegmentSelector.propTypes = {
 
   getSegmentsBegin: PropTypes.func.isRequired,
   segments: PropTypes.array,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   segments: selectPaginatedSelectSegments(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

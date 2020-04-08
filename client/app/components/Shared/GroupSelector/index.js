@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
+import { selectPaginatedSelectGroups, selectGroupIsLoading } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -54,11 +54,11 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       label={label}
       isMulti
       fullWidth
-      options={rest.selectgroups}
+      options={rest.selectGroups}
+      isLoading={rest.isLoading}
       value={values[groupField]}
       onChange={value => setFieldValue(groupField, value)}
       onInputChange={value => groupSelectAction(value)}
-      onMenuOpen={groupSelectAction}
       hideHelperText
       {...rest}
     />
@@ -73,11 +73,13 @@ GroupSelector.propTypes = {
   values: PropTypes.object.isRequired,
   groupType: PropTypes.string,
   getGroupsBegin: PropTypes.func.isRequired,
-  selectgroups: PropTypes.array,
+  selectGroups: PropTypes.array,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  selectgroups: selectPaginatedSelectGroups(),
+  selectGroups: selectPaginatedSelectGroups(),
+  isLoading: selectGroupIsLoading(),
 });
 
 const mapDispatchToProps = {
