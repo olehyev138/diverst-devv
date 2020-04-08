@@ -4,4 +4,4 @@ Your <%= @group.name %> has <%= @count %> pending comment(s). Click below to vie
 
 <br/>
 
-<p><%= link_to "View Pending Comments", group_posts_url(@group) %></p>
+<p><%= link_to "View Pending Comments", ReactRoutesHelper.routes.group.news.index(@group) %></p>

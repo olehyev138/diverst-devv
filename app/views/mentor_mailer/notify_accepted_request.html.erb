@@ -2,4 +2,4 @@
 
 <p><%= @receiver.name %> has accepted your request for mentorship. Click the link below to schedule a session with him/her today.</p>
 
-<p><%= link_to "Schedule a Session!", new_mentoring_session_url(saml_for_enterprise: @sender.enterprise.id) %></p>
+<p><%= link_to "Schedule a Session!", ReactRoutesHelper.routes.user.mentorship.sessions.schedule %></p>

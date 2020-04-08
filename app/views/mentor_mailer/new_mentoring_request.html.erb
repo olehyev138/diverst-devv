@@ -10,4 +10,4 @@
 
 <% end %>
 
-<p><%= link_to "Accept/Decline", requests_user_mentorship_index_url(saml_for_enterprise: @receiver.enterprise.id) %></p>
+<p><%= link_to "Accept/Decline", ReactRoutesHelper.routes.user.mentorship.requests(@receiver) %></p>
