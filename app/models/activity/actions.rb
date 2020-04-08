@@ -37,5 +37,14 @@ module Activity::Actions
           :for_group_ids
       ].map { |scope| scope.to_s }
     end
+
+    def base_includes
+      [ :user ]
+    end
+
+    def base_preloads
+      [ :user, user: User.base_attribute_preloads ]
+    end
+
   end
 end

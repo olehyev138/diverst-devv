@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
 
+  has_many :activities, as: :owner
   # sessions
   has_many :sessions, dependent: :destroy
 

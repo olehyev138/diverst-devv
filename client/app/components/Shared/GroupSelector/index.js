@@ -18,7 +18,7 @@ import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Segment/reducer';
+import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 
@@ -27,7 +27,6 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
   useInjectSaga({ key: 'groups', saga });
 
   const groupSelectAction = (searchKey = '') => {
-    // eslint-disable-next-line no-nested-ternary,no-unused-expressions
     if (groupType === 'parent')
       rest.getGroupsBegin({
         count: 10, page: 0, order: 'asc',
