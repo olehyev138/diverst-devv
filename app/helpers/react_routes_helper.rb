@@ -24,7 +24,7 @@ class ReactRoutesHelper
         case routes_hash[key]
         when Hash
           define_singleton_method key do
-            make_class routes_hash[key]
+            instance_variable_get("@#{key}_class") || instance_variable_set("@#{key}_class", make_class(routes_hash[key]))
           end
         when String
           parts = routes_hash[key].split('/')
