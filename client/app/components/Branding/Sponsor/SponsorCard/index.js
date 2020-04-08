@@ -60,7 +60,7 @@ export function SponsorCard(props) {
 
 SponsorCard.propTypes = {
   getSponsorsBegin: PropTypes.func,
-  type: PropTypes.func,
+  type: PropTypes.string,
   currentGroup: PropTypes.object,
   sponsorList: PropTypes.array,
 };
