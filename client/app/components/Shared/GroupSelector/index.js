@@ -1,7 +1,7 @@
 /**
  *
  * GroupSelector
- * @Param groupType= parent,child or null(all groups)
+ * @Param groupType= parent,children or null(all groups)
  */
 
 import React, { memo } from 'react';
@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectGroups, selectAllSubgroups, selectAllGroups } from 'containers/Group/selectors';
+import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -27,10 +27,24 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
   useInjectSaga({ key: 'groups', saga });
 
   const groupSelectAction = (searchKey = '') => {
-    rest.getGroupsBegin({
-      count: 10, page: 0, order: 'asc',
-      search: searchKey,
-    });
+    // eslint-disable-next-line no-nested-ternary,no-unused-expressions
+    if (groupType === 'parent')
+      rest.getGroupsBegin({
+        count: 10, page: 0, order: 'asc',
+        search: searchKey,
+        query_scopes: ['all_parents']
+      });
+    else if (groupType === 'children')
+      rest.getGroupsBegin({
+        count: 10, page: 0, order: 'asc',
+        search: searchKey,
+        query_scopes: ['all_children']
+      });
+    else
+      rest.getGroupsBegin({
+        count: 10, page: 0, order: 'asc',
+        search: searchKey,
+      });
   };
 
   return (
@@ -45,6 +59,7 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       value={values[groupField]}
       onChange={value => setFieldValue(groupField, value)}
       onInputChange={value => groupSelectAction(value)}
+      onMenuOpen={groupSelectAction}
       hideHelperText
       {...rest}
     />
@@ -60,15 +75,10 @@ GroupSelector.propTypes = {
   groupType: PropTypes.string,
   getGroupsBegin: PropTypes.func.isRequired,
   selectgroups: PropTypes.array,
-  allgroups: PropTypes.array,
-  parentgroups: PropTypes.array,
-  subgroups: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  subgroups: selectAllSubgroups(),
   selectgroups: selectPaginatedSelectGroups(),
-  allgroups: selectAllGroups(),
 });
 
 const mapDispatchToProps = {

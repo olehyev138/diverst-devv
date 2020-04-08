@@ -20,31 +20,6 @@ const selectPaginatedSelectGroups = () => createSelector(
   )
 );
 
-const selectAllSubgroups = () => createSelector(
-  selectGroupsDomain,
-  groupsState => (
-    Object
-      .values(groupsState.groupList)
-      // eslint-disable-next-line no-return-assign
-      .flatMap(group => group.children.map(gc => ({ value: gc.id, label: gc.name })))
-  )
-);
-
-const selectAllGroups = () => createSelector(
-  selectGroupsDomain,
-  (groupsState) => {
-    // const { groups } = Object.values(groupsState.groupList);
-
-    const allgroups = [];
-
-    Object.values(groupsState.groupList).forEach(parent => (
-      allgroups.push({ value: parent.id, label: parent.name })
-      && (parent.children.forEach(child => allgroups.push({ value: child.id, label: child.name })))
-    ));
-    return allgroups;
-  }
-);
-
 const selectGroupTotal = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.groupTotal
@@ -130,6 +105,4 @@ export {
   selectGroupIsCommitting,
   selectHasChanged,
   selectCategorizeGroup,
-  selectAllSubgroups,
-  selectAllGroups
 };
