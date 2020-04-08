@@ -6,6 +6,29 @@ module Activity::Actions
   end
 
   module ClassMethods
+    def csv_attributes(current_user = nil, params = {})
+      {
+          titles: [
+              'User_id',
+              'First_name',
+              'Last_name',
+              'Trackable_id',
+              'Trackable_type',
+              'Action',
+              'Created_at'
+          ],
+          values: [
+              'owner_id',
+              'user.first_name',
+              'user.last_name',
+              'trackable_id',
+              'trackable_type',
+              'key',
+              'created_at'
+          ]
+      }
+    end
+
     def parameter_name(scope)
       function_scope_map = {
           joined_from: -> (from) { "from #{from.to_time.strftime('%Y-%m-%d')}" },
