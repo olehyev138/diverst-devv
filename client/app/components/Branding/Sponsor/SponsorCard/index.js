@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader } from '@material-ui/core';
-
+import Carousel from 'react-material-ui-carousel';
 import { injectIntl } from 'react-intl';
 
 import {
