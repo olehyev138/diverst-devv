@@ -5,6 +5,10 @@ class ReactRoutesHelper
     @routes ||= JSON.parse(ROUTES_JSON)
   end
 
+  def self.domain
+    ENV['REACT_DOMAIN'] || 'http://localhost:8082'
+  end
+
   def self.make_class(routes)
     klass = Class.new
     klass.define_singleton_method(:routes_hash) do
@@ -30,7 +34,7 @@ class ReactRoutesHelper
               if part.start_with? ':'
                 arg = copied_args.shift
                 case arg
-                when -> (a) {a.respond_to?(:id)} then arg.id
+                when -> (a) { a.respond_to?(:id) } then arg.id
                 when Integer, String then arg.to_s
                 else part
                 end
@@ -38,11 +42,22 @@ class ReactRoutesHelper
                 part
               end
             end
-            mapped_parts.join('/')
+            ReactRoutesHelper.domain + mapped_parts.join('/')
           end
-        else
         end
       end
+    end
+
+    klass.define_singleton_method(:inspect) do
+      parts = routes_hash.keys.map do |n|
+        if String === routes_hash[n]
+          "#{n} => #{send(n)}"
+        else
+          n
+        end
+      end.join(",\n\t")
+
+      "#{super()} (\n\t#{parts}\n)"
     end
 
     klass

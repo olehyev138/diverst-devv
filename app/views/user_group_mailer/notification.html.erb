@@ -17,14 +17,14 @@
   <% if group[:messages_count].to_i > 0 %>
     <em>Messages</em>
     <% group[:messages].each do |message| %>
-      <p><%= link_to message.subject, ReactRoutesHelper.routes.group.news.messages.show(message.group, message.id) %></p>
+      <p><%= link_to message.subject, ReactRoutesHelper.routes.group.news.messages.show(message.group, message.news_feed_link ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:news_count].to_i > 0 %>
     <em>News Links</em>
     <% group[:news].each do |new| %>
-      <p><%= link_to new.title, ReactRoutesHelper.routes.group.news.news_links.show(new.group, new.id ) %></p>
+      <p><%= link_to new.title, ReactRoutesHelper.routes.group.news.news_links.show(new.group, new.news_feed_link ) %></p>
     <% end %>
   <% end %>
 
