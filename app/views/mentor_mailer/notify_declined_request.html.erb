@@ -1,0 +1,5 @@
+<p>Hello <%= @sender.name %>!</p>
+
+<p><%= @receiver.name %> has declined your request for mentorship. Click the link below to find another mentor/mentee.</p>
+
+<p><%= link_to "Find another mentor/mentee", mentors_user_mentorship_index_url(saml_for_enterprise: @sender.enterprise.id) %></p>

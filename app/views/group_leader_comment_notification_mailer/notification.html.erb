@@ -1,0 +1,7 @@
+Hello, <%= @leader.name %>
+<br/>
+Your <%= @group.name %> has <%= @count %> pending comment(s). Click below to view them and accept/deny group comments.
+
+<br/>
+
+<p><%= link_to "View Pending Comments", group_posts_url(@group) %></p>
