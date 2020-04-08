@@ -136,9 +136,10 @@ export function GroupHome({ classes, ...props }) {
       rows='auto 50px 50px 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
-        'news   news    news    news    events  events  events  events  join    join',
         'news   news    news    news    events  events  events  events  sponsor sponsor',
+        'news   news    news    news    events  events  events  events  join    join',
         'news   news    news    news    events  events  events  events  family  family',
+        'news   news    news    news    events  events  events  events  null    null',
       ]}
       rowGap='16px'
       columnGap='24px'
