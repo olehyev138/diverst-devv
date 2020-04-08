@@ -35,7 +35,7 @@ export function GroupSponsorListPage(props) {
   const groupId = rs.params('group_id');
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor'] , sponsorable_id: groupId
+    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: groupId
   });
 
   const links = {
@@ -107,7 +107,7 @@ const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.sponsors.edit.path(groupId,id))),
+  handleVisitSponsorEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.sponsors.edit.path(groupId, id))),
 });
 
 const withConnect = connect(

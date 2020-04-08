@@ -27,9 +27,7 @@ const keyTypes = Object.freeze({
 
 export function* getSponsors(action) {
   try {
-    console.log(action);
     const response = yield call(api.sponsors.all.bind(api.sponsors), action.payload);
-console.log(response);
     yield put(getSponsorsSuccess(response.data.page));
   } catch (err) {
     yield put(getSponsorsError(err));

@@ -1,6 +1,6 @@
 import { takeLatest } from 'redux-saga/effects';
 
-import { CREATE_SPONSOR_BEGIN, GET_SPONSORS_BEGIN, GET_SPONSOR_BEGIN, UPDATE_SPONSOR_BEGIN, DELETE_SPONSOR_BEGIN } from 'containers/Shared/Sponsors/constants'
+import { CREATE_SPONSOR_BEGIN, GET_SPONSORS_BEGIN, GET_SPONSOR_BEGIN, UPDATE_SPONSOR_BEGIN, DELETE_SPONSOR_BEGIN } from 'containers/Shared/Sponsors/constants';
 
 import {
   getSponsors, getSponsor, createSponsors, deleteSponsors, updateSponsor

@@ -29,8 +29,6 @@ function sponsorsReducer(state = initialState, action) {
         draft.isFetchingSponsors = true;
         break;
       case GET_SPONSORS_SUCCESS:
-        console.log(action.payload);
-        console.log("here");
         draft.sponsorList = action.payload.items;
         draft.sponsorTotal = action.payload.total;
         draft.isFetchingSponsors = false;
