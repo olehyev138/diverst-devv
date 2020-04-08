@@ -521,6 +521,7 @@
   "diverst.containers.Update.index.form.button.create": "Create Update",
   "diverst.containers.Update.fields": "KPI Fields",
   "diverst.containers.Update.preface": "\r",
+  "diverst.containers.Update.create_field": "Create KPI field first.",
   "diverst.containers.Update.fields_save": "Save",
   "diverst.containers.User.index.button.new":"Add new user",
   "diverst.containers.User.index.button.edit": "Edit",
