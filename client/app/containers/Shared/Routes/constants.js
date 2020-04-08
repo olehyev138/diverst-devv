@@ -477,7 +477,7 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id', groupSponsorId = ':group_sponsor_id') => `/groups/${groupId}/manage/sponsors/${groupSponsorId}/edit`,
           data: {
-            titleMessage: messages.groups.manage.leaders.edit
+            titleMessage: messages.groups.manage.sponsors.edit
           }
         }
       },

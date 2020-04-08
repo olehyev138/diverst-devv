@@ -21,6 +21,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 const keyTypes = Object.freeze({
   groupSponsor: 'group_id',
   enterpriseSponsor: 'enterprise_id',
+  group: 'Group',
+  enterprise: 'Enterprise'
 });
 
 export function* getSponsors(action) {
@@ -77,9 +79,13 @@ export function* createSponsors(action, sponsorableKey) {
 export function* deleteSponsors(action) {
   try {
     yield call(api.sponsors.destroy.bind(api.sponsors), action.payload.id);
-    yield put(deleteSponsorSuccess());
 
-    yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
+    if (action.payload.type === keyTypes.group)
+      yield put(push(ROUTES.group.manage.sponsors.index.path(action.payload.location)));
+    else
+      yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
+
+    yield put(deleteSponsorSuccess());
     yield put(showSnackbar({ message: 'Sponsor deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSponsorError(err));

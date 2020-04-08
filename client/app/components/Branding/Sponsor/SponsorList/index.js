@@ -90,7 +90,7 @@ export function SponsorList(props) {
               icon: () => <EditIcon />,
               tooltip: intl.formatMessage(messages.Sponsors.edit),
               onClick: (_, rowData) => {
-                props.handleVisitSponsorEdit(rowData.sponsorable_id,rowData.id);
+                props.handleVisitSponsorEdit(rowData.sponsorable_id, rowData.id);
               }
             },
             {
@@ -99,7 +99,7 @@ export function SponsorList(props) {
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))
-                  props.deleteSponsorBegin({ id: rowData.id });
+                  props.deleteSponsorBegin({ id: rowData.id, type: rowData.sponsorable_type, location: rowData.sponsorable_id });
               }
             }]}
         />
