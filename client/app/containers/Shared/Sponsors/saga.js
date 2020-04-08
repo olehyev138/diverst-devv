@@ -64,7 +64,6 @@ export function* createSponsors(action, sponsorableKey) {
     else
       yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
-
     yield put(createSponsorSuccess());
 
     yield put(showSnackbar({ message: 'Sponsor created', options: { variant: 'success' } }));
@@ -95,10 +94,15 @@ export function* deleteSponsors(action) {
   }
 }
 
-export function* updateSponsor(action) {
+export function* updateSponsor(action, sponsorableType) {
   try {
     const payload = { sponsor: action.payload };
     const response = yield call(api.sponsors.update.bind(api.sponsors), payload.sponsor.id, payload);
+
+    if (sponsorableType === keyTypes.groupSponsor)
+      yield put(push(ROUTES.group.manage.sponsors.index.path(payload.sponsor.sponsorableId)));
+    else
+      yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
     yield put(updateSponsorSuccess());
     yield put(showSnackbar({

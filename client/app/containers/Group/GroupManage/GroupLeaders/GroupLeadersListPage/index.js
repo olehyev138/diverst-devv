@@ -34,7 +34,7 @@ export function GroupLeadersListPage(props) {
 
   const rs = new RouteService(useContext);
 
-  const groupId = rs.params('group_id')[0];
+  const groupId = rs.params('group_id');
 
   const [params, setParams] = useState({
     group_id: groupId, count: 10, page: 0,

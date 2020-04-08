@@ -32,7 +32,7 @@ export function GroupSponsorListPage(props) {
   useInjectSaga({ key: 'sponsors', saga });
 
   const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id')[0];
+  const groupId = rs.params('group_id');
 
   const [params, setParams] = useState({
     count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor'] , sponsorable_id: groupId
