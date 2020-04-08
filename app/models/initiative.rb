@@ -123,6 +123,14 @@ class Initiative < BaseClass
     end
   end
 
+  def virtual_toggle
+    if virtual?
+      update(virtual: false)
+    else
+      update(virtual: true)
+    end
+  end
+
   def ended?
     self.end < DateTime.now
   end

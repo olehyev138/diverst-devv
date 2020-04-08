@@ -130,6 +130,12 @@ class InitiativesController < ApplicationController
     end
   end
 
+  def enable_virtual_meet
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+    @initiative.virtual_toggle
+    render nothing: true
+  end
+
 
   protected
 
@@ -179,6 +185,7 @@ class InitiativesController < ApplicationController
         :from, # For filtering
         :to, # For filtering
         :annual_budget_id,
+        :virtual,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
