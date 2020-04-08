@@ -38,48 +38,72 @@ export function SponsorCard(props) {
     Enterprise: 'enterprise',
   });
 
-  const groupParams = {
-    orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup.id
+  const sponsorType = {
+    orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup ? props.currentGroup.id : 0
   };
   const enterpriseParams = {
-    orderBy: '', order: 'asc',
+    orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
   };
+
+  const { sponsorList } = props;
 
   useEffect(() => {
     if (props.type === SponsorType.Group)
-      props.getSponsorsBegin(groupParams);
+      props.getSponsorsBegin(sponsorType);
     else
       props.getSponsorsBegin(enterpriseParams);
   }, []);
 
-console.log(props.sponsorList);
   return (
-    props.sponsorTotal > 1 ? (
-      <Carousel
-        autoPlay={false}
-      >
-        {props.sponsorList.map((sponsor) => (
+    // eslint-disable-next-line no-nested-ternary
+    sponsorList[0] ? (
+      props.sponsorTotal > 1 ? (
+        <Carousel
+          autoPlay={false}
+        >
+          {sponsorList.map(sponsor => (
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>
+                  { sponsor.sponsor_name}
+                </Typography>
+                <Typography>
+                  { sponsor.sponsor_title}
+                </Typography>
+              </CardContent>
+              <CardContent>
+                { sponsor.sponsor_message}
+              </CardContent>
+            </Card>
+          ))}
+        </Carousel>
+      )
+        : (
           <Card>
             <CardContent>
-              { sponsor.sponsor_name}
+              <Typography variant='h6'>
+                { sponsorList[0].sponsor_name}
+              </Typography>
+              <Typography>
+                { sponsorList[0].sponsor_title}
+              </Typography>
             </CardContent>
             <CardContent>
-              { sponsor.sponsor_message}
+              { sponsorList[0].sponsor_message}
             </CardContent>
           </Card>
-        ))}
-      </Carousel>
+        )
+    ) : (
+      <React.Fragment>
+
+      </React.Fragment>
     )
-      : (
-        <Card>
-        </Card>
-      )
   );
 }
 
 SponsorCard.propTypes = {
   getSponsorsBegin: PropTypes.func,
-  type: PropTypes.func,
+  type: PropTypes.string,
   currentGroup: PropTypes.object,
   sponsorList: PropTypes.array,
   sponsorTotal: PropTypes.number,

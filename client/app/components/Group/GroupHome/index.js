@@ -131,7 +131,7 @@ export function GroupHome({ classes, ...props }) {
   return (
     <DiverstCSSGrid
       columns={10}
-      rows='auto 50px 50px 1fr'
+      rows='auto auto auto 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
         'news   news    news    news    events  events  events  events  join    join',

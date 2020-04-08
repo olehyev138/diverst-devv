@@ -12,6 +12,7 @@ import messages from './messages';
 
 import EventsPage from '../UserEventsPage';
 import NewsPage from '../UserNewsFeedPage';
+import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import {
   Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
@@ -60,6 +61,13 @@ export class HomePage extends React.PureComponent {
             </h1>
             <NewsPage />
           </Grid>
+        </Grid>
+        <Grid item xs>
+          <SponsorCard
+            type='enterprise'
+            currentGroup={null}
+          />
+
         </Grid>
       </React.Fragment>
     );
