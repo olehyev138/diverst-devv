@@ -26,10 +26,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Shared/Sponsors/saga';
 import reducer from 'containers/Shared/Sponsors/reducer';
-import {push} from "connected-react-router";
-import {connect} from "react-redux";
-import {createStructuredSelector} from "reselect";
-
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 export function SponsorCard(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -53,7 +51,6 @@ export function SponsorCard(props) {
       props.getSponsorsBegin(enterpriseParams);
   }, []);
 
-console.log(props.sponsorList);
   return (
     <Card>
 
