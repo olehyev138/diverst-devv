@@ -9,20 +9,22 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Grid, Box, Typography, Card, CardContent, Select
+  Button, Grid, Box, Typography, Card, CardContent, Link
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
+
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   logListItem: {
@@ -44,24 +46,25 @@ export function LogList(props, context) {
       query_field: 'id'
     },
     {
-      title: 'owner_id',
+      title: 'user',
       field: 'owner_id',
-      query_field: 'owner_id'
-    },
-    {
-      title: 'first name',
-      field: 'user.first_name',
-      query_field: 'owner_id'
-    },
-    {
-      title: 'last name',
-      field: 'user.last_name',
-      query_field: 'owner_id'
+      render: rowData => (
+        <Link
+          component={WrappedNavLink}
+          to={{
+            pathname: ROUTES.admin.system.users.edit.path(rowData.owner_id),
+            state: { id: rowData.owner_id }
+          }}
+        >
+          {rowData.user.first_name}
+          &ensp;
+          {rowData.user.last_name}
+        </Link>
+      )
     },
     {
       title: 'key',
       field: 'key',
-      query_field: 'key'
     },
     {
       title: 'date',
