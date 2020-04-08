@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader } from '@material-ui/core';
-import Carousel from 'react-material-ui-carousel';
+
 import { injectIntl } from 'react-intl';
 
 import {
@@ -26,10 +26,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Shared/Sponsors/saga';
 import reducer from 'containers/Shared/Sponsors/reducer';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
 
 export function SponsorCard(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -54,7 +52,7 @@ export function SponsorCard(props) {
       props.getSponsorsBegin(enterpriseParams);
   }, []);
 
-  console.log(props.sponsorList);
+console.log(props.sponsorList);
   return (
     props.sponsorTotal > 1 ? (
       <Carousel
