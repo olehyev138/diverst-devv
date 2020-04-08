@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader } from '@material-ui/core';
-
+import Carousel from 'react-material-ui-carousel';
 import { injectIntl } from 'react-intl';
 
 import {
@@ -26,9 +26,9 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Shared/Sponsors/saga';
 import reducer from 'containers/Shared/Sponsors/reducer';
-import {push} from "connected-react-router";
-import {connect} from "react-redux";
-import {createStructuredSelector} from "reselect";
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 
 export function SponsorCard(props) {
@@ -39,6 +39,7 @@ export function SponsorCard(props) {
     Group: 'group',
     Enterprise: 'enterprise',
   });
+
   const groupParams = {
     orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup.id
   };
@@ -53,11 +54,28 @@ export function SponsorCard(props) {
       props.getSponsorsBegin(enterpriseParams);
   }, []);
 
-console.log(props.sponsorList);
+  console.log(props.sponsorList);
   return (
-    <Card>
-
-    </Card>
+    props.sponsorTotal > 1 ? (
+      <Carousel
+        autoPlay={false}
+      >
+        {props.sponsorList.map((sponsor) => (
+          <Card>
+            <CardContent>
+              { sponsor.sponsor_name}
+            </CardContent>
+            <CardContent>
+              { sponsor.sponsor_message}
+            </CardContent>
+          </Card>
+        ))}
+      </Carousel>
+    )
+      : (
+        <Card>
+        </Card>
+      )
   );
 }
 
@@ -66,6 +84,7 @@ SponsorCard.propTypes = {
   type: PropTypes.func,
   currentGroup: PropTypes.object,
   sponsorList: PropTypes.array,
+  sponsorTotal: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({

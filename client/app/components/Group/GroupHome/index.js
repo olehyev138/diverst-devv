@@ -13,7 +13,7 @@ import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardH
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
-import SponsorCard from "../../Branding/Sponsor/SponsorCard";
+import SponsorCard from '../../Branding/Sponsor/SponsorCard';
 
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -122,12 +122,10 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const sponsor = (
-    <Card>
-      <SponsorCard
-        type='group'
-        currentGroup={props.currentGroup}
-      />
-    </Card>
+    <SponsorCard
+      type='group'
+      currentGroup={props.currentGroup}
+    />
   );
 
   return (
