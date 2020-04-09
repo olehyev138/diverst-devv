@@ -4,7 +4,7 @@ class User < ApplicationRecord
   belongs_to :enterprise, counter_cache: true
 
   has_secure_password
-  has_secure_token :invitation_toke
+  has_secure_token :invitation_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -155,6 +155,7 @@ class User < ApplicationRecord
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
+  after_create :invite!
   after_save :set_default_policy_group, if: :user_role_id_changed?
   accepts_nested_attributes_for :policy_group
 
@@ -203,15 +204,10 @@ class User < ApplicationRecord
     end
   end
 
-  # =============================================
-  # INVITATION CODE
-  # =============================================
-
   def invite!(manager = nil)
     regenerate_invitation_token
 
-
-    # UserMailer.delay(queue: 'mailers').send_invitation(self)
+    DiverstMailer.delay(queue: 'mailers').invite(self)
   end
 
   def valid_password?(password)
