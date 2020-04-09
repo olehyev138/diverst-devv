@@ -9,5 +9,5 @@
   a mentoring session scheduled from <%= @mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %> to <%= @mentoring_session.end.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %>. Click the Export to Outlook link below to add the session to your calendar.</p>
 
 <p>
-  <%= link_to "Session Details", ReactRoutesHelper.routes.user.mentorship.sessions.show(@mentoring_session), target: :_blank %>
+  <%= link_to "Session Details", ReactRoutes.user.mentorship.sessions.show(@mentoring_session), target: :_blank %>
 </p>

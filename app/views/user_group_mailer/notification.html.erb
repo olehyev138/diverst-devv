@@ -10,34 +10,34 @@
   <% if group[:events_count].to_i > 0 %>
     <em>Events</em>
     <% group[:events].each do |event| %>
-      <p><%= link_to event.name, ReactRoutesHelper.routes.group.events.show(group[:group].try(:id), event ) %></p>
+      <p><%= link_to event.name, ReactRoutes.group.events.show(group[:group].try(:id), event ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:messages_count].to_i > 0 %>
     <em>Messages</em>
     <% group[:messages].each do |message| %>
-      <p><%= link_to message.subject, ReactRoutesHelper.routes.group.news.messages.show(message.group, message.news_feed_link ) %></p>
+      <p><%= link_to message.subject, ReactRoutes.group.news.messages.show(message.group, message.news_feed_link ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:news_count].to_i > 0 %>
     <em>News Links</em>
     <% group[:news].each do |new| %>
-      <p><%= link_to new.title, ReactRoutesHelper.routes.group.news.news_links.show(new.group, new.news_feed_link ) %></p>
+      <p><%= link_to new.title, ReactRoutes.group.news.news_links.show(new.group, new.news_feed_link ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:social_links_count].to_i > 0 %>
     <em>Social Links</em>
-    <p><%= link_to pluralize(group[:social_links_count], ' news item'), ReactRoutesHelper.routes.group.news.index(group[:group].try(:id)) %>.</p>
+    <p><%= link_to pluralize(group[:social_links_count], ' news item'), ReactRoutes.group.news.index(group[:group].try(:id)) %>.</p>
   <% end %>
 
   <% if group[:participating_events_count].to_i > 0 %>
     <em>Participating Events</em>
     <% group[:participating_events].each do |p_event| %>
-      <p><%= link_to p_event.name, ReactRoutesHelper.routes.group.events.show(p_event.group_id, p_event.id ) %></p>
+      <p><%= link_to p_event.name, ReactRoutes.group.events.show(p_event.group_id, p_event.id ) %></p>
     <% end %>
   <% end %>
 <% end %>
-Email notification options may be changed <%= link_to 'here', ReactRoutesHelper.routes.user.edit(@user) %>
+Email notification options may be changed <%= link_to 'here', ReactRoutes.user.edit(@user) %>

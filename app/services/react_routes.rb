@@ -1,5 +1,5 @@
-class ReactRoutesHelper
-  ROUTES_JSON = File.read('./app/helpers/routes.json')
+class ReactRoutes
+  ROUTES_JSON = File.read('./app/assets/json/routes.json')
 
   def self.routes_hash
     @routes ||= JSON.parse(ROUTES_JSON)
@@ -16,7 +16,7 @@ class ReactRoutesHelper
     end
 
     klass.define_singleton_method(:make_class) do |new_routes|
-      ReactRoutesHelper.make_class new_routes
+      ReactRoutes.make_class new_routes
     end
 
     klass.class_eval do
@@ -42,7 +42,7 @@ class ReactRoutesHelper
                 part
               end
             end
-            ReactRoutesHelper.domain + mapped_parts.join('/')
+            ReactRoutes.domain + mapped_parts.join('/')
           end
         end
       end
@@ -65,5 +65,9 @@ class ReactRoutesHelper
 
   def self.routes
     @routes_class ||= make_class routes_hash
+  end
+
+  class << self
+    delegate *([:inspect] + ReactRoutes.routes_hash.keys), to: :routes
   end
 end
