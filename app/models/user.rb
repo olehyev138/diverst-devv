@@ -4,6 +4,7 @@ class User < ApplicationRecord
   belongs_to :enterprise, counter_cache: true
 
   has_secure_password
+  has_secure_token :invitation_toke
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -200,6 +201,17 @@ class User < ApplicationRecord
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
       break token unless Session.find_by(token: token)
     end
+  end
+
+  # =============================================
+  # INVITATION CODE
+  # =============================================
+
+  def invite!(manager = nil)
+    regenerate_invitation_token
+
+
+    # UserMailer.delay(queue: 'mailers').send_invitation(self)
   end
 
   def valid_password?(password)
