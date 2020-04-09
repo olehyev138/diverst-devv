@@ -23,6 +23,7 @@ import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function OutcomeCreatePage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
@@ -81,5 +82,5 @@ export default compose(
   OutcomeCreatePage,
   ['currentGroup.permissions.update?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'group.outcome.createPage'
+  permissionMessages.group.outcome.createPage
 ));

@@ -23,6 +23,7 @@ import {
 } from 'containers/Innovate/Campaign/selectors';
 
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignShowPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -82,5 +83,5 @@ export default compose(
   CampaignShowPage,
   ['campaign.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'innovate.campaign.showPage'
+  permissionMessages.innovate.campaign.showPage
 ));

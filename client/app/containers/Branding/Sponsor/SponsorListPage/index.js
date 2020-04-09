@@ -28,6 +28,7 @@ import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -125,5 +126,5 @@ export default compose(
   SponsorListPage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'branding.sponsor.listPage'
+  permissionMessages.branding.sponsor.listPage
 ));

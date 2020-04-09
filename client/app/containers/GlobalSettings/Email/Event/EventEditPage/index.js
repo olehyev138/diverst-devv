@@ -28,6 +28,7 @@ import globalMessages from 'containers/Shared/App/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'mailEvents', reducer });
@@ -110,5 +111,5 @@ export default compose(
   EventEditPage,
   ['permissions.emails_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.email.event.editPage'
+  permissionMessages.globalSettings.email.event.editPage
 ));

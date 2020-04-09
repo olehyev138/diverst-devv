@@ -24,6 +24,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { MetricsDashboardCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -92,5 +93,5 @@ export default compose(
   AdminGroupListPage,
   ['permissions.groups_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'group.adminListPage'
+  permissionMessages.group.adminListPage
 ));

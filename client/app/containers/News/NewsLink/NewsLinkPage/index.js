@@ -26,6 +26,7 @@ import {
 
 import NewsLink from 'components/News/NewsLink/NewsLink';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsLinkPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -101,5 +102,5 @@ export default compose(
   NewsLinkPage,
   ['currentNewsItem.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'news.newsLink.showPage'
+  permissionMessages.news.newsLink.showPage
 ));

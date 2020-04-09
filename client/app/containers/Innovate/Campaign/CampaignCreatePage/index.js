@@ -29,6 +29,7 @@ import messages from 'containers/Innovate/Campaign/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { CampaignEditPage } from 'containers/Innovate/Campaign/CampaignEditPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignCreatePage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -89,5 +90,5 @@ export default compose(
   CampaignCreatePage,
   ['permissions.campaigns_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'innovate.campaign.createPage'
+  permissionMessages.innovate.campaign.createPage
 ));

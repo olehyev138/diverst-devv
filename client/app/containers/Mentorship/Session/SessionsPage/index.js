@@ -27,6 +27,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SessionsList from 'components/Mentorship/SessionsList';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const SessionTypes = Object.freeze({
   upcoming: 2,
@@ -193,5 +194,5 @@ export default compose(
   SessionsPage,
   ['user.permissions.update?'],
   (props, rs) => ROUTES.user.root.path(),
-  'mentorship.session.indexPage',
+  permissionMessages.mentorship.session.indexPage
 ));

@@ -25,7 +25,7 @@ import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { UserRoleListPage } from 'containers/User/UserRole/UserRoleListPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserRoleEditPage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -95,5 +95,5 @@ export default compose(
   UserRoleEditPage,
   ['userRole.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.system.users.roles.index.path(),
-  'user.userRole.editPage'
+  permissionMessages.user.userRole.editPage
 ));

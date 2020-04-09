@@ -16,6 +16,7 @@ import UserDashboard from 'components/Analyze/Dashboards/UserDashboard';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserDashboardPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
@@ -55,5 +56,5 @@ export default compose(
   UserDashboardPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'analyze.dashboards.userPage'
+  permissionMessages.analyze.dashboards.userPage
 ));

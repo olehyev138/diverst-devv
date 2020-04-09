@@ -28,6 +28,7 @@ import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selec
 import SegmentList from 'components/Segment/SegmentList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SegmentListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -127,5 +128,5 @@ export default compose(
   SegmentListPage,
   ['permissions.segments_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'segment.listPage'
+  permissionMessages.segment.listPage
 ));

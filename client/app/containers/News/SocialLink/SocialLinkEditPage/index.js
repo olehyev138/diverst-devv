@@ -28,6 +28,7 @@ import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SocialLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -100,5 +101,5 @@ export default compose(
   SocialLinkEditPage,
   ['currentNewsItem.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'news.socialLink.editPage'
+  permissionMessages.news.socialLink.editPage
 ));

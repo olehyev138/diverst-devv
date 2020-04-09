@@ -25,6 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
 import { MentorsPage } from 'containers/Mentorship/Requests/RequestsPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SessionProfilePage(props) {
   useInjectReducer({ key: 'sessions', reducer });
@@ -99,7 +100,7 @@ export default compose(
   SessionProfilePage,
   ['type', 'formSession.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'mentorship.session.editPage',
+  permissionMessages.mentorship.session.editPage,
   false,
   a => a[0] !== 'edit' || a.slice(1, 3).some(b => b)
 ));

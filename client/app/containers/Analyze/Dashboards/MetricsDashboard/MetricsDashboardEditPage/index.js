@@ -39,6 +39,7 @@ import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard
 import messages from 'containers/Analyze/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MetricsDashboardEditPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -121,5 +122,5 @@ export default compose(
   MetricsDashboardEditPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'analyze.dashboards.metricsDashboard.editPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.editPage
 ));

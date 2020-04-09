@@ -24,6 +24,7 @@ import EventForm from 'components/Event/EventForm';
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -98,5 +99,5 @@ export default compose(
   EventEditPage,
   ['currentEvent.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
-  'event.editPage'
+  permissionMessages.event.editPage
 ));

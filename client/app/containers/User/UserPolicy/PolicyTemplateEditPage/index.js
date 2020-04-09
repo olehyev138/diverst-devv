@@ -26,6 +26,7 @@ import {
 
 import PolicyForm from 'components/GlobalSettings/PolicyTemplate/PolicyForm';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function PolicyEditPage(props) {
   useInjectReducer({ key: 'policies', reducer });
@@ -94,5 +95,5 @@ export default compose(
   PolicyEditPage,
   ['currentPolicy.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.system.users.policy_templates.index.path(),
-  'user.userPolicy.policyTemplateEditPage'
+  permissionMessages.user.userPolicy.policyTemplateEditPage
 ));

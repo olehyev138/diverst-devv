@@ -24,6 +24,7 @@ import messages from 'containers/Group/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { GroupCreatePage } from 'containers/Group/GroupCreatePage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -97,5 +98,5 @@ export default compose(
   GroupCreatePage,
   ['group.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.manage.groups.index.path(),
-  'group.editPage'
+  permissionMessages.group.editPage
 ));

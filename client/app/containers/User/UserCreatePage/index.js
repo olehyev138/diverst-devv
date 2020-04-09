@@ -27,6 +27,7 @@ import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { PolicyTemplatesPage } from 'containers/User/UserPolicy/PolicyTemplatesPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -88,5 +89,5 @@ export default compose(
   UserCreatePage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.createPage'
+  permissionMessages.user.createPage
 ));

@@ -25,6 +25,7 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { getCampaignBegin } from 'containers/Innovate/Campaign/actions';
 import { selectCampaign, selectIsFormLoading } from 'containers/Innovate/Campaign/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -90,5 +91,5 @@ export default compose(
   CampaignQuestionCreatePage,
   ['campaign.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'innovate.campaign.campaignQuestion.createPage'
+  permissionMessages.innovate.campaign.campaignQuestion.createPage
 ));

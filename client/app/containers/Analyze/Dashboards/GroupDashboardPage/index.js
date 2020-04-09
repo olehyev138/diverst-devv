@@ -28,6 +28,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { UserDashboardPage } from 'containers/Analyze/Dashboards/UserDashboardPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const Dashboards = Object.freeze({
   overview: 0,
@@ -112,5 +113,5 @@ export default compose(
   UserDashboardPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'analyze.dashboards.groupPage'
+  permissionMessages.analyze.dashboards.groupPage
 ));

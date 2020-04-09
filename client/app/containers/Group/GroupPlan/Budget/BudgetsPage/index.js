@@ -36,6 +36,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import { BudgetCreatePage } from 'containers/Group/GroupPlan/Budget/BudgetCreatePage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -159,5 +160,5 @@ export default compose(
   BudgetsPage,
   ['currentGroup.permissions.budgets_view?'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'group.groupPlan.budget.indexPage'
+  permissionMessages.group.groupPlan.budget.indexPage
 ));

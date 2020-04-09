@@ -25,6 +25,7 @@ import RouteService from 'utils/routeHelpers';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const changePage = id => push(ROUTES.admin.manage.groups.categorize.path(id));
 
@@ -101,5 +102,5 @@ export default compose(
   GroupCategorizePage,
   ['group.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.manage.groups.index.path(),
-  'group.categorizePage'
+  permissionMessages.group.categorizePage
 ));

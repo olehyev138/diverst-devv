@@ -36,6 +36,7 @@ import {
 
 import Session from 'components/Mentorship/Session';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -184,5 +185,5 @@ export default compose(
   SessionPage,
   ['session.permissions.update?', 'isFetchingSession'],
   (props, rs) => ROUTES.user.root.path(),
-  'mentorship.session.showPage',
+  permissionMessages.mentorship.session.showPage
 ));

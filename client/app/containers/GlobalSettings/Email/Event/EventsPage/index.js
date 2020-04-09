@@ -32,6 +32,7 @@ import messages from 'containers/GlobalSettings/Email/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { EmailsPage } from 'containers/GlobalSettings/Email/Email/EmailsPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -135,5 +136,5 @@ export default compose(
   EventsPage,
   ['permissions.emails_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.email.event.indexPage'
+  permissionMessages.globalSettings.email.event.indexPage
 ));

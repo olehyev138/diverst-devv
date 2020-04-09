@@ -57,6 +57,7 @@ import RouteService from 'utils/routeHelpers';
 import Update from 'components/Shared/Updates/Update';
 import { selectGroup } from 'containers/Group/selectors';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UpdatePage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -145,5 +146,5 @@ export default compose(
   UpdatePage,
   ['currentGroup.permissions.kpi_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'group.groupPlan.KPI.updatePage'
+  permissionMessages.group.groupPlan.KPI.updatePage
 ));

@@ -35,6 +35,7 @@ import {
   getFolderIndexPath,
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -133,5 +134,5 @@ export default compose(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
   (props, rs) => getFolderIndexPath('admin'),
-  'resource.enterpriseResource.resourceEditPage'
+  permissionMessages.resource.enterpriseResource.resourceEditPage
 ));

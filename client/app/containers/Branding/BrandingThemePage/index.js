@@ -24,6 +24,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -85,5 +86,5 @@ export default compose(
   BrandingThemePage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'branding.themePage'
+  permissionMessages.branding.themePage
 ));

@@ -36,6 +36,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Budget from 'components/Group/GroupPlan/Budget';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BudgetPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -129,5 +130,5 @@ export default compose(
   BudgetPage,
   ['budget.permissions.show?', 'isLoading'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'group.groupPlan.budget.showPage'
+  permissionMessages.group.groupPlan.budget.showPage
 ));

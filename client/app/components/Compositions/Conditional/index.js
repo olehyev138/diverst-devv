@@ -56,7 +56,10 @@ export default function Conditional(
       else if (!show && path) {
         props.redirectAction(path);
         if (message)
-          props.showSnackbar({ message: props.intl.formatMessage(conditionalCheck(messages, message)), options: { variant: 'warning' } });
+          props.showSnackbar({
+            message: typeof message === 'object' ? props.intl.formatMessage(message) : message,
+            options: { variant: 'warning' }
+          });
       }
 
       return () => null;

@@ -30,6 +30,7 @@ import EmailsList from 'components/GlobalSettings/Email/EmailsList';
 import dig from 'object-dig';
 import Conditional from 'components/Compositions/Conditional';
 import { EmailEditPage } from 'containers/GlobalSettings/Email/Email/EmailEditPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -120,5 +121,5 @@ export default compose(
   EmailsPage,
   ['permissions.emails_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.email.email.indexPage'
+  permissionMessages.globalSettings.email.email.indexPage
 ));

@@ -51,6 +51,7 @@ import RequestList from 'components/Mentorship/MentorRequestList';
 import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
 import { selectUser } from 'containers/Mentorship/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 
 const defaultParams = Object.freeze({
@@ -196,6 +197,6 @@ export default compose(
   MentorsPage,
   ['user.permissions.update?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'mentorship.requests.indexPage',
+  permissionMessages.mentorship.requests.indexPage,
   true
 ));

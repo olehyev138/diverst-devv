@@ -35,6 +35,7 @@ import UserRoleList from 'components/User/UserRole/UserRoleList';
 import Conditional from 'components/Compositions/Conditional';
 import { CampaignListPage } from 'containers/Innovate/Campaign/CampaignListPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserRoleListPage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -122,5 +123,5 @@ export default compose(
   UserRoleListPage,
   ['permissions.policy_templates_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.userRole.listPage'
+  permissionMessages.user.userRole.listPage
 ));

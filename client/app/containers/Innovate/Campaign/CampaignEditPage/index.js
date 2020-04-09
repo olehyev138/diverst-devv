@@ -15,6 +15,7 @@ import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 import groupReducer from 'containers/Group/reducer';
 import groupSaga from 'containers/Group/saga';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import { updateCampaignBegin, getCampaignBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
 import {
@@ -109,5 +110,5 @@ export default compose(
   CampaignEditPage,
   ['campaign.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
-  'innovate.campaign.editPage'
+  permissionMessages.innovate.campaign.editPage
 ));

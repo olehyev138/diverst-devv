@@ -35,6 +35,7 @@ import {
   getFolderIndexPath,
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -136,6 +137,6 @@ export default compose(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
   (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'resource.groupResource.resourceEditPage',
+  permissionMessages.resource.groupResource.resourceEditPage,
   true
 ));

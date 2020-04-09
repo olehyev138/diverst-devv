@@ -43,6 +43,7 @@ import UserList from 'components/User/UserList';
 import Conditional from 'components/Compositions/Conditional';
 import { UserEditPage } from 'containers/User/UserEditPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const UserTypes = Object.freeze([
   'all',
@@ -164,5 +165,5 @@ export default compose(
   UserListPage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.indexPage'
+  permissionMessages.user.indexPage
 ));

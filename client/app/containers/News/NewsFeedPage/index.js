@@ -21,6 +21,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
@@ -188,5 +189,5 @@ export default compose(
   NewsFeedPage,
   ['currentGroup.permissions.news_view?'],
   (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
-  'news.NewsFeedPage'
+  permissionMessages.news.NewsFeedPage
 ));

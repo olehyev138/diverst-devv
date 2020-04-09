@@ -15,6 +15,7 @@ import { selectArchives, selectArchivesTotal, selectHasChanged, selectIsLoading 
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -145,7 +146,7 @@ export default compose(
   ArchivePage,
   ['permissions.archive_manage', 'permissions.posts_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'archive.indexPage',
+  permissionMessages.archive.indexPage,
   false,
   a => a.every(v => v)
 ));

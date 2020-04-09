@@ -24,6 +24,7 @@ import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
 
@@ -117,5 +118,5 @@ export default compose(
   AdminAnnualBudgetPage,
   ['permissions.manage_all_budgets'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'group.groupPlan.annualBudget.adminPlanPage',
+  permissionMessages.group.groupPlan.annualBudget.adminPlanPage
 ));

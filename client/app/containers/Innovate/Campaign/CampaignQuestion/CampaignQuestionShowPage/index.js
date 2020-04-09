@@ -32,6 +32,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { getFolderIndexPath } from 'utils/resourceHelpers';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionShowPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -112,5 +113,5 @@ export default compose(
   CampaignQuestionShowPage,
   ['question.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'innovate.campaign.campaignQuestion.showPage'
+  permissionMessages.innovate.campaign.campaignQuestion.showPage
 ));

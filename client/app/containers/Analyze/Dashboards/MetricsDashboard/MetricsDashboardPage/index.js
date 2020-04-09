@@ -22,6 +22,7 @@ import { selectMetricsDashboard, selectIsFormLoading } from 'containers/Analyze/
 
 import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MetricsDashboardPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -83,5 +84,5 @@ export default compose(
   MetricsDashboardPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.index.path(),
-  'analyze.dashboards.metricsDashboard.showPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.showPage
 ));

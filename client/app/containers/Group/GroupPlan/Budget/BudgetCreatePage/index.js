@@ -19,6 +19,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 const { form: formMessage } = messages;
 
 export function BudgetCreatePage(props) {
@@ -78,5 +79,5 @@ export default compose(
   BudgetCreatePage,
   ['currentGroup.permissions.budgets_create?'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'group.groupPlan.budget.createPage'
+  permissionMessages.group.groupPlan.budget.createPage
 ));

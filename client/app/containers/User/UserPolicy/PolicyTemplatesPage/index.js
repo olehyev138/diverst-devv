@@ -30,6 +30,7 @@ import {
 
 import PolicyTemplatesList from 'components/GlobalSettings/PolicyTemplate/PolicyTemplatesList';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const handlePolicyEdit = id => push(ROUTES.admin.system.users.policy_templates.edit.path(id));
 
@@ -124,5 +125,5 @@ export default compose(
   PolicyTemplatesPage,
   ['permissions.policy_templates_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.userPolicy.policyTemplatesPage'
+  permissionMessages.user.userPolicy.policyTemplatesPage
 ));

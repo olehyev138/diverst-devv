@@ -19,6 +19,7 @@ import { selectPaginatedSelectMembers, selectMemberTotal, selectIsCommitting } f
 
 import GroupMemberForm from 'components/Group/GroupMembers/GroupMemberForm';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupMemberCreatePage(props) {
   useInjectReducer({ key: 'members', reducer });
@@ -76,5 +77,5 @@ export default compose(
   GroupMemberCreatePage,
   ['currentGroup.permissions.members_create?'],
   (props, rs) => ROUTES.group.members.index.path(rs.params('group_id')),
-  'group.groupMembers.createPage'
+  permissionMessages.group.groupMembers.createPage
 ));

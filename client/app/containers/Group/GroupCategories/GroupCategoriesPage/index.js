@@ -19,6 +19,7 @@ import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectGroup
 import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategoriesList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupCategoriesPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
@@ -85,5 +86,5 @@ export default compose(
   GroupCategoriesPage,
   ['permissions.groups_manage'],
   (props, rs) => ROUTES.admin.manage.groups.index.path(),
-  'group.groupCategories.indexPage'
+  permissionMessages.group.groupCategories.indexPage
 ));

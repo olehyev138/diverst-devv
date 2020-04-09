@@ -28,6 +28,7 @@ import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { UserCreatePage } from 'containers/User/UserCreatePage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserEditPage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -108,5 +109,5 @@ export default compose(
   UserEditPage,
   ['user.permissions.update?', 'isFormLoading'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.editPage'
+  permissionMessages.user.editPage
 ));

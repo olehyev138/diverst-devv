@@ -22,6 +22,7 @@ import GroupList from 'components/Group/UserGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -92,5 +93,5 @@ export default compose(
   UserGroupListPage,
   ['permissions.groups_view'],
   (props, rs) => ROUTES.user.home.path(),
-  'group.userListPage',
+  permissionMessages.group.userListPage
 ));

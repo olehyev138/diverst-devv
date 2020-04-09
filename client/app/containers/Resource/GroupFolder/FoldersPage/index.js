@@ -26,6 +26,7 @@ import {
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Folder from 'components/Resource/Folder/Folder';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList
@@ -145,5 +146,5 @@ export default compose(
   FoldersPage,
   ['currentGroup.permissions.resources_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'resource.groupFolder.foldersPage'
+  permissionMessages.resource.groupFolder.foldersPage
 ));

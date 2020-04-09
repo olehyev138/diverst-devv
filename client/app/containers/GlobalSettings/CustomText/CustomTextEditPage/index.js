@@ -27,6 +27,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { UserListPage } from 'containers/User/UsersPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomTextEditPage(props) {
   useInjectReducer({ key: 'custom_text', reducer });
@@ -85,5 +86,5 @@ export default compose(
   CustomTextEditPage,
   ['permissions.custom_text_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.customText.editPage'
+  permissionMessages.globalSettings.customText.editPage
 ));

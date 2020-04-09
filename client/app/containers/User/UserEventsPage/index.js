@@ -20,6 +20,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const EventTypes = Object.freeze({
   upcoming: 0,
@@ -207,5 +208,5 @@ export default compose(
   EventsPage,
   ['permissions.events_view'],
   (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
-  'user.eventsPage'
+  permissionMessages.user.eventsPage
 ));

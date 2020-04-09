@@ -30,6 +30,7 @@ import { CardContent, Grid } from '@material-ui/core';
 import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -140,6 +141,6 @@ export default compose(
   MentorshipLayout,
   ['enterprise.mentorship_module_enabled'],
   (props, rs) => ROUTES.user.root.path(),
-  'layouts.mentorship',
+  permissionMessages.layouts.mentorship,
   true
 ));

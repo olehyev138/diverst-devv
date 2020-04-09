@@ -48,6 +48,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserImport from 'components/User/UserImport';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = {
   count: -1, page: 0, order: 'asc'
@@ -137,5 +138,5 @@ export default compose(
   UserImportPage,
   ['permissions.users_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'user.importPage'
+  permissionMessages.user.importPage
 ));

@@ -23,6 +23,7 @@ import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 export function SSOSettingsPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -77,5 +78,5 @@ export default compose(
   SSOSettingsPage,
   ['permissions.sso_authentication'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.SSOSettingsPage'
+  permissionMessages.globalSettings.SSOSettingsPage
 ));

@@ -23,6 +23,7 @@ import { selectIsCommitting } from 'containers/Event/selectors';
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -84,5 +85,5 @@ export default compose(
   EventCreatePage,
   ['currentGroup.permissions.events_create?'],
   (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
-  'event.createPage'
+  permissionMessages.event.createPage
 ));

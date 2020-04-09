@@ -52,6 +52,7 @@ import MentorList from 'components/Mentorship/MentorList';
 import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
 import { selectUser } from 'containers/Mentorship/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const Types = Object.freeze({
   current: 0,
@@ -252,6 +253,6 @@ export default compose(
   MentorsPage,
   ['user.permissions.show?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'mentorship.mentoring.mentorsPage',
+  permissionMessages.mentorship.mentoring.mentorsPage,
   true
 ));

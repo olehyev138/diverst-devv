@@ -29,6 +29,7 @@ import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import { CampaignEditPage } from 'containers/Innovate/Campaign/CampaignEditPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignListPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -129,5 +130,5 @@ export default compose(
   CampaignListPage,
   ['permissions.campaigns_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'innovate.campaign.listPage'
+  permissionMessages.innovate.campaign.listPage
 ));

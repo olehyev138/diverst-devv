@@ -37,6 +37,7 @@ import { selectPermissions } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
 import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
 import { resolveRootManagePath } from 'utils/adminLinkHelpers';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MetricsDashboardCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -107,5 +108,5 @@ export default compose(
   MetricsDashboardCreatePage,
   ['permissions.metrics_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'analyze.dashboards.metricsDashboard.createPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.createPage
 ));

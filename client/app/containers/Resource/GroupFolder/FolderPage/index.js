@@ -46,6 +46,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -296,5 +297,5 @@ export default compose(
   FolderPage,
   ['currentFolder.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.resources.index.path(rs.params('group_id')),
-  'resource.groupFolder.folderPage'
+  permissionMessages.resource.groupFolder.folderPage
 ));

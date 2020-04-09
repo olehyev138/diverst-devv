@@ -34,6 +34,7 @@ import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { CustomGraphCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomGraphEditPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -110,5 +111,5 @@ export default compose(
   CustomGraphEditPage,
   ['currentCustomGraph.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'analyze.dashboards.metricsDashboard.customGraph.editPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.customGraph.editPage
 ));

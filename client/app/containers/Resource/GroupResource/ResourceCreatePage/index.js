@@ -29,6 +29,7 @@ import {
   getFolderIndexPath
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function ResourceCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -116,5 +117,5 @@ export default compose(
   ResourceCreatePage,
   ['currentGroup.permissions.resources_create?'],
   (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'resource.groupResource.resourceCreatePage'
+  permissionMessages.resource.groupResource.resourceCreatePage
 ));

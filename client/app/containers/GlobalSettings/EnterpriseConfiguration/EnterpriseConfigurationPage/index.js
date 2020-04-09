@@ -23,6 +23,7 @@ import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -78,5 +79,5 @@ export default compose(
   EnterpriseConfigurationPage,
   ['permissions.enterprise_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.enterpriseConfiguration.showPage'
+  permissionMessages.globalSettings.enterpriseConfiguration.showPage
 ));

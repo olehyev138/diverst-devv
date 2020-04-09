@@ -25,6 +25,7 @@ import {
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList
@@ -134,5 +135,5 @@ export default compose(
   FoldersPage,
   ['permissions.enterprise_folders_view'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'resource.enterpriseFolder.foldersPage'
+  permissionMessages.resource.enterpriseFolder.foldersPage
 ));

@@ -36,6 +36,7 @@ import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selec
 // messages
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomGraphCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -120,5 +121,5 @@ export default compose(
   CustomGraphCreatePage,
   ['currentDashboard.permissions.update?', 'isLoading'],
   (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
-  'analyze.dashboards.metricsDashboard.customGraph.createPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.customGraph.createPage
 ));

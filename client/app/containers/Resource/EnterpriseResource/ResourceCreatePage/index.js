@@ -29,6 +29,7 @@ import {
   getFolderIndexPath
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function ResourceCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -112,5 +113,5 @@ export default compose(
   ResourceCreatePage,
   ['permissions.enterprise_folders_create'],
   (props, rs) => getFolderIndexPath('admin'),
-  'resource.enterpriseResource.resourceCreatePage'
+  permissionMessages.resource.enterpriseResource.resourceCreatePage
 ));

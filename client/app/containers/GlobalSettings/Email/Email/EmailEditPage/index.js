@@ -27,6 +27,7 @@ import {
 import EmailForm from 'components/GlobalSettings/Email/EmailForm';
 import Conditional from 'components/Compositions/Conditional';
 import { SSOSettingsPage } from 'containers/GlobalSettings/SSOSettingsPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EmailEditPage(props) {
   useInjectReducer({ key: 'emails', reducer });
@@ -99,5 +100,5 @@ export default compose(
   EmailEditPage,
   ['permissions.emails_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'globalSettings.email.email.editPage'
+  permissionMessages.globalSettings.email.email.editPage
 ));

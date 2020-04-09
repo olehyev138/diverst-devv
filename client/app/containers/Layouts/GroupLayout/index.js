@@ -24,6 +24,7 @@ import Scrollbar from 'components/Shared/Scrollbar';
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -120,5 +121,5 @@ export default compose(
   GroupLayout,
   ['currentGroup.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.user.root.path(),
-  'layouts.group',
+  permissionMessages.layouts.group
 ));

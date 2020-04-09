@@ -26,6 +26,7 @@ import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionEditPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -101,5 +102,5 @@ export default compose(
   CampaignQuestionEditPage,
   ['question.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
-  'innovate.campaign.campaignQuestion.editPage'
+  permissionMessages.innovate.campaign.campaignQuestion.editPage
 ));

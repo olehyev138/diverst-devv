@@ -22,6 +22,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
@@ -117,5 +118,5 @@ export default compose(
   NewsFeedPage,
   ['permissions.news_view'],
   (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
-  'user.newsFeedPage'
+  permissionMessages.user.newsFeedPage
 ));

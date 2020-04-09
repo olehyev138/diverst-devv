@@ -23,6 +23,7 @@ import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
 import Conditional from 'components/Compositions/Conditional';
 
 import dig from 'object-dig';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MentorshipEditProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
@@ -82,6 +83,6 @@ export default compose(
   MentorshipEditProfilePage,
   ['formUser.permissions.update?'],
   (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
-  'mentorship.editProfilePage',
+  permissionMessages.mentorship.editProfilePage,
   true
 ));

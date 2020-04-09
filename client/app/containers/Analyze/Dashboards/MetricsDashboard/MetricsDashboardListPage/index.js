@@ -31,6 +31,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
 import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10,
@@ -117,5 +118,5 @@ export default compose(
   MetricsDashboardListPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'analyze.dashboards.metricsDashboard.listPage'
+  permissionMessages.analyze.dashboards.metricsDashboard.listPage
 ));

@@ -24,6 +24,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -87,5 +88,5 @@ export default compose(
   SponsorEditPage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'branding.sponsor.editPage'
+  permissionMessages.branding.sponsor.editPage
 ));

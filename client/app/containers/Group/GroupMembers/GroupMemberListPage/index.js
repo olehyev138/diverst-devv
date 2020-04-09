@@ -25,6 +25,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const MemberTypes = Object.freeze([
   'active',
@@ -226,5 +227,5 @@ export default compose(
   GroupMemberListPage,
   ['currentGroup.permissions.members_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'group.groupMembers.listPage'
+  permissionMessages.group.groupMembers.listPage
 ));

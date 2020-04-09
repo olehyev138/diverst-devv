@@ -39,6 +39,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Segment/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -146,7 +147,7 @@ export default compose(
   SegmentPage,
   ['edit', 'permissions.segments_create', 'segment.permissions.update?', 'isFormLoading'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'segment.showPage',
+  permissionMessages.segment.showPage,
   true,
   a => a[3] || (a[0] ? a[2] : a[1])
 ));

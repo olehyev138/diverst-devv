@@ -24,6 +24,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -81,5 +82,5 @@ export default compose(
   BrandingHomePage,
   ['permissions.branding_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  'branding.homePage'
+  permissionMessages.branding.homePage
 ));

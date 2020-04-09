@@ -37,6 +37,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
 import produce from 'immer';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -169,5 +170,5 @@ export default compose(
   AnnualBudgetsPage,
   ['currentGroup.permissions.annual_budgets_view?'],
   (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'group.groupPlan.annualBudget.overviewPage'
+  permissionMessages.group.groupPlan.annualBudget.overviewPage
 ));
