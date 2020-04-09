@@ -1,6 +1,6 @@
 /**
  *
- * ThemeProvider
+ * Invalid Session Detector
  *
  */
 
@@ -11,13 +11,13 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import dig from 'object-dig';
 import { logoutBegin } from 'containers/Shared/App/actions';
-import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
 
 // Axios
 const axios = require('axios');
 
 export function InvalidSessionDetector(props) {
-  // Only rebuild theme if theme relevant values change
+  // Set axios interceptor and logout a user if they have an invalid user token
+  // Immediately render the children
   useEffect(() => {
     axios.interceptors.response.use(
       response => response,
