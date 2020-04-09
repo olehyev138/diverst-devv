@@ -129,7 +129,7 @@ export default defineMessages({
           id: `${scope}.group.groupPlan.budget.budgetCreatePage`
         }
       },
-      kPI: {
+      KPI: {
         updatePage: {
           id: `${scope}.group.groupPlan.KPI.updatePage`
         },
@@ -148,6 +148,9 @@ export default defineMessages({
         fieldsPage: {
           id: `${scope}.group.groupPlan.KPI.fieldsPage`
         }
+      },
+      eventList: {
+        id: `${scope}.group.groupPlan.eventsList`
       }
     },
     userListPage: {

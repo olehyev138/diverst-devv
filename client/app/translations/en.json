@@ -909,6 +909,7 @@
   "diverst.containers.Permissions.group.groupPlan.KPI.kpiPage": "You don't have permission to manage group KPI",
   "diverst.containers.Permissions.group.groupPlan.KPI.updateCreatePage": "You don't have permission to manage group KPI",
   "diverst.containers.Permissions.group.groupPlan.KPI.fieldsPage": "You don't have permission to manage group KPI",
+  "diverst.containers.Permissions.group.groupPlan.eventsList": "You don't have permission to manage group outcomes",
   "diverst.containers.Permissions.group.userGroupListPage": "You don't have permission view groups",
   "diverst.containers.Permissions.group.groupMembers.groupMemberCreatePage": "You don't have permission to add members",
   "diverst.containers.Permissions.group.groupMembers.groupMemberListPage": "You don't have permission to view group members",
