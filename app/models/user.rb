@@ -206,7 +206,7 @@ class User < ApplicationRecord
   def invite!(manager = nil)
     regenerate_invitation_token
 
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_now
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later
   end
 
   def valid_password?(password)
