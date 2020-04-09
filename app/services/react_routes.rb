@@ -68,6 +68,6 @@ class ReactRoutes
   end
 
   class << self
-    delegate *([:inspect] + ReactRoutes.routes_hash.keys), to: :routes
+    delegate(*([:inspect] + ReactRoutes.routes_hash.keys), to: :routes)
   end
 end
