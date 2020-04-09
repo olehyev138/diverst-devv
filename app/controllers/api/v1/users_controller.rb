@@ -17,7 +17,7 @@ class Api::V1::UsersController < DiverstController
     params[klass.symbol] = payload
     base_authorize(klass)
     new_item = klass.build(self.diverst_request, params)
-    new_item.invite(current_user)
+    new_item.invite!(current_user)
 
     render status: 201, json: new_item
   rescue => e
