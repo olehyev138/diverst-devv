@@ -20,6 +20,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -49,6 +52,7 @@ SponsorCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -65,4 +69,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SponsorCreatePage);
+)(Conditional(
+  SponsorCreatePage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.branding.sponsor.createPage
+));

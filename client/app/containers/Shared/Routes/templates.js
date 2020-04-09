@@ -161,12 +161,19 @@ import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/Gro
 import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
 
 /* Group/Admin - Resource */
-import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
-import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
-import FolderEditPage from 'containers/Resource/Folder/FolderEditPage/Loadable';
-import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
-import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/Loadable';
-import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
+import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
+import FolderCreatePage from 'containers/Resource/GroupFolder/FolderCreatePage/Loadable';
+import FolderEditPage from 'containers/Resource/GroupFolder/FolderEditPage/Loadable';
+import FolderPage from 'containers/Resource/GroupFolder/FolderPage/Loadable';
+import ResourceCreatePage from 'containers/Resource/GroupResource/ResourceCreatePage/Loadable';
+import ResourceEditPage from 'containers/Resource/GroupResource/ResourceEditPage/Loadable';
+
+import EFoldersPage from 'containers/Resource/EnterpriseFolder/FoldersPage/Loadable';
+import EFolderCreatePage from 'containers/Resource/EnterpriseFolder/FolderCreatePage/Loadable';
+import EFolderEditPage from 'containers/Resource/EnterpriseFolder/FolderEditPage/Loadable';
+import EFolderPage from 'containers/Resource/EnterpriseFolder/FolderPage/Loadable';
+import EResourceCreatePage from 'containers/Resource/EnterpriseResource/ResourceCreatePage/Loadable';
+import EResourceEditPage from 'containers/Resource/EnterpriseResource/ResourceEditPage/Loadable';
 
 /* Admin Innovate */
 import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Loadable';
@@ -271,6 +278,12 @@ export {
   FolderPage,
   ResourceCreatePage,
   ResourceEditPage,
+  EFoldersPage,
+  EFolderCreatePage,
+  EFolderEditPage,
+  EFolderPage,
+  EResourceCreatePage,
+  EResourceEditPage,
   UserProfilePage,
   InnovateLayout,
   CampaignListPage,

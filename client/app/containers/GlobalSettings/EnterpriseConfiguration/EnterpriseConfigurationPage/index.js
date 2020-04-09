@@ -20,6 +20,10 @@ import RouteService from 'utils/routeHelpers';
 import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -52,7 +56,8 @@ EnterpriseConfigurationPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectFormEnterprise()
+  enterprise: selectFormEnterprise(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -70,4 +75,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(EnterpriseConfigurationPage);
+)(Conditional(
+  EnterpriseConfigurationPage,
+  ['permissions.enterprise_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.globalSettings.enterpriseConfiguration.showPage
+));

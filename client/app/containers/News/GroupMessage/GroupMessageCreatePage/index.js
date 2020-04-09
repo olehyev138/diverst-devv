@@ -24,6 +24,7 @@ import { Button } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupMessageCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -82,5 +83,5 @@ export default compose(
   GroupMessageCreatePage,
   ['currentGroup.permissions.news_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to create group messages'
+  permissionMessages.news.groupMessage.createPage
 ));

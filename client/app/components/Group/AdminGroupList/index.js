@@ -25,6 +25,8 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   progress: {
@@ -115,53 +117,57 @@ export function AdminGroupList(props, context) {
                       </Typography>
                     )}
                   </CardContent>
-                  <CardActions>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                        state: { id: group.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      <DiverstFormattedMessage {...messages.edit} />
-                    </Button>
-                    <Button
-                      size='small'
-                      className={classes.errorButton}
-                      onClick={() => {
-                        /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm(intl.formatMessage(messages.delete_confirm)))
-                          props.deleteGroupBegin(group.id);
-                      }}
-                    >
-                      <DiverstFormattedMessage {...messages.delete} />
-                    </Button>
-                    <Button
-                      size='small'
-                      onClick={() => {
-                        setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                      }}
-                    >
-                      {expandedGroups[group.id] ? (
-                        <DiverstFormattedMessage {...messages.children_collapse} />
-                      ) : (
-                        <DiverstFormattedMessage {...messages.children_expand} />
-                      )}
-                    </Button>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
-                        state: { id: group.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      Categorize Subgroups
-                    </Button>
-                  </CardActions>
+                  <Permission show={permission(group, 'update?')}>
+                    <CardActions>
+                      <Button
+                        size='small'
+                        color='primary'
+                        to={{
+                          pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+                          state: { id: group.id }
+                        }}
+                        component={WrappedNavLink}
+                      >
+                        <DiverstFormattedMessage {...messages.edit} />
+                      </Button>
+                      <Permission show={permission(group, 'destroy?')}>
+                        <Button
+                          size='small'
+                          className={classes.errorButton}
+                          onClick={() => {
+                            /* eslint-disable-next-line no-alert, no-restricted-globals */
+                            if (confirm(intl.formatMessage(messages.delete_confirm)))
+                              props.deleteGroupBegin(group.id);
+                          }}
+                        >
+                          <DiverstFormattedMessage {...messages.delete} />
+                        </Button>
+                      </Permission>
+                      <Button
+                        size='small'
+                        onClick={() => {
+                          setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+                        }}
+                      >
+                        {expandedGroups[group.id] ? (
+                          <DiverstFormattedMessage {...messages.children_collapse} />
+                        ) : (
+                          <DiverstFormattedMessage {...messages.children_expand} />
+                        )}
+                      </Button>
+                      <Button
+                        size='small'
+                        color='primary'
+                        to={{
+                          pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
+                          state: { id: group.id }
+                        }}
+                        component={WrappedNavLink}
+                      >
+                        Categorize Subgroups
+                      </Button>
+                    </CardActions>
+                  </Permission>
                 </Card>
                 <Collapse in={expandedGroups[`${group.id}`]}>
                   <Box mt={1} />

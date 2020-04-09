@@ -25,6 +25,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import { permission } from 'utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -58,19 +60,21 @@ export function CampaignQuestionsList(props) {
 
   return (
     <React.Fragment>
-      <Box className={classes.floatRight}>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          to={props.links.campaignQuestionNew}
-          color='primary'
-          size='large'
-          component={WrappedNavLink}
-          startIcon={<AddIcon />}
-        >
-          ADD NEW QUESTION
-        </Button>
-      </Box>
+      <Permission show={permission(props.campaign, 'update?')}>
+        <Box className={classes.floatRight}>
+          <Button
+            className={classes.actionButton}
+            variant='contained'
+            to={props.links.campaignQuestionNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            startIcon={<AddIcon />}
+          >
+            ADD NEW QUESTION
+          </Button>
+        </Box>
+      </Permission>
       <Box className={classes.floatSpacer} />
       <DiverstTable
         title={intl.formatMessage(messages.question.list.questions)}
@@ -82,21 +86,26 @@ export function CampaignQuestionsList(props) {
         dataTotal={props.questionTotal}
         columns={columns}
         rowsPerPage={props.params.count}
-        actions={[{
-          icon: () => <EditIcon />,
-          tooltip: intl.formatMessage(messages.question.edit),
-          onClick: (_, rowData) => {
-            props.handleVisitQuestionEdit(props.campaignId, rowData.id);
-          }
-        }, {
-          icon: () => <DeleteIcon />,
-          tooltip: intl.formatMessage(messages.question.delete),
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete question?'))
-              props.deleteQuestionBegin({ campaignId: props.campaignId, questionId: rowData.id });
-          }
-        }]}
+        actions={[
+          rowData => ({
+            icon: () => <EditIcon />,
+            tooltip: intl.formatMessage(messages.question.edit),
+            onClick: (_, rowData) => {
+              props.handleVisitQuestionEdit(props.campaignId, rowData.id);
+            },
+            disabled: !permission(rowData, 'update?')
+          }),
+          rowData => ({
+            icon: () => <DeleteIcon />,
+            tooltip: intl.formatMessage(messages.question.delete),
+            onClick: (_, rowData) => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm('Delete question?'))
+                props.deleteQuestionBegin({ campaignId: props.campaignId, questionId: rowData.id });
+            },
+            disabled: !permission(rowData, 'destroy?')
+          })
+        ]}
       />
     </React.Fragment>
   );
@@ -111,6 +120,7 @@ CampaignQuestionsList.propTypes = {
   }),
   params: PropTypes.object,
   questionList: PropTypes.array,
+  campaign: PropTypes.object,
   questionTotal: PropTypes.number,
   isFetchingQuestions: PropTypes.bool,
   campaignId: PropTypes.string,

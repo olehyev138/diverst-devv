@@ -15,6 +15,11 @@ import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting 
 import GroupForm from 'components/Group/GroupForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
+
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -46,6 +51,7 @@ GroupCreatePage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
   isCommitting: selectGroupIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -64,4 +70,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupCreatePage);
+)(Conditional(
+  GroupCreatePage,
+  ['permissions.groups_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.group.createPage
+));

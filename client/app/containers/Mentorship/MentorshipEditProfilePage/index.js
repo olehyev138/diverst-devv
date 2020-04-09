@@ -16,12 +16,16 @@ import {
 } from 'containers/Mentorship/actions';
 
 import { selectFormUser } from 'containers/Mentorship/selectors';
-import { selectMentoringInterests, selectMentoringTypes } from 'containers/Shared/App/selectors';
+import { selectMentoringInterests, selectMentoringTypes, selectUser } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Mentorship/saga';
 import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
+import Conditional from 'components/Compositions/Conditional';
 
-export function UserProfilePage(props) {
+import dig from 'object-dig';
+import permissionMessages from 'containers/Shared/Permissions/messages';
+
+export function MentorshipEditProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
   useInjectSaga({ key: 'mentorship', saga });
 
@@ -40,7 +44,7 @@ export function UserProfilePage(props) {
   );
 }
 
-UserProfilePage.propTypes = {
+MentorshipEditProfilePage.propTypes = {
   updateUserBegin: PropTypes.func,
   path: PropTypes.string,
   user: PropTypes.object,
@@ -56,6 +60,7 @@ UserProfilePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   formUser: selectFormUser(),
+  sessionUser: selectUser(),
   interestOptions: selectMentoringInterests(),
   typeOptions: selectMentoringTypes()
 });
@@ -74,4 +79,10 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserProfilePage);
+)(Conditional(
+  MentorshipEditProfilePage,
+  ['formUser.permissions.update?'],
+  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  permissionMessages.mentorship.editProfilePage,
+  true
+));
