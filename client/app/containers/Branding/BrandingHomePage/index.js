@@ -21,6 +21,10 @@ import BrandingHome from 'components/Branding/BrandingHome';
 
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -55,7 +59,8 @@ BrandingHomePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise()
+  enterprise: selectEnterprise(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -73,4 +78,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(BrandingHomePage);
+)(Conditional(
+  BrandingHomePage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.branding.homePage
+));

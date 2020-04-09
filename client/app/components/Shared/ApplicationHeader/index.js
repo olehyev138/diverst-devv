@@ -21,7 +21,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo/index';
 import { logoutBegin } from 'containers/Shared/App/actions';
 
-import { selectEnterprise, selectUser } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectUser, selectPermissions } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -29,7 +29,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
-
+import Permission from 'components/Shared/DiverstPermission';
+import dig from 'object-dig';
 
 const styles = theme => ({
   grow: {
@@ -125,9 +126,11 @@ export class ApplicationHeader extends React.PureComponent {
   render() {
     const { menuAnchor } = this.state;
     const {
-      classes, enterprise, group, position, isAdmin, user
+      classes, group, position, isAdmin, user, permissions
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
+
+    const adminPath = dig(permissions, 'adminPath');
 
     const renderMenu = (
       <Menu
@@ -218,32 +221,34 @@ export class ApplicationHeader extends React.PureComponent {
             </div>
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
-                <Hidden xsDown>
-                  <Link
-                    component={WrappedNavLink}
-                    to={isAdmin ? ROUTES.user.root.path() : ROUTES.admin.root.path()}
-                  >
-                    <Button
-                      className={classes.dashboardSwitchButton}
-                      variant='outlined'
+                <Permission show={isAdmin || !!adminPath}>
+                  <Hidden xsDown>
+                    <Link
+                      component={WrappedNavLink}
+                      to={isAdmin ? ROUTES.user.root.path() : adminPath && adminPath}
                     >
-                      { isAdmin
-                        ? (
-                          <span>
-                            <DvrIcon className={classes.dashboardIcon} />
-                            {<DiverstFormattedMessage {...messages.header.dashboard} />}
-                          </span>
-                        )
-                        : (
-                          <span>
-                            <BuildIcon className={classes.adminIcon} />
-                            {<DiverstFormattedMessage {...messages.header.admin} />}
-                          </span>
-                        )
-                      }
-                    </Button>
-                  </Link>
-                </Hidden>
+                      <Button
+                        className={classes.dashboardSwitchButton}
+                        variant='outlined'
+                      >
+                        { isAdmin
+                          ? (
+                            <span>
+                              <DvrIcon className={classes.dashboardIcon} />
+                              {<DiverstFormattedMessage {...messages.header.dashboard} />}
+                            </span>
+                          )
+                          : (
+                            <span>
+                              <BuildIcon className={classes.adminIcon} />
+                              {<DiverstFormattedMessage {...messages.header.admin} />}
+                            </span>
+                          )
+                        }
+                      </Button>
+                    </Link>
+                  </Hidden>
+                </Permission>
                 <div>
                   <IconButton
                     aria-controls={
@@ -272,6 +277,7 @@ ApplicationHeader.propTypes = {
   classes: PropTypes.object,
   user: PropTypes.object,
   group: PropTypes.object,
+  permissions: PropTypes.object,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
@@ -298,6 +304,7 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),
+  permissions: selectPermissions(),
 });
 
 const withConnect = connect(

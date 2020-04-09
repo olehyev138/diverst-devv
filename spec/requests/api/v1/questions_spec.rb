@@ -12,14 +12,19 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   describe '#index' do
-    it 'gets all items' do
+    it 'throws unauthorized without campaign_id' do
       get "/api/v1/#{route}", headers: headers
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'gets all items of campaign' do
+      get "/api/v1/#{route}", headers: headers, params: { campaign_id: item.campaign_id }
       expect(response).to have_http_status(:ok)
     end
 
     it 'captures the error' do
       allow(model.constantize).to receive(:index).and_raise(BadRequestException)
-      get "/api/v1/#{route}", headers: headers
+      get "/api/v1/#{route}", headers: headers, params: { campaign_id: item.campaign_id }
       expect(response).to have_http_status(:bad_request)
     end
   end

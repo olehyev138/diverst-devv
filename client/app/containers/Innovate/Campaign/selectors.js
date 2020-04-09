@@ -39,6 +39,11 @@ const selectIsFetchingCampaigns = () => createSelector(
   campaignsState => campaignsState.isFetchingCampaigns
 );
 
+const selectIsFormLoading = () => createSelector(
+  selectCampaignsDomain,
+  campaignsState => campaignsState.isFormLoading
+);
+
 const selectIsCommitting = () => createSelector(
   selectCampaignsDomain,
   campaignsState => campaignsState.isCommitting
@@ -65,5 +70,5 @@ const selectFormCampaign = () => createSelector(
 export {
   selectCampaignsDomain, selectPaginatedCampaigns, selectCampaign,
   selectCampaignTotal, selectIsFetchingCampaigns, selectIsCommitting,
-  selectFormCampaign,
+  selectFormCampaign, selectIsFormLoading,
 };

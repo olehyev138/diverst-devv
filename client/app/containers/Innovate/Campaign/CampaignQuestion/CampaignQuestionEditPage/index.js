@@ -17,7 +17,7 @@ import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
 
 import {
-  selectQuestionTotal, selectIsCommitting, selectQuestion
+  selectQuestionTotal, selectIsCommitting, selectQuestion, selectIsFormLoading
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
@@ -25,6 +25,8 @@ import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionEditPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -66,7 +68,7 @@ CampaignQuestionEditPage.propTypes = {
   getQuestionBegin: PropTypes.func,
   updateQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   question: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
@@ -78,6 +80,7 @@ CampaignQuestionEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   question: selectQuestion(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -95,4 +98,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CampaignQuestionEditPage);
+)(Conditional(
+  CampaignQuestionEditPage,
+  ['question.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  permissionMessages.innovate.campaign.campaignQuestion.editPage
+));

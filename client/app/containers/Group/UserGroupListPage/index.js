@@ -19,6 +19,10 @@ import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
 import GroupList from 'components/Group/UserGroupList';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -66,6 +70,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
+  permissions: selectPermissions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -84,4 +89,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserGroupListPage);
+)(Conditional(
+  UserGroupListPage,
+  ['permissions.groups_view'],
+  (props, rs) => ROUTES.user.home.path(),
+  permissionMessages.group.userListPage
+));

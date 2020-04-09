@@ -50,6 +50,7 @@ const user = {
     manage_all: false
   },
   time_zone: 'America/New_York',
+  permissions: {}
 };
 
 beforeEach(() => {

@@ -30,6 +30,7 @@ import {
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import AuthService from 'utils/authService';
+import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 
 const axios = require('axios');
 
@@ -45,6 +46,8 @@ export function* login(action) {
     yield put(loginSuccess(token));
     yield put(setUserData(payload));
     axios.defaults.headers.common['Diverst-UserToken'] = token;
+
+    payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
 
     yield call(AuthService.storeJwt, token);
     yield call(AuthService.storeUserData, payload);

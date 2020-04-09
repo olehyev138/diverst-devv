@@ -10,8 +10,8 @@ import { compose } from 'redux';
 
 import messages from './messages';
 
-import EventsPage from '../UserEventsPage';
-import NewsPage from '../UserNewsFeedPage';
+import Events from '../UserEventsPage';
+import News from '../UserNewsFeedPage';
 
 import {
   Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
@@ -19,6 +19,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import EventsList from 'components/Event/HomeEventsList';
+import NewsFeed from 'components/News/HomeNewsList';
 
 const styles = theme => ({
   title: {
@@ -36,29 +38,47 @@ export class HomePage extends React.PureComponent {
   render() {
     const { classes } = this.props;
 
+    const events = (
+      <Paper>
+        <CardContent>
+          <Typography variant='h5' className={classes.title}>
+            <DiverstFormattedMessage {...messages.events} />
+          </Typography>
+          <Events
+            listComponent={EventsList}
+            readonly
+            loaderProps={{
+              transitionProps: {
+                direction: 'right',
+              },
+            }}
+          />
+        </CardContent>
+      </Paper>
+    );
+
+    const news = (
+      <Paper>
+        <CardContent>
+          <Typography variant='h5' className={classes.title}>
+            <DiverstFormattedMessage {...messages.news} />
+          </Typography>
+          <News
+            listComponent={NewsFeed}
+            readonly
+          />
+        </CardContent>
+      </Paper>
+    );
+
     return (
       <React.Fragment>
         <Grid container spacing={3}>
           <Grid item xs>
-            <h1 className={classes.title}>
-              <DiverstFormattedMessage {...messages.events} />
-            </h1>
-            <EventsPage
-              loaderProps={{
-                transitionProps: {
-                  direction: 'right',
-                },
-              }}
-            />
-          </Grid>
-          <Grid item xs='auto'>
-            <Divider orientation='vertical' />
+            {events}
           </Grid>
           <Grid item xs>
-            <h1 className={classes.title}>
-              <DiverstFormattedMessage {...messages.news} />
-            </h1>
-            <NewsPage />
+            {news}
           </Grid>
         </Grid>
       </React.Fragment>
