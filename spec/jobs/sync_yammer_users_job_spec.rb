@@ -5,7 +5,7 @@ RSpec.describe SyncYammerUsersJob, type: :job do
     it 'invites the user' do
       user = create(:user)
       allow(User).to receive(:from_yammer).and_return(user)
-      allow(user).to receive(:invite!)
+      allow(user).to receive(:invitation_instructions)
 
       create(:enterprise, yammer_import: true, yammer_token: 'token')
 
@@ -18,7 +18,7 @@ RSpec.describe SyncYammerUsersJob, type: :job do
 
       SyncYammerUsersJob.new.perform
 
-      expect(user).to have_received(:invite!)
+      expect(user).to have_received(:invitation_instructions)
     end
   end
 end

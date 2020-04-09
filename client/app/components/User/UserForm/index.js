@@ -38,6 +38,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={handleChange}
                 fullWidth
                 disabled={props.isCommitting}
+                required
+                margin='normal'
+                id='email'
+                name='email'
+                value={values.email}
+                label={<DiverstFormattedMessage {...messages.email} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
                 margin='normal'
                 id='first_name'
                 name='first_name'
@@ -123,6 +135,7 @@ export function UserForm(props) {
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
+    email: { default: '' },
     last_name: { default: '' },
     biography: { default: '' },
     time_zone: { default: null },

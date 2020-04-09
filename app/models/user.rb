@@ -3,7 +3,7 @@ class User < ApplicationRecord
   FIELD_ASSOCIATION_NAME = :fields
   belongs_to :enterprise, counter_cache: true
 
-  has_secure_password
+  has_secure_password validations: false
   has_secure_token :invitation_token
   include PublicActivity::Common
   include User::Actions
@@ -137,7 +137,6 @@ class User < ApplicationRecord
   validates_uniqueness_of :email, allow_blank: false, if: :email_changed?
   validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false, if: :email_changed?
 
-  validates_presence_of   :password, on: create
   validates_length_of     :password, within: 8..128, allow_blank: true
 
   validate :user_role_presence
@@ -207,7 +206,7 @@ class User < ApplicationRecord
   def invite!(manager = nil)
     regenerate_invitation_token
 
-    DiverstMailer.delay(queue: 'mailers').invite(self)
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_now
   end
 
   def valid_password?(password)
