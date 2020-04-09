@@ -154,7 +154,6 @@ class User < ApplicationRecord
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
-  after_create :invite!
   after_save :set_default_policy_group, if: :user_role_id_changed?
   accepts_nested_attributes_for :policy_group
 
@@ -203,10 +202,10 @@ class User < ApplicationRecord
     end
   end
 
-  def invite!(manager = nil)
+  def invite!(manager = nil, skip: false)
     regenerate_invitation_token
 
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
   def valid_password?(password)

@@ -13,6 +13,20 @@ class Api::V1::UsersController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def create
+    params[klass.symbol] = payload
+    base_authorize(klass)
+    new_item = klass.build(self.diverst_request, params)
+    new_item.invite(current_user)
+
+    render status: 201, json: new_item
+  rescue => e
+    case e
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   def show
     item = klass.find(params[:id])
     base_authorize(item)
