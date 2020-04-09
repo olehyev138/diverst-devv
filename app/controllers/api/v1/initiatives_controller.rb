@@ -14,16 +14,6 @@ class Api::V1::InitiativesController < DiverstController
     super
   end
 
-  def update
-    params[:initiative] = payload
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    item.picture.purge_later if params[:picture] == nil && item.picture.attached?
-
-    render status: 200, json: klass.update(self.diverst_request, params)
-  end
-
   def finish_expenses
     item = klass.find(params[:id])
     base_authorize(item)
