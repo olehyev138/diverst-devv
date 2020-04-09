@@ -37,6 +37,28 @@ module Metrics
       query
     end
 
+    def add_scoped_group_filter(graph_builder, field, scoped_ids)
+      # Wraps an existing ElasticsearchQuery in a filter that filters on a list of group ids
+
+      scoped_ids = manage_group_scopes(scoped_ids)
+      query = graph_builder.get_new_query.bool_filter_agg { |_| graph_builder.query }
+      query.add_filter_clause(field: field, value: scoped_ids, bool_op: :must, multi: true)
+
+      query
+    end
+
+    def manage_group_scopes(scoped_ids)
+      # If no scope selected - scope only on parents
+      # If singular parent group - scope on its children
+      if scoped_ids.blank?
+        enterprise.groups.all_parents.ids
+      elsif scoped_ids.count == 1 && enterprise.groups.find(scoped_ids[0]).is_parent_group?
+        enterprise.groups.find(scoped_ids[0]).children.ids
+      else
+        scoped_ids
+      end
+    end
+
     def get_change_percentage(from_date_total, to_date_total)
       if (from_date_total == 0) && (to_date_total > 0)
         change_percentage = 100
