@@ -19,8 +19,9 @@ $(document).on('ready page:load', function(){
         var virtual_event = event.virtual
         var isVirtual = function() {
           if(virtual_event){ 
-            return "virtual event\n";
+            return "virtual event<br>".bold();
           }
+          return '';
         };
 
         $(this).popover({
