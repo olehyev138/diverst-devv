@@ -16,13 +16,19 @@ $(document).on('ready page:load', function(){
 
       eventMouseover: function(event, jsEvent, view) {
         var groupName = event.group_name;
+        var virtual_event = event.virtual
+        var isVirtual = function() {
+          if(virtual_event){ 
+            return "virtual event\n";
+          }
+        };
 
         $(this).popover({
           html: true,
           title: groupName,
           placement: 'top',
           trigger: 'hover',
-          content: event.description,
+          content: `${isVirtual()}` + event.description,
           container: '#calendar'
       });
       },
