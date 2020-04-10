@@ -225,8 +225,8 @@ module Metrics
       custom_parser.extractors[:y] = custom_parser.date_range(key: :doc_count)
 
       scoped_groups = manage_group_scopes(scoped_groups)
-      groups = scoped_groups.present? ? enterprise.groups.all_parents.where(id: scoped_groups)
-                                      : enterprise.groups.all_parents
+      groups = scoped_groups.present? ? enterprise.groups.where(id: scoped_groups)
+                                      : enterprise.groups
       groups.each do |group|
         graph.query = graph.query
           .filter_agg(field: 'folder.group_id', value: group.id) { |q|

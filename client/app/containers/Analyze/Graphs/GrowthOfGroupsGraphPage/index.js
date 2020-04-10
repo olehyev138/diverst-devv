@@ -33,7 +33,7 @@ export function GrowthOfGroupsGraphPage(props) {
       from_date: '',
       to_date: ''
     },
-    scoped_by_models: []
+    scoped_by_models: props.dashboardParams.scoped_by_models
   });
 
   useEffect(() => {
