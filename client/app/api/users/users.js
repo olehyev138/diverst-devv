@@ -11,6 +11,9 @@ Object.assign(Users, {
   getInvitedUser(payload) {
     return axios.post(`${this.url}/sign_up_token`, payload);
   },
+  signUpUser(payload) {
+    return axios.post(`${this.url}/sign_up`, payload);
+  },
 });
 
 export default Users;

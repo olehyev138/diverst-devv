@@ -10,7 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form } from 'formik';
+import { Field, Formik, Form, ErrorMessage } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
   Divider, Typography, Box
@@ -26,7 +26,7 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import Scrollbar from 'components/Shared/Scrollbar';
 
 /* eslint-disable object-curly-newline */
-export function SignUpFormInner({ formikProps, buttonText, ...props }) {
+export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>
@@ -124,17 +124,6 @@ export function SignUpFormInner({ formikProps, buttonText, ...props }) {
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
-              <FieldInputForm
-                fieldData={dig(props, 'user', 'field_data') || []}
-                isCommitting={props.isCommitting}
-                isFetching={props.isLoading}
-
-                messages={messages}
-                formikProps={formikProps}
-
-                join
-                noCard
-              />
             </CardContent>
             <Divider />
             <CardActions>
@@ -169,10 +158,10 @@ export function SignUpForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone']);
-        props.submitAction(payload);
+        props.submitAction({token: props.token, ...payload});
       }}
     >
-      {formikProps => <SignUpFormInner {...props} formikProps={formikProps} />}
+      {formikProps => <SignUpFormInner {...props} formikProps={formikProps} errors={props.errors} />}
     </Formik>
   );
 }
@@ -188,6 +177,7 @@ SignUpForm.propTypes = {
 
 SignUpFormInner.propTypes = {
   formikProps: PropTypes.object,
+  errors: PropTypes.object,
   user: PropTypes.object,
   buttonText: PropTypes.string,
   isCommitting: PropTypes.bool,

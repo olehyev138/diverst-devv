@@ -32,12 +32,12 @@ module User::Actions
     self
   end
 
-  def sign_uo(params)
-    if update_attributes(params[:user].permit!)
+  def sign_up(params)
+    if update_attributes(params)
       update(invitation_token: nil, invitation_accepted_at: Time.now)
       self
     else
-      raise InvalidInputException.new({ errors: errors.as_json })
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
     end
   end
 

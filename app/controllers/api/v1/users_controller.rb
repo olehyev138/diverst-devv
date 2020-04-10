@@ -1,5 +1,5 @@
 class Api::V1::UsersController < DiverstController
-  skip_before_action :verify_jwt_token, only: [:find_user_enterprise_by_email, :sign_up_token]
+  skip_before_action :verify_jwt_token, only: [:find_user_enterprise_by_email, :sign_up_token, :sign_up]
 
   def find_user_enterprise_by_email
     render json: User.find_user_by_email(self.diverst_request.user, params).enterprise
@@ -104,9 +104,9 @@ class Api::V1::UsersController < DiverstController
   end
 
   def sign_up
-    user = InviteTokenService.verify_jwt_token(sign_up_payload, 'set_password')
+    user = InviteTokenService.verify_jwt_token(params[:token], 'set_password')
 
-    render status: 200, json: user.sign_uo(payload)
+    render status: 200, json: user.sign_up(sign_up_payload)
   rescue => e
     case e
     when InvalidInputException
