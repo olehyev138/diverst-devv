@@ -4,6 +4,9 @@ import messages from 'containers/Shared/Routes/messages';
 export const ROUTES = {
   // Session
   session: {
+    sign_up: {
+      path: () => '/sign_up',
+    },
     login: {
       path: () => '/login',
     },

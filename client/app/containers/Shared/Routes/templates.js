@@ -17,6 +17,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import SignUpPage from 'containers/User/SignUpPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
@@ -190,6 +191,7 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,

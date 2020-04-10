@@ -8,8 +8,8 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/User/reducer';
-import saga from 'containers/User/saga';
+import reducer from './reducer';
+import saga from './saga';
 
 import {
   selectToken,
@@ -28,14 +28,35 @@ import {
 import RouteService from 'utils/routeHelpers';
 
 import { injectIntl, intlShape } from 'react-intl';
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { push } from 'connected-react-router';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
+const redirectAction = url => push(url);
 
 export function SignUpPage(props) {
-  useInjectReducer({ key: 'users', reducer });
-  useInjectSaga({ key: 'users', saga });
-
-  useEffect(() => () => props.signUpUnmount(), []);
+  useInjectReducer({ key: 'signup', reducer });
+  useInjectSaga({ key: 'signup', saga });
 
   const rs = new RouteService(useContext);
+  const query = new URLSearchParams(rs.routeData.location.search);
+
+  useEffect(() => {
+    const token = query.get('token');
+
+    if (token)
+      props.getUserByTokenBegin({
+        token
+      });
+    else {
+      props.showSnackbar({
+        message: 'You need nave an invitation to sign up',
+        options: { variant: 'warning' }
+      });
+      props.redirectAction(ROUTES.session.login.path());
+    }
+    return () => props.signUpUnmount();
+  }, []);
 
   return (
     <React.Fragment />
@@ -46,6 +67,8 @@ SignUpPage.propTypes = {
   getUserByTokenBegin: PropTypes.func,
   submitPasswordBegin: PropTypes.func,
   signUpUnmount: PropTypes.func,
+  showSnackbar: PropTypes.func,
+  redirectAction: PropTypes.func,
 
   isCommitting: PropTypes.bool,
   token: PropTypes.string,
@@ -66,6 +89,8 @@ const mapDispatchToProps = {
   getUserByTokenBegin,
   submitPasswordBegin,
   signUpUnmount,
+  showSnackbar,
+  redirectAction,
 };
 
 const withConnect = connect(

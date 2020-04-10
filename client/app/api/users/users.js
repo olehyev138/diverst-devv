@@ -8,6 +8,9 @@ Object.assign(Users, {
   findEnterprise(payload) {
     return axios.post(`${this.url}/email`, payload);
   },
+  getInvitedUser(payload) {
+    return axios.post(`${this.url}/signup_token`, payload);
+  },
 });
 
 export default Users;

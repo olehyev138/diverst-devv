@@ -49,6 +49,8 @@ class InviteTokenService < TokenService
   private
 
   def self.get_invite_payload(token)
-    decode_jwt(token)
+    JWT.decode(token, JWT_SECRET)
+  rescue JWT::DecodeError => e
+    user_token_error('Invalid Token')
   end
 end
