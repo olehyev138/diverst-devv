@@ -2,6 +2,7 @@ require 'jwt'
 
 class InviteTokenService < TokenService
   TOKEN_EXPIRATION = 2.weeks
+  FORM_EXPIRATION = 2.weeks
 
   def self.first_jwt(user, params = {})
     token = user.generate_invitation_token
@@ -9,7 +10,8 @@ class InviteTokenService < TokenService
     payload = {
         invite_token: token,
         user_id: user.id,
-        type: 'invite'
+        type: 'invite',
+        created: Time.now,
     }
 
     create_jwt_token(payload)
@@ -23,6 +25,7 @@ class InviteTokenService < TokenService
                              type: 'set_password',
                              user_id: user.id,
                              invite_token: user.invitation_token,
+                             created: Time.now,
                          }),
         user
     ]
@@ -33,7 +36,11 @@ class InviteTokenService < TokenService
 
     user_token_error('Invalid Invitation Link') if user.blank? || payload['user_id'] != user.id
     user_token_error('Invalid Token') if payload['type'] != type
-    user_token_error('Invitation Expired') if user.invitation_created_at < TOKEN_EXPIRATION.ago
+    user_token_error('Invitation Expired') if case type
+                                              when 'invite' then user.invitation_created_at < TOKEN_EXPIRATION.ago
+                                              when 'set_password' then payload['created'] < FORM_EXPIRATION.ago
+                                              else true
+                                              end
 
     user
   end
