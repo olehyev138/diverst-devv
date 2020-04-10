@@ -1,5 +1,6 @@
 <div class="block block-section <%= "flippable" if event.picture.present? %>" style="margin-bottom: 20px;">
     <div class="front">
+      <%= image_tag("Remote meeting icon.png", size: "20x20") %>
       <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
       <p>
         <%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %>
