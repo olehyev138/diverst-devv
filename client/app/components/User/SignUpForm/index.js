@@ -56,6 +56,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   onChange={handleChange}
                   fullWidth
                   required
+                  type='password'
                   disabled={props.isCommitting}
                   margin='normal'
                   id='password'
@@ -68,6 +69,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   onChange={handleChange}
                   fullWidth
                   required
+                  type='password'
                   disabled={props.isCommitting}
                   margin='normal'
                   id='password_confirmation'
