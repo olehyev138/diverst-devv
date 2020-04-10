@@ -26,6 +26,7 @@ const CustomDateField = (props) => {
       id={dataLocation}
       type='date'
       margin='normal'
+      required={fieldDatum.field.required}
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
       onChange={props.formik.handleChange}

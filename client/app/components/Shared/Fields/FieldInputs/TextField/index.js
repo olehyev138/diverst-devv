@@ -20,6 +20,7 @@ const CustomTextField = (props) => {
 
   return (
     <TextField
+      required={fieldDatum.field.required}
       name={dataLocation}
       id={dataLocation}
       type={props.inputType}

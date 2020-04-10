@@ -25,9 +25,10 @@ const CustomSelectField = (props) => {
       id={dataLocation}
       fullWidth
       margin='normal'
+      required={fieldDatum.field.required}
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
-      options={fieldDatum.field.options_text}
+      options={fieldDatum.field.options}
       onChange={v => props.formik.setFieldValue(dataLocation, v)}
       {...props}
     />

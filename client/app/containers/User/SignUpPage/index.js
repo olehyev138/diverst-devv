@@ -31,6 +31,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import SignUpForm from 'components/User/SignUpForm';
 
 const redirectAction = url => push(url);
 
@@ -59,7 +60,16 @@ export function SignUpPage(props) {
   }, []);
 
   return (
-    <React.Fragment />
+    <SignUpForm
+      user={props.user}
+      isLoading={props.isLoading}
+      isCommitting={props.isCommitting}
+      token={props.token}
+      errors={props.formErrors}
+
+      submitAction={props.submitPasswordBegin}
+      buttonText='Sign Up'
+    />
   );
 }
 
