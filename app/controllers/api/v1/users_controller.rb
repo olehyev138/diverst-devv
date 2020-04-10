@@ -129,7 +129,7 @@ class Api::V1::UsersController < DiverstController
             field_data_attributes: [
                 :data
             ]
-        )
+          )
   end
 
   def payload

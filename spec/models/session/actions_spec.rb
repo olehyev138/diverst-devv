@@ -15,7 +15,7 @@ RSpec.describe Session::Actions, type: :model do
       allow(OneLogin::RubySaml::Logoutrequest).to receive(:new).and_return(logout_request)
       allow(logout_request).to receive(:create).and_return('link')
 
-      payload = Session.logout(UserTokenService.create_jwt_token({user_token: session.token }))
+      payload = Session.logout(UserTokenService.create_jwt_token({ user_token: session.token }))
       expect(payload[:logout_link]).to_not be nil
     end
   end
