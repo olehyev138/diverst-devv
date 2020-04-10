@@ -24,116 +24,122 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import Scrollbar from 'components/Shared/Scrollbar';
+import Container from '@material-ui/core/Container';
+import Logo from 'components/Shared/Logo';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>
-      <DiverstFormLoader isLoading={props.isLoading} isError={!props.user}>
-        <Card>
-          <Form>
-            <CardContent>
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={props.isCommitting}
-                margin='normal'
-                id='email'
-                name='email'
-                value={values.email}
-                label={<DiverstFormattedMessage {...messages.email} />}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={props.isCommitting}
-                margin='normal'
-                id='password'
-                name='password'
-                value={values.password}
-                label='Password'
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={props.isCommitting}
-                margin='normal'
-                id='password_confirmation'
-                name='password_confirmation'
-                value={values.password_confirmation}
-                label='Password Confirmation'
-              />
-              <Box mb={1} />
+      <Container>
+        <DiverstFormLoader isLoading={props.isLoading} isError={!props.user}>
+          <Card>
+            <Form>
+              <CardContent>
+                <Logo coloredDefault maxHeight='60px' />
+                <Box pb={2} />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  id='email'
+                  name='email'
+                  value={values.email}
+                  label={<DiverstFormattedMessage {...messages.email} />}
+                />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  id='password'
+                  name='password'
+                  value={values.password}
+                  label='Password'
+                />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  id='password_confirmation'
+                  name='password_confirmation'
+                  value={values.password_confirmation}
+                  label='Password Confirmation'
+                />
+                <Box mb={1} />
+                <Divider />
+                <Box mb={1} />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  id='first_name'
+                  name='first_name'
+                  value={values.first_name}
+                  label={<DiverstFormattedMessage {...messages.first_name} />}
+                />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  id='last_name'
+                  name='last_name'
+                  value={values.last_name}
+                  label={<DiverstFormattedMessage {...messages.last_name} />}
+                />
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  multiline
+                  rows={4}
+                  variant='outlined'
+                  id='biography'
+                  name='biography'
+                  value={values.biography}
+                  label={<DiverstFormattedMessage {...messages.biography} />}
+                />
+                <Field
+                  component={Select}
+                  fullWidth
+                  disabled={props.isCommitting}
+                  id='time_zone'
+                  name='time_zone'
+                  margin='normal'
+                  label={<DiverstFormattedMessage {...messages.time_zone} />}
+                  value={values.time_zone}
+                  options={dig(props, 'user', 'timezones') || []}
+                  onChange={value => setFieldValue('time_zone', value)}
+                  onBlur={() => setFieldTouched('time_zone', true)}
+                />
+              </CardContent>
               <Divider />
-              <Box mb={1} />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={props.isCommitting}
-                margin='normal'
-                id='first_name'
-                name='first_name'
-                value={values.first_name}
-                label={<DiverstFormattedMessage {...messages.first_name} />}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={props.isCommitting}
-                margin='normal'
-                id='last_name'
-                name='last_name'
-                value={values.last_name}
-                label={<DiverstFormattedMessage {...messages.last_name} />}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                multiline
-                rows={4}
-                variant='outlined'
-                id='biography'
-                name='biography'
-                value={values.biography}
-                label={<DiverstFormattedMessage {...messages.biography} />}
-              />
-              <Field
-                component={Select}
-                fullWidth
-                disabled={props.isCommitting}
-                id='time_zone'
-                name='time_zone'
-                margin='normal'
-                label={<DiverstFormattedMessage {...messages.time_zone} />}
-                value={values.time_zone}
-                options={dig(props, 'user', 'timezones') || []}
-                onChange={value => setFieldValue('time_zone', value)}
-                onBlur={() => setFieldTouched('time_zone', true)}
-              />
-            </CardContent>
-            <Divider />
-            <CardActions>
-              <DiverstSubmit isCommitting={props.isCommitting}>
-                {buttonText}
-              </DiverstSubmit>
-            </CardActions>
-          </Form>
-        </Card>
-      </DiverstFormLoader>
+              <CardActions>
+                <DiverstSubmit isCommitting={props.isCommitting}>
+                  {buttonText}
+                </DiverstSubmit>
+              </CardActions>
+            </Form>
+          </Card>
+        </DiverstFormLoader>
+      </Container>
     </Scrollbar>
   );
 }
@@ -158,7 +164,7 @@ export function SignUpForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone']);
-        props.submitAction({token: props.token, ...payload});
+        props.submitAction({ token: props.token, ...payload });
       }}
     >
       {formikProps => <SignUpFormInner {...props} formikProps={formikProps} errors={props.errors} />}

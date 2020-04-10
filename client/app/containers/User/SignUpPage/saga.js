@@ -23,8 +23,8 @@ export function* getUserByToken(action) {
     yield put(getUserByTokenSuccess(response.data));
   } catch (err) {
     yield put(getUserByTokenError());
-
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
+    yield put(push(ROUTES.session.login.path()));
   }
 }
 
