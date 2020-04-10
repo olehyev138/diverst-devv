@@ -97,7 +97,7 @@ class Api::V1::UsersController < DiverstController
 
     render status: 200, json: {
         token: token,
-        user: UserSerializer.new(user).as_json,
+        user: InvitedUserSerializer.new(user).as_json,
     }
   rescue => e
     raise BadRequestException.new(e.message)
