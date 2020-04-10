@@ -1,4 +1,4 @@
-import { delay, call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
@@ -11,13 +11,16 @@ import {
   updateCustomTextSuccess, updateCustomTextError,
 } from 'containers/GlobalSettings/CustomText/actions';
 
+
 export function* updateCustomText(action) {
   try {
+    const { callback } = action.payload;
+
     const payload = { custom_text: action.payload };
     const response = yield call(api.customText.update.bind(api.customText), payload.custom_text.id, payload);
 
     yield put(updateCustomTextSuccess());
-    yield put(showSnackbar({ message: 'Changes will only be applied next time you login', options: { variant: 'info' } }));
+
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));

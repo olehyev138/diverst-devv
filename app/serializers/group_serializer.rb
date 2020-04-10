@@ -48,6 +48,8 @@ class GroupSerializer < ApplicationRecordSerializer
         :leaders_manage?,
         :news_manage?,
         :annual_budgets_manage?,
+        :carryover_annual_budget?,
+        :reset_annual_budget?,
         :members_destroy?,
         :is_a_member?,
         :is_a_pending_member?,

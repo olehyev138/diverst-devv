@@ -26,6 +26,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -101,6 +104,7 @@ const mapStateToProps = createStructuredSelector({
   sponsorList: selectPaginatedSponsors(),
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -118,4 +122,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SponsorListPage);
+)(Conditional(
+  SponsorListPage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.branding.sponsor.listPage
+));

@@ -20,6 +20,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
 import OutcomesList from 'components/Group/Outcome/OutcomesList';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10,
@@ -110,5 +111,5 @@ export default compose(
   OutcomesPage,
   ['currentGroup.permissions.update?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group outcomes'
+  permissionMessages.group.outcome.indexPage
 ));

@@ -16,7 +16,8 @@ export const initialState = {
   isCommitting: false,
   campaignList: [],
   campaignTotal: null,
-  isFetchingCampaigns: true
+  isFetchingCampaigns: true,
+  isFormLoading: true,
 };
 
 /* eslint-disable default-case, no-param-reassign, consistent-return  */

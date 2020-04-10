@@ -24,6 +24,7 @@ import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -85,5 +86,5 @@ export default compose(
   NewsLinkCreatePage,
   ['currentGroup.permissions.news_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to post news links'
+  permissionMessages.news.newsLink.createPage
 ));

@@ -39,6 +39,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import NotFoundPage from 'containers/Shared/NotFoundPage';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function KPIPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -87,5 +88,5 @@ export default compose(
   KPIPage,
   ['currentGroup.permissions.kpi_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group KPI'
+  permissionMessages.group.groupPlan.KPI.kpiPage
 ));

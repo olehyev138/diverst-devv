@@ -407,6 +407,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.integer "polls_count"
     t.boolean "slack_enabled", default: false
     t.integer "users_count"
+    t.boolean "onboarding_consent_enabled", default: false
+    t.boolean "enable_outlook", default: false
   end
 
   create_table "expense_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -768,6 +770,7 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.datetime "updated_at", null: false
     t.boolean "attended", default: false
     t.datetime "check_in_time"
+    t.string "outlook_id"
     t.index ["initiative_id"], name: "index_initiative_users_on_initiative_id"
     t.index ["user_id"], name: "index_initiative_users_on_user_id"
   end
@@ -1091,6 +1094,17 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.index ["group_id"], name: "index_outcomes_on_group_id"
   end
 
+  create_table "outlook_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.text "encrypted_token_hash"
+    t.text "encrypted_token_hash_iv"
+    t.boolean "auto_add_event_to_calendar", default: true
+    t.boolean "auto_update_calendar_event", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_outlook_data_on_user_id"
+  end
+
   create_table "page_names", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "page_url"
     t.string "page_name"
@@ -1188,6 +1202,7 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.boolean "group_posts_index", default: false
     t.boolean "mentorship_manage", default: false
     t.boolean "auto_archive_manage", default: false
+    t.boolean "onboarding_consent_manage", default: false
     t.index ["enterprise_id"], name: "index_policy_group_templates_on_enterprise_id"
     t.index ["user_role_id"], name: "index_policy_group_templates_on_user_role_id"
   end
@@ -1253,6 +1268,7 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.boolean "group_posts_index", default: false
     t.boolean "mentorship_manage", default: false
     t.boolean "auto_archive_manage", default: false
+    t.boolean "onboarding_consent_manage", default: false
     t.index ["user_id"], name: "index_policy_groups_on_user_id"
   end
 

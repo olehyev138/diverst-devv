@@ -113,5 +113,10 @@ export default defineMessages({
     logout: {
       id: `${scope}.header.logout`
     },
-  }
+  },
+  errors: {
+    findEnterprise: {
+      id: `${scope}.errors.findEnterprise`
+    },
+  },
 });

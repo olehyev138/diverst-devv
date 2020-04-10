@@ -22,6 +22,10 @@ import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestio
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { getCampaignBegin } from 'containers/Innovate/Campaign/actions';
+import { selectCampaign, selectIsFormLoading } from 'containers/Innovate/Campaign/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -35,12 +39,16 @@ export function CampaignQuestionCreatePage(props) {
     questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
 
-  useEffect(() => () => props.campaignQuestionsUnmount(), []);
+  useEffect(() => {
+    props.getCampaignBegin({ id: campaignId });
+
+    return () => props.campaignQuestionsUnmount();
+  }, []);
 
   return (
     <CampaignQuestionForm
       questionAction={props.createQuestionBegin}
-      campaignId={campaignId[0]}
+      campaignId={campaignId}
       buttonText={intl.formatMessage(messages.create)}
       isCommitting={props.isCommitting}
       links={links}
@@ -55,15 +63,19 @@ CampaignQuestionCreatePage.propTypes = {
   getCampaignBegin: PropTypes.func,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
+  campaign: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
+  campaign: selectCampaign(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
   createQuestionBegin,
   campaignQuestionsUnmount,
+  getCampaignBegin,
 };
 
 const withConnect = connect(
@@ -75,4 +87,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CampaignQuestionCreatePage);
+)(Conditional(
+  CampaignQuestionCreatePage,
+  ['campaign.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  permissionMessages.innovate.campaign.campaignQuestion.createPage
+));

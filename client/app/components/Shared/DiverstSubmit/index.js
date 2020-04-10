@@ -23,7 +23,6 @@ const styles = theme => ({
 
 function DiverstSubmit(props) {
   const { classes, children, isCommitting, ...rest } = props;
-
   return (
     <div className={classes.wrapper}>
       <Button

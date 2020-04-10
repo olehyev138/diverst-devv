@@ -1,6 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
   attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
-             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data
+             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :permissions
 
   has_many :field_data
 

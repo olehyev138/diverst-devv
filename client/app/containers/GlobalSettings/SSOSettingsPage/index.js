@@ -20,6 +20,10 @@ import RouteService from 'utils/routeHelpers';
 import SSOSettings from 'components/GlobalSettings/SSOSettings';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 export function SSOSettingsPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -51,7 +55,8 @@ SSOSettingsPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectFormEnterprise()
+  enterprise: selectFormEnterprise(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -69,4 +74,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SSOSettingsPage);
+)(Conditional(
+  SSOSettingsPage,
+  ['permissions.sso_authentication'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.globalSettings.SSOSettingsPage
+));

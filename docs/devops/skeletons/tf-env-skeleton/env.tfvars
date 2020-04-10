@@ -5,9 +5,10 @@ env_name      = "<client-name>"
 region        = "<region>"
 ssh_key_name  = "key_<client-name"
 
-backend_asg_min   = 1
-backend_asg_max   = 4
-backend_ec2_type  = "t2.small"
+backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.4 running Ruby 2.6 (Puma)"
+backend_asg_min         = 1
+backend_asg_max         = 4
+backend_ec2_type        = "t2.small"
 
 sidekiq_username = "admin"
 sidekiq_password = "<password>"
@@ -19,5 +20,7 @@ db_backup_window            = null
 db_deletion_protection      = true
 db_apply_immediately        = true
 db_maintenance_window       = null
+
+db_name       = "diverst_production"
 db_username   = "admin"
 db_password   = "<password>"

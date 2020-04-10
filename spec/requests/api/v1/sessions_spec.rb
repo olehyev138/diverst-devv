@@ -54,7 +54,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'captures the error if the jwt is invalid' do
+    it 'captures bad request if the token is undecodable' do
       # allow(model.constantize).to receive(:logout).and_raise(BadRequestException)
       # Not needed as the request returns unauthorized during initial JWT verification if the JWT is invalid
       create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
@@ -69,7 +69,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       headers['Diverst-UserToken'] = 'iamnotavalidtoken'
 
       delete '/api/v1/sessions/logout', params: nil, headers: headers
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end
