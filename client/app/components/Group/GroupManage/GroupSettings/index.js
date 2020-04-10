@@ -166,6 +166,19 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             </Grid>
             <Grid item xs='auto'>
               <Field
+                component={DiverstFileInput}
+                id='logo'
+                name='logo'
+                margin='normal'
+                fileName={props.group.logo_file_name}
+                fullWidth
+                label={intl.formatMessage(messages.settings.logo)}
+                disabled={props.isCommitting}
+                value={values.logo}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
                 component={DiverstColorPicker}
                 id='calendar_color'
                 name='calendar_color'
@@ -203,6 +216,7 @@ export function GroupSettings(props) {
     calendar_color: { default: '' },
     auto_archive: { default: '' },
     banner: { default: null },
+    logo: { default: null },
   });
 
   return (

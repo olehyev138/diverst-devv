@@ -2,7 +2,7 @@ class GroupSerializer < ApplicationRecordSerializer
   def initialize(object, options = {})
     super
     if instance_options[:family]
-      serializer_attributes :id, :name, :private, :current_user_is_member, :permissions
+      serializer_attributes :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data
     elsif policy&.show?
       serializer_attributes :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
@@ -10,7 +10,7 @@ class GroupSerializer < ApplicationRecordSerializer
                             :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
                             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
                             :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
-                            :children, :parent
+                            :logo, :logo_file_name, :logo_data, :children, :parent
     else
       serializer_attributes :id
     end
@@ -72,6 +72,18 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def banner_data
     AttachmentHelper.attachment_data_string(object.banner)
+  end
+
+  def logo
+    AttachmentHelper.attachment_signed_id(object.logo)
+  end
+
+  def logo_file_name
+    AttachmentHelper.attachment_file_name(object.logo)
+  end
+
+  def logo_data
+    AttachmentHelper.attachment_data_string(object.logo)
   end
 
   def current_user_is_member

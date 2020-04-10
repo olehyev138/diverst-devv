@@ -12,7 +12,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Card, CardContent, CardActionArea,
-  Typography, Grid, Link, Collapse, Box,
+  Typography, Grid, Link, Collapse, Box, Hidden,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +25,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   errorButton: {
@@ -112,17 +113,36 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
-                          {group.current_user_is_member === true && (
-                            <JoinedGroupIcon className={classes.groupCardIcon} />
-                          )}
-                          <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
-                            {group.name}
-                          </Typography>
-                          {group.description && (
-                            <Typography color='textSecondary' className={classes.groupCardDescription}>
-                              {group.description}
-                            </Typography>
-                          )}
+                          <Grid container spacing={2} alignItems='center'>
+                            {group.logo_data && (
+                              <React.Fragment>
+                                <Hidden xsDown>
+                                  <Grid item xs='auto'>
+                                    <DiverstImg
+                                      data={group.logo_data}
+                                      maxWidth='70px'
+                                      maxHeight='70px'
+                                      minWidth='70px'
+                                      minHeight='70px'
+                                    />
+                                  </Grid>
+                                </Hidden>
+                              </React.Fragment>
+                            )}
+                            <Grid item xs>
+                              {group.current_user_is_member === true && (
+                                <JoinedGroupIcon className={classes.groupCardIcon} />
+                              )}
+                              <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
+                                {group.name}
+                              </Typography>
+                              {group.short_description && (
+                                <Typography color='textSecondary' className={classes.groupCardDescription}>
+                                  {group.short_description}
+                                </Typography>
+                              )}
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </CardActionArea>
                     </Link>
@@ -166,14 +186,33 @@ export function UserGroupList(props, context) {
                         >
                           <CardActionArea>
                             <CardContent className={classes.groupCardContent}>
-                              <Typography variant='h5' component='h2' display='inline'>
-                                {childGroup.name}
-                              </Typography>
-                              {childGroup.description && (
-                                <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                  {childGroup.description}
-                                </Typography>
-                              )}
+                              <Grid container spacing={2} alignItems='center'>
+                                {childGroup.logo_data && (
+                                  <React.Fragment>
+                                    <Hidden xsDown>
+                                      <Grid item xs='auto'>
+                                        <DiverstImg
+                                          data={childGroup.logo_data}
+                                          maxWidth='60px'
+                                          maxHeight='60px'
+                                          minWidth='60px'
+                                          minHeight='60px'
+                                        />
+                                      </Grid>
+                                    </Hidden>
+                                  </React.Fragment>
+                                )}
+                                <Grid item xs>
+                                  <Typography variant='h5' component='h2' display='inline'>
+                                    {childGroup.name}
+                                  </Typography>
+                                  {childGroup.short_description && (
+                                    <Typography color='textSecondary' className={classes.groupCardDescription}>
+                                      {childGroup.short_description}
+                                    </Typography>
+                                  )}
+                                </Grid>
+                              </Grid>
                             </CardContent>
                           </CardActionArea>
                         </Link>
