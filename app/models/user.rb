@@ -133,6 +133,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  validates :password, confirmation: true
+  validates_confirmation_of :password
+
   validates_presence_of   :email
   validates_uniqueness_of :email, allow_blank: false, if: :email_changed?
   validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false, if: :email_changed?
