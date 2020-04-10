@@ -14,7 +14,7 @@ RSpec.describe UserTokenService, type: :service do
     it 'raises an error because user doesnt exist' do
       user = create(:user)
       token = UserTokenService.create_jwt user
-      user.destroy
+      user.reload.destroy
       expect { UserTokenService.verify_jwt_token token }.to raise_error BadRequestException
     end
   end

@@ -22,6 +22,7 @@ import Box from '@material-ui/core/Box';
 import GroupLayout from '../GroupLayout';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
   content: {
@@ -121,5 +122,5 @@ export default compose(
   EventManageLayout,
   ['event.permissions.update?', 'isLoading'],
   (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
-  'You don\'t have permission manage this event'
+  permissionMessages.layouts.eventManage
 ));

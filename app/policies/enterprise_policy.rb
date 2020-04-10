@@ -16,7 +16,7 @@ class EnterprisePolicy < ApplicationPolicy
   end
 
   def fields?
-    update?
+    edit_fields?
   end
 
   def create_field?

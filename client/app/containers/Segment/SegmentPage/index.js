@@ -33,10 +33,13 @@ import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Segment/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -118,6 +121,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
   currentEnterprise: selectEnterprise(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -139,4 +143,11 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SegmentPage);
+)(Conditional(
+  SegmentPage,
+  ['edit', 'permissions.segments_create', 'segment.permissions.update?', 'isFormLoading'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.segment.showPage,
+  true,
+  a => a[3] || (a[0] ? a[2] : a[1])
+));

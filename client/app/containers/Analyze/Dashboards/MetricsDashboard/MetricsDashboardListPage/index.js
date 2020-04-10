@@ -27,6 +27,11 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
+import Conditional from 'components/Compositions/Conditional';
+import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
+import { resolveRootManagePath } from 'utils/adminLinkHelpers';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10,
@@ -84,11 +89,13 @@ MetricsDashboardListPage.propTypes = {
   metricsDashboardsUnmount: PropTypes.func.isRequired,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,
+  permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   metricsDashboards: selectPaginatedMetricsDashboards(),
   metricsDashboardsTotal: selectMetricsDashboardsTotal(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -107,4 +114,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(MetricsDashboardListPage);
+)(Conditional(
+  MetricsDashboardListPage,
+  ['permissions.metrics_overview'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.analyze.dashboards.metricsDashboard.listPage
+));

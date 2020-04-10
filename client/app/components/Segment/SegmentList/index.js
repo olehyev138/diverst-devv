@@ -27,6 +27,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   segmentListItem: {
@@ -98,21 +99,25 @@ export function SegmentList(props, context) {
             dataArray={Object.values(props.segments)}
             dataTotal={props.segmentTotal}
             columns={columns}
-            actions={[{
-              icon: () => <EditIcon />,
-              tooltip: intl.formatMessage(messages.list.edit),
-              onClick: (_, rowData) => {
-                props.handleSegmentEdit(rowData.id);
-              }
-            }, {
-              icon: () => <DeleteIcon />,
-              tooltip: intl.formatMessage(messages.list.delete),
-              onClick: (_, rowData) => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
-                  props.deleteSegmentBegin(rowData.id);
-              }
-            }]}
+            actions={[
+              rowData => ({
+                icon: () => <EditIcon />,
+                tooltip: intl.formatMessage(messages.list.edit),
+                onClick: (_, rowData) => {
+                  props.handleSegmentEdit(rowData.id);
+                },
+                disabled: !permission(rowData, 'update?')
+              }),
+              rowData => ({
+                icon: () => <DeleteIcon />,
+                tooltip: intl.formatMessage(messages.list.delete),
+                onClick: (_, rowData) => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    props.deleteSegmentBegin(rowData.id);
+                },
+                disabled: !permission(rowData, 'destroy?')
+              })]}
           />
         </Grid>
       </Grid>

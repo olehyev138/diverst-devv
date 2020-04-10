@@ -26,7 +26,7 @@ export function QuestionSummary(props) {
 QuestionSummary.propTypes = {
   getQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   question: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,

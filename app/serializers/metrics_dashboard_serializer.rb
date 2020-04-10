@@ -1,5 +1,5 @@
 class MetricsDashboardSerializer < ApplicationRecordSerializer
-  attributes :id, :name
+  attributes :id, :name, :permissions
 
   has_many :groups
   has_many :segments
