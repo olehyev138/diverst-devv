@@ -18,11 +18,14 @@ class InviteTokenService < TokenService
   def self.second_jwt(token)
     user = verify_jwt_token(token, 'invite')
 
-    create_jwt_token({
-                         user_id: user.id,
-                         invite_token: user.invitation_token,
-                         type: 'set_password'
-                     })
+    [
+        create_jwt_token({
+                             type: 'set_password',
+                             user_id: user.id,
+                             invite_token: user.invitation_token,
+                         }),
+        user
+    ]
   end
 
   def self.verify_jwt_token(token, type)

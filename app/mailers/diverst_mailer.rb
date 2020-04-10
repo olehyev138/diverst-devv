@@ -3,7 +3,7 @@ class DiverstMailer < ApplicationMailer
 
   def invitation_instructions(user, token)
     @user = user
-    @token = token
+    @token = InviteTokenService.first_jwt(user)
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
