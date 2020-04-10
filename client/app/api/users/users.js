@@ -9,7 +9,7 @@ Object.assign(Users, {
     return axios.post(`${this.url}/email`, payload);
   },
   getInvitedUser(payload) {
-    return axios.post(`${this.url}/signup_token`, payload);
+    return axios.post(`${this.url}/sign_up_token`, payload);
   },
 });
 

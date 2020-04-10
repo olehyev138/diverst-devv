@@ -16,6 +16,7 @@ class DiverstController < ApplicationController
   def error_json(e)
     json = { message: e.message }
     json[:attribute] = e.attribute if e.respond_to?(:attribute)
+    json[:errors] = e.errors if e.respond_to?(:errors)
     if Rails.env.development? || Rails.env.test?
       json[:backtrace] = e.backtrace
       json[:cause] = e.cause&.backtrace

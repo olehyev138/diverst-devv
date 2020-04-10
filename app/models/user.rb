@@ -204,8 +204,7 @@ class User < ApplicationRecord
 
   def generate_invitation_token
     regenerate_invitation_token
-    update(invitation_created_at: Time.now)
-    update(invitation_sent_at: Time.now)
+    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
     invitation_token
   end
 

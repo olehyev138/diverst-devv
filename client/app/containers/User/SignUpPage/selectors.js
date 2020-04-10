@@ -5,7 +5,7 @@ import dig from 'object-dig';
 
 import { initialState } from './reducer';
 
-const selectUsersDomain = state => state.signup || initialState;
+const selectUsersDomain = state => state.signUp || initialState;
 
 const selectToken = () => createSelector(
   selectUsersDomain,

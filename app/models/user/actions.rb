@@ -32,6 +32,15 @@ module User::Actions
     self
   end
 
+  def sign_uo(params)
+    if update_attributes(params[:user].permit!)
+      update(invitation_token: nil, invitation_accepted_at: Time.now)
+      self
+    else
+      raise InvalidInputException.new({ errors: errors.as_json })
+    end
+  end
+
   def posts(params)
     count = (params[:count] || 5).to_i
     page = (params[:page] || 0).to_i

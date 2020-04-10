@@ -103,11 +103,39 @@ class Api::V1::UsersController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def sign_up
+    user = InviteTokenService.verify_jwt_token(sign_up_payload, 'set_password')
+
+    render status: 200, json: user.sign_uo(payload)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
+  def sign_up_payload
+    params
+        .require(:user)
+        .permit(
+            :password,
+            :password_confirmation,
+            :first_name,
+            :last_name,
+            :biography,
+            :time_zone,
+            field_data_attributes: [
+                :data
+            ]
+        )
+  end
+
   def payload
     params
       .require(:user)
       .permit(
-        :password,
         :avatar,
         :email,
         :first_name,
@@ -129,7 +157,6 @@ class Api::V1::UsersController < DiverstController
         mentoring_interest_ids: [],
         mentoring_type_ids: [],
         policy_group_attributes: [
-          :id,
           :campaigns_index,
           :campaigns_create,
           :campaigns_manage,

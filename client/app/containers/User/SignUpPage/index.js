@@ -35,8 +35,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 const redirectAction = url => push(url);
 
 export function SignUpPage(props) {
-  useInjectReducer({ key: 'signup', reducer });
-  useInjectSaga({ key: 'signup', saga });
+  useInjectReducer({ key: 'signUp', reducer });
+  useInjectSaga({ key: 'signUp', saga });
 
   const rs = new RouteService(useContext);
   const query = new URLSearchParams(rs.routeData.location.search);
