@@ -27,30 +27,34 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       </div>
       <div>
         <div>
-          <Hidden
-            xsDown={true}
+          <Permission
+            show={true}
           >
-            <WithStyles(ForwardRef(Link))
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/"
+            <Hidden
+              xsDown={true}
             >
-              <WithStyles(ForwardRef(Button))
-                variant="outlined"
+              <WithStyles(ForwardRef(Link))
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/"
               >
-                <span>
-                  <DvrIcon />
-                  <Memo(DiverstFormattedMessage)
-                    id="diverst.containers.App.header.dashboard"
-                  />
-                </span>
-              </WithStyles(ForwardRef(Button))>
-            </WithStyles(ForwardRef(Link))>
-          </Hidden>
+                <WithStyles(ForwardRef(Button))
+                  variant="outlined"
+                >
+                  <span>
+                    <DvrIcon />
+                    <Memo(DiverstFormattedMessage)
+                      id="diverst.containers.App.header.dashboard"
+                    />
+                  </span>
+                </WithStyles(ForwardRef(Button))>
+              </WithStyles(ForwardRef(Link))>
+            </Hidden>
+          </Permission>
           <div>
             <WithStyles(ForwardRef(IconButton))
               aria-haspopup="true"

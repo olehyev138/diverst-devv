@@ -18,4 +18,8 @@ class PolicyGroup < ApplicationRecord
   def self.all_permission_fields
     PolicyGroup.columns_hash.select { |k, v| v.type.to_s === 'boolean' }.map { |field| field.first }
   end
+
+  def logout_user
+    user.sessions.destroy_all
+  end
 end

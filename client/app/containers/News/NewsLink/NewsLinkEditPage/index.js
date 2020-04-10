@@ -28,6 +28,7 @@ import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -100,5 +101,5 @@ export default compose(
   NewsLinkEditPage,
   ['currentNewsItem.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.news_links.show.path(rs.params('group_id'), rs.params('item_id')),
-  'You don\'t have permission to edit this news link'
+  permissionMessages.news.newsLink.editPage
 ));

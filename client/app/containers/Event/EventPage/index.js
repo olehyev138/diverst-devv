@@ -33,6 +33,7 @@ import {
 
 import Event from 'components/Event/Event';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EventPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -122,5 +123,5 @@ export default compose(
   EventPage,
   ['currentEvent.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
-  'You don\'t have permission to view this event'
+  permissionMessages.event.showPage
 ));

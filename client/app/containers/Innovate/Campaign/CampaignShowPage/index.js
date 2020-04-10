@@ -17,9 +17,13 @@ import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 
 import { getCampaignBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
-import { selectCampaignTotal, selectCampaign, selectIsCommitting } from 'containers/Innovate/Campaign/selectors';
+import {
+  selectCampaign,
+  selectIsFormLoading
+} from 'containers/Innovate/Campaign/selectors';
 
-import CampaignShow from 'components/Innovate/Campaign/CampaignShow';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignShowPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -44,7 +48,7 @@ export function CampaignShowPage(props) {
   }, []);
   return (
     <React.Fragment>
-      <CampaignQuestionListPage />
+      <CampaignQuestionListPage {...props} />
     </React.Fragment>
   );
 }
@@ -52,13 +56,14 @@ export function CampaignShowPage(props) {
 CampaignShowPage.propTypes = {
   getCampaignBegin: PropTypes.func,
   campaignsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   campaign: PropTypes.object,
   users: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   campaign: selectCampaign(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -74,4 +79,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CampaignShowPage);
+)(Conditional(
+  CampaignShowPage,
+  ['campaign.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  permissionMessages.innovate.campaign.showPage
+));
