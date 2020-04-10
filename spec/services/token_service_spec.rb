@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UserTokenService, type: :service do
+RSpec.describe TokenService., type: :service do
   describe '#verify_jwt_token' do
     it 'verifies the user' do
       user = create(:user)

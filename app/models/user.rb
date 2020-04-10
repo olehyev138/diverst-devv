@@ -202,6 +202,12 @@ class User < ApplicationRecord
     end
   end
 
+  def generate_invitation_token
+    regenerate_invitation_token
+    update(invitation_created_at: Time.now)
+    invitation_token
+  end
+
   def invite!(manager = nil, skip: false)
     regenerate_invitation_token
 
