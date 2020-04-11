@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diverst</title>
+    <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+      video {
+        height: 200px;
+        position: relative;
+        top: 75px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body onload="init()" data-env="<%= Rails.env %>">
+    <%= render 'partials/js_branding_color_variables' %>
+
+    <header class="primary-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12">
+            <h2 class="text-center">Video call</h2>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="row" style="overflow-x: scroll;">
+      <div class="col-xs-8">
+        <div class="row">
+          <ul class="list-inline text-center">
+            <li></li>
+            <li>
+              <div id="local-media" style="height:200px; width: 200px;"></div>
+            </li>
+            <li></li>
+            <li>
+              <div id="remote-media" style="height:200px; width: 200px;"></div>
+            </li>
+          </ul>
+        </div>
+        <div class="row" style="position: relative; top: 75px;">
+          <div class="col-xs-12">
+            <div id="firepad"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-4" style="background-color: white; height: 550px; margin-top: 75px;">
+        <div class="row">
+          <div class="col-xs-12">
+            <h3 class="text-center">Chat</h3>
+          </div>
+        </div>
+        <div class="row" style="height: 475px;">
+          <div class="col-xs-12" id="chat" style="overflow: scroll; height: inherit;">
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Send a message..." id="message">
+                <span class="input-group-btn">
+                  <button class="btn" style="background-color: #7B77C9;" type="button" id="send">Send!</button>
+                </span>
+              </div><!-- /input-group -->
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var token= '<%=@token%>';
+    var twilio = Twilio.Video;
+    var dataTrack = new twilio.LocalDataTrack();
+    var chatElement = document.getElementById('chat');
+    var color = getRandomColor();
+    var localParticipant;
+    var activeRoom;
+    var previewTracks;
+    var identity = '<%= current_user.email %>';
+
+    // Attach the Tracks to the DOM.
+    function attachTracks(tracks, container) {
+      tracks.forEach(function(track) {
+          if (track.kind === 'audio' || track.kind === 'video') {
+                container.appendChild(track.attach());
+          }else if (track.kind === 'data') {
+            track.on('message', function(data) {
+                var response = JSON.parse(data);
+                chat(response.message, response.user, response.chatColor);
+              });
+          }
+      });
+    }
+
+    // Attach the Participant's Tracks to the DOM.
+    function attachParticipantTracks(participant, container) {
+      var tracks = Array.from(participant.tracks.values());
+      attachTracks(tracks, container);
+    }
+
+    // Detach the Tracks from the DOM.
+    function detachTracks(tracks) {
+      tracks.forEach(function(track) {
+          if (track.kind === 'audio' || track.kind === 'video') {
+            track.detach().forEach(function(detachedElement) {
+              detachedElement.remove();
+            });
+          }
+      });
+    }
+
+    // Detach the Participant's Tracks from the DOM.
+    function detachParticipantTracks(participant) {
+      var tracks = Array.from(participant.tracks.values());
+      detachTracks(tracks);
+    }
+
+    // When we are about to transition away from this page, disconnect
+    // from the room, if joined.
+    window.addEventListener('beforeunload', leaveRoomIfJoined);
+
+    twilio.createLocalTracks({
+      audio: true,
+      video: { width: 640 }
+      }).then(localTracks => {
+      localTracks.push(dataTrack)
+        return twilio.connect(token, {
+          name: '<% @video_room_name %>',
+          tracks: localTracks
+      });
+      }).then(roomJoined, function(error) {
+          console.error('Unable to connect to Room: ' +  error.message);
+      });
+
+    // Successfully connected!
+    function roomJoined(room) {
+      window.room = activeRoom = room;
+
+      localParticipant = room.localParticipant;
+
+      log("Joined as '" + identity + "'");
+
+      // Attach LocalParticipant's Tracks, if not already attached.
+      var previewContainer = document.getElementById('local-media');
+      if (!previewContainer.querySelector('video')) {
+        attachParticipantTracks(room.localParticipant, previewContainer);
+      }
+
+      // Attach the Tracks of the Room's Participants.
+      room.participants.forEach(function(participant) {
+        log("Already in Room: '" + participant.identity + "'");
+        var previewContainer = document.getElementById('remote-media');
+        attachParticipantTracks(participant, previewContainer);
+      });
+
+      // When a Participant joins the Room, log the event.
+      room.on('participantConnected', function(participant) {
+        log("Joining: '" + participant.identity + "'");
+
+        var previewContainer = document.getElementById('remote-media');
+        attachParticipantTracks(participant, previewContainer);
+      });
+
+      // When a Participant adds a Track, attach it to the DOM.
+      room.on('trackAdded', function(track, participant) {
+        //log(participant.identity + " added track: " + track.kind);
+        var previewContainer = document.getElementById('remote-media');
+        attachTracks([track], previewContainer);
+      });
+
+      // When a Participant removes a Track, detach it from the DOM.
+      room.on('trackRemoved', function(track, participant) {
+        log(participant.identity + " removed track: " + track.kind);
+        detachTracks([track]);
+      });
+
+      // When a Participant leaves the Room, detach its Tracks.
+      room.on('participantDisconnected', function(participant) {
+        log("Participant '" + participant.identity + "' left the room");
+        detachParticipantTracks(participant);
+      });
+
+      // Once the LocalParticipant leaves the room, detach the Tracks
+      // of all Participants, including that of the LocalParticipant.
+      room.on('disconnected', function() {
+        log('Left');
+        if (previewTracks) {
+          previewTracks.forEach(function(track) {
+            track.stop();
+          });
+        }
+        detachParticipantTracks(room.localParticipant);
+        room.participants.forEach(detachParticipantTracks);
+        activeRoom = null;
+      });
+    }
+
+    // Activity log.
+    function log(message) {
+      chatElement.innerHTML += '<p style="text-transform: uppercase;"><strong>' + message + '</strong></p>';
+    }
+
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function chat(message, email, chatColor){
+        chatElement.innerHTML += "<p>" + "<span style='color:" + chatColor + ";'>" + email + "</span>" + "<br>" + message + "</p>";
+    }
+
+    // Leave Room.
+    function leaveRoomIfJoined() {
+      if (activeRoom) {
+        activeRoom.disconnect();
+      }
+    }
+
+    function sendMessage(eventObj) {
+        // get the chat message value
+        var message = document.getElementById('message').value
+        // send the message to other users
+        var object = JSON.stringify({message: message, user: "<%= current_user.email %>", chatColor: color});
+
+        dataTrack.send(object);
+        // display the message for the current user
+        chat(message, "<%= current_user.email %>", color)
+
+        // remove the message from the input
+        document.getElementById("message").value = "";
+    }
+
+    var chatInput = document.getElementById('send');
+    chatInput.addEventListener('click', sendMessage);
+
+    function init() {
+      // Initialize Firebase.
+      var firebase_key = "<%= ENV["FIREBASE_API_KEY"] %>";
+      var auth_domain = "<%= ENV["FIREBASE_AUTH_DOMAIN"] %>";
+      var domain_url = "<%= ENV["FIREBASE_DATABASE_URL"] %>";
+      var firebase_project_id = "<%= ENV["FIREBASE_PROJECT_ID"] %>";
+      var firebase_storage_bucket = "<%= ENV["FIREBASE_STORAGE_BUCKET"] %>";
+      var firebase_sender_id = "<%= ENV["FIREBASE_SENDER_ID"] %>";
+
+      var config = {
+        apiKey: firebase_key,
+        authDomain: auth_domain,
+        databaseURL: domain_url,
+        projectId: firebase_project_id,
+        storageBucket: firebase_storage_bucket,
+        messagingSenderId: firebase_sender_id
+      };
+      firebase.initializeApp(config);
+
+      // Get Firebase Database reference - set reference to an ID pointing to the session
+      var path = '<%= @enterprise.name %>/initiatives/<%= Time.now.to_i %>/<%= @initiative.id %>';
+      var firepadRef = firebase.database().ref(path);
+
+      // Create CodeMirror (with lineWrapping on).
+      var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
+
+      // Create Firepad (with rich text toolbar and shortcuts enabled).
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        richTextShortcuts: true,
+        richTextToolbar: true,
+        defaultText: 'Hello, World!',
+        userId: '<%= current_user.id%>'
+      });
+    }
+
+    </script>
+</html>
