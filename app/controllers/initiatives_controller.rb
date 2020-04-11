@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -128,6 +128,47 @@ class InitiativesController < ApplicationController
       format.html { redirect_to :back }
       format.js
     end
+  end
+
+  def start_video
+    # Only user with permission to update group should be able to start a call
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+
+    # check if user can start the session
+    require 'twilio-ruby'
+
+    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
+    raise BadRequestException.new 'TWILIO_API_KEY Required' if ENV['TWILIO_API_KEY'].blank?
+    raise BadRequestException.new 'TWILIO_SECRET Required' if ENV['TWILIO_SECRET'].blank?
+
+    account_sid = ENV['TWILIO_ACCOUNT_SID']
+    api_key_sid = ENV['TWILIO_API_KEY']
+    api_key_secret = ENV['TWILIO_SECRET']
+
+    @video_room_name = "BorysTestenterprise.nameInitiative#{@initiative.id}"
+    @enterprise = @group.enterprise
+    # Create an Access Token
+    token = Twilio::JWT::AccessToken.new(
+      account_sid,
+      api_key_sid,
+      api_key_secret,
+      identity: current_user.email
+    )
+
+    # Grant access to Video
+    grant = Twilio::JWT::AccessToken::VideoGrant.new
+    grant.room = @video_room_name
+    token.add_grant grant
+
+    # Serialize the token as a JWT
+    @token = token.to_jwt
+  end
+
+  def join_video
+    # TODO check, maybe lower required permission level
+    authorize [@group, @initiative], :show?, policy_class: GroupEventsPolicy
+
+
   end
 
 
