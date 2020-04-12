@@ -1,8 +1,8 @@
 require 'jwt'
 
 class InviteTokenService < TokenService
-  TOKEN_EXPIRATION = 2.weeks
-  FORM_EXPIRATION = 2.weeks
+  TOKEN_EXPIRATION = 1.day
+  FORM_EXPIRATION = 2.hours
 
   def self.first_jwt(user, params = {})
     token = user.generate_invitation_token
