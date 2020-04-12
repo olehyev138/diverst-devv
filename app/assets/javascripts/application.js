@@ -33,7 +33,6 @@
 //= require hamburger_menu
 //= require jquery-embedly
 //= require ckeditor/init
-//= require twilio-video
 //= require codemirror/lib/codemirror
 //= require firepad/dist/firepad.min
 //= require firebase/firebase
