@@ -19,7 +19,7 @@ const selectUser = () => createSelector(
     if (user) {
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
-        draft.timezones = timezoneMap(timezoneArray, draft);
+        draft.timezones = timezoneMap(timezoneArray, user, draft);
         draft.field_data = mapFieldData(user.field_data);
       });
     }
@@ -30,10 +30,12 @@ const selectUser = () => createSelector(
 // Map the possible timezones to make it compatible with select fields
 //    If the time zone we are currently mapping is what the user's timezone is set too
 //    set the timezone field to be also compatible with select fields
-const timezoneMap = (timeZones, draft) => {
-  if (element[1] === user.time_zone)
-            draft.time_zone = { label: element[1], value: element[0] };
-          return { label: element[1], value: element[0] };
+const timezoneMap = (timeZones, user, draft) => {
+  return timeZones.map((element) => {
+    if (element[1] === user.time_zone)
+      draft.time_zone = { label: element[1], value: element[0] };
+    return { label: element[1], value: element[0] };
+  });
 };
 
 // maps each field to transfom select/checkbox field options to an array compatible with the Select Field
