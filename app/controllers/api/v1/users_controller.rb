@@ -16,10 +16,10 @@ class Api::V1::UsersController < DiverstController
   def create
     params[klass.symbol] = payload
     base_authorize(klass)
-    new_item = klass.build(self.diverst_request, params)
-    new_item.invite!(current_user)
+    user = klass.build(self.diverst_request, params)
+    user.invite!(current_user)
 
-    render status: 201, json: new_item
+    render status: 201, json: user
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
