@@ -1,5 +1,5 @@
 class SegmentSerializer < ApplicationRecordSerializer
-  attributes :owner, :all_rules_count, :active_users_filter, :limit
+  attributes :owner, :all_rules_count, :active_users_filter, :limit, :permissions
 
   has_many :field_rules
   has_many :order_rules

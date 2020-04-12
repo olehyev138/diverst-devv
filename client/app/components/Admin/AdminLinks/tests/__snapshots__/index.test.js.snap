@@ -23,7 +23,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
       <div />
       <WithStyles(ForwardRef(Divider)) />
       <WithStyles(ForwardRef(List))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -36,7 +36,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -45,7 +45,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -63,8 +63,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.overview"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -81,8 +81,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -99,8 +99,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -117,10 +117,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.custom"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -133,7 +133,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -142,7 +142,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -159,8 +159,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -177,8 +177,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.segments"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -195,8 +195,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -213,10 +213,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.archived"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -231,7 +231,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             }
           />
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -240,7 +240,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -255,10 +255,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemText))>
                 Group Budgets
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -273,7 +273,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             }
           />
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -282,7 +282,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -299,8 +299,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.innovate.campaigns"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -317,10 +317,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.innovate.financials"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
@@ -333,8 +333,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
-        </WithStyles(ForwardRef(ListItem))>
-        <WithStyles(ForwardRef(ListItem))
+        </WrappedComponent>
+        <WrappedComponent
           button={true}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
@@ -347,9 +347,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Divider)) />
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -362,7 +362,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -371,7 +371,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -379,7 +379,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 }
               }
               isActive={[Function]}
-              to="/admin/system/settings/fields"
+              to="/admin/system/settings"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
@@ -389,8 +389,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.globalSettings"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -407,8 +407,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -425,8 +425,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -443,8 +443,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.logs"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -461,7 +461,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.diversity"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(Divider)) />
@@ -483,7 +483,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
       <div />
       <WithStyles(ForwardRef(Divider)) />
       <WithStyles(ForwardRef(List))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -496,7 +496,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -505,7 +505,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -523,8 +523,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.overview"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -541,8 +541,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -559,8 +559,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -577,10 +577,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.custom"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -593,7 +593,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -602,7 +602,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -619,8 +619,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -637,8 +637,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.segments"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -655,8 +655,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -673,10 +673,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.manage.archived"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -691,7 +691,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             }
           />
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -700,7 +700,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -715,10 +715,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemText))>
                 Group Budgets
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -733,7 +733,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             }
           />
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -742,7 +742,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -759,8 +759,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.innovate.campaigns"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -777,10 +777,10 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.innovate.financials"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
@@ -793,8 +793,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
-        </WithStyles(ForwardRef(ListItem))>
-        <WithStyles(ForwardRef(ListItem))
+        </WrappedComponent>
+        <WrappedComponent
           button={true}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
@@ -807,9 +807,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Divider)) />
-        <WithStyles(ForwardRef(ListItem))
+        <WrappedComponent
           button={true}
           onClick={[Function]}
         >
@@ -822,7 +822,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
-        </WithStyles(ForwardRef(ListItem))>
+        </WrappedComponent>
         <WithStyles(ForwardRef(Collapse))
           in={false}
           timeout="auto"
@@ -831,7 +831,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(List))
             disablePadding={true}
           >
-            <WithStyles(ForwardRef(MenuItem))
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -839,7 +839,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 }
               }
               isActive={[Function]}
-              to="/admin/system/settings/fields"
+              to="/admin/system/settings"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
@@ -849,8 +849,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.globalSettings"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -867,8 +867,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -885,8 +885,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -903,8 +903,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.logs"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
-            <WithStyles(ForwardRef(MenuItem))
+            </WrappedComponent>
+            <WrappedComponent
               component={
                 Object {
                   "$$typeof": Symbol(react.forward_ref),
@@ -921,7 +921,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.system.diversity"
                 />
               </WithStyles(ForwardRef(ListItemText))>
-            </WithStyles(ForwardRef(MenuItem))>
+            </WrappedComponent>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(Divider)) />

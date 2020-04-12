@@ -26,6 +26,10 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import messages from 'containers/Session/LoginPage/messages';
+import { selectEnterprise, selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import WithPermission from 'components/Compositions/WithPermission';
+import dig from 'object-dig';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
@@ -107,8 +111,10 @@ const styles = theme => ({
   },
 });
 
+const MenuItemPermission = WithPermission(MenuItem);
+
 /* eslint-disable object-curly-newline */
-export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handleMobileNavClose }) {
+export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handleMobileNavClose, enterprise, permissions, user }) {
   return (
     <Menu
       classes={{
@@ -130,47 +136,74 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.home.data.titleMessage} />
       </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.innovate.path()} activeClassName={classes.mobileNavLinkActive}>
+      <MenuItemPermission
+        component={WrappedNavLink}
+        to={ROUTES.user.innovate.path()}
+        activeClassName={classes.mobileNavLinkActive}
+        show={dig(enterprise, 'collaborate_module_enabled')}
+      >
         <ListItemIcon>
           <LightbulbIcon className={classes.lightbulbIcon} />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
-      </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.news.path()} activeClassName={classes.mobileNavLinkActive}>
+      </MenuItemPermission>
+      <MenuItemPermission
+        component={WrappedNavLink}
+        to={ROUTES.user.news.path()}
+        activeClassName={classes.mobileNavLinkActive}
+        show={dig(permissions, 'news_view')}
+      >
         <ListItemIcon>
           <QuestionAnswerIcon />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.news.data.titleMessage} />
-      </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.events.path()} activeClassName={classes.mobileNavLinkActive}>
+      </MenuItemPermission>
+      <MenuItemPermission
+        component={WrappedNavLink}
+        to={ROUTES.user.events.path()}
+        activeClassName={classes.mobileNavLinkActive}
+        show={dig(permissions, 'events_view')}
+      >
         <ListItemIcon>
           <EventIcon />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.events.data.titleMessage} />
-      </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.groups.path()} activeClassName={classes.mobileNavLinkActive}>
+      </MenuItemPermission>
+      <MenuItemPermission
+        component={WrappedNavLink}
+        to={ROUTES.user.groups.path()}
+        activeClassName={classes.mobileNavLinkActive}
+        show={dig(permissions, 'groups_view')}
+      >
         <ListItemIcon>
           <GroupIcon />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.groups.data.titleMessage} />
-      </MenuItem>
+      </MenuItemPermission>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.downloads.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <CloudDownloadIcon />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
       </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.home.path()} activeClassName={classes.mobileNavLinkActive}>
+      <MenuItemPermission
+        component={WrappedNavLink}
+        to={ROUTES.user.mentorship.show.path(dig(user, 'user_id'))}
+        activeClassName={classes.mobileNavLinkActive}
+        show={dig(enterprise, 'mentorship_module_enabled')}
+      >
         <ListItemIcon>
           <UsersCircleIcon />
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
-      </MenuItem>
+      </MenuItemPermission>
     </Menu>
   );
 }
 
-export function NavLinks({ classes }) {
+const PermissionButton = WithPermission(Button);
+
+export function NavLinks({ classes, enterprise, permissions, user }) {
   return (
     <Toolbar className={classes.toolbar}>
       <Button
@@ -185,50 +218,54 @@ export function NavLinks({ classes }) {
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.home.data.titleMessage} />
       </Button>
-      <Button
+      <PermissionButton
         component={WrappedNavLink}
         to={ROUTES.user.innovate.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
+        show={dig(enterprise, 'collaborate_module_enabled')}
       >
         <Hidden smDown>
           <LightbulbIcon className={classes.lightbulbIcon} />
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
-      </Button>
-      <Button
+      </PermissionButton>
+      <PermissionButton
         component={WrappedNavLink}
         to={ROUTES.user.news.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
+        show={dig(permissions, 'news_view')}
       >
         <Hidden smDown>
           <QuestionAnswerIcon className={classes.navIcon} />
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.news.data.titleMessage} />
-      </Button>
-      <Button
+      </PermissionButton>
+      <PermissionButton
         component={WrappedNavLink}
         to={ROUTES.user.events.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
+        show={dig(permissions, 'events_view')}
       >
         <Hidden smDown>
           <EventIcon className={classes.navIcon} />
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.events.data.titleMessage} />
-      </Button>
-      <Button
+      </PermissionButton>
+      <PermissionButton
         component={WrappedNavLink}
         to={ROUTES.user.groups.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
+        show={dig(permissions, 'groups_view')}
       >
         <Hidden smDown>
           <GroupIcon className={classes.navIcon} />
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.groups.data.titleMessage} />
-      </Button>
+      </PermissionButton>
       <Button
         component={WrappedNavLink}
         to={ROUTES.user.downloads.path()}
@@ -240,17 +277,18 @@ export function NavLinks({ classes }) {
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
       </Button>
-      <Button
+      <PermissionButton
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.home.path()}
+        to={ROUTES.user.mentorship.show.path(dig(user, 'user_id'))}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
+        show={dig(enterprise, 'mentorship_module_enabled')}
       >
         <Hidden smDown>
           <UsersCircleIcon className={classes.navIcon} />
         </Hidden>
         <DiverstFormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
-      </Button>
+      </PermissionButton>
     </Toolbar>
   );
 }
@@ -274,7 +312,7 @@ export class UserLinks extends React.PureComponent {
 
   render() {
     const { mobileNavAnchor } = this.state;
-    const { classes, pageTitle } = this.props;
+    const { classes, pageTitle, user } = this.props;
     const isMobileNavOpen = Boolean(mobileNavAnchor);
 
     // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
@@ -303,10 +341,16 @@ export class UserLinks extends React.PureComponent {
             mobileNavAnchor={mobileNavAnchor}
             isMobileNavOpen={isMobileNavOpen}
             handleMobileNavClose={this.handleMobileNavClose}
+            user={user}
           />
         </Hidden>
         <Hidden xsDown>
-          <NavLinks classes={classes} />
+          <NavLinks
+            user={this.props.user}
+            enterprise={this.props.enterprise}
+            permissions={this.props.permissions}
+            classes={this.props.classes}
+          />
         </Hidden>
       </React.Fragment>
     );
@@ -317,21 +361,41 @@ MobileNavMenu.propTypes = {
   classes: PropTypes.object,
   mobileNavAnchor: PropTypes.object,
   isMobileNavOpen: PropTypes.bool,
-  handleMobileNavClose: PropTypes.func
+  handleMobileNavClose: PropTypes.func,
+  user: PropTypes.object,
+  enterprise: PropTypes.object,
+  permissions: PropTypes.object,
 };
 
 NavLinks.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  user: PropTypes.object,
+  enterprise: PropTypes.object,
+  permissions: PropTypes.object,
 };
 
 UserLinks.propTypes = {
   classes: PropTypes.object,
   pageTitle: PropTypes.object,
+  user: PropTypes.object,
+  enterprise: PropTypes.object,
+  permissions: PropTypes.object,
 };
+
+const mapStateToProps = createStructuredSelector({
+  user: selectUser(),
+  enterprise: selectEnterprise(),
+  permissions: selectPermissions(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
 
 export const StyledUserLinks = withStyles(styles)(UserLinks);
 
 export default compose(
+  withConnect,
   withStyles(styles),
   memo,
 )(UserLinks);

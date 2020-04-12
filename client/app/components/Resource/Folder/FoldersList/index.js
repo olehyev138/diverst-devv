@@ -66,13 +66,18 @@ const styles = theme => ({
 });
 
 export function FoldersList(props, context) {
-  const { classes, intl } = props;
+  const { classes, intl, type, currentGroup, permissions } = props;
 
   const routeContext = useContext(RouteContext);
 
   return (
     <React.Fragment>
-      <Permission show={permission(props.currentGroup, 'resources_create?')}>
+      <Permission
+        show={
+          (type === 'group' && permission(currentGroup, 'resources_create?'))
+          || (type === 'admin' && permissions.enterprise_folders_create)
+        }
+      >
         <Button
           className={classes.floatRight}
           variant='contained'
@@ -147,6 +152,8 @@ FoldersList.propTypes = {
   links: PropTypes.object,
   deleteFolderBegin: PropTypes.func,
   currentGroup: PropTypes.object,
+  permissions: PropTypes.object,
+  type: PropTypes.string,
 };
 
 export default compose(

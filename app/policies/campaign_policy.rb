@@ -37,6 +37,10 @@ class CampaignPolicy < ApplicationPolicy
     update?
   end
 
+  def show?
+    update?
+  end
+
   class Scope < Scope
     def index?
       CampaignPolicy.new(user, nil).index?

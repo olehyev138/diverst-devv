@@ -150,7 +150,7 @@ export function Session(props) {
         <React.Fragment>
           <Grid container spacing={1}>
             <Grid item sm>
-              { loggedUser.id === session.creator_id && (
+              { loggedUser.user_id === session.creator_id && (
                 <React.Fragment>
                   <Button
                     variant='contained'
@@ -187,7 +187,7 @@ export function Session(props) {
           <Paper className={classes.padding}>
 
             { /* ACCEPT / DECLINE Buttons */ }
-            {session.creator_id !== loggedUser.id
+            {session.creator_id !== loggedUser.user_id
             && session.current_user_session
             && session.current_user_session.status === 'pending'
             && (

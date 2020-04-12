@@ -12,6 +12,10 @@ import saga from 'containers/Archive/saga';
 import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/actions';
 import ArchiveList from 'components/Archive/ArchiveList';
 import { selectArchives, selectArchivesTotal, selectHasChanged, selectIsLoading } from '../selectors';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -113,14 +117,16 @@ ArchivePage.propTypes = {
   getArchivesBegin: PropTypes.func,
   restoreArchiveBegin: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   archives: selectArchives(),
   archivesTotal: selectArchivesTotal(),
   hasChanged: selectHasChanged(),
-  isLoading: selectIsLoading()
+  isLoading: selectIsLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -136,4 +142,11 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(ArchivePage);
+)(Conditional(
+  ArchivePage,
+  ['permissions.archive_manage', 'permissions.posts_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.archive.indexPage,
+  false,
+  a => a.every(v => v)
+));

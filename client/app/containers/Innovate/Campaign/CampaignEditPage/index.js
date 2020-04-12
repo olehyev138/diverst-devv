@@ -15,9 +15,15 @@ import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 import groupReducer from 'containers/Group/reducer';
 import groupSaga from 'containers/Group/saga';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import { updateCampaignBegin, getCampaignBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
-import { selectCampaignTotal, selectFormCampaign, selectIsCommitting } from 'containers/Innovate/Campaign/selectors';
+import {
+  selectCampaignTotal,
+  selectFormCampaign,
+  selectIsCommitting,
+  selectIsFormLoading
+} from 'containers/Innovate/Campaign/selectors';
 
 import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 
@@ -26,6 +32,7 @@ import { selectPaginatedSelectGroups, selectFormGroup } from 'containers/Group/s
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function CampaignEditPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -40,7 +47,7 @@ export function CampaignEditPage(props) {
   const { intl } = props;
   useEffect(() => {
     const campaignId = rs.params('campaign_id');
-    props.getCampaignBegin({ id: rs.params('campaign_id') });
+    props.getCampaignBegin({ id: campaignId });
 
     return () => props.campaignsUnmount();
   }, []);
@@ -69,7 +76,7 @@ CampaignEditPage.propTypes = {
   group: PropTypes.object,
   groups: PropTypes.array,
   campaignsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   campaign: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
@@ -80,6 +87,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
   isCommitting: selectIsCommitting(),
   group: selectFormGroup(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -98,4 +106,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CampaignEditPage);
+)(Conditional(
+  CampaignEditPage,
+  ['campaign.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
+  permissionMessages.innovate.campaign.editPage
+));

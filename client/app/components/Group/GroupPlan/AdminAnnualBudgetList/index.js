@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
+  Grid,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -22,10 +21,10 @@ import RedoIcon from '@material-ui/icons/Redo';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { injectIntl, intlShape } from 'react-intl';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
+import { permission } from 'utils/permissionsHelpers';
+
 const { adminList: listMessages } = messages;
 
 const styles = theme => ({
@@ -78,33 +77,42 @@ export function AnnualBudgetList(props, context) {
 
   const actions = [];
 
-  actions.push({
-    icon: () => <EditIcon />,
-    tooltip: intl.formatMessage(listMessages.actions.edit),
-    onClick: (_, rowData) => {
-      props.handleVisitEditPage(rowData.id);
-    }
-  });
+  actions.push(
+    rowData => ({
+      icon: () => <EditIcon />,
+      tooltip: intl.formatMessage(listMessages.actions.edit),
+      onClick: (_, rowData) => {
+        props.handleVisitEditPage(rowData.id);
+      },
+      disabled: !permission(rowData, 'annual_budgets_manage?')
+    })
+  );
 
-  actions.push({
-    icon: () => <RedoIcon />,
-    tooltip: intl.formatMessage(listMessages.actions.carryover),
-    onClick: (_, rowData) => {
-      /* eslint-disable-next-line no-alert, no-restricted-globals */
-      if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
-        props.carryBudget(rowData.id);
-    }
-  });
+  actions.push(
+    rowData => ({
+      icon: () => <RedoIcon />,
+      tooltip: intl.formatMessage(listMessages.actions.carryover),
+      onClick: (_, rowData) => {
+        /* eslint-disable-next-line no-alert, no-restricted-globals */
+        if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
+          props.carryBudget(rowData.id);
+      },
+      // disabled: !permission(rowData, 'carryover_annual_budget?')
+    })
+  );
 
-  actions.push({
-    icon: () => <LoopIcon />,
-    tooltip: intl.formatMessage(listMessages.actions.reset),
-    onClick: (_, rowData) => {
-      /* eslint-disable-next-line no-alert, no-restricted-globals */
-      if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
-        props.resetBudget(rowData.id);
-    }
-  });
+  actions.push(
+    rowData => ({
+      icon: () => <LoopIcon />,
+      tooltip: intl.formatMessage(listMessages.actions.reset),
+      onClick: (_, rowData) => {
+        /* eslint-disable-next-line no-alert, no-restricted-globals */
+        if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
+          props.resetBudget(rowData.id);
+      },
+      // disabled: !permission(rowData, 'reset_annual_budget?')
+    })
+  );
 
   return (
     <React.Fragment>

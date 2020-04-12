@@ -21,6 +21,7 @@ import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SocialLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -79,5 +80,5 @@ export default compose(
   SocialLinkCreatePage,
   ['currentGroup.permissions.news_create?', 'currentGroup.permissions.social_link_create?'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to post social links'
+  permissionMessages.news.socialLink.createPage
 ));
