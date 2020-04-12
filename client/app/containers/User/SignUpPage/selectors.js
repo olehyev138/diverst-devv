@@ -24,18 +24,25 @@ const selectUser = () => createSelector(
             draft.time_zone = { label: element[1], value: element[0] };
           return { label: element[1], value: element[0] };
         });
-        draft.field_data = user.field_data.map(fd => produce(fd, (draft2) => {
-          draft2.field = produce(fd.field, (draft3) => {
-            draft3.options = fd.field.options_text
-              ? fd.field.options_text.split('\n').filter(o => o).map(o => ({ value: o, label: o }))
-              : null;
-          });
-        }));
+        draft.field_data = mapFieldData(user.field_data);
       });
     }
     return null;
   }
 );
+
+// maps each field to transfom select/checkbox field options to an array compatible with the Select Field
+const mapFieldData = fieldData => produce(fieldData, (draft) => {
+  draft.field = splitOptions(fieldData.field);
+});
+
+// Takes fields and transforms the options texts in the form of ("Option1\nOption2\nOption3\n")
+// and turns it into an array of select field options [{label: "Option1", value: "Option1"}, ...]
+const splitOptions = field => produce(field, (draft) => {
+  draft.options = field.options_text
+    ? field.options_text.split('\n').filter(o => o).map(o => ({ value: o, label: o }))
+    : null;
+});
 
 const selectIsLoading = () => createSelector(
   selectSignUpDomain,
