@@ -69,14 +69,5 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
        type="enterprise"
       />
       </WithStyles(ForwardRef(Grid))>
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={true}
-          >
-           <Memo(Connect(InjectIntl(SponsorCard)))
-             currentGroup={null}
-             type="enterprise"
-            />
-            </WithStyles(ForwardRef(Grid))>
 </Fragment>
 `;
