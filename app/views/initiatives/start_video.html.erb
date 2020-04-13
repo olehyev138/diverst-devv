@@ -74,7 +74,8 @@
     </div>
   </body>
   <script>
-    var token= '<%=@token%>';
+  $(document).ready(function(){
+  var token= '<%= @token %>';
     var twilio = Twilio.Video;
     var dataTrack = new twilio.LocalDataTrack();
     var chatElement = document.getElementById('chat');
@@ -277,6 +278,6 @@
         userId: '<%= current_user.id%>'
       });
     }
-
+  });
     </script>
 </html>
