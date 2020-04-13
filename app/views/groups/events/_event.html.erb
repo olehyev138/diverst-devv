@@ -2,7 +2,8 @@
   <div class="block block-section">
     <div class="flex-row flex-row--middle">
       <% if event.picture.exists? %>
-       <%= image_tag("Remote meeting icon.png", size: "20x20") %>
+        <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'live__streaming') %>
+        <%= image_tag("Remote meeting icon.png", size: "20x20") if event.virtual? %>
         <div class="flex-row__cell">
           <div style="background-image: url(<%= event.picture.expiring_url(3600) %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
         </div>
