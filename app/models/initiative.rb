@@ -127,6 +127,14 @@ class Initiative < BaseClass
     self.start <= Time.current && self.end >= Time.current
   end
 
+  def upcoming?
+    self.start > Time.current
+  end
+
+  def past? 
+    self.end < Time.current
+  end
+
   def virtual_toggle
     if virtual?
       update(virtual: false)

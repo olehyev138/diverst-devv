@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>
-    <%= link_to "Events", group_events_path(@group) %> /
+    <%= inline_svg('icons/brand.svg', size: '25px*25px', class: 'play__back') if @event.virtual? && @event.past? %><%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
   </h1>
   <% unless @event.archived? %>

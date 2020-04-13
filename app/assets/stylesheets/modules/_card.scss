@@ -120,6 +120,18 @@
   fill: $green;
 }
 
+.scheduled__streaming {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $diverst-grey-lightest;
+}
+
+.play__back { 
+  margin-bottom: -4px;
+  fill: $primary-color; 
+}
+
 .card__yellow {
   position: relative;
   margin-right: $spacing-small;
