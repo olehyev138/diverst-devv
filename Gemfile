@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.4.10'
 
-gem 'rails', '~> 4.2.7.1'
+gem 'rails', '~> 4.2.11.1'
 gem 'mysql2', '~> 0.4.3'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -63,7 +63,7 @@ gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', git: 'https://github.com/TeamDiverst/simple_form_fancy_uploads.git', branch: 'paperclip_version'
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
-gem 'twilio-ruby', '~> 5.10.0'
+gem 'twilio-ruby', '~> 5.31.1'
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'

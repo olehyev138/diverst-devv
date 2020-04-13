@@ -324,6 +324,11 @@ Rails.application.routes.draw do
     resources :outcomes
     resources :pillars
     resources :initiatives do
+      member do
+        get 'start_video'
+        get 'join_video'
+      end
+
       scope module: 'initiatives' do
         resources :updates
 
