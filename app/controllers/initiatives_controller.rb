@@ -129,7 +129,7 @@ class InitiativesController < ApplicationController
       format.js
     end
   end
-
+  
   def start_video
     # Only user with permission to update group should be able to start a call
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
@@ -164,11 +164,10 @@ class InitiativesController < ApplicationController
     @token = token.to_jwt
   end
 
-  def join_video
-    # TODO check, maybe lower required permission level
-    authorize [@group, @initiative], :show?, policy_class: GroupEventsPolicy
-
-
+  def enable_virtual_meet
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+    @initiative.virtual_toggle
+    render nothing: true
   end
 
 
@@ -220,6 +219,7 @@ class InitiativesController < ApplicationController
         :from, # For filtering
         :to, # For filtering
         :annual_budget_id,
+        :virtual,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [

@@ -113,6 +113,13 @@
   fill: $primary-color;
 }
 
+.live__streaming {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $green;
+}
+
 .card__yellow {
   position: relative;
   margin-right: $spacing-small;

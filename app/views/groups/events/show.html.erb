@@ -27,28 +27,30 @@
               class="btn btn--primary js-join-event"
               data-joined="<%= @participation.present? %>"
             >
-              <%= @participation.present? ? "Leave event" : "Join event" %>
-            </a>
-          </div>
+            <%= @participation.present? ? "Leave event" : "Join event" %>
+          </a>
+        </div>
         <% end %>
-      <% end %>
-    </div>
-    <div class="container-fluid visible-xs">
-      <div class="row">
-        <div class="col-xs-12 text-center">
-          <div class="btn-group">
-            <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
-            <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
-            <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+        <% end %>
+      </div>
+      <div class="container-fluid visible-xs">
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <div class="btn-group">
+              <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
+              <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
+              <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
               <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave" : "Join" %></a>
-          <% end %>
+              <% end %>
             </div>
+          </div>
         </div>
       </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
-
+    <%= inline_svg('icons/live-streaming.svg', size: '100px*70px', class: 'live__streaming')if @event.virtual? && @event.ongoing? %>
+    <%= image_tag("Remote meeting icon.png", size: "100x70") if @event.virtual? %>
+    <br>
 <div class="content__main">
   <div class="card">
     <div class="card__section">
