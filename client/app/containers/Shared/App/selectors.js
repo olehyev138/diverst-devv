@@ -16,6 +16,11 @@ const selectEnterprise = () => createSelector(
   globalState => dig(globalState.data, 'enterprise')
 );
 
+const selectPermissions = () => createSelector(
+  selectGlobal,
+  globalState => dig(globalState.data, 'permissions')
+);
+
 const selectToken = () => createSelector(
   selectGlobal,
   globalState => globalState.token
@@ -56,9 +61,14 @@ const selectMentoringTypes = () => createSelector(
   }
 );
 
+const selectFindEnterpriseError = () => createSelector(
+  selectGlobal,
+  globalState => globalState.findEnterpriseError
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
   selectUser, selectCustomText, selectMentoringInterests,
-  selectMentoringTypes,
+  selectMentoringTypes, selectFindEnterpriseError, selectPermissions
 };

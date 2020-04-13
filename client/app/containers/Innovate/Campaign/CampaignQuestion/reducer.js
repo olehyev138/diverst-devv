@@ -20,7 +20,8 @@ export const initialState = {
   isCommitting: false,
   questionList: [],
   questionTotal: null,
-  isFetchingQuestions: true
+  isFetchingQuestions: true,
+  isFormLoading: true,
 };
 
 /* eslint-disable default-case, no-param-reassign, consistent-return  */

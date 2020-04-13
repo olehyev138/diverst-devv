@@ -77,6 +77,9 @@ export default defineMessages({
     banner: {
       id: `${scope}.settings.banner`,
     },
+    logo: {
+      id: `${scope}.settings.logo`,
+    },
     calendar_color: {
       id: `${scope}.settings.calendar_color`,
     },

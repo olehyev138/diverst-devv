@@ -22,6 +22,9 @@ import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetB
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
 
@@ -29,7 +32,7 @@ export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc', query_scopes: ['all_parents'] });
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
@@ -92,6 +95,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -110,4 +114,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AdminAnnualBudgetPage);
+)(Conditional(
+  AdminAnnualBudgetPage,
+  ['permissions.manage_all_budgets'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.group.groupPlan.annualBudget.adminPlanPage
+));
