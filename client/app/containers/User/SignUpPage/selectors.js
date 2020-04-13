@@ -34,7 +34,7 @@ const timezoneMap = (timeZones, user, draft) => timeZones.map((element) => {
   if (element[1] === user.time_zone)
     draft.time_zone = { label: element[1], value: element[0] };
   return { label: element[1], value: element[0] };
-};
+});
 
 // maps each field to transfom select/checkbox field options to an array compatible with the Select Field
 const mapFieldData = fieldData => produce(fieldData, (draft) => {
