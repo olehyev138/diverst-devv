@@ -10,8 +10,8 @@ import { compose } from 'redux';
 
 import messages from './messages';
 
-import EventsPage from '../UserEventsPage';
-import NewsPage from '../UserNewsFeedPage';
+import Events from '../UserEventsPage';
+import News from '../UserNewsFeedPage';
 import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import {

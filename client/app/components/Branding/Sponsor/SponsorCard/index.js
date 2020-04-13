@@ -53,7 +53,6 @@ export function SponsorCard(props) {
     else
       props.getSponsorsBegin(enterpriseParams);
   }, []);
-
   return (
     // eslint-disable-next-line no-nested-ternary
     sponsorList[0] ? (
@@ -62,7 +61,7 @@ export function SponsorCard(props) {
           autoPlay={false}
         >
           {sponsorList.map(sponsor => (
-            <Card>
+            <Card key={sponsor.id}>
               <CardContent>
                 <Typography variant='h6'>
                   { sponsor.sponsor_name}
