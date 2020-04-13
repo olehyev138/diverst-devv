@@ -36,10 +36,10 @@ const timezoneMap = (timeZones, user, draft) => timeZones.map((element) => {
   return { label: element[1], value: element[0] };
 });
 
-// maps each field to transfom select/checkbox field options to an array compatible with the Select Field
-const mapFieldData = fieldData => produce(fieldData, (draft) => {
-  draft.field = splitOptions(fieldData.field);
-});
+// maps each field to transform select/checkbox field options to an array compatible with the Select Field
+const mapFieldData = fieldData => fieldData.map(fieldDatum => produce(fieldDatum, (draft) => {
+  draft.field = splitOptions(fieldDatum.field);
+}));
 
 // Takes fields and transforms the options texts in the form of ("Option1\nOption2\nOption3\n")
 // and turns it into an array of select field options [{label: "Option1", value: "Option1"}, ...]

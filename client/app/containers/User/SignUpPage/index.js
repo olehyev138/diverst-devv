@@ -40,10 +40,9 @@ export function SignUpPage(props) {
   useInjectSaga({ key: 'signUp', saga });
 
   const rs = new RouteService(useContext);
-  const query = new URLSearchParams(rs.routeData.location.search);
 
   useEffect(() => {
-    const token = query.get('token');
+    const token = rs.params('token');
 
     if (token)
       props.getUserByTokenBegin({

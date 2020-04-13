@@ -5,7 +5,7 @@ export const ROUTES = {
   // Session
   session: {
     sign_up: {
-      path: () => '/sign_up',
+      path: (token = ':token') => `/sign_up/${token}`,
     },
     login: {
       path: () => '/login',
