@@ -9,6 +9,7 @@
       <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'live__streaming') if event.virtual? && event.ongoing? %>
       <%= image_tag("Remote meeting icon.png", size: "20x20") if event.virtual? %>
       <div class="flex-row__cell flex-row__cell--grow">
+        <%= inline_svg('icons/brand.svg', size: '20px*20px', class: 'play__back') if event.virtual? && event.past? %>
         <span class="highlight"><%= link_to event.name, group_event_path(event.pillar.outcome.group, event) %></span><br>
         <% if event.group != @group %>
           <strong><small>Hosted By: <%= event.group.name %></small></strong><br>
