@@ -2,10 +2,12 @@
   <div class="block block-section">
     <div class="flex-row flex-row--middle">
       <% if event.picture.exists? %>
-        <div class="flex-row__cell">
-          <div style="background-image: url(<%= event.picture.expiring_url(3600) %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
-        </div>
+      <div class="flex-row__cell">
+        <div style="background-image: url(<%= event.picture.expiring_url(3600) %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
+      </div>
       <% end %>
+      <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'live__streaming') if event.virtual? && event.ongoing? %>
+      <%= image_tag("Remote meeting icon.png", size: "20x20") if event.virtual? %>
       <div class="flex-row__cell flex-row__cell--grow">
         <span class="highlight"><%= link_to event.name, group_event_path(event.pillar.outcome.group, event) %></span><br>
         <% if event.group != @group %>
