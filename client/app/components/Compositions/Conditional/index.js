@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -9,10 +9,18 @@ import NotAuthorizedPage from 'containers/Shared/NotAuthorizedPage';
 import PropTypes from 'prop-types';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Shared/Permissions/messages';
 
 function conditionalCheck(props, condition) {
-  const parts = condition.split('.');
-  return dig(...[props, ...parts]);
+  let parts;
+  const neg = condition[0] === '!';
+  if (condition[0] === '!')
+    parts = condition.substr(1).split('.');
+  else
+    parts = condition.split('.');
+  const evaluated = dig(...[props, ...parts]);
+  return neg ? !evaluated : evaluated;
 }
 
 function conditionsMapper(props, conditions) {
@@ -30,9 +38,11 @@ export default function Conditional(
   conditions,
   redirect = null,
   message = null,
-  reducer = a => a.reduce((sum, v) => sum || v, false)
+  wait = false,
+  reducer = a => a.some(v => v)
 ) {
   const WrappedComponent = (props) => {
+    const [first, setFirst] = useState(true);
     const show = valid(props, conditions, reducer);
     const rs = props.computedMatch
       ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
@@ -41,11 +51,15 @@ export default function Conditional(
     const path = redirect && redirect(props, rs);
 
     useEffect(() => {
-      if (!show && path) {
+      if (!show && wait && first)
+        setFirst(false);
+      else if (!show && path) {
         props.redirectAction(path);
-
         if (message)
-          props.showSnackbar({ message, options: { variant: 'warning' } });
+          props.showSnackbar({
+            message: typeof message === 'object' ? props.intl.formatMessage(message) : message,
+            options: { variant: 'warning' }
+          });
       }
 
       return () => null;
@@ -60,6 +74,7 @@ export default function Conditional(
   };
 
   WrappedComponent.propTypes = {
+    intl: intlShape,
     showSnackbar: PropTypes.func,
     redirectAction: PropTypes.func,
     computedMatch: PropTypes.object,
@@ -77,6 +92,7 @@ export default function Conditional(
   );
 
   return compose(
-    withConnect
+    withConnect,
+    injectIntl,
   )(WrappedComponent);
 }

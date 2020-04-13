@@ -35,6 +35,8 @@ import {
 } from 'containers/Mentorship/Session/actions';
 
 import Session from 'components/Mentorship/Session';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -151,7 +153,6 @@ SessionPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectUser(),
   session: selectSession(),
   users: selectPaginatedUsers(),
   loggedUser: selectUserSession(),
@@ -180,4 +181,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SessionPage);
+)(Conditional(
+  SessionPage,
+  ['session.permissions.update?', 'isFetchingSession'],
+  (props, rs) => ROUTES.user.root.path(),
+  permissionMessages.mentorship.session.showPage
+));

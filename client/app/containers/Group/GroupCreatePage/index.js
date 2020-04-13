@@ -9,12 +9,17 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
-import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/Group/actions';
+import { createGroupBegin, getGroupsBegin, groupFormUnmount, getGroupsSuccess } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
+
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -28,6 +33,7 @@ export function GroupCreatePage(props) {
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}
+      getGroupsSuccess={props.getGroupsSuccess}
     />
   );
 }
@@ -37,6 +43,7 @@ GroupCreatePage.propTypes = {
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
+  getGroupsSuccess: PropTypes.func,
   groups: PropTypes.array,
   isCommitting: PropTypes.bool,
 };
@@ -44,12 +51,14 @@ GroupCreatePage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
   isCommitting: selectGroupIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
   createGroupBegin,
   getGroupsBegin,
-  groupFormUnmount
+  getGroupsSuccess,
+  groupFormUnmount,
 };
 
 const withConnect = connect(
@@ -61,4 +70,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupCreatePage);
+)(Conditional(
+  GroupCreatePage,
+  ['permissions.groups_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.group.createPage
+));

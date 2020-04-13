@@ -11,6 +11,6 @@ RSpec.describe CampaignSerializer, type: :serializer do
     expect(serializer.serializable_hash[:image_location]).to_not be nil
     expect(serializer.serializable_hash[:banner_location]).to_not be nil
     expect(serializer.serializable_hash[:groups].empty?).to_not be true
-    expect(serializer.serializable_hash[:questions].empty?).to_not be true
+    expect(serializer.serializable_hash[:questions].blank?).to be true
   end
 end

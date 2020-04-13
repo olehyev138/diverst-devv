@@ -26,6 +26,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CampaignList from 'components/Innovate/Campaign/CampaignList';
 import { push } from 'connected-react-router';
+import Conditional from 'components/Compositions/Conditional';
+import { CampaignEditPage } from 'containers/Innovate/Campaign/CampaignEditPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignListPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -103,6 +107,7 @@ const mapStateToProps = createStructuredSelector({
   campaignTotal: selectCampaignTotal(),
   isFetchingCampaigns: selectIsFetchingCampaigns(),
   campaign: selectFormCampaign(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -121,4 +126,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CampaignListPage);
+)(Conditional(
+  CampaignListPage,
+  ['permissions.campaigns_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.innovate.campaign.listPage
+));

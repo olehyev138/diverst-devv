@@ -1,5 +1,5 @@
 class MentoringSessionSerializer < ApplicationRecordSerializer
-  attributes :creator, :interests, :users, :current_user_session
+  attributes :creator, :interests, :users, :current_user_session, :permissions
 
   has_many :mentoring_interests
 

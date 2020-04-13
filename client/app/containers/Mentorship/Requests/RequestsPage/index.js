@@ -48,6 +48,10 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import RequestList from 'components/Mentorship/MentorRequestList';
+import Conditional from 'components/Compositions/Conditional';
+import dig from 'object-dig';
+import { selectUser } from 'containers/Mentorship/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 
 const defaultParams = Object.freeze({
@@ -189,4 +193,10 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(MentorsPage);
+)(Conditional(
+  MentorsPage,
+  ['user.permissions.update?'],
+  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  permissionMessages.mentorship.requests.indexPage,
+  true
+));

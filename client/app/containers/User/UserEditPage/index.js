@@ -25,6 +25,10 @@ import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { UserCreatePage } from 'containers/User/UserCreatePage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserEditPage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -82,6 +86,7 @@ const mapStateToProps = createStructuredSelector({
   fieldData: selectFieldData(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -100,4 +105,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(UserEditPage);
+)(Conditional(
+  UserEditPage,
+  ['user.permissions.update?', 'isFormLoading'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.user.editPage
+));

@@ -12,13 +12,15 @@ import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
 import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents } from 'containers/User/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const EventTypes = Object.freeze({
   upcoming: 0,
@@ -146,8 +148,10 @@ export function EventsPage(props) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || EventsList;
+
   return (
-    <EventsList
+    <List
       events={props.events}
       eventsTotal={props.eventsTotal}
       currentTab={tab}
@@ -176,13 +180,15 @@ EventsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  listComponent: PropTypes.elementType,
 };
 
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoadingEvents(),
-  currentSession: selectUser()
+  currentSession: selectUser(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -198,4 +204,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EventsPage);
+)(Conditional(
+  EventsPage,
+  ['permissions.events_view'],
+  (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
+  permissionMessages.user.eventsPage
+));

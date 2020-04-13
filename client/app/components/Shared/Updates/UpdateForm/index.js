@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -26,10 +26,14 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import RouteService from 'utils/routeHelpers';
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+  const rs = new RouteService(useContext);
+
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
@@ -68,6 +72,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 
               messages={messages}
               formikProps={formikProps}
+              link={ROUTES.group.plan.kpi.fields.path(rs.params('group_id'))}
 
               join
               noCard
@@ -107,13 +112,15 @@ export function UpdateForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        values.redirectPath = props.links.index;
-        const payload = {
-          ...values,
-          field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
-        };
-        delete payload.fieldData;
-        props.updateAction(payload);
+        if (values.fieldData.length !== 0) {
+          values.redirectPath = props.links.index;
+          const payload = {
+            ...values,
+            field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
+          };
+          delete payload.fieldData;
+          props.updateAction(payload);
+        }
       }}
     >
       {formikProps => <UpdateFormInner {...props} formikProps={formikProps} />}

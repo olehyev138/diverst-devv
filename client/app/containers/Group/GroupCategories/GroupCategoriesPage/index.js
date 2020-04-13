@@ -17,7 +17,9 @@ import reducer from 'containers/Group/GroupCategories/reducer';
 import { getGroupCategoriesBegin, categoriesUnmount, deleteGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
 import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectGroupCategoriesIsLoading } from 'containers/Group/GroupCategories/selectors';
 import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategoriesList';
-
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupCategoriesPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
@@ -80,4 +82,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupCategoriesPage);
+)(Conditional(
+  GroupCategoriesPage,
+  ['permissions.groups_manage'],
+  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  permissionMessages.group.groupCategories.indexPage
+));

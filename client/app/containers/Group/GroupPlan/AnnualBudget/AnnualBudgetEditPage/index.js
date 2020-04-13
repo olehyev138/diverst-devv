@@ -25,6 +25,7 @@ import {
 } from '../actions';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function AnnualBudgetEditPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
@@ -85,5 +86,5 @@ export default compose(
   AnnualBudgetEditPage,
   ['currentGroup.permissions.annual_budgets_manage?'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
-  'You don\'t have permission to view edit the group annual budget'
+  permissionMessages.group.groupPlan.annualBudget.editPage
 ));

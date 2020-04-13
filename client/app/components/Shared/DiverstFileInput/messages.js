@@ -30,5 +30,7 @@ export default defineMessages({
   nofile: {
     id: `${scope}.nofile`,
   },
-
+  deleteFileConfirm: {
+    id: `${scope}.deleteFileConfirm`
+  },
 });

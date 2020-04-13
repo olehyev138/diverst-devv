@@ -12,6 +12,8 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import messages from 'containers/User/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import WithPermission from 'components/Compositions/WithPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({});
 
@@ -19,6 +21,8 @@ const styles = theme => ({});
 export function SystemUsersLinks(props) {
   const { classes } = props;
   const { currentTab } = props;
+
+  const PermissionTabs = WithPermission(Tab);
 
   return (
     <React.Fragment>
@@ -28,29 +32,33 @@ export function SystemUsersLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.users} />}
             value='users'
+            show={permission(props, 'users_create')}
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.roles.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.roles} />}
             value='roles'
+            show={permission(props, 'policy_templates_create')}
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.policy_templates.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.policy} />}
             value='templates'
+            show={permission(props, 'policy_templates_manage')}
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.import.path()}
             label='Import Users'
             value='import'
+            show={permission(props, 'users_create')}
           />
         </ResponsiveTabs>
       </Paper>
@@ -60,7 +68,7 @@ export function SystemUsersLinks(props) {
 
 SystemUsersLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object
 };
 

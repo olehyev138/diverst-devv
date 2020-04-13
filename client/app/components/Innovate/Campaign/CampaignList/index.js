@@ -26,6 +26,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 import DiverstTable from 'components/Shared/DiverstTable';
 import CampaignQuestionsList from '../CampaignQuestion/CampaignQuestionsList';
 import { injectIntl, intlShape } from 'react-intl';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   errorButton: {
@@ -86,22 +87,25 @@ export function CampaignList(props) {
           columns={columns}
           rowsPerPage={props.params.count}
           actions={[
-            {
+            rowData => ({
               icon: () => <EditIcon />,
               tooltip: intl.formatMessage(messages.Campaign.edit),
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
-              }
-            },
-            {
+              },
+              disabled: !permission(rowData, 'update?')
+            }),
+            rowData => ({
               icon: () => <DeleteIcon />,
               tooltip: intl.formatMessage(messages.Campaign.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))
                   props.deleteCampaignBegin({ id: rowData.id });
-              }
-            }]}
+              },
+              disabled: !permission(rowData, 'update?')
+            })
+          ]}
         />
       </React.Fragment>
     </DiverstFormLoader>

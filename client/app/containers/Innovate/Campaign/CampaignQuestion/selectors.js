@@ -40,6 +40,11 @@ const selectIsFetchingQuestions = () => createSelector(
   questionsState => questionsState.isFetchingQuestions
 );
 
+const selectIsFormLoading = () => createSelector(
+  selectQuestionsDomain,
+  questionsState => questionsState.isFormLoading
+);
+
 const selectIsCommitting = () => createSelector(
   selectQuestionsDomain,
   questionsState => questionsState.isCommitting
@@ -47,5 +52,5 @@ const selectIsCommitting = () => createSelector(
 
 export {
   selectQuestionsDomain, selectPaginatedQuestions, selectPaginatedSelectQuestions,
-  selectQuestionTotal, selectIsFetchingQuestions, selectIsCommitting, selectQuestion
+  selectQuestionTotal, selectIsFetchingQuestions, selectIsFormLoading, selectIsCommitting, selectQuestion
 };

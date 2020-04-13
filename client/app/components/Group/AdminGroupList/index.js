@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse, Box, CircularProgress,
+  Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +25,9 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstImg from 'components/Shared/DiverstImg';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   progress: {
@@ -69,7 +72,6 @@ export function AdminGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
-
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -95,73 +97,96 @@ export function AdminGroupList(props, context) {
               <Grid item key={group.id} xs={12}>
                 <Card className={classes.groupCard}>
                   <CardContent>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <Button
-                      className={classes.groupLink}
-                      color='primary'
-                      component={WrappedNavLink}
-                      to={{
-                        pathname: ROUTES.group.home.path(group.id),
-                        state: { id: group.id }
-                      }}
-                    >
-                      <Typography variant='h5' component='h2' display='inline'>
-                        {group.name}
-                      </Typography>
-                    </Button>
-                    {group.description && (
-                      <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                        {group.description}
-                      </Typography>
-                    )}
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                        state: { id: group.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      <DiverstFormattedMessage {...messages.edit} />
-                    </Button>
-                    <Button
-                      size='small'
-                      className={classes.errorButton}
-                      onClick={() => {
-                        /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm(intl.formatMessage(messages.delete_confirm)))
-                          props.deleteGroupBegin(group.id);
-                      }}
-                    >
-                      <DiverstFormattedMessage {...messages.delete} />
-                    </Button>
-                    <Button
-                      size='small'
-                      onClick={() => {
-                        setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                      }}
-                    >
-                      {expandedGroups[group.id] ? (
-                        <DiverstFormattedMessage {...messages.children_collapse} />
-                      ) : (
-                        <DiverstFormattedMessage {...messages.children_expand} />
+                    <Grid container spacing={2} alignItems='center'>
+                      {group.logo_data && (
+                        <React.Fragment>
+                          <Hidden xsDown>
+                            <Grid item xs='auto'>
+                              <DiverstImg
+                                data={group.logo_data}
+                                maxWidth='70px'
+                                maxHeight='70px'
+                                minWidth='70px'
+                                minHeight='70px'
+                              />
+                            </Grid>
+                          </Hidden>
+                        </React.Fragment>
                       )}
-                    </Button>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
-                        state: { id: group.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      Categorize Subgroups
-                    </Button>
-                  </CardActions>
+                      <Grid item xs>
+                        <Button
+                          className={classes.groupLink}
+                          color='primary'
+                          component={WrappedNavLink}
+                          to={{
+                            pathname: ROUTES.group.home.path(group.id),
+                            state: { id: group.id }
+                          }}
+                        >
+                          <Typography variant='h5' component='h2' display='inline'>
+                            {group.name}
+                          </Typography>
+                        </Button>
+                        {group.short_description && (
+                          <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                            &ensp;
+                            {group.short_description}
+                          </Typography>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                  <Permission show={permission(group, 'update?')}>
+                    <CardActions>
+                      <Button
+                        size='small'
+                        color='primary'
+                        to={{
+                          pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+                          state: { id: group.id }
+                        }}
+                        component={WrappedNavLink}
+                      >
+                        <DiverstFormattedMessage {...messages.edit} />
+                      </Button>
+                      <Permission show={permission(group, 'destroy?')}>
+                        <Button
+                          size='small'
+                          className={classes.errorButton}
+                          onClick={() => {
+                            /* eslint-disable-next-line no-alert, no-restricted-globals */
+                            if (confirm(intl.formatMessage(messages.delete_confirm)))
+                              props.deleteGroupBegin(group.id);
+                          }}
+                        >
+                          <DiverstFormattedMessage {...messages.delete} />
+                        </Button>
+                      </Permission>
+                      <Button
+                        size='small'
+                        onClick={() => {
+                          setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+                        }}
+                      >
+                        {expandedGroups[group.id] ? (
+                          <DiverstFormattedMessage {...messages.children_collapse} />
+                        ) : (
+                          <DiverstFormattedMessage {...messages.children_expand} />
+                        )}
+                      </Button>
+                      <Button
+                        size='small'
+                        color='primary'
+                        to={{
+                          pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
+                          state: { id: group.id }
+                        }}
+                        component={WrappedNavLink}
+                      >
+                        Categorize Subgroups
+                      </Button>
+                    </CardActions>
+                  </Permission>
                 </Card>
                 <Collapse in={expandedGroups[`${group.id}`]}>
                   <Box mt={1} />
@@ -171,23 +196,41 @@ export function AdminGroupList(props, context) {
                       <Grid item key={childGroup.id} xs={12}>
                         <Card className={classes.childGroupCard}>
                           <CardContent>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <Link
-                              component={WrappedNavLink}
-                              to={{
-                                pathname: ROUTES.group.home.path(childGroup.id),
-                                state: { id: childGroup.id }
-                              }}
-                            >
-                              <Typography variant='h5' component='h2' display='inline'>
-                                {childGroup.name}
-                              </Typography>
-                            </Link>
-                            {childGroup.description && (
-                              <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                                {childGroup.description}
-                              </Typography>
-                            )}
+                            <Grid container spacing={2} alignItems='center'>
+                              {childGroup.logo_data && (
+                                <React.Fragment>
+                                  <Hidden xsDown>
+                                    <Grid item xs='auto'>
+                                      <DiverstImg
+                                        data={childGroup.logo_data}
+                                        maxWidth='60px'
+                                        maxHeight='60px'
+                                        minWidth='60px'
+                                        minHeight='60px'
+                                      />
+                                    </Grid>
+                                  </Hidden>
+                                </React.Fragment>
+                              )}
+                              <Grid item xs>
+                                <Link
+                                  component={WrappedNavLink}
+                                  to={{
+                                    pathname: ROUTES.group.home.path(childGroup.id),
+                                    state: { id: childGroup.id }
+                                  }}
+                                >
+                                  <Typography variant='h5' component='h2' display='inline'>
+                                    {childGroup.name}
+                                  </Typography>
+                                </Link>
+                                {childGroup.short_description && (
+                                  <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                                    {childGroup.short_description}
+                                  </Typography>
+                                )}
+                              </Grid>
+                            </Grid>
                           </CardContent>
                           <CardActions>
                             <Button

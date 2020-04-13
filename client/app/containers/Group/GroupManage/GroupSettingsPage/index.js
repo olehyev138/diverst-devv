@@ -18,6 +18,7 @@ import { selectGroupIsCommitting, selectGroupIsFormLoading } from 'containers/Gr
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupSettingsPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -60,5 +61,5 @@ export default compose(
   GroupSettingsPage,
   ['currentGroup.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
-  'You don\'t have permission change group settings'
+  permissionMessages.group.groupManage.groupSettingsPage
 ));

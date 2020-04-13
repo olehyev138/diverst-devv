@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe PolicyGroup, type: :model do
   describe 'test associations' do
-    let(:policy_group) { build(:policy_group) }
+    let!(:user) { create(:user) }
+    let(:policy_group) { user.policy_group }
 
     it { expect(policy_group).to belong_to(:user).inverse_of(:policy_group) }
 
@@ -14,8 +15,10 @@ RSpec.describe PolicyGroup, type: :model do
   end
 
   describe '.update_all_permissions' do
+    let!(:user) { create(:user) }
+    let(:policy_group) { user.policy_group }
+
     it 'sets all permissions to false' do
-      policy_group = create(:policy_group)
       policy_group.update_all_permissions
 
       PolicyGroup.all_permission_fields.each do |field|
@@ -24,7 +27,6 @@ RSpec.describe PolicyGroup, type: :model do
     end
 
     it 'sets all permissions to true' do
-      policy_group = create(:policy_group)
       policy_group.update_all_permissions(true)
 
       PolicyGroup.all_permission_fields.each do |field|

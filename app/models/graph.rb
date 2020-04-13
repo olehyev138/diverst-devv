@@ -28,6 +28,14 @@ class Graph < ApplicationRecord
 
   attr_accessor :enterprise_id
 
+  def policy_class
+    MetricsDashboardPolicy
+  end
+
+  def self.policy_class
+    MetricsDashboardPolicy
+  end
+
   def set_graph_builder
     if @graph_builder.blank? && collection.present?
       @graph_builder = get_custom_class.get_graph_builder
