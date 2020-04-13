@@ -155,22 +155,16 @@ module BaseGraph
 
       @series_index = -1
       @data = {
-          series: []
+          values: []
       }
     end
 
-    # Parse, format & add a single element to current series
+    # Parse, format & add a single element to data array
     # @element - the element to add
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
-    def add_element(es_element, series_key: nil, **args)
-      element = format_element(es_element, args)
-
-      # create a series for element if necessary & add element to current series
-      # if series is specified, find it and pull it out, otherwise get series using current index
-      add_series if @data.dig(:series, @series_index).blank?
-      series = series_key.present? ? @data[:series].find { |s| s.dig(:key) == series_key }
-                   : @data[:series][@series_index]
-      series[:values] << element
+    def add_element(es_element, series_name: @title, **args)
+      element = format_element(es_element, series_name: series_name, **args)
+      @data[:values] << element
     end
 
     # Parse, format & add a list of elements to current series
@@ -187,16 +181,6 @@ module BaseGraph
     # @element - the element to parse
     def get_element_key(element, key: :x)
       @parser.parse(element)[key]
-    end
-
-    # Add a new series
-    # @series_name - optional, default is title
-    # All elements added after will be added to this new series
-    def add_series(series_name: @title)
-      return if @data[:series].any? { |h| h[:key] == series_name }
-
-      @series_index += 1
-      @data[:series] << { key: series_name, values: [] }
     end
 
     # Returns the dataset formatted to Vega Lite, ready to be passed to frontend
@@ -218,9 +202,9 @@ module BaseGraph
       }
     end
 
-    def format_element(element, **args)
+    def format_element(element, series_name: @title, **args)
       values = @parser.parse(element, args)
-      values[:children] = {}
+      values[:series] = series_name
       values
     end
   end
