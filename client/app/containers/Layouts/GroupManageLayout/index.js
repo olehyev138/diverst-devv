@@ -41,7 +41,6 @@ const GroupManageLayout = ({ component: Component, classes, defaultPage, ...rest
     if (defaultPage) {
       const rs = new RouteService({ computedMatch, location });
 
-      // TODO : Add permissions to the sponsors page access
       if (permission(rest.currentGroup, 'update?'))
         redirectAction(ROUTES.group.manage.settings.index.path(rs.params('group_id')));
       else if (permission(rest.currentGroup, 'leaders_view?'))

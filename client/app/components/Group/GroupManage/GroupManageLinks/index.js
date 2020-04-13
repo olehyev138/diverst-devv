@@ -45,10 +45,11 @@ export function GroupManageLinks(props) {
             value='leaders'
           />
 
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.manage.sponsors.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.sponsors} />}
+            show={permission(props.currentGroup, 'update?')}
             value='sponsors'
           />
         </ResponsiveTabs>

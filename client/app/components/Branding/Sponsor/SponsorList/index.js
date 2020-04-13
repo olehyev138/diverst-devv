@@ -27,6 +27,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
+
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,

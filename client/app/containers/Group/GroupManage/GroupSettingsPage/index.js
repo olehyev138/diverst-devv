@@ -13,7 +13,7 @@ import {
   updateGroupSettingsBegin
 } from 'containers/Group/actions';
 
-import { selectGroupIsCommitting } from 'containers/Group/selectors';
+import { selectGroupIsCommitting, selectGroupIsFormLoading } from 'containers/Group/selectors';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
@@ -36,10 +36,12 @@ GroupSettingsPage.propTypes = {
   currentGroup: PropTypes.object,
   updateGroupSettingsBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectGroupIsCommitting(),
+  isFormLoading: selectGroupIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -56,7 +58,7 @@ export default compose(
   memo,
 )(Conditional(
   GroupSettingsPage,
-  ['currentGroup.permissions.update?'],
+  ['currentGroup.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
   'You don\'t have permission change group settings'
 ));

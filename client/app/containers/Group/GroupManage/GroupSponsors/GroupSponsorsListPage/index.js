@@ -20,12 +20,15 @@ import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors
 } from 'containers/Shared/Sponsors/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
+
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupSponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
@@ -94,14 +97,15 @@ GroupSponsorListPage.propTypes = {
   sponsor: PropTypes.object,
   handleVisitSponsorEdit: PropTypes.func,
   handleVisitSponsorShow: PropTypes.func,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   sponsorList: selectPaginatedSponsors(),
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
+  currentGroup: selectGroup(),
 });
-
 
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
@@ -118,4 +122,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupSponsorListPage);
+)(Conditional(
+  GroupSponsorListPage,
+  ['currentGroup.permissions.update?'],
+  (props, rs) => ROUTES.group.manage.sponsors.index.path(rs.params('group_id')),
+  'You don\'t have permission change group sponsor settings'
+));

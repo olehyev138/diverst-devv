@@ -67,7 +67,6 @@ export class HomePage extends React.PureComponent {
             type='enterprise'
             currentGroup={null}
           />
-
         </Grid>
       </React.Fragment>
     );
