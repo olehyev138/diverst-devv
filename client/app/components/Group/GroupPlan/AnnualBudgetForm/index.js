@@ -14,7 +14,7 @@ import { Field, Formik, Form, getIn } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
-import { floatRound } from 'utils/floatRound';
+import { floatRound, toNumber } from 'utils/floatRound';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -31,6 +31,8 @@ import {
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
+import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import { getCurrency } from 'utils/currencyHelpers';
 
 const { form: formMessages } = messages;
 
@@ -49,27 +51,22 @@ export function AnnualBudgetFormInner(
       <Card>
         <Form>
           <CardContent>
-            <FormControl fullWidth className={classes.margin}>
-              <InputLabel htmlFor='standard-adornment-amount'>
-                <DiverstFormattedMessage {...formMessages.amount} />
-              </InputLabel>
-              <Input
-                required
-                onChange={handleChange}
-                type='number'
-                name='amount'
-                id='amount'
-                margin='dense'
-                fullWidth
-                disabled={props.isCommitting}
-                value={values.amount}
-                startAdornment={(
-                  <InputAdornment position={intl.formatMessage(appMessages.currency.placement)}>
-                    {intl.formatMessage(appMessages.currency.defaultSymbol)}
-                  </InputAdornment>
-                )}
-              />
-            </FormControl>
+            <DiverstMoneyField
+              label={intl.formatMessage(formMessages.amount)}
+              type='number'
+              name='amount'
+              id='amount'
+              margin='dense'
+              fullWidth
+              disabled={props.isCommitting}
+              value={toNumber(values.amount)}
+              onChange={value => setFieldValue('amount', value)}
+
+              currency={values.currency}
+              currency_name='currency'
+              currency_id='currency'
+              onCurrencyChange={value => setFieldValue('currency', value)}
+            />
           </CardContent>
           { annualBudget && (
             <CardContent>
@@ -132,7 +129,8 @@ export function AnnualBudgetFormInner(
 export function AnnualBudgetForm(props) {
   const initialValues = buildValues(props.annualBudget, {
     id: { default: '' },
-    amount: { default: '' },
+    amount: { default: 0 },
+    currency: { default: getCurrency('USD') }
   });
 
   return (
