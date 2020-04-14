@@ -32,4 +32,8 @@ export default function DiverstDialog(props) {
 
 DiverstDialog.propTypes = {
   children: PropTypes.any,
+  title: PropTypes.string,
+  message: PropTypes.string,
+  open: PropTypes.bool,
+  handleClose: PropTypes.func,
 };
