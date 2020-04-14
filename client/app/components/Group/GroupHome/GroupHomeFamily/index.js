@@ -15,6 +15,8 @@ import GroupIcon from '@material-ui/icons/Group';
 import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
 import Collapse from '@material-ui/core/Collapse';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/messages';
 
 const styles = theme => ({
   title: {
@@ -43,11 +45,11 @@ export function GroupHomeFamily({ classes, ...props }) {
       <Grid item xs='auto'>
         {group.current_user_is_member
           ? (
-            <Tooltip title='Are a member' enterDelay={300} placement='right'>
+            <Tooltip title={<DiverstFormattedMessage {...messages.family.areMember} />} enterDelay={300} placement='right'>
               <GroupIcon />
             </Tooltip>
           ) : (
-            <Tooltip title='Not a member' enterDelay={300} placement='right'>
+            <Tooltip title={<DiverstFormattedMessage {...messages.family.notMember} />} enterDelay={300} placement='right'>
               <GroupOutlinedIcon />
             </Tooltip>
           )}
@@ -100,7 +102,7 @@ export function GroupHomeFamily({ classes, ...props }) {
               size='small'
               onClick={() => setExpand(!expand)}
             >
-              {expand ? 'show less' : 'show more'}
+              {expand ? <DiverstFormattedMessage {...messages.family.showLess} /> : <DiverstFormattedMessage {...messages.family.showMore} />}
             </Button>
           </React.Fragment>
         )}
