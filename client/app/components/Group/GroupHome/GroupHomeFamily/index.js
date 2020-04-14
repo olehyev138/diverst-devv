@@ -8,7 +8,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Grid, Divider, Typography, Card, Button, CardContent, Link, Box } from '@material-ui/core';
+import { Grid, Divider, Typography, Card, Button, CardContent, Link, Box, Tooltip } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupIcon from '@material-ui/icons/Group';
@@ -41,7 +41,15 @@ export function GroupHomeFamily({ classes, ...props }) {
       </Grid>
       <Grid item xs='auto'>
         {group.current_user_is_member
-          ? <GroupIcon /> : <GroupOutlinedIcon />}
+          ? (
+            <Tooltip title='Are a member' aria-label='add'>
+              <GroupIcon />
+            </Tooltip>
+          ) : (
+            <Tooltip title='Not a member' aria-label='add'>
+              <GroupOutlinedIcon />
+            </Tooltip>
+          )}
       </Grid>
     </Grid>
   );
