@@ -22,6 +22,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
+import { getCurrency } from 'utils/currencyHelpers';
+import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
 const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
@@ -46,21 +48,22 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
               type='text'
               onChange={handleChange}
               value={values.description}
+              disabled={props.isCommitting}
               label={<DiverstFormattedMessage {...formMessages.description} />}
             />
             <Box mb={2} />
             <Divider />
             <Box mb={2} />
-            <TextField
-              fullWidth
-              required
-              margin='dense'
+            <DiverstMoneyField
+              label={<DiverstFormattedMessage {...formMessages.amount} />}
               id='amount'
               name='amount'
-              type='number'
-              onChange={handleChange}
+              margin='dense'
+              fullWidth
+              disabled={props.isCommitting}
               value={values.amount}
-              label={<DiverstFormattedMessage {...formMessages.amount} />}
+              onChange={value => setFieldValue('amount', value)}
+              currency={getCurrency(props.currentEvent.currency)}
             />
           </CardContent>
         </Paper>
@@ -93,7 +96,7 @@ export function ExpenseForm(props) {
   const initialValues = buildValues(expense, {
     id: { default: '' },
     description: { default: '' },
-    amount: { default: 0 },
+    amount: { default: '' },
   });
 
   return (
@@ -126,6 +129,7 @@ ExpenseFormInner.propTypes = {
   expense: PropTypes.object,
   approvers: PropTypes.array,
   currentGroup: PropTypes.object,
+  currentEvent: PropTypes.object,
 
   formikProps: PropTypes.object,
 

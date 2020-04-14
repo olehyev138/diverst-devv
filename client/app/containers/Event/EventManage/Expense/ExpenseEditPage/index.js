@@ -71,6 +71,7 @@ export function ExpenseCreatePage({ intl, ...props }) {
     <React.Fragment>
       <ExpenseForm
         initiativeId={props.currentEvent.id}
+        currentEvent={props.currentEvent}
         currentGroup={props.currentGroup}
         isCommitting={props.isCommitting}
         isLoading={props.isLoading}
