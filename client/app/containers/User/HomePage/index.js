@@ -64,7 +64,6 @@ handleClickOpen = (event) => {
 
   render() {
     const { classes } = this.props;
-
     const events = (
       <Paper>
         <CardContent>
@@ -107,7 +106,7 @@ handleClickOpen = (event) => {
           open={this.state.open}
           handleclose={this.handleClose}
           message={this.props.privacyMessage}
-          title={this.props.intl.formatMessage(messages.privacy)}
+          title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
     );
