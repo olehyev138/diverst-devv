@@ -19,10 +19,8 @@ import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessa
 import messages from 'containers/Group/messages';
 
 const styles = theme => ({
-  title: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    paddingBottom: theme.spacing(1),
+  groupName: {
+    textAlign: 'left',
   },
   dataHeaders: {
     paddingBottom: theme.spacing(1),
@@ -31,18 +29,18 @@ const styles = theme => ({
 
 export function GroupHomeFamily({ classes, ...props }) {
   const renderGroup = group => (
-    <Grid container spacing={3} justify='space-between'>
-      <Grid item xs='auto'>
+    <Grid container spacing={1} justify='space-between'>
+      <Grid item xs={10}>
         <Link
           component={WrappedNavLink}
           to={ROUTES.group.home.path(group.id)}
         >
-          <Typography>
+          <Typography className={classes.groupName}>
             {`${group.name}`}
           </Typography>
         </Link>
       </Grid>
-      <Grid item xs='auto'>
+      <Grid item xs={2}>
         {group.current_user_is_member
           ? (
             <Tooltip title={<DiverstFormattedMessage {...messages.family.areMember} />} enterDelay={300} placement='right'>
