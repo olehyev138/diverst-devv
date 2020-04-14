@@ -7,6 +7,8 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import messages from './messages';
 
@@ -20,8 +22,12 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstDialog from 'components/Shared/DiverstDialog';
 import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
+
+import { injectIntl, intlShape } from 'react-intl';
+import { selectEnterprisePrivacyMessage } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   title: {
@@ -32,10 +38,30 @@ const styles = theme => ({
   dataHeaders: {
     paddingBottom: theme.spacing(1),
   },
+  privacyStatement: {
+    padding: theme.spacing(1),
+    textDecoration: 'underline',
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+  }
+
+handleClickOpen = (event) => {
+  this.setState({ open: true });
+};
+
+  handleClose = (event) => {
+    this.setState({ open: false });
+  };
+
+
   render() {
     const { classes } = this.props;
 
@@ -72,6 +98,27 @@ export class HomePage extends React.PureComponent {
       </Paper>
     );
 
+    const privacyMessage = (
+      <React.Fragment>
+        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary'>
+          <DiverstFormattedMessage {...messages.privacy} />
+        </Typography>
+        <DiverstDialog
+          open={this.state.open}
+          handleClose={this.handleClose}
+          message={this.props.privacyMessage}
+          title={ this.props.intl.formatMessage(messages.privacy) }
+        />
+      </React.Fragment>
+    );
+
+    const sponsor = (
+      <SponsorCard
+        type='enterprise'
+        currentGroup={null}
+      />
+    );
+
     return (
       <React.Fragment>
         <Grid container spacing={3}>
@@ -83,21 +130,37 @@ export class HomePage extends React.PureComponent {
           </Grid>
         </Grid>
         <Grid item xs>
-          <SponsorCard
-            type='enterprise'
-            currentGroup={null}
-          />
+          { sponsor }
+        </Grid>
+        <Grid item xs>
+          { privacyMessage }
         </Grid>
       </React.Fragment>
     );
   }
 }
 
+const mapDispatchToProps = {
+};
+
+const mapStateToProps = createStructuredSelector({
+  privacyMessage: selectEnterprisePrivacyMessage(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
 HomePage.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  privacyMessage: PropTypes.string,
+  intl: intlShape,
 };
 
 export default compose(
+  withConnect,
   memo,
+  injectIntl,
   withStyles(styles),
 )(HomePage);
