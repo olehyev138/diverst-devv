@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
+  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem, Avatar,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -72,14 +72,12 @@ export function UserList(props, context) {
       title: <DiverstFormattedMessage {...messages.avatar} />,
       sorting: false,
       render: rowData => (
-        rowData.avatar_data && (
-          <DiverstImg
-            data={rowData.avatar_data}
-            maxWidth='30px'
-            maxHeight='30px'
-            minWidth='30px'
-            minHeight='30px'
-          />
+        rowData.avatar && (
+          <Avatar>
+            <DiverstImg
+              data={rowData.avatar_data}
+            />
+          </Avatar>
         )
       )
     },
