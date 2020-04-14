@@ -129,7 +129,7 @@ export function AnnualBudgetFormInner(
 export function AnnualBudgetForm(props) {
   const initialValues = buildValues(props.annualBudget, {
     id: { default: '' },
-    amount: { default: 0 },
+    amount: { default: undefined },
     currency: { default: getCurrency('USD') }
   });
 

@@ -41,6 +41,7 @@ export function DiverstCurrencyTextField(props) {
   useEffect(() => {
     const { currencySymbol, ...others } = props;
     const options = {
+      allowDecimalPadding: 'floats',
       ...others,
       onChange: undefined,
       onFocus: undefined,
@@ -52,18 +53,20 @@ export function DiverstCurrencyTextField(props) {
     };
     if (autoNumeric)
       autoNumeric.update(options);
-    else
+    else if (props.value)
       setAuto(new AutoNumeric(inputRef, props.value, options));
 
     return () => autoNumeric && autoNumeric.remove();
   }, [
+    props.value,
     props.decimalCharacter,
-    props.digitGroupSeparator
+    props.digitGroupSeparator,
+    props.decimalPlaces,
   ]);
 
   useEffect(() => {
     if (autoNumeric)
-      autoNumeric.set(props.value);
+      autoNumeric.set(getValue());
   }, [getValue()]);
 
   const {

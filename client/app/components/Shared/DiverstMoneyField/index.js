@@ -54,6 +54,7 @@ export function DiverstMoneyField(props) {
           options={currencyOptions}
           value={props.currency}
           onChange={props.onCurrencyChange}
+          disabled={true || props.disabled}
         />
       </Grid>
     </Grid>

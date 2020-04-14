@@ -24,7 +24,7 @@ export function clamp(num, min, max) {
 
 export function toNumber(number) {
   if (number == null)
-    return 0;
+    return undefined;
   if (typeof number === 'string' || number instanceof String)
     return parseFloat(number);
   if (typeof number !== 'number')
