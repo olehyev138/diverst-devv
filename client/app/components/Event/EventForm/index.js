@@ -67,6 +67,7 @@ export function EventFormInner({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       group_id: props.currentGroup.id,
+      event_id: values.id,
       query_scopes: ['approved'],
       is_done: 'false'
     });
