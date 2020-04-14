@@ -17,6 +17,7 @@ import Collapse from '@material-ui/core/Collapse';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
+import appMessages from 'containers/Shared/App/messages';
 
 const styles = theme => ({
   groupName: {
@@ -69,7 +70,7 @@ export function GroupHomeFamily({ classes, ...props }) {
           { props.currentGroup.parent && (
             <React.Fragment>
               <Typography variant='h6'>
-                Parent-Group
+                <DiverstFormattedMessage {...appMessages.custom_text.parent} />
               </Typography>
               <Box mb={1} />
               <Divider />
@@ -80,7 +81,7 @@ export function GroupHomeFamily({ classes, ...props }) {
           { props.currentGroup.children.length > 0 && (
             <React.Fragment>
               <Typography variant='h6'>
-                Sub-Groups
+                <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
               </Typography>
               {props.currentGroup.children.map(child => (
                 <React.Fragment key={`child:${child.id}`}>
