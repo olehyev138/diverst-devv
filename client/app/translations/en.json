@@ -536,6 +536,7 @@
   "diverst.containers.User.form.input.first_name": "First Name",
   "diverst.containers.User.form.input.last_name": "Last Name",
   "diverst.containers.User.form.input.email": "Email",
+  "diverst.containers.User.form.input.avatar": "Avatar",
   "diverst.containers.User.form.input.biography": "Biography",
   "diverst.containers.User.form.input.time_zone": "Time Zone",
   "diverst.containers.User.profile.fields": "Hidden info",
