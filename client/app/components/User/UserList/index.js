@@ -29,6 +29,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { injectIntl, intlShape } from 'react-intl';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   userListItem: {
@@ -67,6 +68,21 @@ export function UserList(props, context) {
   };
 
   const columns = [
+    {
+      title: <DiverstFormattedMessage {...messages.avatar} />,
+      sorting: false,
+      render: rowData => (
+        rowData.avatar_data && (
+          <DiverstImg
+            data={rowData.avatar_data}
+            maxWidth='30px'
+            maxHeight='30px'
+            minWidth='30px'
+            minHeight='30px'
+          />
+        )
+      )
+    },
     {
       title: <DiverstFormattedMessage {...messages.first_name} />,
       field: 'first_name',
