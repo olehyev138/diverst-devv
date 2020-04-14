@@ -33,6 +33,8 @@ import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
+
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -97,6 +99,21 @@ export function GroupMemberList(props) {
   };
 
   const columns = [
+    {
+      title: <DiverstFormattedMessage {...messages.columns.avatar} />,
+      sorting: false,
+      render: rowData => (
+        rowData.user.avatar_data && (
+          <DiverstImg
+            data={rowData.user.avatar_data}
+            maxWidth='30px'
+            maxHeight='30px'
+            minWidth='30px'
+            minHeight='30px'
+          />
+        )
+      )
+    },
     {
       title: <DiverstFormattedMessage {...messages.columns.givenName} />,
       field: 'user.first_name',

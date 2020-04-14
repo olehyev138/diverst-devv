@@ -409,6 +409,7 @@
   "diverst.containers.Members.scopes.pending": "Pending Members",
   "diverst.containers.Members.scopes.inactive": "Inactive Members",
   "diverst.containers.Members.scopes.all": "All Members",
+  "diverst.containers.Members.columns.avatar": "Avatar",
   "diverst.containers.Members.columns.givenName": "First Name",
   "diverst.containers.Members.columns.familyName": "Last Name",
   "diverst.containers.Members.columns.status": "Membership Status",
