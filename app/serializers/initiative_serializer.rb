@@ -2,7 +2,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
   attributes :pillar, :owner, :budget, :outcome, :budget_status,
              :expenses_status, :current_expenses_sum, :leftover, :full?, :permissions,
              :picture, :picture_file_name, :picture_data, :qr_code, :qr_code_file_name, :qr_code_data,
-             :total_comments, :is_attending, :total_attendees
+             :total_comments, :is_attending, :total_attendees, :currency
 
   has_many :comments
   belongs_to :budget_item
