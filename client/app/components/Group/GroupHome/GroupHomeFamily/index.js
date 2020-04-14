@@ -42,11 +42,11 @@ export function GroupHomeFamily({ classes, ...props }) {
       <Grid item xs='auto'>
         {group.current_user_is_member
           ? (
-            <Tooltip title='Are a member' aria-label='add'>
+            <Tooltip title='Are a member' aria-label='add' leaveDelay={300}>
               <GroupIcon />
             </Tooltip>
           ) : (
-            <Tooltip title='Not a member' aria-label='add'>
+            <Tooltip title='Not a member' aria-label='add' leaveDelay={300}>
               <GroupOutlinedIcon />
             </Tooltip>
           )}
