@@ -53,7 +53,6 @@ export function AnnualBudgetFormInner(
           <CardContent>
             <DiverstMoneyField
               label={intl.formatMessage(formMessages.amount)}
-              type='number'
               name='amount'
               id='amount'
               margin='dense'
