@@ -107,7 +107,7 @@ handleClickOpen = (event) => {
           open={this.state.open}
           handleClose={this.handleClose}
           message={this.props.privacyMessage}
-          title={ this.props.intl.formatMessage(messages.privacy) }
+          title={this.props.intl.formatMessage(messages.privacy)}
         />
       </React.Fragment>
     );
