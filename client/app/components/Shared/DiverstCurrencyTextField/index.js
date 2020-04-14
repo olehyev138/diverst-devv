@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { withStyles, TextField, InputAdornment } from '@material-ui/core';
 import { compose } from 'redux';
 import NumberFormat from 'react-number-format';
+import { clamp } from 'utils/floatRound';
 
 const styles = theme => ({});
 
-export function Currency({ inputRef, numericProps, onChange, name, ...others }) {
+export function Currency({ inputRef, numericProps, onChange, name, max, ...others }) {
   return (
     <NumberFormat
       getInputRef={inputRef}
-      onValueChange={values => onChange(values.value)}
+      onValueChange={values => onChange(Math.min(values.value, max || Infinity).toString())}
       fixedDecimalScale
       allowNegative={false}
       {...numericProps}
@@ -30,9 +31,10 @@ Currency.propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   inputRef: PropTypes.func.isRequired,
+  max: PropTypes.string,
 };
 
-export function DiverstCurrencyTextField({ id, value, label, onChange, name, numericProps, ...others }) {
+export function DiverstCurrencyTextField({ id, value, label, onChange, name, numericProps, max, ...others }) {
   return (
     <TextField
       label={label}
@@ -46,6 +48,7 @@ export function DiverstCurrencyTextField({ id, value, label, onChange, name, num
       // eslint-disable-next-line react/jsx-no-duplicate-props
       inputProps={{
         numericProps,
+        max,
       }}
       {...others}
     />
@@ -65,6 +68,7 @@ DiverstCurrencyTextField.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  max: PropTypes.string,
 };
 
 export default compose(

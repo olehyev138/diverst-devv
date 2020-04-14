@@ -28,6 +28,7 @@ export function DiverstMoneyField(props) {
           onChange={props.onChange}
           disabled={props.disabled}
           numericProps={dig(props, 'currency', 'props')}
+          max={props.max}
         />
       </Grid>
       {props.currencyForm && (
@@ -54,6 +55,7 @@ DiverstMoneyField.propTypes = {
   label: PropTypes.node,
   onChange: PropTypes.func,
   value: PropTypes.string,
+  max: PropTypes.string,
 
   currency_id: PropTypes.string,
   currency_name: PropTypes.string,

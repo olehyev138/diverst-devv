@@ -41,7 +41,7 @@ import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
 import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
 
-const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: 0 };
+const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -174,6 +174,7 @@ export function EventFormInner({
                   value={values.estimated_funding}
                   onChange={value => setFieldValue('estimated_funding', value)}
                   currency={getCurrency(values.currency)}
+                  max={values.budget_item_id.available}
                 />
               </Grid>
             </Grid>
