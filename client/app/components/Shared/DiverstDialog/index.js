@@ -11,22 +11,20 @@ import messages from 'containers/User/HomePage/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 export default function DiverstDialog(props) {
-  const { title, message, open, handleClose } = props;
+  const { title, message, open, handleclose } = props;
 
   return (
-    <div>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' {...props}>
-        <DialogTitle>{ title }</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            { message }
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button color='primary' onClick={handleClose}><DiverstFormattedMessage {...messages.close} /></Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={open} onClose={handleclose} aria-labelledby='form-dialog-title' {...props}>
+      <DialogTitle>{ title }</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          { message }
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button color='primary' onClick={handleclose}><DiverstFormattedMessage {...messages.close} /></Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
@@ -35,5 +33,4 @@ DiverstDialog.propTypes = {
   title: PropTypes.string,
   message: PropTypes.string,
   open: PropTypes.bool,
-  handleClose: PropTypes.func,
 };
