@@ -14,6 +14,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupIcon from '@material-ui/icons/Group';
 import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
 import Collapse from '@material-ui/core/Collapse';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   title: {
@@ -31,8 +32,8 @@ export function GroupHomeFamily({ classes, ...props }) {
     <Grid container spacing={3} justify='space-between'>
       <Grid item xs='auto'>
         <Link
-          href={ROUTES.group.home.path(group.id)}
-          rel='noopener'
+          component={WrappedNavLink}
+          to={ROUTES.group.home.path(group.id)}
         >
           <Typography>
             {`${group.name}`}
