@@ -43,7 +43,6 @@ export function BudgetCreatePage(props) {
   };
 
   useEffect(() => {
-    console.log('Hi');
     props.getAnnualBudgetBegin({ id: annualBudgetId });
   }, []);
 
