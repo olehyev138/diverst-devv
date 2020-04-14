@@ -49,7 +49,7 @@ export function GroupHomeFamily({ classes, ...props }) {
   const [expand, setExpand] = useState(false);
 
   const needExpand = ((props.currentGroup.parent ? 2 : 0)
-    + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 4;
+    + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 5;
 
   const CollapseConditional = needExpand ? Collapse : React.Fragment;
 
