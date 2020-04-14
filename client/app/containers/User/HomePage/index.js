@@ -53,11 +53,11 @@ export class HomePage extends React.PureComponent {
     };
   }
 
-handleClickOpen = (event) => {
+handleClickOpen = () => {
   this.setState({ open: true });
 };
 
-  handleClose = (event) => {
+  handleClose = () => {
     this.setState({ open: false });
   };
 
