@@ -59,9 +59,10 @@ export function AnnualBudgetFormInner(
               margin='dense'
               fullWidth
               disabled={props.isCommitting}
-              value={toNumber(values.amount)}
+              value={values.amount}
               onChange={value => setFieldValue('amount', value)}
 
+              currencyForm
               currency={values.currency}
               currency_name='currency'
               currency_id='currency'
@@ -129,7 +130,7 @@ export function AnnualBudgetFormInner(
 export function AnnualBudgetForm(props) {
   const initialValues = buildValues(props.annualBudget, {
     id: { default: '' },
-    amount: { default: undefined },
+    amount: { default: '' },
     currency: { default: getCurrency('USD') }
   });
 

@@ -1,6 +1,6 @@
 export const currencyOptions = Object.freeze([
-  { value: 'USD', label: '$ (USD)', props: { decimalCharacter: '.', decimalPlaces: 2, digitGroupSeparator: ',', currencySymbol: '$' } },
-  { value: 'GBP', label: '£ (GBP)', props: { decimalCharacter: ',', decimalPlaces: 2, digitGroupSeparator: ' ', decimalCharacterAlternative: '.', currencySymbol: '£' } },
+  { value: 'USD', label: '$ (USD)', props: { decimalSeparator: '.', decimalScale: 2, thousandSeparator: ',', prefix: '$', thousandsGroupStyle: 'thousand' } },
+  { value: 'GBP', label: '£ (GBP)', props: { decimalSeparator: ',', decimalScale: 2, thousandSeparator: ' ', prefix: '£', thousandsGroupStyle: 'thousand' } },
 ]);
 
 export const getCurrency = code => currencyOptions.find(curr => curr.value === code);
