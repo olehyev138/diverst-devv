@@ -10,6 +10,7 @@ class Api::V1::SessionsController < DiverstController
       enterprise: AuthenticatedEnterpriseSerializer.new(user.enterprise).as_json,
       policy_group: PolicyGroupSerializer.new(user.policy_group).as_json,
       email: user.email,
+      avatar_data: Base64.encode64(user.avatar.download),
       role: user.user_role.role_name,
       time_zone: ActiveSupport::TimeZone.find_tzinfo(user.time_zone).name,
       created_at: user.created_at.as_json,
