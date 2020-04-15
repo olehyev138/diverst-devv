@@ -20,9 +20,21 @@ function routesPruner(routes) {
   return toReturn;
 }
 
-fs.writeFile('../app/assets/json/routes.json', JSON.stringify(routesPruner(ROUTES)), (err) => {
-  if (err)
-    console.log(err);
-  else
-    console.log('Success');
-});
+function toJson(routes) {
+  return JSON.stringify(routesPruner(routes))
+}
+
+function main() {
+  fs.writeFile('../app/assets/json/routes.json', toJson(ROUTES), (err) => {
+    if (err)
+      console.log(err);
+    else
+      console.log('Success');
+  });
+}
+
+if (typeof require !== 'undefined' && require.main === module) {
+  main();
+}
+
+module.exports = toJson
