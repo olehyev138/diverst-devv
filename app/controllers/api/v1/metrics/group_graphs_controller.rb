@@ -1,4 +1,6 @@
 class Api::V1::Metrics::GroupGraphsController < DiverstController
+  require 'aws-sdk-s3'
+
   include Api::V1::Concerns::Metrics
 
   # Overview
@@ -6,7 +8,7 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
   def group_population
     authorize MetricsDashboard, :index?
 
-    render json: @graph.group_population(metrics_params[:date_range], metrics_params[:scoped_by_models])
+    render json: @analytics_bucket.object('group_population').get.body.read
   end
 
   def views_per_group
