@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { Link } from "@material-ui/core";
+import { Link } from '@material-ui/core';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
