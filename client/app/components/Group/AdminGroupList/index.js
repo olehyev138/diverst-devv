@@ -23,11 +23,16 @@ import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
+
+import DraggableCard from 'components/Shared/DragAndDrop/DraggableItems/DraggableCard';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
 
 const styles = theme => ({
   progress: {
@@ -59,6 +64,15 @@ const styles = theme => ({
   },
 });
 
+export const ItemTypes = {
+  CARD: 'card',
+};
+
+function dragArea() {
+
+}
+
+
 export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;
   const [expandedGroups, setExpandedGroups] = useState({});
@@ -72,6 +86,9 @@ export function AdminGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
+
+  // Drag and drop
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -90,6 +107,7 @@ export function AdminGroupList(props, context) {
       </Grid>
       <Box mb={1} />
       <DiverstLoader isLoading={props.isLoading}>
+        <DroppableList />
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.groups && Object.values(props.groups).map((group, i) => {
