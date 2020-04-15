@@ -17,6 +17,9 @@ import { permission } from 'utils/permissionsHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
+  cardHeader: {
+    paddingBottom: 0,
+  },
   margin: {
     marginTop: 16,
     marginBottom: 16,
