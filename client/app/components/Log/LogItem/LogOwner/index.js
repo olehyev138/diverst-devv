@@ -15,7 +15,7 @@ export function LogOwner(props) {
         <Link
           component={WrappedNavLink}
           to={{
-            pathname: ROUTES.admin.system.users.edit.path(rowData.owner_id),
+            pathname: ROUTES.user.show.path(rowData.owner_id),
             state: { id: rowData.owner_id }
           }}
         >
