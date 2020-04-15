@@ -54,6 +54,16 @@ module BaseController
     item = klass.find(params[:id])
     base_authorize(item)
 
+    # Generic way to allow clearing of attachment content when there's already content and we send the attachment param(s) empty
+    # Note: So far only works on has_one attachments
+    klass
+        .reflect_on_all_associations(:has_one)
+        .filter { |a| a.class_name.constantize == ActiveStorage::Attachment rescue false }
+        .map { |a| a.name.to_s.chomp('_attachment').to_sym }
+        .each do |attachment|
+          item.send(attachment).purge_later if params[attachment].blank? && item.send(attachment).attached?
+        end
+
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e

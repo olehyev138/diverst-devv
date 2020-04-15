@@ -10,6 +10,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import AdminLayout from '../AdminLayout';
 import SystemUsersLinks from 'components/User/SystemUsersLinks';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   content: {
@@ -25,7 +28,7 @@ const SystemUsersPages = Object.freeze([
 ]);
 
 const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
-  const { currentGroup, location, ...other } = rest;
+  const { permissions, location, computedMatch, defaultPage, ...other } = rest;
 
   let currentPage;
   if (matchPath(location.pathname, { path: ROUTES.admin.system.users.roles.index.path() }))
@@ -68,9 +71,19 @@ SystemUsersLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
+  permissions: PropTypes.object,
 };
 
+const mapStateToProps = createStructuredSelector({
+  permissions: selectPermissions(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
 export default compose(
+  withConnect,
   memo,
   withStyles(styles),
 )(SystemUsersLayout);

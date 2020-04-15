@@ -8,7 +8,7 @@ module Session::Actions
   module ClassMethods
     def logout(jwt)
       session = UserTokenService.get_session_from_jwt(jwt)
-      UserTokenService.user_token_error if session.blank?
+      return {} if session.blank?
 
       session.update(status: 1)
       # if user enterprise has saml enabled then log out process is different

@@ -43,6 +43,7 @@ import FieldList from 'components/Shared/Fields/FieldList';
 import { selectGroup } from 'containers/Group/selectors';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
@@ -152,5 +153,5 @@ export default compose(
   FieldListPage,
   ['currentGroup.permissions.kpi_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group KPI'
+  permissionMessages.group.groupPlan.KPI.fieldsPage
 ));

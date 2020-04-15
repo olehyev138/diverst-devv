@@ -13,14 +13,19 @@ import groupReducer from 'containers/Group/reducer';
 
 import { getGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
 import { getGroupsBegin, groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
-import { selectPaginatedSelectGroups, selectFormGroup, selectCategorizeGroup } from 'containers/Group/selectors';
+import {
+  selectPaginatedSelectGroups,
+  selectCategorizeGroup,
+  selectGroupIsFormLoading
+} from 'containers/Group/selectors';
 import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
-import messages from 'containers/Group/messages';
 import RouteService from 'utils/routeHelpers';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const changePage = id => push(ROUTES.admin.manage.groups.categorize.path(id));
 
@@ -73,6 +78,7 @@ const mapStateToProps = createStructuredSelector({
   categories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectGroupCategoriesIsCommitting(),
+  isFormLoading: selectGroupIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -92,4 +98,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupCategorizePage);
+)(Conditional(
+  GroupCategorizePage,
+  ['group.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  permissionMessages.group.categorizePage
+));

@@ -72,7 +72,7 @@ const styles = theme => ({
 });
 
 export function Folder(props) {
-  const { classes } = props;
+  const { classes, type, permissions, currentGroup } = props;
   const folder = dig(props, 'folder');
 
   return (
@@ -86,7 +86,12 @@ export function Folder(props) {
                 {folder.name}
               </Typography>
             </Grid>
-            <Permission show={permission(props.currentGroup, 'resources_create?')}>
+            <Permission
+              show={
+                (type === 'group' && permission(currentGroup, 'resources_create?'))
+                || (type === 'admin' && permissions.enterprise_folders_create)
+              }
+            >
               <Grid item>
                 <Button
                   variant='contained'
@@ -101,7 +106,12 @@ export function Folder(props) {
                 </Button>
               </Grid>
             </Permission>
-            <Permission show={permission(props.currentGroup, 'resources_create?')}>
+            <Permission
+              show={
+                (type === 'group' && permission(currentGroup, 'resources_create?'))
+                || (type === 'admin' && permissions.enterprise_folders_create)
+              }
+            >
               <Grid item>
                 <Button
                   variant='contained'
@@ -262,6 +272,8 @@ Folder.propTypes = {
   deleteFolderBegin: PropTypes.func,
   deleteResourceBegin: PropTypes.func,
   classes: PropTypes.object,
+  permissions: PropTypes.object,
+  type: PropTypes.string,
   folder: PropTypes.object,
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,

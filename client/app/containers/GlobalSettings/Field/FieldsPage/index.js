@@ -40,7 +40,10 @@ import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
 import FieldList from 'components/Shared/Fields/FieldList';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
@@ -132,6 +135,7 @@ const mapStateToProps = createStructuredSelector({
   commitSuccess: selectCommitSuccess(),
   currentEnterprise: selectEnterprise(),
   hasChanged: selectHasChanged(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -150,4 +154,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(FieldListPage);
+)(Conditional(
+  FieldListPage,
+  ['permissions.fields_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.globalSettings.field.indexPage
+));

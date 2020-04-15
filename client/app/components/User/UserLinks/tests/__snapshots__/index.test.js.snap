@@ -44,7 +44,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
       id="diverst.containers.Routes.user.home"
     />
   </WithStyles(ForwardRef(MenuItem))>
-  <WithStyles(ForwardRef(MenuItem))
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -59,8 +59,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.innovate"
     />
-  </WithStyles(ForwardRef(MenuItem))>
-  <WithStyles(ForwardRef(MenuItem))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -75,8 +75,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.news"
     />
-  </WithStyles(ForwardRef(MenuItem))>
-  <WithStyles(ForwardRef(MenuItem))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -91,8 +91,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.events"
     />
-  </WithStyles(ForwardRef(MenuItem))>
-  <WithStyles(ForwardRef(MenuItem))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -107,7 +107,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.groups"
     />
-  </WithStyles(ForwardRef(MenuItem))>
+  </WrappedComponent>
   <WithStyles(ForwardRef(MenuItem))
     component={
       Object {
@@ -124,14 +124,14 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
       id="diverst.containers.Routes.user.downloads"
     />
   </WithStyles(ForwardRef(MenuItem))>
-  <WithStyles(ForwardRef(MenuItem))
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
         "render": [Function],
       }
     }
-    to="/mentorship"
+    to="/mentorship/:user_id"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <GroupWorkOutlinedIcon />
@@ -139,7 +139,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.mentorship"
     />
-  </WithStyles(ForwardRef(MenuItem))>
+  </WrappedComponent>
 </WithStyles(ForwardRef(Menu))>
 `;
 
@@ -164,7 +164,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
       id="diverst.containers.Routes.user.home"
     />
   </WithStyles(ForwardRef(Button))>
-  <WithStyles(ForwardRef(Button))
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -181,8 +181,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.innovate"
     />
-  </WithStyles(ForwardRef(Button))>
-  <WithStyles(ForwardRef(Button))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -199,8 +199,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.news"
     />
-  </WithStyles(ForwardRef(Button))>
-  <WithStyles(ForwardRef(Button))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -217,8 +217,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.events"
     />
-  </WithStyles(ForwardRef(Button))>
-  <WithStyles(ForwardRef(Button))
+  </WrappedComponent>
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
@@ -235,7 +235,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.groups"
     />
-  </WithStyles(ForwardRef(Button))>
+  </WrappedComponent>
   <WithStyles(ForwardRef(Button))
     component={
       Object {
@@ -254,14 +254,14 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
       id="diverst.containers.Routes.user.downloads"
     />
   </WithStyles(ForwardRef(Button))>
-  <WithStyles(ForwardRef(Button))
+  <WrappedComponent
     component={
       Object {
         "$$typeof": Symbol(react.forward_ref),
         "render": [Function],
       }
     }
-    to="/mentorship"
+    to="/mentorship/:user_id"
   >
     <Hidden
       smDown={true}
@@ -271,7 +271,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.mentorship"
     />
-  </WithStyles(ForwardRef(Button))>
+  </WrappedComponent>
 </WithStyles(ForwardRef(Toolbar))>
 `;
 

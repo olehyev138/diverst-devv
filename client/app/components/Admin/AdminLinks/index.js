@@ -24,6 +24,10 @@ import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import UsersCircleIcon from '@material-ui/icons/GroupWork';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import WithPermission from 'components/Compositions/WithPermission';
+import { permission } from 'utils/permissionsHelpers';
+import dig from 'object-dig';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -66,6 +70,9 @@ const styles = theme => ({
     backgroundColor: 'rgba(0, 0, 0, 0.14)',
   },
 });
+
+const ListPermission = WithPermission(ListItem);
+const MenuPermission = WithPermission(MenuItem);
 
 class AdminLinks extends React.PureComponent {
   constructor(props) {
@@ -144,7 +151,7 @@ class AdminLinks extends React.PureComponent {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button onClick={this.handleAnalyzeClick}>
+          <ListPermission button onClick={this.handleAnalyzeClick} show={permission(this.props, 'metrics_overview')}>
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
@@ -152,15 +159,16 @@ class AdminLinks extends React.PureComponent {
               <DiverstFormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
             </ListItemText>
             {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
+          </ListPermission>
           <Collapse in={this.state.analyze.open} timeout='auto' unmountOnExit>
             <List disablePadding>
-              <MenuItem
+              <MenuPermission
                 component={WrappedNavLink}
                 exact
                 to={ROUTES.admin.analyze.overview.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'metrics_overview')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -168,12 +176,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.analyze.users.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'metrics_overview')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -181,12 +190,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.analyze.groups.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'metrics_overview')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -194,12 +204,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.analyze.custom.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'metrics_overview')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -207,11 +218,20 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.custom.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
+              </MenuPermission>
             </List>
           </Collapse>
 
-          <ListItem button onClick={this.handleManageClick}>
+          <ListPermission
+            button
+            onClick={this.handleManageClick}
+            show={
+              permission(this.props, 'groups_create')
+              || permission(this.props, 'segments_create')
+              || permission(this.props, 'enterprise_folders_view')
+              || permission(this.props, 'archive_manage')
+            }
+          >
             <ListItemIcon>
               <DeviceHubIcon />
             </ListItemIcon>
@@ -219,14 +239,15 @@ class AdminLinks extends React.PureComponent {
               <DiverstFormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
             </ListItemText>
             {this.state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
+          </ListPermission>
           <Collapse in={this.state.manage.open} timeout='auto' unmountOnExit>
             <List disablePadding>
-              <MenuItem
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.manage.groups.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'groups_create')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -234,12 +255,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.manage.segments.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'segments_create')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -247,12 +269,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.manage.resources.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'enterprise_folders_view')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -260,12 +283,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.manage.archived.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'archive_manage')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -273,24 +297,32 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
+              </MenuPermission>
             </List>
           </Collapse>
 
-          <ListItem button onClick={this.handlePlanClick}>
+          <ListPermission
+            button
+            onClick={this.handlePlanClick}
+            show={
+              dig(this.props, 'enterprise', 'plan_module_enabled')
+              && permission(this.props, 'manage_all_budgets')
+            }
+          >
             <ListItemIcon>
               <AssignmentTurnedInIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.plan.index.data.titleMessage} />} />
             {this.state.plan.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
+          </ListPermission>
           <Collapse in={this.state.plan.open} timeout='auto' unmountOnExit>
             <List disablePadding>
-              <MenuItem
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.plan.budgeting.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'manage_all_budgets')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -298,24 +330,29 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   Group Budgets
                 </ListItemText>
-              </MenuItem>
+              </MenuPermission>
             </List>
           </Collapse>
 
-          <ListItem button onClick={this.handleInnovateClick}>
+          <ListPermission
+            button
+            onClick={this.handleInnovateClick}
+            show={permission(this.props, 'campaigns_create')}
+          >
             <ListItemIcon>
               <LightbulbIcon className={classes.lightbulbIcon} />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.innovate.index.data.titleMessage} />} />
             {this.state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
+          </ListPermission>
           <Collapse in={this.state.innovate.open} timeout='auto' unmountOnExit>
             <List disablePadding>
-              <MenuItem
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.innovate.campaigns.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'campaigns_create')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -323,12 +360,13 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.innovate.financials.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={permission(this.props, 'campaigns_manage')}
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -336,27 +374,49 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.innovate.financials.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
+              </MenuPermission>
             </List>
           </Collapse>
 
-          <ListItem button>
+          <ListPermission button show={permission(this.props, 'polls_create')}>
             <ListItemIcon>
               <HowToVoteIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
-          </ListItem>
+          </ListPermission>
 
-          <ListItem button>
+          <ListPermission
+            button
+            show={
+              dig(this.props, 'enterprise', 'mentorship_module_enabled')
+              && permission(this.props, 'mentoring_interests_create')
+            }
+          >
             <ListItemIcon>
               <UsersCircleIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.mentorship.index.data.titleMessage} />} />
-          </ListItem>
+          </ListPermission>
 
           <Divider />
 
-          <ListItem button onClick={this.handleSystemClick}>
+          <ListPermission
+            button
+            onClick={this.handleSystemClick}
+            show={
+              permission(this.props, 'fields_manage')
+              || permission(this.props, 'custom_text_manage')
+              || permission(this.props, 'enterprise_manage')
+              || permission(this.props, 'sso_authentication')
+              || permission(this.props, 'emails_manage')
+              || permission(this.props, 'users_create')
+              || permission(this.props, 'policy_templates_create')
+              || permission(this.props, 'branding_manage')
+              || permission(this.props, 'integrations_manage')
+              || permission(this.props, 'rewards_manage')
+              || permission(this.props, 'logs_manage')
+            }
+          >
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
@@ -364,12 +424,12 @@ class AdminLinks extends React.PureComponent {
               <DiverstFormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
             </ListItemText>
             {this.state.system.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
+          </ListPermission>
           <Collapse in={this.state.system.open} timeout='auto' unmountOnExit>
             <List disablePadding>
-              <MenuItem
+              <MenuPermission
                 component={WrappedNavLink}
-                to={ROUTES.admin.system.globalSettings.fields.index.path()}
+                to={ROUTES.admin.system.globalSettings.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
                 isActive={(match, location) => !!matchPath(location.pathname, {
@@ -377,6 +437,13 @@ class AdminLinks extends React.PureComponent {
                   exact: false,
                   strict: false,
                 })}
+                show={
+                  permission(this.props, 'fields_manage')
+                  || permission(this.props, 'custom_text_manage')
+                  || permission(this.props, 'enterprise_manage')
+                  || permission(this.props, 'sso_authentication')
+                  || permission(this.props, 'emails_manage')
+                }
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -384,12 +451,16 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.globalSettings.fields.index.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.system.users.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={
+                  permission(this.props, 'users_create')
+                  || permission(this.props, 'policy_templates_create')
+                }
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -397,12 +468,15 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.system.branding.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={
+                  permission(this.props, 'branding_manage')
+                }
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -410,12 +484,15 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.branding.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.system.logs.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={
+                  permission(this.props, 'logs_manage')
+                }
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -423,12 +500,16 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
-              <MenuItem
+              </MenuPermission>
+              <MenuPermission
                 component={WrappedNavLink}
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                show={
+                  permission(this.props, 'integrations_manage')
+                  || permission(this.props, 'rewards_manage')
+                }
               >
                 <ListItemIcon>
                   <ListIcon />
@@ -436,7 +517,7 @@ class AdminLinks extends React.PureComponent {
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
                 </ListItemText>
-              </MenuItem>
+              </MenuPermission>
             </List>
           </Collapse>
 
@@ -487,6 +568,8 @@ AdminLinks.propTypes = {
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   location: PropTypes.object,
+  permissions: PropTypes.object,
+  enterprise: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -495,7 +578,10 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  permissions: selectPermissions(),
+  enterprise: selectEnterprise(),
+});
 
 const withConnect = connect(
   mapStateToProps,

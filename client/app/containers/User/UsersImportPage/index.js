@@ -29,7 +29,7 @@ import {
   selectPaginatedFields,
   selectIsLoading
 } from 'containers/Shared/Field/selectors';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { selectIsCommitting } from 'containers/Shared/CsvFile/selectors';
 import {
   getFieldsBegin, fieldUnmount
@@ -46,14 +46,15 @@ import fieldSaga from 'containers/GlobalSettings/Field/saga';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import UserList from 'components/User/UserList';
 import UserImport from 'components/User/UserImport';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = {
   count: -1, page: 0, order: 'asc'
 };
 
-export function UserListPage(props) {
+export function UserImportPage(props) {
   useInjectReducer({ key: 'csv_files', reducer });
   useInjectSaga({ key: 'csv_files', saga });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
@@ -101,7 +102,7 @@ export function UserListPage(props) {
   );
 }
 
-UserListPage.propTypes = {
+UserImportPage.propTypes = {
   currentEnterprise: PropTypes.object.isRequired,
   getFieldsBegin: PropTypes.func.isRequired,
   createCsvFileBegin: PropTypes.func.isRequired,
@@ -116,6 +117,7 @@ const mapStateToProps = createStructuredSelector({
   isFetchingFields: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -132,4 +134,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserListPage);
+)(Conditional(
+  UserImportPage,
+  ['permissions.users_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.user.importPage
+));

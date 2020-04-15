@@ -18,6 +18,9 @@ import RouteService from 'utils/routeHelpers';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupCategories/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupCategoriesEditPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
@@ -82,4 +85,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupCategoriesEditPage);
+)(Conditional(
+  GroupCategoriesEditPage,
+  ['permissions.groups_manage'],
+  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  permissionMessages.group.groupCategories.editPage
+));

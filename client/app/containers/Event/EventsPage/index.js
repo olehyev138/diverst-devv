@@ -17,6 +17,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const EventTypes = Object.freeze({
   upcoming: 0,
@@ -150,5 +151,5 @@ export default compose(
   EventsPage,
   ['currentGroup.permissions.events_view?'],
   (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission view this group\'s events'
+  permissionMessages.event.indexPage
 ));

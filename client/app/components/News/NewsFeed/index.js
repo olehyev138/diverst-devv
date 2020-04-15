@@ -74,7 +74,10 @@ export function NewsFeed(props) {
     if (window.instgrm)
       window.instgrm.Embeds.process();
     if (window.FB)
-      window.FB.XFBML.parse();
+      try {
+        window.FB.XFBML.parse();
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     if (window.twttr && window.twttr.ready())
       window.twttr.widgets.load();
 

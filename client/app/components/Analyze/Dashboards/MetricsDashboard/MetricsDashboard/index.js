@@ -17,6 +17,8 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import CustomGraphPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphPage';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   padding: {
@@ -59,42 +61,48 @@ export function MetricsDashboard(props) {
               </Typography>
             </Grid>
             <Grid item sm>
-              <Button
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classNames(classes.buttons, classes.deleteButton)}
-                onClick={() => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete metricsDashboard?'))
-                    props.deleteMetricsDashboardBegin(metricsDashboard.id);
-                }}
-              >
-                <DiverstFormattedMessage {...messages.delete} />
-              </Button>
-              <Button
-                component={WrappedNavLink}
-                to={props.links.metricsDashboardEdit}
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
+              <Permission show={permission(metricsDashboard, 'update?')}>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classNames(classes.buttons, classes.deleteButton)}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Delete metricsDashboard?'))
+                      props.deleteMetricsDashboardBegin(metricsDashboard.id);
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.delete} />
+                </Button>
+              </Permission>
+              <Permission show={permission(metricsDashboard, 'destroy?')}>
+                <Button
+                  component={WrappedNavLink}
+                  to={props.links.metricsDashboardEdit}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                >
+                  <DiverstFormattedMessage {...messages.edit} />
+                </Button>
+              </Permission>
             </Grid>
-            <Grid item xs>
-              <Button
-                component={WrappedNavLink}
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classNames(classes.buttons)}
-                to={props.links.customGraphNew}
-              >
-                <DiverstFormattedMessage {...messages.creategraph} />
-              </Button>
-            </Grid>
+            <Permission show={permission(metricsDashboard, 'update?')}>
+              <Grid item xs>
+                <Button
+                  component={WrappedNavLink}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classNames(classes.buttons)}
+                  to={props.links.customGraphNew}
+                >
+                  <DiverstFormattedMessage {...messages.creategraph} />
+                </Button>
+              </Grid>
+            </Permission>
           </Grid>
           <Grid container spacing={3}>
             {metricsDashboard.graphs && metricsDashboard.graphs.map((graph => (
