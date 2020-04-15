@@ -68,6 +68,12 @@ class ReactRoutes
   end
 
   class << self
-    delegate(*([:inspect] + ReactRoutes.routes_hash.keys), to: :routes)
+    delegate :inspect, to: :routes
+
+    def method_missing(method, *args, &block)
+      return super method, *args, &block unless routes.respond_to?(method)
+
+      routes.send(method, *args)
+    end
   end
 end
