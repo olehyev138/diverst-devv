@@ -1,7 +1,7 @@
-import messages from 'containers/Shared/Routes/messages';
+const messages = require('./messages');
 
 // Routes structure
-export const ROUTES = {
+const ROUTES = {
   // Session
   session: {
     sign_up: {
@@ -900,3 +900,5 @@ export const ROUTES = {
     }
   },
 };
+
+module.exports.ROUTES = ROUTES;
