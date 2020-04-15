@@ -68,12 +68,20 @@ class ReactRoutes
   end
 
   class << self
+    ActionDispatch::TestProcess.instance_methods(false).each do |m|
+      undef_method m
+    end
+
     delegate :inspect, to: :routes
 
     def method_missing(method, *args, &block)
       return super method, *args, &block unless routes.respond_to?(method)
 
       routes.send(method, *args)
+    end
+
+    def respond_to_missing?(method_name, *args)
+      routes.respond_to?(method_name)
     end
   end
 end
