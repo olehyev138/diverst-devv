@@ -29,7 +29,9 @@ module BaseController
     params[klass.symbol] = payload
     base_authorize(klass)
 
-    render status: 201, json: klass.build(self.diverst_request, params)
+    new_item = klass.build(self.diverst_request, params)
+    track_activity(new_item)
+    render status: 201, json: new_item
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
@@ -64,7 +66,9 @@ module BaseController
           item.send(attachment).purge_later if params[attachment].blank? && item.send(attachment).attached?
         end
 
-    render status: 200, json: klass.update(self.diverst_request, params)
+    updated_item = klass.update(self.diverst_request, params)
+    track_activity(updated_item)
+    render status: 200, json: updated_item
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
@@ -76,6 +80,7 @@ module BaseController
     item = klass.find(params[:id])
     base_authorize(item)
     klass.destroy(self.diverst_request, params[:id])
+    track_activity(item)
     head :no_content
   rescue => e
     case e
@@ -88,6 +93,18 @@ module BaseController
     params.require(klass.symbol).permit(
       klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'owner_id']
     )
+  end
+
+  def action_map(action)
+    action.to_s
+  end
+
+  def track_activity(model, params = {})
+    action_mapped = action_map(action_name)
+    klass = model.class
+    if model.respond_to?(:create_activity) && action_mapped.present?
+      ActivityJob.perform_later(klass.name, model.id, action_mapped, current_user.id, params)
+    end
   end
 
   private
