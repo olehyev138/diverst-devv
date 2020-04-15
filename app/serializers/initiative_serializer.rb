@@ -8,7 +8,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
   has_many :participating_groups
 
   def budget_item
-    BudgetItemSerializer.new(object.budget_item, scope: scope, scope_name: :scope, event: object).as_json
+    BudgetItemSerializer.new(object.budget_item, scope: scope, scope_name: :scope, event: object).as_json if object.budget_item.present?
   end
 
   def serialize_all_fields
