@@ -8,12 +8,13 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   margin: {
@@ -27,12 +28,24 @@ export function EventComment(props) {
 
   return (
     <Card className={classes.margin}>
+      <CardHeader
+        className={classes.cardHeader}
+        avatar={(
+          <Avatar>
+            { comment.user.avatar ? (
+              <DiverstImg
+                data={comment.user.avatar_data}
+              />
+            ) : (
+              comment.user.first_name[0]
+            )}
+          </Avatar>
+        )}
+        title={`${(comment.user_id === props.currentUserId) ? intl.formatMessage(messages.comment.you) : `${comment.user_name}`}`.concat(' ').concat(`${
+          intl.formatMessage(messages.comment.said)}`)}
+        titleTypographyProps={{ variant: 'overline', display: 'inline' }}
+      />
       <CardContent>
-        <Typography variant='overline'>
-          {(comment.user_id === props.currentUserId) ? intl.formatMessage(messages.comment.you) : comment.user_name}
-          &ensp;
-          {intl.formatMessage(messages.comment.said)}
-        </Typography>
         <Typography
           variant='body1'
           color='textSecondary'
