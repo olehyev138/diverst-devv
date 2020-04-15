@@ -13,4 +13,12 @@ class Api::V1::SocialLinksController < DiverstController
       news_feed_link_attributes: [:id, :approved, :news_feed_id, :link, shared_news_feed_ids: [], segment_ids: []],
     )
   end
+
+  def action_map(action)
+    case action
+    when :create then 'create'
+    when :destroy then 'destroy'
+    else nil
+    end
+  end
 end

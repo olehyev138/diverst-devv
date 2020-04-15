@@ -42,7 +42,9 @@ class Api::V1::EnterprisesController < DiverstController
     enterprise = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(enterprise)
 
-    render status: 200, json: enterprise.update(params[:enterprise])
+    enterprise.update(params[:enterprise])
+    track_activity(enterprise)
+    render status: 200, json: enterprise
   rescue => e
     case e
     when InvalidInputException
@@ -118,5 +120,12 @@ class Api::V1::EnterprisesController < DiverstController
         :logo_redirect_url,
       ]
     )
+  end
+
+  def action_map(action)
+    case action
+    when :update then 'update'
+    else nil
+    end
   end
 end

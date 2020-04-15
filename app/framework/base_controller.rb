@@ -95,19 +95,29 @@ module BaseController
     )
   end
 
-  def action_map(action)
-    action.to_s
-  end
+  private
 
-  def track_activity(model, params = {})
-    action_mapped = action_map(action_name)
-    klass = model.class
-    if model.respond_to?(:create_activity) && action_mapped.present?
-      ActivityJob.perform_later(klass.name, model.id, action_mapped, current_user.id, params)
+  def action_map(action)
+    case action
+    when :create then 'create'
+    when :update then 'update'
+    when :destroy then 'destroy'
+    else nil
     end
   end
 
-  private
+  def model_map(model)
+    model
+  end
+
+  def track_activity(model, params = {})
+    model_map = action_map(model)
+    action_mapped = action_map(action_name)
+    klass = model_map.class
+    if model_map.respond_to?(:create_activity) && action_mapped.present?
+      ActivityJob.perform_later(klass.name, model_map.id, action_mapped, current_user.id, params)
+    end
+  end
 
   # returns model name for controller
   # ex: users_controller will return User

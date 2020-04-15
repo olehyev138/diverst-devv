@@ -4,4 +4,11 @@ class Api::V1::PolicyGroupTemplatesController < DiverstController
         klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'manage_all']
       )
   end
+
+  def action_map(action)
+    case action
+    when :update then 'update'
+    else nil
+    end
+  end
 end

@@ -27,7 +27,9 @@ class Api::V1::BudgetsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.approve(current_user)
+    item.approve(current_user)
+    track_activity(item)
+    render status: 200, json: item
   rescue => e
     case e
     when InvalidInputException
@@ -42,13 +44,25 @@ class Api::V1::BudgetsController < DiverstController
     base_authorize(item)
 
     decline_reason = params[:budget][:decline_reason]
-    render status: 200, json: item.decline(current_user, decline_reason)
+    item.decline(current_user, decline_reason)
+    track_activity(item)
+    render status: 200, json: item
   rescue => e
     case e
     when InvalidInputException
       raise
     else
       raise BadRequestException.new(e.message)
+    end
+  end
+
+  def action_map(action)
+    case action
+    when :create then 'create'
+    when :approve then 'approve'
+    when :decline then 'decline'
+    when :destroy then 'destroy'
+    else nil
     end
   end
 end

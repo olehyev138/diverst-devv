@@ -4,6 +4,8 @@ class Api::V1::SessionsController < DiverstController
   def create
     user = User.signin(params[:email], params[:password])
 
+    track_activity(user)
+
     render status: 200, json: {
       token: UserTokenService.create_jwt(user, params),
       user_id: user.id,
@@ -79,5 +81,12 @@ class Api::V1::SessionsController < DiverstController
     render status: 200, json: klass.logout(request.headers['Diverst-UserToken'])
   rescue => e
     raise BadRequestException.new(e.message)
+  end
+
+  def action_map(action)
+    case action
+    when :create then 'login'
+    else nil
+    end
   end
 end
