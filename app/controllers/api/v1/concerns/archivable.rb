@@ -43,7 +43,7 @@ module Api::V1::Concerns::Archivable
     end
   end
 
-  def action_map(action)
+  private def action_map(action)
     case action
     when :archive then 'archive'
     when :un_archive then 'restore'

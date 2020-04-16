@@ -43,7 +43,7 @@ class Api::V1::UpdatesController < DiverstController
     )
   end
 
-  def model_map(model)
+  private def model_map(model)
     super if model.updatable_type == 'Group'
   end
 end

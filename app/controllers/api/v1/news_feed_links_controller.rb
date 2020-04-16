@@ -31,7 +31,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
     end
   end
 
-  def model_map(model)
+  private def model_map(model)
     model.link
   end
 end

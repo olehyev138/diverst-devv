@@ -1,5 +1,5 @@
 class Api::V1::AnswerCommentsController < DiverstController
-  def action_map(action)
+  private def action_map(action)
     case action
     when :create then 'create'
     else nil

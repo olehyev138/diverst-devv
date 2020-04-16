@@ -83,7 +83,7 @@ class Api::V1::SessionsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
-  def action_map(action)
+  private def action_map(action)
     case action
     when :create then 'login'
     else nil

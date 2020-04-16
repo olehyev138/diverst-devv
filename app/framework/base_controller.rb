@@ -107,7 +107,7 @@ module BaseController
     end
   end
 
-  def model_map(model)
+  private def model_map(model)
     model
   end
 

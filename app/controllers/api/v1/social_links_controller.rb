@@ -14,7 +14,7 @@ class Api::V1::SocialLinksController < DiverstController
     )
   end
 
-  def action_map(action)
+  private def action_map(action)
     case action
     when :create then 'create'
     when :destroy then 'destroy'

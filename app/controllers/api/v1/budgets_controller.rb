@@ -56,7 +56,7 @@ class Api::V1::BudgetsController < DiverstController
     end
   end
 
-  def action_map(action)
+  private def action_map(action)
     case action
     when :create then 'create'
     when :approve then 'approve'
