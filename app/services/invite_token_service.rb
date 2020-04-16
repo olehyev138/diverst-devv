@@ -48,8 +48,6 @@ class InviteTokenService < TokenService
   def self.get_payload_from_jwt(token)
     payload, _ = get_invite_payload(token)
 
-    pp payload
-
     [User.find_by(invitation_token: payload['invite_token']), payload]
   end
 
