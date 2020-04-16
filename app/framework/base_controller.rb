@@ -17,6 +17,7 @@ module BaseController
     base_authorize(klass)
 
     CsvDownloadJob.perform_later(current_user.id, params.permit!.to_json, klass_name: klass.name)
+    track_activity(nil)
     head :no_content
   rescue => e
     case e
@@ -111,8 +112,8 @@ module BaseController
   end
 
   def track_activity(model, params = {})
-    model_map = action_map(model)
-    action_mapped = action_map(action_name)
+    model_map = model_map(model)
+    action_mapped = action_map(action_name.to_sym)
     klass = model_map.class
     if model_map.respond_to?(:create_activity) && action_mapped.present?
       ActivityJob.perform_later(klass.name, model_map.id, action_mapped, current_user.id, params)

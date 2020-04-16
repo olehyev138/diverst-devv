@@ -171,10 +171,21 @@ class Api::V1::UsersController < DiverstController
       )
   end
 
+  private
+
+  def model_map(model)
+    if action_name == 'export_csv'
+      current_user.enterprise
+    else
+      model
+    end
+  end
+
   def action_map(action)
     case action
     when :update then 'update_mentorship_profile' if params[:serializer] == 'mentorship'
     when :create then 'create'
+    when :export_csv then 'export_members'
     else nil
     end
   end
