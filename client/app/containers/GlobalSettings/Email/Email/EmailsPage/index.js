@@ -20,7 +20,7 @@ import {
   selectIsFetchingEmails,
   selectEmailsTotal
 } from 'containers/GlobalSettings/Email/Email/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 
 import {
   emailsUnmount, getEmailsBegin,
@@ -28,6 +28,9 @@ import {
 
 import EmailsList from 'components/GlobalSettings/Email/EmailsList';
 import dig from 'object-dig';
+import Conditional from 'components/Compositions/Conditional';
+import { EmailEditPage } from 'containers/GlobalSettings/Email/Email/EmailEditPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -36,7 +39,7 @@ const defaultParams = Object.freeze({
   orderBy: 'id',
 });
 
-export function CustomTextEditPage(props) {
+export function EmailsPage(props) {
   useInjectReducer({ key: 'emails', reducer });
   useInjectSaga({ key: 'emails', saga });
 
@@ -84,7 +87,7 @@ export function CustomTextEditPage(props) {
   );
 }
 
-CustomTextEditPage.propTypes = {
+EmailsPage.propTypes = {
   getEmailsBegin: PropTypes.func,
   emailsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -98,6 +101,7 @@ const mapStateToProps = createStructuredSelector({
   emails: selectPaginatedEmails(),
   emailsTotal: selectEmailsTotal(),
   isFetching: selectIsFetchingEmails(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -113,4 +117,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CustomTextEditPage);
+)(Conditional(
+  EmailsPage,
+  ['permissions.emails_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.globalSettings.email.email.indexPage
+));

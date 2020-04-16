@@ -24,6 +24,7 @@ import { permission } from 'utils/permissionsHelpers';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { OutcomesPage } from 'containers/Group/Outcome/OutcomesPage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
   title: {
@@ -194,5 +195,5 @@ export default compose(
   EventsList,
   ['currentGroup.permissions.events_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group outcomes'
+  permissionMessages.group.groupPlan.eventList
 ));

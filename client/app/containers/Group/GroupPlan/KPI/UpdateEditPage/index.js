@@ -60,6 +60,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -154,5 +155,5 @@ export default compose(
   UpdateEditPage,
   ['currentGroup.permissions.kpi_manage?'],
   (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
-  'You don\'t have permission to manage group KPI'
+  permissionMessages.group.groupPlan.KPI.updateEditPage
 ));

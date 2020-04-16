@@ -14,13 +14,15 @@ import likeSaga from 'containers/Shared/Like/saga';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
+import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
@@ -53,9 +55,11 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || NewsFeed;
+
   return (
     <React.Fragment>
-      <NewsFeed
+      <List
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
         defaultParams={params}
@@ -79,6 +83,7 @@ NewsFeedPage.propTypes = {
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  listComponent: PropTypes.elementType,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -91,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
   newsItemsTotal: selectPostsTotal(),
   currentUser: selectUser(),
   isLoading: selectIsLoadingPosts(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -108,4 +114,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(NewsFeedPage);
+)(Conditional(
+  NewsFeedPage,
+  ['permissions.news_view'],
+  (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
+  permissionMessages.user.newsFeedPage
+));

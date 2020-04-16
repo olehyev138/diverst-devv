@@ -17,6 +17,7 @@ import messages from 'containers/GlobalSettings/Email/Email/messages';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   emailListItem: {
@@ -63,13 +64,16 @@ const columns = [
 export function TemplatesList(props) {
   const { classes } = props;
 
-  const actions = [{
-    icon: () => <EditIcon />,
-    tooltip: 'Edit Permissions',
-    onClick: (_, rowData) => {
-      props.handlePolicyEdit(rowData.id);
-    }
-  }];
+  const actions = [
+    rowData => ({
+      icon: () => <EditIcon />,
+      tooltip: 'Edit Permissions',
+      onClick: (_, rowData) => {
+        props.handlePolicyEdit(rowData.id);
+      },
+      disabled: !permission(rowData, 'update?')
+    })
+  ];
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({

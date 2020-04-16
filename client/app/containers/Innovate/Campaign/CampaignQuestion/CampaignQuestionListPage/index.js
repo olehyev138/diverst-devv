@@ -72,6 +72,7 @@ export function CampaignQuestionListPage(props) {
         questionTotal={props.questionTotal}
         isFetchingQuestions={props.isFetchingQuestions}
         campaignId={campaignId}
+        campaign={props.campaign}
         handleVisitQuestionEdit={props.handleVisitQuestionEdit}
         handleVisitQuestionShow={props.handleVisitQuestionShow}
         deleteQuestionBegin={props.deleteQuestionBegin}
@@ -90,6 +91,7 @@ CampaignQuestionListPage.propTypes = {
   deleteQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   questionList: PropTypes.array,
+  campaign: PropTypes.object,
   questionTotal: PropTypes.number,
   isFetchingQuestions: PropTypes.bool,
   handleVisitQuestionEdit: PropTypes.func,

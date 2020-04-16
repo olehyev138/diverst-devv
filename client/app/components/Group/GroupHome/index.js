@@ -17,10 +17,10 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 import { withStyles } from '@material-ui/core/styles';
-import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
-import NewsFeed from 'components/Group/GroupHome/GroupHomeNewsList';
+import EventsList from 'components/Event/HomeEventsList';
+import NewsFeed from 'components/News/HomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { GroupHomeFamily } from 'components/Group/GroupHome/GroupHomeFamily';
+import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
 
 const styles = theme => ({
   title: {
@@ -52,6 +52,7 @@ export function GroupHome({ classes, ...props }) {
         <EventsPage
           currentGroup={props.currentGroup}
           listComponent={EventsList}
+          readonly
           loaderProps={{
             transitionProps: {
               direction: 'right',
