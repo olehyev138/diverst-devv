@@ -124,7 +124,11 @@ class Api::V1::EnterprisesController < DiverstController
 
   private def action_map(action)
     case action
-    when :update then 'update'
+    when :update then if payload[:theme_attributes].present? || payload[:home_message].present?
+                        'update_branding'
+                      else
+                        'update'
+                      end
     else nil
     end
   end
