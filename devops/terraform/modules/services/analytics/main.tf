@@ -37,7 +37,7 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
 }
 
 resource "aws_lambda_function" "diverst_analytics" {
-  function_name = "diverst-analytics-tf"
+  function_name = "diverst-analytics"
 
   s3_bucket = "devops-inmvlike"
   s3_key    = "deploy.zip"
