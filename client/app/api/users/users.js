@@ -14,6 +14,9 @@ Object.assign(Users, {
   signUpUser(payload) {
     return axios.post(`${this.url}/sign_up`, payload);
   },
+  prototype(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/prototype`, payload));
+  },
 });
 
 export default Users;

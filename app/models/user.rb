@@ -150,9 +150,12 @@ class User < ApplicationRecord
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
+  validates_presence_of :time_zone
+
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
+  before_validation :set_timezone
   before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
@@ -161,13 +164,6 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :policy_group
 
   after_update :add_to_default_mentor_group
-
-  # Default values
-  after_initialize do
-    if self.new_record?
-      self.time_zone ||= self.enterprise&.default_time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
-    end
-  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -296,7 +292,7 @@ class User < ApplicationRecord
   end
 
   def last_initial
-    "#{(last_name || '')[0].capitalize}."
+    "#{(last_name || '')[0]&.capitalize}."
   end
 
   def user_role_presence
@@ -594,6 +590,10 @@ class User < ApplicationRecord
 
   def set_uid
     self.uid = generate_uid if self.uid.blank?
+  end
+
+  def set_timezone
+    self.time_zone ||= enterprise&.time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
   end
 
   # Returns a hash of all the user's fields combined with all their poll fields

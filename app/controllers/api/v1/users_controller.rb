@@ -71,6 +71,16 @@ class Api::V1::UsersController < DiverstController
     end
   end
 
+  def prototype
+    item = current_user.enterprise
+
+    base_authorize(klass)
+
+    render status: 200, json: klass.create_prototype(item)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def get_base
     case params[:type]
     when 'budget_approval'

@@ -11,10 +11,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectIsCommitting } from 'containers/User/selectors';
+import {selectFormUser, selectIsCommitting, selectIsFormLoading} from 'containers/User/selectors';
 import {
   createUserBegin, updateFieldDataBegin,
-  getUsersBegin, userUnmount
+  getUsersBegin, userUnmount, getUserPrototypeBegin
 } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -25,7 +25,6 @@ import UserForm from 'components/User/UserForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { PolicyTemplatesPage } from 'containers/User/UserPolicy/PolicyTemplatesPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -33,7 +32,13 @@ export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
-  useEffect(() => () => props.userUnmount(), []);
+  useEffect(() => {
+    props.getUserPrototypeBegin();
+
+    return () => {
+      props.userUnmount();
+    };
+  }, []);
   const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
@@ -43,6 +48,8 @@ export function UserCreatePage(props) {
   return (
     <UserForm
       admin
+      user={props.user}
+      isFormLoading={props.isFormLoading}
       userAction={props.createUserBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
       buttonText={intl.formatMessage(messages.create)}
@@ -59,13 +66,18 @@ UserCreatePage.propTypes = {
   createUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
+  getUserPrototypeBegin: PropTypes.func,
   userUnmount: PropTypes.func,
+  user: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
+  user: selectFormUser(),
   permissions: selectPermissions(),
 });
 
@@ -73,7 +85,8 @@ const mapDispatchToProps = {
   createUserBegin,
   updateFieldDataBegin,
   getUsersBegin,
-  userUnmount
+  userUnmount,
+  getUserPrototypeBegin,
 };
 
 const withConnect = connect(
