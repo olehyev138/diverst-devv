@@ -4,7 +4,7 @@ class Api::V1::SessionsController < DiverstController
   def create
     user = User.signin(params[:email], params[:password])
 
-    track_activity(user)
+    ActivityJob.perform_later('User', user.id, 'login', user.id)
 
     render status: 200, json: {
       token: UserTokenService.create_jwt(user, params),
