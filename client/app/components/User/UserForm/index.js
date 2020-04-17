@@ -67,7 +67,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 value={values.last_name}
                 label={<DiverstFormattedMessage {...messages.last_name} />}
               />
-              {props.edit || (
+              {props.edit && (
                 <Field
                   component={TextField}
                   onChange={handleChange}
