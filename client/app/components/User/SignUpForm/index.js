@@ -52,6 +52,9 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   name='email'
                   value={values.email}
                   label={<DiverstFormattedMessage {...messages.email} />}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
                 <Field
                   component={TextField}

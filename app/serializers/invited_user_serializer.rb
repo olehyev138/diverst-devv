@@ -1,5 +1,5 @@
 class InvitedUserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :first_name, :biography, :last_name, :fields, :name, :last_initial, :timezones, :time_zone
+  attributes :email, :enterprise, :first_name, :biography, :last_name, :fields, :name, :last_initial, :timezones, :time_zone
 
   has_many :field_data
 
