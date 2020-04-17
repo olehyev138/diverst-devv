@@ -131,7 +131,7 @@ class Initiative < BaseClass
     self.start > Time.current
   end
 
-  def past? 
+  def past?
     self.end < Time.current
   end
 
