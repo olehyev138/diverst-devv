@@ -27,7 +27,6 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log(values.user_role_id);
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -165,7 +164,7 @@ export function UserForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone']);
+        const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(payload);
       }}
