@@ -1,7 +1,7 @@
 class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_id, :group_leader, :user_group
 
-  def initialize(user, context, params = {})
+  def initialize(user, context, params = {}, group_field: :group_id)
     case user
     when GroupPolicy
       @user = user.user
@@ -21,7 +21,7 @@ class GroupBasePolicy < ApplicationPolicy
       elsif context.is_a?(Class) # Class
         # Set group using params if context is a class as this will be for
         # nested model actions such as index and create, which require a group
-        self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
+        self.group = ::Group.find(params[group_field] || params.dig(context.model_name.param_key.to_sym, group_field)) rescue nil
       elsif context.present?
         self.group = context.group
         self.record = context

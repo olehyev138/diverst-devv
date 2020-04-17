@@ -1,4 +1,8 @@
 class InitiativePolicy < GroupBasePolicy
+  def initialize(*args)
+    super(*args, group_field: :owner_group_id)
+  end
+
   def base_index_permission
     'initiatives_index'
   end
