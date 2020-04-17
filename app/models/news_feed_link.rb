@@ -87,6 +87,10 @@ class NewsFeedLink < BaseClass
 
   after_create :approve_link
 
+  def pending?
+    approved?
+  end
+
   # checks if link can automatically be approved
   # links are automatically approved if author is a
   # group leader
