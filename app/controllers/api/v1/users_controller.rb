@@ -228,7 +228,7 @@ class Api::V1::UsersController < DiverstController
                 :group_posts_index,
                 :mentorship_manage
             ]
-        )
+          )
   end
 
   def payload

@@ -59,7 +59,7 @@ class ApplicationPolicy
         end
       )
     @group_leader_role = @group_leader&.user_role
-    @group_leader_role&.send(permission)
+    @group_leader_role&.policy_group_template&.send(permission)
   end
 
   def scope

@@ -40,7 +40,7 @@ class UserSerializer < ApplicationRecordSerializer
   end
 
   def available_roles
-    scope.dig(:current_user).enterprise.user_roles
+    scope.dig(:current_user).enterprise.user_roles.select { |role| role.role_type == 'user' }
   end
 
   def time_zone
