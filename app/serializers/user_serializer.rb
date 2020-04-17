@@ -1,6 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
   attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
-             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :permissions
+             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :permissions, :available_roles
 
   has_many :field_data
 
@@ -37,6 +37,10 @@ class UserSerializer < ApplicationRecordSerializer
 
   def timezones
     ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"] }
+  end
+
+  def available_roles
+    scope.dig(:current_user).enterprise.user_roles
   end
 
   def time_zone

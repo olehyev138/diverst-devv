@@ -27,6 +27,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values.user_role_id);
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -94,6 +95,21 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
+              {props.admin && (
+                <Field
+                  component={Select}
+                  fullWidth
+                  disabled={props.isCommitting}
+                  id='user_role_id'
+                  name='user_role_id'
+                  margin='normal'
+                  label={<DiverstFormattedMessage {...messages.user_role} />}
+                  value={values.user_role_id}
+                  options={dig(props, 'user', 'available_roles') || []}
+                  onChange={value => setFieldValue('user_role_id', value)}
+                  onBlur={() => setFieldTouched('user_role_id', true)}
+                />
+              )}
             </CardContent>
             <Divider />
             <CardActions>
@@ -132,6 +148,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
 
 export function UserForm(props) {
   const user = dig(props, 'user');
+  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
@@ -139,6 +156,7 @@ export function UserForm(props) {
     last_name: { default: '' },
     biography: { default: '' },
     time_zone: { default: null },
+    user_role_id: { default: defaultRole },
     id: { default: undefined },
   });
 
