@@ -18,6 +18,7 @@ import {
 
 import Select from 'components/Shared/DiverstSelect';
 import messages from 'containers/User/messages';
+import signUpMessages from 'containers/User/SignUpPage/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -26,6 +27,7 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import Scrollbar from 'components/Shared/Scrollbar';
 import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
+import { FormattedMessage } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -62,7 +64,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   id='password'
                   name='password'
                   value={values.password}
-                  label='Password'
+                  label={<DiverstFormattedMessage {...signUpMessages.password} />}
                 />
                 <Field
                   component={TextField}
@@ -75,7 +77,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   id='password_confirmation'
                   name='password_confirmation'
                   value={values.password_confirmation}
-                  label='Password Confirmation'
+                  label={<DiverstFormattedMessage {...signUpMessages.passwordConfirmation} />}
                 />
                 <Box mb={1} />
                 <Divider />
@@ -135,7 +137,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
               <Divider />
               <CardActions>
                 <DiverstSubmit isCommitting={props.isCommitting}>
-                  {buttonText}
+                  {<FormattedMessage {...signUpMessages.activate} />}
                 </DiverstSubmit>
               </CardActions>
             </Form>

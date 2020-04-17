@@ -67,7 +67,6 @@ export function SignUpPage(props) {
       errors={props.formErrors}
 
       submitAction={props.submitPasswordBegin}
-      buttonText='Sign Up'
     />
   );
 }
