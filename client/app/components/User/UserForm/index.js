@@ -67,20 +67,22 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 value={values.last_name}
                 label={<DiverstFormattedMessage {...messages.last_name} />}
               />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                multiline
-                rows={4}
-                variant='outlined'
-                id='biography'
-                name='biography'
-                value={values.biography}
-                label={<DiverstFormattedMessage {...messages.biography} />}
-              />
+              {props.edit || (
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  disabled={props.isCommitting}
+                  margin='normal'
+                  multiline
+                  rows={4}
+                  variant='outlined'
+                  id='biography'
+                  name='biography'
+                  value={values.biography}
+                  label={<DiverstFormattedMessage {...messages.biography} />}
+                />
+              )}
               <Field
                 component={Select}
                 fullWidth
