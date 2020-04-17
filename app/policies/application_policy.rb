@@ -57,7 +57,7 @@ class ApplicationPolicy
         elsif record&.respond_to?(:group_id)
           record.group_id
         end
-    )
+      )
     @group_leader_role = @group_leader&.user_role
     @group_leader_role&.send(permission)
   end

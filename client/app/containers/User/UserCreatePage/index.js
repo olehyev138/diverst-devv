@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import {selectFormUser, selectIsCommitting, selectIsFormLoading} from 'containers/User/selectors';
+import { selectFormUser, selectIsCommitting, selectIsFormLoading } from 'containers/User/selectors';
 import {
   createUserBegin, updateFieldDataBegin,
   getUsersBegin, userUnmount, getUserPrototypeBegin

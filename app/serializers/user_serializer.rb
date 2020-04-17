@@ -41,10 +41,10 @@ class UserSerializer < ApplicationRecordSerializer
 
   def time_zone
     tz = if object.time_zone
-           ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
-         else
-           ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(scope.dig(:current_user).enterprise.time_zone)]
-         end
+      ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
+    else
+      ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(scope.dig(:current_user).enterprise.time_zone)]
+    end
     "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
   end
 

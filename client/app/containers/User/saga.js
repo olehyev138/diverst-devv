@@ -199,7 +199,6 @@ export function* getUserPrototype(action, updatableKey) {
     yield put(getUserPrototypeSuccess(response.data));
   } catch (err) {
     yield put(getUserPrototypeError(err));
-    console.log(err)
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
