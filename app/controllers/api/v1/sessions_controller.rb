@@ -78,6 +78,6 @@ class Api::V1::SessionsController < DiverstController
   def logout
     render status: 200, json: klass.logout(request.headers['Diverst-UserToken'])
   rescue => e
-    raise BadRequestException.new(e.message)
+    raise BadRequestException.new('User not logged in')
   end
 end
