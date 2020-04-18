@@ -28,7 +28,9 @@ class NewsFeedLinkPolicy < GroupBasePolicy
   end
 
   alias_method :pin?, :group_update?
+  alias_method :un_pin?, :group_update?
   alias_method :archive?, :group_update?
+  alias_method :un_archive?, :group_update?
 
   class Scope < Scope
     def is_member(permission)
