@@ -1,5 +1,30 @@
 import dig from 'object-dig';
 
+/* Data set operations */
+
+/* Filter data set on a given key & a given set of allowed values
+ *  @data:      Array of data point objects - objects must contain a key, passed as `key`
+ *  @key:       The key to filter the data set on
+ *  @values:    An array of accepted values, each data point object value for `key` must be in this values lit
+ */
+export function filterKeys(data, key, values) {
+  if (values.length === 0)
+    return data;
+
+  return data.filter(dataPoint => values.includes(dig(dataPoint, key)));
+}
+
+/* Filter data set given a data range
+ *  @data:      Array of data point objects - objects must contain `date` key
+ *  @from_date: Lower date range value, inclusive
+ *  @to_date:   Upper date range value, inclusive
+ */
+export function filterDates(data, from_date, to_date) {
+  console.log('PENDING');
+}
+
+/* -------------------------- !! Deprecated !! -------------------------- */
+
 /* Return a function to handle range selector updates */
 export function getUpdateRange([params, setParams]) {
   return (range) => {

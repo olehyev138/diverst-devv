@@ -4,11 +4,8 @@ import { compose } from 'redux';
 import { VegaLite } from 'react-vega';
 
 import {
-  Grid, Paper, withStyles, Box,
-  Button
+  Paper, withStyles
 } from '@material-ui/core';
-
-import RangeSelector from 'components/Analyze/Shared/RangeSelector';
 
 const styles = theme => ({
   paper: {
@@ -35,8 +32,8 @@ const spec = {
   },
 
   encoding: {
-    y: { field: 'y', type: 'nominal', title: 'Group' },
-    x: { field: 'x', type: 'quantitative', title: 'Members' },
+    y: { field: 'x', type: 'nominal', title: 'Group' },
+    x: { field: 'y', type: 'quantitative', title: 'Members' },
     fillOpacity: {
       condition: { selection: 'select', value: 1 },
       value: 0.3
@@ -61,20 +58,19 @@ const spec = {
 
 export function BarGraph(props) {
   const { classes } = props;
-  const [value, setValue] = useState(undefined);
 
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
-        <VegaLite spec={spec} data={{ values: (props.data && props.data.length !== 0) ? props.data : [] }} />
+        <VegaLite spec={spec} data={{ values: (props.data || []) }} />
       </Paper>
     </React.Fragment>
   );
 }
 
 BarGraph.propTypes = {
-  classes: PropTypes.object,
   data: PropTypes.array,
+  classes: PropTypes.object,
   updateRange: PropTypes.func,
   metricsUnmount: PropTypes.func
 };

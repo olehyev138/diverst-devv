@@ -42,12 +42,19 @@ export function GroupDashboardPage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const [params, setParams] = useState({ scoped_by_models: [] });
+  /* Group dashboard supports 'dashboard wide' filtering
+   *   - allows filtering on one to many 'group names'
+   *   - renders 'GroupScopeSelect', allowing user to select the groups to filter on
+   *   - we map the user selected groups & pass it down as 'dashboardFilters' to the graphs
+   *     allowing them to filter there data.
+   */
+
   const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
+  const [dashboardFilters, setDashboardFilters] = useState([]);
 
   const updateScope = (scope) => {
-    const newParams = { scoped_by_models: scope.groups ? scope.groups.map(g => g.value) : [] };
-    setParams(newParams);
+    const dashboardFilters = scope.groups ? scope.groups.map(g => g.label) : [];
+    setDashboardFilters(dashboardFilters);
   };
 
   const handleDashboardChange = (_, newDashboard) => {
@@ -57,9 +64,9 @@ export function GroupDashboardPage(props) {
   useEffect(() => () => () => metricsUnmount(), []);
 
   const dashboards = [
-    <OverviewDashboard dashboardParams={params} />,
-    <SocialMediaDashboard dashboardParams={params} />,
-    <ResourcesDashboard dashboardParams={params} />
+    <OverviewDashboard dashboardFilters={dashboardFilters} />,
+    <SocialMediaDashboard dashboardFilters={dashboardFilters} />,
+    <ResourcesDashboard dashboardFilters={dashboardFilters} />
   ];
 
   return (
@@ -110,7 +117,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  UserDashboardPage,
+  GroupDashboardPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.analyze.dashboards.groupPage

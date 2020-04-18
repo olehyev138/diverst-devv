@@ -8,7 +8,7 @@ const selectMetricsDomain = state => state.metrics || initialState;
 
 const selectGroupPopulation = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.groupPopulation, 0) || [])
+  metricsState => metricsState.metricsData.groupPopulation
 );
 
 const selectViewsPerGroup = () => createSelector(

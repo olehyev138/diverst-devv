@@ -14,28 +14,16 @@ import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraph
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 import InitiativesPerGroupGraphPage from 'containers/Analyze/Graphs/InitiativesPerGroupGraphPage';
 
-const OverviewDashboard = ({ dashboardParams }) => (
+const OverviewDashboard = ({ dashboardFilters }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
-      <GroupPopulationGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-
-    <Grid item xs={12}>
-      <ViewsPerGroupGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-
-    <Grid item xs={12}>
-      <GrowthOfGroupsGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-
-    <Grid item xs={12}>
-      <InitiativesPerGroupGraphPage dashboardParams={dashboardParams} />
+      <GroupPopulationGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
   </Grid>
 );
 
 OverviewDashboard.propTypes = {
-  dashboardParams: PropTypes.object
+  dashboardFilters: PropTypes.array
 };
 
 export default OverviewDashboard;
