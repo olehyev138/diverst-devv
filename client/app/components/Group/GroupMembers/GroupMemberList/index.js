@@ -154,16 +154,6 @@ export function GroupMemberList(props) {
             <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Permission>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          color='secondary'
-          size='large'
-          startIcon={<ExportIcon />}
-          onClick={() => props.exportMembersBegin()}
-        >
-          <DiverstFormattedMessage {...messages.export} />
-        </Button>
       </Box>
 
       <Box className={classes.floatSpacer} />
