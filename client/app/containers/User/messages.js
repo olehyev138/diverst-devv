@@ -57,6 +57,9 @@ export default defineMessages({
   time_zone: {
     id: `${scope}.form.input.time_zone`,
   },
+  active: {
+    id: `${scope}.form.input.active`,
+  },
   fields: {
     id: `${scope}.profile.fields`
   },

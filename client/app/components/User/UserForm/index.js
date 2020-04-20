@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Typography, Box
+  Divider, Box, FormControl, FormControlLabel, Switch
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
@@ -82,6 +82,24 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='right'
+                  label={<DiverstFormattedMessage {...messages.active} />}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={handleChange}
+                      color='primary'
+                      id='active'
+                      name='active'
+                      margin='normal'
+                      checked={values.active}
+                      value={values.active}
+                    />
+                  )}
+                />
+              </FormControl>
             </CardContent>
             <Divider />
             <CardActions>
@@ -127,6 +145,7 @@ export function UserForm(props) {
     biography: { default: '' },
     time_zone: { default: null },
     id: { default: undefined },
+    active: { default: false },
   });
 
   return (

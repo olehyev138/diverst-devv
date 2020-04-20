@@ -553,6 +553,7 @@
   "diverst.containers.User.form.input.last_name": "Last Name",
   "diverst.containers.User.form.input.email": "Email",
   "diverst.containers.User.form.input.biography": "Biography",
+  "diverst.containers.User.form.input.active": "Active user of Diverst",
   "diverst.containers.User.form.input.time_zone": "Time Zone",
   "diverst.containers.User.profile.fields": "Hidden info",
   "diverst.containers.User.profile.privacy": "Only D&I Management can see hidden fields",
