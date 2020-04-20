@@ -47,6 +47,44 @@ export default defineMessages({
       id: `${scope}.texts.privacy_statement`,
     },
   },
+  custom_text: {
+    erg: {
+      id: `${scope}.custom_text.erg`,
+    },
+    program: {
+      id: `${scope}.custom_text.program`,
+    },
+    structure: {
+      id: `${scope}.custom_text.structure`,
+    },
+    outcome: {
+      id: `${scope}.custom_text.outcome`,
+    },
+    badge: {
+      id: `${scope}.custom_text.badge`,
+    },
+    segment: {
+      id: `${scope}.custom_text.segment`,
+    },
+    dci_full_title: {
+      id: `${scope}.custom_text.dci_full_title`,
+    },
+    dci_abbreviation: {
+      id: `${scope}.custom_text.dci_abbreviation`,
+    },
+    member_preference: {
+      id: `${scope}.custom_text.member_preference`,
+    },
+    parent: {
+      id: `${scope}.custom_text.parent`,
+    },
+    sub_erg: {
+      id: `${scope}.custom_text.sub_erg`,
+    },
+    privacy_statement: {
+      id: `${scope}.custom_text.privacy_statement`,
+    },
+  },
   days_of_week: [
     {
       id: `${scope}.dayOfWeek.sunday`,
