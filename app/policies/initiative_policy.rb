@@ -1,6 +1,6 @@
 class InitiativePolicy < GroupBasePolicy
-  def initialize(*args)
-    super(*args, group_field: :owner_group_id)
+  def initialize(user, record, params = {})
+    super(user, [Group.find_by_id(params[:owner_group_id]), record], params)
   end
 
   def base_index_permission

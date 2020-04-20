@@ -3,7 +3,6 @@ module BaseController
     # Authorize with policy, only if policy exists
     # TODO: Don't only authorize if policy exists as every model should have a policy.
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
-    params.permit!
     base_authorize(klass)
 
     render status: 200, json: klass.index(self.diverst_request, params, policy: @policy)
@@ -15,7 +14,6 @@ module BaseController
   end
 
   def export_csv
-    params.permit!
     base_authorize(klass)
 
     CsvDownloadJob.perform_later(current_user.id, params.to_json, klass_name: klass.name)
