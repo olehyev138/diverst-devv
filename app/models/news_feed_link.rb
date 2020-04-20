@@ -88,7 +88,7 @@ class NewsFeedLink < BaseClass
   after_create :approve_link
 
   def pending?
-    approved?
+    !approved?
   end
 
   # checks if link can automatically be approved
