@@ -83,11 +83,11 @@ export function* createGroup(action) {
     const response = yield call(api.groups.create.bind(api.groups), payload);
 
     yield put(createGroupSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(push(ROUTES.group.home.path(response.data.group.id)));
     yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
-
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create group', options: { variant: 'warning' } }));
   }
