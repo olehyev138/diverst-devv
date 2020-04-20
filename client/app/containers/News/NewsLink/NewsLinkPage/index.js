@@ -53,7 +53,7 @@ export function NewsLinkPage(props) {
     <NewsLink
       commentAction={props.createNewsLinkCommentBegin}
       deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}
