@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Shared/Sponsors/reducer';
-import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
+import saga from '../groupsponsorsSaga';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,
@@ -20,32 +20,31 @@ import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors
 } from 'containers/Shared/Sponsors/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
-import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
-import permissionMessages from 'containers/Shared/Permissions/messages';
 
-export function SponsorListPage(props) {
+import Conditional from 'components/Compositions/Conditional';
+
+export function GroupSponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
   const rs = new RouteService(useContext);
+  const groupId = rs.params('group_id');
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
+    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: groupId
   });
 
   const links = {
-    sponsorNew: ROUTES.admin.system.branding.sponsors.new.path(),
-    sponsorEdit: id => ROUTES.admin.system.branding.sponsors.edit.path(id),
+    sponsorNew: ROUTES.group.manage.sponsors.new.path(groupId),
+    sponsorEdit: id => ROUTES.group.manage.sponsors.edit.path(groupId),
   };
-
-  const sponsorId = rs.params('sponsor_id');
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -88,7 +87,7 @@ export function SponsorListPage(props) {
   );
 }
 
-SponsorListPage.propTypes = {
+GroupSponsorListPage.propTypes = {
   getSponsorsBegin: PropTypes.func,
   deleteSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func,
@@ -98,21 +97,21 @@ SponsorListPage.propTypes = {
   sponsor: PropTypes.object,
   handleVisitSponsorEdit: PropTypes.func,
   handleVisitSponsorShow: PropTypes.func,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   sponsorList: selectPaginatedSponsors(),
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
-  permissions: selectPermissions(),
+  currentGroup: selectGroup(),
 });
-
 
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: (enterpriseId, id) => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
+  handleVisitSponsorEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.sponsors.edit.path(groupId, id))),
 });
 
 const withConnect = connect(
@@ -124,8 +123,8 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  SponsorListPage,
-  ['permissions.branding_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  permissionMessages.branding.sponsor.listPage
+  GroupSponsorListPage,
+  ['currentGroup.permissions.update?'],
+  (props, rs) => ROUTES.group.manage.sponsors.index.path(rs.params('group_id')),
+  'You don\'t have permission change group sponsor settings'
 ));

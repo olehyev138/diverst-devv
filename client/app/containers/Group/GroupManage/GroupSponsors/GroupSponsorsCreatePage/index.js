@@ -7,29 +7,25 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from '../../../Shared/Sponsors/reducer';
-import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
+import reducer from 'containers/Shared/Sponsors/reducer';
+import saga from 'containers/Group/GroupManage/GroupSponsors/groupsponsorsSaga';
 import {
   createSponsorBegin,
   sponsorsUnmount
-} from '../../../Shared/Sponsors/actions';
+} from 'containers/Shared/Sponsors/actions';
 
-import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
-import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
   const { intl } = props;
   const links = {
-    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(props.currentGroup.id),
   };
 
   useEffect(() => () => props.sponsorsUnmount(), []);
@@ -40,7 +36,7 @@ export function SponsorCreatePage(props) {
         sponsorAction={props.createSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={null}
+        sponsorableId={props.currentGroup.id}
       />
     </React.Fragment>
   );
@@ -49,11 +45,11 @@ export function SponsorCreatePage(props) {
 SponsorCreatePage.propTypes = {
   intl: intlShape,
   createSponsorBegin: PropTypes.func,
-  sponsorsUnmount: PropTypes.func
+  sponsorsUnmount: PropTypes.func,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -70,9 +66,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(Conditional(
-  SponsorCreatePage,
-  ['permissions.branding_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  permissionMessages.branding.sponsor.createPage
-));
+)(SponsorCreatePage);

@@ -7,14 +7,14 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectSponsor } from '../../../Shared/Sponsors/selectors';
-import reducer from '../../../Shared/Sponsors/reducer';
-import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
+import { selectSponsor } from 'containers/Shared/Sponsors/selectors';
+import reducer from 'containers/Shared/Sponsors/reducer';
+import saga from '../groupsponsorsSaga';
 import {
   getSponsorBegin,
   updateSponsorBegin,
   sponsorsUnmount
-} from '../../../Shared/Sponsors/actions';
+} from 'containers/Shared/Sponsors/actions';
 
 import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
@@ -22,21 +22,19 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
-import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
-import permissionMessages from 'containers/Shared/Permissions/messages';
 
-export function SponsorEditPage(props) {
+export function GroupSponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
   const rs = new RouteService(useContext);
   const links = {
-    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(rs.params('group_sponsor_id')),
   };
   const { intl } = props;
+
   useEffect(() => {
-    props.getSponsorBegin({ id: rs.params('sponsor_id') });
+    props.getSponsorBegin({ id: rs.params('group_sponsor_id') });
 
     return () => {
       props.sponsorsUnmount();
@@ -51,12 +49,13 @@ export function SponsorEditPage(props) {
         sponsorAction={props.updateSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
+        sponsorableId={rs.params('group_sponsor_id')}
       />
     </React.Fragment>
   );
 }
 
-SponsorEditPage.propTypes = {
+GroupSponsorCreatePage.propTypes = {
   intl: intlShape,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
@@ -65,8 +64,7 @@ SponsorEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  sponsor: selectSponsor(),
-  permissions: selectPermissions(),
+  sponsor: selectSponsor()
 });
 
 const mapDispatchToProps = {
@@ -84,9 +82,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(Conditional(
-  SponsorEditPage,
-  ['permissions.branding_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
-  permissionMessages.branding.sponsor.editPage
-));
+)(GroupSponsorCreatePage);
