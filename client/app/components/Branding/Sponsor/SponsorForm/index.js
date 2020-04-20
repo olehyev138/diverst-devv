@@ -48,7 +48,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_name'
                 name='sponsor_name'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.sname} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.name} />}
                 value={values.sponsor_name}
               />
             </Grid>
@@ -61,7 +61,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_title'
                 name='sponsor_title'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.stitle} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.title} />}
                 value={values.sponsor_title}
               />
             </Grid>
@@ -73,7 +73,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_message'
                 name='sponsor_messsage'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.smessage} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.message} />}
                 value={values.sponsor_message}
               />
             </Grid>
