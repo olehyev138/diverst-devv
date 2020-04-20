@@ -11,7 +11,7 @@ import {
   UPDATE_SPONSOR_BEGIN, UPDATE_SPONSOR_SUCCESS, UPDATE_SPONSOR_ERROR,
   DELETE_SPONSOR_BEGIN, DELETE_SPONSOR_SUCCESS, DELETE_SPONSOR_ERROR,
   SPONSORS_UNMOUNT
-} from 'containers/Branding/Sponsor/constants';
+} from 'containers/Shared/Sponsors/constants';
 
 /* Sponsor listing */
 

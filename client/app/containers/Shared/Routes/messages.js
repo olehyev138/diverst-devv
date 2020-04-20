@@ -220,6 +220,17 @@ export default defineMessages({
           id: `${scope}.group.manage.settings.index`,
         }
       },
+      sponsors: {
+        index: {
+          id: `${scope}.group.manage.sponsors.index`,
+        },
+        new: {
+          id: `${scope}.group.manage.sponsors.new`,
+        },
+        edit: {
+          id: `${scope}.group.manage.sponsors.edit`,
+        }
+      },
       leaders: {
         index: {
           id: `${scope}.group.manage.leaders.index`,
