@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 
 export function DroppableSpot({index , children}, props) {
+
   const ItemTypes = {
     CARD: 'card',
   };
