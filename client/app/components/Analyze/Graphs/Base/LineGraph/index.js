@@ -2,17 +2,11 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { VegaLite } from 'react-vega';
-
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-
-import produce from 'immer';
-import dig from 'object-dig';
-
 import {
-  Grid, Paper, Button, withStyles,
+  Paper, withStyles,
 } from '@material-ui/core';
+
+import { VegaLite } from 'react-vega';
 
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
 
@@ -38,22 +32,22 @@ const spec = {
     mark: 'line',
     encoding: {
       x: {
-        field: 'x',
+        field: 'date',
         type: 'temporal',
         scale: { domain: { selection: 'brush' } }
       }
     },
     layer: [{
       encoding: {
-        color: { field: 'key', type: 'nominal' },
-        y: { field: 'y', type: 'quantitative' }
+        color: { field: 'name', type: 'nominal' },
+        y: { field: 'count', type: 'quantitative' }
       },
       layer: [
         {
           mark: 'line',
           selection: {
             legend: {
-              type: 'multi', fields: ['key'], bind: 'legend'
+              type: 'multi', fields: ['name'], bind: 'legend'
             }
           },
           encoding: {
@@ -66,7 +60,7 @@ const spec = {
         { transform: [{ filter: { selection: 'hover' } }], mark: 'point' }
       ]
     }, {
-      transform: [{ pivot: 'key', value: 'y', groupby: ['x'] }],
+      transform: [{ pivot: 'name', value: 'count', groupby: ['date'] }],
       mark: 'rule',
       encoding: {
         opacity: {
@@ -77,7 +71,7 @@ const spec = {
       selection: {
         hover: {
           type: 'single',
-          fields: ['x'],
+          fields: ['date'],
           nearest: true,
           on: 'mouseover',
           empty: 'none',
@@ -93,9 +87,9 @@ const spec = {
       brush: { type: 'interval', encodings: ['x'] }
     },
     encoding: {
-      x: { field: 'x', type: 'temporal' },
-      color: { field: 'key', type: 'nominal' },
-      y: { field: 'y', type: 'quantitative' }
+      x: { field: 'date', type: 'temporal' },
+      color: { field: 'name', type: 'nominal' },
+      y: { field: 'count', type: 'quantitative' }
     }
   }]
 };
@@ -103,22 +97,11 @@ const spec = {
 export function LineGraph(props) {
   const { classes } = props;
 
-  // TODO: move this to backend
-  /* flatten */
-
-  const flattened = [];
-
-  if (props.data)
-    props.data.map(s => {
-      s.values.map(d => {
-        flattened.push({ key: s.key, x: d.x, y: d.y });
-      });
-    });
-
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
-        <VegaLite spec={spec} data={{ values: flattened }} />
+        <RangeSelector updateRange={props.updateDateFilters} />
+        <VegaLite spec={spec} data={{ values: (props.data || []) }} />
       </Paper>
     </React.Fragment>
   );
@@ -127,7 +110,7 @@ export function LineGraph(props) {
 LineGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
-  updateRange: PropTypes.func,
+  updateDateFilters: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 

@@ -20,7 +20,7 @@ import {
 
 // helpers
 import {
-  filterKeys
+  filterData
 } from 'utils/metricsHelpers';
 
 import GroupPopulationGraph from 'components/Analyze/Graphs/GroupPopulationGraph';
@@ -29,10 +29,16 @@ export function GroupPopulationGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
+  /**
+   * Group Population bar graph
+   *  - implements no graph specific filtering
+   *  - accepts dashboard filters
+   */
+
   const [currentData, setCurrentData] = useState([]);
 
   useEffect(() => {
-    setCurrentData(filterKeys(props.data, 'x', props.dashboardFilters));
+    setCurrentData(filterData(props.data, props.dashboardFilters));
   }, [props.data, props.dashboardFilters]);
 
   useEffect(() => {

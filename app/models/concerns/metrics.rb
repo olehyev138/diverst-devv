@@ -16,5 +16,9 @@ module Metrics
     def group_population
       @@analytics_bucket.object('group_population').get.body.read
     end
+
+    def growth_of_groups
+      @@analytics_bucket.object('group_growth').get.body.read
+    end
   end
 end

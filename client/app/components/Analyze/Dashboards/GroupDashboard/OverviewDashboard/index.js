@@ -19,6 +19,9 @@ const OverviewDashboard = ({ dashboardFilters }) => (
     <Grid item xs={12}>
       <GroupPopulationGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
+    <Grid item xs={12}>
+      <GrowthOfGroupsGraphPage dashboardFilters={dashboardFilters} />
+    </Grid>
   </Grid>
 );
 

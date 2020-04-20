@@ -26,7 +26,6 @@ import SocialMediaDashboard from 'components/Analyze/Dashboards/GroupDashboard/S
 import ResourcesDashboard from 'components/Analyze/Dashboards/GroupDashboard/ResourcesDashboard';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { UserDashboardPage } from 'containers/Analyze/Dashboards/UserDashboardPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -42,19 +41,26 @@ export function GroupDashboardPage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  /* Group dashboard supports 'dashboard wide' filtering
-   *   - allows filtering on one to many 'group names'
-   *   - renders 'GroupScopeSelect', allowing user to select the groups to filter on
-   *   - we map the user selected groups & pass it down as 'dashboardFilters' to the graphs
-   *     allowing them to filter there data.
+  /**
+   * GroupDashboard supports group filtering/scoping as a `dashboard filter`
+   *  - Renders a `group scope select`, builds a `filter object` & passes it down to the
+   *    graphs for filtering.
+   *
+   *  - See metricsHelpers for details on filtering
    */
 
   const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
   const [dashboardFilters, setDashboardFilters] = useState([]);
 
+  /* Callback function for GroupScopeSelect
+   *   - builds single filter object out of selected group names
+   */
   const updateScope = (scope) => {
-    const dashboardFilters = scope.groups ? scope.groups.map(g => g.label) : [];
-    setDashboardFilters(dashboardFilters);
+    setDashboardFilters(
+      scope.groups && scope.groups.length
+        ? [{ value: scope.groups.map(g => g.label), key: 'name', op: 'in' }]
+        : []
+    );
   };
 
   const handleDashboardChange = (_, newDashboard) => {
