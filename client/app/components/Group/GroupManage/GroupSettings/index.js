@@ -23,6 +23,7 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
+import groupmessages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
   noBottomPadding: {
@@ -72,6 +73,44 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
     <Card>
       <Form>
         <CardContent>
+          <Field
+            component={TextField}
+            required
+            onChange={handleChange}
+            fullWidth
+            id='name'
+            name='name'
+            margin='normal'
+            disabled={props.isCommitting}
+            label={<DiverstFormattedMessage {...groupmessages.name} />}
+            value={values.name}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='short_description'
+            name='short_description'
+            margin='normal'
+            disabled={props.isCommitting}
+            value={values.short_description}
+            label={<DiverstFormattedMessage {...groupmessages.short_description} />}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='description'
+            name='description'
+            multiline
+            rows={4}
+            variant='outlined'
+            margin='normal'
+            disabled={props.isCommitting}
+            label={<DiverstFormattedMessage {...groupmessages.description} />}
+            value={values.description}
+          />
+
           <Grid container spacing={3} justify='space-around'>
             <Grid item xs='auto'>
               <Field
@@ -207,6 +246,9 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
 export function GroupSettings(props) {
   const initialValues = buildValues(props.group, {
     id: { default: '' },
+    name: { default: '' },
+    short_description: { default: '' },
+    description: { default: '' },
     pending_users: { default: '' },
     members_visibility: { default: '' },
     event_attendance_visibility: { default: '' },

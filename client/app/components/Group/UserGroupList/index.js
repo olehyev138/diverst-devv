@@ -203,6 +203,9 @@ export function UserGroupList(props, context) {
                                   </React.Fragment>
                                 )}
                                 <Grid item xs>
+                                  {childGroup.current_user_is_member === true && (
+                                    <JoinedGroupIcon className={classes.groupCardIcon} />
+                                  )}
                                   <Typography variant='h5' component='h2' display='inline'>
                                     {childGroup.name}
                                   </Typography>
