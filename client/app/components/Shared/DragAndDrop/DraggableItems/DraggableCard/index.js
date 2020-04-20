@@ -23,13 +23,6 @@ export default function DraggableCard({ id, text, index, moveCard }, props) {
     CARD: 'card',
   };
 
-  const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.CARD },
-    collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
     hover(item, monitor) {
@@ -70,6 +63,14 @@ export default function DraggableCard({ id, text, index, moveCard }, props) {
       item.index = hoverIndex;
     },
   });
+
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: ItemTypes.CARD, id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   drag(drop(ref));
 
   return (
