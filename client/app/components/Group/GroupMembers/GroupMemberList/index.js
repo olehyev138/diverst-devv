@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions, Avatar
+  Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -26,14 +26,12 @@ import messages from 'containers/Group/GroupMembers/messages';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
-import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
-import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   errorButton: {

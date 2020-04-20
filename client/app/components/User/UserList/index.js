@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem, Avatar,
+  Button, Grid, Box, MenuItem
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,7 +28,6 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { injectIntl, intlShape } from 'react-intl';
 import { permission } from 'utils/permissionsHelpers';
-import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   userListItem: {
