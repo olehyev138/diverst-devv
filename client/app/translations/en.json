@@ -819,7 +819,7 @@
   "diverst.containers.GlobalSettings.Configurations.switch.mentorship_module" : "Enable Mentorship Module",
   "diverst.containers.GlobalSettings.Configurations.switch.likes" : "Disable Likes",
   "diverst.containers.GlobalSettings.Configurations.switch.pending_comments" : "Enable Pending Comments",
-  "diverst.containers.GlobalSettings.Configurations.switch.collaborate_module" : "Enable Collaborate module",
+  "diverst.containers.GlobalSettings.Configurations.switch.collaborate_module" : "Enable Innovate Module",
   "diverst.containers.GlobalSettings.Configurations.switch.scope_module" : "Enable Scope Module",
   "diverst.containers.GlobalSettings.Configurations.switch.onboarding_emails" : "Enable Onboarding Emails",
   "diverst.containers.GlobalSettings.Configurations.switch.all_emails" : "Disable all Emails",
