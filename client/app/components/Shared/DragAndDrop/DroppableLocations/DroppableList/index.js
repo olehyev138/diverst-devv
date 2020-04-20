@@ -17,18 +17,12 @@ import DraggableCard from '../../DraggableItems/DraggableCard';
 
 let cardPos = 1;
 
-export function moveItem(toY) {
-  cardPos = toY;
-}
-
 export function DroppableList(props) {
   const numSpots = 5;
   const spots = [];
 
-  const ItemTypes = {
-    CARD: 'card',
-  };
 
+  //Create the spot for the item and display the item if located inside
   function createSpot(y) {
     return (
       <div key={y}>

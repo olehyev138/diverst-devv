@@ -9,8 +9,12 @@ import PropTypes from 'prop-types';
 import { DndProvider, useDrop } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 
+import moveElement from 'components/Shared/DragAndDrop/DroppableLocations/DroppableContainer';
 
-import { moveItem } from '../DroppableList';
+import {
+  Button, Card, CardContent, CardActions,
+  Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
+} from '@material-ui/core';
 
 export function DroppableSpot({index , children}, props) {
   const ItemTypes = {
@@ -19,24 +23,25 @@ export function DroppableSpot({index , children}, props) {
 
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.CARD,
-    drop: () => moveItem(index.index),
+    drop: () => moveElement(index),
     collect: monitor => ({
       isOver: !!monitor.isOver(),
     }),
   });
 
-  const backgroundColor = 'blue'
+  const backgroundColor = 'blue';
   const color = 'pink';
 
   return (
-    <div
+    <Card
       ref={drop}
       style={{
         color,
         backgroundColor,
       }}
-    >hi!
+    >
+      <CardContent>This is a droppable spot!</CardContent>
       {children}
-    </div>
+    </Card>
   );
 }
