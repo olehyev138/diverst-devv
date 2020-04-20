@@ -1,22 +1,15 @@
 /*
  * Droppable List
- * A paginated List component that has "spots" for draggable items
+ * A list of draggable cards
  *
  */
 
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import { DndProvider, useDrop } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
-
-
-import { Card } from '@material-ui/core';
-import { DroppableSpot } from '../DroppableSpot';
+import React, { useState, useCallback } from 'react';
+import update from 'immutability-helper';
 import DraggableCard from '../../DraggableItems/DraggableCard';
-import observe from '../DroppableContainer';
-
-
 
 export function DroppableList(props) {
   const [cards, setCards] = useState([
@@ -39,7 +32,7 @@ export function DroppableList(props) {
     {
       id: 5,
       text:
-        'Spam in Twitter and IRC to promote it (note that this element is taller than the others)',
+        'Spam in Twitter and IRC t o promote it (note that this element is taller than the others)',
     },
     {
       id: 6,
@@ -49,13 +42,37 @@ export function DroppableList(props) {
       id: 7,
       text: 'PROFIT',
     },
-  ])
+  ]);
 
+
+  const moveCard = useCallback(
+    (dragIndex, hoverIndex) => {
+      const dragCard = cards[dragIndex];
+      setCards(
+        update(cards, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragCard],
+          ],
+        }),
+      );
+    },
+    [cards],
+  );
+
+  const renderCard = (card, index) => (
+    <DraggableCard
+      key={card.id}
+      index={index}
+      id={card.id}
+      text={card.text}
+      moveCard={moveCard}
+    />
+  );
 
   return (
     <DndProvider backend={Backend}>
-
+      {cards.map((card, i) => renderCard(card, i))}
     </DndProvider>
-
   );
 }
