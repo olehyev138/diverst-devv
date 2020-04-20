@@ -53,7 +53,7 @@ class InitiativeBasePolicy < GroupBasePolicy
   end
 
   def is_a_member?
-    super || (user.group_ids && participating_group_ids).present?
+    super || (user.group_ids && initiative.participating_group_ids).present?
   end
 
   class Scope < Scope
