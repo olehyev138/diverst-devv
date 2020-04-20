@@ -27,6 +27,7 @@ import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import InviteForm from 'components/User/InviteForm';
 
 export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -46,7 +47,7 @@ export function UserCreatePage(props) {
   };
 
   return (
-    <UserForm
+    <InviteForm
       admin
       user={props.user}
       isFormLoading={props.isFormLoading}

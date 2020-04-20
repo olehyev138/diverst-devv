@@ -24,9 +24,11 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 
 /* eslint-disable object-curly-newline */
-export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function InviteFormInner({ formikProps, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -68,20 +70,6 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 label={<DiverstFormattedMessage {...messages.last_name} />}
               />
               <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                multiline
-                rows={4}
-                variant='outlined'
-                id='biography'
-                name='biography'
-                value={values.biography}
-                label={<DiverstFormattedMessage {...messages.biography} />}
-              />
-              <Field
                 component={Select}
                 fullWidth
                 disabled={props.isCommitting}
@@ -94,11 +82,38 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='user_role_id'
+                name='user_role_id'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.user_role} />}
+                value={values.user_role_id}
+                options={dig(props, 'user', 'available_roles') || []}
+                onChange={value => setFieldValue('user_role_id', value)}
+                onBlur={() => setFieldTouched('user_role_id', true)}
+              />
             </CardContent>
+            {/* Consider For Later */}
+            {false && (
+              <FieldInputForm
+                fieldData={dig(props, 'user', 'field_data') || []}
+                isCommitting={props.isCommitting}
+                isFetching={props.isFormLoading}
+
+                messages={messages}
+                formikProps={formikProps}
+
+                join
+                noCard
+              />
+            )}
             <Divider />
             <CardActions>
               <DiverstSubmit isCommitting={props.isCommitting}>
-                {buttonText}
+                {props.buttonText}
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
@@ -111,26 +126,11 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           </Form>
         </Card>
       </DiverstFormLoader>
-      {props.edit && (
-        <React.Fragment>
-          <Box mb={2} />
-          <UserFieldInputForm
-            edit
-            user={props.user}
-            fieldData={props.fieldData}
-            updateFieldDataBegin={props.updateFieldDataBegin}
-            admin={props.admin}
-            isCommitting={props.isCommitting}
-            isFormLoading={props.isFormLoading}
-            messages={messages}
-          />
-        </React.Fragment>
-      )}
     </React.Fragment>
   );
 }
 
-export function UserForm(props) {
+export function InviteForm(props) {
   const user = dig(props, 'user');
   const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
@@ -142,6 +142,7 @@ export function UserForm(props) {
     time_zone: { default: null },
     user_role_id: { default: defaultRole },
     id: { default: undefined },
+    field_data: { default: [], customKey: 'fieldData' },
   });
 
   return (
@@ -154,12 +155,12 @@ export function UserForm(props) {
         props.userAction(payload);
       }}
     >
-      {formikProps => <UserFormInner {...props} {...formikProps} />}
+      {formikProps => <InviteFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
 
-UserForm.propTypes = {
+InviteForm.propTypes = {
   userAction: PropTypes.func,
   user: PropTypes.object,
   currentUser: PropTypes.object,
@@ -173,17 +174,19 @@ UserForm.propTypes = {
   })
 };
 
-UserFormInner.propTypes = {
+InviteFormInner.propTypes = {
   user: PropTypes.object,
   fieldData: PropTypes.array,
-  updateFieldDataBegin: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
+  formikProps: PropTypes.shape({
+    updateFieldDataBegin: PropTypes.func,
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleBlur: PropTypes.func,
+    values: PropTypes.object,
+    setFieldValue: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+  }),
   buttonText: PropTypes.string,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
@@ -196,4 +199,4 @@ UserFormInner.propTypes = {
 
 export default compose(
   memo,
-)(UserForm);
+)(InviteForm);

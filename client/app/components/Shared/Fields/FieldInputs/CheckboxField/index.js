@@ -13,8 +13,7 @@ import { connect, Field, getIn } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 
 const CustomCheckboxField = (props) => {
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
 
   // allow specification of dataLocation
   const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
@@ -29,10 +28,10 @@ const CustomCheckboxField = (props) => {
         margin='normal'
         required={fieldDatum.field.required}
         label={fieldDatum.field.title}
-        value={getIn(props.formik.values, dataLocation)}
+        value={getIn(formik.values, dataLocation)}
         options={fieldDatum.field.options}
-        onChange={v => props.formik.setFieldValue(dataLocation, v)}
-        {...props}
+        onChange={v => formik.setFieldValue(dataLocation, v)}
+        {...rest}
       />
     </React.Fragment>
   );
