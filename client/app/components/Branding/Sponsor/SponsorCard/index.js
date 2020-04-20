@@ -38,23 +38,20 @@ export function SponsorCard(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
-  const sponsorParams = {
-    orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup ? props.currentGroup.id : 0
-  };
-  const enterpriseParams = {
-    orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
-  };
-
   const { sponsorList } = props;
 
   useEffect(() => {
     if (props.type === SponsorType.Group)
-      props.getSponsorsBegin(sponsorParams);
+      props.getSponsorsBegin({
+        orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup.id
+      });
     else
-      props.getSponsorsBegin(enterpriseParams);
+      props.getSponsorsBegin({
+        orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
+      });
   }, []);
 
-  if (props.sponsorTotal > 1)
+  if (props.sponsorTotal > 0)
     return (
       <Carousel
         autoPlay={false}
@@ -75,22 +72,6 @@ export function SponsorCard(props) {
           </Card>
         ))}
       </Carousel>
-    );
-  if (sponsorList[0])
-    return (
-      <Card>
-        <CardContent>
-          <Typography variant='h6'>
-            { sponsorList[0].sponsor_name}
-          </Typography>
-          <Typography>
-            { sponsorList[0].sponsor_title}
-          </Typography>
-        </CardContent>
-        <CardContent>
-          { sponsorList[0].sponsor_message}
-        </CardContent>
-      </Card>
     );
   return (
     <React.Fragment>
