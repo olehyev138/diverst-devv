@@ -29,7 +29,6 @@ import reducer from 'containers/Shared/Sponsors/reducer';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-
 const SponsorType = Object.freeze({
   Group: 'group',
   Enterprise: 'enterprise',
@@ -50,7 +49,7 @@ export function SponsorCard(props) {
 
   useEffect(() => {
     if (props.type === SponsorType.Group)
-      props.getSponsorsBegin(sponsorType);
+      props.getSponsorsBegin(sponsorParams);
     else
       props.getSponsorsBegin(enterpriseParams);
   }, []);
