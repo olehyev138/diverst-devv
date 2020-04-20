@@ -24,6 +24,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -66,6 +67,17 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 name='last_name'
                 value={values.last_name}
                 label={<DiverstFormattedMessage {...messages.last_name} />}
+              />
+              <Field
+                component={DiverstFileInput}
+                id='avatar'
+                name='avatar'
+                margin='normal'
+                fileName={props.user && props.user.avatar_file_name}
+                fullWidth
+                label={<DiverstFormattedMessage {...messages.avatar} />}
+                disabled={props.isCommitting}
+                value={values.avatar}
               />
               <Field
                 component={TextField}
@@ -142,6 +154,7 @@ export function UserForm(props) {
     time_zone: { default: null },
     user_role_id: { default: defaultRole },
     id: { default: undefined },
+    avatar: { default: null },
   });
 
   return (

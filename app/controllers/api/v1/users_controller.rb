@@ -40,6 +40,7 @@ class Api::V1::UsersController < DiverstController
     params[klass.symbol] = payload
     item = klass.find(params[:id])
     base_authorize(item)
+    item.avatar.purge_later if item.avatar.attached? && params[:avatar].blank?
 
     render status: 200, json: klass.update(self.diverst_request, params), serializer: serializer(params)
   rescue => e

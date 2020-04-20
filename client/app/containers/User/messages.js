@@ -51,6 +51,9 @@ export default defineMessages({
   email: {
     id: `${scope}.form.input.email`,
   },
+  avatar: {
+    id: `${scope}.form.input.avatar`,
+  },
   biography: {
     id: `${scope}.form.input.biography`,
   },
