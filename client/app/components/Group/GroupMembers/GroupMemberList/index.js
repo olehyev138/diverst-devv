@@ -100,19 +100,6 @@ export function GroupMemberList(props) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.columns.avatar} />,
-      sorting: false,
-      render: rowData => (
-        rowData.user.avatar && (
-          <Avatar>
-            <DiverstImg
-              data={rowData.user.avatar_data}
-            />
-          </Avatar>
-        )
-      )
-    },
-    {
       title: <DiverstFormattedMessage {...messages.columns.givenName} />,
       field: 'user.first_name',
       query_field: 'users.first_name'

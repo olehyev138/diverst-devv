@@ -69,19 +69,6 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.avatar} />,
-      sorting: false,
-      render: rowData => (
-        rowData.avatar && (
-          <Avatar>
-            <DiverstImg
-              data={rowData.avatar_data}
-            />
-          </Avatar>
-        )
-      )
-    },
-    {
       title: <DiverstFormattedMessage {...messages.first_name} />,
       field: 'first_name',
       query_field: 'first_name'
