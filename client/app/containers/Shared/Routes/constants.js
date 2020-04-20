@@ -461,6 +461,26 @@ export const ROUTES = {
           }
         }
       },
+      sponsors: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/sponsors`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.index
+          }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/sponsors/new`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.new
+          }
+        },
+        edit: {
+          path: (groupId = ':group_id', groupSponsorId = ':group_sponsor_id') => `/groups/${groupId}/manage/sponsors/${groupSponsorId}/edit`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.edit
+          }
+        }
+      },
       leaders: {
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders`,

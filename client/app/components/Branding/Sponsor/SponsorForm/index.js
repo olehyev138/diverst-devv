@@ -7,7 +7,6 @@
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
-import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
@@ -49,7 +48,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_name'
                 name='sponsor_name'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.sname} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.name} />}
                 value={values.sponsor_name}
               />
             </Grid>
@@ -62,8 +61,20 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_title'
                 name='sponsor_title'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.stitle} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.title} />}
                 value={values.sponsor_title}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                id='sponsor_message'
+                name='sponsor_messsage'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.Sponsors.message} />}
+                value={values.sponsor_message}
               />
             </Grid>
           </Grid>
@@ -93,6 +104,7 @@ export function SponsorForm(props) {
     id: { default: '' },
     sponsor_name: { default: '' },
     sponsor_title: { default: '' },
+    sponsor_message: { default: '' },
   });
 
   return (
@@ -100,6 +112,7 @@ export function SponsorForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        values.sponsorableId = props.sponsorableId;
         props.sponsorAction(values);
       }}
 
@@ -111,6 +124,7 @@ export function SponsorForm(props) {
 SponsorForm.propTypes = {
   sponsorAction: PropTypes.func,
   sponsor: PropTypes.object,
+  sponsorableId: PropTypes.number,
 };
 
 SponsorFormInner.propTypes = {
