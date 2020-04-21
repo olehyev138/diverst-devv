@@ -10,9 +10,9 @@ class Api::V1::SponsorsController < DiverstController
     params[:sponsor][:sponsorable_id] = id
     super
   end
-  
+
   private
-  
+
   def model_map(model)
     current_user.enterprise
   end
