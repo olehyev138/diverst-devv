@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
+  Button, Grid, Box, MenuItem
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 

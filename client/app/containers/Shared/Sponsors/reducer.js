@@ -12,6 +12,7 @@ import {
   CREATE_SPONSOR_BEGIN, CREATE_SPONSOR_SUCCESS, CREATE_SPONSOR_ERROR,
 } from './constants';
 
+
 export const initialState = {
   isCommitting: false,
   sponsorList: [],

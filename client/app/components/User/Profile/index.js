@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Divider, CardContent, Card
+  Paper, Typography, Grid, Button, Divider, CardContent, Card, Avatar
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -17,7 +17,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
-
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   padding: {
@@ -73,6 +73,21 @@ export function Profile(props) {
             </Grid>
           </Grid>
           <Paper>
+            <CardContent>
+              <Grid item>
+                <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                  {<DiverstFormattedMessage {...messages.avatar} />}
+                </Typography>
+                {user.avatar && (
+                  <Avatar>
+                    <DiverstImg
+                      data={user.avatar_data}
+                    />
+                  </Avatar>
+                )}
+              </Grid>
+            </CardContent>
+            <Divider />
             <CardContent>
               <Grid item>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>

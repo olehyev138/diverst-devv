@@ -3,7 +3,8 @@ class User < ApplicationRecord
   FIELD_ASSOCIATION_NAME = :fields
   belongs_to :enterprise, counter_cache: true
 
-  has_secure_password
+  has_secure_password validations: false
+  has_secure_token :invitation_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -132,11 +133,13 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  validates :password, confirmation: true
+  validates_confirmation_of :password
+
   validates_presence_of   :email
   validates_uniqueness_of :email, allow_blank: false, if: :email_changed?
   validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false, if: :email_changed?
 
-  validates_presence_of   :password, on: create
   validates_length_of     :password, within: 8..128, allow_blank: true
 
   validate :user_role_presence
@@ -147,9 +150,12 @@ class User < ApplicationRecord
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
+  validates_presence_of :time_zone
+
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
+  before_validation :set_timezone
   before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
@@ -158,13 +164,6 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :policy_group
 
   after_update :add_to_default_mentor_group
-
-  # Default values
-  after_initialize do
-    if self.new_record?
-      self.time_zone ||= self.enterprise&.default_time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
-    end
-  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -200,6 +199,18 @@ class User < ApplicationRecord
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
       break token unless Session.find_by(token: token)
     end
+  end
+
+  def generate_invitation_token
+    regenerate_invitation_token
+    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
+    invitation_token
+  end
+
+  def invite!(manager = nil, skip: false)
+    regenerate_invitation_token
+
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
   def valid_password?(password)
@@ -281,7 +292,7 @@ class User < ApplicationRecord
   end
 
   def last_initial
-    "#{(last_name || '')[0].capitalize}."
+    "#{(last_name || '')[0]&.capitalize}."
   end
 
   def user_role_presence
@@ -579,6 +590,10 @@ class User < ApplicationRecord
 
   def set_uid
     self.uid = generate_uid if self.uid.blank?
+  end
+
+  def set_timezone
+    self.time_zone ||= enterprise&.time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
   end
 
   # Returns a hash of all the user's fields combined with all their poll fields
