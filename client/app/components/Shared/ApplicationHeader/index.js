@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea
+  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea, Avatar
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -31,6 +31,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import dig from 'object-dig';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   grow: {
@@ -260,7 +261,14 @@ export class ApplicationHeader extends React.PureComponent {
                     onClick={this.handleProfileMenuOpen}
                     className={classes.whiteButton}
                   >
-                    <AccountCircleIcon />
+                    {user.avatar_data ? (
+                      <Avatar>
+                        <DiverstImg
+                          data={user.avatar_data}
+                        />
+                      </Avatar>
+                    )
+                      : <AccountCircleIcon />}
                   </IconButton>
                 </div>
               </div>

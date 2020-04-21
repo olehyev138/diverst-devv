@@ -15,7 +15,7 @@ RSpec.describe AnnualBudget, type: :model do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise: enterprise, annual_budget: 2000) }
       let!(:annual_budget) { create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget) }
-      let!(:budget) { create(:approved, annual_budget: annual_budget, group: group) }
+      let!(:budget) { create(:approved_budget, annual_budget: annual_budget, group: group) }
       let!(:selected_budget) { budget.budget_items.first }
       let!(:initiative) { create(:initiative, :with_budget_item, owner_group: group, estimated_funding: selected_budget.available_amount,
                                                                  budget_item_id: selected_budget.id)

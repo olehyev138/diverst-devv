@@ -24,7 +24,8 @@ RSpec.describe PollResponse do
     let!(:poll_response) { create(:poll_response) }
 
     # Skip until polls implementation
-    xit 'returns group' do
+    it 'returns group' do
+      pending
       pending 'Skip until polls implementation'
       poll_response.poll = poll
       expect(poll_response.group).to eq group

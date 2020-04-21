@@ -39,6 +39,9 @@ import {
   GET_USER_DOWNLOAD_DATA_BEGIN,
   GET_USER_DOWNLOAD_DATA_SUCCESS,
   GET_USER_DOWNLOAD_DATA_ERROR,
+  GET_USER_PROTOTYPE_BEGIN,
+  GET_USER_PROTOTYPE_SUCCESS,
+  GET_USER_PROTOTYPE_ERROR,
   USER_UNMOUNT,
 } from './constants';
 
@@ -82,13 +85,16 @@ function usersReducer(state = initialState, action) {
         draft.isFetchingUsers = false;
         return;
       case GET_USER_BEGIN:
+      case GET_USER_PROTOTYPE_BEGIN:
         draft.isFormLoading = true;
         break;
       case GET_USER_SUCCESS:
+      case GET_USER_PROTOTYPE_SUCCESS:
         draft.currentUser = action.payload.user;
         draft.isFormLoading = false;
         break;
       case GET_USER_ERROR:
+      case GET_USER_PROTOTYPE_ERROR:
         draft.isFormLoading = false;
         break;
       case GET_USER_POSTS_BEGIN:

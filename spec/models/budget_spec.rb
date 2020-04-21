@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Budget, type: :model do
   describe 'when validating' do
     let(:budget) { build(:budget) }
-    let(:approved) { build :approved }
+    let(:approved) { build :approved_budget }
 
     it { expect(budget).to have_one(:group) }
     it { expect(budget).to belong_to(:approver).class_name('User').with_foreign_key('approver_id') }
@@ -15,7 +15,7 @@ RSpec.describe Budget, type: :model do
   end
 
   describe 'amounts' do
-    let!(:budget) { create :approved }
+    let!(:budget) { create :approved_budget }
     let(:requested_amount) { budget.budget_items.sum(:estimated_amount) }
 
     before { budget.budget_items.first.update(is_done: true) }
@@ -87,7 +87,7 @@ RSpec.describe Budget, type: :model do
     describe 'pre_approved_events' do
       let(:group) { create :group }
       let!(:budget) { create :budget, group: group }
-      let!(:approved) { create :approved, group: group }
+      let!(:approved) { create :approved_budget, group: group }
 
       subject { described_class.pre_approved_events(group) }
 
@@ -109,7 +109,7 @@ RSpec.describe Budget, type: :model do
       let!(:group) { create(:group) }
       let!(:annual_budget) { create(:annual_budget, group: group) }
       let!(:related_budgets) { create_list(:budget, 3, annual_budget: annual_budget, is_approved: true) }
-      let!(:approved) { create :approved, annual_budget: annual_budget }
+      let!(:approved) { create :approved_budget, annual_budget: annual_budget }
 
       subject { described_class }
 

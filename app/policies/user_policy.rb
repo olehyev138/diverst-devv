@@ -68,6 +68,8 @@ class UserPolicy < ApplicationPolicy
     users_points_ranking?
   end
 
+  alias_method :prototype?, :create?
+
   class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?

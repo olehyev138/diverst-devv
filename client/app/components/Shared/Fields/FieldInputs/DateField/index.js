@@ -9,14 +9,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect, getIn } from 'formik';
+import { connect, Field, getIn } from 'formik';
 import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
 
 const CustomDateField = (props) => {
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
 
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
@@ -26,10 +25,11 @@ const CustomDateField = (props) => {
       id={dataLocation}
       type='date'
       margin='normal'
+      required={fieldDatum.field.required}
       label={fieldDatum.field.title}
-      value={getIn(props.formik.values, dataLocation)}
-      onChange={props.formik.handleChange}
-      {...props}
+      value={getIn(formik.values, dataLocation)}
+      onChange={formik.handleChange}
+      {...rest}
     />
   );
 };

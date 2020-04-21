@@ -43,6 +43,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       attributes['user_role_id'] = user.user_role_id
       attributes['password'] = 'password'
       post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
+      Clipboard.copy response.body
       expect(response).to have_http_status(201)
     end
 

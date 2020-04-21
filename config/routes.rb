@@ -250,6 +250,9 @@ Diverst::Application.routes.draw do
         collection do
           get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
+          post '/sign_up_token', to: 'users#sign_up_token'
+          post '/sign_up', to: 'users#sign_up'
+          get 'prototype'
         end
       end
       resources :user_groups do
