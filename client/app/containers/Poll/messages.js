@@ -40,20 +40,17 @@ export default defineMessages({
     id: `${scope}.form.button.cancel`,
   },
   form: {
-    name: {
-      id: `${scope}.form.input.name`,
+    title: {
+      id: `${scope}.form.input.title`,
     },
-    active_filter: {
-      id: `${scope}.form.label.active_filter`,
+    description: {
+      id: `${scope}.form.input.description`,
     },
-    field_rule: {
-      id: `${scope}.form.label.field_rule`,
+    groups: {
+      id: `${scope}.form.input.groups`,
     },
-    order_rule: {
-      id: `${scope}.form.label.order_rule`,
-    },
-    scope_rule: {
-      id: `${scope}.form.label.scope_rule`,
+    segments: {
+      id: `${scope}.form.input.segments`,
     },
   },
   list: {

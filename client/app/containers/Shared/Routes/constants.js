@@ -744,6 +744,12 @@ const ROUTES = {
             titleMessage: messages.admin.manage.groups,
           }
         },
+        new: {
+          path: () => '/admin/include/polls/new',
+          data: {
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
       },
     },
     mentorship: {

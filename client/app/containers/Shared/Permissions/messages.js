@@ -422,6 +422,9 @@ export default defineMessages({
   poll: {
     indexPage: {
       id: `${scope}.poll.pollListPage`
+    },
+    createPage: {
+      id: `${scope}.poll.pollCreatePage`
     }
   }
 });

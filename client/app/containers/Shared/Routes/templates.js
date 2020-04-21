@@ -70,6 +70,7 @@ import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 
 /* Admin - Include - Polls */
 import PollsList from 'containers/Poll/PollListPage/Loadable';
+import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
 
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
@@ -306,6 +307,7 @@ export {
   CampaignQuestionEditPage,
   CampaignQuestionShowPage,
   PollsList,
+  PollCreatePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
