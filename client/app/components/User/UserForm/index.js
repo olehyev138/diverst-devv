@@ -146,6 +146,7 @@ export function UserForm(props) {
     time_zone: { default: null },
     id: { default: undefined },
     active: { default: false },
+    avatar: { default: null },
   });
 
   return (
