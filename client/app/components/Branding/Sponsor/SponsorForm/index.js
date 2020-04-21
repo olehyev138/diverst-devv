@@ -73,7 +73,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_message'
                 name='sponsor_messsage'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Sponsors.smessage} />}
+                label={<DiverstFormattedMessage {...messages.Sponsors.message} />}
                 value={values.sponsor_message}
               />
             </Grid>
