@@ -108,7 +108,9 @@ export function AdminGroupList(props, context) {
       </Grid>
       <Box mb={1} />
       <DiverstLoader isLoading={props.isLoading}>
-        <DroppableList />
+        <DroppableList
+          list={props.groups}
+        />
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.groups && Object.values(props.groups).map((group, i) => {
