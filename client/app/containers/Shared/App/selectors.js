@@ -16,6 +16,11 @@ const selectEnterprise = () => createSelector(
   globalState => dig(globalState.data, 'enterprise')
 );
 
+const selectEnterprisePrivacyMessage = () => createSelector(
+  selectGlobal,
+  globalState => dig(globalState.data.enterprise, 'privacy_statement')
+);
+
 const selectPermissions = () => createSelector(
   selectGlobal,
   globalState => dig(globalState.data, 'permissions')
@@ -70,5 +75,6 @@ export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
   selectUser, selectCustomText, selectMentoringInterests,
-  selectMentoringTypes, selectFindEnterpriseError, selectPermissions
+  selectMentoringTypes, selectFindEnterpriseError, selectPermissions,
+  selectEnterprisePrivacyMessage
 };
