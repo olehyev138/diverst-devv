@@ -33,7 +33,7 @@ import DiverstImg from 'components/Shared/DiverstImg';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
-import {DroppableContainer} from "../../Shared/DragAndDrop/DroppableLocations/DroppableContainer";
+
 
 const styles = theme => ({
   progress: {
@@ -88,7 +88,6 @@ export function AdminGroupList(props, context) {
     setExpandedGroups(initialExpandedGroups);
   }
 
-  // Drag and drop
 
   return (
     <React.Fragment>
@@ -110,6 +109,7 @@ export function AdminGroupList(props, context) {
       <DiverstLoader isLoading={props.isLoading}>
         <DroppableList
           list={props.groups}
+          classes={classes}
         />
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }

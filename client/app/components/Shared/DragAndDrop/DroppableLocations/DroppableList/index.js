@@ -36,6 +36,8 @@ export function DroppableList(props) {
       id={card.id}
       text={card.text}
       moveCard={moveCard}
+      group={card}
+      classes={props.classes}
     />
   );
   return (
@@ -47,4 +49,5 @@ export function DroppableList(props) {
 
 DroppableList.propTypes = {
   list: PropTypes.object,
+  classes: PropTypes.object,
 };
