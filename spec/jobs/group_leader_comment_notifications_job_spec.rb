@@ -33,7 +33,7 @@ RSpec.describe GroupLeaderCommentNotificationsJob, type: :job do
       end
 
       # TODO Fix MySQL errors on CircleCI with these tests
-      xit 'does not send an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is false' do
+      it 'does not send an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is false' do
         enterprise.enable_pending_comments = true
         enterprise.save!
         group_message = create(:group_message, group: group)
@@ -42,7 +42,7 @@ RSpec.describe GroupLeaderCommentNotificationsJob, type: :job do
         subject.perform(group.id)
       end
 
-      xit 'sends an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is true' do
+      it 'sends an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is true' do
         enterprise.enable_pending_comments = true
         enterprise.save!
         group_message = create(:group_message, group: group)

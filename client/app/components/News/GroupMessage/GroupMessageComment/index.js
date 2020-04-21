@@ -8,15 +8,19 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
+  cardHeader: {
+    paddingBottom: 0,
+  },
   margin: {
     marginTop: 16,
     marginBottom: 16,
@@ -28,9 +32,24 @@ export function GroupMessageComment(props) {
 
   return (
     <Card className={classes.margin}>
+      <CardHeader
+        className={classes.cardHeader}
+        avatar={(
+          <Avatar>
+            { comment.author.avatar ? (
+              <DiverstImg
+                data={comment.author.avatar_data}
+              />
+            ) : (
+              comment.author.first_name[0]
+            )}
+          </Avatar>
+        )}
+        title={comment.author.name}
+        titleTypographyProps={{ variant: 'overline', display: 'inline' }}
+      />
       <CardContent>
         <Typography variant='body1'>{comment.content}</Typography>
-        <Typography variant='body2'>{comment.author.first_name}</Typography>
       </CardContent>
       <Permission show={permission(props.comment)}>
         <CardActions>

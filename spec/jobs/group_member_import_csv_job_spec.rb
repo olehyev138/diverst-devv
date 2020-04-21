@@ -7,10 +7,7 @@ RSpec.describe GroupMemberImportCSVJob, type: :job do
     let!(:file) { { io: File.open('spec/fixtures/files/members.csv'), filename: 'members.csv' } }
     let!(:csv_file) { create(:csv_file, import_file: file, group_id: group.id, user: user) }
 
-    xit 'imports the file and sends an email' do
-      # TODO: fix this spec, shouldnt be using multiple expects to begin with
-      pending 'fix this spec, shouldnt be using multiple expects to begin with'
-
+    it 'imports the file and sends an email' do
       expect(group.members.count).to eq(0)
 
       subject.perform(csv_file.id)
@@ -27,10 +24,7 @@ RSpec.describe GroupMemberImportCSVJob, type: :job do
     let!(:file) { fixture_file_upload('files/members.csv', 'text/csv') }
     let!(:csv_file) { create(:csv_file, import_file: file, group_id: group.id, user: user) }
 
-    xit 'imports the file and sends an email' do
-      # TODO: fix this spec, shouldnt be using multiple expects to begin with
-      pending 'fix this spec, shouldnt be using multiple expects to begin with'
-
+    it 'imports the file and sends an email' do
       expect(group.members.count).to eq(0)
 
       subject.perform(csv_file.id)

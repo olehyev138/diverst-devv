@@ -3,11 +3,11 @@
  *
  */
 
-import { defineMessages } from 'react-intl';
+const { defineMessages } = require('react-intl');
 
-export const scope = 'diverst.containers.Routes';
+const scope = 'diverst.containers.Routes';
 
-export default defineMessages({
+const messages = defineMessages({
   user: {
     home: {
       id: `${scope}.user.home`,
@@ -326,5 +326,6 @@ export default defineMessages({
       },
     },
   },
-
 });
+
+module.exports = messages;
