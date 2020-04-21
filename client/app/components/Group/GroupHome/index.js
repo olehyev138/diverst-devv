@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -23,6 +23,7 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
+import GroupJoinDialog from 'components/Group/GroupHome/GroupJoinDialog';
 
 const styles = theme => ({
   title: {
@@ -79,6 +80,15 @@ export function GroupHome({ classes, ...props }) {
       </CardContent>
     </Paper>
   );
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const joinBtn = (
     props.currentGroup.current_user_is_member
@@ -99,20 +109,23 @@ export function GroupHome({ classes, ...props }) {
         </Button>
       )
       : (
-        <Button
-          variant='contained'
-          size='large'
-          fullWidth
-          color='primary'
-          onClick={() => {
-            props.joinGroup({
-              group_id: props.currentGroup.id
-            });
-          }}
-          startIcon={<AddIcon />}
-        >
-          Join
-        </Button>
+        <div>
+          <Button
+            variant='contained'
+            size='large'
+            fullWidth
+            color='primary'
+            onClick={(handleClickOpen)
+              // props.joinGroup({
+              //   group_id: props.currentGroup.id
+              // });
+            }
+            startIcon={<AddIcon />}
+          >
+            Join
+          </Button>
+          <GroupJoinDialog open={open} handleClose={handleClose}/>
+        </div>
       )
   );
 
