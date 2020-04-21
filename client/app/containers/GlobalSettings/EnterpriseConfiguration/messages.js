@@ -46,7 +46,7 @@ export default defineMessages({
     id: `${scope}.switch.collaborate_module`,
   },
   scope_module: {
-    id: `${scope}.switch.collaborate_module`,
+    id: `${scope}.switch.scope_module`,
   },
   onboarding_emails: {
     id: `${scope}.switch.onboarding_emails`,
