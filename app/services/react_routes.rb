@@ -69,7 +69,7 @@ class ReactRoutes
 
   class << self
     ActionDispatch::TestProcess.instance_methods(false).each do |m|
-      undef_method m
+      undef_method m rescue nil
     end
 
     delegate :inspect, to: :routes
