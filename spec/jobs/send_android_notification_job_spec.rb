@@ -4,7 +4,8 @@ RSpec.describe SendAndroidNotificationJob, type: :job do
   include ActiveJob::TestHelper
 
   describe '#perform' do
-    xit 'pushes the notification' do
+    it 'pushes the notification' do
+      pending
       gcm = OpenStruct.new({ send: true })
       allow(GCM).to receive(:new).and_return(gcm)
       allow(gcm).to receive(:send)

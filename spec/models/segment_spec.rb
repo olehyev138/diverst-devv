@@ -167,7 +167,8 @@ RSpec.describe Segment, type: :model do
       users.each { |user| create(:users_segment, user_id: user.id, segment_id: segment.id) }
     end
 
-    xit 'returns inactive users' do
+    it 'returns inactive users' do
+      pending
       # TODO: active isnt a field rule
 
       expect(segment.apply_field_rules(users)).to eq(inactive_users)

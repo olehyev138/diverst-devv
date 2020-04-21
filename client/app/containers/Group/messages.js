@@ -78,4 +78,18 @@ export default defineMessages({
   save: {
     id: `${scope}.categorize.button.save`,
   },
+  family: {
+    showMore: {
+      id: `${scope}.family.showMore`,
+    },
+    showLess: {
+      id: `${scope}.family.showLess`,
+    },
+    areMember: {
+      id: `${scope}.family.areMember`,
+    },
+    notMember: {
+      id: `${scope}.family.notMember`,
+    }
+  }
 });

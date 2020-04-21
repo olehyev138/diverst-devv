@@ -55,20 +55,14 @@ export default defineMessages({
     },
   },
   Sponsors: {
-    sname: {
+    name: {
       id: `${scope}.Sponsors.input.name`,
     },
-    stitle: {
+    title: {
       id: `${scope}.Sponsors.input.title`,
     },
-    smessage: {
+    message: {
       id: `${scope}.Sponsors.input.message`,
-    },
-    name: {
-      id: `${scope}.Sponsors.list.name`,
-    },
-    title: {
-      id: `${scope}.Sponsors.list.title`,
     },
     tabletitle: {
       id: `${scope}.Sponsors.table.title`,
