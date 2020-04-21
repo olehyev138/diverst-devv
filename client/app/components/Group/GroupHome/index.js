@@ -8,10 +8,12 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box } from '@material-ui/core';
+import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader } from '@material-ui/core';
+
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
+import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -120,15 +122,22 @@ export function GroupHome({ classes, ...props }) {
     />
   );
 
+  const sponsor = (
+    <SponsorCard
+      type='group'
+      currentGroup={props.currentGroup}
+    />
+  );
+
   return (
     <DiverstCSSGrid
       columns={10}
-      rows='auto 50px 50px 1fr'
+      rows='auto auto auto 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
         'news   news    news    news    events  events  events  events  join    join',
+        'news   news    news    news    events  events  events  events  sponsor sponsor',
         'news   news    news    news    events  events  events  events  family  family',
-        'news   news    news    news    events  events  events  events  null    null',
       ]}
       rowGap='16px'
       columnGap='24px'
@@ -138,6 +147,7 @@ export function GroupHome({ classes, ...props }) {
       <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
       <DiverstCSSCell area='family'>{family}</DiverstCSSCell>
       <DiverstCSSCell area='join'>{joinBtn}</DiverstCSSCell>
+      <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
       <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
     </DiverstCSSGrid>
   );

@@ -92,7 +92,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             Pundit::PolicyFinder.new(object).policy&.new(
                 scope&.dig(:current_user) || (Rails.env.development? && @@test_user ||= User.first),
                 object,
-                @instance_options[:params]
+                scope&.dig(:params) || @instance_options[:params] || {}
               )
   )
   end

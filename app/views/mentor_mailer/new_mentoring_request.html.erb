@@ -1,0 +1,13 @@
+<p>Hello <%= @receiver.name %>!</p>
+
+<% if @mentoring_request.mentoring_type === "mentor" %>
+
+    <p><%= @sender.name %> would like you to become his/her mentor. You can accept/decline the request through the link below.</p>
+
+<% else %>
+
+    <p><%= @sender.name %> would like to become your mentor! You can accept/decline the request through the link below.</p>
+
+<% end %>
+
+<p><%= link_to "Accept/Decline", ReactRoutes.user.mentorship.requests(@receiver) %></p>

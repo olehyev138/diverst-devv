@@ -51,15 +51,15 @@ class ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    @group_leader_role_id = user.policy_group_leader(
+    @group_leader = user.policy_group_leader(
         if record&.is_a?(Group)
           record.id
         elsif record&.respond_to?(:group_id)
           record.group_id
         end
-      )&.user_role_id
-
-    PolicyGroupTemplate.where(user_role_id: @group_leader_role_id).where("#{permission} = true").exists?
+      )
+    @group_leader_role = @group_leader&.user_role
+    @group_leader_role&.policy_group_template&.send(permission)
   end
 
   def scope

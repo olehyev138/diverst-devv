@@ -1,9 +1,12 @@
-import messages from 'containers/Shared/Routes/messages';
+const messages = require('./messages');
 
 // Routes structure
-export const ROUTES = {
+const ROUTES = {
   // Session
   session: {
+    sign_up: {
+      path: (token = ':token') => `/sign_up/${token}`,
+    },
     login: {
       path: () => '/login',
     },
@@ -461,6 +464,26 @@ export const ROUTES = {
           }
         }
       },
+      sponsors: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/sponsors`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.index
+          }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/sponsors/new`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.new
+          }
+        },
+        edit: {
+          path: (groupId = ':group_id', groupSponsorId = ':group_sponsor_id') => `/groups/${groupId}/manage/sponsors/${groupSponsorId}/edit`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.edit
+          }
+        }
+      },
       leaders: {
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders`,
@@ -897,3 +920,5 @@ export const ROUTES = {
     }
   },
 };
+
+module.exports.ROUTES = ROUTES;
