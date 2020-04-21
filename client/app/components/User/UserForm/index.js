@@ -39,6 +39,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={handleChange}
                 fullWidth
                 disabled={props.isCommitting}
+                required
+                margin='normal'
+                id='email'
+                name='email'
+                value={values.email}
+                label={<DiverstFormattedMessage {...messages.email} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
                 margin='normal'
                 id='first_name'
                 name='first_name'
@@ -132,12 +144,15 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
 
 export function UserForm(props) {
   const user = dig(props, 'user');
+  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
+    email: { default: '' },
     last_name: { default: '' },
     biography: { default: '' },
     time_zone: { default: null },
+    user_role_id: { default: defaultRole },
     id: { default: undefined },
     avatar: { default: null },
   });
@@ -147,7 +162,7 @@ export function UserForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone']);
+        const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(payload);
       }}

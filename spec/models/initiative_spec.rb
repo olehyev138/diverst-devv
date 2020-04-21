@@ -292,7 +292,7 @@ RSpec.describe Initiative, type: :model do
         before do
           group.annual_budget = 2000
           annual_budget = group.current_annual_budget
-          budget = FactoryBot.create(:approved, annual_budget: annual_budget)
+          budget = FactoryBot.create(:approved_budget, annual_budget: annual_budget)
           budget_item = budget.budget_items.first
           budget_item.update(estimated_amount: 1000)
         end
@@ -360,7 +360,7 @@ RSpec.describe Initiative, type: :model do
       enterprise = create(:enterprise)
       group = create(:group, enterprise: enterprise, annual_budget: 10000)
       annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
-      budget = create(:approved, annual_budget: annual_budget)
+      budget = create(:approved_budget, annual_budget: annual_budget)
       initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
 
       expect(initiative1.finish_expenses!).to eq(true)
@@ -370,7 +370,7 @@ RSpec.describe Initiative, type: :model do
   describe '#current_expenses_sum' do
     it 'return 0' do
       annual_budget = create(:annual_budget)
-      budget = create(:approved, annual_budget: annual_budget)
+      budget = create(:approved_budget, annual_budget: annual_budget)
       initiative = create(:initiative, budget_item_id: budget.budget_item_ids.first)
       expect(initiative.current_expenses_sum).to eq(0)
     end
@@ -400,7 +400,8 @@ RSpec.describe Initiative, type: :model do
 
   describe '#time_string' do
     # TODO: timestring doesnt exist
-    xit 'returns day and start/end time' do
+    it 'returns day and start/end time' do
+      pending
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
       expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
     end
@@ -471,7 +472,7 @@ RSpec.describe Initiative, type: :model do
     it 'removes the child objects' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
-      budget = create(:approved, annual_budget: annual_budget)
+      budget = create(:approved_budget, annual_budget: annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, budget_item: budget.budget_items.first)
       initiative_update = create(:update, updatable: initiative)
       field = create(:field, field_definer: initiative)
@@ -543,7 +544,7 @@ RSpec.describe Initiative, type: :model do
     let!(:enterprise) { create(:enterprise) }
     let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
     let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
-    let!(:budget) { create(:approved, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved_budget, annual_budget_id: annual_budget.id) }
     let!(:outcome) { create :outcome, group_id: group.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,

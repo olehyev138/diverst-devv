@@ -73,7 +73,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
     context 'when there is new messages or news' do
       let(:previous_hour) { 30.minutes.ago.in_time_zone('EST') }
-      let(:next_hour) { 2.hours.ago.in_time_zone('EST') }
+      let(:next_hour) { 2.hours.from_now.in_time_zone('EST') }
 
       let!(:user_group) { create(:user_group, user: user, group: group) }
       let!(:group_message) { create(:group_message, group: group, updated_at: previous_hour, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
@@ -247,25 +247,24 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context 'when there is new messages or news' do
-      let(:yesterday) { (Date.today - 1.day).in_time_zone('UTC') }
-      let(:today) { (Date.today).in_time_zone('UTC') }
+      let(:day_before) { (Date.today - 2.days).in_time_zone('UTC') }
+      let(:yesterday) { (Date.today - 1.days).in_time_zone('UTC') }
 
       let!(:user_group) { create(:user_group, user: user, group: group) }
-      let!(:group_message) { create(:group_message, group: group, updated_at: yesterday, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
-      let!(:another_group_message) { create(:group_message, group: group, updated_at: today, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
-      let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
-      let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
-      let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: yesterday, owner: user) }
-      let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: today, owner: user) }
+      let!(:group_message) { create(:group_message, group: group, updated_at: day_before, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_group_message) { create(:group_message, group: group, updated_at: yesterday, owner: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:group_event) { create(:initiative, owner_group: group, updated_at: day_before, owner: user) }
+      let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
+      let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: day_before, owner: user) }
+      let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: yesterday, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link) { create(:news_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
-      let!(:another_news_link) { create(:news_link, group: group, updated_at: today, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
-      let!(:social_link) { create(:social_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
-      let!(:another_social_link) { create(:social_link, group: group, updated_at: today, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:news_link) { create(:news_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_news_link) { create(:news_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:social_link) { create(:social_link, group: group, updated_at: day_before, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
+      let!(:another_social_link) { create(:social_link, group: group, updated_at: yesterday, author: user, news_feed_link_attributes: { news_feed_id: group.news_feed.id }) }
 
-      # TODO Fix these tests
-      xit 'sends an email of notification to user' do
+      it 'sends an email of notification to user' do
         Timecop.freeze(Date.today) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
@@ -287,7 +286,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         end
       end
 
-      xit 'sends an email of notification to user when user is in segment and items are not in segments' do
+      it 'sends an email of notification to user when user is in segment and items are not in segments' do
         segment = create(:segment, groups: [group, second_group])
         create(:users_segment, user: user, segment: segment)
 
@@ -310,7 +309,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
 
-      xit 'sends an email of notification to user when user is in segment and items are in segment' do
+      it 'sends an email of notification to user when user is in segment and items are in segment' do
         segment = create(:segment, groups: [group, second_group])
         create(:users_segment, user: user, segment: segment)
 
@@ -337,7 +336,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
 
-      xit 'send an email of notification only for events to user when user is not in segment and items are in segment' do
+      it 'send an email of notification only for events to user when user is not in segment and items are in segment' do
         segment = create(:segment, groups: [group, second_group])
 
         create(:news_link_segment, news_link: news_link, segment: segment)
@@ -347,22 +346,24 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         create(:group_messages_segment, group_message: group_message, segment: segment)
         create(:group_messages_segment, group_message: another_group_message, segment: segment)
         mailer = double('mailer')
-        expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{
-                         group: group,
-                         events: [another_group_event],
-                         events_count: 1,
-                         messages: [],
-                         messages_count: 0,
-                         news: [],
-                         news_count: 0,
-                         social_links: [],
-                         social_links_count: 0,
-                         participating_events: [fourth_group_event],
-                         participating_events_count: 1
-                       }]) { mailer }
-        expect(mailer).to receive(:deliver_now)
-        subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
+        Timecop.freeze(Time.now) do
+          expect(UserGroupMailer).to receive(:notification)
+                                         .with(user, [{
+                                                          group: group,
+                                                          events: [another_group_event],
+                                                          events_count: 1,
+                                                          messages: [],
+                                                          messages_count: 0,
+                                                          news: [],
+                                                          news_count: 0,
+                                                          social_links: [],
+                                                          social_links_count: 0,
+                                                          participating_events: [fourth_group_event],
+                                                          participating_events_count: 1
+                                                      }]) { mailer }
+          expect(mailer).to receive(:deliver_now)
+          subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
+        end
       end
 
       it 'does not send an email of notification only for events to user when user is not in segment and items are in segment' do

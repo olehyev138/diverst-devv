@@ -17,35 +17,16 @@ RSpec.describe InitiativeExpense, type: :model do
   describe 'test after_save and after_destroy callbacks' do
     let!(:enterprise) { create(:enterprise) }
     let!(:group1) { create(:group, enterprise_id: enterprise.id, annual_budget: 10000) }
-    let!(:annual_budget1) { create(:annual_budget, amount: group1.annual_budget, group_id: group1.id, enterprise_id: enterprise.id) }
+    let!(:annual_budget1) { create(:annual_budget, amount: group1.annual_budget, group_id: group1.id) }
     let!(:budget) { create(:approved_budget, group: group1, annual_budget_id: annual_budget1.id) }
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
-    let!(:initiative) { create(:initiative, owner_group_id: group1.id, annual_budget_id: annual_budget1.id, pillar: pillar,
+    let!(:initiative) { create(:initiative, owner_group_id: group1.id, pillar: pillar,
                                             estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
     }
-    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10, annual_budget_id: annual_budget1.id) }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10) }
 
-    xit 'after_save, #update_annual_budget' do
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:save)
-    end
-
-    xit 'after_destroy, #update_annual_budget' do
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:destroy)
-    end
-
-    xit 'sets expenses on annual_budget to 0 when expense is destroyed' do
-      # TODO: skipping as budget implementation as changed - review
-      pending 'skipping as budget implementation as changed - review'
-
+    it 'sets expenses on annual_budget to 0 when expense is destroyed' do
       expense.reload
       annual_budget1.reload
       expect(annual_budget1.expenses).to eq expense.amount
@@ -60,7 +41,7 @@ RSpec.describe InitiativeExpense, type: :model do
     let!(:enterprise) { create(:enterprise) }
     let!(:group1) { create(:group, :with_annual_budget, enterprise_id: enterprise.id, amount: 10000) }
     let!(:annual_budget1) { group1.current_annual_budget }
-    let!(:budget) { create(:approved, annual_budget_id: annual_budget1.id) }
+    let!(:budget) { create(:approved_budget, annual_budget_id: annual_budget1.id) }
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, owner_group_id: group1.id, pillar: pillar,

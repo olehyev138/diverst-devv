@@ -13,22 +13,21 @@ import dig from 'object-dig';
 import { TextField } from '@material-ui/core';
 
 const CustomTextField = (props) => {
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
-
+  const { inputType, fieldDatum, fieldDatumIndex, formik, ...rest } = props;
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
     <TextField
+      required={fieldDatum.field.required}
       name={dataLocation}
       id={dataLocation}
-      type={props.inputType}
+      type={inputType}
       fullWidth
       margin='normal'
       label={fieldDatum.field.title}
-      value={getIn(props.formik.values, dataLocation)}
-      onChange={props.formik.handleChange}
-      {...props}
+      value={getIn(formik.values, dataLocation)}
+      onChange={formik.handleChange}
+      {...rest}
     />
   );
 };

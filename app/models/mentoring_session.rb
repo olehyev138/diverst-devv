@@ -47,8 +47,8 @@ class MentoringSession < ApplicationRecord
 
   after_create_commit { notify_users_on_create }
 
-  after_update    :notify_users_on_update
-  after_destroy   :notify_users_on_destroy
+  before_update    :notify_users_on_update
+  before_destroy   :notify_users_on_destroy
 
   settings do
     mappings dynamic: false do

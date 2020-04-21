@@ -60,6 +60,9 @@ export default defineMessages({
   time_zone: {
     id: `${scope}.form.input.time_zone`,
   },
+  user_role: {
+    id: `${scope}.form.input.user_role`,
+  },
   fields: {
     id: `${scope}.profile.fields`
   },
