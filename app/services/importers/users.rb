@@ -20,9 +20,7 @@ class Importers::Users
       new_user = user.new_record? ? true : false
       if user.save
         if new_user
-          user.invite!(@manager) do |u|
-            u.skip_invitation = !@manager.enterprise.has_enabled_onboarding_email
-          end
+          user.invite!(@manager, skip: !@manager.enterprise.has_enabled_onboarding_email)
         end
 
         @successful_rows << row

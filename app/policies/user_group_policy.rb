@@ -28,8 +28,8 @@ class UserGroupPolicy < GroupBasePolicy
   end
 
   alias_method :view_members?, :index?
-  alias_method :join?, :create?
-  alias_method :leave?, :destroy?
+  alias_method :create?, :join?
+  alias_method :destroy?, :leave?
 
   class Scope < Scope
     def is_member(permission)

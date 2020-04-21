@@ -84,6 +84,9 @@ export default defineMessages({
     },
   },
   columns: {
+    avatar: {
+      id: `${scope}.columns.avatar`,
+    },
     givenName: {
       id: `${scope}.columns.givenName`,
     },
