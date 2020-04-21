@@ -51,6 +51,9 @@ export default defineMessages({
     settings: {
       id: `${scope}.links.settings`,
     },
+    sponsors: {
+      id: `${scope}.links.sponsors`,
+    },
     leaders: {
       id: `${scope}.links.leaders`,
     },

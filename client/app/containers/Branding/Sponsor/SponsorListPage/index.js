@@ -8,18 +8,18 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Branding/Sponsor/reducer';
-import saga from 'containers/Branding/Sponsor/saga';
+import reducer from 'containers/Shared/Sponsors/reducer';
+import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,
   sponsorsUnmount
-} from 'containers/Branding/Sponsor/actions';
+} from 'containers/Shared/Sponsors/actions';
 
 import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors
-} from 'containers/Branding/Sponsor/selectors';
+} from 'containers/Shared/Sponsors/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -37,7 +37,7 @@ export function SponsorListPage(props) {
   const rs = new RouteService(useContext);
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc'
+    count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
   });
 
   const links = {
@@ -107,11 +107,12 @@ const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
 });
 
+
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: id => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
+  handleVisitSponsorEdit: (enterpriseId, id) => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
 });
 
 const withConnect = connect(

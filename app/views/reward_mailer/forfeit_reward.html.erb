@@ -1,0 +1,7 @@
+Sorry, <%= @user.name %>. Your reward (<%= @reward.label %>) has been denied
+<% unless @comment.blank? %>
+ due to the following reason: 
+<p><%= @comment %></p>
+<br>
+<% end %>
+Contact the administrator for more details.

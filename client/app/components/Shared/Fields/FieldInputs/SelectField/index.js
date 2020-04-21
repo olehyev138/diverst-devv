@@ -13,8 +13,7 @@ import { connect, Field, getIn } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 
 const CustomSelectField = (props) => {
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
 
   // allow specification of dataLocation
   const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
@@ -25,11 +24,12 @@ const CustomSelectField = (props) => {
       id={dataLocation}
       fullWidth
       margin='normal'
+      required={fieldDatum.field.required}
       label={fieldDatum.field.title}
-      value={getIn(props.formik.values, dataLocation)}
-      options={fieldDatum.field.options_text}
-      onChange={v => props.formik.setFieldValue(dataLocation, v)}
-      {...props}
+      value={getIn(formik.values, dataLocation)}
+      options={fieldDatum.field.options}
+      onChange={v => formik.setFieldValue(dataLocation, v)}
+      {...rest}
     />
   );
 };

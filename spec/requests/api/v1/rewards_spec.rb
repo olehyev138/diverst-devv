@@ -25,8 +25,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#show' do
-    xit 'gets a item' do
-      # TODO: fix when implementing rewards
+    it 'gets a item' do
       get "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:ok)
     end

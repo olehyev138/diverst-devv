@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe InitiativeSerializer, type: :serializer do
   it 'returns associations' do
-    budget = create(:approved)
+    budget = create(:approved_budget)
     budget_item = create(:budget_item, budget: budget)
     initiative = create(:initiative,
                         budget_item_id: budget_item.id,

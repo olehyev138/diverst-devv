@@ -20,7 +20,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     end
 
     context 'when an initiative with estimated funding and expenses made exists' do
-      let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+      let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
       let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
@@ -92,7 +92,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
   end
 
   describe '#approve' do
-    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
 
     it 'sets approved in annual_budget object' do
       expect(annual_budget.approved).to eq 0
@@ -114,7 +114,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     end
 
     context 'when existing annual_budget has leftover' do
-      let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+      let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
       let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
@@ -138,7 +138,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
   end
 
   describe '#re_assign_annual_budget' do
-    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
     let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                             budget_item_id: budget.budget_items.first.id)
     }
@@ -152,7 +152,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do
       # the second annual_budget is gotten from calling carryover on AnnualBudgetManager
       let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
-      let!(:budget1) { create(:approved, group_id: group.id, annual_budget_id: annual_budget1.id) }
+      let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
       let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available_amount,
                                                budget_item_id: budget1.budget_items.first.id)
       }

@@ -23,7 +23,8 @@ const styles = theme => ({
 
 const ManagePages = Object.freeze([
   'settings',
-  'leaders'
+  'leaders',
+  'sponsors'
 ]);
 
 const redirectAction = path => push(path);
