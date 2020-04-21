@@ -418,5 +418,10 @@ export default defineMessages({
         id: `${scope}.news.groupMessage.groupMessagePage`
       }
     }
+  },
+  poll: {
+    indexPage: {
+      id: `${scope}.poll.pollListPage`
+    }
   }
 });

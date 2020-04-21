@@ -736,7 +736,15 @@ const ROUTES = {
         data: {
           titleMessage: messages.admin.include.index
         }
-      }
+      },
+      polls: {
+        index: {
+          path: () => '/admin/include/polls',
+          data: {
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
+      },
     },
     mentorship: {
       index: {

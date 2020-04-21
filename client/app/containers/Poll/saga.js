@@ -37,7 +37,7 @@ export function* getPoll(action) {
 
 export function* getPolls(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.polls.all.bind(api.polls), action.payload);
 
     yield put(getPollsSuccess(response.data.page));
   } catch (err) {
