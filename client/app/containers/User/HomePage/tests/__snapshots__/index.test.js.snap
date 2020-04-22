@@ -10,40 +10,82 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       item={true}
       xs={true}
     >
-      <h1>
-        <Memo(DiverstFormattedMessage)
-          id="diverst.containers.HomePage.events"
-        />
-      </h1>
-      <Connect(Component)
-        loaderProps={
-          Object {
-            "transitionProps": Object {
-              "direction": "right",
-            },
-          }
-        }
-      />
-    </WithStyles(ForwardRef(Grid))>
-    <WithStyles(ForwardRef(Grid))
-      item={true}
-      xs="auto"
-    >
-      <WithStyles(ForwardRef(Divider))
-        orientation="vertical"
-      />
+      <WithStyles(ForwardRef(Paper))>
+        <WithStyles(ForwardRef(CardContent))>
+          <WithStyles(ForwardRef(Typography))
+            variant="h5"
+          >
+            <Memo(DiverstFormattedMessage)
+              id="diverst.containers.HomePage.events"
+            />
+          </WithStyles(ForwardRef(Typography))>
+          <Connect(Component)
+            listComponent={[Function]}
+            loaderProps={
+              Object {
+                "transitionProps": Object {
+                  "direction": "right",
+                },
+              }
+            }
+            readonly={true}
+          />
+        </WithStyles(ForwardRef(CardContent))>
+      </WithStyles(ForwardRef(Paper))>
     </WithStyles(ForwardRef(Grid))>
     <WithStyles(ForwardRef(Grid))
       item={true}
       xs={true}
     >
-      <h1>
-        <Memo(DiverstFormattedMessage)
-          id="diverst.containers.HomePage.news"
-        />
-      </h1>
-      <Connect(Component) />
+      <WithStyles(ForwardRef(Paper))>
+        <WithStyles(ForwardRef(CardContent))>
+          <WithStyles(ForwardRef(Typography))
+            variant="h5"
+          >
+            <Memo(DiverstFormattedMessage)
+              id="diverst.containers.HomePage.news"
+            />
+          </WithStyles(ForwardRef(Typography))>
+          <Connect(Component)
+            listComponent={
+              Object {
+                "$$typeof": Symbol(react.memo),
+                "compare": null,
+                "type": [Function],
+              }
+            }
+            readonly={true}
+          />
+        </WithStyles(ForwardRef(CardContent))>
+      </WithStyles(ForwardRef(Paper))>
     </WithStyles(ForwardRef(Grid))>
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    item={true}
+    xs={true}
+  >
+    <Memo(Connect(InjectIntl(SponsorCard)))
+      currentGroup={null}
+      type="enterprise"
+    />
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    item={true}
+    xs={true}
+  >
+    <WithStyles(ForwardRef(Typography))
+      color="primary"
+      onClick={[Function]}
+    >
+      <Memo(DiverstFormattedMessage)
+        id="diverst.containers.HomePage.privacy"
+      />
+    </WithStyles(ForwardRef(Typography))>
+    <DiverstDialog
+      handleClose={[Function]}
+      open={false}
+      title=" "
+    />
   </WithStyles(ForwardRef(Grid))>
 </Fragment>
 `;

@@ -19,4 +19,10 @@ export default defineMessages({
   events: {
     id: `${scope}.events`,
   },
+  privacy: {
+    id: `${scope}.privacy`,
+  },
+  close: {
+    id: `${scope}.close`,
+  },
 });

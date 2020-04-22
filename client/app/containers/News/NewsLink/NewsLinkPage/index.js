@@ -26,6 +26,7 @@ import {
 
 import NewsLink from 'components/News/NewsLink/NewsLink';
 import Conditional from 'components/Compositions/Conditional';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function NewsLinkPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -52,7 +53,7 @@ export function NewsLinkPage(props) {
     <NewsLink
       commentAction={props.createNewsLinkCommentBegin}
       deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}
@@ -101,5 +102,5 @@ export default compose(
   NewsLinkPage,
   ['currentNewsItem.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
-  'You don\'t have permission to view this group message'
+  permissionMessages.news.newsLink.showPage
 ));

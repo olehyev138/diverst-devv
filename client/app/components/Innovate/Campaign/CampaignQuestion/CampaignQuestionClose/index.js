@@ -108,7 +108,7 @@ CampaignQuestionClose.propTypes = {
   questionAction: PropTypes.func,
   getQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   users: PropTypes.array,
 };
 

@@ -26,13 +26,13 @@ import messages from 'containers/Group/GroupMembers/messages';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
-import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -154,16 +154,6 @@ export function GroupMemberList(props) {
             <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Permission>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          color='secondary'
-          size='large'
-          startIcon={<ExportIcon />}
-          onClick={() => props.exportMembersBegin()}
-        >
-          <DiverstFormattedMessage {...messages.export} />
-        </Button>
       </Box>
 
       <Box className={classes.floatSpacer} />

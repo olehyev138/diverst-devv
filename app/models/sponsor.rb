@@ -1,10 +1,15 @@
 class Sponsor < ApplicationRecord
+  include Sponsors::Actions
+
   belongs_to :sponsorable, polymorphic: true
 
   validates_length_of :sponsorable_type, maximum: 191
   validates_length_of :sponsor_message, maximum: 65535
   validates_length_of :sponsor_title, maximum: 191
   validates_length_of :sponsor_name, maximum: 191
+
+  scope :group_sponsor, -> { where(sponsorable_type: 'Group') }
+  scope :enterprise_sponsor, -> { where(sponsorable_type: 'Enterprise') }
 
   # ActiveStorage
   has_one_attached :sponsor_media

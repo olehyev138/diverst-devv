@@ -3,6 +3,7 @@ import { Switch } from 'react-router';
 
 // Pages
 import {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -91,6 +92,12 @@ import {
   FolderPage,
   ResourceCreatePage,
   ResourceEditPage,
+  EFoldersPage,
+  EFolderCreatePage,
+  EFolderEditPage,
+  EFolderPage,
+  EResourceCreatePage,
+  EResourceEditPage,
   UserProfilePage,
   InnovateLayout,
   CampaignListPage,
@@ -134,7 +141,9 @@ import {
   SocialLinkCreatePage,
   SocialLinkEditPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  GroupSponsorsListPage,
+  GroupSponsorsCreatePage, GroupSponsorsEditPage
 } from './templates';
 
 // Paths
@@ -148,6 +157,7 @@ export default function Routes(props) {
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
       <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.sign_up)} component={SignUpPage} />
 
       { /* User */}
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
@@ -203,12 +213,12 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - Manage - Resources */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={ResourceCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={ResourceEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={FolderEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={FolderCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={FolderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={EResourceCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={EResourceEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={EFolderEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={EFolderCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={EFolderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={EFoldersPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
 
       { /* Admin - Plan - Budget */ }
@@ -225,6 +235,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
 
       { /* Admin - System - GlobalSettings */ }
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
@@ -317,6 +328,9 @@ export default function Routes(props) {
       { /* Group Manage */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.manage.index)} component={GroupManageLayout} defaultPage />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.new)} component={GroupSponsorsCreatePage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.edit)} component={GroupSponsorsEditPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />

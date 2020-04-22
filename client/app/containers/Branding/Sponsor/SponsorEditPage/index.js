@@ -7,14 +7,14 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectSponsor } from '../selectors';
-import reducer from '../reducer';
-import saga from '../saga';
+import { selectSponsor } from '../../../Shared/Sponsors/selectors';
+import reducer from '../../../Shared/Sponsors/reducer';
+import saga from 'containers/Branding/Sponsor/enterprisesponsorsSaga';
 import {
   getSponsorBegin,
   updateSponsorBegin,
   sponsorsUnmount
-} from '../actions';
+} from '../../../Shared/Sponsors/actions';
 
 import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
@@ -22,8 +22,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
-export function SponsorCreatePage(props) {
+export function SponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
@@ -53,7 +56,7 @@ export function SponsorCreatePage(props) {
   );
 }
 
-SponsorCreatePage.propTypes = {
+SponsorEditPage.propTypes = {
   intl: intlShape,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
@@ -62,7 +65,8 @@ SponsorCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  sponsor: selectSponsor()
+  sponsor: selectSponsor(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -80,4 +84,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SponsorCreatePage);
+)(Conditional(
+  SponsorEditPage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  permissionMessages.branding.sponsor.editPage
+));

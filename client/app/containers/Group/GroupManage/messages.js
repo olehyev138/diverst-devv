@@ -51,6 +51,9 @@ export default defineMessages({
     settings: {
       id: `${scope}.links.settings`,
     },
+    sponsors: {
+      id: `${scope}.links.sponsors`,
+    },
     leaders: {
       id: `${scope}.links.leaders`,
     },
@@ -76,6 +79,9 @@ export default defineMessages({
     },
     banner: {
       id: `${scope}.settings.banner`,
+    },
+    logo: {
+      id: `${scope}.settings.logo`,
     },
     calendar_color: {
       id: `${scope}.settings.calendar_color`,

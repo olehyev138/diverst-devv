@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
+  Button, Grid, Box, MenuItem
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -28,6 +27,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { injectIntl, intlShape } from 'react-intl';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   userListItem: {
@@ -126,21 +126,26 @@ export function UserList(props, context) {
             dataArray={Object.values(props.users)}
             dataTotal={props.userTotal}
             columns={columns}
-            actions={[{
-              icon: () => <EditIcon />,
-              tooltip: intl.formatMessage(messages.tooltip.edit),
-              onClick: (_, rowData) => {
-                props.handleVisitUserEdit(rowData.id);
-              }
-            }, {
-              icon: () => <DeleteIcon />,
-              tooltip: intl.formatMessage(messages.tooltip.edit),
-              onClick: (_, rowData) => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
-                  props.deleteUserBegin(rowData.id);
-              }
-            }]}
+            actions={[
+              rowData => ({
+                icon: () => <EditIcon />,
+                tooltip: intl.formatMessage(messages.tooltip.edit),
+                onClick: (_, rowData) => {
+                  props.handleVisitUserEdit(rowData.id);
+                },
+                disabled: !permission(rowData, 'update?')
+              }),
+              rowData => ({
+                icon: () => <DeleteIcon />,
+                tooltip: intl.formatMessage(messages.tooltip.delete),
+                onClick: (_, rowData) => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    props.deleteUserBegin(rowData.id);
+                },
+                disabled: !permission(rowData, 'destroy?')
+              })
+            ]}
             my_options={{
               exportButton: true,
               exportCsv: (columns, data) => {

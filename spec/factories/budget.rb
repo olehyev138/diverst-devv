@@ -6,7 +6,7 @@ FactoryBot.define do
 
     description { Faker::Lorem.sentence }
     association :annual_budget, factory: :annual_budget
-    factory :approved do
+    factory :approved_budget do
       after(:create) do |budget|
         budget.is_approved = true
         budget.save

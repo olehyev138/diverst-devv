@@ -135,7 +135,7 @@ RSpec.describe CheckboxField, type: :model do
       expect(checkbox_field.validates_rule_for_user?(rule: rule, user: user)).to eq(false)
     end
 
-    xit 'returns true if user has info' do
+    it 'returns true if user has info' do
       # TODO: update for new field data design
       pending 'Update for new field data design'
 

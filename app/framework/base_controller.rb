@@ -5,7 +5,7 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, policy: @policy)
+    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy)
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise
@@ -16,7 +16,7 @@ module BaseController
   def export_csv
     base_authorize(klass)
 
-    CsvDownloadJob.perform_later(current_user.id, params.permit!.to_json, klass_name: klass.name)
+    CsvDownloadJob.perform_later(current_user.id, params.to_json, klass_name: klass.name)
     head :no_content
   rescue => e
     case e
@@ -53,6 +53,16 @@ module BaseController
     params[klass.symbol] = payload
     item = klass.find(params[:id])
     base_authorize(item)
+
+    # Generic way to allow clearing of attachment content when there's already content and we send the attachment param(s) empty
+    # Note: So far only works on has_one attachments
+    klass
+        .reflect_on_all_associations(:has_one)
+        .filter { |a| a.class_name.constantize == ActiveStorage::Attachment rescue false }
+        .map { |a| a.name.to_s.chomp('_attachment').to_sym }
+        .each do |attachment|
+          item.send(attachment).purge_later if params[attachment].blank? && item.send(attachment).attached?
+        end
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e

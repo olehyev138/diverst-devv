@@ -1,10 +1,6 @@
 require 'jwt'
 
-class UserTokenService
-  def self.create_jwt_token(payload)
-    JWT.encode(payload, JWT_SECRET)
-  end
-
+class UserTokenService < TokenService
   def self.create_jwt(user, params = {})
     token = user.generate_authentication_token
 
@@ -30,7 +26,7 @@ class UserTokenService
   def self.verify_jwt_token(token)
     session = get_session_from_jwt(token)
 
-    user_token_error if session.blank?
+    user_token_error if session.blank? || session.user.blank?
 
     session.user
   end
@@ -41,23 +37,11 @@ class UserTokenService
     Session.find_by(token: token, status: 0)
   end
 
-  def self.user_token_error
-    raise BadRequestException.new 'Invalid User Token'
-  end
-
   private
-
-  def self.decode_jwt(token)
-    JWT.decode(token, JWT_SECRET)
-  rescue JWT::DecodeError
-    user_token_error
-  end
 
   def self.get_user_token(token)
     payload = decode_jwt(token)
 
     payload[0]['user_token']
   end
-
-  JWT_SECRET = 'd1v3rS1tY1Sg0oD'.freeze
 end

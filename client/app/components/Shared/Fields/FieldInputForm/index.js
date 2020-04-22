@@ -9,14 +9,15 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { FieldArray, Formik, Form } from 'formik';
+import { FieldArray } from 'formik';
 
 import { withStyles } from '@material-ui/styles';
 import {
-  CardContent, Divider, Typography
+  CardContent, Divider, Typography, Link
 } from '@material-ui/core';
 
 import CustomField from 'components/Shared/Fields/FieldInputs/Field';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   fieldInput: {
@@ -24,7 +25,7 @@ const styles = theme => ({
   },
 });
 
-export function FieldInputForm({ formikProps, messages, ...props }) {
+export function FieldInputForm({ formikProps, messages, link, ...props }) {
   const { values } = formikProps;
 
   return (
@@ -37,27 +38,47 @@ export function FieldInputForm({ formikProps, messages, ...props }) {
           <DiverstFormattedMessage {...messages.preface} />
         </Typography>
       </CardContent>
-      <FieldArray
-        name='fields'
-        render={_ => (
-          <React.Fragment>
-            {values.fieldData.map((fieldDatum, i) => (
-              <div key={fieldDatum.id} className={props.classes.fieldInput}>
-                <Divider />
-                <CardContent>
-                  {Object.entries(fieldDatum).length !== 0 && (
-                    <CustomField
-                      fieldDatum={fieldDatum}
-                      fieldDatumIndex={i}
-                      disabled={props.isCommitting}
-                    />
-                  )}
-                </CardContent>
-              </div>
+      {values.fieldData.length !== 0
+        ? (
+          <FieldArray
+            name='fields'
+            render={_ => (
+              <React.Fragment>
+                {values.fieldData.map((fieldDatum, i) => (
+                  <div key={fieldDatum.id} className={props.classes.fieldInput}>
+                    <Divider />
+                    <CardContent>
+                      {Object.entries(fieldDatum).length !== 0 && (
+                        <CustomField
+                          fieldDatum={fieldDatum}
+                          fieldDatumIndex={i}
+                          disabled={props.isCommitting}
+                        />
+                      )}
+                    </CardContent>
+                  </div>
+                ))}
+              </React.Fragment>
+            )}
+          />
+        ) : (
+          <CardContent>
+            {link ? (
+              <Link
+                component={WrappedNavLink}
+                to={link}
+              >
+                <DiverstFormattedMessage {...messages.create_field} />
+              </Link>
+            ) : (messages.create_field && (
+              <Typography>
+                {' '}
+                <DiverstFormattedMessage {...messages.create_field} />
+              </Typography>
             ))}
-          </React.Fragment>
+
+          </CardContent>
         )}
-      />
     </React.Fragment>
   );
 }
@@ -70,12 +91,16 @@ FieldInputForm.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 
+  link: PropTypes.string,
   join: PropTypes.bool,
   messages: PropTypes.shape({
     fields: PropTypes.shape({
       id: PropTypes.string
     }),
     preface: PropTypes.shape({
+      id: PropTypes.string
+    }),
+    create_field: PropTypes.shape({
       id: PropTypes.string
     }),
     fields_save: PropTypes.shape({

@@ -14,12 +14,18 @@ import RouteService from 'utils/routeHelpers';
 import { selectFormGroup, selectGroupIsCommitting, selectPaginatedSelectGroups, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import {
   getGroupBegin, getGroupsBegin,
-  updateGroupBegin, groupFormUnmount
+  updateGroupBegin, groupFormUnmount,
+  getGroupsSuccess,
 } from 'containers/Group/actions';
 
 import GroupForm from 'components/Group/GroupForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { GroupCreatePage } from 'containers/Group/GroupCreatePage';
+import permissionMessages from 'containers/Shared/Permissions/messages';
+
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -45,6 +51,7 @@ export function GroupEditPage(props) {
         buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
+        getGroupsSuccess={props.getGroupsSuccess}
       />
     </React.Fragment>
   );
@@ -58,6 +65,7 @@ GroupEditPage.propTypes = {
   getGroupsBegin: PropTypes.func,
   updateGroupBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
+  getGroupsSuccess: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 };
@@ -73,7 +81,8 @@ const mapDispatchToProps = {
   getGroupBegin,
   getGroupsBegin,
   updateGroupBegin,
-  groupFormUnmount
+  groupFormUnmount,
+  getGroupsSuccess,
 };
 
 const withConnect = connect(
@@ -85,4 +94,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupEditPage);
+)(Conditional(
+  GroupCreatePage,
+  ['group.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  permissionMessages.group.editPage
+));

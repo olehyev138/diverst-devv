@@ -18,12 +18,19 @@ import dig from 'object-dig';
 
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
-import { selectMentoringInterests, selectUser as selectUserSession } from 'containers/Shared/App/selectors';
+import {
+  selectEnterprise,
+  selectMentoringInterests,
+  selectUser as selectUserSession
+} from 'containers/Shared/App/selectors';
 import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { CardContent, Grid } from '@material-ui/core';
-import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
+import MentorshipMenu from 'components/Mentorship/MentorshipMenu/Loadable';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -49,8 +56,8 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     const userId1A = rs.params('user_id');
-    const userId1 = userId1A ? userId1A[0] : null;
-    const userId2 = dig(rest, 'userSession', 'id');
+    const userId1 = userId1A || null;
+    const userId2 = dig(rest, 'userSession', 'user_id');
 
     // const userId = userId1;
     const userId = userId1 || userId2;
@@ -61,7 +68,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
     return () => {
       other.userUnmount();
     };
-  }, [dig(rest, 'userSession', 'id')]);
+  }, [dig(rest, 'userSession', 'user_id')]);
 
   return (
     <UserLayout
@@ -111,6 +118,7 @@ const mapStateToProps = createStructuredSelector({
   userSession: selectUserSession(),
   user: selectUser(),
   formUser: selectFormUser(),
+  enterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {
@@ -129,4 +137,9 @@ export default compose(
   withConnect,
   memo,
   withStyles(styles),
-)(MentorshipLayout);
+)(Conditional(
+  MentorshipLayout,
+  ['enterprise.mentorship_module_enabled', '!enterprise'],
+  (props, rs) => ROUTES.user.root.path(),
+  permissionMessages.layouts.mentorship,
+));
