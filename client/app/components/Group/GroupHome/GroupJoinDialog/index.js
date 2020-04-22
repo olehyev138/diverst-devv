@@ -7,11 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-import messages from 'containers/User/HomePage/messages';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 export default function GroupJoinDialog(props) {
-  const { title, message, open, handleNo, handleYes } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content } = props;
 
   return (
     <Dialog
@@ -21,18 +18,22 @@ export default function GroupJoinDialog(props) {
       aria-describedby='alert-dialog-description'
     >
       <DialogContent>
+        {title && <DialogTitle>{ title }</DialogTitle>}
         <DialogContentText id='alert-dialog-description'>
-          Thanks for joining the group!
-          Do you also want to join a subgroup?
+          {content}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleYes} color='primary' autoFocus>
-          Yes
-        </Button>
-        <Button onClick={handleNo} color='primary'>
-          No
-        </Button>
+        {handleYes && (
+          <Button onClick={handleYes} color='primary' autoFocus>
+            {textYes}
+          </Button>
+        )}
+        {handleNo && (
+          <Button onClick={handleNo} color='primary' autoFocus>
+            {textNo}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
@@ -40,8 +41,10 @@ export default function GroupJoinDialog(props) {
 
 GroupJoinDialog.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
+  textYes: PropTypes.string,
   handleNo: PropTypes.func,
+  textNo: PropTypes.string,
+  content: PropTypes.any,
 };
