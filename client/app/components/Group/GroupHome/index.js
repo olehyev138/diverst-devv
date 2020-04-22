@@ -82,6 +82,7 @@ export function GroupHome({ classes, ...props }) {
     </Paper>
   );
   const [openSubgroup, setOpenSubgroup] = useState(false);
+  const [isJoined, setIsJoined] = useState(props.currentGroup.current_user_is_member);
 
   const handleOpenSubgroup = () => {
     setOpenSubgroup(true);
@@ -92,6 +93,7 @@ export function GroupHome({ classes, ...props }) {
     props.joinGroup({
       group_id: props.currentGroup.id
     });
+    setIsJoined(!isJoined);
   };
   const handleJoinParentGroup = () => {
     setOpenSubgroup(false);
@@ -101,10 +103,11 @@ export function GroupHome({ classes, ...props }) {
     props.joinGroup({
       group_id: props.currentGroup.id
     });
-  }
+    setIsJoined(!isJoined);
+  };
 
   const joinBtn = (
-    props.currentGroup.current_user_is_member
+    isJoined
       ? (
         <Button
           variant='contained'
@@ -115,6 +118,7 @@ export function GroupHome({ classes, ...props }) {
             props.leaveGroup({
               group_id: props.currentGroup.id
             });
+            setIsJoined(!isJoined);
           }}
           startIcon={<RemoveIcon />}
         >
