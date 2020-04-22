@@ -24,8 +24,7 @@ import NewsFeed from 'components/News/HomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
 import GroupJoinDialog from 'components/Group/GroupHome/GroupJoinDialog';
-import SubgroupJoinDialog from 'components/Group/GroupHome/SubgroupJoinDialog';
-
+import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 
 const styles = theme => ({
   title: {
@@ -82,21 +81,14 @@ export function GroupHome({ classes, ...props }) {
       </CardContent>
     </Paper>
   );
-  const [openConfirmation, setOpenConfirmation] = useState(false);
   const [openSubgroup, setOpenSubgroup] = useState(false);
 
   const handleOpenSubgroup = () => {
-    setOpenConfirmation(false);
     setOpenSubgroup(true);
-  };
-
-  const handleClickOpenConfirmation = () => {
-    setOpenConfirmation(true);
   };
 
   const handleClose = () => {
     setOpenSubgroup(false);
-    setOpenConfirmation(false);
     props.joinGroup({
       group_id: props.currentGroup.id
     });
@@ -127,13 +119,23 @@ export function GroupHome({ classes, ...props }) {
             size='large'
             fullWidth
             color='primary'
-            onClick={(handleClickOpenConfirmation)}
+            onClick={(handleOpenSubgroup)}
             startIcon={<AddIcon />}
           >
             Join
           </Button>
-          <GroupJoinDialog open={openConfirmation} handleNo={handleClose} handleYes={handleOpenSubgroup}/>
-          <SubgroupJoinDialog open={openSubgroup} handleNo={handleClose} handleYes={handleClose}/>
+          <GroupJoinDialog
+            open={openSubgroup}
+            title='Thanks for joining the group! '
+            content={(
+              <SubgroupJoinForm
+                subgroupJoinAction={props.joinSubgroups}
+                handleClose={handleClose}
+                group={props.currentGroup}
+              />
+            )
+            }
+          />
         </div>
       )
   );
@@ -180,6 +182,7 @@ GroupHome.propTypes = {
   classes: PropTypes.object,
   joinGroup: PropTypes.func,
   leaveGroup: PropTypes.func,
+  joinSubgroups: PropTypes.func,
 };
 
 export default compose(
