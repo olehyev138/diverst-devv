@@ -93,6 +93,15 @@ export function GroupHome({ classes, ...props }) {
       group_id: props.currentGroup.id
     });
   };
+  const handleJoinParentGroup = () => {
+    setOpenSubgroup(false);
+    props.joinGroup({
+      group_id: props.currentGroup.parent_id
+    });
+    props.joinGroup({
+      group_id: props.currentGroup.id
+    });
+  }
 
   const joinBtn = (
     props.currentGroup.current_user_is_member
@@ -124,18 +133,32 @@ export function GroupHome({ classes, ...props }) {
           >
             Join
           </Button>
-          <GroupJoinDialog
-            open={openSubgroup}
-            title='Thanks for joining the group! '
-            content={(
-              <SubgroupJoinForm
-                subgroupJoinAction={props.joinSubgroups}
-                handleClose={handleClose}
-                group={props.currentGroup}
+          {props.currentGroup.parent_id === null
+            ? (
+              <GroupJoinDialog
+                open={openSubgroup}
+                title='Thanks for joining the group! '
+                content={(
+                  <SubgroupJoinForm
+                    subgroupJoinAction={props.joinSubgroups}
+                    handleClose={handleClose}
+                    group={props.currentGroup}
+                  />
+                )}
               />
             )
-            }
-          />
+            : (
+              <GroupJoinDialog
+                open={openSubgroup}
+                title='Thanks for joining the group! '
+                content='Do you want to also join the parent group?'
+                handleYes={handleJoinParentGroup}
+                textYes='Yes'
+                handleNo={handleClose}
+                textNo='No'
+              />
+            )
+          }
         </div>
       )
   );
