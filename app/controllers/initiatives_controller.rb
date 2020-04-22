@@ -136,6 +136,10 @@ class InitiativesController < ApplicationController
 
     # check if user can start the session
     require 'twilio-ruby'
+    
+    ENV['TWILIO_ACCOUNT_SID'] = 'AC96e9f809a29495d4acc1431d8171d310'
+    ENV['TWILIO_API_KEY'] = 'SK83cc4c80feba1449a3f5475c851e8860'
+    ENV['TWILIO_SECRET'] = '9oY0TYDoij7uOEhltUtCkjMWa1teO1oV'
 
     raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
     raise BadRequestException.new 'TWILIO_API_KEY Required' if ENV['TWILIO_API_KEY'].blank?
