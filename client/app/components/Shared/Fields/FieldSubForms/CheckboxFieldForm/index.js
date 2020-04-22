@@ -62,7 +62,7 @@ export function CheckboxFieldForm({ formikProps, arrayHelpers, index, fieldsName
           />
         </Grid>
         <Grid item xs={1}>
-          <IconButton onClick={() => remove(index)}>
+          <IconButton onClick={() => setFieldValue(`${fieldsName}[${index}]._destroy`, true)}>
             <DeleteIcon />
           </IconButton>
         </Grid>

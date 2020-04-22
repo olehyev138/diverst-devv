@@ -739,15 +739,21 @@ const ROUTES = {
       },
       polls: {
         index: {
-          path: () => '/admin/include/polls',
+          path: () => '/admin/polls',
           data: {
-            titleMessage: messages.admin.manage.groups,
+            titleMessage: messages.admin.include.polls.index,
           }
         },
         new: {
-          path: () => '/admin/include/polls/new',
+          path: () => '/admin/polls/new',
           data: {
-            titleMessage: messages.admin.manage.groups,
+            titleMessage: messages.admin.include.polls.new,
+          }
+        },
+        edit: {
+          path: (pollId = ':poll_id') => `/admin/polls/${pollId}/edit`,
+          data: {
+            titleMessage: messages.admin.include.polls.edit,
           }
         },
       },

@@ -109,6 +109,7 @@ import {
   CampaignQuestionEditPage,
   PollsList,
   PollCreatePage,
+  PollEditPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -228,6 +229,7 @@ export default function Routes(props) {
 
       { /* Admin - Plan - Budget */ }
       <AdminLayout {...expandRoute(ROUTES.admin.include.polls.new)} component={PollCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.edit)} component={PollEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.include.polls.index)} component={PollsList} />
 
       { /* Admin - Innovate */ }

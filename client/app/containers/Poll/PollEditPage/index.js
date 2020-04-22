@@ -16,9 +16,9 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createPollBegin, pollsUnmount } from 'containers/Poll/actions';
+import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
 import PollForm from 'components/Poll/PollForm';
-import { selectIsCommitting } from 'containers/Poll/selectors';
+import { selectIsCommitting, selectIsFetchingPoll, selectFormPoll } from 'containers/Poll/selectors';
 
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
@@ -31,20 +31,32 @@ export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
 
-  useEffect(() => () => {}, []);
-
   const rs = new RouteService(useContext);
+
+  useEffect(() => {
+    const pollId = rs.params('poll_id');
+    if (pollId)
+      props.getPollBegin({ id: pollId });
+
+    return () => props.pollsUnmount();
+  }, []);
+
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
+    pollShow: '/' // ROUTES.admin.include.polls.index.path(),
   };
   const { intl } = props;
 
   return (
     <React.Fragment>
       <PollForm
-        pollAction={props.createPollBegin}
+        poll={props.poll}
+        pollAction={props.updatePollBegin}
         isCommitting={props.isCommitting}
-        buttonText={<DiverstFormattedMessage {...messages.create} />}
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        isFormLoading={props.isFormLoading}
+        edit
+
         links={links}
       />
     </React.Fragment>
@@ -53,18 +65,24 @@ export function PollCreatePage(props) {
 
 PollCreatePage.propTypes = {
   intl: intlShape,
-  createPollBegin: PropTypes.func,
+  updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
+  getPollBegin: PropTypes.func,
+  poll: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
+  poll: selectFormPoll(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFetchingPoll(),
 });
 
 const mapDispatchToProps = {
-  createPollBegin,
-  pollsUnmount
+  updatePollBegin,
+  pollsUnmount,
+  getPollBegin,
 };
 
 const withConnect = connect(

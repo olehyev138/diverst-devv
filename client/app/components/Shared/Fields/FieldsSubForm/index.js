@@ -8,6 +8,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import dig from 'object-dig';
 
 import {
   Button, Divider, Grid, Box
@@ -61,6 +62,7 @@ export function FieldsSubForm(props, context) {
     max: undefined,
     private: false,
     required: false,
+    _destroy: false,
   });
 
   const addButtons = arrayHelpers => (
@@ -134,15 +136,20 @@ export function FieldsSubForm(props, context) {
   );
 
   const fieldForm = props => (
-    <React.Fragment key={props.index}>
-      <FieldForm
-        {...props}
-      />
-    </React.Fragment>
+    props.field && !dig(props, 'field', '_destroy') ? (
+      <React.Fragment key={props.index}>
+        <FieldForm
+          {...props}
+        />
+      </React.Fragment>
+    ) : null
   );
 
   fieldForm.propTypes = {
     index: PropTypes.number,
+    field: PropTypes.shape({
+      _destroy: PropTypes.bool,
+    }),
   };
 
   return (
@@ -155,7 +162,7 @@ export function FieldsSubForm(props, context) {
           {insertIntoArray(
             formikProps.values[fieldsName].map(
               (field, index) => fieldForm({ arrayHelpers, formikProps, field, index, fieldsName })
-            ), (
+            ).filter(a => a), (
               <React.Fragment>
                 <Box mb={2} />
                 <Divider />

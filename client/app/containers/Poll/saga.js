@@ -25,7 +25,7 @@ import { createEventSuccess } from 'containers/Event/actions';
 
 export function* getPoll(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.polls.get.bind(api.polls), action.payload.id);
 
     yield put(getPollSuccess(response.data));
   } catch (err) {
@@ -68,7 +68,9 @@ export function* createPoll(action) {
 
 export function* updatePoll(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { poll: action.payload };
+
+    const response = yield call(api.polls.update.bind(api.polls), action.payload.id, payload);
 
     yield put(updatePollSuccess({}));
     yield put(showSnackbar({ message: 'Successfully updated poll', options: { variant: 'success' } }));
