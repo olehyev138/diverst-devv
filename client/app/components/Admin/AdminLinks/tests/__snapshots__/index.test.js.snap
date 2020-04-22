@@ -31,7 +31,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.analyze.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -59,7 +59,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.overview"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -77,7 +77,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -95,7 +95,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -113,7 +113,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.custom"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -128,7 +128,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.manage.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -155,7 +155,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -173,7 +173,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.segments"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -191,7 +191,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -209,7 +209,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.archived"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -225,7 +225,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.plan.index"
               />
             }
@@ -267,7 +267,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.innovate.index"
               />
             }
@@ -295,7 +295,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.innovate.campaigns"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -313,7 +313,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.innovate.financials"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -328,7 +328,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.include.index"
               />
             }
@@ -342,7 +342,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.mentorship.index"
               />
             }
@@ -357,7 +357,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.system.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -385,7 +385,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.globalSettings"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -403,7 +403,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -421,7 +421,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -439,7 +439,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.logs"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -457,7 +457,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.diversity"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -491,7 +491,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.analyze.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -519,7 +519,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.overview"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -537,7 +537,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -555,7 +555,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -573,7 +573,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.analyze.custom"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -588,7 +588,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.manage.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -615,7 +615,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.groups"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -633,7 +633,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.segments"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -651,7 +651,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -669,7 +669,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.manage.archived"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -685,7 +685,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.plan.index"
               />
             }
@@ -727,7 +727,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.innovate.index"
               />
             }
@@ -755,7 +755,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.innovate.campaigns"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -773,7 +773,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.innovate.financials"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -788,7 +788,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.include.index"
               />
             }
@@ -802,7 +802,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary={
-              <Memo(DiverstFormattedMessage)
+              <Memo(Connect(DiverstFormattedMessage))
                 id="diverst.containers.Routes.admin.mentorship.index"
               />
             }
@@ -817,7 +817,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.Routes.admin.system.index"
             />
           </WithStyles(ForwardRef(ListItemText))>
@@ -845,7 +845,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.globalSettings"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -863,7 +863,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.users"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -881,7 +881,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -899,7 +899,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.logs"
                 />
               </WithStyles(ForwardRef(ListItemText))>
@@ -917,7 +917,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
+                <Memo(Connect(DiverstFormattedMessage))
                   id="diverst.containers.Routes.admin.system.diversity"
                 />
               </WithStyles(ForwardRef(ListItemText))>

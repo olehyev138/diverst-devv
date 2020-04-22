@@ -15,7 +15,7 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(Typography))
             variant="h5"
           >
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.HomePage.events"
             />
           </WithStyles(ForwardRef(Typography))>
@@ -42,7 +42,7 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(Typography))
             variant="h5"
           >
-            <Memo(DiverstFormattedMessage)
+            <Memo(Connect(DiverstFormattedMessage))
               id="diverst.containers.HomePage.news"
             />
           </WithStyles(ForwardRef(Typography))>
