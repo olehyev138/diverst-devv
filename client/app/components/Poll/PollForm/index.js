@@ -128,13 +128,15 @@ export function PollForm(props) {
     title: { default: '' },
     description: { default: '' },
     fields: { default: [], customKey: 'fields_attributes' },
+    groups: { default: [], customKey: 'group_ids' },
+    segments: { default: [], customKey: 'segment_ids' },
   });
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.pollAction(values);
+        props.pollAction(mapFields(values, ['group_ids', 'segment_ids']));
       }}
     >
       {formikProps => <PollFormInner {...props} formikProps={formikProps} />}

@@ -38,7 +38,7 @@ export function PollListPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    pollNew: '/', // ROUTES.admin.manage.polls.new.path(),
+    pollNew: ROUTES.admin.include.polls.new.path(),
     pollPage: id => '/', // ROUTES.admin.manage.polls.show.path(id)
   };
 

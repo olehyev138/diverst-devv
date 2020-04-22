@@ -17,9 +17,6 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
-
-import DiverstLoader from 'components/Shared/DiverstLoader';
-import DiverstPagination from 'components/Shared/DiverstPagination';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import DiverstTable from 'components/Shared/DiverstTable';
@@ -27,7 +24,6 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import { permission } from 'utils/permissionsHelpers';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({

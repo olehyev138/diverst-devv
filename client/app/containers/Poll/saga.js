@@ -21,6 +21,7 @@ import {
   updatePollSuccess, updatePollError,
   deletePollSuccess, deletePollError,
 } from './actions';
+import { createEventSuccess } from 'containers/Event/actions';
 
 export function* getPoll(action) {
   try {
@@ -50,9 +51,12 @@ export function* getPolls(action) {
 
 export function* createPoll(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { poll: action.payload };
+
+    const response = yield call(api.polls.create.bind(api.polls), payload);
 
     yield put(createPollSuccess({}));
+    yield put(push(ROUTES.admin.include.polls.index.path()));
     yield put(showSnackbar({ message: 'Successfully created poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollError(err));
