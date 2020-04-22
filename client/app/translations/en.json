@@ -565,6 +565,7 @@
   "diverst.containers.User.form.input.email": "Email",
   "diverst.containers.User.form.input.avatar": "Avatar",
   "diverst.containers.User.form.input.biography": "Biography",
+  "diverst.containers.User.form.input.active": "Active user of Diverst",
   "diverst.containers.User.form.input.time_zone": "Time Zone",
   "diverst.containers.User.form.input.user_role": "User Role",
   "diverst.containers.User.profile.fields": "Hidden info",
