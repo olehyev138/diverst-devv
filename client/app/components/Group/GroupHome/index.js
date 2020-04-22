@@ -124,7 +124,7 @@ export function GroupHome({ classes, ...props }) {
           >
             Join
           </Button>
-          <GroupJoinDialog open={open} handleClose={handleClose}/>
+          <GroupJoinDialog open={open} handleClose={handleClose} />
         </div>
       )
   );
