@@ -47,7 +47,7 @@ export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, val
         ))}
         <Grid item xs='12'>
           <Grid container justify='flex-end'>
-            <Button
+            <Button onClick={handleClose}
               color='primary'
               type='submit'
             >
