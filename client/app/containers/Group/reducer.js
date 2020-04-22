@@ -43,6 +43,10 @@ import {
   GROUP_CATEGORIZE_BEGIN,
   GROUP_CATEGORIZE_SUCCESS,
   GROUP_CATEGORIZE_ERROR,
+  JOIN_SUBGROUPS_BEGIN,
+  JOIN_SUBGROUPS_SUCCESS,
+  JOIN_SUBGROUPS_ERROR
+
 } from './constants';
 
 export const initialState = {
@@ -104,6 +108,7 @@ function groupsReducer(state = initialState, action) {
       case RESET_BUDGET_BEGIN:
       case JOIN_GROUP_BEGIN:
       case LEAVE_GROUP_BEGIN:
+      case JOIN_SUBGROUPS_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
@@ -120,6 +125,7 @@ function groupsReducer(state = initialState, action) {
       case CARRY_BUDGET_SUCCESS:
       case RESET_BUDGET_SUCCESS:
       case JOIN_GROUP_SUCCESS:
+      case JOIN_SUBGROUPS_SUCCESS:
       case LEAVE_GROUP_SUCCESS:
       case GROUP_CATEGORIZE_SUCCESS:
         draft.isCommitting = false;
@@ -133,6 +139,7 @@ function groupsReducer(state = initialState, action) {
       case DELETE_GROUP_ERROR:
       case LEAVE_GROUP_ERROR:
       case JOIN_GROUP_ERROR:
+      case JOIN_SUBGROUPS_ERROR:
         draft.isCommitting = false;
         break;
 

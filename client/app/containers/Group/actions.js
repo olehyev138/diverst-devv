@@ -43,7 +43,10 @@ import {
   GROUP_CATEGORIZE_UNMOUNT,
   GROUP_CATEGORIZE_BEGIN,
   GROUP_CATEGORIZE_SUCCESS,
-  GROUP_CATEGORIZE_ERROR
+  GROUP_CATEGORIZE_ERROR,
+  JOIN_SUBGROUPS_BEGIN,
+  JOIN_SUBGROUPS_SUCCESS,
+  JOIN_SUBGROUPS_ERROR
 } from 'containers/Group/constants';
 
 /* Group listing */
@@ -313,6 +316,26 @@ export function groupCategorizeSuccess(payload) {
 export function groupCategorizeError(error) {
   return {
     type: GROUP_CATEGORIZE_ERROR,
+    error,
+  };
+}
+export function joinSubgroupsBegin(payload) {
+  return {
+    type: JOIN_SUBGROUPS_BEGIN,
+    payload,
+  };
+}
+
+export function joinSubgroupsSuccess(payload) {
+  return {
+    type: JOIN_SUBGROUPS_SUCCESS,
+    payload,
+  };
+}
+
+export function joinSubgroupsError(error) {
+  return {
+    type: JOIN_SUBGROUPS_ERROR,
     error,
   };
 }
