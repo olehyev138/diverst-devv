@@ -2,6 +2,13 @@ provider "aws" {
 }
 
 terraform {
+  required_version = "~> 0.12.24"
+
+  required_providers {
+    aws     = "~> 2.58"
+    random  = "~> 2.2"
+  }
+
   backend "s3" {
     bucket          = "devops-inmvlike"
     key             = "terraform/terraform.tfstate"
@@ -17,8 +24,8 @@ resource "aws_key_pair" "aws-tf-key" {
   public_key  = file("~/.ssh/devops.pub")
 }
 
-module "prod" {
-  source = "../base-prod"
+module "sandbox" {
+  source = "../base-sandbox"
 
   env_name      = var.env_name
   region        = var.region
