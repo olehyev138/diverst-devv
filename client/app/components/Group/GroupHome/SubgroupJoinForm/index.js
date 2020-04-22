@@ -13,9 +13,9 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
-
+import DiverstSwitch from '../../../Shared/DiverstSwitch';
 import {
-  Button, Card, CardActions, CardContent, Grid, FormControl, Divider, Switch, FormControlLabel,
+  Button, Grid, Typography
 } from '@material-ui/core';
 
 const styles = theme => ({
@@ -25,30 +25,24 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, values, handleClose, ...props }) {
+export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, values, handleClose, setFieldValue, ...props }) {
   return (
     <Form>
       <Grid container>
+        <Grid item>
+          <Typography>Please choose a subgroup to join, if you want:</Typography>
+        </Grid>
         {values.children && values.children.map((subgroup, i) => (
           <Grid item key={subgroup.id} xs={12}>
-            <FormControl>
-              <FormControlLabel
-                labelPlacement='right'
-                label={subgroup.name}
-                control={(
-                  <Field
-                    component={Switch}
-                    onChange={handleChange}
-                    color='primary'
-                    id='current_user_is_member'
-                    name='current_user_is_member'
-                    margin='normal'
-                    checked={values.children[i].current_user_is_member}
-                    value={values.current_user_is_member}
-                  />
-                )}
-              />
-            </FormControl>
+            <Field
+              component={DiverstSwitch}
+              id='current_user_is_member'
+              name='current_user_is_member'
+              label={subgroup.name}
+              margin='normal'
+              value={values.children[i].current_user_is_member}
+              onChange={(_, value) => setFieldValue(`children[${i}].current_user_is_member`, value)}
+            />
           </Grid>
         ))}
         <Grid item xs='12'>
@@ -57,10 +51,10 @@ export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, val
               color='primary'
               type='submit'
             >
-            Done
+              Update
             </Button>
             <Button onClick={handleClose}>
-              <DiverstFormattedMessage {...messages.cancel} />
+              Cancel
             </Button>
           </Grid>
         </Grid>
@@ -75,14 +69,14 @@ export function SubgroupJoinForm(props) {
     name: { default: '' },
     children: { default: [] }
   });
-  console.log(props.group);
+
   return (
     <React.Fragment>
       <Formik
         initialValues={initialValues}
         enableReinitialize
         onSubmit={(values, actions) => {
-          props.subgroupJoinAction(mapFields(values, ['children']));
+          props.subgroupJoinAction(values.children.map(group => ({ group_id: group.id, join: group.current_user_is_member })));
         }}
       >
         {formikProps => <SubgroupJoinFormInner handleClose={props.handleClose} {...props} {...formikProps} />}
@@ -103,6 +97,7 @@ SubgroupJoinFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   values: PropTypes.object,
+  setFieldValue: PropTypes.func,
 };
 
 export default compose(
