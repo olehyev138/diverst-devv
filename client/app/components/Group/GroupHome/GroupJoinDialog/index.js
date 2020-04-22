@@ -17,20 +17,20 @@ export default function GroupJoinDialog(props) {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby='alert-dialog-title'
+      aria-describedby='alert-dialog-description'
     >
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id='alert-dialog-description'>
           Thanks for joining the group!
           Do you also want to join a subgroup?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" autoFocus>
+        <Button onClick={handleClose} color='primary' autoFocus>
           Yes
         </Button>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} color='primary'>
           No
         </Button>
       </DialogActions>
