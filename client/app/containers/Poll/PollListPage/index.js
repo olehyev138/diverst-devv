@@ -29,6 +29,9 @@ import PollList from 'components/Poll/PollList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { createRedirectAction } from 'utils/reduxPushHelper';
+
+const handlePollEdit = createRedirectAction(ROUTES.admin.include.polls.edit.path);
 
 export function PollListPage(props) {
   useInjectReducer({ key: 'polls', reducer });
@@ -46,7 +49,7 @@ export function PollListPage(props) {
     props.getPollsBegin(params);
 
     return () => {
-      props.pollUnmount();
+      props.pollsUnmount();
     };
   }, []);
 
@@ -83,7 +86,7 @@ export function PollListPage(props) {
 
 PollListPage.propTypes = {
   getPollsBegin: PropTypes.func.isRequired,
-  pollUnmount: PropTypes.func.isRequired,
+  pollsUnmount: PropTypes.func.isRequired,
   polls: PropTypes.array,
   pollTotal: PropTypes.number,
   deletePollBegin: PropTypes.func,
@@ -102,19 +105,13 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
 });
-/*
+
 const mapDispatchToProps = {
   getPollsBegin,
-  pollUnmount,
+  pollsUnmount,
   deletePollBegin,
+  handlePollEdit,
 };
-*/
-const mapDispatchToProps = dispatch => ({
-  getPollsBegin: payload => dispatch(getPollsBegin(payload)),
-  deletePollBegin: payload => dispatch(deletePollBegin(payload)),
-  pollUnmount: () => dispatch(pollsUnmount()),
-  handlePollEdit: id => dispatch(push(ROUTES.admin.manage.polls.edit.path(id)))
-});
 
 const withConnect = connect(
   mapStateToProps,

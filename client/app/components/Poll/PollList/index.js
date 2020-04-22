@@ -25,6 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   pollListItem: {
@@ -97,7 +98,7 @@ export function PollList(props, context) {
     onClick: (_, rowData) => {
       props.handlePollEdit(rowData.id);
     },
-    disabled: true // !permission(rowData, 'update?')
+    disabled: !permission(rowData, 'update?')
   }));
 
   actions.push(rowData => ({

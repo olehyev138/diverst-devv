@@ -10,9 +10,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Poll/reducer';
 import saga from 'containers/Poll/saga';
 
-import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
-
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -43,7 +40,7 @@ export function PollCreatePage(props) {
 
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
-    pollShow: '/' // ROUTES.admin.include.polls.index.path(),
+    pollShow: ROUTES.admin.include.polls.index.path(),
   };
   const { intl } = props;
 

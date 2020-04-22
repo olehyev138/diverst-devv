@@ -11,6 +11,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Shared/Permissions/messages';
+import { redirectAction } from 'utils/reduxPushHelper';
 
 function conditionalCheck(props, condition) {
   let parts;
@@ -32,8 +33,6 @@ function conditionsMapper(props, conditions) {
 function valid(props, conditions, reducer) {
   return reducer(conditionsMapper(props, conditions));
 }
-
-const redirectAction = url => push(url);
 
 export default function Conditional(
   Component,
