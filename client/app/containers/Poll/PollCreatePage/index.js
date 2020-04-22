@@ -24,6 +24,8 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { Button } from '@material-ui/core';
 
 export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
@@ -43,7 +45,7 @@ export function PollCreatePage(props) {
       <PollForm
         pollAction={props.createPollBegin}
         isCommitting={props.isCommitting}
-        buttonText={intl.formatMessage(messages.create)}
+        buttonText={<DiverstFormattedMessage {...messages.create} />}
         currentUser={currentUser}
         currentGroup={currentGroup}
         links={links}

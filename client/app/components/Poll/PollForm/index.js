@@ -36,9 +36,10 @@ import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 const freePoll = { label: 'Create new free poll ($0.00)', value: null, available: 0 };
 
 /* eslint-disable object-curly-newline */
-export function PollFormInner({ formikProps, ...props }) {
+export function PollFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
-    buttonText, setFieldValue, setFieldTouched, setFieldError } = formikProps;
+    setFieldValue, setFieldTouched, setFieldError } = formikProps;
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.poll}>
       <Form>
@@ -78,7 +79,7 @@ export function PollFormInner({ formikProps, ...props }) {
               {...formikProps}
             />
             <SegmentSelector
-              groupField='segment_ids'
+              segmentField='segment_ids'
               label={<DiverstFormattedMessage {...messages.form.segments} />}
               isMulti
               {...formikProps}
@@ -160,15 +161,11 @@ PollFormInner.propTypes = {
     values: PropTypes.object,
     touched: PropTypes.object,
     errors: PropTypes.object,
-    buttonText: PropTypes.string,
     setFieldValue: PropTypes.func,
     setFieldTouched: PropTypes.func,
     setFieldError: PropTypes.func,
   }),
-  currentGroup: PropTypes.object.isRequired,
-  pillars: PropTypes.array.isRequired,
-  budgetItems: PropTypes.array.isRequired,
-
+  buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
