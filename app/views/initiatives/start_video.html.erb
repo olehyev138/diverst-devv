@@ -67,7 +67,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center">Video call</h2>
+            <h2 class="text-center"><%= @initiative.name %></h2>
           </div>
         </div>
       </div>
@@ -87,12 +87,6 @@
               <li>
                 <div id="remote-media"></div>
                 <p id="remote-participant"></p>
-              </li>
-              <li>
-                <div class="remote-box" style="height:200px; width: 200px;"></div>
-              </li>
-              <li>
-                <div class="remote-box" style="height:200px; width: 200px;"></div>
               </li>
             </div>
             </ul>
@@ -119,7 +113,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Send a message..." id="message">
                 <span class="input-group-btn">
-                  <button class="btn" style="background-color: #7B77C9;" type="button" id="send">Send!</button>
+                  <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
                 </span>
               </div><!-- /input-group -->
             </div>
