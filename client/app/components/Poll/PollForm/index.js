@@ -13,7 +13,7 @@ import { DateTime } from 'luxon';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Grid, Divider,
+  Button, Card, CardActions, CardContent, TextField, Grid, Divider, Box
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -29,22 +29,21 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectPaginatedSelectPillars } from 'containers/Group/Pillar/selectors';
 import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/BudgetItem/selectors';
+import GroupSelector from "components/Shared/GroupSelector";
+import SegmentSelector from "components/Shared/SegmentSelector";
 
 const freePoll = { label: 'Create new free poll ($0.00)', value: null, available: 0 };
 
 /* eslint-disable object-curly-newline */
-export function PollFormInner({
-  handleSubmit, handleChange, handleBlur, values, touched, errors,
-  buttonText, setFieldValue, setFieldTouched, setFieldError,
-  ...props
-}) {
+export function PollFormInner({ formikProps, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, touched, errors,
+    buttonText, setFieldValue, setFieldTouched, setFieldError } = formikProps;
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.poll}>
-      <Card>
-        <Form>
+      <Form>
+        <Card>
           <CardContent>
-            <Field
-              component={TextField}
+            <TextField
               onChange={handleChange}
               disabled={props.isCommitting}
               required
@@ -53,10 +52,40 @@ export function PollFormInner({
               name='title'
               margin='normal'
               label={<DiverstFormattedMessage {...messages.form.title} />}
-              value={values.name}
+              value={values.title}
+            />
+            <TextField
+              onChange={handleChange}
+              disabled={props.isCommitting}
+              required
+              fullWidth
+              multiline
+              rows={4}
+              variant='outlined'
+              id='description'
+              name='description'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.form.description} />}
+              value={values.description}
+            />
+            <Box mb={1} />
+            <Divider />
+            <GroupSelector
+              groupField='group_ids'
+              label={<DiverstFormattedMessage {...messages.form.groups} />}
+              isMulti
+              {...formikProps}
+            />
+            <SegmentSelector
+              groupField='segment_ids'
+              label={<DiverstFormattedMessage {...messages.form.segments} />}
+              isMulti
+              {...formikProps}
             />
           </CardContent>
-          <Divider />
+        </Card>
+        <Box mb={1} />
+        <Card>
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
@@ -69,8 +98,8 @@ export function PollFormInner({
               <DiverstFormattedMessage {...messages.cancel} />
             </Button>
           </CardActions>
-        </Form>
-      </Card>
+        </Card>
+      </Form>
     </DiverstFormLoader>
   );
 }
@@ -81,6 +110,7 @@ export function PollForm(props) {
   const initialValues = buildValues(poll, {
     id: { default: '' },
     title: { default: '' },
+    description: { default: '' },
   });
   return (
     <Formik
@@ -90,7 +120,7 @@ export function PollForm(props) {
         props.pollAction(values);
       }}
     >
-      {formikProps => <PollFormInner {...props} {...formikProps} />}
+      {formikProps => <PollFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -107,19 +137,18 @@ PollForm.propTypes = {
 PollFormInner.propTypes = {
   edit: PropTypes.bool,
   poll: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
-  touched: PropTypes.object,
-  errors: PropTypes.object,
-  buttonText: PropTypes.string,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  setFieldError: PropTypes.func,
-
-  getPillarsBegin: PropTypes.func.isRequired,
-  getBudgetItemsBegin: PropTypes.func.isRequired,
+  formikProps: PropTypes.shape({
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleBlur: PropTypes.func,
+    values: PropTypes.object,
+    touched: PropTypes.object,
+    errors: PropTypes.object,
+    buttonText: PropTypes.string,
+    setFieldValue: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+    setFieldError: PropTypes.func,
+  }),
   currentGroup: PropTypes.object.isRequired,
   pillars: PropTypes.array.isRequired,
   budgetItems: PropTypes.array.isRequired,

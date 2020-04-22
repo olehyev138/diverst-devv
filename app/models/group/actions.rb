@@ -27,12 +27,16 @@ module Group::Actions
   end
 
   module ClassMethods
+    def base_query
+      "LOWER(#{self.table_name}.name) LIKE LOWER(:search)"
+    end
+
     def valid_scopes
       ['all_children', 'all_parents', 'no_children', 'is_private']
     end
 
     def base_preloads
-      [ :user_groups, :group_leaders, :news_feed, :annual_budgets, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ], children: base_preload_no_recursion ]
+      base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
     end
 
     def base_preloads_budget
@@ -40,7 +44,7 @@ module Group::Actions
     end
 
     def base_preload_no_recursion
-      [ :user_groups, :group_leaders, :news_feed, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
+      base_attributes_preloads | [ :user_groups, :group_leaders, :children, :parent, :enterprise ]
     end
 
     def base_attributes_preloads
