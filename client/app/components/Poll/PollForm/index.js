@@ -29,8 +29,9 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectPaginatedSelectPillars } from 'containers/Group/Pillar/selectors';
 import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/BudgetItem/selectors';
-import GroupSelector from "components/Shared/GroupSelector";
-import SegmentSelector from "components/Shared/SegmentSelector";
+import GroupSelector from 'components/Shared/GroupSelector';
+import SegmentSelector from 'components/Shared/SegmentSelector';
+import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 
 const freePoll = { label: 'Create new free poll ($0.00)', value: null, available: 0 };
 
@@ -86,6 +87,20 @@ export function PollFormInner({ formikProps, ...props }) {
         </Card>
         <Box mb={1} />
         <Card>
+          <CardContent>
+            <FieldsSubForm
+              formikProps={formikProps}
+              fieldsName='fields_attributes'
+              textField
+              selectField
+              checkboxField
+              dateField
+              numberField
+            />
+          </CardContent>
+        </Card>
+        <Box mb={1} />
+        <Card>
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
@@ -111,6 +126,7 @@ export function PollForm(props) {
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
+    fields: { default: [], customKey: 'fields_attributes' },
   });
   return (
     <Formik

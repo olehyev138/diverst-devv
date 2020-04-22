@@ -24,6 +24,21 @@ export default defineMessages({
   newNumericField: {
     id: `${scope}.index.button.numericField.new`,
   },
+  textField: {
+    id: `${scope}.index.button.textField`,
+  },
+  checkBoxField: {
+    id: `${scope}.index.button.checkboxField`,
+  },
+  selectField: {
+    id: `${scope}.index.button.selectField`,
+  },
+  dateField: {
+    id: `${scope}.index.button.dateField`,
+  },
+  numericField: {
+    id: `${scope}.index.button.numericField`,
+  },
   edit: {
     id: `${scope}.index.button.edit`,
   },
