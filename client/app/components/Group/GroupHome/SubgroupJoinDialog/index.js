@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import messages from 'containers/User/HomePage/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
-export default function GroupJoinDialog(props) {
+export default function SubgroupJoinDialog(props) {
   const { title, message, open, handleNo, handleYes } = props;
 
   return (
@@ -22,8 +22,7 @@ export default function GroupJoinDialog(props) {
     >
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          Thanks for joining the group!
-          Do you also want to join a subgroup?
+          Subgroups
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -38,7 +37,7 @@ export default function GroupJoinDialog(props) {
   );
 }
 
-GroupJoinDialog.propTypes = {
+SubgroupJoinDialog.propTypes = {
   title: PropTypes.string,
   message: PropTypes.string,
   open: PropTypes.bool,

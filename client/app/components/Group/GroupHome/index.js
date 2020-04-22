@@ -24,6 +24,8 @@ import NewsFeed from 'components/News/HomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
 import GroupJoinDialog from 'components/Group/GroupHome/GroupJoinDialog';
+import SubgroupJoinDialog from 'components/Group/GroupHome/SubgroupJoinDialog';
+
 
 const styles = theme => ({
   title: {
@@ -80,14 +82,24 @@ export function GroupHome({ classes, ...props }) {
       </CardContent>
     </Paper>
   );
-  const [open, setOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [openSubgroup, setOpenSubgroup] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenSubgroup = () => {
+    setOpenConfirmation(false);
+    setOpenSubgroup(true);
+  };
+
+  const handleClickOpenConfirmation = () => {
+    setOpenConfirmation(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenSubgroup(false);
+    setOpenConfirmation(false);
+    props.joinGroup({
+      group_id: props.currentGroup.id
+    });
   };
 
   const joinBtn = (
@@ -115,16 +127,13 @@ export function GroupHome({ classes, ...props }) {
             size='large'
             fullWidth
             color='primary'
-            onClick={(handleClickOpen)
-              // props.joinGroup({
-              //   group_id: props.currentGroup.id
-              // });
-            }
+            onClick={(handleClickOpenConfirmation)}
             startIcon={<AddIcon />}
           >
             Join
           </Button>
-          <GroupJoinDialog open={open} handleClose={handleClose} />
+          <GroupJoinDialog open={openConfirmation} handleNo={handleClose} handleYes={handleOpenSubgroup}/>
+          <SubgroupJoinDialog open={openSubgroup} handleNo={handleClose} handleYes={handleClose}/>
         </div>
       )
   );
