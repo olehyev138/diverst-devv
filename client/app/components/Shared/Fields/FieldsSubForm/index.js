@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import {
-  Button, Divider, Grid, Box
+  Button, Divider, Grid, Box, Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -55,11 +55,11 @@ export function FieldsSubForm(props, context) {
   const blankFieldPrototype = Object.freeze({
     id: undefined,
     type: undefined,
-    title: undefined,
+    title: '',
     show_on_vcard: true,
-    options_text: undefined,
-    min: undefined,
-    max: undefined,
+    options_text: '',
+    min: '',
+    max: '',
     private: false,
     required: false,
     _destroy: false,
@@ -72,7 +72,7 @@ export function FieldsSubForm(props, context) {
           <Button
             variant='contained'
             color='primary'
-            size='large'
+            size='small'
             onClick={() => arrayHelpers.push({ ...blankFieldPrototype, type: 'TextField' })}
             startIcon={<AddIcon />}
           >
@@ -85,7 +85,7 @@ export function FieldsSubForm(props, context) {
           <Button
             variant='contained'
             color='primary'
-            size='large'
+            size='small'
             onClick={() => arrayHelpers.push({ ...blankFieldPrototype, type: 'SelectField' })}
             startIcon={<AddIcon />}
           >
@@ -98,7 +98,7 @@ export function FieldsSubForm(props, context) {
           <Button
             variant='contained'
             color='primary'
-            size='large'
+            size='small'
             onClick={() => arrayHelpers.push({ ...blankFieldPrototype, type: 'CheckboxField' })}
             startIcon={<AddIcon />}
           >
@@ -111,7 +111,7 @@ export function FieldsSubForm(props, context) {
           <Button
             variant='contained'
             color='primary'
-            size='large'
+            size='small'
             onClick={() => arrayHelpers.push({ ...blankFieldPrototype, type: 'DateField' })}
             startIcon={<AddIcon />}
           >
@@ -124,7 +124,7 @@ export function FieldsSubForm(props, context) {
           <Button
             variant='contained'
             color='primary'
-            size='large'
+            size='small'
             onClick={() => arrayHelpers.push({ ...blankFieldPrototype, type: 'NumericField' })}
             startIcon={<AddIcon />}
           >
@@ -157,7 +157,16 @@ export function FieldsSubForm(props, context) {
       name={fieldsName}
       render={arrayHelpers => (
         <React.Fragment>
-          { addButtons(arrayHelpers) }
+          <Grid container justify='space-between'>
+            <Grid item>
+              <Typography variant='h5' color='primary'>
+                <DiverstFormattedMessage {...messages.header} />
+              </Typography>
+            </Grid>
+            <Grid item>
+              { addButtons(arrayHelpers) }
+            </Grid>
+          </Grid>
           <Box mb={1} />
           {insertIntoArray(
             formikProps.values[fieldsName].map(
@@ -168,7 +177,9 @@ export function FieldsSubForm(props, context) {
                 <Divider />
                 <Box mb={2} />
               </React.Fragment>
-            )
+            ),
+            true,
+            false,
           )}
         </React.Fragment>
       )}

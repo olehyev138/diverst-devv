@@ -13,7 +13,7 @@ import { DateTime } from 'luxon';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Grid, Divider, Box
+  Button, Card, CardActions, CardContent, TextField, Grid, Divider, Box, CardHeader, Typography
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -36,7 +36,7 @@ import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 const freePoll = { label: 'Create new free poll ($0.00)', value: null, available: 0 };
 
 /* eslint-disable object-curly-newline */
-export function PollFormInner({ formikProps, buttonText, ...props }) {
+export function PollFormInner({ formikProps, buttonText, header, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
     setFieldValue, setFieldTouched, setFieldError } = formikProps;
 
@@ -45,6 +45,9 @@ export function PollFormInner({ formikProps, buttonText, ...props }) {
       <Form>
         <Card>
           <CardContent>
+            <Typography variant='h5' color='primary'>
+              {header}
+            </Typography>
             <TextField
               onChange={handleChange}
               disabled={props.isCommitting}
@@ -167,6 +170,7 @@ PollFormInner.propTypes = {
     setFieldTouched: PropTypes.func,
     setFieldError: PropTypes.func,
   }),
+  header: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,

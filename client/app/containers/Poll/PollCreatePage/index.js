@@ -45,6 +45,7 @@ export function PollCreatePage(props) {
         pollAction={props.createPollBegin}
         isCommitting={props.isCommitting}
         buttonText={<DiverstFormattedMessage {...messages.create} />}
+        header={<DiverstFormattedMessage {...messages.form.header.create} />}
         links={links}
       />
     </React.Fragment>

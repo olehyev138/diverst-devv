@@ -40,6 +40,17 @@ export default defineMessages({
     id: `${scope}.form.button.cancel`,
   },
   form: {
+    header: {
+      create: {
+        id: `${scope}.form.header.create`,
+      },
+      edit: {
+        id: `${scope}.form.header.edit`,
+      },
+    },
+    fieldHeader: {
+      id: `${scope}.form.fieldHeader`,
+    },
     title: {
       id: `${scope}.form.input.title`,
     },

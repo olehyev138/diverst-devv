@@ -81,4 +81,7 @@ export default defineMessages({
   max: {
     id: `${scope}.form.input.max`,
   },
+  header: {
+    id: `${scope}.form.header`,
+  },
 });

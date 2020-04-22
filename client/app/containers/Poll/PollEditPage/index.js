@@ -51,6 +51,7 @@ export function PollCreatePage(props) {
         pollAction={props.updatePollBegin}
         isCommitting={props.isCommitting}
         buttonText={<DiverstFormattedMessage {...messages.update} />}
+        header={<DiverstFormattedMessage {...messages.form.header.edit} />}
         isFormLoading={props.isFormLoading}
         edit
 

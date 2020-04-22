@@ -28,7 +28,7 @@ module Group::Actions
 
   module ClassMethods
     def base_query
-      "LOWER(#{self.table_name}.name) LIKE LOWER(:search)"
+      "LOWER(#{self.table_name}.name) LIKE :search"
     end
 
     def valid_scopes
