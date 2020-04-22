@@ -18,7 +18,7 @@ export default function GroupJoinDialog(props) {
       aria-describedby='alert-dialog-description'
     >
       <DialogContent>
-        {title && <DialogTitle>{ title }</DialogTitle>}
+        {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
         <DialogContentText id='alert-dialog-description'>
           {content}
         </DialogContentText>
