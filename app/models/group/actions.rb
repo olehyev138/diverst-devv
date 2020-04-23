@@ -35,18 +35,26 @@ module Group::Actions
       ['all_children', 'all_parents', 'no_children', 'is_private']
     end
 
+    # List of all attributes to preload.
+    # Used when serializing a group itself
     def base_preloads
       base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
     end
 
+    # List of all attributes to preload when dealing with annual budgets.
+    # Used when getting the list of budgets for all groups
     def base_preloads_budget
       [ :annual_budgets ]
     end
 
+    # List of non-recursive attributes to preload.
+    # Used as the preload fields for a groups children/parent as to prevent infinite recursion of base_preloads
     def base_preload_no_recursion
       base_attributes_preloads | [ :user_groups, :group_leaders, :children, :parent, :enterprise ]
     end
 
+    # List of basic attributes to preload.
+    # Used when preloading groups field for other serializers (Like UserGroupSerializer)
     def base_attributes_preloads
       [ :news_feed, :annual_budgets, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
     end
