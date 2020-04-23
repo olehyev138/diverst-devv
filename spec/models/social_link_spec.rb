@@ -28,12 +28,12 @@ RSpec.describe SocialLink, type: :model do
           expect(social_link).to be_valid
         end
 
-        it 'populates embed code' do
+        it 'populates embed code', skip: 'No OEmbed during testing' do
           expect(social_link.embed_code).to_not be_empty
         end
       end
 
-      context 'with incorrect url' do
+      context 'with incorrect url', skip: 'No OEmbed during testing' do
         before do
           social_link.url = 'https://blahblah.rb/deffdsieh'
           social_link.save
