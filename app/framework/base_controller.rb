@@ -5,7 +5,7 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, policy: @policy)
+    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy)
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise
@@ -16,7 +16,7 @@ module BaseController
   def export_csv
     base_authorize(klass)
 
-    CsvDownloadJob.perform_later(current_user.id, params.permit!.to_json, klass_name: klass.name)
+    CsvDownloadJob.perform_later(current_user.id, params.to_json, klass_name: klass.name)
     head :no_content
   rescue => e
     case e

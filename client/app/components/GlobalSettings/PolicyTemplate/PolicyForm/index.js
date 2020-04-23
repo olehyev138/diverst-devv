@@ -243,6 +243,27 @@ export function PolicyFormInner({
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
+                  <FormLabel component='legend'>Branding</FormLabel>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={(
+                        <Field
+                          component={Checkbox}
+                          onChange={handleChange}
+                          id='branding_manage'
+                          name='branding_manage'
+                          margin='normal'
+                          disabled={props.isCommitting}
+                          label='Manage'
+                          value={values.branding_manage}
+                          checked={values.branding_manage}
+                        />
+                      )}
+                      label='View'
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
                   <FormLabel component='legend'>Metrics dashboards</FormLabel>
                   <FormGroup>
                     <FormControlLabel
