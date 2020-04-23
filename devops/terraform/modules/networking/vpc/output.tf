@@ -3,11 +3,6 @@ output "vpc" {
   description = "VPC to contain all of the infrastructure"
 }
 
-output "az_count" {
-  value       = local.az_count
-  description = "Number of AZ's being used"
-}
-
 output "sn_dmz" {
   value       = aws_subnet.sn-dmz
   description = "List of DMZ subnets"
