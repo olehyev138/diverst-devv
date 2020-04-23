@@ -11,6 +11,16 @@ variable "ssh_key_name" {
   type    = string
 }
 
+variable "az_count" {
+  type        = number
+  description = "Number of availability zones"
+}
+
+variable "nat_gateway_enabled" {
+  type        = bool
+  description = "Whether NAT Gateways are enabled or not"
+}
+
 # Backend
 variable "backend_solution_stack" {
   type    = string
@@ -43,6 +53,10 @@ variable "db_class" {
 
 variable "db_allocated_storage" {
   type    = string
+}
+
+variable "multi_az" {
+  type    = bool
 }
 
 variable "db_backup_retention" {

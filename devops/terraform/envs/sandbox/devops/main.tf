@@ -27,9 +27,11 @@ resource "aws_key_pair" "aws-tf-key" {
 module "sandbox" {
   source = "../base-sandbox"
 
-  env_name      = var.env_name
-  region        = var.region
-  ssh_key_name  = var.ssh_key_name
+  env_name            = var.env_name
+  region              = var.region
+  ssh_key_name        = var.ssh_key_name
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
 
   backend_solution_stack  = var.backend_solution_stack
   backend_asg_min         = var.backend_asg_min
@@ -40,6 +42,7 @@ module "sandbox" {
   sidekiq_password = var.sidekiq_password
 
   db_class                    = var.db_class
+  multi_az                    = var.multi_az
   db_allocated_storage        = var.db_allocated_storage
   db_backup_retention         = var.db_backup_retention
   db_backup_window            = var.db_backup_window

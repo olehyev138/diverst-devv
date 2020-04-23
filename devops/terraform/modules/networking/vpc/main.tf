@@ -7,10 +7,6 @@
 #  - sn_app         - list of app subnets
 #  - sn_db          - list of db subnets
 
-locals {
-  # How many AZ's we will be using
-  az_count = 2
-}
 
 data "aws_availability_zones" "available" {}
 
@@ -23,7 +19,7 @@ resource "aws_vpc" "vpc" {
 
 # DMZ/public subnets
 resource "aws_subnet" "sn-dmz" {
-  count                   = local.az_count
+  count                   = var.az_count
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.${count.index}.0/24"
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -32,7 +28,7 @@ resource "aws_subnet" "sn-dmz" {
 
 # Two app subnets
 resource "aws_subnet" "sn-app" {
-  count                   = local.az_count
+  count                   = var.az_count
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.${count.index + 2}.0/24"
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -41,7 +37,7 @@ resource "aws_subnet" "sn-app" {
 
 # Two DB subnets
 resource "aws_subnet" "sn-db" {
-  count                   = local.az_count
+  count                   = var.az_count
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.${count.index + 4}.0/24"
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -54,12 +50,12 @@ resource "aws_internet_gateway" "igw" {
 
 # NAT gateway & EIP per AZ
 resource aws_eip "eip-ngw" {
-  count =  var.nat_gateway_enabled ? local.az_count : 0
+  count =  var.nat_gateway_enabled ? var.az_count : 0
   vpc   = true
 }
 
 resource aws_nat_gateway "ngw" {
-  count           =  var.nat_gateway_enabled ? local.az_count : 0
+  count           =  var.nat_gateway_enabled ? var.az_count : 0
   subnet_id       = aws_subnet.sn-dmz[count.index].id
   allocation_id   = aws_eip.eip-ngw[count.index].id
 
@@ -79,7 +75,7 @@ resource "aws_route_table" "rt-dmz" {
 
 # Associate each dmz subnet with the dmz route table
 resource "aws_route_table_association" "rt-asc-dmz" {
-  count           = local.az_count
+  count           = var.az_count
   subnet_id       = aws_subnet.sn-dmz[count.index].id
   route_table_id  = aws_route_table.rt-dmz.id
 }
@@ -87,7 +83,7 @@ resource "aws_route_table_association" "rt-asc-dmz" {
 # Private subnet routing
 #  - 1 route table per AZ
 resource "aws_route_table" "rt-private" {
-  count   = local.az_count
+  count   = var.az_count
   vpc_id  = aws_vpc.vpc.id
 
 }
@@ -95,7 +91,7 @@ resource "aws_route_table" "rt-private" {
 # Route for NAT Gateway
 #  - disabled if var.nat_gateway_enabled is set to false
 resource aws_route "route-ng" {
-  count                   = var.nat_gateway_enabled ? local.az_count : 0
+  count                   = var.nat_gateway_enabled ? var.az_count : 0
   destination_cidr_block  = "0.0.0.0/0"
   route_table_id          = aws_route_table.rt-private[count.index].id
   nat_gateway_id          = aws_nat_gateway.ngw[count.index].id
@@ -103,14 +99,14 @@ resource aws_route "route-ng" {
 
 # Associate each app subnet with each private route table
 resource aws_route_table_association "rt-asc-app" {
-  count           = local.az_count
+  count           = var.az_count
   subnet_id       = aws_subnet.sn-app[count.index].id
   route_table_id  = aws_route_table.rt-private[count.index].id
 }
 
 # Associate each db subnet with each private route table
 resource aws_route_table_association "rt-asc-db" {
-  count           = local.az_count
+  count           = var.az_count
   subnet_id       = aws_subnet.sn-db[count.index].id
   route_table_id  = aws_route_table.rt-private[count.index].id
 }
@@ -167,7 +163,7 @@ resource "aws_security_group_rule" "sg-nat-ingress" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   to_port           = 0
-  protocol          = "tcp"
+  protocol          = "-1"
 }
 
 resource "aws_security_group_rule" "sg-nat-egress" {
@@ -177,7 +173,7 @@ resource "aws_security_group_rule" "sg-nat-egress" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   to_port           = 0
-  protocol          = "tcp"
+  protocol          = "-1"
 }
 
 resource "aws_network_interface" "eni-nat" {
@@ -196,7 +192,7 @@ resource "aws_eip" "eip-nat" {
 }
 
 resource "aws_route" "route-nat" {
-  count                   = var.nat_gateway_enabled ? 0 : local.az_count
+  count                   = var.nat_gateway_enabled ? 0 : var.az_count
   route_table_id          = aws_route_table.rt-private[count.index].id
   destination_cidr_block  = "0.0.0.0/0"
   network_interface_id    = aws_network_interface.eni-nat[0].id
@@ -240,14 +236,13 @@ resource "aws_autoscaling_group" "nat-asg" {
   vpc_zone_identifier = [aws_subnet.sn-dmz[0].id]
 
   launch_template {
-    id = aws_launch_template.launch-tmpl-nat[0].id
+    id      = aws_launch_template.launch-tmpl-nat[0].id
+    version = "$Latest"
   }
 
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [aws_launch_template.launch-tmpl-nat]
 }
 
 resource "aws_iam_instance_profile" "nat-instance-profile" {

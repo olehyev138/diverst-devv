@@ -3,7 +3,8 @@
 module "vpc" {
   source              = "../../../modules/networking/vpc"
   ssh_key_name        = var.ssh_key_name
-  nat_gateway_enabled = false
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
 }
 
 module "sec" {
@@ -29,6 +30,7 @@ module "db" {
   db_password   = var.db_password
 
   db_class                = var.db_class
+  multi_az                = var.multi_az
   allocated_storage       = var.db_allocated_storage
   backup_retention        = var.db_backup_retention
   backup_window           = var.db_backup_window
