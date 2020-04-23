@@ -21,7 +21,12 @@ import reducer from 'containers/Poll/reducer';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectPaginatedPolls, selectPollsTotal, selectIsFetchingPolls } from 'containers/Poll/selectors';
+import {
+  selectPaginatedPolls,
+  selectPollsTotal,
+  selectIsFetchingPolls,
+  selectHasChanged
+} from 'containers/Poll/selectors';
 import { getPollsBegin, pollsUnmount, deletePollBegin } from 'containers/Poll/actions';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
@@ -52,6 +57,15 @@ export function PollListPage(props) {
       props.pollsUnmount();
     };
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getPollsBegin(params);
+
+    return () => {
+      props.pollsUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -92,6 +106,7 @@ PollListPage.propTypes = {
   deletePollBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   handlePollEdit: PropTypes.func,
+  hasChanged: PropTypes.bool,
 
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
@@ -104,6 +119,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsFetchingPolls(),
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {

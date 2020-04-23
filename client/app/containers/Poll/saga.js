@@ -21,7 +21,7 @@ import {
   updatePollSuccess, updatePollError,
   deletePollSuccess, deletePollError,
 } from './actions';
-import { createEventSuccess } from 'containers/Event/actions';
+import { createEventSuccess, deleteEventSuccess } from 'containers/Event/actions';
 
 export function* getPoll(action) {
   try {
@@ -84,8 +84,7 @@ export function* updatePoll(action) {
 
 export function* deletePoll(action) {
   try {
-    const response = { data: 'API CALL' };
-
+    yield call(api.polls.destroy.bind(api.polls), action.payload.id);
     yield put(deletePollSuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted poll', options: { variant: 'success' } }));
   } catch (err) {

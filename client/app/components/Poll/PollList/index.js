@@ -107,9 +107,9 @@ export function PollList(props, context) {
     onClick: (_, rowData) => {
       /* eslint-disable-next-line no-alert, no-restricted-globals */
       if (confirm(intl.formatMessage(messages.delete_confirm)))
-        props.deletePollBegin(rowData.id);
+        props.deletePollBegin({ id: rowData.id });
     },
-    disabled: true // !permission(rowData, 'destroy?')
+    disabled: !permission(rowData, 'destroy?')
   }));
 
   return (
