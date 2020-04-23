@@ -15,7 +15,7 @@ import {
   DELETE_USER_BEGIN,
   UPDATE_FIELD_DATA_BEGIN,
   EXPORT_USERS_BEGIN,
-  GET_USER_DOWNLOAD_DATA_BEGIN,
+  GET_USER_DOWNLOAD_DATA_BEGIN, GET_USER_PROTOTYPE_BEGIN,
 } from './constants';
 
 import {
@@ -29,7 +29,7 @@ import {
   deleteUserSuccess, deleteUserError,
   updateFieldDataSuccess, updateFieldDataError,
   exportUsersSuccess, exportUsersError,
-  getUserDownloadDataSuccess, getUserDownloadDataError,
+  getUserDownloadDataSuccess, getUserDownloadDataError, getUserPrototypeSuccess, getUserPrototypeError,
 } from './actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -192,6 +192,19 @@ export function* getUserDownloadData(action) {
   }
 }
 
+export function* getUserPrototype(action, updatableKey) {
+  try {
+    const response = yield call(api.users.prototype.bind(api.users), action.payload);
+
+    yield put(getUserPrototypeSuccess(response.data));
+  } catch (err) {
+    yield put(getUserPrototypeError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* usersSaga() {
   yield takeLatest(GET_USERS_BEGIN, getUsers);
@@ -205,4 +218,5 @@ export default function* usersSaga() {
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
   yield takeLatest(EXPORT_USERS_BEGIN, exportUsers);
   yield takeLatest(GET_USER_DOWNLOAD_DATA_BEGIN, getUserDownloadData);
+  yield takeLatest(GET_USER_PROTOTYPE_BEGIN, getUserPrototype);
 }

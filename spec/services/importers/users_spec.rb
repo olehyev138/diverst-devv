@@ -74,7 +74,7 @@ RSpec.describe Importers::Users do
     end
 
     it 'send an invite to created user' do
-      expect_any_instance_of(User).to receive('invite!').with(manager)
+      expect_any_instance_of(User).to receive('invite!').with(manager, skip: false)
       importer.import
     end
 

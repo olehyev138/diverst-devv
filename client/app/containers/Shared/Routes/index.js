@@ -3,6 +3,7 @@ import { Switch } from 'react-router';
 
 // Pages
 import {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -140,7 +141,9 @@ import {
   SocialLinkCreatePage,
   SocialLinkEditPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  GroupSponsorsListPage,
+  GroupSponsorsCreatePage, GroupSponsorsEditPage
 } from './templates';
 
 // Paths
@@ -154,6 +157,7 @@ export default function Routes(props) {
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
       <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.sign_up)} component={SignUpPage} />
 
       { /* User */}
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
@@ -324,6 +328,9 @@ export default function Routes(props) {
       { /* Group Manage */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.manage.index)} component={GroupManageLayout} defaultPage />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.new)} component={GroupSponsorsCreatePage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.edit)} component={GroupSponsorsEditPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />

@@ -38,6 +38,9 @@ import {
   GET_USER_DOWNLOAD_DATA_BEGIN,
   GET_USER_DOWNLOAD_DATA_SUCCESS,
   GET_USER_DOWNLOAD_DATA_ERROR,
+  GET_USER_PROTOTYPE_BEGIN,
+  GET_USER_PROTOTYPE_SUCCESS,
+  GET_USER_PROTOTYPE_ERROR,
   USER_UNMOUNT,
 } from './constants';
 
@@ -282,6 +285,26 @@ export function getUserDownloadDataError(error) {
   };
 }
 
+export function getUserPrototypeBegin(payload) {
+  return {
+    type: GET_USER_PROTOTYPE_BEGIN,
+    payload,
+  };
+}
+
+export function getUserPrototypeSuccess(payload) {
+  return {
+    type: GET_USER_PROTOTYPE_SUCCESS,
+    payload,
+  };
+}
+
+export function getUserPrototypeError(error) {
+  return {
+    type: GET_USER_PROTOTYPE_ERROR,
+    error,
+  };
+}
 
 export function userUnmount() {
   return {

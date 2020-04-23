@@ -17,6 +17,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import SignUpPage from 'containers/User/SignUpPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
@@ -159,6 +160,9 @@ import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Lo
 import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
 import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
 import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
+import GroupSponsorsListPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsListPage/Loadable';
+import GroupSponsorsCreatePage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsCreatePage/Loadable';
+import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsEditPage/Loadable';
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
@@ -190,6 +194,7 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -269,6 +274,9 @@ export {
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
   GroupSettingsPage,
+  GroupSponsorsListPage,
+  GroupSponsorsCreatePage,
+  GroupSponsorsEditPage,
   CustomTextEditPage,
   UserNewsLinkPage,
   UserEventsPage,

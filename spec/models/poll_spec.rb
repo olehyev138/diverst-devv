@@ -155,7 +155,8 @@ RSpec.describe Poll, type: :model do
 
     context 'after_create' do
       # TODO: callback issue
-      xit '#create_default_graphs should be called after create' do
+      it '#create_default_graphs should be called after create' do
+        pending
         expect(poll).to receive(:create_default_graphs)
         poll.run_callbacks(:create)
       end

@@ -1,7 +1,10 @@
 # Base env module for all production/client environments
 
 module "vpc" {
-  source = "../../../modules/networking/vpc"
+  source              = "../../../modules/networking/vpc"
+  ssh_key_name        = var.ssh_key_name
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
 }
 
 module "sec" {
@@ -26,6 +29,7 @@ module "db" {
   db_username   = var.db_username
   db_password   = var.db_password
 
+  multi_az                = var.multi_az
   db_class                = var.db_class
   allocated_storage       = var.db_allocated_storage
   backup_retention        = var.db_backup_retention
