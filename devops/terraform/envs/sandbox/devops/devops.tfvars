@@ -12,7 +12,7 @@ backend_ec2_type        = "t2.micro"
 sidekiq_username = "admin"
 sidekiq_password = "password123"
 
-db_class                    = "db.t2.small"
+db_class                    = "db.t2.micro"
 multi_az                    = false
 db_allocated_storage        = 20
 db_backup_retention         = 31
