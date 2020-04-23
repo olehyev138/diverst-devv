@@ -77,7 +77,7 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       color="primary"
       onClick={[Function]}
     >
-      <Memo(DiverstFormattedMessage)
+      <Memo(Connect(DiverstFormattedMessage))
         id="diverst.containers.HomePage.privacy"
       />
     </WithStyles(ForwardRef(Typography))>
