@@ -31,7 +31,7 @@ function logsReducer(state = initialState, action) {
         draft.isLoading = true;
         break;
       case GET_LOGS_SUCCESS:
-        draft.logList = formatLogs(action.payload.items);
+        draft.logList = action.payload.items;
         draft.logTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -49,20 +49,6 @@ function logsReducer(state = initialState, action) {
         return initialState;
     }
   });
-}
-
-/* Helpers */
-
-function formatLogs(logs) {
-  /* eslint-disable no-return-assign */
-
-  /* Format segments to hash by id:
-   *   { <id>: { name: segment_01, ... } }
-   */
-  return logs.reduce((map, log) => {
-    map[log.id] = log;
-    return map;
-  }, {});
 }
 
 export default logsReducer;

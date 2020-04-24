@@ -147,7 +147,7 @@ LogListPage.propTypes = {
   getLogsBegin: PropTypes.func.isRequired,
   getGroupsBegin: PropTypes.func,
   logUnmount: PropTypes.func.isRequired,
-  logs: PropTypes.object,
+  logs: PropTypes.array,
   logTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   exportLogsBegin: PropTypes.func,

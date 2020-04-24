@@ -50,8 +50,7 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: 'key',
-      field: 'key',
+      title: 'Log',
       render: (rowData) => {
         try {
           // eslint-disable-next-line global-require
@@ -61,6 +60,7 @@ export function LogList(props, context) {
           return rowData.key;
         }
       },
+      query_field: 'created_at'
     },
   ];
 
@@ -165,9 +165,9 @@ export function LogList(props, context) {
             title='Logs'
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
-            isLoading={props.isFetchingLogs}
-            rowsPerPage={5}
-            dataArray={Object.values(props.logs)}
+            isLoading={props.isLoading}
+            rowsPerPage={10}
+            dataArray={props.logs}
             dataTotal={props.logTotal}
             columns={columns}
             my_options={{
@@ -187,9 +187,9 @@ export function LogList(props, context) {
 LogList.propTypes = {
   intl: intlShape,
   classes: PropTypes.object,
-  logs: PropTypes.object,
+  logs: PropTypes.array,
   logTotal: PropTypes.number,
-  isFetchingLogs: PropTypes.bool,
+  isLoading: PropTypes.bool,
   isCommitting: PropTypes.bool,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
