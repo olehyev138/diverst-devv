@@ -1,4 +1,4 @@
-# Base env module for all production/client environments
+# Base env module for all sandbox environments
 
 module "vpc" {
   source              = "../../../modules/networking/vpc"
@@ -29,8 +29,8 @@ module "db" {
   db_username   = var.db_username
   db_password   = var.db_password
 
-  multi_az                = var.multi_az
   db_class                = var.db_class
+  multi_az                = var.multi_az
   allocated_storage       = var.db_allocated_storage
   backup_retention        = var.db_backup_retention
   backup_window           = var.db_backup_window
