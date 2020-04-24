@@ -19,9 +19,7 @@ export function LogOwner(props) {
             state: { id: rowData.owner_id }
           }}
         >
-          {rowData.user.first_name}
-          &ensp;
-          {rowData.user.last_name}
+          {rowData.user.name}
         </Link>
       )}
     </React.Fragment>
