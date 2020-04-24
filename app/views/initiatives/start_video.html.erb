@@ -17,22 +17,23 @@
       }
 
       #local-media {
-        max-height: 500px;
+        max-height: 300px;
         margin: auto;
       }
 
       #remote-media {
-        max-height: 200px;
-        max-width: 160px;
+        max-height: 300px;
+        /* max-width: 160px; */
         margin: auto;
       }
 
       .remote-box {
-        height: 200px;
+        max-height: 300px;
         position: relative;
         top: 75px;
         display: inline-block;
         background-color: grey;
+        max-width: 160px;
       }
 
       #local-participant {
@@ -67,7 +68,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center">Video call</h2>
+            <h2 class="text-center"><%= @initiative.name %></h2>
           </div>
         </div>
       </div>
@@ -77,24 +78,53 @@
       <div class="col-xs-8">
         <div class="row">
           <ul class="list-inline text-center">
-            <div class="col-xs-8">
+            <div class="col-xs-4" style="padding: 0px;">
               <li>
                 <div id="local-media"></div>
                 <p id="local-participant"></p>
               </li>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-4" style="padding: 0px;">
               <li>
                 <div id="remote-media"></div>
                 <p id="remote-participant"></p>
               </li>
+            </div>
+            <!-- <div class="col-xs-4" style="padding: 0px;">
               <li>
-                <div class="remote-box" style="height:200px; width: 200px;"></div>
-              </li>
-              <li>
-                <div class="remote-box" style="height:200px; width: 200px;"></div>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
               </li>
             </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div>
+            <div class="col-xs-4" style="padding: 0px;">
+              <li>
+                <div class="remote-box" style="height: 150px; width: 160px;"></div>
+              </li>
+            </div> -->
             </ul>
         </div>
         <div class="row" style="position: relative; top: 75px;">
@@ -119,7 +149,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Send a message..." id="message">
                 <span class="input-group-btn">
-                  <button class="btn" style="background-color: #7B77C9;" type="button" id="send">Send!</button>
+                  <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
                 </span>
               </div><!-- /input-group -->
             </div>
@@ -206,8 +236,8 @@
       var previewContainer = document.getElementById('local-media');
       if (!previewContainer.querySelector('video')) {
         attachParticipantTracks(room.localParticipant, previewContainer);
-        var text = document.createTextNode(identity);
-        document.getElementById('local-participant').appendChild(text);
+        // var text = document.createTextNode(identity);
+        // document.getElementById('local-participant').appendChild(text);
       }
 
       // Attach the Tracks of the Room's Participants.
@@ -215,8 +245,8 @@
         log("Already in Room: '" + participant.identity + "'");
         var previewContainer = document.getElementById('remote-media');
         attachParticipantTracks(participant, previewContainer);
-        var text = document.createTextNode(participant.identity);
-        document.getElementById('remote-participant').appendChild(text);
+        // var text = document.createTextNode(participant.identity);
+        // document.getElementById('remote-participant').appendChild(text);
       });
 
       // When a Participant joins the Room, log the event.
@@ -225,8 +255,8 @@
 
         var previewContainer = document.getElementById('remote-media');
         attachParticipantTracks(participant, previewContainer);
-        var text = document.createTextNode(participant.identity);
-        document.getElementById('remote-participant').appendChild(text);
+        // var text = document.createTextNode(participant.identity);
+        // document.getElementById('remote-participant').appendChild(text);
       });
 
       // When a Participant adds a Track, attach it to the DOM.
