@@ -24,6 +24,7 @@ import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
 
 import LogOwner from '../LogItem/LogOwner';
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
   logListItem: {
@@ -52,100 +53,104 @@ export function LogList(props, context) {
       title: 'date',
       field: 'created_at',
       query_field: 'created_at',
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
     },
-
   ];
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
-      orderDir: (columnId === -1) ? 'asc' : orderDir
+      orderBy: (columnId === -1) ? 'created_at' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'desc' : orderDir
     });
   };
 
+  const filter = (
+    <Card>
+      <Formik
+        initialValues={{
+          from: props.logFrom,
+          to: props.logTo,
+          groupLabels: props.groupLabels,
+        }}
+        enableReinitialize
+        onSubmit={(values) => {
+          values.groupIds = (values.groupLabels || []).map(i => i.value);
+          props.handleFilterChange(values);
+        }}
+      >
+        {formikProps => (
+          <Form>
+            <CardContent>
+              <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
+                <Grid item xs={4}>
+                  <Typography>Filter by group</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>From</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>To</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                </Grid>
+              </Grid>
+              <Grid container spacing={3} alignItems='flex-start' justify='space-between'>
+                <Grid item xs={4}>
+                  <GroupSelector
+                    groupField='groupLabels'
+                    label=''
+                    {...formikProps}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    component={DiverstDatePicker}
+                    keyboardMode
+                    fullWidth
+                    maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
+                    maxDateMessage={<DiverstFormattedMessage {...messages.filter.fromMax} />}
+                    id='from'
+                    name='from'
+                    margin='normal'
+                    label=''
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    component={DiverstDatePicker}
+                    keyboardMode
+                    fullWidth
+                    minDate={formikProps.values.from ? formikProps.values.from : undefined}
+                    maxDate={new Date()}
+                    minDateMessage={<DiverstFormattedMessage {...messages.filter.toMin} />}
+                    maxDateMessage={<DiverstFormattedMessage {...messages.filter.toMax} />}
+                    id='to'
+                    name='to'
+                    margin='normal'
+                    label=''
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                    color='primary'
+                    type='submit'
+                    variant='contained'
+                    className={classes.submitButton}
+                  >
+                    Filter
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Form>
+        )}
+      </Formik>
+    </Card>
+  )
+
   return (
     <React.Fragment>
-      <Card>
-        <Formik
-          initialValues={{
-            from: props.logFrom,
-            to: props.logTo,
-            groupLabels: props.groupLabels,
-          }}
-          enableReinitialize
-          onSubmit={(values) => {
-            values.groupIds = (values.groupLabels || []).map(i => i.value);
-            props.handleFilterChange(values);
-          }}
-        >
-          {formikProps => (
-            <Form>
-              <CardContent>
-                <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
-                  <Grid item xs={4}>
-                    <Typography>Filter by group</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>From</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>To</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={3} alignItems='flex-start' justify='space-between'>
-                  <Grid item xs={4}>
-                    <GroupSelector
-                      groupField='groupLabels'
-                      label=''
-                      {...formikProps}
-                    />
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Field
-                      component={DiverstDatePicker}
-                      keyboardMode
-                      fullWidth
-                      maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
-                      maxDateMessage={<DiverstFormattedMessage {...messages.filter.fromMax} />}
-                      id='from'
-                      name='from'
-                      margin='normal'
-                      label=''
-                    />
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Field
-                      component={DiverstDatePicker}
-                      keyboardMode
-                      fullWidth
-                      minDate={formikProps.values.from ? formikProps.values.from : undefined}
-                      maxDate={new Date()}
-                      minDateMessage={<DiverstFormattedMessage {...messages.filter.toMin} />}
-                      maxDateMessage={<DiverstFormattedMessage {...messages.filter.toMax} />}
-                      id='to'
-                      name='to'
-                      margin='normal'
-                      label=''
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Button
-                      color='primary'
-                      type='submit'
-                      variant='contained'
-                      className={classes.submitButton}
-                    >
-                      Filter
-                    </Button>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Form>
-          )}
-        </Formik>
-      </Card>
+      {filter}
       <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>

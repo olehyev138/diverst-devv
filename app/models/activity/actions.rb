@@ -6,6 +6,13 @@ module Activity::Actions
   end
 
   module ClassMethods
+    def set_defaults
+      @default_order = :desc
+      @default_order_by = "#{self.table_name}.created_at"
+      @page = 0
+      @count = 10
+    end
+
     def csv_attributes(current_user = nil, params = {})
       {
           titles: [

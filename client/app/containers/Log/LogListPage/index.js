@@ -34,7 +34,7 @@ export function LogListPage(props) {
 
   const defaultParams = {
     count: 10, page: 0,
-    orderBy: 'id', order: 'asc',
+    orderBy: 'created_at', order: 'desc',
     query_scopes: []
   };
 
