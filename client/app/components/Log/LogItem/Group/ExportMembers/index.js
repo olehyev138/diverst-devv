@@ -10,28 +10,28 @@ import { Link } from '@material-ui/core';
 
 // This component for displaying log owner
 export function UserLogin(props) {
-  const { rowData, ...rest } = props;
+  const { activity, ...rest } = props;
 
   return (
     <React.Fragment>
-      <LogOwner rowData={rowData} />
+      <LogOwner activity={activity} />
       {' exported members via CSV of group '}
-      { rowData.trackable ? (
+      { activity.trackable ? (
         <Link
           component={WrappedNavLink}
-          to={ROUTES.group.home.path(rowData.trackable_id)}
+          to={ROUTES.group.home.path(activity.trackable_id)}
         >
-          {rowData.trackable.name}
+          {activity.trackable.name}
         </Link>
       ) : ' Which has been removed '}
       {' at '}
-      { formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL) }
+      { formatDateTimeString(activity.created_at, DateTime.DATETIME_FULL) }
     </React.Fragment>
   );
 }
 
 UserLogin.propTypes = {
-  rowData: PropTypes.object,
+  activity: PropTypes.object,
 };
 
 export default compose(

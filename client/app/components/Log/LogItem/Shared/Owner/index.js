@@ -31,7 +31,7 @@ export function SharedOwner(props) {
           </Avatar>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.user.home.path()}
           >
             {activity.owner.name_with_status}
           </Link>

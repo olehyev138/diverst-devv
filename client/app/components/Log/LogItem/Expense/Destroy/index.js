@@ -16,7 +16,7 @@ export function ExpenseDestroy(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' deleted expense item '}
       {' at '}
       { formatDateTimeString(activity.created_at, DateTime.DATETIME_FULL) }

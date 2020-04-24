@@ -16,7 +16,7 @@ export function SocialLinkDestroy(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' deleted a social link '}
       {' at '}
       { formatDateTimeString(activity.created_at, DateTime.DATETIME_FULL) }

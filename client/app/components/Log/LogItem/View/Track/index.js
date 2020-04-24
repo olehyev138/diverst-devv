@@ -16,7 +16,7 @@ export function ViewTrack(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       { activity.trackable ? (
         <React.Fragment>
           { activity.trackable.resource ? (
@@ -25,7 +25,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.home.path()}
+                    to={ROUTES.user.home.path()}
                   >
                     {activity.trackable.resource.title}
                   </Link>
@@ -34,7 +34,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.home.path()}
+                    to={ROUTES.user.home.path()}
                   >
                     {activity.trackable.resource.title}
                   </Link>
@@ -46,7 +46,7 @@ export function ViewTrack(props) {
             <React.Fragment>
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.group.name}
               </Link>
@@ -59,7 +59,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.home.path()}
+                    to={ROUTES.user.home.path()}
                   >
                     {activity.trackable.folder.name}
                   </Link>
@@ -68,7 +68,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.home.path()}
+                    to={ROUTES.user.home.path()}
                   >
                     {activity.trackable.folder.name}
                   </Link>
@@ -82,7 +82,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.home.path()}
+                    to={ROUTES.user.home.path()}
                   >
                     {activity.trackable.news_feed_link.news_link.title}
                   </Link>

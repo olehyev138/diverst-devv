@@ -16,7 +16,7 @@ export function AnswerCommentCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created comment on answer '}
       { activity.trackable ? (
         <React.Fragment>
@@ -25,7 +25,7 @@ export function AnswerCommentCreate(props) {
               {' for question '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.answer.question.title}
               </Link>

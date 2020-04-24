@@ -7,21 +7,21 @@ import { DateTime } from 'luxon';
 
 // This component for displaying log owner
 export function UserLogin(props) {
-  const { rowData, ...rest } = props;
+  const { activity, ...rest } = props;
 
   return (
     <React.Fragment>
-      <LogOwner rowData={rowData} />
+      <LogOwner activity={activity} />
       {' Logged in '}
-      { rowData.parameters.ip && `with IP: ${rowData.parameters.ip}`}
+      { activity.parameters.ip && `with IP: ${activity.parameters.ip}`}
       {' at '}
-      { formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL) }
+      { formatDateTimeString(activity.created_at, DateTime.DATETIME_FULL) }
     </React.Fragment>
   );
 }
 
 UserLogin.propTypes = {
-  rowData: PropTypes.object,
+  activity: PropTypes.object,
 };
 
 export default compose(

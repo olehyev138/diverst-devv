@@ -16,7 +16,7 @@ export function EnterpriseExportGenericGraphsMentorship(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' exported mentorship graph via CSV '}
       {' at '}
       { formatDateTimeString(activity.created_at, DateTime.DATETIME_FULL) }

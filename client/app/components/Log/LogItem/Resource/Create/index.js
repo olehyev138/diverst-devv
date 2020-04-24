@@ -16,7 +16,7 @@ export function ResourceCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created '}
       { activity.trackable ? (
         <React.Fragment>
@@ -25,7 +25,7 @@ export function ResourceCreate(props) {
               {' event activity.trackable '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.title}
               </Link>
@@ -35,7 +35,7 @@ export function ResourceCreate(props) {
               {' enterprise activity.trackable '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.title}
               </Link>
@@ -45,7 +45,7 @@ export function ResourceCreate(props) {
               {' group activity.trackable '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.title}
               </Link>

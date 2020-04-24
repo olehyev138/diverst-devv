@@ -16,7 +16,7 @@ export function FolderUpdate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' updated folder '}
       { activity.trackable ? (
         <React.Fragment>
@@ -25,7 +25,7 @@ export function FolderUpdate(props) {
               {' enterprise folder '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.name}
               </Link>
@@ -35,7 +35,7 @@ export function FolderUpdate(props) {
               {' group folder '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.name}
               </Link>

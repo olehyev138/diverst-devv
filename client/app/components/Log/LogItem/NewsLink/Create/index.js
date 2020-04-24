@@ -16,13 +16,13 @@ export function NewsLinkCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created a news item '}
       { activity.trackable ? (
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.user.home.path()}
           >
             {activity.trackable.title}
           </Link>

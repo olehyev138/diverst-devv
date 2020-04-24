@@ -16,7 +16,7 @@ export function SocialLinkCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created a social link '}
       { activity.trackable ? (
         <React.Fragment>

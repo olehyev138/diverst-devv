@@ -7,19 +7,19 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 // This component for displaying log owner
 export function LogOwner(props) {
-  const { rowData, ...rest } = props;
+  const { activity, ...rest } = props;
 
   return (
     <React.Fragment>
-      {rowData && (
+      {activity && (
         <Link
           component={WrappedNavLink}
           to={{
-            pathname: ROUTES.user.show.path(rowData.owner_id),
-            state: { id: rowData.owner_id }
+            pathname: ROUTES.user.show.path(activity.owner_id),
+            state: { id: activity.owner_id }
           }}
         >
-          {rowData.user.name}
+          {activity.user.name}
         </Link>
       )}
     </React.Fragment>
@@ -27,7 +27,7 @@ export function LogOwner(props) {
 }
 
 LogOwner.propTypes = {
-  rowData: PropTypes.object,
+  activity: PropTypes.object,
 };
 
 export default compose(

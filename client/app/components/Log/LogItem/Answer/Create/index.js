@@ -16,7 +16,7 @@ export function AnswerCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created answer '}
       { activity.trackable ? (
         <React.Fragment>
@@ -25,7 +25,7 @@ export function AnswerCreate(props) {
               {' for question '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.question.title}
               </Link>

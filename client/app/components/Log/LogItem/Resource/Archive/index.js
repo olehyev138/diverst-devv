@@ -16,7 +16,7 @@ export function ResourceArchive(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       { activity.trackable ? (
         <React.Fragment>
           { activity.trackable.container.group ? (
@@ -24,7 +24,7 @@ export function ResourceArchive(props) {
               {' archived a group resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.title}
               </Link>
@@ -34,7 +34,7 @@ export function ResourceArchive(props) {
               {' archived an enterprise resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.title}
               </Link>

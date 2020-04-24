@@ -16,7 +16,7 @@ export function NewsFeedLinkApprove(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' approved a '}
       { activity.trackable ? (
         <React.Fragment>
@@ -24,7 +24,7 @@ export function NewsFeedLinkApprove(props) {
             <React.Fragment>
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {'group message'}
               </Link>
@@ -33,7 +33,7 @@ export function NewsFeedLinkApprove(props) {
             <React.Fragment>
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {'news link'}
               </Link>
@@ -48,7 +48,7 @@ export function NewsFeedLinkApprove(props) {
               {' for group '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.home.path()}
+                to={ROUTES.user.home.path()}
               >
                 {activity.trackable.group.name}
               </Link>

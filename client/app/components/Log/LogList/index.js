@@ -51,13 +51,13 @@ export function LogList(props, context) {
   const columns = [
     {
       title: 'Log',
-      render: (rowData) => {
+      render: (activity) => {
         try {
           // eslint-disable-next-line global-require
-          const Component = require(`components/Log/LogItem/${keyToComp(rowData.key)}`).default;
-          return <Component rowData={rowData} />;
+          const Component = require(`components/Log/LogItem/${keyToComp(activity.key)}`).default;
+          return <Component activity={activity} />;
         } catch {
-          return rowData.key;
+          return activity.key;
         }
       },
       query_field: 'created_at'

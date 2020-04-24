@@ -16,13 +16,13 @@ export function PollCreate(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' created survey '}
       { activity.trackable ? (
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.user.home.path()}
           >
             {activity.trackable.title}
           </Link>

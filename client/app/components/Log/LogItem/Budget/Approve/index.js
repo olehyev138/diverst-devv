@@ -16,13 +16,13 @@ export function BudgetApprove(props) {
   /* eslint no-nested-ternary: 0 */
   return (
     <React.Fragment>
-      <LogOwner rowData={activity} />
+      <LogOwner activity={activity} />
       {' approved '}
       { activity.trackable ? (
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.user.home.path()}
           >
             {`budget request for ${activity.trackable.group.name}`}
           </Link>
