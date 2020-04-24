@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import LogOwner from 'components/Log/LogItem/LogOwner';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import { DateTime } from 'luxon';
-import WrappedNavLink from "components/Shared/WrappedNavLink";
-import {ROUTES} from "containers/Shared/Routes/constants";
-import {Link} from "@material-ui/core";
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { Link } from '@material-ui/core';
 
 // This component for displaying log owner
 export function UserLogin(props) {
