@@ -26,8 +26,8 @@ module Activity::Actions
           ],
           values: [
               'owner_id',
-              'user.first_name',
-              'user.last_name',
+              'owner.first_name',
+              'owner.last_name',
               'trackable_id',
               'trackable_type',
               'key',
@@ -69,11 +69,11 @@ module Activity::Actions
     end
 
     def base_includes
-      [ :user ]
+      [ :owner ]
     end
 
     def base_preloads
-      [ :user, user: User.base_attribute_preloads ]
+      [ :owner, owner: User.base_preloads ]
     end
   end
 end

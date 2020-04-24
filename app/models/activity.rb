@@ -9,7 +9,7 @@ class Activity < PublicActivity::Activity
   include ActionView::Helpers::DateHelper
   include Activity::Actions
 
-  belongs_to :user, -> { where(activities: { owner_type: 'User' }).includes(:activities) }, foreign_key: :owner_id
+  belongs_to :owner, -> { where(activities: { owner_type: 'User' }) }, class_name: 'User'
 
   # filter for group (the logs of the users who are in selected groups)
   scope :for_group_ids, -> (group_ids) { where('activities.owner_id' => (UserGroup.where('group_id' => group_ids)).map { |p| p.user_id }).distinct if group_ids.any? }
