@@ -23,9 +23,6 @@ import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
 
-import LogOwner from '../LogItem/LogOwner';
-import { formatDateTimeString } from 'utils/dateTimeHelpers';
-
 const styles = theme => ({
   logListItem: {
     width: '100%',
