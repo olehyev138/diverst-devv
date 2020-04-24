@@ -35,25 +35,32 @@ const styles = theme => ({
   },
 });
 
+const keyToComp = (key) => {
+  const parts = key.split('.');
+  const capital = parts.map(str => str.replace(
+    /(^\w)|([-_][a-z])/g,
+    group => group.toUpperCase().replace('_', '')
+  ));
+  return capital.join('/');
+};
+
 export function LogList(props, context) {
   const { classes } = props;
   const { intl } = props;
 
   const columns = [
     {
-      title: 'user',
-      field: 'owner_id',
-      render: rowData => <LogOwner rowData={rowData} />
-    },
-    {
       title: 'key',
       field: 'key',
-    },
-    {
-      title: 'date',
-      field: 'created_at',
-      query_field: 'created_at',
-      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
+      render: (rowData) => {
+        try {
+          // eslint-disable-next-line global-require
+          const Component = require(`components/Log/LogItem/${keyToComp(rowData.key)}`).default;
+          return <Component rowData={rowData} />;
+        } catch {
+          return rowData.key;
+        }
+      },
     },
   ];
 
@@ -146,7 +153,7 @@ export function LogList(props, context) {
         )}
       </Formik>
     </Card>
-  )
+  );
 
   return (
     <React.Fragment>
