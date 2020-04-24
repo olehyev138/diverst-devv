@@ -22,7 +22,7 @@ export function MetricsDashboardUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.analyze.custom.show.path(activity.trackable_id)}
           >
             {activity.trackable.name}
           </Link>

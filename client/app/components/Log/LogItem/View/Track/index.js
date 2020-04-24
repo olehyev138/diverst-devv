@@ -8,6 +8,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { Link, Avatar } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { getFolderShowPath } from 'utils/resourceHelpers';
 
 // This component for displaying log owner
 export function ViewTrack(props) {
@@ -21,20 +22,20 @@ export function ViewTrack(props) {
         <React.Fragment>
           { activity.trackable.resource ? (
             <React.Fragment>
-              { activity.trackable.resource.container.group ? (
+              { activity.trackable.resource.group_id ? (
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.user.home.path()}
+                    to={getFolderShowPath(activity.trackable)}
                   >
                     {activity.trackable.resource.title}
                   </Link>
                 </React.Fragment>
-              ) : activity.trackable.resource.container.enterprise ? (
+              ) : activity.trackable.resource.enterprise_id ? (
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.user.home.path()}
+                    to={getFolderShowPath(activity.trackable)}
                   >
                     {activity.trackable.resource.title}
                   </Link>
@@ -46,7 +47,7 @@ export function ViewTrack(props) {
             <React.Fragment>
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.group.home.path(activity.trackable_id)}
               >
                 {activity.trackable.group.name}
               </Link>
@@ -61,14 +62,15 @@ export function ViewTrack(props) {
                     component={WrappedNavLink}
                     to={ROUTES.user.home.path()}
                   >
-                    {activity.trackable.folder.name}
+                    to=
+                    {ROUTES.admin.manage.resources.folders.show.path(activity.trackable_id)}
                   </Link>
                 </React.Fragment>
               ) : activity.trackable.folder.enterprise ? (
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.user.home.path()}
+                    to={ROUTES.group.manage.resources.folders.show.path(activity.trackable.group.id, activity.trackable_id)}
                   >
                     {activity.trackable.folder.name}
                   </Link>
@@ -82,7 +84,7 @@ export function ViewTrack(props) {
                 <React.Fragment>
                   <Link
                     component={WrappedNavLink}
-                    to={ROUTES.user.home.path()}
+                    to={ROUTES.group.news.news_links.show.path(activity.trackable.group.id, activity.trackable_id)}
                   >
                     {activity.trackable.news_feed_link.news_link.title}
                   </Link>

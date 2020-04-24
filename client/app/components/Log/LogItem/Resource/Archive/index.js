@@ -19,22 +19,22 @@ export function ResourceArchive(props) {
       <LogOwner activity={activity} />
       { activity.trackable ? (
         <React.Fragment>
-          { activity.trackable.container.group ? (
+          { activity.trackable.group_id ? (
             <React.Fragment>
               {' archived a group resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.admin.manage.archived.path()}
               >
                 {activity.trackable.title}
               </Link>
             </React.Fragment>
-          ) : activity.trackable.container.enterprise ? (
+          ) : activity.trackable.enterprise_id ? (
             <React.Fragment>
               {' archived an enterprise resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.admin.manage.archived.path()}
               >
                 {activity.trackable.title}
               </Link>

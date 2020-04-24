@@ -22,7 +22,7 @@ export function SegmentUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.manage.segments.show.path(activity.trackable_id)}
           >
             {activity.trackable.name}
           </Link>

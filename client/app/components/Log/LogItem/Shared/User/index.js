@@ -31,7 +31,7 @@ export function SharedUser(props) {
           </Avatar>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.user.show.path(activity.trackable_id)}
           >
             {activity.trackable.first_name}
           </Link>

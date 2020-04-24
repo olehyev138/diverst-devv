@@ -22,7 +22,7 @@ export function InitiativeArchive(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.manage.archived.path()}
           >
             {activity.trackable.name}
           </Link>

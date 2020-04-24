@@ -22,7 +22,7 @@ export function GroupUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.group.home.path(activity.trackable_id)}
           >
             {activity.trackable.name}
           </Link>

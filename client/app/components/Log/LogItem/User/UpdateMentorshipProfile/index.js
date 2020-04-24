@@ -22,7 +22,7 @@ export function UserUpdateMentorshipProfile(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.user.mentorship.show.path(activity.trackable_id)}
           >
             {'mentorship profile'}
           </Link>

@@ -22,7 +22,7 @@ export function UserRoleUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.system.users.roles.edit.path(activity.trackable_id)}
           >
             {activity.trackable.role_name}
           </Link>

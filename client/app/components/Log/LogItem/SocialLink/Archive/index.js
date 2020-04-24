@@ -20,7 +20,7 @@ export function SocialLinkArchive(props) {
       {' archived a social link '}
       { activity.trackable ? (
         <React.Fragment>
-          {' <%= activity.trackable.url %> '}
+          {` ${activity.trackable.url} `}
         </React.Fragment>
       ) : (
         <React.Fragment>

@@ -22,7 +22,7 @@ export function GroupMessageRestore(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.group.news.messages.show.path(activity.trackable.group.id, activity.trackable_id)}
           >
             {activity.trackable.subject}
           </Link>

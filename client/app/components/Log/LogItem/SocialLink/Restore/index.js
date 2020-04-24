@@ -20,7 +20,7 @@ export function SocialLinkRestore(props) {
       {' restored a social link '}
       { activity.trackable ? (
         <React.Fragment>
-          {' <%= activity.trackable.url %> '}
+          {` ${activity.trackable.url} `}
         </React.Fragment>
       ) : (
         <React.Fragment>

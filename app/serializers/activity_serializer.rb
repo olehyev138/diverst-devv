@@ -1,7 +1,5 @@
 class ActivitySerializer < ApplicationRecordSerializer
-  attributes :trackable
-
-  has_one :user
+  has_one :owner, :trackable, :user
 
   def serialize_all_fields
     true

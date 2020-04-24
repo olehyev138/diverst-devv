@@ -8,6 +8,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { Link, Avatar } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { getFolderShowPath } from 'utils/resourceHelpers';
 
 // This component for displaying log owner
 export function ResourceRestore(props) {
@@ -19,22 +20,22 @@ export function ResourceRestore(props) {
       <LogOwner activity={activity} />
       { activity.trackable ? (
         <React.Fragment>
-          { activity.trackable.container.group ? (
+          { activity.trackable.group_id ? (
             <React.Fragment>
               {' restored a group resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={getFolderShowPath(activity.trackable)}
               >
                 {activity.trackable.title}
               </Link>
             </React.Fragment>
-          ) : activity.trackable.container.enterprise ? (
+          ) : activity.trackable.enterprise_id ? (
             <React.Fragment>
               {' restored an enterprise resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={getFolderShowPath(activity.trackable)}
               >
                 {activity.trackable.title}
               </Link>

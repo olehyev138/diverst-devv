@@ -22,7 +22,7 @@ export function NewsLinkUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.group.news.news_links.show.path(activity.trackable.group.id, activity.trackable_id)}
           >
             {activity.trackable.title}
           </Link>

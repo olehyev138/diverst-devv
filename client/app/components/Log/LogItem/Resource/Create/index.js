@@ -8,6 +8,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { Link, Avatar } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { getFolderShowPath } from 'utils/resourceHelpers';
 
 // This component for displaying log owner
 export function ResourceCreate(props) {
@@ -20,32 +21,32 @@ export function ResourceCreate(props) {
       {' created '}
       { activity.trackable ? (
         <React.Fragment>
-          { activity.trackable.container.class.name === 'Initiative' && activity.trackable.container.group ? (
+          { activity.trackable.initiative_id ? (
             <React.Fragment>
-              {' event activity.trackable '}
+              {' event resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={getFolderShowPath(activity.trackable)}
               >
                 {activity.trackable.title}
               </Link>
             </React.Fragment>
-          ) : activity.trackable.container.enterprise ? (
+          ) : activity.trackable.enterprise_id ? (
             <React.Fragment>
-              {' enterprise activity.trackable '}
+              {' enterprise resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={getFolderShowPath(activity.trackable)}
               >
                 {activity.trackable.title}
               </Link>
             </React.Fragment>
-          ) : activity.trackable.container.group ? (
+          ) : activity.trackable.group_id ? (
             <React.Fragment>
-              {' group activity.trackable '}
+              {' group resource '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={getFolderShowPath(activity.trackable)}
               >
                 {activity.trackable.title}
               </Link>
@@ -54,7 +55,7 @@ export function ResourceCreate(props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          {' a activity.trackable which has since been removed '}
+          {' a resource which has since been removed '}
         </React.Fragment>
       )}
       {' at '}

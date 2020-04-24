@@ -25,7 +25,7 @@ export function FolderUpdate(props) {
               {' enterprise folder '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.group.manage.resources.folders.show.path(activity.trackable.group.id, activity.trackable_id)}
               >
                 {activity.trackable.name}
               </Link>
@@ -35,7 +35,7 @@ export function FolderUpdate(props) {
               {' group folder '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.admin.manage.resources.folders.show.path(activity.trackable_id)}
               >
                 {activity.trackable.name}
               </Link>

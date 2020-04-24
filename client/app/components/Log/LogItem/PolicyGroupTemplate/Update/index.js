@@ -20,7 +20,7 @@ export function PolicyGroupTemplateUpdate(props) {
       {' updated policy group template '}
       <Link
         component={WrappedNavLink}
-        to={ROUTES.user.home.path()}
+        to={ROUTES.admin.system.users.policy_templates.edit.path(activity.trackable_id)}
       >
         {activity.trackable.name}
       </Link>

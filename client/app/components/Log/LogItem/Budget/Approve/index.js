@@ -22,7 +22,7 @@ export function BudgetApprove(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.group.plan.budget.budgets.show.path(activity.trackable.group.id, activity.trackable_id)}
           >
             {`budget request for ${activity.trackable.group.name}`}
           </Link>

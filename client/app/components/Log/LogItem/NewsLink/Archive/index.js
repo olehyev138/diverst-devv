@@ -22,7 +22,7 @@ export function NewsLinkArchive(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.manage.archived.path()}
           >
             {activity.trackable.title}
           </Link>

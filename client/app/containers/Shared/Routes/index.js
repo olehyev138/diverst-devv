@@ -154,6 +154,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export default function Routes(props) {
   const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
+
   return (
     <Switch>
       { /* Session */ }

@@ -22,7 +22,7 @@ export function CampaignUpdate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.innovate.campaigns.show.path(activity.trackable_id)}
           >
             {activity.trackable.title}
           </Link>

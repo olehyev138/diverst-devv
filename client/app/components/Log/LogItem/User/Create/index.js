@@ -22,7 +22,7 @@ export function UserCreate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.user.show.path(activity.trackable_id)}
           >
             {activity.trackable.name}
           </Link>

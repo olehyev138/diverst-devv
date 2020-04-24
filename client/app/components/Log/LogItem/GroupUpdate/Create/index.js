@@ -22,7 +22,7 @@ export function GroupUpdateCreate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.group.manage.updates.show.path(activity.trackable.group.id, activity.trackable_id)}
           >
             {`group update for ${activity.trackable.group.name}`}
           </Link>

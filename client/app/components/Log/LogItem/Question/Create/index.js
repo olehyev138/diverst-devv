@@ -22,7 +22,7 @@ export function QuestionCreate(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.user.home.path()}
+            to={ROUTES.admin.innovate.campaigns.questions.show.path(activity.trackable.campaign.id, activity.trackable_id)}
           >
             {activity.trackable.title}
           </Link>
@@ -31,7 +31,7 @@ export function QuestionCreate(props) {
               {' for campaign '}
               <Link
                 component={WrappedNavLink}
-                to={ROUTES.user.home.path()}
+                to={ROUTES.admin.innovate.campaigns.show.path(activity.trackable.campaign.id)}
               >
                 {activity.trackable.campaign.title}
               </Link>

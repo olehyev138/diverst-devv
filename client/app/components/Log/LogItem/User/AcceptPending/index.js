@@ -21,7 +21,7 @@ export function UserAcceptPending(props) {
         <React.Fragment>
           <Link
             component={WrappedNavLink}
-            to={ROUTES.home.path()}
+            to={ROUTES.group.home.path(activity.parameters.group.id)}
           >
             {activity.parameters.group.name}
           </Link>
