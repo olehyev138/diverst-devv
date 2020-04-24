@@ -487,7 +487,7 @@ class AdminLinks extends React.PureComponent {
               </MenuPermission>
               <MenuPermission
                 component={WrappedNavLink}
-                to='#'
+                to={ROUTES.admin.system.logs.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
                 show={

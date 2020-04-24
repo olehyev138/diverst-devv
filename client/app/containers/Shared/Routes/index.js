@@ -142,8 +142,10 @@ import {
   SocialLinkEditPage,
   UserDownloadsPage,
   ArchivesPage,
+  LogListPage,
   GroupSponsorsListPage,
-  GroupSponsorsCreatePage, GroupSponsorsEditPage
+  GroupSponsorsCreatePage,
+  GroupSponsorsEditPage,
 } from './templates';
 
 // Paths
@@ -264,6 +266,9 @@ export default function Routes(props) {
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
+
+      { /* Admin - System - Logs */ }
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.logs.index)} component={LogListPage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
