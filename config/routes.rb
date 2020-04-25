@@ -293,7 +293,7 @@ Diverst::Application.routes.draw do
 
             get 'group_population'
             get 'initiatives_per_group'
-            get 'messages_per_group'
+            get 'news_posts_per_group'
             get 'views_per_group'
             get 'views_per_folder'
             get 'views_per_resource'

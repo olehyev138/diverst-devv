@@ -31,10 +31,10 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
 
   # Social Media
 
-  def messages_per_group
+  def news_posts_per_group
     authorize MetricsDashboard, :index?
 
-    render json: @graph.messages_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
+    render json: Graph.news_posts_per_group
   end
 
   def views_per_news_link

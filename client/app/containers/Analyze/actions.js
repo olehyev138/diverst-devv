@@ -9,7 +9,7 @@ import {
   GET_GROWTH_OF_GROUPS_BEGIN, GET_GROWTH_OF_GROUPS_SUCCESS, GET_GROWTH_OF_GROUPS_ERROR,
   GET_VIEWS_PER_GROUP_BEGIN, GET_VIEWS_PER_GROUP_SUCCESS, GET_VIEWS_PER_GROUP_ERROR,
   GET_INITIATIVES_PER_GROUP_BEGIN, GET_INITIATIVES_PER_GROUP_SUCCESS, GET_INITIATIVES_PER_GROUP_ERROR,
-  GET_MESSAGES_PER_GROUP_BEGIN, GET_MESSAGES_PER_GROUP_SUCCESS, GET_MESSAGES_PER_GROUP_ERROR,
+  GET_NEWS_PER_GROUP_BEGIN, GET_NEWS_PER_GROUP_SUCCESS, GET_NEWS_PER_GROUP_ERROR,
   GET_VIEWS_PER_NEWS_LINK_BEGIN, GET_VIEWS_PER_NEWS_LINK_SUCCESS, GET_VIEWS_PER_NEWS_LINK_ERROR,
   GET_VIEWS_PER_FOLDER_BEGIN, GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_FOLDER_ERROR,
   GET_VIEWS_PER_RESOURCE_BEGIN, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_VIEWS_PER_RESOURCE_ERROR,
@@ -110,25 +110,25 @@ export function getInitiativesPerGroupError(payload) {
   };
 }
 
-/* Messages per Group */
+/* News per Group */
 
-export function getMessagesPerGroupBegin(payload) {
+export function getNewsPerGroupBegin(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_BEGIN,
+    type: GET_NEWS_PER_GROUP_BEGIN,
     payload
   };
 }
 
-export function getMessagesPerGroupSuccess(payload) {
+export function getNewsPerGroupSuccess(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_SUCCESS,
+    type: GET_NEWS_PER_GROUP_SUCCESS,
     payload
   };
 }
 
-export function getMessagesPerGroupError(payload) {
+export function getNewsPerGroupError(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_ERROR,
+    type: GET_NEWS_PER_GROUP_ERROR,
     payload
   };
 }

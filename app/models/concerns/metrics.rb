@@ -11,7 +11,9 @@ module Metrics
     @@analytics_bucket = Aws::S3::Resource::new(region: 'us-east-1')
                            .bucket('diverst-analytics')
 
-    # Group metrics
+    #
+    ## Group metrics
+    #
 
     def group_population
       @@analytics_bucket.object('group_population').get.body.read
@@ -19,6 +21,10 @@ module Metrics
 
     def growth_of_groups
       @@analytics_bucket.object('group_growth').get.body.read
+    end
+
+    def news_posts_per_group
+      @@analytics_bucket.object('news_posts_per_group').get.body.read
     end
   end
 end

@@ -50,17 +50,35 @@ export function GroupDashboardPage(props) {
    */
 
   const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
-  const [dashboardFilters, setDashboardFilters] = useState([]);
+
+  /* Filter by default on only parent groups */
+  const [dashboardFilters, setDashboardFilters] = useState({
+    parent_scope: { value: null, key: 'parent_id', op: '==' },
+    group_scope: null
+  });
 
   /* Callback function for GroupScopeSelect
    *   - builds single filter object out of selected group names
    */
   const updateScope = (scope) => {
-    setDashboardFilters(
-      scope.groups && scope.groups.length
-        ? [{ value: scope.groups.map(g => g.label), key: 'name', op: 'in' }]
-        : []
-    );
+    /* If scope groups is set & not 0, apply new filters */
+    if (scope.groups && scope.groups.length !== 0)
+      /* If scope groups is == 1, filter groups with scoped group as parent */
+      if (scope.groups.length === 1)
+        setDashboardFilters({
+          parent_scope: { value: scope.groups[0].value, key: 'parent_id', op: '==' }
+        });
+      else
+      /* If scope groups is > 1, filter on selected groups */
+        setDashboardFilters({
+          group_scope: { value: scope.groups.map(g => g.label), key: 'name', op: 'in' }
+        });
+    /* If scope groups is not set, set filters back to default */
+    else
+      setDashboardFilters({
+        parent_scope: { value: null, key: 'parent_id', op: '==' },
+        group_scope: null
+      });
   };
 
   const handleDashboardChange = (_, newDashboard) => {
@@ -70,9 +88,9 @@ export function GroupDashboardPage(props) {
   useEffect(() => () => () => metricsUnmount(), []);
 
   const dashboards = [
-    <OverviewDashboard dashboardFilters={dashboardFilters} />,
-    <SocialMediaDashboard dashboardFilters={dashboardFilters} />,
-    <ResourcesDashboard dashboardFilters={dashboardFilters} />
+    <OverviewDashboard dashboardFilters={Object.values(dashboardFilters)} />,
+    <SocialMediaDashboard dashboardFilters={Object.values(dashboardFilters)} />,
+    <ResourcesDashboard dashboardFilters={Object.values(dashboardFilters)} />
   ];
 
   return (

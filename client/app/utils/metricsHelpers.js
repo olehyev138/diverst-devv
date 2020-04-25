@@ -37,7 +37,7 @@ export function filterData(data, filters) {
 
   return data.filter((datapoint) => {
     for (const filter of filters)
-      if (!OPERATIONS[filter.op](dig(datapoint, filter.key), filter.value))
+      if (filter && !OPERATIONS[filter.op](dig(datapoint, filter.key), filter.value))
         return false;
 
     return true;

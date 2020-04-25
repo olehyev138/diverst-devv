@@ -32,8 +32,8 @@ const spec = {
   },
 
   encoding: {
-    y: { field: 'x', type: 'nominal', title: 'Group' },
-    x: { field: 'y', type: 'quantitative', title: 'Members' },
+    y: { field: 'name', type: 'nominal', title: 'Group' },
+    x: { field: 'count', type: 'quantitative', title: 'Members' },
     fillOpacity: {
       condition: { selection: 'select', value: 1 },
       value: 0.3

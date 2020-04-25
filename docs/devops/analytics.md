@@ -56,7 +56,7 @@ All of the analytics endpoints are the root path `/analyze`
 
 _Note: In the future, we will be migrating towards offering a separate 'Analytics API' service, with AWS API Gateway._
 
-#### Backend internal structure
+#### Backend structure
 
 The backend defines a `Graph` model/table. `Graph` defines `field` & an optional `aggregation` that define how custom graphs are calculated. The model itself consists of any necessary logic related to creating these graphs.
 
@@ -73,4 +73,43 @@ Graph.user_growth_percentage
 
 The frontend applications role is to retrieve & visually present the metrics data from the backend. We achieve this mainly with the use of _VegaLite_. _VegaLite_ is a grammar or DSL of interactive graphics, written in JSON _schemas_. 
 
-Additionally, the frontend allows the user to filter the data they are viewing by providing several types of filtering tools.
+Additionally, the frontend allows the user to filter the data they are viewing by providing several types of filtering tools, ie by _group_ or date.
+
+#### Frontend structure
+
+##### Overview
+
+The frontend metrics/analytics code is generally split up into _dashboards_ & _graphs_.
+ 
+ Dashboards display a list of graphs & metrics and optionally provide filtering mechanisms that allow the user to narrow down the data they are viewing in the entire dashboard. The _dashboard containers_ are responsible for any logic around filtering or any other kind of custom functionality specific to that dashboard, the _dashboard components_ are responsible for rendering the graphs & other data that should be displayed on that dashboard.
+ 
+ Graphs are responsible for visually displaying a set of data. Generally, the graphs should be/are stand alone so that they could in theory be imported into any place in the app that might want to display them. Like the dashboards, the graphs may provide there own graph specific filtering tools, such as clickable legends or date range selection. As an abstraction & reuse of code, we define the _base graphs_, ie line graph, bar graph separately under `BaseGraphs` as components. These components are where we define the VegaLite schema's that define how our graphs look & behave. All our graphs are based off of these. 
+
+
+##### Data structure 
+
+The data structure produced by MYSQL & accepted by VegaLite is a flat array of objects. The actual definition of the objects at the time of writing is somewhat arbitrary. Graphs related to certain dashboards may require certain keys so that the dashboards are able to pass down dashboard filters. 
+
+##### Filtering 
+
+To be as flexible as possible, we define a very generic filtering functionality. All graphs accept a list of data & a list of _filter objects_. If the graph provides its own specific filter mechanisms as described above, then it will also add its own _filter objects_ into this _filter object list_. Before rendering, the graph passes its data & its list of filter objects through a _filter function_. 
+
+In our `metricsHelpers` we define a function `filterData`. This function accepts a list of data & a list of _filter objects_. Filter objects are defined as follows
+
+```
+   *   A `filter object` describes a `filter operation` to be carried out on a data point in order to determine whether
+   *   it should be included in the filter data set
+   *
+   *   A filter object must be written as follows: { key: <>, value: <>, op: <> }
+   *     `key`:   The key inside each data point in the data set, containing the value to be compared
+   *     `value`: The literal value to be compared against `key` in each data point
+   *     `op`:    The comparison operator to be applied, must be one of the following:
+   *              '==', '!=', '>', '>=', '<=', '<', '<=', 'in'
+   *
+   *   - Filter operations will always be carried out as: `datapoint.key <op> value`
+   *   - Each filter object will be applied against the data point, all must be true in order for the data point to be included.
+   *   - The `in` operator expects `value` to be an array of literal values, runs <value-array>.includes(datapoint.key)
+```
+
+The filter function will then apply each filter object to each data point. Because the graphs all accept a list of filter objects, they become extremely customizable, allowing the dashboards that render them to apply complex, custom filtering logic to whatever extent necessary. 
+

@@ -7,7 +7,7 @@
 import produce from 'immer';
 import {
   GET_GROUP_POPULATION_SUCCESS, GET_VIEWS_PER_GROUP_SUCCESS, GET_GROWTH_OF_GROUPS_SUCCESS,
-  GET_INITIATIVES_PER_GROUP_SUCCESS, GET_MESSAGES_PER_GROUP_SUCCESS, GET_VIEWS_PER_NEWS_LINK_SUCCESS,
+  GET_INITIATIVES_PER_GROUP_SUCCESS, GET_NEWS_PER_GROUP_SUCCESS, GET_VIEWS_PER_NEWS_LINK_SUCCESS,
   GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_GROWTH_OF_RESOURCES_SUCCESS,
   GET_GROWTH_OF_USERS_SUCCESS, METRICS_UNMOUNT
 } from 'containers/Analyze/constants';
@@ -16,9 +16,9 @@ export const initialState = {
   metricsData: {
     groupPopulation: [],
     viewsPerGroup: {},
-    growthOfGroups: {},
+    growthOfGroups: [],
     initiativesPerGroup: {},
-    messagesPerGroup: {},
+    newsPerGroup: [],
     viewsPerNewsLink: {},
     viewsPerFolder: {},
     viewsPerResource: {},
@@ -44,8 +44,8 @@ function metricsReducer(state = initialState, action) {
       case GET_INITIATIVES_PER_GROUP_SUCCESS:
         draft.metricsData.initiativesPerGroup = action.payload;
         break;
-      case GET_MESSAGES_PER_GROUP_SUCCESS:
-        draft.metricsData.messagesPerGroup = action.payload;
+      case GET_NEWS_PER_GROUP_SUCCESS:
+        draft.metricsData.newsPerGroup = action.payload;
         break;
       case GET_VIEWS_PER_NEWS_LINK_SUCCESS:
         draft.metricsData.viewsPerNewsLink = action.payload;

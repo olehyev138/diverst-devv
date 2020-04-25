@@ -13,6 +13,7 @@ import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationG
 import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 import InitiativesPerGroupGraphPage from 'containers/Analyze/Graphs/InitiativesPerGroupGraphPage';
+import NewsPerGroupGraphPage from 'containers/Analyze/Graphs/NewsPerGroupGraphPage';
 
 const OverviewDashboard = ({ dashboardFilters }) => (
   <Grid container spacing={3}>
@@ -21,6 +22,9 @@ const OverviewDashboard = ({ dashboardFilters }) => (
     </Grid>
     <Grid item xs={12}>
       <GrowthOfGroupsGraphPage dashboardFilters={dashboardFilters} />
+    </Grid>
+    <Grid item xs={12}>
+      <NewsPerGroupGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
   </Grid>
 );

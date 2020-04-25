@@ -4,6 +4,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 
+import dig from 'object-dig';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -11,26 +13,24 @@ import reducer from 'containers/Analyze/reducer';
 import saga from 'containers/Analyze/saga';
 
 import {
-  getGroupPopulationBegin, metricsUnmount
+  getNewsPerGroupBegin, metricsUnmount
 } from 'containers/Analyze/actions';
 
 import {
-  selectGroupPopulation
+  selectNewsPerGroup
 } from 'containers/Analyze/selectors';
 
 // helpers
-import {
-  filterData
-} from 'utils/metricsHelpers';
+import { filterData } from 'utils/metricsHelpers';
 
-import GroupPopulationGraph from 'components/Analyze/Graphs/GroupPopulationGraph';
+import NewsPerGroupGraph from 'components/Analyze/Graphs/NewsPerGroupGraph';
 
-export function GroupPopulationGraphPage(props) {
+export function NewsPerGroupGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
   /**
-   * Group Population bar graph
+   * News per group bar graph
    *  - implements no graph specific filtering
    *  - accepts dashboard filters
    */
@@ -42,31 +42,31 @@ export function GroupPopulationGraphPage(props) {
   }, [props.data, props.dashboardFilters]);
 
   useEffect(() => {
-    props.getGroupPopulationBegin();
+    props.getNewsPerGroupBegin();
   }, []);
 
   return (
     <React.Fragment>
-      <GroupPopulationGraph
+      <NewsPerGroupGraph
         data={currentData}
       />
     </React.Fragment>
   );
 }
 
-GroupPopulationGraphPage.propTypes = {
+NewsPerGroupGraphPage.propTypes = {
   data: PropTypes.array,
   dashboardFilters: PropTypes.array,
-  getGroupPopulationBegin: PropTypes.func,
+  getNewsPerGroupBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  data: selectGroupPopulation()
+  data: selectNewsPerGroup()
 });
 
 const mapDispatchToProps = {
-  getGroupPopulationBegin,
+  getNewsPerGroupBegin,
   metricsUnmount
 };
 
@@ -78,4 +78,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupPopulationGraphPage);
+)(NewsPerGroupGraphPage);

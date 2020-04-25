@@ -26,8 +26,8 @@ Object.assign(GroupGraphs, {
 
   // Social Media
 
-  messagesPerGroup(params) {
-    return axios.get(`${this.url}/messages_per_group`, { params });
+  newsPerGroup(params) {
+    return axios.get(`${this.url}/news_posts_per_group`, { params });
   },
 
   viewsPerNewsLink(params) {

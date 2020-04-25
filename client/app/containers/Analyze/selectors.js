@@ -26,9 +26,9 @@ const selectInitiativesPerGroup = () => createSelector(
   metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.initiativesPerGroup, 0) || [])
 );
 
-const selectMessagesPerGroup = () => createSelector(
+const selectNewsPerGroup = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.messagesPerGroup, 0) || [])
+  metricsState => metricsState.metricsData.newsPerGroup
 );
 
 const selectViewsPerNewsLink = () => createSelector(
@@ -59,7 +59,7 @@ const selectGrowthOfUsers = () => createSelector(
 
 export {
   selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
-  selectGrowthOfGroups, selectInitiativesPerGroup, selectMessagesPerGroup,
+  selectGrowthOfGroups, selectInitiativesPerGroup, selectNewsPerGroup,
   selectViewsPerNewsLink, selectViewsPerFolder, selectViewsPerResource,
   selectGrowthOfResources, selectGrowthOfUsers
 
