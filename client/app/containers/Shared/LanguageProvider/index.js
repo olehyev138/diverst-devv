@@ -32,7 +32,7 @@ export function LanguageProvider(props) {
   // If no locale has been manually set, default to the browser locale
   useEffect(() => {
     // Set user locale
-    if (userLocale) {
+    if (userLocale && props.changeLocale) {
       props.changeLocale(userLocale);
       Settings.defaultLocale = userLocale;
     }
