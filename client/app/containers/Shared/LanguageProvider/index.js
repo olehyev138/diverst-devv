@@ -21,13 +21,15 @@ import GlobalLanguageProvider from 'containers/Shared/LanguageProvider/GlobalLan
 
 import LocaleService from 'utils/localeService';
 
-import { Settings } from 'luxon';
+import { Settings, DateTime } from 'luxon';
 
 export function LanguageProvider(props) {
   const messages = { ...props.messages[props.locale] };
 
-  const userLocale = LocaleService.getLocale();
+  const defaultBrowserLocale = DateTime.local() && DateTime.local().resolvedLocaleOpts() && DateTime.local().resolvedLocaleOpts().locale;
+  const userLocale = LocaleService.getLocale() || defaultBrowserLocale || 'en';
 
+  // If no locale has been manually set, default to the browser locale
   useEffect(() => {
     // Set user locale
     if (userLocale) {
