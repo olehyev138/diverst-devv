@@ -15,14 +15,23 @@ import { selectLocale } from 'containers/Shared/LanguageProvider/selectors';
 
 import DiverstLanguageSelect from 'components/Shared/DiverstLanguageSelect';
 
+import LocaleService from 'utils/localeService';
+
 export class LocaleToggle extends React.PureComponent {
+  handleLocaleToggle = (e) => {
+    const { value } = e.target;
+
+    this.props.onLocaleToggle(value);
+    LocaleService.storeLocale(value);
+  }
+
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <DiverstLanguageSelect
         value={this.props.locale}
         values={appLocales}
-        onToggle={this.props.onLocaleToggle}
+        onToggle={this.handleLocaleToggle}
       />
     );
   }
@@ -39,7 +48,7 @@ const mapStateToProps = createSelector(selectLocale(), locale => ({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLocaleToggle: evt => dispatch(changeLocale(evt.target.value)),
+    onLocaleToggle: value => dispatch(changeLocale(value)),
     dispatch,
   };
 }
