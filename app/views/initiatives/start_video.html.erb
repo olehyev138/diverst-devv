@@ -9,55 +9,18 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
       video {
-        height: auto !important;
-        width: 100% !important;
+        width:200px;
         position: relative;
         top: 75px;
         display: inline-block;
       }
 
-      #local-media {
+      #video-grid {
+        display: grid;
+        grid-template-columns: 200px 200px 200px;
+        grid-template-rows: auto auto auto;
         max-height: 300px;
         margin: auto;
-      }
-
-      #remote-media {
-        max-height: 300px;
-        /* max-width: 160px; */
-        margin: auto;
-      }
-
-      .remote-box {
-        max-height: 300px;
-        position: relative;
-        top: 75px;
-        display: inline-block;
-        background-color: grey;
-        max-width: 160px;
-      }
-
-      #local-participant {
-        position: absolute;
-        z-index: 999;
-        margin: 0 auto;
-        left: 55%;
-        text-align: center;
-        top: 110%; 
-        font-family: Arial,sans-serif;
-        color: #fff;
-        width: 60%;
-      }
-
-      #remote-participant {
-        position: absolute;
-        z-index: 999;
-        margin: 0 auto;
-        left: 55%;
-        text-align: center;
-        top: auto; 
-        font-family: Arial,sans-serif;
-        color: #fff;
-        width: 60%; 
       }
     </style>
   </head>
@@ -78,53 +41,11 @@
       <div class="col-xs-8">
         <div class="row">
           <ul class="list-inline text-center">
-            <div class="col-xs-4" style="padding: 0px;">
+            <div class="col-xs-8" style="padding: 0px;">
               <li>
-                <div id="local-media"></div>
-                <p id="local-participant"></p>
+                <div id="video-grid"></div>
               </li>
             </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div id="remote-media"></div>
-                <p id="remote-participant"></p>
-              </li>
-            </div>
-            <!-- <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div>
-            <div class="col-xs-4" style="padding: 0px;">
-              <li>
-                <div class="remote-box" style="height: 150px; width: 160px;"></div>
-              </li>
-            </div> -->
             </ul>
         </div>
         <div class="row" style="position: relative; top: 75px;">
@@ -173,8 +94,7 @@
     function attachTracks(tracks, container) {
       tracks.forEach(function(track) {
           if (track.kind === 'audio' || track.kind === 'video') {
-            console.log(container);
-                container.appendChild(track.attach());
+            container.appendChild(track.attach());
           }else if (track.kind === 'data') {
             track.on('message', function(data) {
                 var response = JSON.parse(data);
@@ -233,36 +153,30 @@
       log("Joined as '" + identity + "'");
 
       // Attach LocalParticipant's Tracks, if not already attached.
-      var previewContainer = document.getElementById('local-media');
+      var previewContainer = document.getElementById('video-grid');
       if (!previewContainer.querySelector('video')) {
         attachParticipantTracks(room.localParticipant, previewContainer);
-        // var text = document.createTextNode(identity);
-        // document.getElementById('local-participant').appendChild(text);
       }
 
       // Attach the Tracks of the Room's Participants.
       room.participants.forEach(function(participant) {
         log("Already in Room: '" + participant.identity + "'");
-        var previewContainer = document.getElementById('remote-media');
+        var previewContainer = document.getElementById('video-grid');
         attachParticipantTracks(participant, previewContainer);
-        // var text = document.createTextNode(participant.identity);
-        // document.getElementById('remote-participant').appendChild(text);
       });
 
       // When a Participant joins the Room, log the event.
       room.on('participantConnected', function(participant) {
         log("Joining: '" + participant.identity + "'");
 
-        var previewContainer = document.getElementById('remote-media');
+        var previewContainer = document.getElementById('video-grid');
         attachParticipantTracks(participant, previewContainer);
-        // var text = document.createTextNode(participant.identity);
-        // document.getElementById('remote-participant').appendChild(text);
       });
 
       // When a Participant adds a Track, attach it to the DOM.
       room.on('trackAdded', function(track, participant) {
         //log(participant.identity + " added track: " + track.kind);
-        var previewContainer = document.getElementById('remote-media');
+        var previewContainer = document.getElementById('video-grid');
         attachTracks([track], previewContainer);
       });
 
