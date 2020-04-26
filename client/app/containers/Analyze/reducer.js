@@ -6,6 +6,7 @@
 
 import produce from 'immer';
 import {
+  GET_GROUP_OVERVIEW_METRICS_SUCCESS, GET_GROUP_SPECIFIC_METRICS_SUCCESS,
   GET_GROUP_POPULATION_SUCCESS, GET_VIEWS_PER_GROUP_SUCCESS, GET_GROWTH_OF_GROUPS_SUCCESS,
   GET_INITIATIVES_PER_GROUP_SUCCESS, GET_NEWS_PER_GROUP_SUCCESS, GET_VIEWS_PER_NEWS_LINK_SUCCESS,
   GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_GROWTH_OF_RESOURCES_SUCCESS,
@@ -14,6 +15,8 @@ import {
 
 export const initialState = {
   metricsData: {
+    groupOverviewMetrics: {},
+    groupSpecificMetrics: {},
     groupPopulation: [],
     viewsPerGroup: {},
     growthOfGroups: [],
@@ -32,6 +35,12 @@ function metricsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_GROUP_OVERVIEW_METRICS_SUCCESS:
+        draft.metricsData.groupOverviewMetrics = action.payload;
+        break;
+      case GET_GROUP_SPECIFIC_METRICS_SUCCESS:
+        draft.metricsData.groupSpecificMetrics = action.payload;
+        break;
       case GET_GROUP_POPULATION_SUCCESS:
         draft.metricsData.groupPopulation = action.payload;
         break;

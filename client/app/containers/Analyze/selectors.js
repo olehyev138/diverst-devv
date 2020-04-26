@@ -6,6 +6,16 @@ import { formatBarGraphData, selectSeriesValues } from 'utils/metricsHelpers';
 
 const selectMetricsDomain = state => state.metrics || initialState;
 
+const selectGroupOverviewMetrics = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.groupOverviewMetrics
+);
+
+const selectGroupSpecificMetrics = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.groupSpecificMetrics
+);
+
 const selectGroupPopulation = () => createSelector(
   selectMetricsDomain,
   metricsState => metricsState.metricsData.groupPopulation
@@ -61,6 +71,6 @@ export {
   selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
   selectGrowthOfGroups, selectInitiativesPerGroup, selectNewsPerGroup,
   selectViewsPerNewsLink, selectViewsPerFolder, selectViewsPerResource,
-  selectGrowthOfResources, selectGrowthOfUsers
-
+  selectGrowthOfResources, selectGrowthOfUsers, selectGroupOverviewMetrics,
+  selectGroupSpecificMetrics
 };

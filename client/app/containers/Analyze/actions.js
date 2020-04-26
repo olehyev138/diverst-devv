@@ -5,6 +5,8 @@
  */
 
 import {
+  GET_GROUP_OVERVIEW_METRICS_BEGIN, GET_GROUP_OVERVIEW_METRICS_SUCCESS, GET_GROUP_OVERVIEW_METRICS_ERROR,
+  GET_GROUP_SPECIFIC_METRICS_BEGIN, GET_GROUP_SPECIFIC_METRICS_SUCCESS, GET_GROUP_SPECIFIC_METRICS_ERROR,
   GET_GROUP_POPULATION_BEGIN, GET_GROUP_POPULATION_SUCCESS, GET_GROUP_POPULATION_ERROR,
   GET_GROWTH_OF_GROUPS_BEGIN, GET_GROWTH_OF_GROUPS_SUCCESS, GET_GROWTH_OF_GROUPS_ERROR,
   GET_VIEWS_PER_GROUP_BEGIN, GET_VIEWS_PER_GROUP_SUCCESS, GET_VIEWS_PER_GROUP_ERROR,
@@ -17,6 +19,52 @@ import {
   GET_GROWTH_OF_USERS_BEGIN, GET_GROWTH_OF_USERS_SUCCESS, GET_GROWTH_OF_USERS_ERROR,
   METRICS_UNMOUNT,
 } from 'containers/Analyze/constants';
+
+/* Group overview metrics */
+
+export function getGroupOverviewMetricsBegin(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupOverviewMetricsSuccess(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_SUCCESS,
+    payload
+  };
+}
+
+export function getGroupOverviewMetricsError(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_ERROR,
+    payload
+  };
+}
+
+/* Group specific metrics */
+
+export function getGroupSpecificMetricsBegin(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupSpecificMetricsSuccess(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupSpecificMetricsError(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_ERROR,
+    payload
+  };
+}
 
 /* Group population */
 

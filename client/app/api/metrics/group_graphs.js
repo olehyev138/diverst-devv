@@ -6,6 +6,14 @@ const GroupGraphs = new API({ controller: 'metrics/groups' });
 Object.assign(GroupGraphs, {
   // Overview
 
+  groupOverviewMetrics(params) {
+    return axios.get(`${this.url}/group_overview_metrics`, { params });
+  },
+
+  groupSpecificMetrics(params) {
+    return axios.get(`${this.url}/group_specific_metrics`, { params });
+  },
+
   groupPopulation(params) {
     return axios.get(`${this.url}/group_population`, { params });
   },

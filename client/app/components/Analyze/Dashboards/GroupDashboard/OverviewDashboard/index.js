@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 
 // Graphs
+import GroupOverviewMetricsPage from 'containers/Analyze/Metrics/GroupOverviewMetricsPage';
 import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
 import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
@@ -17,6 +18,9 @@ import NewsPerGroupGraphPage from 'containers/Analyze/Graphs/NewsPerGroupGraphPa
 
 const OverviewDashboard = ({ dashboardFilters }) => (
   <Grid container spacing={3}>
+    <Grid item xs={12}>
+      <GroupOverviewMetricsPage />
+    </Grid>
     <Grid item xs={12}>
       <GroupPopulationGraphPage dashboardFilters={dashboardFilters} />
     </Grid>

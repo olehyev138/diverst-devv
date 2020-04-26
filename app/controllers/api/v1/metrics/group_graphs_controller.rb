@@ -3,16 +3,29 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
 
   # Overview
 
+  def group_overview_metrics
+    authorize MetricsDashboard, :index?
+
+    render status: 200, json: { total_groups: current_user.enterprise.groups.size,
+                   avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise) }
+  end
+
+  def group_specific_metrics
+    authorize MetricsDashboard, :index?
+
+    render status: 200, json: {}
+  end
+
   def group_population
     authorize MetricsDashboard, :index?
 
-    render json: Graph.group_population
+    render status: 200, json: Graph.group_population
   end
 
   def views_per_group
     authorize MetricsDashboard, :index?
 
-    render json: @graph.views_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
+    render status: 200, json: @graph.views_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
   end
 
   def growth_of_groups
@@ -61,5 +74,11 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
     authorize MetricsDashboard, :index?
 
     render json: @graph.growth_of_resources(metrics_params[:date_range], metrics_params[:scoped_by_models])
+  end
+
+  def payload
+    params
+        .require(klass.symbol)
+        .permit(:group)
   end
 end

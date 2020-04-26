@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
+  GET_GROUP_OVERVIEW_METRICS_BEGIN, GET_GROUP_SPECIFIC_METRICS_BEGIN,
   GET_GROUP_POPULATION_BEGIN, GET_VIEWS_PER_GROUP_BEGIN, GET_GROWTH_OF_GROUPS_BEGIN,
   GET_INITIATIVES_PER_GROUP_BEGIN, GET_NEWS_PER_GROUP_BEGIN, GET_VIEWS_PER_NEWS_LINK_BEGIN,
   GET_VIEWS_PER_FOLDER_BEGIN, GET_VIEWS_PER_RESOURCE_BEGIN, GET_GROWTH_OF_RESOURCES_BEGIN,
@@ -12,6 +13,8 @@ import {
 } from 'containers/Analyze/constants';
 
 import {
+  getGroupOverviewMetricsSuccess, getGroupOverviewMetricsError,
+  getGroupSpecificMetricsSuccess, getGroupSpecificMetricsError,
   getGroupPopulationSuccess, getGroupPopulationError,
   getViewsPerGroupSuccess, getViewsPerGroupError,
   getGrowthOfGroupsSuccess, getGrowthOfGroupsError,
@@ -21,10 +24,36 @@ import {
   getViewsPerFolderSuccess, getViewsPerFolderError,
   getViewsPerResourceSuccess, getViewsPerResourceError,
   getGrowthOfResourcesSuccess, getGrowthOfResourcesError,
-  getGrowthOfUsersSuccess, getGrowthOfUsersError,
+  getGrowthOfUsersSuccess, getGrowthOfUsersError
 } from 'containers/Analyze/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+export function* getGroupOverviewMetrics(action) {
+  try {
+    const response = yield call(api.metrics.groupGraphs.groupOverviewMetrics.bind(api.metrics.groupGraphs), action.payload);
+
+    yield put(getGroupOverviewMetricsSuccess(response.data));
+  } catch (err) {
+    yield put(getGroupOverviewMetricsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load group metrics', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getGroupSpecificMetrics(action) {
+  try {
+    const response = yield call(api.metrics.groupGraphs.groupSpecificMetrics.bind(api.metrics.groupGraphs), action.payload);
+
+    yield put(getGroupSpecificMetricsSuccess(response.data));
+  } catch (err) {
+    yield put(getGroupSpecificMetricsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load group metrics', options: { variant: 'warning' } }));
+  }
+}
 
 export function* getGroupPopulation(action) {
   try {
@@ -158,6 +187,8 @@ export function* getGrowthOfUsers(action) {
 
 
 export default function* metricsSaga() {
+  yield takeLatest(GET_GROUP_OVERVIEW_METRICS_BEGIN, getGroupOverviewMetrics);
+  yield takeLatest(GET_GROUP_SPECIFIC_METRICS_BEGIN, getGroupSpecificMetrics);
   yield takeLatest(GET_GROUP_POPULATION_BEGIN, getGroupPopulation);
   yield takeLatest(GET_VIEWS_PER_GROUP_BEGIN, getViewsPerGroup);
   yield takeLatest(GET_GROWTH_OF_GROUPS_BEGIN, getGrowthOfGroups);
