@@ -26,6 +26,8 @@ import Logo from 'components/Shared/Logo';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import LocaleToggle from 'containers/Shared/LocaleToggle';
+
 const styles = theme => ({
   card: {
     width: '100%',
@@ -42,6 +44,9 @@ const styles = theme => ({
   },
   submitButtonLabel: {
     minWidth: 'max-content',
+  },
+  centerAlign: {
+    textAlign: 'center', // Necessary as the grid item prop "align='center'" breaks the outlined input label layout slightly
   },
 });
 
@@ -106,9 +111,23 @@ export function LoginFormInner({
             />
           </CardContent>
           <CardActions className={classes.cardActions}>
-            <Grid container alignItems='center'>
-              <Grid item xs={false} sm={4} />
-              <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
+            <Grid container spacing={1} alignItems='center' justify='space-between' direction='row-reverse'>
+              <Grid item xs={4} sm align='center'>
+                <Button
+                  component={WrappedNavLink}
+                  to={{
+                    pathname: ROUTES.session.forgotPassword.path(),
+                    state: { email: values.email }
+                  }}
+                  color='primary'
+                  size='small'
+                  variant='text'
+                  disabled={rest.isLoggingIn}
+                >
+                  {<FormattedMessage {...messages.forgotPassword} />}
+                </Button>
+              </Grid>
+              <Grid item xs={8} sm={6} align={width === 'xs' ? 'left' : 'center'}>
                 <Button
                   classes={{
                     label: classes.submitButtonLabel
@@ -127,20 +146,10 @@ export function LoginFormInner({
                   {<FormattedMessage {...messages.login} />}
                 </Button>
               </Grid>
-              <Grid item align='right' xs={8} sm={4}>
-                <Button
-                  component={WrappedNavLink}
-                  to={{
-                    pathname: ROUTES.session.forgotPassword.path(),
-                    state: { email: values.email }
-                  }}
-                  color='primary'
-                  size='small'
-                  variant='text'
-                  disabled={rest.isLoggingIn}
-                >
-                  {<FormattedMessage {...messages.forgotPassword} />}
-                </Button>
+              <Grid item xs={12} sm>
+                <div className={classes.centerAlign}>
+                  <LocaleToggle />
+                </div>
               </Grid>
             </Grid>
           </CardActions>

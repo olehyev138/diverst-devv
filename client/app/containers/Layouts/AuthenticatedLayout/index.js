@@ -13,11 +13,12 @@ import ApplicationFooter from 'components/Shared/ApplicationFooter';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
+
 import { loginSuccess, logoutSuccess, setUserData } from 'containers/Shared/App/actions';
 
 import { Settings } from 'luxon';
 import { createStructuredSelector } from 'reselect';
-import { selectToken } from 'containers/Shared/App/selectors'; // Timezone and locale
+import { selectToken } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -55,10 +56,9 @@ const AuthenticatedLayout = ({
       other.loginSuccess(userJwt);
       other.setUserData(userData);
     }
+
     // Set user time zone from their profile settings
     Settings.defaultZoneName = userData.time_zone;
-    // TODO: Set user locale
-    // Settings.defaultLocale = 'en';
 
     return (
       <ApplicationLayout
