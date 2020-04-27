@@ -1,14 +1,14 @@
 /**
  *
  * GroupSelector
- * @Param groupType= parent,children or null(all groups)
+ *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  getGroupsBegin
+  getGroupsBegin, groupListUnmount
 } from 'containers/Group/actions';
 
 import { compose } from 'redux';
@@ -22,29 +22,25 @@ import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 
-const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label, groupType, ...rest }) => {
+const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label, queryScopes, ...rest }) => {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
+  const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
+
   const groupSelectAction = (searchKey = '') => {
-    if (groupType === 'parent')
-      rest.getGroupsBegin({
-        count: 10, page: 0, order: 'asc',
-        search: searchKey,
-        query_scopes: ['all_parents']
-      });
-    else if (groupType === 'children')
-      rest.getGroupsBegin({
-        count: 10, page: 0, order: 'asc',
-        search: searchKey,
-        query_scopes: ['all_children']
-      });
-    else
-      rest.getGroupsBegin({
-        count: 10, page: 0, order: 'asc',
-        search: searchKey,
-      });
+    rest.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      query_scopes: queryScopes || []
+    });
   };
+
+  useEffect(() => {
+    groupSelectAction();
+
+    return () => groupListUnmount();
+  }, []);
 
   return (
     <DiverstSelect
@@ -52,15 +48,13 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       id={groupField}
       margin='normal'
       label={label}
-      isMulti
       fullWidth
-      options={rest.selectGroups}
-      isLoading={rest.isLoading}
+      options={rest.groups}
       value={values[groupField]}
       onChange={value => setFieldValue(groupField, value)}
-      onInputChange={value => groupSelectAction(value)}
+      onInputChange={groupSelectAction}
       hideHelperText
-      {...rest}
+      {...selectProps}
     />
   );
 };
@@ -71,19 +65,22 @@ GroupSelector.propTypes = {
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
-  groupType: PropTypes.string,
-  getGroupsBegin: PropTypes.func.isRequired,
-  selectGroups: PropTypes.array,
+  queryScopes: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
+
+  getGroupsBegin: PropTypes.func.isRequired,
+  groupListUnmount: PropTypes.func.isRequired,
+  groups: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  selectGroups: selectPaginatedSelectGroups(),
+  groups: selectPaginatedSelectGroups(),
   isLoading: selectGroupIsLoading(),
 });
 
 const mapDispatchToProps = {
-  getGroupsBegin
+  getGroupsBegin,
+  groupListUnmount,
 };
 
 const withConnect = connect(
