@@ -5,7 +5,7 @@ import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import { DateTime } from 'luxon';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { Link, Avatar } from '@material-ui/core';
+import { Link, Avatar, Box } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 
 // This component for displaying log owner
@@ -16,25 +16,29 @@ export function SharedOwner(props) {
   return (
     <React.Fragment>
       { activity.owner ? (
-        <React.Fragment>
-          <Avatar>
-            { activity.owner.avatar ? (
-              <DiverstImg
-                data={activity.owner.avatar_data}
-                maxWidth='100%'
-                maxHeight='240px'
-              />
-            ) : (
-              activity.owner.first_name[0]
-            )}
-          </Avatar>
-          <Link
-            component={WrappedNavLink}
-            to={ROUTES.user.show.path(activity.owner_id)}
-          >
-            {activity.owner.name_with_status}
-          </Link>
-        </React.Fragment>
+        <Box display='flex' alignItems='center' width='auto'>
+          <Box order={1} mr={1}>
+            <Avatar>
+              { activity.owner.avatar ? (
+                <DiverstImg
+                  data={activity.owner.avatar_data}
+                  maxWidth='100%'
+                  maxHeight='240px'
+                />
+              ) : (
+                activity.owner.first_name[0]
+              )}
+            </Avatar>
+          </Box>
+          <Box order={2}>
+            <Link
+              component={WrappedNavLink}
+              to={ROUTES.user.show.path(activity.owner_id)}
+            >
+              {activity.owner.name_with_status}
+            </Link>
+          </Box>
+        </Box>
       ) : (
         <React.Fragment>
           {' Unknown user '}
