@@ -7,31 +7,44 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-import messages from 'containers/User/HomePage/messages';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 export default function DiverstDialog(props) {
-  const { title, message, open, handleClose } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content } = props;
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-      <DialogTitle>{ title }</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={handleNo}
+      aria-labelledby='alert-dialog-title'
+      aria-describedby='alert-dialog-description'
+    >
       <DialogContent>
-        <DialogContentText>
-          { message }
+        {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
+        <DialogContentText id='alert-dialog-description'>
+          {content}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color='primary' onClick={handleClose}><DiverstFormattedMessage {...messages.close} /></Button>
+        {handleYes && (
+          <Button onClick={handleYes} color='primary' autoFocus>
+            {textYes}
+          </Button>
+        )}
+        {handleNo && (
+          <Button onClick={handleNo} color='primary' autoFocus>
+            {textNo}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
 }
 
 DiverstDialog.propTypes = {
-  children: PropTypes.any,
   title: PropTypes.string,
-  message: PropTypes.string,
   open: PropTypes.bool,
-  handleClose: PropTypes.func,
+  handleYes: PropTypes.func,
+  textYes: PropTypes.string,
+  handleNo: PropTypes.func,
+  textNo: PropTypes.string,
+  content: PropTypes.any,
 };

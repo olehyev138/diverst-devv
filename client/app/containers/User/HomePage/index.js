@@ -104,7 +104,8 @@ handleClickOpen = () => {
         </Typography>
         <DiverstDialog
           open={this.state.open}
-          handleClose={this.handleClose}
+          handleNo={this.handleClose}
+          textNo={this.props.intl.formatMessage(messages.close)}
           message={this.props.privacyMessage}
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
