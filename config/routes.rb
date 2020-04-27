@@ -260,8 +260,7 @@ Diverst::Application.routes.draw do
           post 'join'
           post 'leave'
           get 'export_csv'
-          post 'leave'
-          post 'join'
+          post 'join_subgroups'
         end
       end
       resources :user_roles
