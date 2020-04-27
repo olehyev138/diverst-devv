@@ -13,6 +13,22 @@ class Api::V1::UserGroupsController < DiverstController
     item.remove
   end
 
+  def join_subgroups
+    UserGroup.find_or_create_by(group_id: subgroup_payload[:group_id], user_id: current_user.id)
+    subgroup_payload[:subgroups].each do | group |
+      if group[:join]
+        UserGroup.find_or_create_by(group_id: group[:group_id], user_id: current_user.id)
+      else
+        item = UserGroup.find_by(group_id: group[:group_id], user_id: current_user.id)
+        unless item.nil?
+          item.remove
+        end
+      end
+    end
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   private
 
   def model_map(model)
@@ -24,6 +40,17 @@ class Api::V1::UserGroupsController < DiverstController
     when :export_csv then 'export_members'
     else nil
     end
+  end
+      
+  def subgroup_payload
+    params.permit(
+    :group_id,
+    subgroups:
+        [
+            :group_id,
+            :join
+        ]
+  )
   end
 
   def payload
