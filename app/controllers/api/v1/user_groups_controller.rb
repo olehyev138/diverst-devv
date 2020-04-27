@@ -41,7 +41,7 @@ class Api::V1::UserGroupsController < DiverstController
     else nil
     end
   end
-      
+
   def subgroup_payload
     params.permit(
     :group_id,
