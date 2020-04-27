@@ -83,6 +83,6 @@ class GroupLeader < ApplicationRecord
   private
 
   def validate_group_membership_of_group_leader
-    errors.add(:user, 'Selected user is not a member of this group') unless UserGroup.where(user_id: user_id, group_id: group_id, accepted_member: true).exists?
+    errors.add(:user, 'Selected user is not a member of this group') unless UserGroup.find_by(user_id: user_id, group_id: group_id)&.is_accepted?
   end
 end
