@@ -104,8 +104,7 @@ export function GroupHome({ classes, ...props }) {
       group_id: props.currentGroup.id
     });
     handleClose();
-  }
-
+  };
   const joinBtn = (
     isJoined
       ? (
