@@ -172,13 +172,12 @@ class GroupsController < ApplicationController
         @posts = with_segments
       else
         @upcoming_and_ongoing_events = Initiative.all_upcoming_events_for_group(@group.id) + Initiative.all_ongoing_events_for_group(@group.id)
-        @user_groups = []
-        @messages = []
-        @user_group = []
+        @user_groups = UserGroup.none
+        @messages = GroupMessage.none
+        @user_group = UserGroup.none
         @leaders = @group.group_leaders.includes(:user).visible
-        @user_groups = []
-        @top_user_group_participants = []
-        @top_group_participants = []
+        @top_user_group_participants = UserGroup.none
+        @top_group_participants = Group.none
         @posts = with_segments
       end
     end
@@ -431,6 +430,7 @@ class GroupsController < ApplicationController
         .include_posts(social_enabled: @group.enterprise.enable_social_media?)
         .order(is_pinned: :desc, created_at: :desc)
         .limit(5)
+        .distinct
   end
 
   def with_segments
@@ -442,8 +442,9 @@ class GroupsController < ApplicationController
           .include_posts(social_enabled: @group.enterprise.enable_social_media?)
           .order(is_pinned: :desc, created_at: :desc)
           .limit(5)
+          .distinct
     else
-      []
+      NewsFeedLink.none
     end
   end
 

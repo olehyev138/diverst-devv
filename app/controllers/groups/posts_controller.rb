@@ -21,7 +21,7 @@ class Groups::PostsController < ApplicationController
       @posts = NewsFeedLink.none
     end
 
-    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?).distinct
     @pending_posts_count = @posts.not_approved(@group.news_feed.id).count
     @posts = @posts.approved
     prune_posts
@@ -37,7 +37,7 @@ class Groups::PostsController < ApplicationController
       @posts = NewsFeedLink.none
     end
 
-    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?).distinct
     @posts_count = @posts.approved.count
     @pending_posts = @posts.not_approved(@group.news_feed.id)
     prune_posts

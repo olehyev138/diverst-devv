@@ -85,7 +85,7 @@ class NewsFeedLink < BaseClass
 
   validates :news_feed_id, presence: true
 
-  after_create :approve_link
+  before_create :approve_link
 
   # checks if link can automatically be approved
   # links are automatically approved if author is a
@@ -95,7 +95,6 @@ class NewsFeedLink < BaseClass
 
     if GroupPostsPolicy.new(link.author, [link.group]).update?
       self.approved = true
-      self.save!
     end
   end
 
