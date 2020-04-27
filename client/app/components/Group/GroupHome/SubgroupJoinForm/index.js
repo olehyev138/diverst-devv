@@ -51,10 +51,10 @@ export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, val
               color='primary'
               type='submit'
             >
-              Update
+              <DiverstFormattedMessage {...messages.update} />
             </Button>
             <Button onClick={handleCancel}>
-              Cancel
+              <DiverstFormattedMessage {...messages.cancel} />
             </Button>
           </Grid>
         </Grid>
