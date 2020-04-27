@@ -18,7 +18,7 @@ import {
 
 export const initialState = {
   isLoading: true,
-  logList: {},
+  logList: [],
   logTotal: null,
   isCommitting: false,
 };
