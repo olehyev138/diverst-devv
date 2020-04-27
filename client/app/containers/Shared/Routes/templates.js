@@ -68,6 +68,11 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 /* Admin - Manage - Archive */
 import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 
+/* Admin - Include - Polls */
+import PollsList from 'containers/Poll/PollListPage/Loadable';
+import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
+import PollEditPage from 'containers/Poll/PollEditPage/Loadable';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
@@ -302,6 +307,9 @@ export {
   CampaignQuestionCreatePage,
   CampaignQuestionEditPage,
   CampaignQuestionShowPage,
+  PollsList,
+  PollCreatePage,
+  PollEditPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,

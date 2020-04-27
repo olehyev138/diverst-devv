@@ -319,6 +319,17 @@ const messages = defineMessages({
       index: {
         id: `${scope}.admin.include.index`,
       },
+      polls: {
+        index: {
+          id: `${scope}.admin.include.polls.index`,
+        },
+        new: {
+          id: `${scope}.admin.include.polls.new`,
+        },
+        edit: {
+          id: `${scope}.admin.include.polls.edit`,
+        }
+      },
     },
     mentorship: {
       index: {

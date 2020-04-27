@@ -6,19 +6,37 @@
  * IntlProvider component and i18n messages (loaded from `app/translations`)
  */
 
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
+
+import { changeLocale } from 'containers/Shared/LanguageProvider/actions';
 
 import { selectLocale } from './selectors';
 import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import GlobalLanguageProvider from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
+import LocaleService from 'utils/localeService';
+
+import { Settings, DateTime } from 'luxon';
+
 export function LanguageProvider(props) {
   const messages = { ...props.messages[props.locale] };
+
+  const defaultBrowserLocale = DateTime.local() && DateTime.local().resolvedLocaleOpts() && DateTime.local().resolvedLocaleOpts().locale;
+  const userLocale = LocaleService.getLocale() || defaultBrowserLocale || 'en';
+
+  // If no locale has been manually set, default to the browser locale
+  useEffect(() => {
+    // Set user locale
+    if (userLocale && props.changeLocale) {
+      props.changeLocale(userLocale);
+      Settings.defaultLocale = userLocale;
+    }
+  }, [userLocale]);
 
   useEffect(() => {
     if (props.customTexts) // eslint-disable-next-line no-return-assign
@@ -43,6 +61,7 @@ LanguageProvider.propTypes = {
   messages: PropTypes.object,
   children: PropTypes.element.isRequired,
   customTexts: PropTypes.object,
+  changeLocale: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -50,7 +69,11 @@ const mapStateToProps = createStructuredSelector({
   customTexts: selectCustomText(),
 });
 
-export default connect(
+const mapDispatchToProps = {
+  changeLocale,
+};
+
+export default memo(connect(
   mapStateToProps,
-  undefined,
-)(LanguageProvider);
+  mapDispatchToProps,
+)(LanguageProvider));
