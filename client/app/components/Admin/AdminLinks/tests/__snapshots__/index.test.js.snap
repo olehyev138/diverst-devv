@@ -322,6 +322,13 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(Collapse))>
         <WrappedComponent
           button={true}
+          component={
+            Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "render": [Function],
+            }
+          }
+          to="/admin/polls"
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <HowToVoteIcon />
@@ -782,6 +789,13 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(Collapse))>
         <WrappedComponent
           button={true}
+          component={
+            Object {
+              "$$typeof": Symbol(react.forward_ref),
+              "render": [Function],
+            }
+          }
+          to="/admin/polls"
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <HowToVoteIcon />
