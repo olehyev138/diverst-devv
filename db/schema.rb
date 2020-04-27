@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_162417) do
+ActiveRecord::Schema.define(version: 2020_04_13_194858) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -52,12 +52,12 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "group_id"
     t.bigint "deprecated_enterprise_id"
-    t.decimal "amount", precision: 10, default: "0"
+    t.decimal "amount", precision: 20, scale: 4, default: "0.0", null: false
     t.boolean "closed", default: false
-    t.decimal "deprecated_available_budget", precision: 10, default: "0"
-    t.decimal "deprecated_approved_budget", precision: 10, default: "0"
-    t.decimal "deprecated_expenses", precision: 10, default: "0"
-    t.decimal "deprecated_leftover_money", precision: 10, default: "0"
+    t.decimal "deprecated_available_budget", precision: 20, scale: 4, default: "0.0"
+    t.decimal "deprecated_approved_budget", precision: 20, scale: 4, default: "0.0"
+    t.decimal "deprecated_expenses", precision: 20, scale: 4, default: "0.0"
+    t.decimal "deprecated_leftover_money", precision: 20, scale: 4, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
@@ -140,8 +140,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.boolean "is_done", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "estimated_amount", precision: 8, scale: 2
-    t.decimal "deprecated_available_amount", precision: 8, scale: 2, default: "0.0"
+    t.decimal "estimated_amount", precision: 20, scale: 4, default: "0.0", null: false
+    t.decimal "deprecated_available_amount", precision: 20, scale: 4, default: "0.0"
     t.index ["budget_id"], name: "fk_rails_6135db3849"
   end
 
@@ -426,7 +426,7 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
   create_table "expenses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
-    t.integer "price"
+    t.decimal "price", precision: 20, scale: 4
     t.boolean "income", default: false
     t.integer "category_id"
     t.index ["enterprise_id"], name: "index_expenses_on_enterprise_id"
@@ -646,8 +646,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.string "pending_users"
     t.string "members_visibility"
     t.string "messages_visibility"
-    t.decimal "deprecated_annual_budget", precision: 8, scale: 2
-    t.decimal "deprecated_leftover_money", precision: 8, scale: 2, default: "0.0"
+    t.decimal "deprecated_annual_budget", precision: 20, scale: 4
+    t.decimal "deprecated_leftover_money", precision: 20, scale: 4, default: "0.0"
     t.string "banner_file_name"
     t.string "banner_content_type"
     t.integer "banner_file_size"
@@ -710,7 +710,7 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
 
   create_table "initiative_expenses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "description"
-    t.decimal "amount", precision: 8, scale: 2, default: "0.0"
+    t.decimal "amount", precision: 20, scale: 4, default: "0.0", null: false
     t.integer "owner_id"
     t.integer "initiative_id"
     t.datetime "created_at", null: false
@@ -779,8 +779,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_162417) do
     t.string "name"
     t.datetime "start"
     t.datetime "end"
-    t.decimal "estimated_funding", precision: 8, scale: 2, default: "0.0", null: false
-    t.integer "deprecated_actual_funding"
+    t.decimal "estimated_funding", precision: 20, scale: 4, default: "0.0", null: false
+    t.decimal "deprecated_actual_funding", precision: 20, scale: 4
     t.integer "owner_id"
     t.integer "pillar_id"
     t.datetime "created_at", null: false

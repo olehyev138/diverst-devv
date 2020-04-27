@@ -176,6 +176,8 @@ class Initiative < ApplicationRecord
     end
   end
 
+  delegate :currency, to: :annual_budget, allow_nil: true
+
   def ended?
     self.end < Time.now
   end
