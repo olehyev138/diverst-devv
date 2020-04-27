@@ -7,7 +7,7 @@ class PageSerializer < ApplicationRecordSerializer
                  ActiveModel::Serializer.serializer_for(object.items.first)
 
     object.items.map do |item|
-      serializer.new(item, scope: scope, scope_name: :scope).as_json
+      serializer.new(item, @instance_options).as_json
     end
   end
 end
