@@ -35,6 +35,7 @@ LANGUAGE_KEYS = [
 # By default this script will generate human readable output, if you pass 'csv' it will only output failed translations in CSV format
 USE_PRETTY_OUTPUT = ARGV[0] != 'csv'
 
+# rubocop:disable Rails/Blank
 require 'json'
 require 'csv'
 require 'fileutils'
