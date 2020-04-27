@@ -92,13 +92,17 @@ export function Profile(props) {
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
                   {<DiverstFormattedMessage {...messages.avatar} />}
                 </Typography>
-                {user.avatar && (
-                  <Avatar>
+                <Avatar>
+                  { user.avatar ? (
                     <DiverstImg
                       data={user.avatar_data}
+                      maxWidth='100%'
+                      maxHeight='240px'
                     />
-                  </Avatar>
-                )}
+                  ) : (
+                    user.first_name[0]
+                  )}
+                </Avatar>
               </Grid>
             </CardContent>
             <Divider />
