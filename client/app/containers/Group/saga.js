@@ -224,7 +224,7 @@ export function* joinSubgroups(action) {
     yield put(joinSubgroupsError());
 
     // TODO: intl message
-    yield put(showSnackbar({ message: err.response, options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
   }
 }
 
