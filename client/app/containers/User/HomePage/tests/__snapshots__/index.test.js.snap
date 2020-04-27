@@ -82,8 +82,9 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       />
     </WithStyles(ForwardRef(Typography))>
     <DiverstDialog
-      handleClose={[Function]}
+      handleNo={[Function]}
       open={false}
+      textNo=" "
       title=" "
     />
   </WithStyles(ForwardRef(Grid))>
