@@ -23,7 +23,7 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
-import GroupJoinDialog from 'components/Group/GroupHome/GroupJoinDialog';
+import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 
 const styles = theme => ({
@@ -90,21 +90,21 @@ export function GroupHome({ classes, ...props }) {
 
   const handleClose = () => {
     setOpenSubgroup(false);
-    props.joinGroup({
-      group_id: props.currentGroup.id
-    });
     setIsJoined(!isJoined);
   };
   const handleJoinParentGroup = () => {
-    setOpenSubgroup(false);
-    props.joinGroup({
-      group_id: props.currentGroup.parent_id
+    props.joinSubgroups({
+      group_id: props.currentGroup.parent_id,
+      subgroups: [{ group_id: props.currentGroup.id, join: true }]
     });
+    handleClose();
+  };
+  const handleJoinGroup = () => {
     props.joinGroup({
       group_id: props.currentGroup.id
     });
-    setIsJoined(!isJoined);
-  };
+    handleClose();
+  }
 
   const joinBtn = (
     isJoined
@@ -139,26 +139,27 @@ export function GroupHome({ classes, ...props }) {
           </Button>
           {props.currentGroup.parent_id === null
             ? (
-              <GroupJoinDialog
+              <DiverstDialog
                 open={openSubgroup}
                 title='Thanks for joining the group! '
                 content={(
                   <SubgroupJoinForm
                     subgroupJoinAction={props.joinSubgroups}
                     handleClose={handleClose}
+                    handleCancel={handleJoinGroup}
                     group={props.currentGroup}
                   />
                 )}
               />
             )
             : (
-              <GroupJoinDialog
+              <DiverstDialog
                 open={openSubgroup}
                 title='Thanks for joining the group! '
                 content='Do you want to also join the parent group?'
                 handleYes={handleJoinParentGroup}
                 textYes='Yes'
-                handleNo={handleClose}
+                handleNo={handleJoinGroup}
                 textNo='No'
               />
             )

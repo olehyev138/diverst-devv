@@ -9,9 +9,6 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
-
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSwitch from '../../../Shared/DiverstSwitch';
 import {
@@ -25,7 +22,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, values, handleClose, setFieldValue, ...props }) {
+export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, values, handleClose, handleCancel, setFieldValue, ...props }) {
   return (
     <Form>
       <Grid container>
@@ -47,13 +44,13 @@ export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, val
         ))}
         <Grid item xs='12'>
           <Grid container justify='flex-end'>
-            <Button onClick={handleClose}
+            <Button
               color='primary'
               type='submit'
             >
               Update
             </Button>
-            <Button onClick={handleClose}>
+            <Button onClick={handleCancel}>
               Cancel
             </Button>
           </Grid>
@@ -76,7 +73,8 @@ export function SubgroupJoinForm(props) {
         initialValues={initialValues}
         enableReinitialize
         onSubmit={(values, actions) => {
-          props.subgroupJoinAction(values.children.map(group => ({ group_id: group.id, join: group.current_user_is_member })));
+          props.subgroupJoinAction({ group_id: values.id, subgroups: values.children.map(group => ({ group_id: group.id, join: group.current_user_is_member })) });
+          props.handleClose();
         }}
       >
         {formikProps => <SubgroupJoinFormInner handleClose={props.handleClose} {...props} {...formikProps} />}
@@ -98,6 +96,7 @@ SubgroupJoinFormInner.propTypes = {
   handleChange: PropTypes.func,
   values: PropTypes.object,
   setFieldValue: PropTypes.func,
+  handleCancel: PropTypes.func,
 };
 
 export default compose(

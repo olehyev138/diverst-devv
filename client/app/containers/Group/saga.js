@@ -217,19 +217,14 @@ export function* leaveGroup(action) {
 }
 
 export function* joinSubgroups(action) {
-  console.log(action.payload);
-  const payload = { user_group: action.payload };
-
   try {
-    const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), payload);
+    const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
     yield put(joinSubgroupsSuccess());
   } catch (err) {
-    console.log(err);
-    console.log(err.response);
     yield put(joinSubgroupsError());
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to join group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response, options: { variant: 'warning' } }));
   }
 }
 
