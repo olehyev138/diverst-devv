@@ -30,7 +30,7 @@ import {
 import { getPollsBegin, pollsUnmount, deletePollBegin } from 'containers/Poll/actions';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
-import PollList from 'components/Poll/PollList';
+import PollList from 'components/Poll/PollList/Loadable';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';

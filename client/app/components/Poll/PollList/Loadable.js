@@ -1,9 +1,9 @@
 /**
  *
- * Asynchronously loads the component for SegmentList
+ * Asynchronously loads the component for PollList
  *
  */
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('components/Segment/SegmentList/index'));
+export default loadable(() => import('./index'));
