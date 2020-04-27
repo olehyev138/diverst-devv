@@ -20,13 +20,19 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+
+import { getAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/actions';
+import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
+import annualReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
+import annualSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
+
 const { form: formMessage } = messages;
 
 export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
   useInjectSaga({ key: 'budgets', saga });
-
-  useEffect(() => () => {}, []);
+  useInjectReducer({ key: 'annualBudgets', reducer: annualReducer });
+  useInjectSaga({ key: 'annualBudgets', saga: annualSaga });
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
@@ -36,12 +42,16 @@ export function BudgetCreatePage(props) {
     index: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
   };
 
+  useEffect(() => {
+    props.getAnnualBudgetBegin({ id: annualBudgetId });
+  }, []);
+
   return (
     <RequestForm
       budgetAction={props.createBudgetRequestBegin}
       isCommitting={props.isCommitting}
       buttonText={props.intl.formatMessage(formMessage.create)}
-      annualBudgetId={parseInt(annualBudgetId, 10)}
+      annualBudget={props.annualBudget}
       currentGroup={props.currentGroup}
       links={links}
     />
@@ -55,15 +65,19 @@ BudgetCreatePage.propTypes = {
   groupFormUnmount: PropTypes.func,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
+  getAnnualBudgetBegin: PropTypes.func,
+  annualBudget: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   currentGroup: selectGroup(),
+  annualBudget: selectAnnualBudget(),
 });
 
 const mapDispatchToProps = {
-  createBudgetRequestBegin
+  createBudgetRequestBegin,
+  getAnnualBudgetBegin,
 };
 
 const withConnect = connect(

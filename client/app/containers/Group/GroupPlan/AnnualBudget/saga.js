@@ -92,7 +92,7 @@ export function* updateAnnualBudget(action) {
 }
 
 
-export default function* AnnualBudgetSaga() {
+export default function* annualBudgetSaga() {
   yield takeLatest(GET_CURRENT_ANNUAL_BUDGET_BEGIN, getCurrentAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGET_BEGIN, getAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);

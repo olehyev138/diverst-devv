@@ -42,6 +42,9 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import AddIcon from '@material-ui/icons/Add';
+import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import { getCurrency } from 'utils/currencyHelpers';
+
 const { form: formMessage } = messages;
 
 export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
@@ -72,7 +75,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                 startIcon={<AddIcon />}
                 onClick={pushObject({
                   title: '',
-                  estimated_amount: 0,
+                  estimated_amount: '',
                   estimated_date: DateTime.local(),
                   is_private: false,
                 })}
@@ -110,16 +113,16 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                   />
                 </Grid>
                 <Grid item md={2} xs={4}>
-                  <TextField
-                    fullWidth
-                    margin='dense'
-                    disabled={props.isCommitting}
-                    id={`budget_items[${index}].estimated_amount`}
-                    name={`budget_items[${index}].estimated_amount`}
-                    type='number'
-                    onChange={handleChange}
-                    value={values.budget_items[index].estimated_amount}
+                  <DiverstMoneyField
                     label={<DiverstFormattedMessage {...formMessage.event.amount} />}
+                    name={`budget_items[${index}].estimated_amount`}
+                    id={`budget_items[${index}].estimated_amount`}
+                    margin='dense'
+                    fullWidth
+                    disabled={props.isCommitting}
+                    value={values.budget_items[index].estimated_amount}
+                    onChange={value => setFieldValue(`budget_items[${index}].estimated_amount`, value)}
+                    currency={getCurrency(props.annualBudget.currency)}
                   />
                 </Grid>
                 <Grid item md={2} xs={4}>
@@ -243,6 +246,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
             <BudgetItemFormInner
               formikProps={formikProps}
               arrayHelpers={arrayHelpers}
+              {...props}
             />
           )}
         />
@@ -278,13 +282,13 @@ export function BudgetForm(props) {
     budget_items: { default: [] },
   });
 
-  return (
+  return props.annualBudget && (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['approver_id']);
-        props.budgetAction({ groupId: props.currentGroup.id, path: props.links.index, annual_budget_id: props.annualBudgetId, ...payload });
+        props.budgetAction({ groupId: props.currentGroup.id, path: props.links.index, annual_budget_id: props.annualBudget.id, ...payload });
       }}
     >
       {formikProps => <BudgetFormInner {...props} formikProps={formikProps} />}
@@ -294,8 +298,8 @@ export function BudgetForm(props) {
 
 BudgetForm.propTypes = {
   budgetAction: PropTypes.func.isRequired,
-  annualBudgetId: PropTypes.number,
-  currentGroup: PropTypes.number,
+  annualBudget: PropTypes.object,
+  currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
   edit: PropTypes.bool,
@@ -327,6 +331,7 @@ BudgetItemFormInner.propTypes = {
   formikProps: PropTypes.object,
   arrayHelpers: PropTypes.object,
   isCommitting: PropTypes.bool,
+  annualBudget: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

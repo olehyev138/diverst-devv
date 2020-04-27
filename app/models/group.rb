@@ -174,6 +174,8 @@ class Group < ApplicationRecord
   delegate :carryover!, BUDGET_DELEGATE_OPTIONS
   delegate :reset!, BUDGET_DELEGATE_OPTIONS
 
+  delegate :currency, BUDGET_DELEGATE_OPTIONS
+
   def annual_budget
     current_annual_budget!.amount
   end

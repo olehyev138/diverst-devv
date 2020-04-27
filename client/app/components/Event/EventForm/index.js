@@ -38,8 +38,10 @@ import pillarReducer from 'containers/Group/Pillar/reducer';
 import pillarSaga from 'containers/Group/Pillar/saga';
 import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
+import { getCurrency } from 'utils/currencyHelpers';
+import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
 
-const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: 0 };
+const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -65,6 +67,7 @@ export function EventFormInner({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       group_id: props.currentGroup.id,
+      event_id: values.id,
       query_scopes: ['approved'],
       is_done: 'false'
     });
@@ -162,17 +165,17 @@ export function EventFormInner({
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  margin='dense'
-                  disabled={props.isCommitting || values.finished_expenses}
-                  id='estimated_funding'
-                  name='estimated_funding'
-                  type='number'
-                  onChange={handleChange}
-                  value={values.estimated_funding}
+                <DiverstMoneyField
                   label={<DiverstFormattedMessage {...messages.inputs.budgetAmount} />}
-                  inputProps={{ min: 0, max: values.budget_item_id.available, step: 1 }}
+                  name='estimated_funding'
+                  id='estimated_funding'
+                  margin='dense'
+                  fullWidth
+                  disabled={props.isCommitting || values.finished_expenses}
+                  value={values.estimated_funding}
+                  onChange={value => setFieldValue('estimated_funding', value)}
+                  currency={getCurrency(values.currency)}
+                  max={values.budget_item_id.available}
                 />
               </Grid>
             </Grid>
@@ -263,7 +266,8 @@ export function EventForm(props) {
     max_attendees: { default: '' },
     location: { default: '' },
     budget_item: { default: freeEvent, customKey: 'budget_item_id' },
-    estimated_funding: { default: 0 },
+    estimated_funding: { default: '' },
+    currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
     pillar: { default: '', customKey: 'pillar_id' },
     owner_id: { default: '' },
