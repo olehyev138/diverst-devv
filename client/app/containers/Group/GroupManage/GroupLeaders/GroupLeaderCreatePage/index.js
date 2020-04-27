@@ -49,6 +49,7 @@ export function GroupLeaderCreatePage(props) {
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
+  console.log(groupId);
 
   const links = {
     index: ROUTES.group.manage.leaders.index.path(groupId),
@@ -68,7 +69,7 @@ export function GroupLeaderCreatePage(props) {
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
       buttonText={intl.formatMessage(messages.create)}
-      groupId={groupId[0]}
+      groupId={groupId}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
       userRoles={props.userRoles}
