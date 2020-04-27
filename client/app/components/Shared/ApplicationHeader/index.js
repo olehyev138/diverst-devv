@@ -265,6 +265,8 @@ export class ApplicationHeader extends React.PureComponent {
                       <Avatar>
                         <DiverstImg
                           data={user.avatar_data}
+                          maxWidth='100%'
+                          maxHeight='240px'
                         />
                       </Avatar>
                     )

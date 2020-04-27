@@ -21,7 +21,7 @@ function routesPruner(routes) {
 }
 
 function toJson(routes) {
-  return JSON.stringify(routesPruner(routes))
+  return JSON.stringify(routesPruner(routes), null, '  ')
 }
 
 function main() {
