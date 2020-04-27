@@ -47,7 +47,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
                 >
                   <span>
                     <DvrIcon />
-                    <Memo(DiverstFormattedMessage)
+                    <Memo(Connect(DiverstFormattedMessage))
                       id="diverst.containers.App.header.dashboard"
                     />
                   </span>
@@ -105,7 +105,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <DvrIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      <Memo(DiverstFormattedMessage)
+      <Memo(Connect(DiverstFormattedMessage))
         id="diverst.containers.App.header.dashboard"
       />
     </WithStyles(ForwardRef(MenuItem))>
@@ -121,7 +121,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <PermIdentityIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      <Memo(DiverstFormattedMessage)
+      <Memo(Connect(DiverstFormattedMessage))
         id="diverst.containers.App.header.profile"
       />
     </WithStyles(ForwardRef(MenuItem))>
@@ -131,7 +131,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <ExitToAppIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      <Memo(DiverstFormattedMessage)
+      <Memo(Connect(DiverstFormattedMessage))
         id="diverst.containers.App.header.logout"
       />
     </WithStyles(ForwardRef(MenuItem))>

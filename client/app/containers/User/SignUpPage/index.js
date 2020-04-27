@@ -10,6 +10,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from './reducer';
 import saga from './saga';
+import { redirectAction } from 'utils/reduxPushHelper';
 
 import {
   selectToken,
@@ -32,8 +33,6 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import SignUpForm from 'components/User/SignUpForm';
-
-const redirectAction = url => push(url);
 
 export function SignUpPage(props) {
   useInjectReducer({ key: 'signUp', reducer });

@@ -4,11 +4,11 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  getSegmentsBegin
+  getSegmentsBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
 import { compose } from 'redux';
@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectSegments, selectIsLoading } from 'containers/Segment/selectors';
+import { selectIsLoading, selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -26,12 +26,20 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
   useInjectReducer({ key: 'segments', reducer });
   useInjectSaga({ key: 'segments', saga });
 
+  const { getSegmentsBegin, segmentUnmount, ...selectProps } = rest;
+
   const segmentSelectAction = (searchKey = '') => {
     rest.getSegmentsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
     });
   };
+
+  useEffect(() => {
+    segmentSelectAction();
+
+    return () => segmentUnmount();
+  }, []);
 
   return (
     <DiverstSelect
@@ -47,7 +55,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
       onChange={value => setFieldValue(segmentField, value)}
       onInputChange={value => segmentSelectAction(value)}
       hideHelperText
-      {...rest}
+      {...selectProps}
     />
   );
 };
@@ -70,7 +78,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getSegmentsBegin
+  getSegmentsBegin,
+  segmentUnmount,
 };
 
 const withConnect = connect(
