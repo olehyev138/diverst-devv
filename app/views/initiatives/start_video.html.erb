@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
       video {
-        width:200px;
+        width: 250px;
         position: relative;
         top: 75px;
         display: inline-block;
@@ -17,10 +17,16 @@
 
       #video-grid {
         display: grid;
-        grid-template-columns: 200px 200px 200px;
+        grid-template-columns: 250px 250px 250px;
         grid-template-rows: auto auto auto;
         max-height: 300px;
         margin: auto;
+      }
+
+      .content__inner { 
+        padding: 0px;
+        margin-left: 0px;
+        max-width: initial;
       }
     </style>
   </head>
@@ -36,9 +42,12 @@
         </div>
       </div>
     </header>
-
+    
     <div class="row" style="overflow-x: scroll;">
-      <div class="col-xs-8">
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
+       <h1>White Board Here</h1>
+      </div>
+      <div class="col-xs-6" style="padding-left: auto;">
         <div class="row">
           <ul class="list-inline text-center">
             <div class="col-xs-8" style="padding: 0px;">
@@ -54,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4" style="background-color: white; height: 550px; margin-top: 75px;">
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
         <div class="row">
           <div class="col-xs-12">
             <h3 class="text-center">Chat</h3>
