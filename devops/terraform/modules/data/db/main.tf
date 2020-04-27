@@ -18,7 +18,7 @@ resource "aws_db_instance" "db" {
 
   db_subnet_group_name      = aws_db_subnet_group.sn_db_group.name
   vpc_security_group_ids    = [var.sg_db.id]
-  multi_az                  = true
+  multi_az                  = var.multi_az
 
   name                      = var.db_name
   username                  = var.db_username

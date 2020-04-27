@@ -5,6 +5,14 @@ provider "aws" {
 }
 
 terraform {
+  # !! Ensure version pinnings are correct before using skeleton !!
+  required_version = "~> 0.12.24"
+
+  required_providers {
+    aws     = "~> 2.58"
+    random  = "~> 2.2"
+  }
+
   backend "s3" {
     bucket          = "<client-tf-state-bucket>"
     key             = "terraform/terraform.tfstate"
@@ -23,6 +31,9 @@ resource "aws_key_pair" "aws-tf-key" {
 module "prod" {
   source = "../base-prod"
 
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
+
   env_name      = var.env_name
   region        = var.region
   ssh_key_name  = var.ssh_key_name
@@ -36,6 +47,7 @@ module "prod" {
   sidekiq_password = var.sidekiq_password
 
   db_class                    = var.db_class
+  multi_az                    = var.multi_az
   db_allocated_storage        = var.db_allocated_storage
   db_backup_retention         = var.db_backup_retention
   db_backup_window            = var.db_backup_window
