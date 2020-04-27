@@ -11,6 +11,9 @@ import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSwitch from '../../../Shared/DiverstSwitch';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/messages';
+
 import {
   Button, Grid, Typography
 } from '@material-ui/core';
@@ -27,7 +30,7 @@ export function SubgroupJoinFormInner({ classes, handleSubmit, handleChange, val
     <Form>
       <Grid container>
         <Grid item>
-          <Typography>Please choose a subgroup to join, if you want:</Typography>
+          <Typography>{<DiverstFormattedMessage {...messages.joinSubgroups} />}</Typography>
         </Grid>
         {values.children && values.children.map((subgroup, i) => (
           <Grid item key={subgroup.id} xs={12}>

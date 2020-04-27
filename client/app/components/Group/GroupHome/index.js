@@ -25,6 +25,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
+import messages from 'containers/Group/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   title: {
@@ -38,6 +40,7 @@ const styles = theme => ({
 });
 
 export function GroupHome({ classes, ...props }) {
+  const { intl } = props;
   const groupImage = props.currentGroup.banner_data && (
     <DiverstImg
       data={props.currentGroup.banner_data}
@@ -121,7 +124,7 @@ export function GroupHome({ classes, ...props }) {
           }}
           startIcon={<RemoveIcon />}
         >
-          Leave
+          {intl.formatMessage(messages.leave)}
         </Button>
       )
       : (
@@ -134,13 +137,13 @@ export function GroupHome({ classes, ...props }) {
             onClick={(handleOpenSubgroup)}
             startIcon={<AddIcon />}
           >
-            Join
+            {intl.formatMessage(messages.join)}
           </Button>
           {props.currentGroup.parent_id === null
             ? (
               <DiverstDialog
                 open={openSubgroup}
-                title='Thanks for joining the group! '
+                title={intl.formatMessage(messages.thanks)}
                 content={(
                   <SubgroupJoinForm
                     subgroupJoinAction={props.joinSubgroups}
@@ -154,12 +157,12 @@ export function GroupHome({ classes, ...props }) {
             : (
               <DiverstDialog
                 open={openSubgroup}
-                title='Thanks for joining the group! '
-                content='Do you want to also join the parent group?'
+                title={intl.formatMessage(messages.thanks)}
+                content={intl.formatMessage(messages.joinParent)}
                 handleYes={handleJoinParentGroup}
-                textYes='Yes'
+                textYes={intl.formatMessage(messages.yes)}
                 handleNo={handleJoinGroup}
-                textNo='No'
+                textNo={intl.formatMessage(messages.no)}
               />
             )
           }
@@ -210,9 +213,11 @@ GroupHome.propTypes = {
   joinGroup: PropTypes.func,
   leaveGroup: PropTypes.func,
   joinSubgroups: PropTypes.func,
+  intl: intlShape,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupHome);
