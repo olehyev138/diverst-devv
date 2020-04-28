@@ -357,19 +357,18 @@ RSpec.describe Group, type: :model do
 
   describe 'members fetching by type' do
     let(:enterprise) { create :enterprise }
-    let!(:group) { create :group, enterprise: enterprise }
-    let!(:active_user) { create :user, enterprise: enterprise, active: true }
-    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
-    let!(:pending_user) { create :user, enterprise: enterprise }
-
-    before do
-      group.members << active_user
-      group.members << pending_user
-
-      group.accept_user_to_group(active_user.id)
-    end
 
     context 'with disabled pending members setting' do
+      let!(:group) { create :group, enterprise: enterprise }
+      let!(:active_user) { create :user, enterprise: enterprise, active: true }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      let!(:pending_user) { create :user, enterprise: enterprise }
+
+      before do
+        group.members << active_user
+        group.members << pending_user
+      end
+
       describe '#active_members' do
         subject { group.active_members }
 
@@ -390,7 +389,17 @@ RSpec.describe Group, type: :model do
     end
 
     context 'with enabled pending members setting' do
-      before { group.pending_users = 'enabled' }
+      let!(:group) { create :group, enterprise: enterprise, pending_users: 'enabled' }
+      let!(:active_user) { create :user, enterprise: enterprise, active: true }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      let!(:pending_user) { create :user, enterprise: enterprise }
+
+      before do
+        group.members << active_user
+        group.members << pending_user
+
+        group.accept_user_to_group(active_user.id)
+      end
 
       describe '#active_members' do
         subject { group.active_members }

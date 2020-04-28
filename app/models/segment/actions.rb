@@ -5,7 +5,7 @@ module Segment::Actions
 
   module ClassMethods
     def base_query
-      "#{self.table_name}.name LIKE :search"
+      "LOWER(#{self.table_name}.name) LIKE :search"
     end
 
     def base_preloads

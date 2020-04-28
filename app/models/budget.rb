@@ -23,6 +23,8 @@ class Budget < ApplicationRecord
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
 
+  delegate :currency, to: :annual_budget
+
   def group_id
     group.id
   end

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Divider, CardContent, Card, Avatar
+  Paper, Typography, Grid, Button, Divider, CardContent, Box, Avatar
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,6 +19,8 @@ import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index'
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import DiverstImg from 'components/Shared/DiverstImg';
 
+import LocaleToggle from 'containers/Shared/LocaleToggle';
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -27,7 +29,6 @@ const styles = theme => ({
   title: {
     textAlign: 'center',
     fontWeight: 'bold',
-    paddingBottom: theme.spacing(3),
   },
   dataHeaders: {
     paddingBottom: theme.spacing(1),
@@ -52,39 +53,56 @@ export function Profile(props) {
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !user}>
       {user && (
         <React.Fragment>
-          <Grid container spacing={1}>
-            <Grid item>
-              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-                {user.name}
-              </Typography>
+          <Box mb={2}>
+            <Grid container spacing={1} alignItems='flex-end'>
+              <Grid item>
+                <Paper>
+                  <CardContent>
+                    <Grid container spacing={3} alignItems='center'>
+                      <Grid item>
+                        <Typography color='primary' variant='h5' component='h2' className={classes.title}>
+                          {user.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <LocaleToggle />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Paper>
+              </Grid>
+              <Grid item sm>
+                <Button
+                  component={WrappedNavLink}
+                  to={props.links.userEdit(user.id)}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<EditIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.edit} />
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item sm>
-              <Button
-                component={WrappedNavLink}
-                to={props.links.userEdit(user.id)}
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-                startIcon={<EditIcon />}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-            </Grid>
-          </Grid>
+          </Box>
           <Paper>
             <CardContent>
               <Grid item>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
                   {<DiverstFormattedMessage {...messages.avatar} />}
                 </Typography>
-                {user.avatar && (
-                  <Avatar>
+                <Avatar>
+                  { user.avatar ? (
                     <DiverstImg
                       data={user.avatar_data}
+                      maxWidth='100%'
+                      maxHeight='240px'
                     />
-                  </Avatar>
-                )}
+                  ) : (
+                    user.first_name[0]
+                  )}
+                </Avatar>
               </Grid>
             </CardContent>
             <Divider />

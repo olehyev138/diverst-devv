@@ -20,7 +20,7 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.carryover_annual_budget(self.diverst_request), use_serializer: GroupWithBudgetSerializer
+    render status: 200, json: item.carryover_annual_budget(self.diverst_request), serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -29,7 +29,7 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.reset_annual_budget(self.diverst_request), use_serializer: GroupWithBudgetSerializer
+    render status: 200, json: item.reset_annual_budget(self.diverst_request), serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
