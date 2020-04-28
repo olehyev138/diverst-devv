@@ -111,12 +111,12 @@ module BaseController
     model
   end
 
-  def track_activity(model, params = {})
+  def track_activity(model, params = {}, user: current_user)
     model_map = model_map(model)
     action_mapped = action_map(action_name.to_sym)
     klass = model_map.class
     if model_map.respond_to?(:create_activity) && action_mapped.present?
-      ActivityJob.perform_later(klass.name, model_map.id, action_mapped, current_user.id, params)
+      ActivityJob.perform_later(klass.name, model_map.id, action_mapped, user&.id, params)
     end
   end
 
