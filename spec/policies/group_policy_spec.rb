@@ -4,7 +4,7 @@ RSpec.describe GroupPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
-  let(:group) { create(:group, owner: user, enterprise_id: enterprise.id) }
+  let(:group) { create(:group, owner: user, enterprise_id: enterprise.id, pending_users: 'enabled') }
   let(:policy_scope) { GroupPolicy::Scope.new(user, Group).resolve }
 
   subject { described_class.new(user, group) }

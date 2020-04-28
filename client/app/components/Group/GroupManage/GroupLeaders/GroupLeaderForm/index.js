@@ -25,9 +25,8 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   const membersSelectAction = (searchKey = '') => {
     props.getMembersBegin({
       count: 25, page: 0, order: 'asc',
-      search: searchKey,
       group_id: props.groupId,
-      query_scopes: ['active']
+      query_scopes: ['active', ['user_search', searchKey]]
     });
   };
 
@@ -47,9 +46,9 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               value={values.user_id}
               options={props.selectMembers}
               onChange={value => setFieldValue('user_id', value)}
-              onMenuOpen={() => membersSelectAction()}
-              onKeyDown={membersSelectAction}
+              onInputChange={value => membersSelectAction(value)}
               onBlur={() => setFieldTouched('user_id', true)}
+              isLoading={props.isLoadingMembers}
             />
           </CardContent>
           <Divider />
@@ -125,6 +124,7 @@ GroupLeaderForm.propTypes = {
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  isLoadingMembers: PropTypes.bool,
   groupLeader: PropTypes.object,
   groupLeaderAction: PropTypes.func,
 };
@@ -147,6 +147,7 @@ GroupLeaderFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   touched: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isLoadingMembers: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     index: PropTypes.string
