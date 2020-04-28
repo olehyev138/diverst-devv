@@ -17,7 +17,7 @@
 
       #video-grid {
         display: grid;
-        grid-template-columns: 250px 250px 250px;
+        grid-template-columns: 35% 35% 35%;
         grid-template-rows: auto auto auto;
         max-height: 300px;
         margin: auto;
@@ -37,7 +37,6 @@
       }
 
       #control-panel {
-        min-width: 20%;
         float: right;
         margin-left: 70px;
       }
@@ -54,9 +53,9 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center"><%= @initiative.name %><div class="row" id="control-panel">
+            <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
               <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
-            </div></h2>
+            </span></h2>
           </div>
         </div>
       </div>
@@ -68,12 +67,10 @@
       </div>
       <div class="col-xs-6" style="padding-left: auto;">
         <div class="row">
-          <ul class="list-inline text-center">
-            <div class="col-xs-12" style="padding: 0px;">
-              <div id="main-participant"></div>
-              <div id="video-grid"></div>
-            </div>
-          </ul>
+          <div class="col-xs-12" style="padding: 0px;">
+            <div id="main-participant"></div>
+            <div id="video-grid"></div>
+          </div>
         </div>
         <div class="row" style="position: relative; top: 75px;">
           <div class="col-xs-12">
