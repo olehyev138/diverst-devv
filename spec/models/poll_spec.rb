@@ -207,12 +207,9 @@ RSpec.describe Poll, type: :model do
     context 'with groups' do
       let!(:user_in_group) { create(:user, enterprise: poll.enterprise) }
       let!(:pending_user_in_group) { create(:user, enterprise: poll.enterprise) }
-      let!(:group) { create(:group, members: [user_in_group, pending_user_in_group]) }
+      let!(:group) { create(:group, pending_users: 'enabled', members: [user_in_group, pending_user_in_group]) }
 
       before {
-        # add and accept members here. check they work
-        group.update(pending_users: 'enabled')
-
         group.accept_user_to_group(user_in_group.id)
       }
       before(:each) { poll.update(groups: [group]) }
