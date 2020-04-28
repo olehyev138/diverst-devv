@@ -110,6 +110,7 @@ export function LogList(props, context) {
                 <Grid item xs={3}>
                   <Field
                     component={DiverstDatePicker}
+                    clearable
                     keyboardMode
                     fullWidth
                     maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
@@ -123,6 +124,7 @@ export function LogList(props, context) {
                 <Grid item xs={3}>
                   <Field
                     component={DiverstDatePicker}
+                    clearable
                     keyboardMode
                     fullWidth
                     minDate={formikProps.values.from ? formikProps.values.from : undefined}
