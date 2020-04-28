@@ -471,7 +471,7 @@
   "diverst.containers.Members.filter.fromMax": "FROM date cannot be after TO date or today",
   "diverst.containers.Members.filter.toMax": "TO date cannot be after Today",
   "diverst.containers.Members.filter.toMin": "TO date cannot be before FROM date",
-  "diverst.containers.Members.filter.segments": "Segments",
+  "diverst.containers.Members.filter.segments": "{segment_p}",
   "diverst.containers.Members.filter.submit": "Filter",
   "diverst.containers.Members.form.newmembers": "New Members",
   "diverst.containers.Members.form.members": "Members",
