@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
       video {
-        width: 250px;
+        width: 100%;
         position: relative;
         top: 75px;
         display: inline-block;
@@ -28,34 +28,52 @@
         margin-left: 0px;
         max-width: initial;
       }
+
+      #main-participant {
+        position: absolute;
+        z-index: 999;
+        max-height: 100%;
+        min-width: 100%;
+      }
+
+      #control-panel {
+        min-width: 20%;
+        float: right;
+        margin-left: 70px;
+      }
+
+      #mute-mic {
+        fill: white;
+      }
     </style>
   </head>
   <body onload="init()" data-env="<%= Rails.env %>">
     <%= render 'partials/js_branding_color_variables' %>
 
-    <header class="primary-header">
+    <header class="primary-header" style="height: 40px; position: fixed; top: 130px;">
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center"><%= @initiative.name %></h2>
+            <h2 class="text-center"><%= @initiative.name %><div class="row" id="control-panel">
+              <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
+            </div></h2>
           </div>
         </div>
       </div>
     </header>
     
-    <div class="row" style="overflow-x: scroll;">
+    <div class="row" style="overflow-x: scroll; margin-top: -35px;">
       <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
-       <h1>White Board Here</h1>
+        <h1>White Board Here</h1>
       </div>
       <div class="col-xs-6" style="padding-left: auto;">
         <div class="row">
           <ul class="list-inline text-center">
-            <div class="col-xs-8" style="padding: 0px;">
-              <li>
-                <div id="video-grid"></div>
-              </li>
+            <div class="col-xs-12" style="padding: 0px;">
+              <div id="main-participant"></div>
+              <div id="video-grid"></div>
             </div>
-            </ul>
+          </ul>
         </div>
         <div class="row" style="position: relative; top: 75px;">
           <div class="col-xs-12">
@@ -99,11 +117,50 @@
     var previewTracks;
     var identity = '<%= current_user.email %>';
 
+    // enlarge video trackmain participant
+    function enlargeParticipantVideoTrack() {
+      var x = document.getElementById('main-participant');
+      var y = document.getElementById('video-grid');
+
+      if (x.childElementCount==0) {
+        x.appendChild(this);
+      }else if (x.childElementCount == 1) {
+        var oldChildElement = x.firstElementChild;
+
+        x.replaceChild(this, oldChildElement);
+        y.appendChild(oldChildElement);
+      }
+    }
+
+    function attachEventListenersToTracks(track) {    
+        track.addEventListener('click', enlargeParticipantVideoTrack);
+    }
+
+    function muteLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-mic');
+      localParticipant.audioTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = 'white';
+        }
+      });
+    }
+
+    $('#mute-mic').on('click', function(){
+      muteLocalParticipant();
+    });
+
     // Attach the Tracks to the DOM.
     function attachTracks(tracks, container) {
       tracks.forEach(function(track) {
           if (track.kind === 'audio' || track.kind === 'video') {
-            container.appendChild(track.attach());
+            attachEventListenersToTracks(container.appendChild(track.attach()));
           }else if (track.kind === 'data') {
             track.on('message', function(data) {
                 var response = JSON.parse(data);
