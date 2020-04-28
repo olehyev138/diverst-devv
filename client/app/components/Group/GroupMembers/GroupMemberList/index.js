@@ -4,7 +4,7 @@
  *
  */
 
-import React, {memo, useState} from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import {
   Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions, DialogContent,
   DialogActions,
-  Dialog
+  Dialog, FormLabel, FormGroup, FormControlLabel, Checkbox
 } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -36,6 +36,7 @@ import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { buildValues } from 'utils/formHelpers';
 
 const styles = theme => ({
   errorButton: {
@@ -153,29 +154,63 @@ export function GroupMemberList(props) {
       aria-labelledby='alert-dialog-slide-title'
       aria-describedby='alert-dialog-slide-description'
     >
-      <DialogContent>
-        Which do you want to export
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={() => {
-            props.exportMembersBegin();
-            handleDialogClose();
-          }}
-          color='primary'
-        >
-          Just this Group
-        </Button>
-        <Button
-          onClick={() => {
-            props.exportSubMembersBegin();
-            handleDialogClose();
-          }}
-          color='primary'
-        >
-          This Group and Sub-Groups
-        </Button>
-      </DialogActions>
+      <Formik
+        initialValues={buildValues({ groups: props.formGroupFamily }, {
+          groups: { default: [] },
+        })}
+        enableReinitialize
+        onSubmit={(values) => {
+          props.exportGroupsMembers(values.groups.filter(g => g.value).map(g => g.id));
+          handleDialogClose();
+        }}
+      >
+        {formikProps => (
+          <Form>
+            <React.Fragment>
+              <DialogContent>
+                <Typography>
+                  Which group members do you want to export
+                </Typography>
+                <Box mb={1} />
+                <FormGroup>
+                  {formikProps.values.groups.map((group, index) => (
+                    <FormControlLabel
+                      key={group.id}
+                      control={(
+                        <Field
+                          component={Checkbox}
+                          onChange={(_, value) => formikProps.setFieldValue(`groups[${index}].value`, value)}
+                          id={`groups[${index}]`}
+                          name={`groups[${index}]`}
+                          margin='normal'
+                          label={`${group.label}`}
+                          value={group.value}
+                          checked={group.value}
+                        />
+                      )}
+                      label={`${group.label}`}
+                    />
+                  ))}
+                </FormGroup>
+              </DialogContent>
+              <DialogActions>
+                <DiverstSubmit>
+                  {/* <DiverstFormattedMessage {...messages.create} /> */}
+                  Export Members
+                </DiverstSubmit>
+                <Button
+                  onClick={() => {
+                    handleDialogClose();
+                  }}
+                  color='primary'
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </React.Fragment>
+          </Form>
+        )}
+      </Formik>
     </Dialog>
   );
 
@@ -310,10 +345,7 @@ export function GroupMemberList(props) {
         my_options={{
           exportButton: true,
           exportCsv: (columns, data) => {
-            if (dig(props, 'currentGroup', 'children', 'length') > 0)
-              handleDialogOpen();
-            else
-              props.exportMembersBegin();
+            handleDialogOpen();
           }
         }}
       />
@@ -356,7 +388,8 @@ GroupMemberList.propTypes = {
   classes: PropTypes.object,
   deleteMemberBegin: PropTypes.func,
   exportMembersBegin: PropTypes.func,
-  exportSubMembersBegin: PropTypes.func,
+  exportGroupsMembers: PropTypes.func,
+  formGroupFamily: PropTypes.array,
   links: PropTypes.shape({
     groupMembersNew: PropTypes.string,
   }),
