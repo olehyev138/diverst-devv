@@ -169,7 +169,7 @@ export function GroupMemberList(props) {
             <React.Fragment>
               <DialogContent>
                 <Typography>
-                  Which group members do you want to export
+                  <DiverstFormattedMessage {...messages.exportTitle} />
                 </Typography>
                 <Box mb={1} />
                 <FormGroup>
@@ -195,8 +195,7 @@ export function GroupMemberList(props) {
               </DialogContent>
               <DialogActions>
                 <DiverstSubmit>
-                  {/* <DiverstFormattedMessage {...messages.create} /> */}
-                  Export Members
+                  <DiverstFormattedMessage {...messages.export} />
                 </DiverstSubmit>
                 <Button
                   onClick={() => {

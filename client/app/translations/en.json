@@ -451,6 +451,7 @@
   "diverst.containers.Members.index.button.new": "Add new members",
   "diverst.containers.Members.index.button.export": "Export {erg} members",
   "diverst.containers.Members.index.button.delete": "Delete",
+  "diverst.containers.Members.export.title": "Which {erg} members do you want to export",
   "diverst.containers.Members.form.button.create": "Add Members",
   "diverst.containers.Members.form.button.cancel": "Cancel",
   "diverst.containers.Members.index.label.changeScope": "View:",
