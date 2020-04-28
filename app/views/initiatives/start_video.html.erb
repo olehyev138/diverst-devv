@@ -41,8 +41,14 @@
         margin-left: 70px;
       }
 
-      #mute-mic, #leave-call, #mute-video {
+      #mute-mic, #mute-video {
         fill: white;
+        height: 35px;
+        width: 60px;
+      }
+
+      #leave-call {
+        fill: red;
         height: 35px;
         width: 60px;
       }
@@ -191,6 +197,7 @@
 
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
+      window.location.href = "<%= group_event_path(@group, @initiative) %>";
     });
 
 
