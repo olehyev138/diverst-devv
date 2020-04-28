@@ -41,8 +41,10 @@
         margin-left: 70px;
       }
 
-      #mute-mic, #leave-call {
+      #mute-mic, #leave-call, #mute-video {
         fill: white;
+        height: 35px;
+        width: 60px;
       }
     </style>
   </head>
@@ -56,6 +58,7 @@
             <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
               <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
               <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call') %>
+              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video') %>
             </span></h2>
           </div>
         </div>
@@ -134,7 +137,7 @@
         track.addEventListener('click', enlargeParticipantVideoTrack);
     }
 
-    function muteLocalParticipant() {
+    function muteAudioOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
       var svgElement = document.getElementById('mute-mic');
       localParticipant.audioTracks.forEach(function(track){
@@ -150,6 +153,23 @@
       });
     }
 
+    function muteVideoOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-video');
+      localParticipant.videoTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = 'white';
+        }
+      });
+    }
+
+
     function disconnectLocalParticipant() {
       var localParticipant = window.room.localParticipant;
       var svgElement = document.getElementById('leave-call');
@@ -162,12 +182,18 @@
     }
 
     $('#mute-mic').on('click', function(){
-      muteLocalParticipant();
+      muteAudioOfLocalParticipant();
+    });
+
+    $('#mute-video').on('click', function(){
+      muteVideoOfLocalParticipant();
     });
 
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
     });
+
+
 
     // Attach the Tracks to the DOM.
     function attachTracks(tracks, container) {
