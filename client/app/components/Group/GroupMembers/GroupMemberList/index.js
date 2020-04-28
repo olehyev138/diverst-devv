@@ -4,13 +4,17 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, {memo, useState} from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import dig from 'object-dig';
 
 import {
-  Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions
-} from '@material-ui/core/index';
+  Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions, DialogContent,
+  DialogActions,
+  Dialog
+} from '@material-ui/core';
+
 import { withStyles } from '@material-ui/core/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -75,6 +79,10 @@ const styles = theme => ({
 });
 
 export function GroupMemberList(props) {
+  const [dialog, setDialog] = useState(false);
+  const handleDialogClose = () => setDialog(false);
+  const handleDialogOpen = () => setDialog(true);
+
   const { classes, intl } = props;
 
   // MENU CODE
@@ -138,6 +146,39 @@ export function GroupMemberList(props) {
       }
     );
 
+  const subGroupDialog = (
+    <Dialog
+      open={dialog}
+      onClose={handleDialogClose}
+      aria-labelledby='alert-dialog-slide-title'
+      aria-describedby='alert-dialog-slide-description'
+    >
+      <DialogContent>
+        Which do you want to export
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            props.exportMembersBegin();
+            handleDialogClose();
+          }}
+          color='primary'
+        >
+          Just this Group
+        </Button>
+        <Button
+          onClick={() => {
+            props.exportSubMembersBegin();
+            handleDialogClose();
+          }}
+          color='primary'
+        >
+          This Group and Sub-Groups
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
@@ -155,9 +196,7 @@ export function GroupMemberList(props) {
           </Button>
         </Permission>
       </Box>
-
       <Box className={classes.floatSpacer} />
-
       <Grid container spacing={1} alignItems='flex-end'>
         <Grid item md={4} container alignItems='stretch'>
           <Card>
@@ -257,9 +296,7 @@ export function GroupMemberList(props) {
           </Card>
         </Grid>
       </Grid>
-
       <Box className={classes.floatSpacer} />
-
       <DiverstTable
         title={intl.formatMessage(messages.members)}
         handlePagination={props.handlePagination}
@@ -273,7 +310,10 @@ export function GroupMemberList(props) {
         my_options={{
           exportButton: true,
           exportCsv: (columns, data) => {
-            props.exportMembersBegin();
+            if (dig(props, 'currentGroup', 'children', 'length') > 0)
+              handleDialogOpen();
+            else
+              props.exportMembersBegin();
           }
         }}
       />
@@ -306,6 +346,7 @@ export function GroupMemberList(props) {
           <DiverstFormattedMessage {...messages.scopes.all} />
         </MenuItem>
       </DiverstDropdownMenu>
+      {subGroupDialog}
     </React.Fragment>
   );
 }
@@ -315,6 +356,7 @@ GroupMemberList.propTypes = {
   classes: PropTypes.object,
   deleteMemberBegin: PropTypes.func,
   exportMembersBegin: PropTypes.func,
+  exportSubMembersBegin: PropTypes.func,
   links: PropTypes.shape({
     groupMembersNew: PropTypes.string,
   }),

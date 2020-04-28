@@ -26,6 +26,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import dig from "object-dig";
 
 const MemberTypes = Object.freeze([
   'active',
@@ -97,15 +98,21 @@ export function GroupMemberListPage(props) {
     }
   };
 
-  const exportMembers = () => {
-    if (groupId) {
+  const exportMembers = (gID = groupId) => {
+    if (gID) {
       const newParams = {
         ...params,
-        group_id: groupId,
+        group_id: gID,
         query_scopes: getScopes({})
       };
       props.exportMembersBegin(newParams);
     }
+  };
+
+  const exportSubGroupMembers = () => {
+    exportMembers();
+    if (dig(props, 'currentGroup', 'children', 'length') > 0)
+      dig(props, 'currentGroup', 'children').forEach(subGroup => exportMembers(subGroup.id));
   };
 
   const handleChangeTab = (type) => {
@@ -172,6 +179,7 @@ export function GroupMemberListPage(props) {
         currentGroup={props.currentGroup}
         deleteMemberBegin={props.deleteMemberBegin}
         exportMembersBegin={exportMembers}
+        exportSubMembersBegin={exportSubGroupMembers}
         links={links}
         setParams={params}
         params={params}
