@@ -41,7 +41,7 @@
         margin-left: 70px;
       }
 
-      #mute-mic {
+      #mute-mic, #leave-call {
         fill: white;
       }
     </style>
@@ -55,6 +55,7 @@
           <div class="col-xs-12">
             <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
               <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
+              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call') %>
             </span></h2>
           </div>
         </div>
@@ -149,8 +150,23 @@
       });
     }
 
+    function disconnectLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('leave-call');
+      localParticipant.tracks.forEach(function(publication){
+        const attachedElements = publication.track.detach();
+        attachedElements.forEach(function(element) {
+          element.remove();
+        })
+      })
+    }
+
     $('#mute-mic').on('click', function(){
       muteLocalParticipant();
+    });
+
+    $('#leave-call').on('click', function(){
+      leaveRoomIfJoined();
     });
 
     // Attach the Tracks to the DOM.
