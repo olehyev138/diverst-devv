@@ -18,8 +18,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   Button, Card, CardContent, CardActions,
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
+  Dialog, DialogContent
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Formik, Form, Field } from 'formik';
+import { buildValues } from 'utils/formHelpers';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -28,6 +31,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { ImportForm } from 'components/User/UserImport';
 
 const styles = theme => ({
   progress: {
@@ -62,6 +66,9 @@ const styles = theme => ({
 export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;
   const [expandedGroups, setExpandedGroups] = useState({});
+  const [importGroup, setImportGroup] = useState(0);
+  const handleDialogClose = () => setImportGroup(0);
+  const handleDialogOpen = id => setImportGroup(id);
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
@@ -72,8 +79,41 @@ export function AdminGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
+
+  const importDialog = (
+    <Dialog
+      open={importGroup}
+      onClose={handleDialogClose}
+      aria-labelledby='alert-dialog-slide-title'
+      aria-describedby='alert-dialog-slide-description'
+    >
+      <DialogContent>
+        <Typography component='h2' variant='h6' className={classes.dataHeaders}>
+          Import instructions
+        </Typography>
+        <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
+          {'To batch import users to this group, upload a CSV file using the form below. The file should only contain a single column comprised of the users\' email adresses. The first row will be ignored, as it is reserved for the header.'}
+        </Typography>
+      </DialogContent>
+      <Formik
+        initialValues={{
+          import_file: null
+        }}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          /* eslint-disable-next-line no-alert */
+          alert(JSON.stringify({ group_id: importGroup, values }, null, '  '));
+          handleDialogClose();
+        }}
+      >
+        {formikProps => <ImportForm {...props} {...formikProps} />}
+      </Formik>
+    </Dialog>
+  );
+
   return (
     <React.Fragment>
+      { importDialog }
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
@@ -177,6 +217,13 @@ export function AdminGroupList(props, context) {
                       <Button
                         size='small'
                         color='primary'
+                        onClick={() => handleDialogOpen(group.id)}
+                      >
+                        Import Users
+                      </Button>
+                      <Button
+                        size='small'
+                        color='primary'
                         to={{
                           pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
                           state: { id: group.id }
@@ -243,6 +290,13 @@ export function AdminGroupList(props, context) {
                               component={WrappedNavLink}
                             >
                               <DiverstFormattedMessage {...messages.edit} />
+                            </Button>
+                            <Button
+                              size='small'
+                              color='primary'
+                              onClick={() => handleDialogOpen(childGroup.id)}
+                            >
+                              Import Users
                             </Button>
                             <Button
                               size='small'
