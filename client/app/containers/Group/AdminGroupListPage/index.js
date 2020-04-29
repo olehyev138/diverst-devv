@@ -44,7 +44,8 @@ export function AdminGroupListPage(props) {
     props.getGroupsBegin(newParams);
     setParams(newParams);
   };
-
+console.log(props.groups);
+// Little bug around here
   return (
     <React.Fragment>
       <GroupList

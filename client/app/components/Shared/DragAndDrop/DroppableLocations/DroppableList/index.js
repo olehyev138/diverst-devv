@@ -38,6 +38,7 @@ export function DroppableList(props) {
       moveCard={moveCard}
       group={card}
       classes={props.classes}
+      draggable={props.draggable}
     />
   );
   return (

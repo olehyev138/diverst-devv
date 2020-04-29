@@ -21,7 +21,7 @@ import { permission } from 'utils/permissionsHelpers';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
 
-export default function DraggableCard({ id, text, index, moveCard, group, classes }, props) {
+export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
@@ -79,14 +79,15 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
 
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.CARD, id, index },
+    canDrag: draggable,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
-
   drag(drop(ref));
 
   return (
+    <Grid item key={group.id} xs={12}>
     <Card
       ref={ref}
     >
@@ -182,5 +183,79 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
         </CardActions>
       </Permission>
     </Card>
+  <Collapse in={expandedGroups[`${group.id}`]}>
+    <Box mt={1} />
+    <Grid container spacing={2} justify='flex-end'>
+      {group.children && group.children.map((childGroup, i) => (
+        /* eslint-disable-next-line react/jsx-wrap-multilines */
+        <Grid item key={childGroup.id} xs={12}>
+          <Card className={classes.childGroupCard}>
+            <CardContent>
+              <Grid container spacing={2} alignItems='center'>
+                {childGroup.logo_data && (
+                  <React.Fragment>
+                    <Hidden xsDown>
+                      <Grid item xs='auto'>
+                        <DiverstImg
+                          data={childGroup.logo_data}
+                          maxWidth='60px'
+                          maxHeight='60px'
+                          minWidth='60px'
+                          minHeight='60px'
+                        />
+                      </Grid>
+                    </Hidden>
+                  </React.Fragment>
+                )}
+                <Grid item xs>
+                  <Link
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: ROUTES.group.home.path(childGroup.id),
+                      state: { id: childGroup.id }
+                    }}
+                  >
+                    <Typography variant='h5' component='h2' display='inline'>
+                      {childGroup.name}
+                    </Typography>
+                  </Link>
+                  {childGroup.short_description && (
+                    <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                      {childGroup.short_description}
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Button
+                size='small'
+                color='primary'
+                to={{
+                  pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
+                  state: { id: childGroup.id }
+                }}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                size='small'
+                className={classes.errorButton}
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete group?'))
+                    props.deleteGroupBegin(childGroup.id);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
+  </Collapse>
+    </Grid>
   );
 }

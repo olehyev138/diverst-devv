@@ -165,6 +165,8 @@
   "diverst.containers.Group.index.button.new": "New {erg}",
   "diverst.containers.Group.index.button.edit": "Edit",
   "diverst.containers.Group.index.button.delete": "Delete",
+  "diverst.containers.Group.index.button.change_order": "Change Order",
+  "diverst.containers.Group.index.button.set_order": "Save Current Order",
   "diverst.containers.Group.index.button.setAnnualBudget": "Set Annual Budget",
   "diverst.containers.Group.index.button.delete_confirm": "Delete group?",
   "diverst.containers.Group.index.button.children_collapse": "Hide {sub_erg}s",
