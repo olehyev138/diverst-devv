@@ -133,7 +133,6 @@ export function* fetchUserData() {
 
     yield put(fetchUserDataSuccess());
   } catch (err) {
-    console.log(err);
     yield put(fetchUserDataError(err));
   }
 }
