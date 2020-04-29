@@ -55,6 +55,7 @@ export function DiverstSelect(props) {
         {props.label}
       </FormLabel>
       <Select
+        isLoading={props.isLoading}
         className={classes.select}
         // Done to prevent the select menu from being hidden behind other elements
         menuPortalTarget={document.body}
@@ -102,6 +103,7 @@ DiverstSelect.propTypes = {
   imgClass: PropTypes.string,
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 export default compose(

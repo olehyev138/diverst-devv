@@ -20,6 +20,7 @@ class Api::V1::GroupMembersController < DiverstController
       end
 
       # if we made it here - were good, serialize group and return status 204
+      track_activity(group)
       render status: 204, json: {}
     end
   end
@@ -44,10 +45,19 @@ class Api::V1::GroupMembersController < DiverstController
     end
 
     # if we made it here - were good
+    track_activity(group)
     render status: 204, json: {}
   end
 
   private
+
+  def action_map(action)
+    case action
+    when :add_members then 'add_members_to_group'
+    when :remove_members then 'remove_member_from_group'
+    else nil
+    end
+  end
 
   def payload
     params
