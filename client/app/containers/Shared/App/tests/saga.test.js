@@ -242,7 +242,7 @@ describe('findEnterprise Saga', () => {
   it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
     api.enterprises.getAuthEnterprise.mockImplementation(() => Promise.resolve(response));
-    const results = [findEnterpriseSuccess(), setUserData({ enterprise: response.data.enterprise }, true)];
+    const results = [setUserData({ enterprise: response.data.enterprise }, true), findEnterpriseSuccess()];
     const initialAction = { payload: undefined };
     const dispatched = await recordSaga(
       findEnterprise,
