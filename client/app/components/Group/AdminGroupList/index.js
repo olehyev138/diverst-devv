@@ -97,12 +97,12 @@ export function AdminGroupList(props, context) {
       </DialogContent>
       <Formik
         initialValues={{
+          group_id: importGroup,
           import_file: null
         }}
         enableReinitialize
         onSubmit={(values, actions) => {
-          /* eslint-disable-next-line no-alert */
-          alert(JSON.stringify({ group_id: importGroup, values }, null, '  '));
+          props.importAction(values);
           handleDialogClose();
         }}
       >
@@ -338,7 +338,8 @@ AdminGroupList.propTypes = {
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  importAction: PropTypes.func,
 };
 
 export default compose(
