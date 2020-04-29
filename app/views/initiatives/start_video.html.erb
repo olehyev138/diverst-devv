@@ -17,7 +17,7 @@
 
       #video-grid {
         display: grid;
-        grid-template-columns: 250px 250px 250px;
+        grid-template-columns: 35% 35% 35%;
         grid-template-rows: auto auto auto;
         max-height: 300px;
         margin: auto;
@@ -37,13 +37,20 @@
       }
 
       #control-panel {
-        min-width: 20%;
         float: right;
         margin-left: 70px;
       }
 
-      #mute-mic {
+      #mute-mic, #mute-video {
         fill: white;
+        height: 35px;
+        width: 60px;
+      }
+
+      #leave-call {
+        fill: red;
+        height: 35px;
+        width: 60px;
       }
     </style>
   </head>
@@ -54,9 +61,11 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center"><%= @initiative.name %><div class="row" id="control-panel">
+            <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
               <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
-            </div></h2>
+              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call') %>
+              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video') %>
+            </span></h2>
           </div>
         </div>
       </div>
@@ -68,12 +77,10 @@
       </div>
       <div class="col-xs-6" style="padding-left: auto;">
         <div class="row">
-          <ul class="list-inline text-center">
-            <div class="col-xs-12" style="padding: 0px;">
-              <div id="main-participant"></div>
-              <div id="video-grid"></div>
-            </div>
-          </ul>
+          <div class="col-xs-12" style="padding: 0px;">
+            <div id="main-participant"></div>
+            <div id="video-grid"></div>
+          </div>
         </div>
         <div class="row" style="position: relative; top: 75px;">
           <div class="col-xs-12">
@@ -136,7 +143,7 @@
         track.addEventListener('click', enlargeParticipantVideoTrack);
     }
 
-    function muteLocalParticipant() {
+    function muteAudioOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
       var svgElement = document.getElementById('mute-mic');
       localParticipant.audioTracks.forEach(function(track){
@@ -152,9 +159,48 @@
       });
     }
 
+    function muteVideoOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-video');
+      localParticipant.videoTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = 'white';
+        }
+      });
+    }
+
+
+    function disconnectLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('leave-call');
+      localParticipant.tracks.forEach(function(publication){
+        const attachedElements = publication.track.detach();
+        attachedElements.forEach(function(element) {
+          element.remove();
+        })
+      })
+    }
+
     $('#mute-mic').on('click', function(){
-      muteLocalParticipant();
+      muteAudioOfLocalParticipant();
     });
+
+    $('#mute-video').on('click', function(){
+      muteVideoOfLocalParticipant();
+    });
+
+    $('#leave-call').on('click', function(){
+      leaveRoomIfJoined();
+      window.location.href = "<%= group_event_path(@group, @initiative) %>";
+    });
+
+
 
     // Attach the Tracks to the DOM.
     function attachTracks(tracks, container) {

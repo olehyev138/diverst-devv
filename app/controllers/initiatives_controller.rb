@@ -129,7 +129,7 @@ class InitiativesController < ApplicationController
       format.js
     end
   end
-  
+
   def start_video
     # Only user with permission to update group should be able to start a call
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
