@@ -88,7 +88,28 @@ The frontend metrics/analytics code is generally split up into _dashboards_ & _g
 
 ##### Data structure 
 
-The data structure produced by MYSQL & accepted by VegaLite is a flat array of objects. The actual definition of the objects at the time of writing is somewhat arbitrary. Graphs related to certain dashboards may require certain keys so that the dashboards are able to pass down dashboard filters. 
+The data structure produced by MYSQL & accepted by VegaLite is a flat array of objects. The array is known as a _data set_ or just _data_. An object in this array is called a _data point_.
+
+The keys in the data points used by VegaLite, depend on the type of base graph & the correlate to VegaLite _field types_. The current base VegaLite graphs make use of three types & thus expect the data point keys to be named as follows:
+
+- _Nominal_: `name`
+- _Quantitative_: `count`
+- _Temporal_: `date`
+
+##### Labels 
+
+_!! Implementation is WIP !!_
+
+The base VegaLite graphs accept a prop `labels` for setting the title & axis labels. The prop `labels` should be formatted as follows:
+
+```
+{
+  title: <title>,
+  x_label: <x_label>,
+  y_label: <y_label>
+}
+```
+
 
 ##### Filtering 
 
