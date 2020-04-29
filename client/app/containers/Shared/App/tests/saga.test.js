@@ -24,9 +24,7 @@ import api from 'api/api';
 import AuthService from 'utils/authService';
 
 AuthService.storeJwt = jest.fn();
-AuthService.storeUserData = jest.fn();
 AuthService.discardJwt = jest.fn();
-AuthService.discardUserData = jest.fn();
 api.sessions.create = jest.fn();
 api.sessions.logout = jest.fn();
 api.enterprises.getAuthEnterprise = jest.fn();
@@ -59,17 +57,16 @@ beforeEach(() => {
 
 describe('Login Saga', () => {
   it('should get token from API', async () => {
-    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token, ...user } }));
-    const results = [loginSuccess(token), setUserData(user), push(ROUTES.user.home.path())];
+    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token } }));
+    const results = [loginSuccess(token), push(ROUTES.user.home.path())];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
     const dispatched = await recordSaga(
       login,
       initialAction
     );
 
-    expect(AuthService.storeJwt).toHaveBeenCalledWith(token);
-    expect(AuthService.storeUserData).toHaveBeenCalledWith(user);
     expect(api.sessions.create).toHaveBeenCalledWith(initialAction.payload);
+    expect(AuthService.storeJwt).toHaveBeenCalledWith(token);
     expect(dispatched).toEqual(results);
   });
 
@@ -187,9 +184,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 
@@ -208,9 +204,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(window.location.assign).toHaveBeenCalledWith('www.diverst.com');
     expect(dispatched).toEqual(results);
   });
@@ -231,9 +226,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 });
