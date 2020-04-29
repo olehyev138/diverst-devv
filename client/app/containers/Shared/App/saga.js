@@ -113,10 +113,11 @@ export function* findEnterprise(action) {
     // Find enterprise and dispatch setEnterprise action
     const response = yield call(api.enterprises.getAuthEnterprise.bind(api.enterprises), action.payload);
     const { enterprise } = response.data;
-    yield put(findEnterpriseSuccess());
 
     // Set enterprise
     yield put(setUserData({ enterprise }, true));
+
+    yield put(findEnterpriseSuccess());
   } catch (err) {
     yield put(findEnterpriseError(err));
   }
