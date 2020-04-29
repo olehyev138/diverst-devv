@@ -47,6 +47,44 @@ export default defineMessages({
       id: `${scope}.texts.privacy_statement`,
     },
   },
+  plural_text: {
+    erg: {
+      id: `${scope}.texts.plural.erg`,
+    },
+    program: {
+      id: `${scope}.texts.plural.program`,
+    },
+    structure: {
+      id: `${scope}.texts.plural.structure`,
+    },
+    outcome: {
+      id: `${scope}.texts.plural.outcome`,
+    },
+    badge: {
+      id: `${scope}.texts.plural.badge`,
+    },
+    segment: {
+      id: `${scope}.texts.plural.segment`,
+    },
+    dci_full_title: {
+      id: `${scope}.texts.plural.dci_full_title`,
+    },
+    dci_abbreviation: {
+      id: `${scope}.texts.plural.dci_abbreviation`,
+    },
+    member_preference: {
+      id: `${scope}.texts.plural.member_preference`,
+    },
+    parent: {
+      id: `${scope}.texts.plural.parent`,
+    },
+    sub_erg: {
+      id: `${scope}.texts.plural.sub_erg`,
+    },
+    privacy_statement: {
+      id: `${scope}.texts.plural.privacy_statement`,
+    },
+  },
   custom_text: {
     erg: {
       id: `${scope}.custom_text.erg`,

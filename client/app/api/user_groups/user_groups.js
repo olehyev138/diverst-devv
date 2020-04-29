@@ -9,6 +9,9 @@ Object.assign(UserGroups, {
   },
   leave(payload) {
     return axios.post(`${this.url}/leave`, payload);
+  },
+  joinSubgroups(payload) {
+    return axios.post(`${this.url}/join_subgroups`, payload);
   }
 });
 

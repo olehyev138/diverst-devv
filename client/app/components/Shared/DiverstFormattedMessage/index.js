@@ -4,7 +4,23 @@ import { compose } from 'redux';
 import { customTexts } from 'utils/customTextHelpers';
 
 import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { selectCustomText } from 'containers/Shared/App/selectors';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-export const DiverstFormattedMessage = props => <FormattedMessage {...props} values={customTexts()} />;
+export const DiverstFormattedMessage = ({ customText, ...props }) => <FormattedMessage {...props} values={customTexts(customText)} />;
 
-export default compose(memo)(DiverstFormattedMessage);
+DiverstFormattedMessage.propTypes = {
+  customText: PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  customText: selectCustomText(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
+export default compose(memo, withConnect)(DiverstFormattedMessage);

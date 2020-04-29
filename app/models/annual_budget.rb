@@ -16,6 +16,10 @@ class AnnualBudget < ApplicationRecord
   delegate :approved, to: :budgets, prefix: true
   delegate :approved, to: :budget_items, prefix: 'items'
 
+  def currency
+    'USD'
+  end
+
   def close!
     update_column(:closed, true)
   end
