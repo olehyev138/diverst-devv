@@ -1,3 +1,4 @@
+import activities from 'api/activities/activities';
 import enterprises from 'api/enterprises/enterprises';
 import users from 'api/users/users';
 import userRoles from 'api/user_roles/user_roles';
@@ -57,6 +58,7 @@ import metricsDashboards from 'api/metrics/metrics_dashboards';
 import customGraphs from 'api/metrics/custom_graphs';
 
 const Api = {
+  activities,
   enterprises,
   users,
   user,

@@ -49,6 +49,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
       label={label}
       isMulti
       fullWidth
+      isLoading={rest.isLoading}
       options={rest.segments}
       value={values[segmentField]}
       onChange={value => setFieldValue(segmentField, value)}
@@ -68,6 +69,7 @@ SegmentSelector.propTypes = {
 
   getSegmentsBegin: PropTypes.func.isRequired,
   segments: PropTypes.array,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

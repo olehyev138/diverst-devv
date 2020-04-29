@@ -20,7 +20,9 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.carryover_annual_budget(self.diverst_request), serializer: GroupWithBudgetSerializer
+    updated_item = item.carryover_annual_budget(self.diverst_request)
+    track_activity(updated_item)
+    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -29,7 +31,9 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.reset_annual_budget(self.diverst_request), serializer: GroupWithBudgetSerializer
+    updated_item = item.reset_annual_budget(self.diverst_request)
+    track_activity(updated_item)
+    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -184,5 +188,15 @@ class Api::V1::GroupsController < DiverstController
         :_destroy
       ]
     )
+  end
+
+  private
+
+  def action_map(action)
+    case action
+    when :carryover_annual_budget then 'annual_budget_update'
+    when :reset_annual_budget then 'annual_budget_update'
+    else super
+    end
   end
 end
