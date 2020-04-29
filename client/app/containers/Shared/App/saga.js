@@ -10,7 +10,7 @@ import {
   FIND_ENTERPRISE_BEGIN,
   FIND_ENTERPRISE_ERROR,
   SSO_LOGIN_BEGIN,
-  SSO_LINK_BEGIN
+  SSO_LINK_BEGIN, FETCH_USER_DATA_BEGIN
 }
   from './constants';
 
@@ -23,7 +23,7 @@ import {
   logoutError,
   findEnterpriseSuccess,
   findEnterpriseError,
-  setUserData,
+  setUserData, fetchUserDataSuccess, fetchUserDataError,
 }
   from './actions';
 
@@ -122,6 +122,22 @@ export function* findEnterprise(action) {
   }
 }
 
+export function* fetchUserData() {
+  try {
+    const response = yield call(api.user.getUserData.bind(api.user));
+
+    const payload = response.data;
+
+    yield put(setUserData(payload));
+    payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
+
+    yield put(fetchUserDataSuccess());
+  } catch (err) {
+    console.log(err);
+    yield put(fetchUserDataError(err));
+  }
+}
+
 export default function* handleLogin() {
   yield takeLatest(LOGIN_BEGIN, login);
 
@@ -132,4 +148,6 @@ export default function* handleLogin() {
   yield takeLatest(LOGOUT_BEGIN, logout);
 
   yield takeLatest(FIND_ENTERPRISE_BEGIN, findEnterprise);
+
+  yield takeLatest(FETCH_USER_DATA_BEGIN, fetchUserData);
 }
