@@ -13,6 +13,17 @@ class Api::V1::InitiativeUsersController < DiverstController
 
   private
 
+  def model_map(model)
+    Initiative.find_by_id(params[:initiative_id].presence)
+  end
+
+  def action_map(action)
+    case action
+    when :export_csv then 'export_attendees'
+    else nil
+    end
+  end
+
   def payload
     params.require(klass.symbol).permit(
         :user_id,
