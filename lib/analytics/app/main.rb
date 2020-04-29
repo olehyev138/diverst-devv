@@ -37,7 +37,7 @@ def group_population(dbh)
   #  - left join such that we get groups with no members
 
   sql = %{
-    SELECT name, parent_id, count(u.group_id) AS count
+    SELECT name, count(u.group_id) AS count
     FROM groups AS g
       LEFT JOIN user_groups AS u on u.group_id = g.id
     WHERE enterprise_id = 1
@@ -53,7 +53,7 @@ def group_growth(dbh)
   #  - Uses window functions
 
   sql = %{
-    SELECT DISTINCT g.name, parent_id, DATE_FORMAT(u.created_at, '%Y-%m-%d') as date,
+    SELECT DISTINCT g.name, DATE_FORMAT(u.created_at, '%Y-%m-%d') as date,
            COUNT(*) OVER(PARTITION by g.id ORDER BY DATE_FORMAT(u.created_at, '%Y-%m-%d')) count,
            COUNT(*) OVER(PARTITION by g.id) total
     FROM user_groups u
@@ -69,7 +69,7 @@ def news_posts_per_group(dbh)
   #  - Treats shared posts as any other
 
   sql = %{
-    SELECT g.name, parent_id, count(nl.id) AS count
+    SELECT g.name, count(nl.id) AS count
     FROM groups g
       JOIN news_feeds AS nf on nf.group_id = g.id
       LEFT JOIN news_feed_links nl on nl.news_feed_id = nf.id

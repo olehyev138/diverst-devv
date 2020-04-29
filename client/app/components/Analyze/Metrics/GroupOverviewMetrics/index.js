@@ -8,7 +8,7 @@ export function GroupOverviewMetrics({ data }) {
   return (
     <React.Fragment>
       <Grid container spacing={2}>
-        <Grid item xs={6} spacing={2}>
+        <Grid item xs={6} >
           <Paper>
             <Typography variant='h4'>Total groups: {data.total_groups}</Typography>
           </Paper>
