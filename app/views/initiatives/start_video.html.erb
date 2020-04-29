@@ -47,6 +47,10 @@
         width: 60px;
       }
 
+      #mute-video {
+        margin-right: 50px;
+      }
+
       #leave-call {
         fill: red;
         height: 35px;
@@ -62,9 +66,9 @@
         <div class="row">
           <div class="col-xs-12">
             <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
-              <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic') %>
-              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call') %>
-              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video') %>
+              <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic', title: 'mute mic') %>
+              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video', title: 'turn off video') %>
+              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call', title: 'end video call') %>
             </span></h2>
           </div>
         </div>
@@ -360,6 +364,13 @@
 
     var chatInput = document.getElementById('send');
     chatInput.addEventListener('click', sendMessage);
+
+    $('input').on('keydown', function(e){
+      if(e.keyCode===13) {
+        sendMessage();
+      }
+    });
+
 
     function init() {
       // Initialize Firebase.
