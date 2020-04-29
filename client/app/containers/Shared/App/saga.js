@@ -41,16 +41,12 @@ export function* login(action) {
     const response = yield call(api.sessions.create.bind(api.sessions), action.payload);
 
     // eslint-disable-next-line camelcase
-    const { token, ...payload } = response.data;
+    const { token } = response.data;
 
     yield put(loginSuccess(token));
-    yield put(setUserData(payload));
     axios.defaults.headers.common['Diverst-UserToken'] = token;
 
-    payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
-
     yield call(AuthService.storeJwt, token);
-    yield call(AuthService.storeUserData, payload);
 
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
@@ -95,7 +91,6 @@ export function* logout() {
     const response = yield call(api.sessions.logout.bind(api.sessions));
 
     yield call(AuthService.discardJwt);
-    yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
     if (response.data.logout_link)
@@ -107,7 +102,6 @@ export function* logout() {
 
     // Even if logout fails clear the local data
     yield call(AuthService.discardJwt);
-    yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
     yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
