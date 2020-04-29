@@ -440,7 +440,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="#"
+              to="/admin/system/logs"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
@@ -907,7 +907,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="#"
+              to="/admin/system/logs"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />

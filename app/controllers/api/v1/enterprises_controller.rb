@@ -51,7 +51,9 @@ class Api::V1::EnterprisesController < DiverstController
       enterprise.send(attachment).purge_later if params[attachment].blank? && enterprise.send(attachment).attached?
     end
 
-    render status: 200, json: enterprise.update(params[:enterprise])
+    enterprise.update(params[:enterprise])
+    track_activity(enterprise)
+    render status: 200, json: enterprise
   rescue => e
     case e
     when InvalidInputException
@@ -127,5 +129,16 @@ class Api::V1::EnterprisesController < DiverstController
         :logo_redirect_url,
       ]
     )
+  end
+
+  private def action_map(action)
+    case action
+    when :update then if payload[:theme_attributes].present? || payload[:home_message].present?
+                        'update_branding'
+                      else
+                        'update'
+                      end
+    else nil
+    end
   end
 end

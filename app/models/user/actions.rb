@@ -200,6 +200,7 @@ module User::Actions
           :user_role,
           :news_links,
           :avatar_attachment,
+          :avatar_blob,
           field_data: [
                   :field,
                   { field: Field.base_preloads }

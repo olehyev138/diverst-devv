@@ -42,7 +42,9 @@ class Api::V1::UsersController < DiverstController
     base_authorize(item)
     item.avatar.purge_later if item.avatar.attached? && params[:avatar].blank?
 
-    render status: 200, json: klass.update(self.diverst_request, params), serializer: serializer(params)
+    updated_item = klass.update(self.diverst_request, params)
+    track_activity(updated_item)
+    render status: 200, json: updated_item, serializer: serializer(params)
   rescue => e
     case e
     when InvalidInputException
@@ -255,5 +257,24 @@ class Api::V1::UsersController < DiverstController
         mentoring_interest_ids: [],
         mentoring_type_ids: [],
       )
+  end
+
+  private
+
+  def model_map(model)
+    if action_name == 'export_csv'
+      current_user
+    else
+      model
+    end
+  end
+
+  def action_map(action)
+    case action
+    when :update then 'update_mentorship_profile' if params[:serializer] == 'mentorship'
+    when :create then 'create'
+    when :export_csv then 'export_csv'
+    else nil
+    end
   end
 end
