@@ -261,6 +261,9 @@
           "new": "/admin/system/branding/sponsors/new",
           "edit": "/admin/system/branding/sponsors/:sponsor_id/edit"
         }
+      },
+      "logs": {
+        "index": "/admin/system/logs"
       }
     }
   }
