@@ -19,6 +19,9 @@ const styles = theme => ({
         display: 'none',
       },
     },
+    '& .MuiTableCell-head': {
+      zIndex: 0,
+    },
   },
 });
 

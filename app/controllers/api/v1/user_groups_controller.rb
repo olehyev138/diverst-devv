@@ -31,6 +31,17 @@ class Api::V1::UserGroupsController < DiverstController
 
   private
 
+  def model_map(model)
+    Group.find_by_id(params[:group_id].presence)
+  end
+
+  def action_map(action)
+    case action
+    when :export_csv then 'export_members'
+    else nil
+    end
+  end
+
   def subgroup_payload
     params.permit(
     :group_id,
