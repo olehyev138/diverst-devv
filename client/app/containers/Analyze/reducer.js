@@ -23,7 +23,7 @@ export const initialState = {
     initiativesPerGroup: {},
     newsPerGroup: [],
     viewsPerNewsLink: {},
-    viewsPerFolder: {},
+    viewsPerFolder: [],
     viewsPerResource: {},
     growthOfResources: {},
     growthOfUsers: {},

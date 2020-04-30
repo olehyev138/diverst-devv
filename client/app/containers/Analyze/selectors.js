@@ -48,7 +48,7 @@ const selectViewsPerNewsLink = () => createSelector(
 
 const selectViewsPerFolder = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerFolder, 0) || [])
+  metricsState => metricsState.metricsData.viewsPerFolder
 );
 
 const selectViewsPerResource = () => createSelector(

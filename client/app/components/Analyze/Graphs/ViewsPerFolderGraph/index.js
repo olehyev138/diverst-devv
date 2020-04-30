@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import BarGraph from '../Base/BarGraph';
+import ColoredBarGraph from '../Base/ColoredBarGraph';
 
 export function ViewsPerFolderGraph(props) {
   const [value, setValue] = useState(undefined);
 
   return (
-    <BarGraph
+    <ColoredBarGraph
       data={props.data}
       {...props}
     />

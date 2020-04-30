@@ -17,7 +17,8 @@ def main(event:, context:)
   graph_data = {
       group_population: group_population($dbh).to_json,
       group_growth: group_growth($dbh).to_json,
-      news_posts_per_group: news_posts_per_group($dbh).to_json
+      news_posts_per_group: news_posts_per_group($dbh).to_json,
+      views_per_folder: views_per_folder($dbh).to_json
   }
 
   upload_s3(graph_data)
@@ -75,6 +76,20 @@ def news_posts_per_group(dbh)
       LEFT JOIN news_feed_links nl on nl.news_feed_id = nf.id
     WHERE enterprise_id = 1
     GROUP BY nf.id
+    ORDER BY count DESC;
+  }
+
+  dbh.query(sql).to_a
+end
+
+def views_per_folder(dbh)
+  sql = %{
+    SELECT f.name AS folder, g.name AS group, count(f.id) count
+    FROM folders f
+      JOIN groups g on g.id = f.group_id
+      LEFT JOIN views v on v.folder_id = f.id
+    WHERE g.enterprise_id = 1
+    GROUP BY f.id
     ORDER BY count DESC;
   }
 

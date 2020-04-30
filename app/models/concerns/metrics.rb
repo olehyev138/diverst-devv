@@ -26,5 +26,9 @@ module Metrics
     def news_posts_per_group
       @@analytics_bucket.object('news_posts_per_group').get.body.read
     end
+
+    def views_per_folder
+      @@analytics_bucket.object('views_per_folder').get.body.read
+    end
   end
 end

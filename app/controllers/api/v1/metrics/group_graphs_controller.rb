@@ -61,7 +61,7 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
   def views_per_folder
     authorize MetricsDashboard, :index?
 
-    render json: @graph.views_per_folder(metrics_params[:date_range], metrics_params[:scoped_by_models])
+    render status: 200, json: Graph.views_per_folder
   end
 
   def views_per_resource
