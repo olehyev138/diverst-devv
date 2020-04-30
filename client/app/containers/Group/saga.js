@@ -16,7 +16,7 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN
+  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN
 } from './constants';
 
 import {
@@ -31,10 +31,12 @@ import {
   resetBudgetSuccess, resetBudgetError,
   leaveGroupSuccess, leaveGroupError,
   joinGroupSuccess, joinGroupError,
-  groupCategorizeSuccess, groupCategorizeError
+  groupCategorizeSuccess, groupCategorizeError,
+  updateGroupPositionSuccess, updateGroupPositionError,
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
 
 
 export function* getGroups(action) {
@@ -121,6 +123,30 @@ export function* updateGroup(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateGroupOrder(action) {
+  function* updateEachGroup(id, params) {
+    yield call(api.groups.update.bind(api.groups),id, params);
+  }
+  try {
+    console.log(action);
+    console.log(action.payload);
+    const payload = { groups : action.payload}
+    payload.groups.map((g)=> {
+      updateEachGroup(g.id,g.position);
+    });
+
+    yield put(updateGroupPositionSuccess());
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group order updated', options: { variant: 'success' } }));
+  } catch (err) {
+    console.log(err);
+    yield put(updateGroupPositionError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update group order', options: { variant: 'warning' } }));
   }
 }
 
@@ -222,6 +248,7 @@ export default function* groupsSaga() {
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
+  yield takeLatest(UPDATE_GROUP_POSITION_BEGIN, updateGroupOrder);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);

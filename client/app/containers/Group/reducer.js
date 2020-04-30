@@ -42,7 +42,7 @@ import {
   GROUP_CATEGORIZE_UNMOUNT,
   GROUP_CATEGORIZE_BEGIN,
   GROUP_CATEGORIZE_SUCCESS,
-  GROUP_CATEGORIZE_ERROR,
+  GROUP_CATEGORIZE_ERROR, UPDATE_GROUP_POSITION_BEGIN, UPDATE_GROUP_POSITION_SUCCESS, UPDATE_GROUP_POSITION_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -97,6 +97,7 @@ function groupsReducer(state = initialState, action) {
 
       case CREATE_GROUP_BEGIN:
       case UPDATE_GROUP_BEGIN:
+      case UPDATE_GROUP_POSITION_BEGIN:
       case GROUP_CATEGORIZE_BEGIN:
       case UPDATE_GROUP_SETTINGS_BEGIN:
       case DELETE_GROUP_BEGIN:
@@ -122,6 +123,7 @@ function groupsReducer(state = initialState, action) {
       case JOIN_GROUP_SUCCESS:
       case LEAVE_GROUP_SUCCESS:
       case GROUP_CATEGORIZE_SUCCESS:
+      case UPDATE_GROUP_POSITION_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
@@ -130,6 +132,7 @@ function groupsReducer(state = initialState, action) {
       case UPDATE_GROUP_ERROR:
       case GROUP_CATEGORIZE_ERROR:
       case UPDATE_GROUP_SETTINGS_ERROR:
+      case UPDATE_GROUP_POSITION_ERROR:
       case DELETE_GROUP_ERROR:
       case LEAVE_GROUP_ERROR:
       case JOIN_GROUP_ERROR:

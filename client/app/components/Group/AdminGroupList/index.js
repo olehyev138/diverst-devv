@@ -66,16 +66,9 @@ export const ItemTypes = {
   CARD: 'card',
 };
 
-function dragArea() {
-
-}
-
-
 export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;
   const [order, setOrder] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState({});
-
 
   return (
     <React.Fragment>
@@ -99,7 +92,7 @@ export function AdminGroupList(props, context) {
               startIcon={<ReorderIcon />}
               onClick={() => {
                 setOrder(false);
-                props.updateGroupBegin({id: 1 , position: 6});
+                props.updateGroupPositionBegin([{id: 1 , position: 9},{id: 6 , position: 5}]);
               }
               }
             >
@@ -147,7 +140,7 @@ AdminGroupList.propTypes = {
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
-  updateGroupBegin: PropTypes.func,
+  updateGroupPositionBegin: PropTypes.func,
   handlePagination: PropTypes.func
 };
 
