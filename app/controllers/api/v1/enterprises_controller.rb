@@ -42,7 +42,7 @@ class Api::V1::EnterprisesController < DiverstController
     enterprise = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(enterprise)
 
-    if params.dig(:enterprise, :theme_attributes) && params.dig(:enterprise, :theme_attributes, :logo).blank? && enterprise.theme.logo.attached?
+    if params.dig(:enterprise, :theme_attributes) && params.dig(:enterprise, :theme_attributes, :logo).blank? && enterprise.theme&.logo&.attached?
       enterprise.theme.logo.purge_later
       params[:enterprise][:theme_attributes] = params[:enterprise][:theme_attributes].except(:logo)
     end
