@@ -24,10 +24,6 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
-import { DndProvider } from 'react-dnd';
-import Backend from 'react-dnd-html5-backend';
-
-import DraggableCard from 'components/Shared/DragAndDrop/DraggableItems/DraggableCard';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstImg from 'components/Shared/DiverstImg';
@@ -101,7 +97,11 @@ export function AdminGroupList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
-              onClick={() => {setOrder(false)}}
+              onClick={() => {
+                setOrder(false);
+                props.updateGroupBegin({id: 1 , position: 6});
+              }
+              }
             >
               <DiverstFormattedMessage {...messages.set_order} />
             </Button>
@@ -111,7 +111,7 @@ export function AdminGroupList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
-              onClick={() => {setOrder(true)}}
+              onClick={() => { setOrder(true); }}
             >
               <DiverstFormattedMessage {...messages.change_order} />
             </Button>
@@ -147,6 +147,7 @@ AdminGroupList.propTypes = {
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
+  updateGroupBegin: PropTypes.func,
   handlePagination: PropTypes.func
 };
 

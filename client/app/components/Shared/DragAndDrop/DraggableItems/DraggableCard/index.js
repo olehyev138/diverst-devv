@@ -3,7 +3,7 @@
  * A card that can be dragged around and can also be dropped on
  */
 
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
@@ -80,7 +80,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.CARD, id, index },
     canDrag: draggable,
-    collect: (monitor) => ({
+    collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
   });
@@ -88,174 +88,174 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
 
   return (
     <Grid item key={group.id} xs={12}>
-    <Card
-      ref={ref}
-    >
-      <CardContent>
-        <Grid container spacing={2} alignItems='center'>
-          {group.logo_data && (
-            <React.Fragment>
-              <Hidden xsDown>
-                <Grid item xs='auto'>
-                  <DiverstImg
-                    data={group.logo_data}
-                    maxWidth='70px'
-                    maxHeight='70px'
-                    minWidth='70px'
-                    minHeight='70px'
-                  />
-                </Grid>
-              </Hidden>
-            </React.Fragment>
-          )}
-          <Grid item xs>
-            <Button
-              className={classes.groupLink}
-              color='primary'
-              component={WrappedNavLink}
-              to={{
-                pathname: ROUTES.group.home.path(group.id),
-                state: { id: group.id }
-              }}
-            >
-              <Typography variant='h5' component='h2' display='inline'>
-                {group.name}
-              </Typography>
-            </Button>
-            {group.short_description && (
-              <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                &ensp;
-                {group.short_description}
-              </Typography>
+      <Card
+        ref={ref}
+      >
+        <CardContent>
+          <Grid container spacing={2} alignItems='center'>
+            {group.logo_data && (
+              <React.Fragment>
+                <Hidden xsDown>
+                  <Grid item xs='auto'>
+                    <DiverstImg
+                      data={group.logo_data}
+                      maxWidth='70px'
+                      maxHeight='70px'
+                      minWidth='70px'
+                      minHeight='70px'
+                    />
+                  </Grid>
+                </Hidden>
+              </React.Fragment>
             )}
+            <Grid item xs>
+              <Button
+                className={classes.groupLink}
+                color='primary'
+                component={WrappedNavLink}
+                to={{
+                  pathname: ROUTES.group.home.path(group.id),
+                  state: { id: group.id }
+                }}
+              >
+                <Typography variant='h5' component='h2' display='inline'>
+                  {group.name}
+                </Typography>
+              </Button>
+              {group.short_description && (
+                <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                &ensp;
+                  {group.short_description}
+                </Typography>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-      <Permission show={permission(group, 'update?')}>
-        <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={{
-              pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-              state: { id: group.id }
-            }}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
-          <Permission show={permission(group, 'destroy?')}>
+        </CardContent>
+        <Permission show={permission(group, 'update?')}>
+          <CardActions>
             <Button
               size='small'
-              className={classes.errorButton}
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
-                  props.deleteGroupBegin(group.id);
+              color='primary'
+              to={{
+                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+                state: { id: group.id }
               }}
+              component={WrappedNavLink}
             >
-              <DiverstFormattedMessage {...messages.delete} />
+              <DiverstFormattedMessage {...messages.edit} />
             </Button>
-          </Permission>
-          <Button
-            size='small'
-            onClick={() => {
-              setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-            }}
-          >
-            {expandedGroups[group.id] ? (
-              <DiverstFormattedMessage {...messages.children_collapse} />
-            ) : (
-              <DiverstFormattedMessage {...messages.children_expand} />
-            )}
-          </Button>
-          <Button
-            size='small'
-            color='primary'
-            to={{
-              pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
-              state: { id: group.id }
-            }}
-            component={WrappedNavLink}
-          >
-            Categorize Subgroups
-          </Button>
-        </CardActions>
-      </Permission>
-    </Card>
-  <Collapse in={expandedGroups[`${group.id}`]}>
-    <Box mt={1} />
-    <Grid container spacing={2} justify='flex-end'>
-      {group.children && group.children.map((childGroup, i) => (
-        /* eslint-disable-next-line react/jsx-wrap-multilines */
-        <Grid item key={childGroup.id} xs={12}>
-          <Card className={classes.childGroupCard}>
-            <CardContent>
-              <Grid container spacing={2} alignItems='center'>
-                {childGroup.logo_data && (
-                  <React.Fragment>
-                    <Hidden xsDown>
-                      <Grid item xs='auto'>
-                        <DiverstImg
-                          data={childGroup.logo_data}
-                          maxWidth='60px'
-                          maxHeight='60px'
-                          minWidth='60px'
-                          minHeight='60px'
-                        />
-                      </Grid>
-                    </Hidden>
-                  </React.Fragment>
-                )}
-                <Grid item xs>
-                  <Link
-                    component={WrappedNavLink}
-                    to={{
-                      pathname: ROUTES.group.home.path(childGroup.id),
-                      state: { id: childGroup.id }
-                    }}
-                  >
-                    <Typography variant='h5' component='h2' display='inline'>
-                      {childGroup.name}
-                    </Typography>
-                  </Link>
-                  {childGroup.short_description && (
-                    <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                      {childGroup.short_description}
-                    </Typography>
-                  )}
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardActions>
-              <Button
-                size='small'
-                color='primary'
-                to={{
-                  pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
-                  state: { id: childGroup.id }
-                }}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
+            <Permission show={permission(group, 'destroy?')}>
               <Button
                 size='small'
                 className={classes.errorButton}
                 onClick={() => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete group?'))
-                    props.deleteGroupBegin(childGroup.id);
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    props.deleteGroupBegin(group.id);
                 }}
               >
                 <DiverstFormattedMessage {...messages.delete} />
               </Button>
-            </CardActions>
-          </Card>
+            </Permission>
+            <Button
+              size='small'
+              onClick={() => {
+                setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+              }}
+            >
+              {expandedGroups[group.id] ? (
+                <DiverstFormattedMessage {...messages.children_collapse} />
+              ) : (
+                <DiverstFormattedMessage {...messages.children_expand} />
+              )}
+            </Button>
+            <Button
+              size='small'
+              color='primary'
+              to={{
+                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
+                state: { id: group.id }
+              }}
+              component={WrappedNavLink}
+            >
+            Categorize Subgroups
+            </Button>
+          </CardActions>
+        </Permission>
+      </Card>
+      <Collapse in={expandedGroups[`${group.id}`]}>
+        <Box mt={1} />
+        <Grid container spacing={2} justify='flex-end'>
+          {group.children && group.children.map((childGroup, i) => (
+            /* eslint-disable-next-line react/jsx-wrap-multilines */
+            <Grid item key={childGroup.id} xs={12}>
+              <Card className={classes.childGroupCard}>
+                <CardContent>
+                  <Grid container spacing={2} alignItems='center'>
+                    {childGroup.logo_data && (
+                      <React.Fragment>
+                        <Hidden xsDown>
+                          <Grid item xs='auto'>
+                            <DiverstImg
+                              data={childGroup.logo_data}
+                              maxWidth='60px'
+                              maxHeight='60px'
+                              minWidth='60px'
+                              minHeight='60px'
+                            />
+                          </Grid>
+                        </Hidden>
+                      </React.Fragment>
+                    )}
+                    <Grid item xs>
+                      <Link
+                        component={WrappedNavLink}
+                        to={{
+                          pathname: ROUTES.group.home.path(childGroup.id),
+                          state: { id: childGroup.id }
+                        }}
+                      >
+                        <Typography variant='h5' component='h2' display='inline'>
+                          {childGroup.name}
+                        </Typography>
+                      </Link>
+                      {childGroup.short_description && (
+                        <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                          {childGroup.short_description}
+                        </Typography>
+                      )}
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size='small'
+                    color='primary'
+                    to={{
+                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
+                      state: { id: childGroup.id }
+                    }}
+                    component={WrappedNavLink}
+                  >
+                    <DiverstFormattedMessage {...messages.edit} />
+                  </Button>
+                  <Button
+                    size='small'
+                    className={classes.errorButton}
+                    onClick={() => {
+                      /* eslint-disable-next-line no-alert, no-restricted-globals */
+                      if (confirm('Delete group?'))
+                        props.deleteGroupBegin(childGroup.id);
+                    }}
+                  >
+                    <DiverstFormattedMessage {...messages.delete} />
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
-  </Collapse>
+      </Collapse>
     </Grid>
   );
 }

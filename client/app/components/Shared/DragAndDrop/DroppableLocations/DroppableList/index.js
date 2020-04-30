@@ -5,14 +5,18 @@
  */
 
 import PropTypes from 'prop-types';
+
 import { DndProvider, useDrop } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import React, { useState, useCallback } from 'react';
 import update from 'immutability-helper';
 import produce from 'immer';
 import DraggableCard from '../../DraggableItems/DraggableCard';
+import DragDropContext from '../../DragDropContext';
 
 export function DroppableList(props) {
+
+
   const [cards, setCards] = useState(Object.values(props.list));
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
@@ -42,9 +46,9 @@ export function DroppableList(props) {
     />
   );
   return (
-    <DndProvider backend={Backend}>
+    <DragDropContext>
       {cards.map((card, i) => renderCard(card, i))}
-    </DndProvider>
+    </DragDropContext>
   );
 }
 

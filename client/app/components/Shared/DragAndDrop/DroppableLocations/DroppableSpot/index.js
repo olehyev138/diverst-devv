@@ -16,8 +16,7 @@ import {
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
 } from '@material-ui/core';
 
-export function DroppableSpot({index , children}, props) {
-
+export function DroppableSpot({ index, children }, props) {
   const ItemTypes = {
     CARD: 'card',
   };

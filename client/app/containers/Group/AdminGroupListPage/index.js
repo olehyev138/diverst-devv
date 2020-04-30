@@ -17,8 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'c
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
-
+import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupBegin } from 'containers/Group/actions';
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -44,16 +43,17 @@ export function AdminGroupListPage(props) {
     props.getGroupsBegin(newParams);
     setParams(newParams);
   };
-console.log(props.groups);
-// Little bug around here
+
+  // Little bug around here
   return (
     <React.Fragment>
-      <GroupList
+        <GroupList
         isLoading={props.isLoading}
         groups={props.groups}
         groupTotal={props.groupTotal}
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
+        updateGroupBegin={props.updateGroupBegin}
         handlePagination={handlePagination}
       />
     </React.Fragment>
@@ -66,7 +66,8 @@ AdminGroupListPage.propTypes = {
   isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func
+  deleteGroupBegin: PropTypes.func,
+  updateGroupBegin: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -79,7 +80,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getGroupsBegin,
   groupListUnmount,
-  deleteGroupBegin
+  deleteGroupBegin,
+  updateGroupBegin
 };
 
 const withConnect = connect(
