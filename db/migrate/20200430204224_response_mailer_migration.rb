@@ -7,7 +7,7 @@ class ResponseMailerMigration < ActiveRecord::Migration
         :mailer_name => 'poll_mailer',
         :mailer_method => 'survey_response_notification',
         :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>This is to confirm that your response to our survey has been received. Thank you for your participtaion!</p>",
-        :subject => "Thank you for participating in our '%(survey.title) survey",
+        :subject => "Thank you for participating in our '%{survey.title} survey",
         :description => "Email that goes out to users after they have submitted a response to a survey.",
         :template => "")
 
