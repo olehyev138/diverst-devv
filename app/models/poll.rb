@@ -60,23 +60,19 @@ class Poll < ApplicationRecord
 
   # Returns the list of users who meet the participation criteria for the poll
   def targeted_users
-    if groups.any?
-      target = []
-      groups.each do |group|
-        target << group.active_members
-      end
+    @targeted_users ||= begin
+                         if groups.any?
+                           target = User.joins(:groups).where(groups: {id: groups.ids}).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
+                         else
+                           target = enterprise.users.active
+                         end
+                         target = target.for_segments(segments)
+                         target.distinct
+                       end
+  end
 
-      target.flatten!
-      target_ids = target.map { |u| u.id }
-
-      target = User.where(id: target_ids)
-    else
-      target = enterprise.users.active
-    end
-
-    target = target.for_segments(segments) unless segments.empty?
-
-    target.uniq { |u| u.id }
+  def targeted_users_count
+    targeted_users.size
   end
 
   # Defines which fields will be usable when creating graphs

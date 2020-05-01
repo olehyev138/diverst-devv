@@ -5,7 +5,7 @@ module Poll::Actions
 
   module ClassMethods
     def base_preloads
-      [:fields]
+      [:fields, :groups, :segments, :enterprise]
     end
   end
 end
