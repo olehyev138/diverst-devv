@@ -45,8 +45,13 @@ export function PollCreatePage(props) {
   const [tab, setTab] = useState('responses');
 
   const rs = new RouteService(useContext);
+  const pollId = rs.params('poll_id');
 
   const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
+
+  function getResponses(params) {
+    props.getResponsesBegin({ poll_id: pollId, ...params });
+  }
 
   useEffect(() => {
     const pollId = rs.params('poll_id');
@@ -57,8 +62,7 @@ export function PollCreatePage(props) {
   }, []);
 
   useEffect(() => {
-    const pollId = rs.params('poll_id');
-    props.getResponsesBegin({ poll_id: pollId, ...params });
+    getResponses(params);
 
     return () => {
       props.responsesUnmount();
@@ -68,6 +72,20 @@ export function PollCreatePage(props) {
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
     pollEdit: ROUTES.admin.include.polls.edit.path(rs.params('poll_id')),
+  };
+
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    getResponses(newParams);
+    setParams(newParams);
+  };
+
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    getResponses(newParams);
+    setParams(newParams);
   };
 
   const { intl, poll, responses, isFormLoading, responsesLoading, responsesTotal } = props;
@@ -97,7 +115,13 @@ export function PollCreatePage(props) {
       </Card>
       <Box mb={2} />
       {switchExpression(tab,
-        ['responses', (<PollResponses {...componentProps} />)],
+        ['responses', (
+          <PollResponses
+            {...componentProps}
+            handleOrdering={handleOrdering}
+            handlePagination={handlePagination}
+          />
+        )],
         ['graphs', (<PollGraphs {...componentProps} />)],
         [null, (<React.Fragment />)])}
     </React.Fragment>

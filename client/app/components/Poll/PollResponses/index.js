@@ -48,7 +48,7 @@ export function PollResponses(props, context) {
       title: 'Date',
       field: 'created_at',
       query_field: 'created_at',
-      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
     },
   ];
 
