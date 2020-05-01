@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
-import { mapFieldData, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
+import { deserializeFields } from 'utils/selectorHelpers';
 
 const selectResponseDomain = state => state.responses || initialState;
 
 const mapResponse = response => ({
   ...response,
   respondent: response.user ? response.user.name : 'Anonymous',
-  field_data: mapFieldData(response.field_data),
+  field_data: deserializeFields(response.field_data),
 });
 
 const selectPaginatedResponses = () => createSelector(
