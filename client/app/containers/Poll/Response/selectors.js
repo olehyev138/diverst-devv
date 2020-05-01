@@ -5,7 +5,7 @@ const selectResponseDomain = state => state.responses || initialState;
 
 const selectPaginatedResponses = () => createSelector(
   selectResponseDomain,
-  responseState => responseState.responseList
+  responseState => responseState.responseList.map(res => ({ ...res, respondent: res.user ? res.user.name : 'Anonymous' }))
 );
 
 const selectResponsesTotal = () => createSelector(
