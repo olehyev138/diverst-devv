@@ -1,8 +1,8 @@
 class PollResponseSerializer < ApplicationRecordSerializer
   has_many :field_data
 
-  def initialize(object, options = nil)
-    instance_belongs_to :user unless object.anonymous
+  def initialize(object, options = {})
+    instance_attributes :user unless object.anonymous
     super
   end
 

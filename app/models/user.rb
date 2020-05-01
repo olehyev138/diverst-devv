@@ -180,6 +180,10 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  def as_json(options={})
+    super.merge({name: name})
+  end
+
   # Format users field data for a ES index
   # Returns { <field_data.id> => <field_data.data } }
   def indexed_field_data
