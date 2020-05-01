@@ -1,4 +1,5 @@
 class PollResponseMailer < ApplicationMailer
+
   def notification(response, user)
     @user = user
     @response = response
