@@ -113,6 +113,16 @@ after 'development:enterprise' do
             :subject => "Invitation Instructions", 
             :description => "Email that goes out to users after they've been added.",
             :template => ""
+          },
+          #survey_response_mailer
+          {
+            :name => "Survey Response Notification Mailer", 
+            :mailer_name => "poll_response_mailer",
+            :mailer_method => "notification",
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>This is to confirm that your response to our survey has been received. Thank you for your participtaion!</p>", 
+            :subject => "Thank you for participating in our '%{survey.title} survey", 
+            :description => "Email that goes out to users after they have submitted a response to a survey.",
+            :template => ""
           }
         ]
       )
