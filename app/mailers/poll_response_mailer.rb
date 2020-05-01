@@ -21,7 +21,4 @@ class PollResponseMailer < ApplicationMailer
       enterprise: @enterprise
     }
   end
-
-  def url
-  end
 end
