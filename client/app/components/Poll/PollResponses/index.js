@@ -43,19 +43,47 @@ export function PollResponses(props, context) {
   const { classes } = props;
   const { links, intl } = props;
 
+  const columns = [
+    {
+      title: 'Respondent',
+      field: 'respondent',
+      sorting: false
+    },
+  ];
+
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
 
   return (
     <React.Fragment>
-      Poll Responses
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <DiverstTable
+            title='Responses'
+            handlePagination={props.handlePagination}
+            onOrderChange={handleOrderChange}
+            isLoading={props.responsesLoading}
+            rowsPerPage={5}
+            dataArray={props.responses}
+            dataTotal={props.responsesTotal}
+            columns={columns}
+          />
+        </Grid>
+      </Grid>
+
     </React.Fragment>
   );
 }
 PollResponses.propTypes = {
   intl: intlShape,
   classes: PropTypes.object,
-  polls: PropTypes.array,
-  pollTotal: PropTypes.number,
-  isLoading: PropTypes.bool,
+  responses: PropTypes.array,
+  responsesTotal: PropTypes.number,
+  responsesLoading: PropTypes.bool,
   deletePollBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,

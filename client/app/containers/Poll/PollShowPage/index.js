@@ -28,7 +28,11 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import switchExpression from 'utils/caseHelper';
 import PollResponses from 'components/Poll/PollResponses';
 import PollGraphs from 'components/Poll/PollGraphs';
-import { selectIsFetchingResponses, selectPaginatedResponses } from 'containers/Poll/Response/selectors';
+import {
+  selectIsFetchingResponses,
+  selectPaginatedResponses,
+  selectResponsesTotal
+} from 'containers/Poll/Response/selectors';
 import responseReducer from 'containers/Poll/Response/reducer';
 import responseSaga from 'containers/Poll/Response/saga';
 
@@ -66,10 +70,10 @@ export function PollCreatePage(props) {
     pollEdit: ROUTES.admin.include.polls.edit.path(rs.params('poll_id')),
   };
 
-  const { intl, poll, responses, isFormLoading, responsesLoading } = props;
+  const { intl, poll, responses, isFormLoading, responsesLoading, responsesTotal } = props;
 
   const componentProps = {
-    poll, responses, isFormLoading, responsesLoading
+    poll, responses, isFormLoading, responsesLoading, responsesTotal
   };
 
   return (
@@ -108,6 +112,7 @@ PollCreatePage.propTypes = {
   responsesUnmount: PropTypes.func,
   poll: PropTypes.object,
   responses: PropTypes.array,
+  responsesTotal: PropTypes.number,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   responsesLoading: PropTypes.bool,
@@ -118,6 +123,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingPoll(),
   responses: selectPaginatedResponses(),
+  responsesTotal: selectResponsesTotal(),
   responsesLoading: selectIsFetchingResponses(),
 });
 
