@@ -1,11 +1,18 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
+import { mapFieldData, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
 
 const selectResponseDomain = state => state.responses || initialState;
 
+const mapResponse = response => ({
+  ...response,
+  respondent: response.user ? response.user.name : 'Anonymous',
+  field_data: mapFieldData(response.field_data),
+});
+
 const selectPaginatedResponses = () => createSelector(
   selectResponseDomain,
-  responseState => responseState.responseList.map(res => ({ ...res, respondent: res.user ? res.user.name : 'Anonymous' }))
+  responseState => responseState.responseList.map(mapResponse)
 );
 
 const selectResponsesTotal = () => createSelector(
