@@ -7,11 +7,17 @@ import {
   Paper, withStyles
 } from '@material-ui/core';
 
+// helpers
+import {
+  setGraphConfig
+} from 'utils/metricsHelpers';
+
 const styles = theme => ({
   paper: {
     padding: theme.spacing(3),
   },
 });
+
 
 const spec = {
   $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
@@ -59,6 +65,8 @@ const spec = {
 export function BarGraph(props) {
   const { classes } = props;
 
+  setGraphConfig(spec, props.config);
+
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -70,6 +78,7 @@ export function BarGraph(props) {
 
 BarGraph.propTypes = {
   data: PropTypes.array,
+  config: PropTypes.object,
   classes: PropTypes.object,
   updateRange: PropTypes.func,
   metricsUnmount: PropTypes.func

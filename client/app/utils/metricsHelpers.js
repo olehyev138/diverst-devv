@@ -13,8 +13,8 @@ const OPERATIONS = {
 
 /**
  * Filter data set on a given filter object
- *   @data:     Array of `data point` objects - [{ key01: 'value01', ... }, ...]
- *   @filter:   Array of `filter objects`
+ *   @param data:     Array of `data point` objects - [{ key01: 'value01', ... }, ...]
+ *   @param filter:   Array of `filter objects`
  *
  *   return:   Returns a filtered array of `data point` objects
  *
@@ -45,8 +45,8 @@ export function filterData(data, filters) {
 }
 
 /** Return callback function to update date filters
- *  @filters:       Array of filter objects
- *  @setFilters:    State setter function to set filters
+ *  @param filters:       Array of filter objects
+ *  @param setFilters:    State setter function to set filters
  *
  *  return:         Returns callback function that takes a range & updates the components state filters
  *
@@ -70,7 +70,7 @@ export function getUpdateDateFilters(filters, setFilters) {
 }
 
 /** Parse a date range into DateTime objects for filtering use
- *  @range: Object in the form: { from_date: <>, to_date: <> }
+ *  @param range: Object in the form: { from_date: <>, to_date: <> }
  *    from_date:    - Lower datetime range value,
  *                  - Optional, if provided must be either a date shorthand value or a valid datetime string
  *    to_date:      - Upper datetime range value
@@ -110,6 +110,38 @@ export function parseDateRange(range) {
   return { from_date: fromDate.toISO(), to_date: toDate.toISO() };
 }
 
+/**
+ * Set a VegaLite spec with given configuration values
+ * All base graphs support a _config_ object that allows the graphs to dynamically
+ * set certain values in the VegaLite spec.
+ * @param spec      - a VegaLite specification
+ * @param config    - configuration object to set values in the VegaLite specification
+ *
+ * Configuration object:
+ *   - Graphs render _base graphs_ pass a configuration object to set the values
+ *     in the specification
+ *   - The current configurable values are encoding channel field names, axis titles
+ *     and the graph title.
+ *   - For field & axis titles, they should be set in accordance with each encoding
+ *     channel used in the specific base graph.
+ *   - The configuration object should be written as follows:
+ *
+ *      {
+ *        <channel>: { field: <field_name>, title: <title_name> }, ...,
+ *        title: <title_name>
+ *      }
+ *
+ */
+export function setGraphConfig(spec, config) {
+  const channels = ['x', 'y', 'color'];
+
+  // set field & title for each encoding channel
+  for (const channel of channels)
+    if (spec.encoding[channel]) {
+      spec.encoding[channel].field = dig(config, channel, 'field');
+      spec.encoding[channel].title = dig(config, channel, 'title');
+    }
+}
 
 /* -------------------------- !! Deprecated !! -------------------------- */
 

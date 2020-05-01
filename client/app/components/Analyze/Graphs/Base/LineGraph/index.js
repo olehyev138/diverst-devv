@@ -19,6 +19,26 @@ const styles = theme => ({
   },
 });
 
+/* Function to allow configuring of line graph spec */
+function configureLineGraph(spec, config) {
+  spec.vconcat[0].encoding.x.field = config.x.field;
+  spec.vconcat[0].encoding.x.title = config.x.title;
+  spec.vconcat[0].layer[0].encoding.color.field = config.color.field;
+  spec.vconcat[0].layer[0].encoding.color.title = config.color.title;
+  spec.vconcat[0].layer[0].encoding.y.field = config.y.field;
+  spec.vconcat[0].layer[0].encoding.y.title = config.y.title;
+  spec.vconcat[0].layer[0].layer[0].selection.legend.fields[0] = config.color.field;
+  spec.vconcat[0].layer[0].layer[1].transform.pivot = config.color.field;
+  spec.vconcat[0].layer[0].layer[1].transform.value = config.y.field;
+  spec.vconcat[0].layer[0].layer[1].transform.groupby = config.x.field;
+  spec.vconcat[0].layer[1].selection.hover.fields[0] = config.x.field;
+  spec.vconcat[1].encoding.x.field = config.x.field;
+  spec.vconcat[1].encoding.x.title = config.x.title;
+  spec.vconcat[1].encoding.y.field = config.y.field;
+  spec.vconcat[1].encoding.y.title = config.y.title;
+  spec.vconcat[1].encoding.color.field = config.color.field;
+}
+
 const spec = {
   $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
   width: 400,
@@ -34,13 +54,14 @@ const spec = {
       x: {
         field: 'date',
         type: 'temporal',
-        scale: { domain: { selection: 'brush' } }
+        scale: { domain: { selection: 'brush' } },
+        title: 'Date'
       }
     },
     layer: [{
       encoding: {
-        color: { field: 'name', type: 'nominal' },
-        y: { field: 'count', type: 'quantitative' }
+        color: { field: 'name', type: 'nominal', title: 'Groups' },
+        y: { field: 'count', type: 'quantitative', title: 'Members' }
       },
       layer: [
         {
@@ -87,15 +108,17 @@ const spec = {
       brush: { type: 'interval', encodings: ['x'] }
     },
     encoding: {
-      x: { field: 'date', type: 'temporal' },
+      x: { field: 'date', type: 'temporal', title: 'Date' },
       color: { field: 'name', type: 'nominal' },
-      y: { field: 'count', type: 'quantitative' }
+      y: { field: 'count', type: 'quantitative', title: 'Group' }
     }
   }]
 };
 
 export function LineGraph(props) {
   const { classes } = props;
+
+  configureLineGraph(spec, props.config);
 
   return (
     <React.Fragment>
@@ -107,9 +130,11 @@ export function LineGraph(props) {
   );
 }
 
+
 LineGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
+  config: PropTypes.object,
   updateDateFilters: PropTypes.func,
   metricsUnmount: PropTypes.func
 };

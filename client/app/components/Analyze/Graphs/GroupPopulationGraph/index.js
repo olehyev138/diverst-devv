@@ -9,6 +9,10 @@ export function GroupPopulationGraph(props) {
 
   return (
     <BarGraph
+      config={{
+        x: { field: 'count', title: 'Members' },
+        y: { field: 'name', title: 'Groups' }
+      }}
       data={props.data}
       {...props}
     />

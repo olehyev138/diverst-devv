@@ -7,6 +7,11 @@ import {
   Paper, withStyles
 } from '@material-ui/core';
 
+// helpers
+import {
+  setGraphConfig
+} from 'utils/metricsHelpers';
+
 const styles = theme => ({
   paper: {
     padding: theme.spacing(3),
@@ -60,6 +65,8 @@ const spec = {
 export function ColoredBarGraph(props) {
   const { classes } = props;
 
+  setGraphConfig(spec, props.config);
+
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -71,6 +78,7 @@ export function ColoredBarGraph(props) {
 
 ColoredBarGraph.propTypes = {
   data: PropTypes.array,
+  config: PropTypes.object,
   classes: PropTypes.object,
   updateRange: PropTypes.func,
   metricsUnmount: PropTypes.func
