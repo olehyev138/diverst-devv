@@ -35,6 +35,7 @@ import {
 } from 'containers/Poll/Response/selectors';
 import responseReducer from 'containers/Poll/Response/reducer';
 import responseSaga from 'containers/Poll/Response/saga';
+import PollShowHeader from "components/Poll/PollShowHeader";
 
 export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
@@ -71,7 +72,6 @@ export function PollCreatePage(props) {
 
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
-    pollEdit: ROUTES.admin.include.polls.edit.path(rs.params('poll_id')),
   };
 
   const handlePagination = (payload) => {
@@ -91,40 +91,44 @@ export function PollCreatePage(props) {
   const { intl, poll, responses, isFormLoading, responsesLoading, responsesTotal } = props;
 
   const componentProps = {
-    poll, responses, isFormLoading, responsesLoading, responsesTotal
+    poll, responses, isFormLoading, responsesLoading, responsesTotal, links
   };
 
   return (
-    <React.Fragment>
-      <Card>
-        <ResponsiveTabs
-          value={tab}
-          onChange={(_, newTab) => setTab(newTab)}
-          indicatorColor='primary'
-          textColor='primary'
-        >
-          <Tab
-            label='Responses'
-            value='responses'
-          />
-          <Tab
-            label='Graphs'
-            value='graphs'
-          />
-        </ResponsiveTabs>
-      </Card>
-      <Box mb={2} />
-      {switchExpression(tab,
-        ['responses', (
-          <PollResponses
-            {...componentProps}
-            handleOrdering={handleOrdering}
-            handlePagination={handlePagination}
-          />
-        )],
-        ['graphs', (<PollGraphs {...componentProps} />)],
-        [null, (<React.Fragment />)])}
-    </React.Fragment>
+    poll && (
+      <React.Fragment>
+        <PollShowHeader {...componentProps} />
+        <Box mb={2} />
+        <Card>
+          <ResponsiveTabs
+            value={tab}
+            onChange={(_, newTab) => setTab(newTab)}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab
+              label='Responses'
+              value='responses'
+            />
+            <Tab
+              label='Graphs'
+              value='graphs'
+            />
+          </ResponsiveTabs>
+        </Card>
+        <Box mb={2} />
+        {switchExpression(tab,
+          ['responses', (
+            <PollResponses
+              {...componentProps}
+              handleOrdering={handleOrdering}
+              handlePagination={handlePagination}
+            />
+          )],
+          ['graphs', (<PollGraphs {...componentProps} />)],
+          [null, (<React.Fragment />)])}
+      </React.Fragment>
+    )
   );
 }
 
