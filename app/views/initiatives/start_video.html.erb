@@ -249,7 +249,7 @@
 
     twilio.createLocalTracks({
       audio: true,
-      video: { width: 640 }
+      video: { width: 640, height: 640 }
       }).then(localTracks => {
       localTracks.push(dataTrack)
         return twilio.connect(token, {
