@@ -66,7 +66,11 @@ export function PollCreatePage(props) {
     pollEdit: ROUTES.admin.include.polls.edit.path(rs.params('poll_id')),
   };
 
-  const { intl } = props;
+  const { intl, poll, responses, isFormLoading, responsesLoading } = props;
+
+  const componentProps = {
+    poll, responses, isFormLoading, responsesLoading
+  };
 
   return (
     <React.Fragment>
@@ -88,8 +92,8 @@ export function PollCreatePage(props) {
         </ResponsiveTabs>
       </Card>
       {switchExpression(tab,
-        ['responses', (<PollResponses />)],
-        ['graphs', (<PollGraphs />)],
+        ['responses', (<PollResponses {...componentProps} />)],
+        ['graphs', (<PollGraphs {...componentProps} />)],
         [null, (<React.Fragment />)])}
     </React.Fragment>
   );
