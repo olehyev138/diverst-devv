@@ -72,8 +72,8 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   delegate :attributes, to: :singleton_class, prefix: 'serializer'
-  delegate :has_many, to: :singleton_class
-  delegate :has_one, to: :singleton_class
+  delegate :has_many, to: :singleton_class, prefix: 'serializer'
+  delegate :has_one, to: :singleton_class, prefix: 'serializer'
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
   def attributes(requested_attrs = nil, reload = false)
