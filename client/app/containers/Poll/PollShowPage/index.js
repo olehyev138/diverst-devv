@@ -23,7 +23,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Button, Tab, Card } from '@material-ui/core';
+import { Button, Tab, Card, Box } from '@material-ui/core';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import switchExpression from 'utils/caseHelper';
 import PollResponses from 'components/Poll/PollResponses';
@@ -46,7 +46,7 @@ export function PollCreatePage(props) {
 
   const rs = new RouteService(useContext);
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
 
   useEffect(() => {
     const pollId = rs.params('poll_id');
@@ -95,6 +95,7 @@ export function PollCreatePage(props) {
           />
         </ResponsiveTabs>
       </Card>
+      <Box mb={2} />
       {switchExpression(tab,
         ['responses', (<PollResponses {...componentProps} />)],
         ['graphs', (<PollGraphs {...componentProps} />)],

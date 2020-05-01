@@ -8,17 +8,11 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse, Box,
+  CardContent, Grid, Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import DiverstTable from 'components/Shared/DiverstTable';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -26,6 +20,7 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import { permission } from 'utils/permissionsHelpers';
+import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field';
 
 const styles = theme => ({
   PollResponsesItem: {
@@ -49,7 +44,30 @@ export function PollResponses(props, context) {
       field: 'respondent',
       sorting: false
     },
+    {
+      title: 'Date',
+      field: 'created_at',
+      query_field: 'created_at',
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
+    },
   ];
+
+  const detailPanel = [{
+    tooltip: 'Show',
+    render: rowData => rowData.field_data && rowData.field_data.map((fieldDatum, i) => (
+      <div key={fieldDatum.id}>
+        <CardContent>
+          <Grid item>
+            <CustomFieldShow
+              fieldDatum={fieldDatum}
+              fieldDatumIndex={i}
+            />
+          </Grid>
+        </CardContent>
+        <Divider />
+      </div>
+    ))
+  }];
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -67,14 +85,15 @@ export function PollResponses(props, context) {
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.responsesLoading}
-            rowsPerPage={5}
+            rowsPerPage={10}
             dataArray={props.responses}
             dataTotal={props.responsesTotal}
             columns={columns}
+            detailPanel={detailPanel}
+            onRowClick={(event, rowData, togglePanel) => togglePanel()}
           />
         </Grid>
       </Grid>
-
     </React.Fragment>
   );
 }
