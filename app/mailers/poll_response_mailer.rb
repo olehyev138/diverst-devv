@@ -16,8 +16,8 @@ class PollResponseMailer < ApplicationMailer
   def variables
     {
       user: @user,
-      enterprise: @enterprise,
-      click_here: "<a saml_for_enterprise=\"#{@enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>",
+      survey: @response.poll,
+      enterprise: @enterprise
     }
   end
 end
