@@ -117,7 +117,7 @@ after 'development:enterprise' do
           #survey_response_mailer
           {
             :name => "Survey Response Notification Mailer", 
-            :mailer_name => "poll_mailer",
+            :mailer_name => "survey_response_mailer",
             :mailer_method => "survey_response",
             :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>This is to confirm that your response to our survey has been received. Thank you for your participtaion!</p>", 
             :subject => "Thank you for participating in our '%{survey.title} survey", 
