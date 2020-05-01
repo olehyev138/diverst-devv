@@ -136,11 +136,12 @@ export function PollList(props, context) {
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isLoading}
-            rowsPerPage={5}
+            rowsPerPage={10}
             dataArray={props.polls}
             dataTotal={props.pollTotal}
             columns={columns}
             actions={actions}
+            onRowClick={(event, rowData) => props.handlePollShow(rowData.id)}
           />
         </Grid>
       </Grid>
@@ -158,6 +159,7 @@ PollList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handlePollEdit: PropTypes.func,
+  handlePollShow: PropTypes.func,
   handleChangeScope: PropTypes.func,
   links: PropTypes.shape({
     pollNew: PropTypes.string,

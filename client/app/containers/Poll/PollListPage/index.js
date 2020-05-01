@@ -37,17 +37,17 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createRedirectAction } from 'utils/reduxPushHelper';
 
 const handlePollEdit = createRedirectAction(ROUTES.admin.include.polls.edit.path);
+const handlePollShow = createRedirectAction(ROUTES.admin.include.polls.show.path);
 
 export function PollListPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
 
   const rs = new RouteService(useContext);
   const links = {
     pollNew: ROUTES.admin.include.polls.new.path(),
-    pollPage: id => '/', // ROUTES.admin.manage.polls.show.path(id)
   };
 
   useEffect(() => {
@@ -89,6 +89,7 @@ export function PollListPage(props) {
         isLoading={props.isLoading}
         deletePollBegin={props.deletePollBegin}
         handlePollEdit={props.handlePollEdit}
+        handlePollShow={props.handlePollShow}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         links={links}
@@ -106,6 +107,7 @@ PollListPage.propTypes = {
   deletePollBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   handlePollEdit: PropTypes.func,
+  handlePollShow: PropTypes.func,
   hasChanged: PropTypes.bool,
 
   currentEnterprise: PropTypes.shape({
@@ -127,6 +129,7 @@ const mapDispatchToProps = {
   pollsUnmount,
   deletePollBegin,
   handlePollEdit,
+  handlePollShow,
 };
 
 const withConnect = connect(
