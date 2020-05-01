@@ -91,7 +91,7 @@ export function* deleteResponse(action) {
 }
 
 
-export default function* ResponseSaga() {
+export default function* responseSaga() {
   yield takeLatest(GET_RESPONSE_BEGIN, getResponse);
   yield takeLatest(GET_RESPONSES_BEGIN, getResponses);
   yield takeLatest(CREATE_RESPONSE_BEGIN, createResponse);
