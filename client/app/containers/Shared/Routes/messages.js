@@ -3,11 +3,11 @@
  *
  */
 
-import { defineMessages } from 'react-intl';
+const { defineMessages } = require('react-intl');
 
-export const scope = 'diverst.containers.Routes';
+const scope = 'diverst.containers.Routes';
 
-export default defineMessages({
+const messages = defineMessages({
   user: {
     home: {
       id: `${scope}.user.home`,
@@ -220,6 +220,17 @@ export default defineMessages({
           id: `${scope}.group.manage.settings.index`,
         }
       },
+      sponsors: {
+        index: {
+          id: `${scope}.group.manage.sponsors.index`,
+        },
+        new: {
+          id: `${scope}.group.manage.sponsors.new`,
+        },
+        edit: {
+          id: `${scope}.group.manage.sponsors.edit`,
+        }
+      },
       leaders: {
         index: {
           id: `${scope}.group.manage.leaders.index`,
@@ -308,6 +319,17 @@ export default defineMessages({
       index: {
         id: `${scope}.admin.include.index`,
       },
+      polls: {
+        index: {
+          id: `${scope}.admin.include.polls.index`,
+        },
+        new: {
+          id: `${scope}.admin.include.polls.new`,
+        },
+        edit: {
+          id: `${scope}.admin.include.polls.edit`,
+        }
+      },
     },
     mentorship: {
       index: {
@@ -315,5 +337,6 @@ export default defineMessages({
       },
     },
   },
-
 });
+
+module.exports = messages;

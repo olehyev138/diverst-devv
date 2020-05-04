@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Typography, Box
+  Divider, Box, FormControl, FormControlLabel, Switch
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
@@ -24,6 +24,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -33,6 +34,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
         <Card>
           <Form>
             <CardContent>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                required
+                margin='normal'
+                id='email'
+                name='email'
+                value={values.email}
+                label={<DiverstFormattedMessage {...messages.email} />}
+              />
               <Field
                 component={TextField}
                 onChange={handleChange}
@@ -54,6 +67,17 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 name='last_name'
                 value={values.last_name}
                 label={<DiverstFormattedMessage {...messages.last_name} />}
+              />
+              <Field
+                component={DiverstFileInput}
+                id='avatar'
+                name='avatar'
+                margin='normal'
+                fileName={props.user && props.user.avatar_file_name}
+                fullWidth
+                label={<DiverstFormattedMessage {...messages.avatar} />}
+                disabled={props.isCommitting}
+                value={values.avatar}
               />
               <Field
                 component={TextField}
@@ -82,6 +106,24 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='right'
+                  label={<DiverstFormattedMessage {...messages.active} />}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={handleChange}
+                      color='primary'
+                      id='active'
+                      name='active'
+                      margin='normal'
+                      checked={values.active}
+                      value={values.active}
+                    />
+                  )}
+                />
+              </FormControl>
             </CardContent>
             <Divider />
             <CardActions>
@@ -120,13 +162,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
 
 export function UserForm(props) {
   const user = dig(props, 'user');
+  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
+    email: { default: '' },
     last_name: { default: '' },
     biography: { default: '' },
     time_zone: { default: null },
+    user_role_id: { default: defaultRole },
     id: { default: undefined },
+    active: { default: false },
+    avatar: { default: null },
   });
 
   return (
@@ -134,7 +181,7 @@ export function UserForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone']);
+        const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(payload);
       }}

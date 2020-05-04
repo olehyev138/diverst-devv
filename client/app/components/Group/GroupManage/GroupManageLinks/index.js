@@ -22,7 +22,6 @@ export function GroupManageLinks(props) {
   const { classes, currentGroup, currentTab } = props;
 
   const PermissionTabs = WithPermission(Tab);
-
   return (
     <React.Fragment>
       <Paper>
@@ -44,6 +43,14 @@ export function GroupManageLinks(props) {
             label={<DiverstFormattedMessage {...messages.links.leaders} />}
             show={permission(props.currentGroup, 'leaders_view?')}
             value='leaders'
+          />
+
+          <PermissionTabs
+            component={WrappedNavLink}
+            to={ROUTES.group.manage.sponsors.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.sponsors} />}
+            show={permission(props.currentGroup, 'update?')}
+            value='sponsors'
           />
         </ResponsiveTabs>
       </Paper>

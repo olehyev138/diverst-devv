@@ -78,4 +78,41 @@ export default defineMessages({
   save: {
     id: `${scope}.categorize.button.save`,
   },
+  family: {
+    showMore: {
+      id: `${scope}.family.showMore`,
+    },
+    showLess: {
+      id: `${scope}.family.showLess`,
+    },
+    areMember: {
+      id: `${scope}.family.areMember`,
+    },
+    notMember: {
+      id: `${scope}.family.notMember`,
+    }
+  },
+  join: {
+    id: `${scope}.index.button.join`,
+  },
+  leave: {
+    id: `${scope}.index.button.leave`,
+  },
+  yes: {
+    id: `${scope}.index.button.yes`,
+  },
+  no: {
+    id: `${scope}.index.button.no`,
+  },
+  thanks: {
+    id: `${scope}.index.message.thanks`,
+  },
+  joinParent: {
+    id: `${scope}.index.message.joinParent`,
+  },
+  joinSubgroups: {
+    id: `${scope}.index.message.joinSubgroups`,
+  },
+
+
 });

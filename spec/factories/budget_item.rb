@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :budget_item do
-    association :budget, factory: :approved
+    association :budget, factory: :approved_budget
 
     title { Faker::Lorem.sentence }
     estimated_amount { rand(100..1000) }

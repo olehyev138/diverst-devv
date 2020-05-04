@@ -27,6 +27,9 @@ export default defineMessages({
   preface: {
     id: `${scope}.preface`,
   },
+  create_field: {
+    id: `${scope}.create_field`,
+  },
   fields_save: {
     id: `${scope}.fields_save`,
   },

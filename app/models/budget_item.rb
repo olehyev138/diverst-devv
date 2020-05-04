@@ -42,8 +42,13 @@ class BudgetItem < ApplicationRecord
     self.update(is_done: true)
   end
 
-  def title_with_amount
-    "#{title} ($%.2f)" % available_amount
+  def available_for_event(event)
+    event_offset = event.estimated_funding if event&.budget_item_id == id
+    available_amount + (event_offset || 0)
+  end
+
+  def title_with_amount(event = nil)
+    "#{title} ($%.2f)" % available_for_event(event)
   end
 
   def expenses

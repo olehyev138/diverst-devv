@@ -11,6 +11,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Shared/Permissions/messages';
+import { redirectAction } from 'utils/reduxPushHelper';
 
 function conditionalCheck(props, condition) {
   let parts;
@@ -20,6 +21,8 @@ function conditionalCheck(props, condition) {
   else
     parts = condition.split('.');
   const evaluated = dig(...[props, ...parts]);
+  if (evaluated === undefined)
+    return undefined;
   return neg ? !evaluated : evaluated;
 }
 
@@ -31,15 +34,13 @@ function valid(props, conditions, reducer) {
   return reducer(conditionsMapper(props, conditions));
 }
 
-const redirectAction = url => push(url);
-
 export default function Conditional(
   Component,
   conditions,
   redirect = null,
   message = null,
   wait = false,
-  reducer = a => a.some(v => v)
+  reducer = a => a.some(v => v) || a.every(v => v === undefined)
 ) {
   const WrappedComponent = (props) => {
     const [first, setFirst] = useState(true);

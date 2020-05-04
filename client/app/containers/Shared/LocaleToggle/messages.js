@@ -9,12 +9,18 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.LocaleToggle';
 
 export default defineMessages({
-  en: {
-    id: `${scope}.en`,
-    defaultMessage: 'en',
+  language: {
+    id: `${scope}.language`
   },
-  fr: {
-    id: `${scope}.fr`,
-    defaultMessage: 'fr',
+  locales: {
+    en: {
+      id: `${scope}.locales.en`,
+    },
+    es: {
+      id: `${scope}.locales.es`,
+    },
+    fr: {
+      id: `${scope}.locales.fr`,
+    },
   },
 });

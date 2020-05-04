@@ -357,19 +357,18 @@ RSpec.describe Group, type: :model do
 
   describe 'members fetching by type' do
     let(:enterprise) { create :enterprise }
-    let!(:group) { create :group, enterprise: enterprise }
-    let!(:active_user) { create :user, enterprise: enterprise, active: true }
-    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
-    let!(:pending_user) { create :user, enterprise: enterprise }
-
-    before do
-      group.members << active_user
-      group.members << pending_user
-
-      group.accept_user_to_group(active_user.id)
-    end
 
     context 'with disabled pending members setting' do
+      let!(:group) { create :group, enterprise: enterprise }
+      let!(:active_user) { create :user, enterprise: enterprise, active: true }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      let!(:pending_user) { create :user, enterprise: enterprise }
+
+      before do
+        group.members << active_user
+        group.members << pending_user
+      end
+
       describe '#active_members' do
         subject { group.active_members }
 
@@ -390,7 +389,17 @@ RSpec.describe Group, type: :model do
     end
 
     context 'with enabled pending members setting' do
-      before { group.pending_users = 'enabled' }
+      let!(:group) { create :group, enterprise: enterprise, pending_users: 'enabled' }
+      let!(:active_user) { create :user, enterprise: enterprise, active: true }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      let!(:pending_user) { create :user, enterprise: enterprise }
+
+      before do
+        group.members << active_user
+        group.members << pending_user
+
+        group.accept_user_to_group(active_user.id)
+      end
 
       describe '#active_members' do
         subject { group.active_members }
@@ -624,7 +633,7 @@ RSpec.describe Group, type: :model do
     it 'returns expenses budget' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
-      budget = create(:approved, annual_budget_id: annual_budget.id)
+      budget = create(:approved_budget, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
@@ -768,7 +777,7 @@ RSpec.describe Group, type: :model do
     it 'returns title_with_leftover_amount' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved, :zero_budget, annual_budget: annual_budget)
+      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
       budget_item = budget.budget_items.first
       budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
       initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
@@ -912,7 +921,8 @@ RSpec.describe Group, type: :model do
 
   describe '#update_all_elasticsearch_members' do
     before { pending }
-    xit 'updates the users in elasticsearch' do
+    it 'updates the users in elasticsearch' do
+      pending
       group = create(:group)
       user = create(:user)
       create(:user_group, group: group, user: user)

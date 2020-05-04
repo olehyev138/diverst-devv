@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupBasePolicy, type: :policy do
   let(:no_access) { create(:user) }
   let(:user) { no_access }
-  let(:group) { create(:group, owner: user, enterprise_id: user.enterprise_id) }
+  let(:group) { create(:group, owner: user, enterprise_id: user.enterprise_id, pending_users: 'enabled') }
 
   subject { described_class.new(user.reload, [group, group]) }
 

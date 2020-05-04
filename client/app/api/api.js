@@ -1,3 +1,4 @@
+import activities from 'api/activities/activities';
 import enterprises from 'api/enterprises/enterprises';
 import users from 'api/users/users';
 import userRoles from 'api/user_roles/user_roles';
@@ -27,6 +28,7 @@ import budgetItems from 'api/budget_items/budget_items';
 import updates from 'api/updates/updates';
 import outcomes from 'api/outcomes/outcomes';
 import pillars from 'api/pillars/pillars';
+import polls from 'api/polls/polls';
 import customText from 'api/custom_text/custom_text';
 import user from 'api/user/user';
 import folders from 'api/folders/folders';
@@ -56,6 +58,7 @@ import metricsDashboards from 'api/metrics/metrics_dashboards';
 import customGraphs from 'api/metrics/custom_graphs';
 
 const Api = {
+  activities,
   enterprises,
   users,
   user,
@@ -89,6 +92,7 @@ const Api = {
   policyTemplates,
   outcomes,
   pillars,
+  polls,
   customText,
   folders,
   resources,

@@ -24,7 +24,7 @@ import userRoleSaga from 'containers/User/UserRole/saga';
 import { createGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
 import { selectIsCommitting } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 
-import { selectPaginatedSelectMembers } from 'containers/Group/GroupMembers/selectors';
+import { selectPaginatedSelectMembers, selectIsFetchingMembers } from 'containers/Group/GroupMembers/selectors';
 import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
 
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
@@ -56,6 +56,11 @@ export function GroupLeaderCreatePage(props) {
 
   useEffect(() => {
     props.getUserRolesBegin({ role_type: 'group' });
+    props.getMembersBegin({
+      count: 25, page: 0, order: 'asc',
+      group_id: groupId,
+      query_scopes: ['active', 'accepted_users', ['user_search', '']]
+    });
 
     return () => {
       props.groupLeadersUnmount();
@@ -68,12 +73,13 @@ export function GroupLeaderCreatePage(props) {
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
       buttonText={intl.formatMessage(messages.create)}
-      groupId={groupId[0]}
+      groupId={groupId}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
       userRoles={props.userRoles}
       isCommitting={isCommitting}
       links={links}
+      isLoadingMembers={props.isLoadingMembers}
     />
   );
 }
@@ -90,12 +96,14 @@ GroupLeaderCreatePage.propTypes = {
   userRoles: PropTypes.array,
   groupLeaders: PropTypes.array,
   isCommitting: PropTypes.bool,
+  isLoadingMembers: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   members: selectPaginatedSelectMembers(),
   userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
+  isLoadingMembers: selectIsFetchingMembers()
 });
 
 const mapDispatchToProps = {

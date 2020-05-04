@@ -10,7 +10,7 @@ import {
   FIND_ENTERPRISE_ERROR,
   SET_USER_DATA,
   SSO_LOGIN_BEGIN,
-  SSO_LINK_BEGIN
+  SSO_LINK_BEGIN, FETCH_USER_DATA_BEGIN, FETCH_USER_DATA_SUCCESS, FETCH_USER_DATA_ERROR
 }
   from './constants';
 
@@ -89,6 +89,24 @@ export function findEnterpriseError(error) {
   };
 }
 
+export function fetchUserDataBegin() {
+  return {
+    type: FETCH_USER_DATA_BEGIN,
+  };
+}
+
+export function fetchUserDataSuccess() {
+  return {
+    type: FETCH_USER_DATA_SUCCESS,
+  };
+}
+
+export function fetchUserDataError(error) {
+  return {
+    type: FETCH_USER_DATA_ERROR,
+    error
+  };
+}
 
 export function setUserData(payload, append = false) {
   return {

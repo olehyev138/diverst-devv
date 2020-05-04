@@ -5,6 +5,9 @@ const axios = require('axios');
 const User = new API({ controller: 'user' });
 
 Object.assign(User, {
+  getUserData() {
+    return axios.get(`${this.url}/user_data`);
+  },
   getPosts(payload) {
     return axios.get(appendQueryArgs(`${this.url}/posts`, payload));
   },

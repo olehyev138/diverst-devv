@@ -378,7 +378,13 @@ class AdminLinks extends React.PureComponent {
             </List>
           </Collapse>
 
-          <ListPermission button show={permission(this.props, 'polls_create')}>
+          <ListPermission
+            button
+            component={WrappedNavLink}
+            to={ROUTES.admin.include.polls.index.path()}
+            activeClassName={classes.navLinkActive}
+            show={permission(this.props, 'polls_create')}
+          >
             <ListItemIcon>
               <HowToVoteIcon />
             </ListItemIcon>
@@ -487,7 +493,7 @@ class AdminLinks extends React.PureComponent {
               </MenuPermission>
               <MenuPermission
                 component={WrappedNavLink}
-                to='#'
+                to={ROUTES.admin.system.logs.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
                 show={

@@ -1,5 +1,5 @@
 class Api::V1::NewsFeedLinksController < DiverstController
-  include Api::V1::Concerns::Archivable
+  prepend Api::V1::Concerns::Archivable
 
   def pin
     params[klass.symbol][:is_pinned] = true
@@ -29,5 +29,9 @@ class Api::V1::NewsFeedLinksController < DiverstController
     else
       raise BadRequestException.new(e.message)
     end
+  end
+
+  private def model_map(model)
+    model.link
   end
 end

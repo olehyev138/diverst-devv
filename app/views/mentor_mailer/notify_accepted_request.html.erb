@@ -1,0 +1,5 @@
+<p>Hello <%= @sender.name %>!</p>
+
+<p><%= @receiver.name %> has accepted your request for mentorship. Click the link below to schedule a session with him/her today.</p>
+
+<p><%= link_to "Schedule a Session!", ReactRoutes.user.mentorship.sessions.schedule %></p>

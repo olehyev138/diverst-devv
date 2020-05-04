@@ -28,8 +28,6 @@ class Api::V1::UpdatesController < DiverstController
     params[:update][:updatable_type] = type
     params[:update][:updatable_id] = id
 
-    pp params
-
     super
   end
 
@@ -43,5 +41,9 @@ class Api::V1::UpdatesController < DiverstController
           ],
       ]
     )
+  end
+
+  private def model_map(model)
+    super if model.updatable_type == 'Group'
   end
 end

@@ -17,6 +17,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import SignUpPage from 'containers/User/SignUpPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
@@ -67,6 +68,11 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 /* Admin - Manage - Archive */
 import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 
+/* Admin - Include - Polls */
+import PollsList from 'containers/Poll/PollListPage/Loadable';
+import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
+import PollEditPage from 'containers/Poll/PollEditPage/Loadable';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
@@ -96,6 +102,9 @@ import UserEditPage from 'containers/User/UserEditPage/Loadable';
 import UserRolesListPage from 'containers/User/UserRole/UserRoleListPage/Loadable';
 import UserRoleCreatePage from 'containers/User/UserRole/UserRoleCreatePage/Loadable';
 import UserRoleEditPage from 'containers/User/UserRole/UserRoleEditPage/Loadable';
+
+/* Admin - System - Logs */
+import LogListPage from 'containers/Log/LogListPage/Loadable';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage/Loadable';
@@ -159,6 +168,9 @@ import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Lo
 import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
 import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
 import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
+import GroupSponsorsListPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsListPage/Loadable';
+import GroupSponsorsCreatePage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsCreatePage/Loadable';
+import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsEditPage/Loadable';
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
@@ -190,6 +202,7 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -269,6 +282,9 @@ export {
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
   GroupSettingsPage,
+  GroupSponsorsListPage,
+  GroupSponsorsCreatePage,
+  GroupSponsorsEditPage,
   CustomTextEditPage,
   UserNewsLinkPage,
   UserEventsPage,
@@ -294,6 +310,9 @@ export {
   CampaignQuestionCreatePage,
   CampaignQuestionEditPage,
   CampaignQuestionShowPage,
+  PollsList,
+  PollCreatePage,
+  PollEditPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -327,5 +346,6 @@ export {
   SocialLinkEditPage,
   NewsLinkPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  LogListPage
 };

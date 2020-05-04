@@ -3,6 +3,7 @@ import { Switch } from 'react-router';
 
 // Pages
 import {
+  SignUpPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -106,6 +107,9 @@ import {
   CampaignQuestionListPage,
   CampaignQuestionCreatePage,
   CampaignQuestionEditPage,
+  PollsList,
+  PollCreatePage,
+  PollEditPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -140,7 +144,11 @@ import {
   SocialLinkCreatePage,
   SocialLinkEditPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  LogListPage,
+  GroupSponsorsListPage,
+  GroupSponsorsCreatePage,
+  GroupSponsorsEditPage,
 } from './templates';
 
 // Paths
@@ -149,11 +157,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export default function Routes(props) {
   const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
+
   return (
     <Switch>
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
       <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.sign_up)} component={SignUpPage} />
 
       { /* User */}
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
@@ -220,6 +230,11 @@ export default function Routes(props) {
       { /* Admin - Plan - Budget */ }
       <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />
 
+      { /* Admin - Include - Poll */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.new)} component={PollCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.edit)} component={PollEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.index)} component={PollsList} />
+
       { /* Admin - Innovate */ }
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
@@ -255,11 +270,15 @@ export default function Routes(props) {
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.edit)} component={PolicyTemplateEditPage} />
 
       { /* Admin - System - Branding */ }
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.index)} component={BrandingThemePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
+
+      { /* Admin - System - Logs */ }
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.logs.index)} component={LogListPage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
@@ -324,6 +343,9 @@ export default function Routes(props) {
       { /* Group Manage */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.manage.index)} component={GroupManageLayout} defaultPage />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.new)} component={GroupSponsorsCreatePage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.edit)} component={GroupSponsorsEditPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />

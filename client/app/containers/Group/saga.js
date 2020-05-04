@@ -16,7 +16,8 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN
+  GROUP_CATEGORIZE_BEGIN,
+  JOIN_SUBGROUPS_BEGIN
 } from './constants';
 
 import {
@@ -31,7 +32,8 @@ import {
   resetBudgetSuccess, resetBudgetError,
   leaveGroupSuccess, leaveGroupError,
   joinGroupSuccess, joinGroupError,
-  groupCategorizeSuccess, groupCategorizeError
+  groupCategorizeSuccess, groupCategorizeError,
+  joinSubgroupsSuccess, joinSubgroupsError,
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -83,11 +85,11 @@ export function* createGroup(action) {
     const response = yield call(api.groups.create.bind(api.groups), payload);
 
     yield put(createGroupSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(push(ROUTES.group.home.path(response.data.group.id)));
     yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
-
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create group', options: { variant: 'warning' } }));
   }
@@ -214,6 +216,18 @@ export function* leaveGroup(action) {
   }
 }
 
+export function* joinSubgroups(action) {
+  try {
+    const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
+    yield put(joinSubgroupsSuccess());
+  } catch (err) {
+    yield put(joinSubgroupsError());
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
@@ -228,4 +242,5 @@ export default function* groupsSaga() {
   yield takeLatest(JOIN_GROUP_BEGIN, joinGroup);
   yield takeLatest(LEAVE_GROUP_BEGIN, leaveGroup);
   yield takeLatest(GROUP_CATEGORIZE_BEGIN, categorizeGroup);
+  yield takeLatest(JOIN_SUBGROUPS_BEGIN, joinSubgroups);
 }
