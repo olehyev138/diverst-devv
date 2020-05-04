@@ -10,7 +10,7 @@ import {
   FIND_ENTERPRISE_BEGIN,
   FIND_ENTERPRISE_ERROR,
   SSO_LOGIN_BEGIN,
-  SSO_LINK_BEGIN
+  SSO_LINK_BEGIN, FETCH_USER_DATA_BEGIN
 }
   from './constants';
 
@@ -23,7 +23,7 @@ import {
   logoutError,
   findEnterpriseSuccess,
   findEnterpriseError,
-  setUserData,
+  setUserData, fetchUserDataSuccess, fetchUserDataError,
 }
   from './actions';
 
@@ -41,16 +41,12 @@ export function* login(action) {
     const response = yield call(api.sessions.create.bind(api.sessions), action.payload);
 
     // eslint-disable-next-line camelcase
-    const { token, ...payload } = response.data;
+    const { token } = response.data;
 
     yield put(loginSuccess(token));
-    yield put(setUserData(payload));
     axios.defaults.headers.common['Diverst-UserToken'] = token;
 
-    payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
-
     yield call(AuthService.storeJwt, token);
-    yield call(AuthService.storeUserData, payload);
 
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
@@ -95,7 +91,6 @@ export function* logout() {
     const response = yield call(api.sessions.logout.bind(api.sessions));
 
     yield call(AuthService.discardJwt);
-    yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
     if (response.data.logout_link)
@@ -107,7 +102,6 @@ export function* logout() {
 
     // Even if logout fails clear the local data
     yield call(AuthService.discardJwt);
-    yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
     yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
@@ -119,12 +113,28 @@ export function* findEnterprise(action) {
     // Find enterprise and dispatch setEnterprise action
     const response = yield call(api.enterprises.getAuthEnterprise.bind(api.enterprises), action.payload);
     const { enterprise } = response.data;
-    yield put(findEnterpriseSuccess());
 
     // Set enterprise
     yield put(setUserData({ enterprise }, true));
+
+    yield put(findEnterpriseSuccess());
   } catch (err) {
     yield put(findEnterpriseError(err));
+  }
+}
+
+export function* fetchUserData() {
+  try {
+    const response = yield call(api.user.getUserData.bind(api.user));
+
+    const payload = response.data;
+
+    yield put(setUserData(payload));
+    payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
+
+    yield put(fetchUserDataSuccess());
+  } catch (err) {
+    yield put(fetchUserDataError(err));
   }
 }
 
@@ -138,4 +148,6 @@ export default function* handleLogin() {
   yield takeLatest(LOGOUT_BEGIN, logout);
 
   yield takeLatest(FIND_ENTERPRISE_BEGIN, findEnterprise);
+
+  yield takeLatest(FETCH_USER_DATA_BEGIN, fetchUserData);
 }
