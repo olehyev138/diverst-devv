@@ -3,7 +3,8 @@ import {
   ssoLogin,
   ssoLinkFind,
   logout,
-  findEnterprise
+  findEnterprise,
+  fetchUserData,
 } from 'containers/Shared/App/saga';
 
 import {
@@ -13,7 +14,9 @@ import {
   logoutError,
   findEnterpriseSuccess,
   findEnterpriseError,
-  setUserData
+  setUserData,
+  fetchUserDataSuccess,
+  fetchUserDataError,
 } from 'containers/Shared/App/actions';
 
 import { push } from 'connected-react-router';
@@ -24,14 +27,13 @@ import api from 'api/api';
 import AuthService from 'utils/authService';
 
 AuthService.storeJwt = jest.fn();
-AuthService.storeUserData = jest.fn();
 AuthService.discardJwt = jest.fn();
-AuthService.discardUserData = jest.fn();
 api.sessions.create = jest.fn();
 api.sessions.logout = jest.fn();
 api.enterprises.getAuthEnterprise = jest.fn();
 api.enterprises.getSsoLink = jest.fn();
 api.policyGroups.get = jest.fn();
+api.user.getUserData = jest.fn();
 window.location.assign = jest.fn();
 
 const token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZW50ZXJwcmlzZSI6eyJpZCI6MSwibmFtZSI6IlBlcHNpIENvIiwidGhlbWUiOm51bGx9LCJjcmVhdGVkX2F0IjoiU3VuLCAwNCBBdWcgMjAxOSAxMzo1NjowNSBFRFQgLTA0OjAwIiwiZW1haWwiOiJkZXZAZGl2ZXJzdC5jb20iLCJwb2xpY3lfZ3JvdXAiOnsibWFuYWdlX2FsbCI6ZmFsc2V9LCJ1c2VyX3Rva2VuIjoiV0RGczNZOFdWcmFwRnktMWVjWGEiLCJ0aW1lX3pvbmUiOiJBbWVyaWNhL05ld19Zb3JrIiwidGltZSI6MTIzNDU2Nzg5MCwicm9sZSI6IlN1cGVyIEFkbWluIiwianRpIjoiMmYzNjg2NzgtZjZmOC00ODUwLWFlZmItZjViNGE0NTMyMjhlIiwiZXhwIjoxNTY2NTE0MTE1LCJpYXQiOjE1NjY1MTA1MTV9.4tqmNDZFgWtglFw7o9dZAR_wSAqcuLpEyP7EMrnacAU';
@@ -59,17 +61,16 @@ beforeEach(() => {
 
 describe('Login Saga', () => {
   it('should get token from API', async () => {
-    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token, ...user } }));
-    const results = [loginSuccess(token), setUserData(user), push(ROUTES.user.home.path())];
+    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token } }));
+    const results = [loginSuccess(token), push(ROUTES.user.home.path())];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
     const dispatched = await recordSaga(
       login,
       initialAction
     );
 
-    expect(AuthService.storeJwt).toHaveBeenCalledWith(token);
-    expect(AuthService.storeUserData).toHaveBeenCalledWith(user);
     expect(api.sessions.create).toHaveBeenCalledWith(initialAction.payload);
+    expect(AuthService.storeJwt).toHaveBeenCalledWith(token);
     expect(dispatched).toEqual(results);
   });
 
@@ -187,9 +188,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 
@@ -208,9 +208,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(window.location.assign).toHaveBeenCalledWith('www.diverst.com');
     expect(dispatched).toEqual(results);
   });
@@ -231,9 +230,8 @@ describe('logout Saga', () => {
       logout,
     );
 
-    expect(AuthService.discardJwt).toHaveBeenCalled();
-    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
+    expect(AuthService.discardJwt).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 });
@@ -242,7 +240,7 @@ describe('findEnterprise Saga', () => {
   it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
     api.enterprises.getAuthEnterprise.mockImplementation(() => Promise.resolve(response));
-    const results = [findEnterpriseSuccess(), setUserData({ enterprise: response.data.enterprise }, true)];
+    const results = [setUserData({ enterprise: response.data.enterprise }, true), findEnterpriseSuccess()];
     const initialAction = { payload: undefined };
     const dispatched = await recordSaga(
       findEnterprise,
@@ -264,6 +262,31 @@ describe('findEnterprise Saga', () => {
     );
 
     expect(api.enterprises.getAuthEnterprise).toHaveBeenCalledWith(initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('fetchUserData Saga', () => {
+  it('should get token from API', async () => {
+    api.user.getUserData.mockImplementation(() => Promise.resolve({ data: { ...user } }));
+    const results = [setUserData(user), fetchUserDataSuccess()];
+    const dispatched = await recordSaga(
+      fetchUserData,
+    );
+
+    expect(api.user.getUserData).toHaveBeenCalled();
+    expect(dispatched).toEqual(results);
+  });
+
+  it('should return error from API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.user.getUserData.mockImplementation(() => Promise.reject(response));
+    const results = [fetchUserDataError(response)];
+    const dispatched = await recordSaga(
+      fetchUserData,
+    );
+
+    expect(api.user.getUserData).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 });
