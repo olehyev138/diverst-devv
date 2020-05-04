@@ -94,6 +94,13 @@ module "filestorage" {
   env_name = var.env_name
 }
 
+module "analytics" {
+  source  = "../../../modules/services/analytics"
+
+  sn_db   = module.vpc.sn_db
+  sg_db   = module.sec.sg_db
+}
+
 data "aws_instance" "bastion" {
   depends_on = [module.bastion]
 
@@ -116,3 +123,4 @@ data "aws_instance" "app" {
     values  = ["running"]
   }
 }
+

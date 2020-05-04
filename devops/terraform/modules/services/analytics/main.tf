@@ -1,5 +1,8 @@
 # Module to create the Analytics Lambda function
+#   - runs in database subnet & uses database security group
 # Inputs:
+#  - sn_db: database subnet
+#  - sg_db: database security group
 
 resource "aws_iam_role" "lambda_exec_role" {
   name                = "lambda-diverst-analytics-exec-role"
