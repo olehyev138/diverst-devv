@@ -254,7 +254,7 @@
         }
       },
       "branding": {
-        "index": "/admin/system/branding/theme",
+        "index": "/admin/system/branding",
         "theme": "/admin/system/branding/theme",
         "home": "/admin/system/branding/home",
         "sponsors": {

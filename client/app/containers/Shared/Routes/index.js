@@ -272,6 +272,7 @@ export default function Routes(props) {
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.edit)} component={PolicyTemplateEditPage} />
 
       { /* Admin - System - Branding */ }
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.index)} component={BrandingThemePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
