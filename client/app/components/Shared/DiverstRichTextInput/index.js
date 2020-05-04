@@ -39,7 +39,7 @@ class DiverstRichTextInput extends React.PureComponent {
             onEditorStateChange={this.onEditorStateChange}
             toolbar={{
               options: ['inline', 'fontSize', 'list'],
-              inline: { options: ['bold', 'italic', 'underline', 'strikethrough']},
+              inline: { options: ['bold', 'italic', 'underline', 'strikethrough'] },
             }}
           />
         </Card>
