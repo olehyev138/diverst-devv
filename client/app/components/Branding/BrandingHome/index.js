@@ -28,7 +28,7 @@ import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
-
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,6 +38,12 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const [htmlValue, setHtmlValue] = useState(values.home_message);
+  const getRichTextHtmlValue = (editorHtml) => {
+    setHtmlValue(editorHtml);
+    values.home_message=editorHtml;
+  };
+
   return (
     <Card>
       <Form>
@@ -45,6 +51,10 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
               { /* TODO: replace with proper wysiwyg editor */ }
+              <DiverstRichTextInput
+                html={htmlValue}
+                getRichTextHTML={getRichTextHtmlValue}
+              />
               <Field
                 component={TextField}
                 required
