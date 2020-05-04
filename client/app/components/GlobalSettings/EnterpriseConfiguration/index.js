@@ -27,7 +27,6 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
-import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -37,28 +36,11 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const [htmlValue, setHtmlValue] = useState('<p>Hey this <strong>editor</strong> rocks</p>');
-  const getRichTextHtmlValue = (editorHtml) => {
-    setHtmlValue(editorHtml);
-  };
-
   return (
     <Card>
       <Form>
         <CardContent>
           <Grid container>
-            <Grid item xs={12} className={classes.noBottomPadding}>
-              <DiverstRichTextInput
-                html={htmlValue}
-                getRichTextHTML={getRichTextHtmlValue}
-              />
-              <Field
-                component={TextField}
-                fullWidth
-                label='Rich Text Html Output here'
-                value={htmlValue}
-              />
-            </Grid>
             <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
                 component={TextField}
