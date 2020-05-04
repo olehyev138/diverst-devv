@@ -122,7 +122,7 @@ handleClickOpen = () => {
 
     return (
       <React.Fragment>
-        <DiverstSanitizedHtml html={ this.props.enterprise.home_message } />
+        <DiverstSanitizedHtml html={this.props.enterprise.home_message} />
         <Grid container spacing={3}>
           <Grid item xs>
             {events}

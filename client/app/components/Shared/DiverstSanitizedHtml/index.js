@@ -10,15 +10,15 @@ const styles = theme => ({
 
 function DiverstSanitizedHtml(props) {
   const { html } = props;
-    const sanitize = (dirty) => ({
-      __html: sanitizeHtml(
-        dirty,
-        {
-         allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'strike', 'ins', 'del'  ],
-         allowedAttributes: { }
-        }
-      )
-    });
+  const sanitize = dirty => ({
+    __html: sanitizeHtml(
+      dirty,
+      {
+        allowedTags: ['b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'strike', 'ins', 'del'],
+        allowedAttributes: { }
+      }
+    )
+  });
 
   return (
     <React.Fragment>
