@@ -47,20 +47,19 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
       <Form>
         <CardContent>
           <Grid container>
-          <Grid item xs={12} className={classes.noBottomPadding}>
-            <DiverstRichTextInput
-              html={htmlValue}
-              getRichTextHTML={getRichTextHtmlValue}
-            />
-            <Field
-              component={TextField}
-              required
-              fullWidth
-              label='Rich Text Html'
-              value={htmlValue}
-            />
-
-          </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <DiverstRichTextInput
+                html={htmlValue}
+                getRichTextHTML={getRichTextHtmlValue}
+              />
+              <Field
+                component={TextField}
+                required
+                fullWidth
+                label='Rich Text Html'
+                value={htmlValue}
+              />
+            </Grid>
             <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
                 component={TextField}
