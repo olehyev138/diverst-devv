@@ -23,7 +23,10 @@ export function DiverstLogoutDialog(props) {
 
   return (
     <React.Fragment>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={false} // Disabled because data fetching workflow is being reworked
+        onClose={handleClose}
+      >
         <DialogTitle>{ title || <DiverstFormattedMessage {...messages.logoutmessage} /> }</DialogTitle>
         <DialogContent>
           <DialogContentText>

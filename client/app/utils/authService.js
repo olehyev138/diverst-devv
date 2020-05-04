@@ -28,19 +28,8 @@ class AuthService {
   static getUserData() {
     const state = store.getState();
 
-    return dig(state, 'global', 'data') || UserStorage.getStorageValue('userData');
+    return dig(state, 'global', 'data');
   }
-
-  // Store a global data object in user storage
-  static storeUserData(data) {
-    UserStorage.setStorageValue('userData', data);
-  }
-
-  // Remove the global data object from user storage
-  static discardUserData() {
-    UserStorage.clearStorageValue('userData');
-  }
-
 
   // Get Policy Group from the global data
   static getPolicyGroup() {
