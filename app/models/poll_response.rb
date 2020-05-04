@@ -6,7 +6,7 @@ class PollResponse < BaseClass
 
   has_many :user_reward_actions, dependent: :destroy
 
-  after_create :send_poll_response_notification
+  after_commit :send_poll_response_notification, on: :create
 
   validates_length_of :data, maximum: 65535
 
