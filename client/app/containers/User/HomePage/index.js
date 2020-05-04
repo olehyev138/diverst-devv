@@ -28,7 +28,7 @@ import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
 import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
-import sanitizeHtml from 'sanitize-html';
+import DiverstSanitizedHtml from 'components/Shared/DiverstSanitizedHtml';
 
 const styles = theme => ({
   title: {
@@ -120,23 +120,9 @@ handleClickOpen = () => {
       />
     );
 
-    const sanitize = (dirty, options) => ({
-      __html: sanitizeHtml(
-        dirty,
-        {
-         allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'strike', 'ins', 'del'  ],
-         allowedAttributes: { }
-        }
-      )
-    });
-
-    const SanitizeHTML = ({ html, options }) => (
-      <div dangerouslySetInnerHTML={sanitize(html, options)} />
-    );
-
     return (
       <React.Fragment>
-        <SanitizeHTML html={this.props.enterprise.home_message} />
+        <DiverstSanitizedHtml html={ this.props.enterprise.home_message } />
         <Grid container spacing={3}>
           <Grid item xs>
             {events}
