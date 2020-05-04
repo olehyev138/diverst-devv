@@ -26,6 +26,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import dig from 'object-dig';
 
 const MemberTypes = Object.freeze([
   'active',
@@ -97,15 +98,19 @@ export function GroupMemberListPage(props) {
     }
   };
 
-  const exportMembers = () => {
-    if (groupId) {
+  const exportMembers = (gID = groupId) => {
+    if (gID) {
       const newParams = {
         ...params,
-        group_id: groupId,
+        group_id: gID,
         query_scopes: getScopes({})
       };
       props.exportMembersBegin(newParams);
     }
+  };
+
+  const exportGroupsMembers = (groups = []) => {
+    groups.forEach(group => exportMembers(group));
   };
 
   const handleChangeTab = (type) => {
@@ -162,6 +167,15 @@ export function GroupMemberListPage(props) {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
 
+  const formGroupFamily = (group) => {
+    if (!group)
+      return [];
+    return [{ label: group.name, id: group.id, value: true }].concat(
+      (group.parent ? [{ label: group.parent.name, id: group.parent.id, value: false }] : []),
+      group.children.map(subGroup => ({ label: subGroup.name, id: subGroup.id, value: false }))
+    );
+  };
+
   return (
     <React.Fragment>
       <GroupMemberList
@@ -172,6 +186,8 @@ export function GroupMemberListPage(props) {
         currentGroup={props.currentGroup}
         deleteMemberBegin={props.deleteMemberBegin}
         exportMembersBegin={exportMembers}
+        exportGroupsMembers={exportGroupsMembers}
+        formGroupFamily={formGroupFamily(props.currentGroup)}
         links={links}
         setParams={params}
         params={params}
