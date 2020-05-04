@@ -1,8 +1,8 @@
 class PollResponseMailer < ApplicationMailer
 
-  def notification(response, user)
-    @user = user
-    @response = response
+  def notification(response_id, user_id)
+    @user = User.find_by(id: user_id)
+    @response = PollRespoonse.find_by(id: response_id)
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 

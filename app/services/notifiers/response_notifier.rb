@@ -1,11 +1,10 @@
 class Notifiers::ResponseNotifier
-  def initialize(response)
-    @response = response
-    @user = User.find_by(response.user_id)
-    @poll = Poll.find_by(response.poll_id)
+  def initialize(response_id)
+    @response = PollResponse.find_by(id: response_id)
+    @user = User.find_by(id: @response&.user_id)
   end
 
   def notify!
-    PollResponseMailer.notification(@response, @user)
+    PollResponseMailer.notification(@response.id, @user.id)
   end
 end
