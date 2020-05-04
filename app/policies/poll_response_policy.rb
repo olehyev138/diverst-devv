@@ -1,9 +1,13 @@
 class PollResponsePolicy < ApplicationPolicy
   def poll_policy
-    @poll_policy ||= if PollResponse === record
+    PollPolicy.new(user, poll)
+  end
+
+  def poll
+    @poll ||= if PollResponse === record
       record.poll
     else
-      PollPolicy.new(user, Poll.find_by(params[:poll_id]))
+      Poll.find_by(id: (params[:poll_id] || params.dig(:poll_response, :poll_id)))
     end
   end
 
@@ -12,15 +16,15 @@ class PollResponsePolicy < ApplicationPolicy
   end
 
   def create?
-    PollResponse.find_by(user: user, poll_id: params[:poll_id]).none?
+    poll && poll.targeted_users.include?(user) && !poll.responses.exists?(user: user)
   end
 
   def update?
-    record.user_id == user.id
+    manage_all? || record.user_id == user.id
   end
 
   def destroy?
-    false
+    manage_all?
   end
 
   def show?
