@@ -54,9 +54,8 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               />
               <Field
                 component={TextField}
-                required
                 fullWidth
-                label='Rich Text Html'
+                label='Rich Text Html Output here'
                 value={htmlValue}
               />
             </Grid>

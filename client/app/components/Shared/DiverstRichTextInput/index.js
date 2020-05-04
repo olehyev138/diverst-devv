@@ -33,10 +33,14 @@ class DiverstRichTextInput extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Card style={{ height: 400 }}>
+        <Card style={{ height: 300 }}>
           <Editor
             editorState={editorState}
             onEditorStateChange={this.onEditorStateChange}
+            toolbar={{
+              options: ['inline', 'fontSize', 'list'],
+              inline: { options: ['bold', 'italic', 'underline', 'strikethrough']},
+            }}
           />
         </Card>
       </React.Fragment>
