@@ -27,7 +27,8 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprisePrivacyMessage } from 'containers/Shared/App/selectors';
+import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
+import sanitizeHtml from 'sanitize-html';
 
 const styles = theme => ({
   title: {
@@ -119,8 +120,23 @@ handleClickOpen = () => {
       />
     );
 
+    const sanitize = (dirty, options) => ({
+      __html: sanitizeHtml(
+        dirty,
+        {
+         allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'strike', 'ins', 'del'  ],
+         allowedAttributes: { }
+        }
+      )
+    });
+
+    const SanitizeHTML = ({ html, options }) => (
+      <div dangerouslySetInnerHTML={sanitize(html, options)} />
+    );
+
     return (
       <React.Fragment>
+        <SanitizeHTML html={this.props.enterprise.home_message} />
         <Grid container spacing={3}>
           <Grid item xs>
             {events}
@@ -145,6 +161,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = createStructuredSelector({
   privacyMessage: selectEnterprisePrivacyMessage(),
+  enterprise: selectEnterprise(),
 });
 
 const withConnect = connect(
@@ -156,6 +173,7 @@ HomePage.propTypes = {
   classes: PropTypes.object,
   privacyMessage: PropTypes.string,
   intl: intlShape,
+  enterprise: PropTypes.object,
 };
 
 export default compose(
