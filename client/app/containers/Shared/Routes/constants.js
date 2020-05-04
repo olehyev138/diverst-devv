@@ -899,7 +899,7 @@ const ROUTES = {
       },
       branding: {
         index: {
-          path: () => '/admin/system/branding/theme',
+          path: () => '/admin/system/branding',
           data: {
             pathPrefix: '/system/branding',
             titleMessage: messages.admin.system.branding,
