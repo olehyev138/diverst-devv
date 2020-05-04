@@ -422,7 +422,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="/admin/system/branding/theme"
+              to="/admin/system/branding"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
@@ -889,7 +889,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="/admin/system/branding/theme"
+              to="/admin/system/branding"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
