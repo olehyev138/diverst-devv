@@ -1,10 +1,10 @@
 class PollResponsePolicy < ApplicationPolicy
   def poll_policy
     @poll_policy ||= if PollResponse === record
-                       record.poll
-                     else
-                       PollPolicy.new(user, Poll.find_by(params[:poll_id]))
-                     end
+      record.poll
+    else
+      PollPolicy.new(user, Poll.find_by(params[:poll_id]))
+    end
   end
 
   def index?

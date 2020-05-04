@@ -62,7 +62,7 @@ class Poll < ApplicationRecord
   def targeted_users
     @targeted_users ||= begin
                          if groups.any?
-                           target = User.joins(:groups).where(groups: {id: groups.ids}).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
+                           target = User.joins(:groups).where(groups: { id: groups.ids }).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
                          else
                            target = enterprise.users.active
                          end

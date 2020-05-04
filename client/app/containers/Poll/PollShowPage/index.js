@@ -35,7 +35,7 @@ import {
 } from 'containers/Poll/Response/selectors';
 import responseReducer from 'containers/Poll/Response/reducer';
 import responseSaga from 'containers/Poll/Response/saga';
-import PollShowHeader from "components/Poll/PollShowHeader";
+import PollShowHeader from 'components/Poll/PollShowHeader';
 
 export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
