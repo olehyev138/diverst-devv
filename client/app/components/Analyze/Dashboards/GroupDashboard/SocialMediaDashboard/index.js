@@ -14,17 +14,11 @@ import ViewsPerNewsLinkGraphPage from 'containers/Analyze/Graphs/ViewsPerNewsLin
 
 const SocialMediaDashboard = ({ dashboardParams }) => (
   <Grid container spacing={3}>
-    <Grid item xs={12}>
-      <NewsPerGroupGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-    <Grid item xs={12}>
-      <ViewsPerNewsLinkGraphPage dashboardParams={dashboardParams} />
-    </Grid>
   </Grid>
 );
 
 SocialMediaDashboard.propTypes = {
-  dashboardParams: PropTypes.object
+  dashboardFilters: PropTypes.array
 };
 
 export default SocialMediaDashboard;

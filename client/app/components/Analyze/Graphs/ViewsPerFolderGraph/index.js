@@ -8,8 +8,15 @@ import ColoredBarGraph from '../Base/ColoredBarGraph';
 export function ViewsPerFolderGraph(props) {
   const [value, setValue] = useState(undefined);
 
+  console.log(props);
+
   return (
     <ColoredBarGraph
+      config={{
+        x: { field: 'count', title: 'Views' },
+        y: { field: 'folder', title: 'Folder' },
+        color: { field: 'name', title: 'Group' }
+      }}
       data={props.data}
       {...props}
     />
