@@ -56,17 +56,6 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 getRichTextHTML={getRichTextHtmlValue}
               />
               <Field
-                component={DiverstRichTextInput}
-                required
-                onChange={handleChange}
-                fullWidth
-                id='home_message'
-                name='home_message'
-                margin='normal'
-                label={intl.formatMessage(messages.Home.message)}
-                value={values.home_message}
-              />
-              <Field
                 component={TextField}
                 required
                 onChange={handleChange}
