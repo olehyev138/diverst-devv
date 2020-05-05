@@ -31,7 +31,7 @@ export const splitOptions = field => produce(field, (draft) => {
     : null;
 });
 
-export const mapSelectField = (item, label = 'name', additionalFields = []) => item
+export const mapSelectField = (item, label = 'name', ...additionalFields) => item
   ? { label: item[label], value: item.id, ...additionalFields.reduce((sum, field) => {
     sum[field] = item[field];
     return sum;

@@ -15,8 +15,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
 import { getResponsesBegin, responsesUnmount } from 'containers/Poll/Response/actions';
-import PollForm from 'components/Poll/PollForm';
-import { selectIsCommitting, selectIsFetchingPoll, selectFormPoll } from 'containers/Poll/selectors';
+import { selectIsCommitting, selectIsFetchingPoll, selectPoll } from 'containers/Poll/selectors';
 
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
@@ -28,6 +27,8 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import switchExpression from 'utils/caseHelper';
 import PollResponses from 'components/Poll/PollResponses';
 import PollGraphs from 'components/Poll/PollGraphs';
+import dig from 'object-dig';
+
 import {
   selectIsFetchingResponses,
   selectPaginatedResponses,
@@ -36,6 +37,14 @@ import {
 import responseReducer from 'containers/Poll/Response/reducer';
 import responseSaga from 'containers/Poll/Response/saga';
 import PollShowHeader from 'components/Poll/PollShowHeader';
+import PollTestAnswers from 'components/Poll/PollTextAnswers';
+
+const defaultParams = Object.freeze({
+  count: 10,
+  page: 0,
+  order: 'desc',
+  orderBy: 'poll_responses.id',
+});
 
 export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
@@ -44,15 +53,29 @@ export function PollCreatePage(props) {
   useInjectSaga({ key: 'responses', saga: responseSaga });
 
   const [tab, setTab] = useState('responses');
+  const [textField, setTextField] = useState(null);
+  const [responseParams, setResponseParams] = useState(defaultParams);
 
   const rs = new RouteService(useContext);
   const pollId = rs.params('poll_id');
 
-  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
-
   function getResponses(params) {
     props.getResponsesBegin({ poll_id: pollId, ...params });
   }
+
+  const handlePagination = (state, set) => (payload) => {
+    const newParams = { ...state, count: payload.count, page: payload.page };
+
+    getResponses(newParams);
+    set(newParams);
+  };
+
+  const handleOrdering = (state, set) => (payload) => {
+    const newParams = { ...state, orderBy: payload.orderBy, order: payload.orderDir };
+
+    getResponses(newParams);
+    set(newParams);
+  };
 
   useEffect(() => {
     const pollId = rs.params('poll_id');
@@ -63,29 +86,22 @@ export function PollCreatePage(props) {
   }, []);
 
   useEffect(() => {
-    getResponses(params);
+    getResponses(responseParams);
 
     return () => {
       props.responsesUnmount();
     };
   }, []);
 
+  useEffect(() => {
+    if (props.poll)
+      setTextField(dig(poll, 'fields', fd => fd.find(f => f.type === 'TextField')) || -1);
+
+    return () => null;
+  }, [dig(props, 'poll', 'id')]);
+
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
-  };
-
-  const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
-
-    getResponses(newParams);
-    setParams(newParams);
-  };
-
-  const handleOrdering = (payload) => {
-    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
-
-    getResponses(newParams);
-    setParams(newParams);
   };
 
   const { intl, poll, responses, isFormLoading, responsesLoading, responsesTotal } = props;
@@ -102,7 +118,12 @@ export function PollCreatePage(props) {
         <Card>
           <ResponsiveTabs
             value={tab}
-            onChange={(_, newTab) => setTab(newTab)}
+            onChange={(_, newTab) => {
+              setResponseParams(defaultParams);
+              if (['texts', 'responses'].some(t => t === newTab))
+                getResponses(defaultParams);
+              setTab(newTab);
+            }}
             indicatorColor='primary'
             textColor='primary'
           >
@@ -114,6 +135,12 @@ export function PollCreatePage(props) {
               label='Graphs'
               value='graphs'
             />
+            { textField && (
+              <Tab
+                label='Textual answers'
+                value='texts'
+              />
+            )}
           </ResponsiveTabs>
         </Card>
         <Box mb={2} />
@@ -121,11 +148,18 @@ export function PollCreatePage(props) {
           ['responses', (
             <PollResponses
               {...componentProps}
-              handleOrdering={handleOrdering}
-              handlePagination={handlePagination}
+              handlePagination={handlePagination(responseParams, setResponseParams)}
+              handleOrdering={handleOrdering(responseParams, setResponseParams)}
             />
           )],
           ['graphs', (<PollGraphs {...componentProps} />)],
+          ['texts', (<PollTestAnswers
+            {...componentProps}
+            field={textField}
+            setField={setTextField}
+            handlePagination={handlePagination(responseParams, setResponseParams)}
+            handleOrdering={handleOrdering(responseParams, setResponseParams)}
+          />)],
           [null, (<React.Fragment />)])}
       </React.Fragment>
     )
@@ -148,7 +182,7 @@ PollCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  poll: selectFormPoll(),
+  poll: selectPoll(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingPoll(),
   responses: selectPaginatedResponses(),
