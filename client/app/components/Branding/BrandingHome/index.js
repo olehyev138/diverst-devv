@@ -38,7 +38,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched,  ...props }) {
+export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
   const getRichTextHtmlValue = (editorHtml) => {
     values.home_message=editorHtml;
