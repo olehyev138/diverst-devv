@@ -140,6 +140,7 @@ SponsorForm.propTypes = {
   sponsorAction: PropTypes.func,
   sponsor: PropTypes.object,
   sponsorableId: PropTypes.number,
+  isCommitting: PropTypes.bool,
 };
 
 SponsorFormInner.propTypes = {
@@ -147,6 +148,7 @@ SponsorFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
+  isCommitting: PropTypes.bool,
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
