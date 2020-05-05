@@ -90,26 +90,25 @@ The frontend metrics/analytics code is generally split up into _dashboards_ & _g
 
 The data structure produced by MYSQL & accepted by VegaLite is a flat array of objects. The array is known as a _data set_ or just _data_. An object in this array is called a _data point_.
 
-The keys in the data points used by VegaLite, depend on the type of base graph & the correlate to VegaLite _field types_. The current base VegaLite graphs make use of three types & thus expect the data point keys to be named as follows:
 
-- _Nominal_: `name`
-- _Quantitative_: `count`
-- _Temporal_: `date`
+##### Configuration 
 
-##### Labels 
+The base graphs allow configuration through a `config` prop. The definition of the configuration object depends on the base graph. Generally speaking, the configuration object expects a sub object for each encoding channel that the graph uses. This sub object should have values for the VegaLite `field` & `title` properties to be used for the associated encoding channel. Additionally, the `config` object should always define a `title` property for the graph itself.
 
-_!! Implementation is WIP !!_
-
-The base VegaLite graphs accept a prop `labels` for setting the title & axis labels. The prop `labels` should be formatted as follows:
-
+``` 
+{ title: <title>, <encoding_channel>: { field: <field_name>, title: <title> }, ... }
 ```
-{
-  title: <title>,
-  x_label: <x_label>,
-  y_label: <y_label>
+
+Ex:
+
+``` 
+{ 
+  x: { field: 'date', title: 'Date' },
+  y: { field: 'count', title: 'Member count' },
+  color: { field: 'name', title: 'Group' },
+  title: 'Growth of Groups'
 }
 ```
-
 
 ##### Filtering 
 

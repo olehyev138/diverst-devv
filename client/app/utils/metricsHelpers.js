@@ -114,16 +114,14 @@ export function parseDateRange(range) {
  * Set a VegaLite spec with given configuration values
  * All base graphs support a _config_ object that allows the graphs to dynamically
  * set certain values in the VegaLite spec.
- * @param spec      - a VegaLite specification
- * @param config    - configuration object to set values in the VegaLite specification
+ * @param spec      - a VegaLite spec
+ * @param config    - configuration object to set values in the VegaLite spec
  *
  * Configuration object:
- *   - Graphs render _base graphs_ pass a configuration object to set the values
- *     in the specification
- *   - The current configurable values are encoding channel field names, axis titles
- *     and the graph title.
+ *   - Graphs that render _base graphs_ pass a configuration object to set the values
+ *     in the spec
  *   - For field & axis titles, they should be set in accordance with each encoding
- *     channel used in the specific base graph.
+ *     channel used in the base graph.
  *   - The configuration object should be written as follows:
  *
  *      {
