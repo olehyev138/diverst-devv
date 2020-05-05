@@ -21,6 +21,8 @@ class CsvFileSerializer < ApplicationRecordSerializer
   end
 
   def file_name
+    return nil unless object.download_file.attached?
+
     object.download_file_name + object.download_file.filename.extension_with_delimiter
   end
 
