@@ -33,6 +33,8 @@ class Api::V1::SponsorsController < DiverstController
             :sponsor_name,
             :sponsor_message,
             :sponsor_media,
+            :sponsorable_type,
+            :sponsorable_id,
           )
   end
 end
