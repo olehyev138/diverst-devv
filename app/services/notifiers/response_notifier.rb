@@ -5,6 +5,7 @@ class Notifiers::ResponseNotifier
   end
 
   def notify!
-    PollResponseMailer.notification(@response.id, @user.id)
+    return if @response.nil? || @user.nil?
+    PollResponseMailer.notification(@response.id, @user.id).deliver_later
   end
 end
