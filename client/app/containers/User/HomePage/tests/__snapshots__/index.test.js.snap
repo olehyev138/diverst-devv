@@ -2,6 +2,9 @@
 
 exports[`<HomePage /> Should render and match the snapshot 1`] = `
 <Fragment>
+  <Memo(WithStyles(DiverstSanitizedHtml))
+    html=""
+  />
   <WithStyles(ForwardRef(Grid))
     container={true}
     spacing={3}

@@ -107,7 +107,7 @@ handleClickOpen = () => {
           open={this.state.open}
           handleNo={this.handleClose}
           textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
-          message={this.props.privacyMessage}
+          content={this.props.privacyMessage}
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
@@ -120,9 +120,11 @@ handleClickOpen = () => {
       />
     );
 
+    const enterpriseMessage = (<DiverstSanitizedHtml html={this.props.enterprise ? this.props.enterprise.home_message : ''} />);
+
     return (
       <React.Fragment>
-        <DiverstSanitizedHtml html={this.props.enterprise.home_message} />
+        {enterpriseMessage}
         <Grid container spacing={3}>
           <Grid item xs>
             {events}
