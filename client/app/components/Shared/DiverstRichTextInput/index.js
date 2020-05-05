@@ -38,7 +38,7 @@ class DiverstRichTextInput extends React.PureComponent {
         <Typography>
           {title}
         </Typography>
-        <Card style={{ height: 200 }}>
+        <Card style={{ height: 300 }}>
           <Editor
             editorState={editorState}
             onEditorStateChange={this.onEditorStateChange}
