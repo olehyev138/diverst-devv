@@ -52,7 +52,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
       isLoading={rest.isLoading}
       options={rest.segments}
       value={values[segmentField]}
-      onChange={value => setFieldValue(segmentField, value)}
+      onChange={value => setFieldValue(segmentField, value || (selectProps.isMulti ? [] : null))}
       onInputChange={value => segmentSelectAction(value)}
       hideHelperText
       {...selectProps}
