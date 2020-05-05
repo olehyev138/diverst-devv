@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from '@material-ui/core';
+import { Card, Typography, TextField } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -10,7 +10,8 @@ import htmlToDraft from 'html-to-draftjs';
 class DiverstRichTextInput extends React.PureComponent {
   constructor(props) {
     super(props);
-    const { html } = this.props;
+    const title = this.props.title;
+    const html = this.props.html;
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -30,10 +31,14 @@ class DiverstRichTextInput extends React.PureComponent {
 
   render() {
     const { editorState } = this.state;
+    const { title } = this.props;
 
     return (
       <React.Fragment>
-        <Card style={{ height: 300 }}>
+        <Typography>
+          {title}
+        </Typography>
+        <Card style={{ height: 200 }}>
           <Editor
             editorState={editorState}
             onEditorStateChange={this.onEditorStateChange}
@@ -52,6 +57,7 @@ DiverstRichTextInput.propTypes = {
   classes: PropTypes.object,
   html: PropTypes.string,
   getRichTextHTML: PropTypes.func,
+  title: PropTypes.string,
 };
 
 export default DiverstRichTextInput;
