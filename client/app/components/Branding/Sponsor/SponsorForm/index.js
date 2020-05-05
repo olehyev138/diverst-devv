@@ -84,7 +84,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_media'
                 name='sponsor_media'
                 margin='normal'
-                fileName={props.sponsor ? props.sponsor.sponsor_media_file_name : null }
+                fileName={props.sponsor && props.sponsor.sponsor_media_file_name}
                 fullWidth
                 label={<DiverstFormattedMessage {...messages.Sponsors.media} />}
                 value={values.sponsor_media}
@@ -150,6 +150,7 @@ SponsorFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  sponsor: PropTypes.object,
   links: PropTypes.shape({
     sponsorIndex: PropTypes.string
   })
