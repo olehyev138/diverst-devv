@@ -11,7 +11,7 @@ import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -29,7 +29,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
-import { injectIntl, intlShape } from 'react-intl';
+
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,7 +38,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, enterprise, ...props }) {
+export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched,  ...props }) {
   const { intl } = props;
   const getRichTextHtmlValue = (editorHtml) => {
     values.home_message=editorHtml;

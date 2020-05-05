@@ -15,7 +15,7 @@ function DiverstSanitizedHtml(props) {
       dirty,
       {
         allowedTags: ['b', 'i', 'em', 'strong', 'ul', 'ol', 'li', 'strike', 'ins', 'del', 'span'],
-        allowedAttributes: { 'span': [ 'style' ] }
+        allowedAttributes: { span: ['style'] }
       }
     )
   });

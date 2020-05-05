@@ -10,8 +10,8 @@ import htmlToDraft from 'html-to-draftjs';
 class DiverstRichTextInput extends React.PureComponent {
   constructor(props) {
     super(props);
-    const title = this.props.title;
-    const html = this.props.html;
+    const { title } = this.props;
+    const { html } = this.props;
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
