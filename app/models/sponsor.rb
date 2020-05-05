@@ -13,6 +13,7 @@ class Sponsor < ApplicationRecord
 
   # ActiveStorage
   has_one_attached :sponsor_media
+  validates :sponsor_media, content_type: AttachmentHelper.common_image_types
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
