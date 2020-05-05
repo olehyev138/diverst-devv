@@ -87,7 +87,6 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 fileName={props.sponsor && props.sponsor.sponsor_media_file_name}
                 fullWidth
                 label={<DiverstFormattedMessage {...messages.Sponsors.media} />}
-                disabled={props.isCommitting}
                 value={values.sponsor_media}
               />
             </Grid>

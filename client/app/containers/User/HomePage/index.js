@@ -121,19 +121,23 @@ handleClickOpen = () => {
 
     return (
       <React.Fragment>
-        <Grid container spacing={3}>
-          <Grid item xs>
-            {events}
+        <Grid container spacing={3} direction='column'>
+          <Grid item>
+            <Grid container spacing={3}>
+              <Grid item xs>
+                {events}
+              </Grid>
+              <Grid item xs>
+                {news}
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs>
-            {news}
+            { sponsor }
           </Grid>
-        </Grid>
-        <Grid item xs>
-          { sponsor }
-        </Grid>
-        <Grid item xs>
-          { privacyMessage }
+          <Grid item xs>
+            { privacyMessage }
+          </Grid>
         </Grid>
       </React.Fragment>
     );
