@@ -194,5 +194,8 @@ export default defineMessages({
     findEnterprise: {
       id: `${scope}.errors.findEnterprise`
     },
+    fetchUserData: {
+      id: `${scope}.errors.fetchUserData`
+    },
   },
 });

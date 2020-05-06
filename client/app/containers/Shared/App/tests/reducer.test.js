@@ -6,6 +6,9 @@ import {
   logoutSuccess,
   setUserData,
   findEnterpriseError,
+  fetchUserDataBegin,
+  fetchUserDataSuccess,
+  fetchUserDataError
 }
   from 'containers/Shared/App/actions';
 
@@ -18,6 +21,8 @@ describe('appReducer', () => {
       token: null,
       data: null,
       findEnterpriseError: false,
+      isFetchingUserData: true,
+      fetchUserDataError: false,
     };
   });
 
@@ -66,5 +71,31 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, findEnterpriseError())).toEqual(expected);
+  });
+
+  it('handles the fetchUserDataBegin action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isFetchingUserData = true;
+      draft.fetchUserDataError = false;
+    });
+
+    expect(appReducer(state, fetchUserDataBegin())).toEqual(expected);
+  });
+
+  it('handles the fetchUserDataSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isFetchingUserData = false;
+    });
+
+    expect(appReducer(state, fetchUserDataSuccess())).toEqual(expected);
+  });
+
+  it('handles the fetchUserDataError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isFetchingUserData = false;
+      draft.fetchUserDataError = true;
+    });
+
+    expect(appReducer(state, fetchUserDataError())).toEqual(expected);
   });
 });
