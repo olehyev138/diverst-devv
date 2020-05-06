@@ -9,7 +9,7 @@ RSpec.describe NewsLinkSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be_nil
     expect(serializer.serializable_hash[:group_id]).to_not be_nil
     expect(serializer.serializable_hash[:author]).to_not be_nil
-    expect(serializer.serializable_hash[:news_feed_link]).to_not be_nil
+    expect(serializer.serializable_hash[:news_feed_link]).to be_nil
     expect(serializer.serializable_hash[:picture_location]).to_not be_nil
     expect(serializer.serializable_hash[:photos].empty?).to_not be(true)
 
