@@ -1,6 +1,6 @@
 class ResourceSerializer < ApplicationRecordSerializer
   attributes :enterprise, :folder, :initiative, :group, :owner, :mentoring_session, :file_location, :permissions,
-             :file, :file_file_name, :file_data
+             :file, :file_file_name, :file_file_path
 
   def serialize_all_fields
     true
@@ -15,7 +15,7 @@ class ResourceSerializer < ApplicationRecordSerializer
     AttachmentHelper.attachment_file_name(object.file)
   end
 
-  def file_data
-    AttachmentHelper.attachment_data_string(object.file)
+  def file_file_path
+    object.path_for_file_download
   end
 end
