@@ -183,12 +183,17 @@ export function GroupHome({ classes, ...props }) {
     />
   );
 
+  const description = (
+    <Typography>{props.currentGroup.description}</Typography>
+  );
+
   return (
     <DiverstCSSGrid
       columns={10}
       rows='auto auto auto 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
+        'description description  description  description  description  description  description  description  description  description',
         'news   news    news    news    events  events  events  events  join    join',
         'news   news    news    news    events  events  events  events  sponsor sponsor',
         'news   news    news    news    events  events  events  events  family  family',
@@ -197,6 +202,7 @@ export function GroupHome({ classes, ...props }) {
       columnGap='24px'
     >
       <DiverstCSSCell area='header'>{groupImage}</DiverstCSSCell>
+      <DiverstCSSCell area='description'>{description}</DiverstCSSCell>
       <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
       <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
       <DiverstCSSCell area='family'>{family}</DiverstCSSCell>
