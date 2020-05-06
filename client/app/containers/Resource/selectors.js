@@ -72,6 +72,16 @@ const selectFormResource = () => createSelector(
   }
 );
 
+const selectFileData = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.fileData
+);
+
+const selectIsDownloadingFileData = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.isDownloadingFileData
+);
+
 const selectIsLoading = () => createSelector(
   selectResourcesDomain,
   resourcesState => resourcesState.isLoading
@@ -97,5 +107,6 @@ export {
   selectResourcesTotal,
   selectResource, selectFormResource,
   selectIsCommitting, selectIsFormLoading,
-  selectHasChanged
+  selectHasChanged,
+  selectFileData, selectIsDownloadingFileData,
 };
