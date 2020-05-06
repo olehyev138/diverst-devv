@@ -110,37 +110,6 @@ export function parseDateRange(range) {
   return { from_date: fromDate.toISO(), to_date: toDate.toISO() };
 }
 
-/**
- * Set a VegaLite spec with given configuration values
- * All base graphs support a _config_ object that allows the graphs to dynamically
- * set certain values in the VegaLite spec.
- * @param spec      - a VegaLite spec
- * @param config    - configuration object to set values in the VegaLite spec
- *
- * Configuration object:
- *   - Graphs that render _base graphs_ pass a configuration object to set the values
- *     in the spec
- *   - For field & axis titles, they should be set in accordance with each encoding
- *     channel used in the base graph.
- *   - The configuration object should be written as follows:
- *
- *      {
- *        <channel>: { field: <field_name>, title: <title_name> }, ...,
- *        title: <title_name>
- *      }
- *
- */
-export function setGraphConfig(spec, config) {
-  const channels = ['x', 'y', 'color'];
-
-  // set field & title for each encoding channel
-  for (const channel of channels)
-    if (spec.encoding[channel]) {
-      spec.encoding[channel].field = dig(config, channel, 'field');
-      spec.encoding[channel].title = dig(config, channel, 'title');
-    }
-}
-
 /* -------------------------- !! Deprecated !! -------------------------- */
 
 /* Return a function to handle range selector updates */

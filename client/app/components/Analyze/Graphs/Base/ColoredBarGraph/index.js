@@ -15,8 +15,17 @@ import {
 const styles = theme => ({
   paper: {
     padding: theme.spacing(3),
-  },
+  }
 });
+
+function configureColoredBarGraph(spec, config) {
+  spec.encoding.x.field = config.x.field;
+  spec.encoding.x.title = config.x.title;
+  spec.encoding.y.field = config.y.field;
+  spec.encoding.y.title = config.y.title;
+  spec.encoding.y.sort.field = config.x.field;
+  spec.encoding.color.field = config.color.field;
+}
 
 const spec = {
   $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
@@ -37,9 +46,9 @@ const spec = {
   },
 
   encoding: {
-    y: { field: 'folder', type: 'nominal', title: 'Folder', sort: { field: 'count', order: 'descending' } },
-    x: { field: 'count', type: 'quantitative', title: 'Views' },
-    color: { field: 'name', type: 'nominal', title: 'Group' },
+    y: { field: '', type: 'nominal', title: '', sort: { field: '', order: 'descending' } },
+    x: { field: '', type: 'quantitative', title: '' },
+    color: { field: '', type: 'nominal', title: '' },
     fillOpacity: {
       condition: { selection: 'select', value: 1 },
       value: 0.3
@@ -65,7 +74,7 @@ const spec = {
 export function ColoredBarGraph(props) {
   const { classes } = props;
 
-  setGraphConfig(spec, props.config);
+  configureColoredBarGraph(spec, props.config);
 
   return (
     <React.Fragment>

@@ -18,6 +18,14 @@ const styles = theme => ({
   },
 });
 
+function configureBarGraph(spec, config) {
+  spec.encoding.x.field = config.x.field;
+  spec.encoding.x.title = config.x.title;
+  spec.encoding.y.field = config.y.field;
+  spec.encoding.y.title = config.y.title;
+  spec.encoding.y.sort.field = config.x.field;
+  spec.encoding.color.field = config.color.field;
+}
 
 const spec = {
   $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
@@ -38,8 +46,9 @@ const spec = {
   },
 
   encoding: {
-    y: { field: 'name', type: 'nominal', title: 'Group' },
-    x: { field: 'count', type: 'quantitative', title: 'Members' },
+    y: { field: '', type: 'nominal', title: '', sort: { field: '', order: 'descending' } },
+    x: { field: '', type: 'quantitative', title: '' },
+    color: { field: '', type: 'nominal', title: '' },
     fillOpacity: {
       condition: { selection: 'select', value: 1 },
       value: 0.3
@@ -65,7 +74,7 @@ const spec = {
 export function BarGraph(props) {
   const { classes } = props;
 
-  setGraphConfig(spec, props.config);
+  configureBarGraph(spec, props.config);
 
   return (
     <React.Fragment>
