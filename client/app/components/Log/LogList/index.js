@@ -22,6 +22,7 @@ import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { DateTime } from 'luxon';
 import GroupSelector from 'components/Shared/GroupSelector';
+import ErrorBoundary from 'containers/Shared/ErrorBoundary';
 
 const styles = theme => ({
   logListItem: {
@@ -52,7 +53,11 @@ export function LogList(props, context) {
         try {
           // eslint-disable-next-line global-require
           const Component = require(`components/Log/LogItem/${keyToComp(activity.key)}`).default;
-          return <Component activity={activity} />;
+          return (
+            <ErrorBoundary render={activity.key}>
+              <Component activity={activity} />
+            </ErrorBoundary>
+          );
         } catch {
           return activity.key;
         }
