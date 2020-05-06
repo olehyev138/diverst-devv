@@ -54,7 +54,17 @@ export function LogList(props, context) {
           // eslint-disable-next-line global-require
           const Component = require(`components/Log/LogItem/${keyToComp(activity.key)}`).default;
           return (
-            <ErrorBoundary render={activity.key}>
+            <ErrorBoundary
+              render={({ error, info }) => (
+                <React.Fragment>
+                  {activity.key}
+                  {' | '}
+                  {error.stack.split('\n')[0]}
+                  {' | '}
+                  {error.stack.split('\n')[1]}
+                </React.Fragment>
+              )}
+            >
               <Component activity={activity} />
             </ErrorBoundary>
           );

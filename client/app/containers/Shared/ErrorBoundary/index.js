@@ -8,12 +8,12 @@ import messages from 'containers/Shared/ErrorBoundary/messages';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null, info: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error, info) {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+    return { hasError: true, error, info };
   }
 
   componentDidCatch(error, info) {
@@ -23,10 +23,12 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const ErrorRender = this.props.render;
+
     if (this.state.hasError)
       // You can render any custom fallback UI
       if (this.props.render)
-        return this.props.render;
+        return <ErrorRender error={this.state.error} info={this.state.info} />;
       else
         return (
           <React.Fragment>
