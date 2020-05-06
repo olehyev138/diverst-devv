@@ -93,6 +93,12 @@ class Resource < ApplicationRecord
     Rails.application.routes.url_helpers.url_for(file)
   end
 
+  def path_for_file_download
+    return nil unless self.file.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(self.file, only_path: true, disposition: 'attachment')
+  end
+
   def expiration_time
     EXPIRATION_TIME
   end
