@@ -162,9 +162,9 @@ describe('Resource selectors', () => {
   });
 
   describe('selectIsCommitting', () => {
-    it('should select isFormLoading from state', () => {
-      const mockedState = { isFormLoading: false };
-      const selected = selectIsFormLoading().resultFunc(mockedState);
+    it('should select isCommitting from state', () => {
+      const mockedState = { isCommitting: false };
+      const selected = selectIsCommitting().resultFunc(mockedState);
 
       expect(selected).toEqual(false);
     });
