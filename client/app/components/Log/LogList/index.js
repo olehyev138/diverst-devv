@@ -59,9 +59,9 @@ export function LogList(props, context) {
                 <React.Fragment>
                   {activity.key}
                   {' | '}
-                  {error.stack.split('\n')[0]}
+                  {error.message}
                   {' | '}
-                  {error.stack.split('\n')[1]}
+                  { error.stack.split('\n')[navigator.userAgent.indexOf('Chrome') > -1 ? 1 : 0]}
                 </React.Fragment>
               )}
             >
