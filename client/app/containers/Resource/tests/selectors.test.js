@@ -17,7 +17,7 @@ import {
   selectFormResource,
   selectIsLoading,
   selectIsFormLoading,
-  selectIsCommitting,
+  selectIsCommitting, selectFileData, selectIsDownloadingFileData,
 } from '../selectors';
 
 describe('Resource selectors', () => {
@@ -35,6 +35,11 @@ describe('Resource selectors', () => {
         currentResource: null,
         hasChanged: false,
         valid: true,
+        isDownloadingFileData: false,
+        fileData: {
+          data: null,
+          contentType: null,
+        },
       };
       const selected = selectResourcesDomain(mockedState);
 
@@ -49,7 +54,13 @@ describe('Resource selectors', () => {
         currentFolder: null,
         currentResource: null,
         hasChanged: false,
-        valid: true, });
+        valid: true,
+        isDownloadingFileData: false,
+        fileData: {
+          data: null,
+          contentType: null,
+        },
+      });
     });
   });
 
@@ -165,6 +176,32 @@ describe('Resource selectors', () => {
     it('should select isCommitting from state', () => {
       const mockedState = { isCommitting: false };
       const selected = selectIsCommitting().resultFunc(mockedState);
+
+      expect(selected).toEqual(false);
+    });
+  });
+
+  describe('selectFileData', () => {
+    it('should select fileData from state', () => {
+      const mockedState = {
+        fileData: {
+          data: null,
+          contentType: null,
+        }
+      };
+      const selected = selectFileData().resultFunc(mockedState);
+
+      expect(selected).toEqual({
+        data: null,
+        contentType: null,
+      });
+    });
+  });
+
+  describe('selectIsDownloadingFileData', () => {
+    it('should select isDownloadingFileData from state', () => {
+      const mockedState = { isDownloadingFileData: false };
+      const selected = selectIsDownloadingFileData().resultFunc(mockedState);
 
       expect(selected).toEqual(false);
     });
