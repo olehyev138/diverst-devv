@@ -25,7 +25,7 @@ export function NewsLinkCreate(props) {
           <React.Fragment>
             <Link
               component={WrappedNavLink}
-              to={ROUTES.group.news.news_links.show.path(activity.trackable.group_id, activity.trackable.news_feed_link.id)}
+              to={ROUTES.group.news.news_links.show.path(activity.trackable.group_id, activity.trackable.news_feed_link_id)}
             >
               {activity.trackable.title}
             </Link>

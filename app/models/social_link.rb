@@ -33,6 +33,10 @@ class SocialLink < ApplicationRecord
 
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
 
+  def news_feed_link_id
+    news_feed_link.id
+  end
+
   def self.symbol
     :social_link
   end

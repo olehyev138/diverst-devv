@@ -52,6 +52,10 @@ class NewsLink < ApplicationRecord
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
   scope :approved, -> { joins(:news_feed_link).where(news_feed_links: { approved: true }) }
 
+  def news_feed_link_id
+    news_feed_link.id
+  end
+
   def picture_location(expires_in: 3600, default_style: :medium)
     return nil if !picture.attached?
 
