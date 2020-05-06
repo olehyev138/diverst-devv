@@ -16,7 +16,8 @@ import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal, selectIsLoading,
-  selectIsFormLoading, selectHasChanged
+  selectIsFormLoading, selectHasChanged,
+  selectFileData, selectIsDownloadingFileData,
 } from 'containers/Resource/selectors';
 
 import {
@@ -26,6 +27,7 @@ import {
   getResourcesBegin,
   deleteResourceBegin,
   archiveResourceBegin,
+  getFileDataBegin,
 } from 'containers/Resource/actions';
 
 import Folder from 'components/Resource/Folder/Folder';
@@ -225,8 +227,11 @@ export function FolderPage(props) {
           handleResourcePagination={handleResourcePagination}
           handleFolderPagination={handleFolderPagination}
           archiveResourceBegin={props.archiveResourceBegin}
+          getFileDataBegin={props.getFileDataBegin}
           type='group'
           resources={resources}
+          fileData={props.fileData}
+          isDownloadingFileData={props.isDownloadingFileData}
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
           links={links}
@@ -243,6 +248,7 @@ FolderPage.propTypes = {
   deleteFolderBegin: PropTypes.func,
   deleteResourceBegin: PropTypes.func,
   validateFolderPasswordBegin: PropTypes.func,
+  getFileDataBegin: PropTypes.func,
   getResourcesBegin: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
@@ -254,6 +260,8 @@ FolderPage.propTypes = {
   foldersTotal: PropTypes.number,
   resources: PropTypes.array,
   resourcesTotal: PropTypes.number,
+  fileData: PropTypes.object,
+  isDownloadingFileData: PropTypes.bool,
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   valid: PropTypes.bool,
@@ -268,6 +276,8 @@ const mapStateToProps = createStructuredSelector({
   foldersTotal: selectFoldersTotal(),
   resources: selectPaginatedResources(),
   resourcesTotal: selectResourcesTotal(),
+  fileData: selectFileData(),
+  isDownloadingFileData: selectIsDownloadingFileData(),
   isLoading: selectIsLoading(),
   isFormLoading: selectIsFormLoading(),
   valid: selectValid(),
@@ -283,6 +293,7 @@ const mapDispatchToProps = {
   getResourcesBegin,
   deleteResourceBegin,
   archiveResourceBegin,
+  getFileDataBegin,
 };
 
 const withConnect = connect(
