@@ -54,4 +54,8 @@ export const DELETE_RESOURCE_BEGIN = 'app/Resource/DELETE_RESOURCE_BEGIN ';
 export const DELETE_RESOURCE_SUCCESS = 'app/Resource/DELETE_RESOURCE_SUCCESS';
 export const DELETE_RESOURCE_ERROR = 'app/Resource/DELETE_RESOURCE_ERROR';
 
+export const GET_FILE_DATA_BEGIN = 'app/Resource/GET_FILE_DATA_BEGIN ';
+export const GET_FILE_DATA_SUCCESS = 'app/Resource/GET_FILE_DATA_SUCCESS';
+export const GET_FILE_DATA_ERROR = 'app/Resource/GET_FILE_DATA_ERROR';
+
 export const RESOURCES_UNMOUNT = 'app/Resource/RESOURCES_UNMOUNT';
