@@ -40,19 +40,19 @@ export function PollResponses(props, context) {
 
   const columns = [
     {
-      title: 'Respondent',
+      title: <DiverstFormattedMessage {...messages.responses.respondent} />,
       field: 'respondent',
       sorting: false
     },
     {
-      title: 'Date',
+      title: <DiverstFormattedMessage {...messages.responses.date} />,
       query_field: 'poll_responses.created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
     },
   ];
 
   const detailPanel = [{
-    tooltip: 'Show',
+    tooltip: <DiverstFormattedMessage {...messages.responses.show} />,
     render: rowData => rowData.field_data && rowData.field_data.map((fieldDatum, i) => (
       <div key={fieldDatum.id}>
         <CardContent>
@@ -80,7 +80,7 @@ export function PollResponses(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Responses'
+            title={<DiverstFormattedMessage {...messages.responses.title} />}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.responsesLoading}
