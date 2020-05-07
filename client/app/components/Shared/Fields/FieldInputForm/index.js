@@ -18,6 +18,11 @@ import {
 
 import CustomField from 'components/Shared/Fields/FieldInputs/Field';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import {createStructuredSelector} from "reselect";
+import {selectEnterprise, selectPermissions} from "containers/Shared/App/selectors";
+import {connect} from "react-redux";
+import {mapDispatchToProps} from "components/Admin/AdminLinks";
+import {permission} from "utils/permissionsHelpers";
 
 const styles = theme => ({
   fieldInput: {
@@ -44,7 +49,7 @@ export function FieldInputForm({ formikProps, messages, link, ...props }) {
             name='fields'
             render={_ => (
               <React.Fragment>
-                {values.fieldData.filter(fd => !fd.field.private).map((fieldDatum, i) => (
+                {values.fieldData.filter(fd => !fd.field.private || permission(props, 'users_manage')).map((fieldDatum, i) => (
                   <div key={fieldDatum.id} className={props.classes.fieldInput}>
                     <Divider />
                     <CardContent>
@@ -52,7 +57,7 @@ export function FieldInputForm({ formikProps, messages, link, ...props }) {
                         <CustomField
                           fieldDatum={fieldDatum}
                           fieldDatumIndex={i}
-                          disabled={props.isCommitting}
+                          disabled={props.isCommitting || !(fieldDatum.field.show_on_vcard || permission(props, 'users_manage'))}
                         />
                       )}
                     </CardContent>
@@ -109,7 +114,16 @@ FieldInputForm.propTypes = {
   }).isRequired
 };
 
+const mapStateToProps = createStructuredSelector({
+  permissions: selectPermissions(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
 export default compose(
   memo,
+  withConnect,
   withStyles(styles),
 )(FieldInputForm);
