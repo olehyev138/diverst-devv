@@ -25,8 +25,6 @@ const FIELD_TYPE = 'TextField';
 /* eslint-disable object-curly-newline */
 export function Toggles({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, toggles, ...props }) {
 
-  console.log(values);
-
   const visible = toggles.visible && (
     <FormControl
       variant='outlined'

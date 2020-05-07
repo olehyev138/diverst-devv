@@ -18,7 +18,7 @@ import {
 
 import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import {Toggles} from "components/Shared/Fields/FieldForms/Toggles";
+import { Toggles } from 'components/Shared/Fields/FieldForms/Toggles';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'SelectField';
