@@ -142,7 +142,7 @@ export default compose(
   memo,
 )(Conditional(
   PollListPage,
-  ['permissions.polls_create'],
+  ['permissions.polls_view'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.poll.listPage
 ));

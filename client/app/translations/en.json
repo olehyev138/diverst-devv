@@ -1068,6 +1068,10 @@
   "diverst.containers.Permissions.news.groupMessage.groupMessageCreatePage": "You don't have permission to create group messages",
   "diverst.containers.Permissions.news.groupMessage.groupMessageEditPage": "You don't have permission to edit this group message",
   "diverst.containers.Permissions.news.groupMessage.groupMessagePage": "You don't have permission to view this group message",
+  "diverst.containers.Permissions.poll.pollListPage": "You don't have permission to view polls",
+  "diverst.containers.Permissions.poll.pollCreatePage": "You don't have permission to create polls",
+  "diverst.containers.Permissions.poll.pollEditPage": "You don't have permission to edit this poll",
+  "diverst.containers.Permissions.poll.pollShowPage": "You don't have permission to view this poll",
   "diverst.components.DiverstLogoutDialog.later": "Later",
   "diverst.components.DiverstLogoutDialog.logout": "Log out",
   "diverst.components.DiverstLogoutDialog.logoutmessage": "Please log out to view any changes that have been made to your enterprise settings."

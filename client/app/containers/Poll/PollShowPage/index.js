@@ -209,7 +209,7 @@ export default compose(
   memo,
 )(Conditional(
   PollCreatePage,
-  ['currentGroup.permissions.polls_create?'],
+  ['poll.permissions.show?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.include.polls.index.path(),
-  permissionMessages.poll.createPage
+  permissionMessages.poll.showPage
 ));
