@@ -104,4 +104,18 @@ export default defineMessages({
       id: `${scope}.responses.title`,
     },
   },
+  textual: {
+    answer: {
+      id: `${scope}.textual.table.answer`,
+    },
+    respondent: {
+      id: `${scope}.textual.table.respondent`,
+    },
+    date: {
+      id: `${scope}.textual.table.date`,
+    },
+    question: {
+      id: `${scope}.textual.question`,
+    },
+  },
 });

@@ -43,17 +43,17 @@ export function PollTestAnswers(props, context) {
 
   const columns = [
     {
-      title: 'Answer',
+      title: <DiverstFormattedMessage {...messages.textual.answer} />,
       render: rowData => dig(rowData, 'field_data', fd => fd.find(fd => fd.field_id === fieldId), 'data'),
       sorting: false,
     },
     {
-      title: 'Responded by',
+      title: <DiverstFormattedMessage {...messages.textual.respondent} />,
       field: 'respondent',
       sorting: false
     },
     {
-      title: 'Responded at',
+      title: <DiverstFormattedMessage {...messages.textual.date} />,
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL),
       query_field: 'poll_responses.created_at',
     },
@@ -72,7 +72,7 @@ export function PollTestAnswers(props, context) {
         <Grid item xs={6}>
           <DiverstSelect
             fullWidth
-            label='Question'
+            label={<DiverstFormattedMessage {...messages.textual.question} />}
             options={dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField'))}
             value={field}
             onChange={v => props.setField(v)}
