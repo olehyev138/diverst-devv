@@ -26,7 +26,7 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import { permission } from 'utils/permissionsHelpers';
-import Permission from "components/Shared/DiverstPermission";
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   pollListItem: {

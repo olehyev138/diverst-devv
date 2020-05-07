@@ -110,6 +110,7 @@ PollListPage.propTypes = {
   handlePollEdit: PropTypes.func,
   handlePollShow: PropTypes.func,
   hasChanged: PropTypes.bool,
+  permissions: PropTypes.object,
 
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
