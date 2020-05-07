@@ -44,7 +44,7 @@ export function FieldInputForm({ formikProps, messages, link, ...props }) {
             name='fields'
             render={_ => (
               <React.Fragment>
-                {values.fieldData.map((fieldDatum, i) => (
+                {values.fieldData.filter(fd => !fd.field.private).map((fieldDatum, i) => (
                   <div key={fieldDatum.id} className={props.classes.fieldInput}>
                     <Divider />
                     <CardContent>
