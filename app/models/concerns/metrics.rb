@@ -9,7 +9,7 @@ module Metrics
 
   module ClassMethods
     @@analytics_bucket = Aws::S3::Resource::new(region: 'us-east-1')
-                           .bucket('diverst-analytics')
+                           .bucket("#{ENV['ENV_NAME']}-diverst-analytics")
 
     #
     ## Group metrics

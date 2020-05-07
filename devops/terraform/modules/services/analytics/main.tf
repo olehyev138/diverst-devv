@@ -1,8 +1,15 @@
-# Module to create the Analytics Lambda function
+# Module for the Diverst Analytics service
+#   - creates:
+#       - a Lambda function to compute metrics
+#       - a S3 bucket for storing computed JSON data
+#       - CloudWatch Alarm to run function on configured interval
 #   - runs in database subnet & uses database security group
 # Inputs:
+#  - env_name: environment name
 #  - sn_db: database subnet
 #  - sg_db: database security group
+#  - interval: string describing interval to run analytics rule on, should be in form:
+#      "<number> <minutes|hours>"
 
 resource "aws_iam_role" "lambda_exec_role" {
   name                = "lambda-diverst-analytics-exec-role"
@@ -40,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
 }
 
 resource "aws_lambda_function" "diverst_analytics" {
-  function_name = "diverst-analytics"
+  function_name = "${var.env_name}-diverst-analytics"
 
   s3_bucket = "devops-inmvlike"
   s3_key    = "deploy.zip"
@@ -55,3 +62,37 @@ resource "aws_lambda_function" "diverst_analytics" {
   }
 }
 
+#
+## S3 bucket for storing metrics data, named in format: <env-name>-diverst-analytics
+#
+
+resource "aws_s3_bucket" "bucket-filestorage" {
+  bucket        = "${var.env_name}-diverst-analytics"
+  force_destroy = true
+}
+
+#
+## Cloudwatch resources to invoke function on interval
+#
+
+resource "aws_cloudwatch_event_rule" "analytics_invoke_rule" {
+  name                  = "analytics_invoke_rule"
+  description           = "Runs analytics function on configured interval"
+  schedule_expression   = "rate(${var.interval})"
+}
+
+resource "aws_cloudwatch_event_target" "analytics_invoke_rule_target" {
+  rule        = aws_cloudwatch_event_rule.analytics_invoke_rule.name
+  target_id   = "lambda"
+  arn         = aws_lambda_function.diverst_analytics.arn
+
+  input       = jsonencode({"env_name"=var.env_name})
+}
+
+resource "aws_lambda_permission" "analytics_invoke_rule_permission" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.diverst_analytics.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.analytics_invoke_rule.arn
+}

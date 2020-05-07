@@ -2,8 +2,8 @@ require 'mysql2'
 require 'aws-sdk-s3'
 require 'json'
 
-BUCKET_NAME = 'diverst-analytics'
-$data_bucket = Aws::S3::Resource.new(region: ENV['AWS_DEFAULT_REGION']).bucket(BUCKET_NAME)
+POSTFIX_BUCKET_NAME = "diverst-analytics"
+$s3 = Aws::S3::Resource.new(region: ENV['AWS_DEFAULT_REGION'])
 
 # TODO: env variables & secrets management
 $dbh = Mysql2::Client.new(
@@ -21,13 +21,15 @@ def main(event:, context:)
       views_per_folder: views_per_folder($dbh).to_json
   }
 
-  upload_s3(graph_data)
+  upload_s3(event['env_name'], graph_data)
 end
 
-def upload_s3(graph_data)
+def upload_s3(env_name, graph_data)
+  data_bucket = $s3.bucket("#{env_name}-#{POSTFIX_BUCKET_NAME}")
+
   # Create s3 object per graph
   graph_data.each do |graph, data|
-    $data_bucket.object(graph.to_s).put(body: data, content_type: 'application/json')
+    data_bucket.object(graph.to_s).put(body: data, content_type: 'application/json')
   end
 end
 
@@ -84,7 +86,7 @@ end
 
 def views_per_folder(dbh)
   sql = %{
-    SELECT f.name AS folder, g.name AS group, count(f.id) count
+    SELECT f.name AS folder, g.name AS `group`, count(f.id) count
     FROM folders f
       JOIN groups g on g.id = f.group_id
       LEFT JOIN views v on v.folder_id = f.id
