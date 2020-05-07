@@ -12,8 +12,9 @@ import { withStyles } from '@material-ui/core/styles';
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
 import LockIcon from '@material-ui/icons/Lock';
-import OpenInNew from '@material-ui/icons/OpenInNew';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import FileIcon from '@material-ui/icons/Description';
+import DownloadIcon from '@material-ui/icons/GetApp';
 
 import classNames from 'classnames';
 
@@ -98,19 +99,26 @@ export function FolderListItem(props) {
                         </React.Fragment>
                       )}
                   </Grid>
-                  <Grid item xs={!(isResource && item.url)}>
+
+                  <Grid item>
                     <Typography color='primary' variant='h6' component='h2'>
                       {isResource ? item.title : item.name}
                     </Typography>
                   </Grid>
-                  {isResource && !item.url && props.isDownloadingFileData && props.fileName && (
-                    <Grid item>
-                      <CircularProgress size={30} color='primary' className={classes.downloadProgress} />
+
+                  {isResource && (
+                    <Grid item xs>
+                      {item.resource_type === 'file' ? (
+                        <DownloadIcon color='secondary' />
+                      ) : (
+                        <OpenInNewIcon color='secondary' fontSize='small' />
+                      )}
                     </Grid>
                   )}
-                  {isResource && item.url && (
-                    <Grid item xs>
-                      <OpenInNew color='secondary' fontSize='small' />
+
+                  {isResource && item.resource_type === 'file' && props.isDownloadingFileData && props.fileName && (
+                    <Grid item>
+                      <CircularProgress size={30} color='primary' className={classes.downloadProgress} />
                     </Grid>
                   )}
                 </Grid>
