@@ -26,6 +26,7 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import { permission } from 'utils/permissionsHelpers';
+import Permission from "components/Shared/DiverstPermission";
 
 const styles = theme => ({
   pollListItem: {
@@ -116,16 +117,18 @@ export function PollList(props, context) {
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
-          <Button
-            variant='contained'
-            to={links.pollNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
+          <Permission show={permission(props, 'polls_create')}>
+            <Button
+              variant='contained'
+              to={links.pollNew}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.new} />
+            </Button>
+          </Permission>
         </Grid>
       </Grid>
       <Box mb={1} />

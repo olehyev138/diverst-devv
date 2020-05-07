@@ -94,6 +94,7 @@ export function PollListPage(props) {
         handleOrdering={handleOrdering}
         links={links}
         currentEnterprise={props.currentEnterprise}
+        permissions={props.permissions}
       />
     </React.Fragment>
   );
