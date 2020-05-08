@@ -41,10 +41,16 @@
         margin-left: 70px;
       }
 
-      #mute-mic, #mute-video {
+      #mute-video {
         fill: white;
-        height: 35px;
-        width: 60px;
+        height: 40px;
+        width: 65px;
+      }
+
+      #mute-mic {
+        fill: gray;
+        height: 40px;
+        width: 65px;
       }
 
       #mute-video {
@@ -53,8 +59,8 @@
 
       #leave-call {
         fill: red;
-        height: 35px;
-        width: 60px;
+        height: 40px;
+        width: 65px;
       }
     </style>
   </head>
@@ -66,9 +72,9 @@
         <div class="row">
           <div class="col-xs-12">
             <h2 class="text-center"><%= @initiative.name %><span id="control-panel">
-              <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic', title: 'mute mic') %>
-              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video', title: 'turn off video') %>
-              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call', title: 'end video call') %>
+              <%= inline_svg('icons/mic2.svg', size: '55px*25px', id: 'mute-mic', title: 'mute mic') %>
+              <%= inline_svg('icons/camera1.svg', size: '55px*25px', id: 'mute-video', title: 'turn off video') %>
+              <%= inline_svg('icons/call1.svg', size: '55px*25px', id: 'leave-call', title: 'end video call') %>
             </span></h2>
           </div>
         </div>
