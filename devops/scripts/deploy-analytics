@@ -16,7 +16,7 @@ if [ ! -d '.git' ]; then
   exit 1
 fi
 
-# Create build directory if it doesnt exist
+# Create deploy directory if it doesnt exist
 mkdir -p lib/analytics/deploy
 
 # Create analytics app deployment bundle

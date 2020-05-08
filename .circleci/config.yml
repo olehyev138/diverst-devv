@@ -234,3 +234,11 @@ jobs:
       - run:
           name: Build & deploy frontend
           command: ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
+      #
+      ## Deploy Analytics service
+      #
+      - run:
+          name: Deploy Analytics Service
+          command: |
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            ./devops/scripts/deploy-analytics "$VERSION_LABEL" "$AWS_MASTER_BUCKET"

@@ -68,6 +68,7 @@ terraform.tfstate*
 /build
 /client/build
 
+/lib/analytics/deploy
 /lib/analytics/app/vendor/
 /lib/analytics/app/lib/
 /lib/analytics/app/deploy.zip

@@ -1,4 +1,4 @@
-# Module for the Diverst Analytics service
+# Module for Diverst Analytics service
 #   - creates:
 #       - a Lambda function to compute metrics
 #       - a S3 bucket for storing computed JSON data
