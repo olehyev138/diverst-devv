@@ -55,7 +55,6 @@ export function* login(action) {
   }
 }
 
-// TODO: Make this work
 export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
@@ -63,11 +62,6 @@ export function* ssoLogin(action) {
 
     yield call(AuthService.storeJwt, action.payload.userToken);
 
-    // decode token to get user object
-    // const user = yield call(AuthService.getUser, action.payload.userToken);
-
-    // yield put(setUser(user));
-    // yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));

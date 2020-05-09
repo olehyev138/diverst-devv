@@ -34,7 +34,6 @@ export function LoginPage(props) {
 
     // SSO
     const userToken = query.get('userToken');
-    const policyGroupId = query.get('policyGroupId');
     const errorMessage = query.get('errorMessage');
 
     if (errorMessage) {
@@ -42,21 +41,14 @@ export function LoginPage(props) {
       props.refresh('login');
     }
 
-    if (userToken && policyGroupId)
-      props.ssoLoginBegin({ policyGroupId, userToken });
-  }, []);
+    // Redirect to configured SSO IDP
+    if (props.enterprise && props.enterprise.has_enabled_saml)
+      props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
 
-  if (props.enterprise && props.enterprise.has_enabled_saml) {
-    props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
-    return (
-      <EnterpriseForm
-        findEnterpriseBegin={(values, actions) => {
-          props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
-          setEmail(values.email);
-        }}
-      />
-    );
-  }
+    // Login after successful SSO login
+    if (userToken)
+      props.ssoLoginBegin({ userToken });
+  }, []);
 
   return (
     <LoginForm
