@@ -22,6 +22,7 @@ import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
 
 import LoginForm from 'components/Session/LoginForm';
 import EnterpriseForm from 'components/Session/EnterpriseForm';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 
 export function LoginPage(props) {
   useInjectReducer({ key: 'loginPage', reducer });
@@ -41,14 +42,24 @@ export function LoginPage(props) {
       props.refresh('login');
     }
 
-    // Redirect to configured SSO IDP
-    if (props.enterprise && props.enterprise.has_enabled_saml)
-      props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
-
-    // Login after successful SSO login
     if (userToken)
+      // Login after successful SSO login
       props.ssoLoginBegin({ userToken });
+    else if (props.enterprise && props.enterprise.has_enabled_saml)
+      // Redirect to configured SSO IDP
+      props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
   }, []);
+
+  if (props.enterprise && props.enterprise.has_enabled_saml)
+    return (
+      <Backdrop open={!props.enterprise}>
+        <CircularProgress
+          color='secondary'
+          size={60}
+          thickness={1}
+        />
+      </Backdrop>
+    );
 
   return (
     <LoginForm
