@@ -109,6 +109,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
                 component={DiverstFileInput}
                 fileName={props.resource && props.resource.file_file_name}
                 disabled={props.isCommitting}
+                required
                 fullWidth
                 id='file'
                 name='file'
@@ -168,6 +169,12 @@ export function ResourceForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['folder_id']);
+
+        if (values.resource_type === 'file')
+          payload.url = '';
+        else
+          payload.file = null;
+
         props.resourceAction(payload);
       }}
     >
