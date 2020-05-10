@@ -14,8 +14,8 @@
 <div class="text-center">
   <%= render "devise/shared/links" %>
   <br>
-  <%= if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] %>
-    <%= if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']).has_enabled_saml? %>
+  <% if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] %>
+    <% if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']).has_enabled_saml? %>
       <%= link_to 'Login with SSO', 
         sso_enterprise_saml_index_path(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']),
         class: 'btn btn--tertiary',
