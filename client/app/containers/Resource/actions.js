@@ -43,6 +43,9 @@ import {
   ARCHIVE_RESOURCE_SUCCESS,
   ARCHIVE_RESOURCE_ERROR,
   ARCHIVE_RESOURCE_BEGIN,
+  GET_FILE_DATA_BEGIN,
+  GET_FILE_DATA_SUCCESS,
+  GET_FILE_DATA_ERROR,
 } from './constants';
 
 export function getFoldersBegin(payload) {
@@ -175,6 +178,27 @@ export function validateFolderPasswordSuccess(payload) {
 export function validateFolderPasswordError(error) {
   return {
     type: VALIDATE_FOLDER_PASSWORD_ERROR,
+    error,
+  };
+}
+
+export function getFileDataBegin(payload) {
+  return {
+    type: GET_FILE_DATA_BEGIN,
+    payload,
+  };
+}
+
+export function getFileDataSuccess(payload) {
+  return {
+    type: GET_FILE_DATA_SUCCESS,
+    payload,
+  };
+}
+
+export function getFileDataError(error) {
+  return {
+    type: GET_FILE_DATA_ERROR,
     error,
   };
 }

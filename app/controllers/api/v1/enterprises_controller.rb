@@ -42,6 +42,15 @@ class Api::V1::EnterprisesController < DiverstController
     enterprise = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(enterprise)
 
+    if params.dig(:enterprise, :theme_attributes) && params.dig(:enterprise, :theme_attributes, :logo).blank? && enterprise.theme&.logo&.attached?
+      enterprise.theme.logo.purge_later
+      params[:enterprise][:theme_attributes] = params[:enterprise][:theme_attributes].except(:logo)
+    end
+
+    [:banner, :cdo_picture, :xml_sso_config, :sponsor_media, :onboarding_sponsor_media].each do |attachment|
+      enterprise.send(attachment).purge_later if params[attachment].blank? && enterprise.send(attachment).attached?
+    end
+
     enterprise.update(params[:enterprise])
     track_activity(enterprise)
     render status: 200, json: enterprise
