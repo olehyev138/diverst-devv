@@ -32,7 +32,8 @@ import {
   updateResourceBegin,
   updateResourceSuccess,
   updateResourceError,
-  resourcesUnmount } from '../actions';
+  resourcesUnmount, getFileDataBegin, getFileDataSuccess, getFileDataError
+} from '../actions';
 
 describe('resourcesReducer', () => {
   let state;
@@ -52,6 +53,11 @@ describe('resourcesReducer', () => {
       currentResource: null,
       hasChanged: false,
       valid: true,
+      isDownloadingFileData: false,
+      fileData: {
+        data: null,
+        contentType: null,
+      },
     };
   });
 
@@ -186,6 +192,11 @@ describe('resourcesReducer', () => {
       draft.currentFolder = null;
       draft.currentResource = null;
       draft.valid = true;
+      draft.isDownloadingFileData = false;
+      draft.fileData = {
+        data: null,
+        contentType: null,
+      };
     });
     expect(resourcesReducer(
       state,
@@ -291,6 +302,37 @@ describe('resourcesReducer', () => {
     expect(resourcesReducer(state, updateResourceError('error'))).toEqual(expected);
   });
 
+  it('handles the getFileDataBegin action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = true;
+      draft.fileData.data = null;
+      draft.fileData.contentType = null;
+    });
+    expect(resourcesReducer(state, getFileDataBegin())).toEqual(expected);
+  });
+
+  it('handles the getFileDataSuccess action correctly', () => {
+    const data = {};
+    const contentType = 'image/webp';
+
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = false;
+      draft.fileData.data = data;
+      draft.fileData.contentType = contentType;
+    });
+    expect(resourcesReducer(state, getFileDataSuccess({
+      data,
+      contentType,
+    }))).toEqual(expected);
+  });
+
+  it('handles the getFileDataError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = false;
+    });
+    expect(resourcesReducer(state, getFileDataError('error'))).toEqual(expected);
+  });
+
   it('handles the resourcesUnmount action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
@@ -305,6 +347,11 @@ describe('resourcesReducer', () => {
       draft.currentFolder = null;
       draft.currentResource = null;
       draft.valid = true;
+      draft.isDownloadingFileData = false;
+      draft.fileData = {
+        data: null,
+        contentType: null,
+      };
     });
     expect(resourcesReducer(
       state,
