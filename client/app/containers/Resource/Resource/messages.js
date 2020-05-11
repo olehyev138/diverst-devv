@@ -43,11 +43,11 @@ export default defineMessages({
     folder: {
       id: `${scope}.form.input.folder`,
     },
-    upload: {
-      id: `${scope}.form.input.upload`,
-    },
     url: {
       id: `${scope}.form.input.url`,
+    },
+    file: {
+      id: `${scope}.form.input.file`,
     },
   },
 });

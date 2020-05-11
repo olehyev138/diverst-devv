@@ -33,6 +33,8 @@ const BrandingLayout = ({ component: Component, classes, ...rest }) => {
     currentPage = 'home';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.sponsors.index.path() }))
     currentPage = 'sponsors';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.index.path() }))
+    currentPage = 'theme';
 
   const [tab, setTab] = useState(BrandingPages[currentPage]);
 

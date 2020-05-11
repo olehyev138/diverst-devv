@@ -25,10 +25,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { MetricsDashboardCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
+import csvReducer from 'containers/Shared/CsvFile/reducer';
+import csvSaga from 'containers/Shared/CsvFile/saga';
 
 export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+  useInjectReducer({ key: 'csv_files', reducer: csvReducer });
+  useInjectSaga({ key: 'csv_files', saga: csvSaga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', query_scopes: ['all_parents'] });
 
@@ -54,6 +59,7 @@ export function AdminGroupListPage(props) {
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
         handlePagination={handlePagination}
+        importAction={props.createCsvFileBegin}
       />
     </React.Fragment>
   );
@@ -65,7 +71,8 @@ AdminGroupListPage.propTypes = {
   isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func
+  deleteGroupBegin: PropTypes.func,
+  createCsvFileBegin: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -78,7 +85,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getGroupsBegin,
   groupListUnmount,
-  deleteGroupBegin
+  deleteGroupBegin,
+  createCsvFileBegin,
 };
 
 const withConnect = connect(

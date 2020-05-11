@@ -32,7 +32,8 @@ import {
   updateResourceBegin,
   updateResourceSuccess,
   updateResourceError,
-  resourcesUnmount } from '../actions';
+  resourcesUnmount, getFileDataBegin, getFileDataSuccess, getFileDataError
+} from '../actions';
 
 describe('resourcesReducer', () => {
   let state;
@@ -40,8 +41,10 @@ describe('resourcesReducer', () => {
   beforeEach(() => {
     state = {
       isCommitting: false,
-      isLoading: true,
-      isFormLoading: true,
+      isResourceLoading: true,
+      isResourceFormLoading: true,
+      isFolderLoading: true,
+      isFolderFormLoading: true,
       folders: null,
       resources: null,
       foldersTotal: null,
@@ -50,6 +53,11 @@ describe('resourcesReducer', () => {
       currentResource: null,
       hasChanged: false,
       valid: true,
+      isDownloadingFileData: false,
+      fileData: {
+        data: null,
+        contentType: null,
+      },
     };
   });
 
@@ -60,7 +68,7 @@ describe('resourcesReducer', () => {
 
   it('handles the getFoldersBegin action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isFormLoading = true;
+      draft.isFolderFormLoading = true;
     });
 
     expect(resourcesReducer(state, getFoldersBegin(true))).toEqual(expected);
@@ -70,7 +78,7 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.folders = [{ id: 4 }, { id: 5 }, { id: 6 }];
       draft.foldersTotal = 3;
-      draft.isLoading = false;
+      draft.isFolderLoading = false;
     });
     expect(
       resourcesReducer(
@@ -85,14 +93,14 @@ describe('resourcesReducer', () => {
 
   it('handles the getFoldersError action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isLoading = false;
+      draft.isFolderLoading = false;
     });
     expect(resourcesReducer(state, getFoldersError('error'))).toEqual(expected);
   });
 
   it('handles the getFolderBegin action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isFormLoading = true;
+      draft.isFolderFormLoading = true;
     });
     expect(resourcesReducer(state, getFolderBegin(true))).toEqual(expected);
   });
@@ -101,7 +109,7 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.currentFolder = { id: 4 };
       draft.valid = true;
-      draft.isFormLoading = false;
+      draft.isFolderFormLoading = false;
     });
     expect(
       resourcesReducer(
@@ -115,8 +123,8 @@ describe('resourcesReducer', () => {
 
   it('handles the getFolderError action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isFormLoading = false;
-      draft.isLoading = true;
+      draft.isFolderFormLoading = false;
+      draft.isFolderLoading = true;
     });
     expect(resourcesReducer(state, getFolderError('error'))).toEqual(expected);
   });
@@ -173,8 +181,10 @@ describe('resourcesReducer', () => {
   it('handles the foldersUnmount action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
-      draft.isLoading = true;
-      draft.isFormLoading = true;
+      draft.isResourceLoading = true;
+      draft.isResourceFormLoading = true;
+      draft.isFolderLoading = true;
+      draft.isFolderFormLoading = true;
       draft.folders = null;
       draft.resources = null;
       draft.foldersTotal = null;
@@ -182,27 +192,21 @@ describe('resourcesReducer', () => {
       draft.currentFolder = null;
       draft.currentResource = null;
       draft.valid = true;
+      draft.isDownloadingFileData = false;
+      draft.fileData = {
+        data: null,
+        contentType: null,
+      };
     });
     expect(resourcesReducer(
       state,
-      foldersUnmount({
-        isCommitting: false,
-        isLoading: true,
-        isFormLoading: true,
-        folders: null,
-        resources: null,
-        foldersTotal: null,
-        resourcesTotal: null,
-        currentFolder: null,
-        currentResource: null,
-        valid: true,
-      })
+      foldersUnmount()
     )).toEqual(expected);
   });
 
   it('handles the getResourcesBegin action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isLoading = true;
+      draft.isResourceLoading = true;
     });
     expect(resourcesReducer(state, getResourcesBegin(true))).toEqual(expected);
   });
@@ -211,28 +215,28 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.resources = [{ item1: 'item 1' }, { item2: 'item 2' }];
       draft.resourcesTotal = 3;
-      draft.isLoading = false;
+      draft.isResourceLoading = false;
     });
     expect(resourcesReducer(
       state,
       getResourcesSuccess({
         items: [{ item1: 'item 1' }, { item2: 'item 2' }],
         total: 3,
-        isLoading: false,
+        isResourceLoading: false,
       })
     )).toEqual(expected);
   });
 
   it('handles the getResourcesError action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isLoading = false;
+      draft.isResourceLoading = false;
     });
     expect(resourcesReducer(state, getResourcesError('error'))).toEqual(expected);
   });
 
   it('handles the getResourceBegin action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isFormLoading = true;
+      draft.isResourceFormLoading = true;
     });
     expect(resourcesReducer(state, getResourceBegin(true))).toEqual(expected);
   });
@@ -240,14 +244,14 @@ describe('resourcesReducer', () => {
   it('handles the getResourceSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.currentResource = { resource_id: 1 };
-      draft.isFormLoading = false;
+      draft.isResourceFormLoading = false;
     });
     expect(resourcesReducer(state, getResourceSuccess({ resource: { resource_id: 1 } }))).toEqual(expected);
   });
 
   it('handles the getResourceError action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.isFormLoading = false;
+      draft.isResourceFormLoading = false;
     });
     expect(resourcesReducer(state, getResourceError('error'))).toEqual(expected);
   });
@@ -298,11 +302,44 @@ describe('resourcesReducer', () => {
     expect(resourcesReducer(state, updateResourceError('error'))).toEqual(expected);
   });
 
+  it('handles the getFileDataBegin action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = true;
+      draft.fileData.data = null;
+      draft.fileData.contentType = null;
+    });
+    expect(resourcesReducer(state, getFileDataBegin())).toEqual(expected);
+  });
+
+  it('handles the getFileDataSuccess action correctly', () => {
+    const data = {};
+    const contentType = 'image/webp';
+
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = false;
+      draft.fileData.data = data;
+      draft.fileData.contentType = contentType;
+    });
+    expect(resourcesReducer(state, getFileDataSuccess({
+      data,
+      contentType,
+    }))).toEqual(expected);
+  });
+
+  it('handles the getFileDataError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isDownloadingFileData = false;
+    });
+    expect(resourcesReducer(state, getFileDataError('error'))).toEqual(expected);
+  });
+
   it('handles the resourcesUnmount action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
-      draft.isLoading = true;
-      draft.isFormLoading = true;
+      draft.isResourceLoading = true;
+      draft.isResourceFormLoading = true;
+      draft.isFolderLoading = true;
+      draft.isFolderFormLoading = true;
       draft.folders = null;
       draft.resources = null;
       draft.foldersTotal = null;
@@ -310,21 +347,15 @@ describe('resourcesReducer', () => {
       draft.currentFolder = null;
       draft.currentResource = null;
       draft.valid = true;
+      draft.isDownloadingFileData = false;
+      draft.fileData = {
+        data: null,
+        contentType: null,
+      };
     });
     expect(resourcesReducer(
       state,
-      resourcesUnmount({
-        isCommitting: false,
-        isLoading: true,
-        isFormLoading: true,
-        folders: null,
-        resources: null,
-        foldersTotal: null,
-        resourcesTotal: null,
-        currentFolder: null,
-        currentResource: null,
-        valid: true,
-      })
+      resourcesUnmount()
     )).toEqual(expected);
   });
 });
