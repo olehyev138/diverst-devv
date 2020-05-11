@@ -15,8 +15,10 @@ import {
   selectResourcesTotal,
   selectResource,
   selectFormResource,
-  selectIsLoading,
-  selectIsFormLoading,
+  selectIsResourceLoading,
+  selectIsResourceFormLoading,
+  selectIsFolderLoading,
+  selectIsFolderFormLoading,
   selectIsCommitting,
 } from '../selectors';
 
@@ -25,8 +27,10 @@ describe('Resource selectors', () => {
     it('should select the resources domain', () => {
       const mockedState = {
         isCommitting: false,
-        isLoading: true,
-        isFormLoading: true,
+        isResourceLoading: true,
+        isResourceFormLoading: true,
+        isFolderLoading: true,
+        isFolderFormLoading: true,
         folders: null,
         resources: null,
         foldersTotal: null,
@@ -40,8 +44,10 @@ describe('Resource selectors', () => {
 
       expect(selected).toEqual({
         isCommitting: false,
-        isLoading: true,
-        isFormLoading: true,
+        isResourceLoading: true,
+        isResourceFormLoading: true,
+        isFolderLoading: true,
+        isFolderFormLoading: true,
         folders: null,
         resources: null,
         foldersTotal: null,
@@ -49,7 +55,8 @@ describe('Resource selectors', () => {
         currentFolder: null,
         currentResource: null,
         hasChanged: false,
-        valid: true, });
+        valid: true,
+      });
     });
   });
 
@@ -143,19 +150,19 @@ describe('Resource selectors', () => {
     });
   });
 
-  describe('selectIsLoading', () => {
+  describe('selectIsFolderLoading', () => {
     it('should select isLoading from state', () => {
-      const mockedState = { isLoading: false };
-      const selected = selectIsLoading().resultFunc(mockedState);
+      const mockedState = { isFolderLoading: false };
+      const selected = selectIsFolderLoading().resultFunc(mockedState);
 
       expect(selected).toEqual(false);
     });
   });
 
-  describe('selectIsFormLoading', () => {
+  describe('selectIsFolderFormLoading', () => {
     it('should select isFormLoading from state', () => {
-      const mockedState = { isFormLoading: false };
-      const selected = selectIsFormLoading().resultFunc(mockedState);
+      const mockedState = { isFolderFormLoading: false };
+      const selected = selectIsFolderFormLoading().resultFunc(mockedState);
 
       expect(selected).toEqual(false);
     });
@@ -163,8 +170,8 @@ describe('Resource selectors', () => {
 
   describe('selectIsCommitting', () => {
     it('should select isFormLoading from state', () => {
-      const mockedState = { isFormLoading: false };
-      const selected = selectIsFormLoading().resultFunc(mockedState);
+      const mockedState = { isCommitting: false };
+      const selected = selectIsCommitting().resultFunc(mockedState);
 
       expect(selected).toEqual(false);
     });
