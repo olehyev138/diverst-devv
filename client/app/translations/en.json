@@ -456,6 +456,7 @@
   "diverst.containers.Members.form.button.create": "Add Members",
   "diverst.containers.Members.form.button.cancel": "Cancel",
   "diverst.containers.Members.index.label.changeScope": "View:",
+  "diverst.containers.Members.index.label.count": "Member Count:",
   "diverst.containers.Members.scopes.accepted_users": "Active Members",
   "diverst.containers.Members.scopes.pending": "Pending Members",
   "diverst.containers.Members.scopes.inactive": "Inactive Members",
