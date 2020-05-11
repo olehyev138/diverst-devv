@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectPaginatedFolders, selectFoldersTotal, selectIsLoading } from 'containers/Resource/selectors';
+import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading } from 'containers/Resource/selectors';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
@@ -113,7 +113,7 @@ const mapStateToProps = createStructuredSelector({
   folders: selectPaginatedFolders(),
   foldersTotal: selectFoldersTotal(),
   currentEnterprise: selectEnterprise(),
-  isLoading: selectIsLoading(),
+  isLoading: selectIsFolderLoading(),
   permissions: selectPermissions(),
 });
 

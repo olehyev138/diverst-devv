@@ -15,8 +15,8 @@ import RouteService from 'utils/routeHelpers';
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
-  selectFoldersTotal, selectResourcesTotal, selectIsLoading,
-  selectIsFormLoading, selectHasChanged, selectFileData,
+  selectFoldersTotal, selectResourcesTotal, selectIsFolderLoading,
+  selectIsFolderFormLoading, selectHasChanged, selectFileData,
   selectIsDownloadingFileData,
 } from 'containers/Resource/selectors';
 
@@ -270,8 +270,8 @@ const mapStateToProps = createStructuredSelector({
   resourcesTotal: selectResourcesTotal(),
   fileData: selectFileData(),
   isDownloadingFileData: selectIsDownloadingFileData(),
-  isLoading: selectIsLoading(),
-  isFormLoading: selectIsFormLoading(),
+  isLoading: selectIsFolderLoading(),
+  isFormLoading: selectIsFolderFormLoading(),
   valid: selectValid(),
   hasChanged: selectHasChanged(),
   permissions: selectPermissions(),

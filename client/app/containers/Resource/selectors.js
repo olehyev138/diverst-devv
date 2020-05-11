@@ -82,14 +82,24 @@ const selectIsDownloadingFileData = () => createSelector(
   resourcesState => resourcesState.isDownloadingFileData
 );
 
-const selectIsLoading = () => createSelector(
+const selectIsResourceLoading = () => createSelector(
   selectResourcesDomain,
-  resourcesState => resourcesState.isLoading
+  resourcesState => resourcesState.isResourceLoading
 );
 
-const selectIsFormLoading = () => createSelector(
+const selectIsResourceFormLoading = () => createSelector(
   selectResourcesDomain,
-  resourcesState => resourcesState.isFormLoading
+  resourcesState => resourcesState.isResourceFormLoading
+);
+
+const selectIsFolderLoading = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.isFolderLoading
+);
+
+const selectIsFolderFormLoading = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.isFolderFormLoading
 );
 
 const selectIsCommitting = () => createSelector(
@@ -102,11 +112,10 @@ export {
   selectPaginatedFolders, selectPaginatedSelectFolders,
   selectFoldersTotal,
   selectFolder, selectFormFolder,
-  selectValid, selectIsLoading,
+  selectValid, selectIsResourceLoading, selectIsFolderLoading,
   selectPaginatedResources,
   selectResourcesTotal,
   selectResource, selectFormResource,
-  selectIsCommitting, selectIsFormLoading,
-  selectHasChanged,
-  selectFileData, selectIsDownloadingFileData,
+  selectIsCommitting, selectIsResourceFormLoading, selectIsFolderFormLoading,
+  selectHasChanged, selectFileData, selectIsDownloadingFileData,
 };
