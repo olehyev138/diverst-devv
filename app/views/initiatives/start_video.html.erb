@@ -5,7 +5,7 @@
     <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
-    <script src="//media.twiliocdn.com/sdk/js/video/releases/1.20.1/twilio-video.min.js"></script>
+    <%= javascript_include_tag 'twilio_video' %>
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
       video {
@@ -118,7 +118,7 @@
   </body>
   <script>
   $(document).ready(function(){
-  var token= '<%= @token %>';
+    var token= '<%= @token %>';
     var twilio = Twilio.Video;
     var dataTrack = new twilio.LocalDataTrack();
     var chatElement = document.getElementById('chat');
