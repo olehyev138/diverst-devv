@@ -5,14 +5,16 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Box, Card, CardContent, Link, Hidden, Divider, CardActions, CardActionArea
+  Typography, Grid, Button, Card, CardContent, Link, Divider, CardActions, CardActionArea, CircularProgress
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
 import LockIcon from '@material-ui/icons/Lock';
-import OpenInNew from '@material-ui/icons/OpenInNew';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import FileIcon from '@material-ui/icons/Description';
+import DownloadIcon from '@material-ui/icons/GetApp';
 
 import classNames from 'classnames';
 
@@ -38,6 +40,9 @@ const styles = theme => ({
   deleteButton: {
     color: theme.palette.error.main,
   },
+  downloadProgress: {
+    verticalAlign: 'middle',
+  },
 });
 
 export function FolderListItem(props) {
@@ -45,46 +50,75 @@ export function FolderListItem(props) {
   const item = dig(props, 'item');
   const isResource = dig(props, 'isResource');
 
-  const linkProps = isResource ? {
-    href: item.url,
-    target: '_blank',
-    rel: 'noopener',
-    className: classes.folderLink,
-  } : {
-    component: WrappedNavLink,
-    to: props.links.folderShow(item),
-    className: classes.folderLink,
-  };
+  let linkProps;
+  if (isResource)
+    if (item.file_file_path)
+      linkProps = {
+        disabled: props.isDownloadingFileData,
+        onClick: () => {
+          props.setFileName(item.file_file_name);
+          props.getFileDataBegin(item.file_file_path);
+        },
+      };
+    else
+      linkProps = {
+        href: item.url,
+        target: '_blank',
+        rel: 'noopener',
+        className: classes.folderLink,
+      };
+  else
+    linkProps = {
+      component: WrappedNavLink,
+      to: props.links.folderShow(item),
+      className: classes.folderLink,
+    };
+
   return (
     <React.Fragment>
       {item && (
         <Card>
           <Link {...linkProps} className={classes.link}>
-            <CardActionArea>
+            <CardActionArea disabled={props.isDownloadingFileData}>
               <CardContent>
                 <Grid container spacing={1} alignItems='center'>
                   <Grid item>
-                    {isResource ? (
-                      <React.Fragment>
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {isResource
+                      ? item.resource_type === 'file' ? (
+                        <FileIcon />
+                      ) : (
                         <PublicIcon />
-                      </React.Fragment>
-                    ) : (
-                      <React.Fragment>
-                        <FolderIcon />
-                        {item.password_protected && (
-                          <LockIcon />
-                        )}
-                      </React.Fragment>
-                    )}
+                      )
+                      : (
+                        <React.Fragment>
+                          <FolderIcon />
+                          {item.password_protected && (
+                            <LockIcon />
+                          )}
+                        </React.Fragment>
+                      )}
                   </Grid>
-                  <Grid item xs={!(isResource && item.url)}>
+
+                  <Grid item>
                     <Typography color='primary' variant='h6' component='h2'>
                       {isResource ? item.title : item.name}
                     </Typography>
                   </Grid>
-                  {isResource && item.url && (
+
+                  {isResource && (
                     <Grid item xs>
-                      <OpenInNew color='secondary' fontSize='small' />
+                      {item.resource_type === 'file' ? (
+                        <DownloadIcon color='secondary' />
+                      ) : (
+                        <OpenInNewIcon color='secondary' fontSize='small' />
+                      )}
+                    </Grid>
+                  )}
+
+                  {isResource && item.resource_type === 'file' && props.isDownloadingFileData && props.fileName && (
+                    <Grid item>
+                      <CircularProgress size={30} color='primary' className={classes.downloadProgress} />
                     </Grid>
                   )}
                 </Grid>
@@ -154,7 +188,11 @@ FolderListItem.propTypes = {
     folderShow: PropTypes.func,
     folderEdit: PropTypes.func,
     resourceEdit: PropTypes.func,
-  })
+  }),
+  isDownloadingFileData: PropTypes.bool,
+  getFileDataBegin: PropTypes.func,
+  fileName: PropTypes.string,
+  setFileName: PropTypes.func,
 };
 
 export default compose(
