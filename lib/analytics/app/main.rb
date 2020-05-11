@@ -2,16 +2,17 @@ require 'mysql2'
 require 'aws-sdk-s3'
 require 'json'
 
-POSTFIX_BUCKET_NAME = "diverst-analytics"
+POSTFIX_BUCKET_NAME = 'diverst-analytics'
 $s3 = Aws::S3::Resource.new(region: ENV['AWS_DEFAULT_REGION'])
 
 # TODO: env variables & secrets management
 $dbh = Mysql2::Client.new(
-    :host => "devops-db.chzb878zcht6.us-east-1.rds.amazonaws.com",
-    :database=> "diverst",
-    :username => "mainuser",
-    :password=> "password123",
-    :port => 3306)
+    host: 'devops-db.chzb878zcht6.us-east-1.rds.amazonaws.com',
+    database: 'diverst',
+    username: 'mainuser',
+    password: 'password123',
+    port: 3306
+)
 
 def main(event:, context:)
   graph_data = {
