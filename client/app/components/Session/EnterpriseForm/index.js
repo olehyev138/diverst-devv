@@ -1,10 +1,8 @@
 /**
- *
+ * !!!!!!!!!!!!!! Deprecated !!!!!!!!!!!!!!
  * EnterpriseForm
  *
  */
-
-/** !! DEPRECATED !! **/
 
 import React, { memo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
