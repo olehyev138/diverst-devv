@@ -10,7 +10,13 @@ Object.assign(Resources, {
   },
   un_archive(id, payload) {
     return axios.put(`${this.url}/${id}/un_archive`, payload);
-  }
+  },
+  getFileData(payload) {
+    if (!payload)
+      throw Error('Payload must be a valid ActiveStorage blob path');
+
+    return axios.get(payload, { responseType: 'blob' });
+  },
 });
 
 export default Resources;

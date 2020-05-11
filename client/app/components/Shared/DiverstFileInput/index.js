@@ -259,29 +259,31 @@ export function DiverstFileInput(props) {
                               </Typography>
                             </Box>
                           </Grid>
-                          <Divider orientation='vertical' flexItem />
-                          <Grid item>
-                            <Typography display='inline' variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
-                              {!required && (
-                                <IconButton
-                                  className={classes.deleteButton}
-                                  aria-label='delete'
-                                  size='small'
-                                  onClick={() => {
-                                    /* eslint-disable-next-line no-alert, no-restricted-globals */
-                                    if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
+                          {!required && (
+                            <React.Fragment>
+                              <Divider orientation='vertical' flexItem />
+                              <Grid item>
+                                <Typography display='inline' variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
+                                  <IconButton
+                                    className={classes.deleteButton}
+                                    aria-label='delete'
+                                    size='small'
+                                    onClick={() => {
+                                      /* eslint-disable-next-line no-alert, no-restricted-globals */
+                                      if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
 
-                                    form.setFieldValue(props.id, null);
-                                    setUploadedFile(null);
-                                  }}
-                                >
-                                  <Box className={classes.fileInfo}>
-                                    <DeleteIcon />
-                                  </Box>
-                                </IconButton>
-                              )}
-                            </Typography>
-                          </Grid>
+                                      form.setFieldValue(props.id, null);
+                                      setUploadedFile(null);
+                                    }}
+                                  >
+                                    <Box className={classes.fileInfo}>
+                                      <DeleteIcon />
+                                    </Box>
+                                  </IconButton>
+                                </Typography>
+                              </Grid>
+                            </React.Fragment>
+                          )}
                         </Grid>
                       )}
 
