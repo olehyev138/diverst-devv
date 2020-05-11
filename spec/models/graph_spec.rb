@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-#RSpec.describe Graph, type: :model do
+# RSpec.describe Graph, type: :model do
 #  xdescribe 'validations' do
 #    let(:graph) { FactoryBot.build_stubbed(:graph_with_metrics_dashboard) }
 #
@@ -124,4 +124,4 @@ require 'rails_helper'
 #
 #    # it 'defines #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
 #  end
-#end
+# end
