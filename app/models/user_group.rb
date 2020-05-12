@@ -110,7 +110,7 @@ class UserGroup < ApplicationRecord
   end
 
   # For use by ES indexing - method has to be defined in same class
-  def field_data
+  def user_field_data
     user.indexed_field_data
   end
 

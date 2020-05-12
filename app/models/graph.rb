@@ -1,11 +1,11 @@
 class Graph < ApplicationRecord
-#  include Metrics::OverviewMetrics
-#  include Metrics::GroupMetrics
-#  include Metrics::UserMetrics
-#  include Metrics::SegmentMetrics
-#  include Metrics::MentorshipMetrics
-#  include Metrics::CampaignMetrics
-#  include Metrics::MetricsUtil
+  include Metrics::OverviewMetrics
+  include Metrics::GroupMetrics
+  include Metrics::UserMetrics
+  include Metrics::SegmentMetrics
+  include Metrics::MentorshipMetrics
+  include Metrics::CampaignMetrics
+  include Metrics::MetricsUtil
 
   include Metrics
 

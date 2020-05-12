@@ -35,8 +35,9 @@ module BaseGraph
   #
   # Helpers
   #  - Often, the logic being applied in step 4, is common and needed more then once. Helper methods are defined
-  #    to reuse this logic, so as to avoid redundancy. These helpers do the searching and formatting.
-  #     So that all that is needed is  to define a enterprise_filter & ElasticsearchQuery object
+  #    to reuse this logic,
+  #    so as to avoid redundency. These helpers do the searching and formatting. So that all that is needed is
+  #    to define a enterprise_filter & ElasticsearchQuery object
   #
   class GraphBuilder
     attr_accessor :query, :formatter
@@ -46,7 +47,7 @@ module BaseGraph
       @instance = instance
 
       @query = @instance.get_query
-      @formatter = get_new_formatter
+      @formatter = Nvd3Formatter.new
     end
 
     def set_enterprise_filter(field: 'enterprise_id', value:)
@@ -76,7 +77,7 @@ module BaseGraph
     end
 
     def get_new_formatter
-      VegaLiteFormatter.new
+      Nvd3Formatter.new
     end
 
     # Helpers
@@ -113,7 +114,7 @@ module BaseGraph
     end
 
     def stacked_nested_terms(elements)
-      # Reformat's an elasticsearch nested terms response to a nvd3 stacked/grouped bar chart
+      # Reformats an es nested terms response to a nvd3 stacked/grouped bar chart
       # ES has all child buckets nested inside parent bucket
       # Nvd3 represents each child element/'stack' as a separate *series*
       #  ex: Ergs aggregated on certifications would have each certification name as
@@ -141,71 +142,6 @@ module BaseGraph
       end
 
       self
-    end
-  end
-
-  class VegaLiteFormatter
-    attr_accessor :title, :x_label, :y_label, :type, :filter_zeros, :parser
-
-    def initialize
-      @title = 'Default Graph'
-      @type = 'bar'
-
-      @parser = ElasticsearchParser.new
-
-      @series_index = -1
-      @data = {
-          values: []
-      }
-    end
-
-    # Parse, format & add a single element to data array
-    # @element - the element to add
-    #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
-    def add_element(es_element, series_name: @title, **args)
-      element = format_element(es_element, series_name: series_name, **args)
-      @data[:values] << element
-    end
-
-    # Parse, format & add a list of elements to current series
-    # @elements - the list of elements to add
-    #  - in the form of a list of elasticsearch aggregations elements: [{ key: <key>, doc_count: <n> }, ...n]
-    def add_elements(elements, series_index: @series_index, **args)
-      add_series if @data.dig([:series][series_index]).blank?
-      @data[:series][series_index][:values] = format_elements(elements, args)
-    end
-
-    # Parse and return key of element
-    # Key is the thing that uniquely identifies the item
-    # Usually this is the same as the x value, but not always
-    # @element - the element to parse
-    def get_element_key(element, key: :x)
-      @parser.parse(element)[key]
-    end
-
-    # Returns the dataset formatted to Vega Lite, ready to be passed to frontend
-    def format
-      # Set these properties here so user can change them beforehand
-      @data[:title] = @title
-      @data[:x_label] = @x_label
-      @data[:y_label] = @y_label
-      @data[:type] = @type
-
-      @data
-    end
-
-    private
-
-    def format_elements(elements, **args)
-      elements.map { |element|
-        format_element(element, args)
-      }
-    end
-
-    def format_element(element, series_name: @title, **args)
-      values = @parser.parse(element, args)
-      values[:series] = series_name
-      values
     end
   end
 
@@ -281,7 +217,7 @@ module BaseGraph
     end
 
     # Parse and return key of element
-    # Key is the thing that uniquely identifies the item
+    # Key is the thing that uniquely identifes the item
     # Usually this is the same as the x value, but not always
     # @element - the element to parse
     def get_element_key(element, key: :x)
@@ -310,6 +246,7 @@ module BaseGraph
         @data[:series].each_with_index do |series, i|
           @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
         end
+
       end
 
       @data
@@ -349,7 +286,7 @@ module BaseGraph
   #  -  2) You run parse, passing a single elasticsearch element,
   #        parse runs through the extractors hash building a 'values' hash,
   #        each key,value pair is the key of the extractor and the return value of the extractor
-  #        ex: a extractors hash like: { x: <lambda_x>  } maps to: { x: <lambda_x_return_value> }
+  #        ex: a extractos hash like: { x: <lambda_x>  } maps to: { x: <lambda_x_return_value> }
   #
   #  ElasticsearchParser also has a method: 'get_elements'
   #  'get_elements' takes a type of extractor that returns a list of elements, which can then

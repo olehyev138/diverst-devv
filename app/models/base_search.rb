@@ -5,11 +5,11 @@ module BaseSearch
 
   # Represents and builds an elasticsearch aggregation query
   # Essentially a list of methods that take parameters and builds
-  # a hash out of them, representing various elasticsearch aggregation types
+  # a hash out of them, reperesenting various elasicsearch aggregation types
   #
   # Supports nesting to any degree through blocks.
   #   - Block is passed a new ElasticsearchQuery instance.
-  #   - Block is expected to return an instance of ElasticsearchQuery, presumably with
+  #   - Block is expected to return an instance of ElasticsearchQuery, presumambly with
   #     one or more aggregations defined
   #   - A query returned from a block, is nested within the outer query
   #   - Ex: filter_agg(...) { |q| q.terms_agg(...) }
@@ -92,7 +92,7 @@ module BaseSearch
     # Creates a terms aggregation
     # @field - field to aggregate on
     # @order_field - optional, default: _count, field to order on
-    # @order_dir - order direction, default: desc, direction in which to order
+    # @order_dir - order direction, deffault: desc, dirction in which to order
     def terms_agg(field:, size: 2147483647, order_field: '_count', order_dir: 'desc', min_doc_count: 1, &block)
       agg = { agg: { terms: { field: field, size: size, min_doc_count: min_doc_count, order: { order_field => order_dir } } } }
       base_agg(agg, block)
@@ -101,7 +101,7 @@ module BaseSearch
     # Creates any aggregation that follows the { type: { field: <field> } } format
     #   - this is the bulk of aggregations
     # @type - the type of aggregation this is, as defined by elasticsearch
-    #    - ex, a missing aggregation is defined by elasticsearch as 'missing' so type would be 'missing'
+    #    - ex, a missing aggregation is defined by elasticsearch as 'misssing' so type would be 'missing'
     # @field - the field in which this aggregation is being performed on
     def agg(type:, field:, &block)
       agg = { agg: { type => { field: field } } }

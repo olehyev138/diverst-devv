@@ -10,15 +10,15 @@ module Metrics
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.title = "#{c_t(:erg)} Population"
 
-      graph.query = graph.query.terms_agg(field: 'group.name', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
       }
 
-      graph.query = add_scoped_group_filter(graph, 'group_id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'group_id', scoped_groups)
 
       graph.formatter.parser.extractors[:y] = graph.formatter.parser.date_range(key: :doc_count)
+      graph.drilldown_graph(parent_field: 'group.parent.name')
 
-      graph.formatter.add_elements(graph.search)
       graph.build
     end
 
@@ -29,16 +29,16 @@ module Metrics
       graph.set_enterprise_filter(field: 'pillar.outcome.group.enterprise_id', value: enterprise_id)
       graph.formatter.title = 'Events Created'
 
-      graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
       }
 
-      graph.query = add_scoped_group_filter(graph, 'pillar.outcome.group.id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'pillar.outcome.group.id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
+      graph.drilldown_graph(parent_field: 'pillar.outcome.group.parent.name')
 
-      graph.formatter.add_elements(graph.search)
       graph.build
     end
 
@@ -49,16 +49,16 @@ module Metrics
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.title = 'Messages Sent'
 
-      graph.query = graph.query.terms_agg(field: 'group.name', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
       }
 
-      graph.query = add_scoped_group_filter(graph, 'group_id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'group_id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
+      graph.drilldown_graph(parent_field: 'group.parent.name')
 
-      graph.formatter.add_elements(graph.search)
       graph.build
     end
 
@@ -69,16 +69,16 @@ module Metrics
       graph.set_enterprise_filter(value: enterprise_id)
       graph.formatter.title = "# Views per #{c_t(:erg)}"
 
-      graph.query = graph.query.terms_agg(field: 'group.name', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
       }
 
-      graph.query = add_scoped_group_filter(graph, 'group_id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'group_id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
+      graph.drilldown_graph(parent_field: 'group.parent.name')
 
-      graph.formatter.add_elements(graph.search)
       graph.build
     end
 
@@ -89,13 +89,13 @@ module Metrics
       graph.set_enterprise_filter(value: enterprise_id)
       graph.formatter.title = '# Views per Folder'
 
-      graph.query = graph.query.terms_agg(field: 'folder.id', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
         q.date_range_agg(field: 'created_at', range: date_range) { |qq|
           qq.top_hits_agg
         }
       }
 
-      graph.query = add_scoped_group_filter(graph, 'folder.group.id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'folder.group.id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
@@ -108,6 +108,7 @@ module Metrics
       }
 
       graph.formatter.add_elements(graph.search)
+
       graph.build
     end
 
@@ -118,13 +119,13 @@ module Metrics
       graph.set_enterprise_filter(value: enterprise_id)
       graph.formatter.title = '# Views per Resource'
 
-      graph.query = graph.query.terms_agg(field: 'resource.id', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'resource.id') { |q|
         q.date_range_agg(field: 'created_at', range: date_range) { |qq|
           qq.top_hits_agg
         }
       }
 
-      graph.query = add_scoped_group_filter(graph, 'resource.group.id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'resource.group.id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
@@ -137,6 +138,7 @@ module Metrics
       }
 
       graph.formatter.add_elements(graph.search)
+
       graph.build
     end
 
@@ -147,13 +149,13 @@ module Metrics
       graph.set_enterprise_filter(value: enterprise_id)
       graph.formatter.title = '# Views per News Link'
 
-      graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id', size: 10) { |q|
+      graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q|
         q.date_range_agg(field: 'created_at', range: date_range) { |qq|
           qq.top_hits_agg
         }
       }
 
-      graph.query = add_scoped_group_filter(graph, 'news_feed_link.group.id', scoped_groups)
+      graph.query = add_scoped_model_filter(graph, 'news_feed_link.group.id', scoped_groups)
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
@@ -185,9 +187,8 @@ module Metrics
       custom_parser = graph.get_new_parser
       custom_parser.extractors[:y] = custom_parser.date_range(key: :doc_count)
 
-      scoped_groups = manage_group_scopes(scoped_groups)
       groups = scoped_groups.present? ? enterprise.groups.where(id: scoped_groups)
-                                      : enterprise.groups
+                                      : enterprise.groups.all
       groups.each do |group|
         graph.query = graph.query
           .filter_agg(field: 'group_id', value: group.id) { |q|
@@ -224,9 +225,8 @@ module Metrics
       custom_parser = graph.get_new_parser
       custom_parser.extractors[:y] = custom_parser.date_range(key: :doc_count)
 
-      scoped_groups = manage_group_scopes(scoped_groups)
       groups = scoped_groups.present? ? enterprise.groups.where(id: scoped_groups)
-                                      : enterprise.groups
+                                      : enterprise.groups.all
       groups.each do |group|
         graph.query = graph.query
           .filter_agg(field: 'folder.group_id', value: group.id) { |q|
