@@ -29,7 +29,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
-
+import DiverstRichTextInput2 from 'components/Shared/DiverstRichTextInput2';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -49,10 +49,16 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
         <CardContent>
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
-              <DiverstRichTextInput
-                title={intl.formatMessage(messages.Home.message)}
-                html={values.home_message}
-                getRichTextHTML={getRichTextHtmlValue}
+              <Field
+                component={DiverstRichTextInput2}
+                required
+                onChange={value => setFieldValue('home_message', value)}
+                fullWidth
+                id='home_message'
+                name='home_message'
+                margin='normal'
+                label={intl.formatMessage(messages.Home.message)}
+                value={values.home_message}
               />
             </Grid>
           </Grid>
@@ -126,6 +132,7 @@ BrandingHomeInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   intl: intlShape,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(
