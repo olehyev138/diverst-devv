@@ -12,7 +12,7 @@ import {
   CREATE_RESOURCE_BEGIN, UPDATE_RESOURCE_BEGIN,
   DELETE_RESOURCE_BEGIN,
   VALIDATE_FOLDER_PASSWORD_BEGIN,
-  ARCHIVE_RESOURCE_BEGIN
+  ARCHIVE_RESOURCE_BEGIN, GET_FILE_DATA_BEGIN
 } from 'containers/Resource/constants';
 
 import {
@@ -28,6 +28,7 @@ import {
   deleteResourceError,
   validateFolderPasswordSuccess, validateFolderPasswordError, deleteFolderSuccess, deleteResourceSuccess,
   archiveResourceError, archiveResourceSuccess,
+  getFileDataSuccess, getFileDataError,
 } from 'containers/Resource/actions';
 
 import {
@@ -259,6 +260,19 @@ export function* validateFolderPassword(action) {
   }
 }
 
+export function* getResourceFileData(action) {
+  try {
+    const response = yield call(api.resources.getFileData.bind(api.resources), action.payload);
+
+    yield put(getFileDataSuccess({ data: response.data, contentType: response.headers['content-type'] }));
+  } catch (err) {
+    yield put(getFileDataError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to retrieve file data', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* foldersSaga() {
   yield takeLatest(GET_FOLDERS_BEGIN, getFolders);
   yield takeLatest(GET_FOLDER_BEGIN, getFolder);
@@ -272,4 +286,5 @@ export default function* foldersSaga() {
   yield takeLatest(DELETE_RESOURCE_BEGIN, deleteResource);
   yield takeLatest(VALIDATE_FOLDER_PASSWORD_BEGIN, validateFolderPassword);
   yield takeLatest(ARCHIVE_RESOURCE_BEGIN, archiveResource);
+  yield takeLatest(GET_FILE_DATA_BEGIN, getResourceFileData);
 }
