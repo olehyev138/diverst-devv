@@ -34,7 +34,10 @@ import {
   GET_RESOURCES_ERROR,
   ARCHIVE_RESOURCE_BEGIN,
   ARCHIVE_RESOURCE_SUCCESS,
-  ARCHIVE_RESOURCE_ERROR
+  ARCHIVE_RESOURCE_ERROR,
+  GET_FILE_DATA_BEGIN,
+  GET_FILE_DATA_SUCCESS,
+  GET_FILE_DATA_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -51,6 +54,11 @@ export const initialState = {
   currentResource: null,
   hasChanged: false,
   valid: true,
+  isDownloadingFileData: false,
+  fileData: {
+    data: null,
+    contentType: null,
+  },
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -132,6 +140,19 @@ function resourcesReducer(state = initialState, action) {
       case ARCHIVE_RESOURCE_SUCCESS:
         draft.hasChanged = true;
         draft.isCommitting = false;
+        break;
+      case GET_FILE_DATA_BEGIN:
+        draft.isDownloadingFileData = true;
+        draft.fileData.data = null;
+        draft.fileData.contentType = null;
+        break;
+      case GET_FILE_DATA_SUCCESS:
+        draft.isDownloadingFileData = false;
+        draft.fileData.data = action.payload.data;
+        draft.fileData.contentType = action.payload.contentType;
+        break;
+      case GET_FILE_DATA_ERROR:
+        draft.isDownloadingFileData = false;
         break;
     }
   });

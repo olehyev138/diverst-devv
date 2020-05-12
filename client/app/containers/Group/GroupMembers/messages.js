@@ -24,6 +24,9 @@ export default defineMessages({
   changeScope: {
     id: `${scope}.index.label.changeScope`,
   },
+  count: {
+    id: `${scope}.index.label.count`,
+  },
   scopes: {
     accepted_users: {
       id: `${scope}.scopes.accepted_users`,
