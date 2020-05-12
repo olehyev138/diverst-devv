@@ -1,39 +1,38 @@
 import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Typography, TextField, CardContent } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import RichTextEditor from 'react-rte';
 
-export class DiverstRichTextInput2 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: RichTextEditor.createEmptyValue()
-    };
-  }
-
-  onChange = (value) => {
-    this.setState({ value });
-    if (this.props.onChange)
-      this.props.onChange(
+export function DiverstRichTextInput2(props) {
+  const { label, ...rest } = props;
+  const [value, setValue] = useState(props.value
+    ? RichTextEditor.createValueFromString(props.value, 'html')
+    : RichTextEditor.createEmptyValue());
+  const onChange = (value) => {
+    setValue(value);
+    if (props.onChange)
+      props.onChange(
         value.toString('html')
       );
   };
 
-  render() {
-    return (
-      <div>
-        <RichTextEditor
-          value={this.state.value}
-          onChange={this.onChange}
-        />
-      </div>
-    );
-  }
+  return (
+    <React.Fragment>
+      <Typography variant='h6' color='primary'>
+        {label}
+      </Typography>
+      <RichTextEditor
+        value={value}
+        onChange={onChange}
+      />
+    </React.Fragment>
+  );
 }
 
 DiverstRichTextInput2.propTypes = {
   classes: PropTypes.object,
   onChange: PropTypes.func,
+  value: PropTypes.string,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
