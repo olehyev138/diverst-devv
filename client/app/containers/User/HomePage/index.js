@@ -28,7 +28,7 @@ import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
 import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
-import DiverstSanitizedHtml from 'components/Shared/DiverstSanitizedHtml';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   title: {
@@ -120,11 +120,38 @@ handleClickOpen = () => {
       />
     );
 
-    const enterpriseMessage = (<DiverstSanitizedHtml html={this.props.enterprise ? this.props.enterprise.home_message : ''} />);
+    const enterpriseMessage = (
+      <DiverstHTMLEmbedder
+        html={
+          this.props.enterprise
+            ? this.props.enterprise.home_message
+            : ''
+        }
+        interweaveProps={{
+          allowList: [
+            'br',
+            'img', 'pre',
+            'blockquote',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li',
+            'body1', 'body2',
+            'a', 'p', 'u',
+            'strong',
+            'del',
+            'em',
+            'code'
+          ]
+        }}
+      />
+    );
 
     return (
       <React.Fragment>
-        {enterpriseMessage}
+        <Grid container>
+          <Grid item>
+            {enterpriseMessage}
+          </Grid>
+        </Grid>
         <Grid container spacing={3}>
           <Grid item xs>
             {events}
