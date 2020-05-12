@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.5'
 
-gem 'active_storage_validations', '~> 0.8.4'
+gem 'active_storage_validations', '~> 0.8.8'
 gem 'mini_magick', '~> 4.10.1'
 gem 'actionmailer', '~> 5.2.3'
 gem 'actionpack', '~> 5.2.3'
