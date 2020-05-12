@@ -8,8 +8,6 @@ import ColoredBarGraph from '../Base/ColoredBarGraph';
 export function ViewsPerFolderGraph(props) {
   const [value, setValue] = useState(undefined);
 
-  console.log(props);
-
   return (
     <ColoredBarGraph
       config={{

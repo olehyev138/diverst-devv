@@ -9,7 +9,7 @@ module Metrics
 
   module ClassMethods
     @@analytics_bucket = ENV['AWS_ACCESS_KEY_ID'] ?
-        Aws::S3::Resource::new(region: 'us-east-1')
+        Aws::S3::Resource.new(region: 'us-east-1')
                            .bucket("#{ENV['ENV_NAME']}-diverst-analytics") : nil
 
     #

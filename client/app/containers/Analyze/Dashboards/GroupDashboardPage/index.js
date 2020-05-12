@@ -61,8 +61,7 @@ export function GroupDashboardPage(props) {
     // build a list like [ 'group01', ... ] & filter for groups in this list
     setDashboardFilters(scope.groups && scope.groups.length
       ? [{ value: scope.groups.map(g => g.label), key: 'name', op: 'in' }]
-      : []
-    );
+      : []);
   };
   const handleDashboardChange = (_, newDashboard) => {
     setCurrentDashboard(newDashboard);

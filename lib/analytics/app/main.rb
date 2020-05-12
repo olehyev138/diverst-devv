@@ -11,8 +11,7 @@ $dbh = Mysql2::Client.new(
     database: 'diverst',
     username: 'mainuser',
     password: 'password123',
-    port: 3306
-)
+    port: 3306)
 
 def main(event:, context:)
   graph_data = {

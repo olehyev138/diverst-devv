@@ -7,11 +7,6 @@ import {
   Paper, withStyles
 } from '@material-ui/core';
 
-// helpers
-import {
-  setGraphConfig
-} from 'utils/metricsHelpers';
-
 const styles = theme => ({
   paper: {
     padding: theme.spacing(3),
@@ -59,7 +54,7 @@ const spec = {
           test: {
             and: [
               { selection: 'select' },
-              "length(data(\"select_store\"))"
+              "length(data('select_store'))"
             ]
           },
           value: 2

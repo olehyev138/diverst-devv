@@ -6,8 +6,10 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
   def group_overview_metrics
     authorize MetricsDashboard, :index?
 
-    render status: 200, json: { total_groups: current_user.enterprise.groups.size,
-                   avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise) }
+    render status: 200, json: {
+        total_groups: current_user.enterprise.groups.size,
+        avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise)
+    }
   end
 
   def group_specific_metrics

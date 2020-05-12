@@ -5,9 +5,9 @@ module Api::V1::Concerns::Metrics
 
   included do
     # before_action :authenticate_user! - TODO: authentication
-    #before_action :set_graph
+    # before_action :set_graph
 
-    #before_action :set_data_bucket
+    # before_action :set_data_bucket
     before_action :parse_csv_date_range, only: [:group_population,
                                                 :users_per_group,
                                                 :initiatives_per_group,
@@ -22,11 +22,6 @@ module Api::V1::Concerns::Metrics
   end
 
   protected
-
-  def set_data_bucket
-    s3 = Aws::S3::Resource::new(region: 'us-east-1')
-    @analytics_bucket = s3.bucket('diverst-analytics')
-  end
 
   def set_graph
     @graph = Graph.new
