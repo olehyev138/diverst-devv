@@ -14,22 +14,17 @@ import { Field, Formik, Form } from 'formik';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid, Paper,
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
-import Select from 'components/Shared/DiverstSelect';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
-import DiverstRichTextInput2 from 'components/Shared/DiverstRichTextInput2';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -50,7 +45,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
-                component={DiverstRichTextInput2}
+                component={DiverstRichTextInput}
                 required
                 onChange={value => setFieldValue('home_message', value)}
                 fullWidth

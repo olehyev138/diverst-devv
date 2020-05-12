@@ -127,21 +127,6 @@ handleClickOpen = () => {
             ? this.props.enterprise.home_message
             : ''
         }
-        interweaveProps={{
-          allowList: [
-            'br',
-            'img', 'pre',
-            'blockquote',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-            'ul', 'ol', 'li',
-            'body1', 'body2',
-            'a', 'p', 'u',
-            'strong',
-            'del',
-            'em',
-            'code'
-          ]
-        }}
       />
     );
 
