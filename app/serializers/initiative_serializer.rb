@@ -2,10 +2,18 @@ class InitiativeSerializer < ApplicationRecordSerializer
   attributes :pillar, :owner, :budget, :outcome, :budget_status,
              :expenses_status, :current_expenses_sum, :leftover, :full?, :permissions,
              :picture, :picture_file_name, :picture_data, :qr_code, :qr_code_file_name, :qr_code_data,
-             :total_comments, :is_attending, :total_attendees, :currency, :budget_item
+             :total_comments, :is_attending, :total_attendees, :currency, :budget_item, :group
 
   has_many :comments
   has_many :participating_groups
+
+  def group
+    {
+        id: object.group.id,
+        name: object.group.name,
+        calendar_color: object.group.calendar_color,
+    }
+  end
 
   def budget_item
     BudgetItemSerializer.new(object.budget_item, scope: scope, scope_name: :scope, event: object).as_json if object.budget_item.present?

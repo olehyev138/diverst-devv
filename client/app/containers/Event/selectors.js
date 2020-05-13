@@ -1,12 +1,26 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer/dist/immer';
+import { mapFieldNames } from 'utils/selectorHelpers';
 
 const selectEventsDomain = state => state.events || initialState;
 
 const selectPaginatedEvents = () => createSelector(
   selectEventsDomain,
   eventsState => eventsState.events
+);
+
+const selectCalendarEvents = () => createSelector(
+  selectEventsDomain,
+  eventsState => eventsState.events.map(event => mapFieldNames(event,
+    {
+      id: 'id',
+      groupId: 'group.id',
+      start: 'start',
+      end: 'end',
+      title: 'name',
+      color: 'group.calendar_color',
+    }))
 );
 
 const selectEventsTotal = () => createSelector(
