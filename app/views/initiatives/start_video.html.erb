@@ -69,6 +69,7 @@
               <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic', title: 'mute mic') %>
               <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video', title: 'turn off video') %>
               <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call', title: 'end video call') %>
+              <%= inline_svg('icons/plus.svg', size: '55px*25px', id: 'screen-share', title: 'screen share') %>
             </span></h2>
           </div>
         </div>
@@ -179,6 +180,13 @@
       });
     }
 
+    function screenShareOFLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      const stream = navigator.mediaDevices.getDisplayMedia();
+      const screenTrack = dataTrack(stream.getTracks()[0]);
+      window.room.localParticipant.publishTrack(screenTrack);
+    }
+
 
     function disconnectLocalParticipant() {
       var localParticipant = window.room.localParticipant;
@@ -202,6 +210,10 @@
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
       window.location.href = "<%= group_event_path(@group, @initiative) %>";
+    });
+
+    $('#screen-share').on('click', function(){
+      screenShareOFLocalParticipant();
     });
 
 
