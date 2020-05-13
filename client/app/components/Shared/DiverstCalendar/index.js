@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -7,13 +7,23 @@ import { Grid } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
+import 'stylesheets/main.scss';
+
 const styles = theme => ({});
 
 export function DiverstCalendar({ events }) {
+  const calendarRef = React.createRef();
+
   return (
     <FullCalendar
+      ref={calendarRef}
       defaultView='dayGridMonth'
       plugins={[dayGridPlugin]}
+      header={{
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      }}
       events={events}
     />
   );
