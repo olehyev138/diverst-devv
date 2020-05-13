@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents } from 'containers/User/selectors';
+import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents, selectCalendarEvents } from 'containers/User/selectors';
 import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
@@ -54,6 +54,7 @@ export function EventsPage(props) {
 
   const [tab, setTab] = useState(EventTypes.upcoming);
   const [participateTab, setParticipateTab] = useState(ParticipationTypes.participating);
+  const [calendar, setCalendar] = useState(false);
   const [params, setParams] = useState(defaultParams);
 
   const getEvents = (scopes = null, participation = null, resetParams = false) => {
@@ -98,7 +99,7 @@ export function EventsPage(props) {
       query_scopes: scopes,
       participation
     };
-    props.getUserEventsBegin(newParams);
+    props.getUserEventsBegin(calendar ? { ...newParams, scopes: ['not_archived'], count: -1 } : newParams);
     setParams(newParams);
   };
 
@@ -141,6 +142,10 @@ export function EventsPage(props) {
     }
   };
 
+  const handleChangeCalendar = () => {
+    setCalendar(!calendar);
+  };
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -153,7 +158,10 @@ export function EventsPage(props) {
   return (
     <List
       events={props.events}
+      calendarEvents={props.calendarEvents}
       eventsTotal={props.eventsTotal}
+      calendar={calendar}
+      handleCalendarChange={handleChangeCalendar}
       currentTab={tab}
       currentPTab={participateTab}
       handleChangePTab={handleChangeParticipationTab}
@@ -171,6 +179,7 @@ EventsPage.propTypes = {
   getUserEventsBegin: PropTypes.func.isRequired,
   userUnmount: PropTypes.func.isRequired,
   events: PropTypes.array,
+  calendarEvents: PropTypes.array,
   eventsTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   loaderProps: PropTypes.object,
@@ -185,6 +194,7 @@ EventsPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
+  calendarEvents: selectCalendarEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoadingEvents(),
   currentSession: selectUser(),

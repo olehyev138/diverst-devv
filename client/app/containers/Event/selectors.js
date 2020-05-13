@@ -72,4 +72,4 @@ const selectHasChanged = () => createSelector(
   eventsState => eventsState.hasChanged
 );
 
-export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting, selectFormEvent, selectHasChanged };
+export { selectEventsDomain, selectPaginatedEvents, selectCalendarEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting, selectFormEvent, selectHasChanged };

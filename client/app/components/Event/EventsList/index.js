@@ -32,6 +32,7 @@ import { customTexts } from 'utils/customTextHelpers';
 import EventListItem from 'components/Event/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { DiverstCalendar } from 'components/Shared/DiverstCalendar';
 
 const styles = theme => ({
   eventListItem: {
@@ -88,6 +89,11 @@ export function EventsList(props, context) {
         </React.Fragment>
       )}
       <Paper>
+        <Button
+          onClick={props.handleCalendarChange}
+        >
+          Calendar
+        </Button>
         {props.currentPTab != null && (
           <ResponsiveTabs
             value={props.currentPTab}
@@ -99,7 +105,7 @@ export function EventsList(props, context) {
             <Tab label={intl.formatMessage(messages.index.all)} />
           </ResponsiveTabs>
         )}
-        {props.onlyUpcoming || (
+        {props.onlyUpcoming || props.calendar || (
           <ResponsiveTabs
             value={props.currentTab}
             onChange={props.handleChangeTab}
@@ -113,50 +119,58 @@ export function EventsList(props, context) {
         )}
       </Paper>
       <br />
-      <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
-        <Grid container spacing={3}>
-          { /* eslint-disable-next-line arrow-body-style */}
-          {props.events && Object.values(props.events).map((item, i) => {
-            return (
-              <Grid item key={item.id} className={classes.eventListItem}>
-                <Card>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link
-                    className={classes.eventLink}
-                    component={WrappedNavLink}
-                    to={{
-                      pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
-                      state: { id: item.id }
-                    }}
-                  >
-                    <CardActionArea>
-                      <CardContent>
-                        <EventListItem item={item} />
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                </Card>
-              </Grid>
-            );
-          })}
-          {props.events && props.events.length <= 0 && (
-            <React.Fragment>
-              <Grid item sm>
-                <Box mt={3} />
-                <Typography variant='h6' align='center' color='textSecondary'>
-                  <DiverstFormattedMessage {...messages.index.emptySection} />
-                </Typography>
-              </Grid>
-            </React.Fragment>
-          )}
-        </Grid>
-      </DiverstLoader>
-      {props.events && props.events.length > 0 && (
-        <DiverstPagination
-          isLoading={props.isLoading}
-          count={props.eventsTotal}
-          handlePagination={props.handlePagination}
+      { props.calendar ? (
+        <DiverstCalendar
+          events={props.calendarEvents}
         />
+      ) : (
+        <React.Fragment>
+          <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
+            <Grid container spacing={3}>
+              { /* eslint-disable-next-line arrow-body-style */}
+              {props.events && Object.values(props.events).map((item, i) => {
+                return (
+                  <Grid item key={item.id} className={classes.eventListItem}>
+                    <Card>
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <Link
+                        className={classes.eventLink}
+                        component={WrappedNavLink}
+                        to={{
+                          pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                          state: { id: item.id }
+                        }}
+                      >
+                        <CardActionArea>
+                          <CardContent>
+                            <EventListItem item={item} />
+                          </CardContent>
+                        </CardActionArea>
+                      </Link>
+                    </Card>
+                  </Grid>
+                );
+              })}
+              {props.events && props.events.length <= 0 && (
+                <React.Fragment>
+                  <Grid item sm>
+                    <Box mt={3} />
+                    <Typography variant='h6' align='center' color='textSecondary'>
+                      <DiverstFormattedMessage {...messages.index.emptySection} />
+                    </Typography>
+                  </Grid>
+                </React.Fragment>
+              )}
+            </Grid>
+          </DiverstLoader>
+          {props.events && props.events.length > 0 && (
+            <DiverstPagination
+              isLoading={props.isLoading}
+              count={props.eventsTotal}
+              handlePagination={props.handlePagination}
+            />
+          )}
+        </React.Fragment>
       )}
     </React.Fragment>
   );
@@ -166,8 +180,11 @@ EventsList.propTypes = {
   intl: PropTypes.object,
   classes: PropTypes.object,
   events: PropTypes.array,
+  calendarEvents: PropTypes.array,
   eventsTotal: PropTypes.number,
   currentTab: PropTypes.number,
+  calendar: PropTypes.bool,
+  handleCalendarChange: PropTypes.func,
   isLoading: PropTypes.bool,
   handleChangeTab: PropTypes.func,
   currentPTab: PropTypes.number,
