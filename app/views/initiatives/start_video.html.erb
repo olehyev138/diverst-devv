@@ -180,11 +180,14 @@
       });
     }
 
-    function screenShareOFLocalParticipant() {
+    async function screenShareOFLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      const stream = navigator.mediaDevices.getDisplayMedia();
-      const screenTrack = dataTrack(stream.getTracks()[0]);
+      const stream = await navigator.mediaDevices.getDisplayMedia();
+      const screenTrack = new twilio.LocalVideoTrack(stream.getTracks()[0]);
+      console.log(screenTrack);
+      console.log('????');
       window.room.localParticipant.publishTrack(screenTrack);
+      attachTracks([screenTrack], document.getElementById('video-grid'));
     }
 
 
