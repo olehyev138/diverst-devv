@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
 resource "aws_lambda_function" "diverst_analytics" {
   function_name = "${var.env_name}-diverst-analytics"
 
-  s3_bucket = "devops-inmvlike"
+  s3_bucket = aws_s3_bucket.bucket-filestorage.id
   s3_key    = "deploy.zip"
 
   handler   = "main.main"
@@ -69,6 +69,12 @@ resource "aws_lambda_function" "diverst_analytics" {
 resource "aws_s3_bucket" "bucket-filestorage" {
   bucket        = "${var.env_name}-diverst-analytics"
   force_destroy = true
+}
+
+resource "aws_s3_bucket_object" "placeholder-object" {
+  bucket  = aws_s3_bucket.bucket-filestorage.id
+  key     = "deploy.zip"
+  source  = "${path.module}/placeholder/placeholder.zip"
 }
 
 #
