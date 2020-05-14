@@ -7,6 +7,7 @@ import { CircularProgress, Grid } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 
 import 'stylesheets/main.scss';
 
@@ -32,6 +33,7 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
       <FullCalendar
         ref={calendarRef}
         defaultView='dayGridMonth'
+        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
         header={{
           left: 'prev,next today',
           center: 'title',
