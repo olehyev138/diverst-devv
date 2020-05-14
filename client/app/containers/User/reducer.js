@@ -120,6 +120,7 @@ function usersReducer(state = initialState, action) {
           if (event.id === toNumber(action.payload.initiative_user.initiative_id))
             return produce(event, (eventDraft) => {
               eventDraft.is_attending = true;
+              eventDraft.total_attendees = event.total_attendees + 1;
             });
           return event;
         });
@@ -129,6 +130,7 @@ function usersReducer(state = initialState, action) {
           if (event.id === toNumber(action.payload.initiative_user.initiative_id))
             return produce(event, (eventDraft) => {
               eventDraft.is_attending = false;
+              eventDraft.total_attendees = event.total_attendees - 1;
             });
           return event;
         });
