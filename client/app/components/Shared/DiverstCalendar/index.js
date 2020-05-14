@@ -3,33 +3,56 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
 import 'stylesheets/main.scss';
 
-const styles = theme => ({});
+const styles = theme => ({
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+});
 
-export function DiverstCalendar({ events }) {
+export function DiverstCalendar({ events, isLoading, classes }) {
   const calendarRef = React.createRef();
 
   return (
-    <FullCalendar
-      ref={calendarRef}
-      defaultView='dayGridMonth'
-      plugins={[dayGridPlugin]}
-      header={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      }}
-      events={events}
-    />
+    <div className={classes.wrapper}>
+      <FullCalendar
+        ref={calendarRef}
+        defaultView='dayGridMonth'
+        plugins={[dayGridPlugin]}
+        header={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        }}
+        events={events}
+      />
+      {isLoading && (
+        <Grid container justify='center' alignContent='center'>
+          <Grid item>
+            <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+          </Grid>
+        </Grid>
+      )}
+    </div>
   );
 }
 
 DiverstCalendar.propTypes = {
+  classes: PropTypes.object,
+  isLoading: PropTypes.bool,
   events: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     groupId: PropTypes.number,

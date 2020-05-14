@@ -32,7 +32,7 @@ import { customTexts } from 'utils/customTextHelpers';
 import EventListItem from 'components/Event/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
-import { DiverstCalendar } from 'components/Shared/DiverstCalendar';
+import DiverstCalendar from 'components/Shared/DiverstCalendar';
 
 const styles = theme => ({
   eventListItem: {
@@ -122,6 +122,7 @@ export function EventsList(props, context) {
       { props.calendar ? (
         <DiverstCalendar
           events={props.calendarEvents}
+          isLoading={props.isLoading}
         />
       ) : (
         <React.Fragment>
