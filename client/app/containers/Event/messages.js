@@ -68,6 +68,9 @@ export default defineMessages({
   calendar: {
     id: `${scope}.index.button.calendar`,
   },
+  list: {
+    id: `${scope}.index.button.list`,
+  },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
   },

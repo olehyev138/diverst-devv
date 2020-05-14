@@ -16,6 +16,7 @@ import {
 
 import AddIcon from '@material-ui/icons/Add';
 import TodayIcon from '@material-ui/icons/Today';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 import { injectIntl } from 'react-intl';
 
@@ -148,12 +149,15 @@ export function EventsList(props, context) {
               </ResponsiveTabs>
             </Grid>
             <Grid item xs>
-              <Tooltip title={<DiverstFormattedMessage {...messages.calendar} />} placement='top'>
+              <Tooltip
+                title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
+                placement='top'
+              >
                 <IconButton
                   onClick={props.handleCalendarChange}
                   className={classes.buttons}
                 >
-                  <TodayIcon />
+                  {props.calendar ? <ListAltIcon /> : <TodayIcon />}
                 </IconButton>
               </Tooltip>
             </Grid>
