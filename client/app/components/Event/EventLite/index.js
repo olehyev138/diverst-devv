@@ -8,28 +8,19 @@ import {
   Paper, Typography, Grid, Button, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import ArchiveIcon from '@material-ui/icons/Archive';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import ExportIcon from '@material-ui/icons/SaveAlt';
-
-import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
-import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
 import DiverstImg from 'components/Shared/DiverstImg';
 import { injectIntl, intlShape } from 'react-intl';
 
-import EventComment from 'components/Event/EventComment';
-import EventCommentForm from 'components/Event/EventCommentForm';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 
@@ -77,8 +68,8 @@ export function EventLite(props) {
           {event.is_attending ? (
             <Button
               variant='contained'
-              size='large'
-              color='primary'
+              size='small'
+              color='secondary'
               className={classes.buttons}
               onClick={() => {
                 props.leaveEventBegin({
@@ -93,7 +84,7 @@ export function EventLite(props) {
             <Permission show={permission(props.event, 'join_event?')}>
               <Button
                 variant='contained'
-                size='large'
+                size='small'
                 color='primary'
                 className={classes.buttons}
                 onClick={() => {
@@ -107,6 +98,16 @@ export function EventLite(props) {
               </Button>
             </Permission>
           )}
+          <Button
+            variant='contained'
+            size='small'
+            color='primary'
+            component={WrappedNavLink}
+            className={classes.buttons}
+            to={ROUTES.group.events.show.path(event.group.id, event.id)}
+          >
+            ViewPage
+          </Button>
         </Grid>
       </Grid>
       <Paper className={classes.padding}>

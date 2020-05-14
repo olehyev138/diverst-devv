@@ -11,10 +11,11 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, CardActionArea
+  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, CardActionArea, IconButton, Tooltip
 } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
+import TodayIcon from '@material-ui/icons/Today';
 
 import { injectIntl } from 'react-intl';
 
@@ -44,7 +45,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
-import {selectIsCommitting} from "containers/Event/selectors";
+import { selectIsCommitting } from 'containers/Event/selectors';
 
 const styles = theme => ({
   eventListItem: {
@@ -72,6 +73,11 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
     marginBottom: 24,
+  },
+  buttons: {
+    marginLeft: 10,
+    marginRight: 10,
+    float: 'right',
   },
 });
 
@@ -128,15 +134,30 @@ export function EventsList(props, context) {
       )}
       <Paper>
         {props.currentPTab != null && (
-          <ResponsiveTabs
-            value={props.currentPTab}
-            onChange={props.handleChangePTab}
-            indicatorColor='primary'
-            textColor='primary'
-          >
-            <Tab label={intl.formatMessage(messages.index.participating)} />
-            <Tab label={intl.formatMessage(messages.index.all)} />
-          </ResponsiveTabs>
+          <Grid container justify='center'>
+            <Grid item xs={1} />
+            <Grid item xs={10}>
+              <ResponsiveTabs
+                value={props.currentPTab}
+                onChange={props.handleChangePTab}
+                indicatorColor='primary'
+                textColor='primary'
+              >
+                <Tab label={intl.formatMessage(messages.index.participating)} />
+                <Tab label={intl.formatMessage(messages.index.all)} />
+              </ResponsiveTabs>
+            </Grid>
+            <Grid item xs>
+              <Tooltip title='Toggle Calendar View' placement='top'>
+                <IconButton
+                  onClick={props.handleCalendarChange}
+                  className={classes.buttons}
+                >
+                  <TodayIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </Grid>
         )}
         {props.onlyUpcoming || props.calendar || (
           <ResponsiveTabs
@@ -151,11 +172,6 @@ export function EventsList(props, context) {
           </ResponsiveTabs>
         )}
       </Paper>
-      <Button
-        onClick={props.handleCalendarChange}
-      >
-        Calendar
-      </Button>
       <br />
       { props.calendar ? (
         <DiverstCalendar
