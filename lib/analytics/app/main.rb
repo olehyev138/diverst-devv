@@ -2,7 +2,7 @@ require 'mysql2'
 require 'aws-sdk-s3'
 require 'json'
 
-POSTFIX_BUCKET_NAME = 'diverst-analytics'
+BASE_BUCKET_NAME = 'diverst-analytics'
 $s3 = Aws::S3::Resource.new(region: ENV['AWS_DEFAULT_REGION'])
 
 # TODO: env variables & secrets management
@@ -25,7 +25,7 @@ def main(event:, context:)
 end
 
 def upload_s3(env_name, graph_data)
-  data_bucket = $s3.bucket("#{env_name}-#{POSTFIX_BUCKET_NAME}")
+  data_bucket = $s3.bucket("#{env_name}-#{BASE_BUCKET_NAME}")
 
   # Create s3 object per graph
   graph_data.each do |graph, data|
