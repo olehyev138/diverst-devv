@@ -148,7 +148,7 @@ export function EventsList(props, context) {
               </ResponsiveTabs>
             </Grid>
             <Grid item xs>
-              <Tooltip title='Toggle Calendar View' placement='top'>
+              <Tooltip title={<DiverstFormattedMessage {...messages.calendar} />} placement='top'>
                 <IconButton
                   onClick={props.handleCalendarChange}
                   className={classes.buttons}

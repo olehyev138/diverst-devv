@@ -106,7 +106,7 @@ export function EventLite(props) {
             className={classes.buttons}
             to={ROUTES.group.events.show.path(event.group.id, event.id)}
           >
-            ViewPage
+            <DiverstFormattedMessage {...messages.view} />
           </Button>
         </Grid>
       </Grid>
