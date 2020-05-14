@@ -11,7 +11,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
     {
         id: object.group.id,
         name: object.group.name,
-        calendar_color: object.group.calendar_color,
+        calendar_color: object.group.color_hash,
     }
   end
 

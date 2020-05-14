@@ -26,8 +26,8 @@ export const splitOptions = field => produce(field, (draft) => {
 export const mapFieldNames = (item, nameChanges = {}, base = {}) => {
   const toChange = Object.keys(nameChanges);
   return toChange.reduce((sum, n) => {
-    const parts = n.split('.');
-    sum[nameChanges[n]] = dig(...[item, ...parts]);
+    const parts = nameChanges[n].split('.');
+    sum[n] = dig(...[item, ...parts]);
     return sum;
   }, base);
 };

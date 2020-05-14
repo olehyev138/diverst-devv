@@ -99,7 +99,7 @@ export function EventsPage(props) {
       query_scopes: scopes,
       participation
     };
-    props.getUserEventsBegin(calendar ? { ...newParams, scopes: ['not_archived'], count: -1 } : newParams);
+    props.getUserEventsBegin(calendar ? { ...newParams, query_scopes: ['not_archived'], count: -1 } : newParams);
     setParams(newParams);
   };
 
