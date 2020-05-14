@@ -134,9 +134,9 @@ export function EventsList(props, context) {
         </React.Fragment>
       )}
       <Paper>
-        {props.currentPTab != null && (
-          <Grid container justify='center'>
-            <Grid item xs={1} />
+        <Grid container justify='center'>
+          <Grid item xs={1} />
+          {props.currentPTab != null && (
             <Grid item xs={10}>
               <ResponsiveTabs
                 value={props.currentPTab}
@@ -148,21 +148,21 @@ export function EventsList(props, context) {
                 <Tab label={intl.formatMessage(messages.index.all)} />
               </ResponsiveTabs>
             </Grid>
-            <Grid item xs>
-              <Tooltip
-                title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
-                placement='top'
+          )}
+          <Grid item xs>
+            <Tooltip
+              title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
+              placement='top'
+            >
+              <IconButton
+                onClick={props.handleCalendarChange}
+                className={classes.buttons}
               >
-                <IconButton
-                  onClick={props.handleCalendarChange}
-                  className={classes.buttons}
-                >
-                  {props.calendar ? <ListAltIcon /> : <TodayIcon />}
-                </IconButton>
-              </Tooltip>
-            </Grid>
+                {props.calendar ? <ListAltIcon /> : <TodayIcon />}
+              </IconButton>
+            </Tooltip>
           </Grid>
-        )}
+        </Grid>
         {props.onlyUpcoming || props.calendar || (
           <ResponsiveTabs
             value={props.currentTab}

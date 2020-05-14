@@ -14,13 +14,11 @@ const selectCalendarEvents = () => createSelector(
   selectEventsDomain,
   eventsState => eventsState.events.map(event => mapFieldNames(event,
     {
-      id: 'id',
       groupId: 'group.id',
-      start: 'start',
-      end: 'end',
       title: 'name',
-      color: 'group.calendar_color',
-    }))
+      backgroundColor: 'group.calendar_color',
+      borderColor: 'group.calendar_color',
+    }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 
 const selectEventsTotal = () => createSelector(
