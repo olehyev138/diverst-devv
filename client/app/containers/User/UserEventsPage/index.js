@@ -54,7 +54,7 @@ export function EventsPage(props) {
 
   const [tab, setTab] = useState(EventTypes.upcoming);
   const [participateTab, setParticipateTab] = useState(ParticipationTypes.participating);
-  const [calendar, setCalendar] = useState(false);
+  const [calendar, setCalendar] = useState(null);
   const [params, setParams] = useState(defaultParams);
 
   const getEvents = (scopes = null, participation = null, resetParams = false) => {
@@ -110,6 +110,11 @@ export function EventsPage(props) {
       props.userUnmount();
     };
   }, []);
+
+  useEffect(() => {
+    if (calendar != null)
+      getEvents();
+  }, [calendar]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
