@@ -194,12 +194,13 @@
     async function screenShareOFLocalParticipant() {
       var localParticipant = window.room.localParticipant;
       const stream = await navigator.mediaDevices.getDisplayMedia();
-      const screenTrack = new twilio.LocalVideoTrack(stream.getTracks()[0]);
+      const screenTrack = new twilio.LocalVideoTrack(stream.getTracks()[0], { name: 'screen-share' });
       window.room.localParticipant.publishTrack(screenTrack);
       attachTracks([screenTrack], document.getElementById('screen-share-area'));
 
       screenTrack.once('stopped', () => {
         detachTracks([screenTrack]);
+        localParticipant.removeTrack(screenTrack);
         console.log('screen sharing deactivated!');
       });    
     }
@@ -326,7 +327,13 @@
       room.on('trackAdded', function(track, participant) {
         //log(participant.identity + " added track: " + track.kind);
         var previewContainer = document.getElementById('video-grid');
-        attachTracks([track], previewContainer);
+        var screenShareArea = document.getElementById('screen-share-area');
+
+        if (track.name == 'screen-share') {
+          attachTracks([track], screenShareArea);
+        }else{
+          attachTracks([track], previewContainer);
+        }
       });
 
       // When a Participant removes a Track, detach it from the DOM.
