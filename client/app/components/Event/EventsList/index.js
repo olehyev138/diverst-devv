@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
@@ -33,6 +33,18 @@ import EventListItem from 'components/Event/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstCalendar from 'components/Shared/DiverstCalendar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import EventLite from 'components/Event/EventLite';
+import { toNumber } from 'utils/floatRound';
+import { createStructuredSelector } from 'reselect';
+import { joinEventBegin, leaveEventBegin } from 'containers/Event/actions';
+import { connect } from 'react-redux';
+import { useInjectReducer } from 'utils/injectReducer';
+import reducer from 'containers/Event/reducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from 'containers/Event/saga';
+import {selectIsCommitting} from "containers/Event/selectors";
 
 const styles = theme => ({
   eventListItem: {
@@ -64,12 +76,38 @@ const styles = theme => ({
 });
 
 export function EventsList(props, context) {
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
   const { classes, intl } = props;
 
   const routeContext = useContext(RouteContext);
+  const [eventId, setEvent] = useState(null);
+
+  const clickEvent = (info) => {
+    const { event } = info;
+    // const extra = event.extendedProps;
+    setEvent(toNumber(event.id));
+  };
+
+  const dialog = (
+    <Dialog
+      open={!!eventId}
+      onClose={() => setEvent(null)}
+    >
+      <DialogContent>
+        <EventLite
+          event={props.events.find(event => event.id === eventId)}
+          isCommiting={props.isCommitting}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
+        />
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <React.Fragment>
+      {dialog}
       {!props.readonly && (
         <React.Fragment>
           <Permission show={permission(props.currentGroup, 'events_create?')}>
@@ -89,11 +127,6 @@ export function EventsList(props, context) {
         </React.Fragment>
       )}
       <Paper>
-        <Button
-          onClick={props.handleCalendarChange}
-        >
-          Calendar
-        </Button>
         {props.currentPTab != null && (
           <ResponsiveTabs
             value={props.currentPTab}
@@ -118,11 +151,17 @@ export function EventsList(props, context) {
           </ResponsiveTabs>
         )}
       </Paper>
+      <Button
+        onClick={props.handleCalendarChange}
+      >
+        Calendar
+      </Button>
       <br />
       { props.calendar ? (
         <DiverstCalendar
           events={props.calendarEvents}
           isLoading={props.isLoading}
+          eventClick={clickEvent}
         />
       ) : (
         <React.Fragment>
@@ -187,6 +226,7 @@ EventsList.propTypes = {
   calendar: PropTypes.bool,
   handleCalendarChange: PropTypes.func,
   isLoading: PropTypes.bool,
+  isCommitting: PropTypes.bool,
   handleChangeTab: PropTypes.func,
   currentPTab: PropTypes.number,
   handleChangePTab: PropTypes.func,
@@ -196,10 +236,27 @@ EventsList.propTypes = {
   onlyUpcoming: PropTypes.bool,
   loaderProps: PropTypes.object,
   currentGroup: PropTypes.object,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
 };
+
+const mapStateToProps = createStructuredSelector({
+  isCommitting: selectIsCommitting()
+});
+
+const mapDispatchToProps = {
+  joinEventBegin,
+  leaveEventBegin,
+};
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default compose(
   injectIntl,
+  withConnect,
   withStyles(styles),
   memo,
 )(EventsList);

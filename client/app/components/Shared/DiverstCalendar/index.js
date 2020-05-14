@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 });
 
-export function DiverstCalendar({ events, isLoading, classes }) {
+export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
 
   return (
@@ -38,6 +38,7 @@ export function DiverstCalendar({ events, isLoading, classes }) {
           right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         }}
         events={events}
+        {...rest}
       />
       {isLoading && (
         <Grid container justify='center' alignContent='center'>

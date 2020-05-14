@@ -83,7 +83,7 @@ const selectCalendarEvents = () => createSelector(
       end: 'end',
       title: 'name',
       color: 'group.calendar_color',
-    }))
+    }, { ...event }))
 );
 
 const selectEventsTotal = () => createSelector(

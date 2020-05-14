@@ -44,6 +44,8 @@ import {
   GET_USER_PROTOTYPE_ERROR,
   USER_UNMOUNT,
 } from './constants';
+import { JOIN_EVENT_SUCCESS, LEAVE_EVENT_SUCCESS } from 'containers/Event/constants';
+import { toNumber } from 'utils/floatRound';
 
 export const initialState = {
   isLoadingPosts: true,
@@ -112,6 +114,24 @@ function usersReducer(state = initialState, action) {
         draft.events = action.payload.items;
         draft.eventsTotal = action.payload.total;
         draft.isLoadingEvents = false;
+        break;
+      case JOIN_EVENT_SUCCESS:
+        draft.events = state.events.map((event) => {
+          if (event.id === toNumber(action.payload.initiative_user.initiative_id))
+            return produce(event, (eventDraft) => {
+              eventDraft.is_attending = true;
+            });
+          return event;
+        });
+        break;
+      case LEAVE_EVENT_SUCCESS:
+        draft.events = state.events.map((event) => {
+          if (event.id === toNumber(action.payload.initiative_user.initiative_id))
+            return produce(event, (eventDraft) => {
+              eventDraft.is_attending = false;
+            });
+          return event;
+        });
         break;
       case GET_USER_DOWNLOADS_BEGIN:
         draft.isLoadingDownloads = true;
