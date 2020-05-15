@@ -28,6 +28,7 @@ import {
   JOIN_EVENT_ERROR,
   JOIN_EVENT_SUCCESS, LEAVE_EVENT_ERROR, LEAVE_EVENT_BEGIN, LEAVE_EVENT_SUCCESS
 } from './constants';
+import {toNumber} from "utils/floatRound";
 
 export const initialState = {
   isLoading: true,
@@ -103,7 +104,26 @@ function eventsReducer(state = initialState, action) {
         break;
       case ARCHIVE_EVENT_SUCCESS:
       case JOIN_EVENT_SUCCESS:
+        draft.events = state.events.map((event) => {
+          if (event.id === toNumber(action.payload.initiative_user.initiative_id))
+            return produce(event, (eventDraft) => {
+              eventDraft.is_attending = true;
+              eventDraft.total_attendees = event.total_attendees + 1;
+            });
+          return event;
+        });
+        draft.hasChanged = true;
+        draft.isCommitting = false;
+        break;
       case LEAVE_EVENT_SUCCESS:
+        draft.events = state.events.map((event) => {
+          if (event.id === toNumber(action.payload.initiative_user.initiative_id))
+            return produce(event, (eventDraft) => {
+              eventDraft.is_attending = false;
+              eventDraft.total_attendees = event.total_attendees - 1;
+            });
+          return event;
+        });
         draft.hasChanged = true;
         draft.isCommitting = false;
         break;
