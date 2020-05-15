@@ -92,7 +92,14 @@ resource "aws_cloudwatch_event_target" "analytics_invoke_rule_target" {
   target_id   = "lambda"
   arn         = aws_lambda_function.diverst_analytics.arn
 
-  input       = jsonencode({"env_name"=var.env_name})
+  input       = jsonencode({
+    "env_name"=var.env_name,
+    "db_host"=var.db_address,
+    "db_name"=var.db_name,
+    "db_username"=var.db_username,
+    "db_password"=var.db_password,
+    "db_port"=var.db_port
+  })
 }
 
 resource "aws_lambda_permission" "analytics_invoke_rule_permission" {
