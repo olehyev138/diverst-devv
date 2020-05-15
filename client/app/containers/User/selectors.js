@@ -4,9 +4,8 @@ import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
-import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { selectGroupsDomain } from '../Group/selectors';
-import { mapFieldData, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
+import { deserializeDatum, deserializeOptionsText, mapFieldData } from 'utils/customFieldHelpers';
+import { mapSelectField, timezoneMap } from 'utils/selectorHelpers';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -137,7 +136,7 @@ const selectFieldData = () => createSelector(
       if (fieldData)
         draft.forEach((datum) => {
           datum.data = deserializeDatum(datum);
-          datum.field.options_text = deserializeOptionsText(datum.field);
+          datum.field.options = deserializeOptionsText(datum.field);
         });
     });
   }
