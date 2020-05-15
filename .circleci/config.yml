@@ -15,18 +15,18 @@ workflows:
           context: aws-context
           requires:
             - backend-test
-              - frontend-test
-              filters:
-                branches:
-                  only: react_update
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
       - deploy-analytics:
           context: aws-context
           requires:
             - backend-test
-              - frontend-test
-              filters:
-                branches:
-                  only: react_update
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
 
 jobs:
   lint:
