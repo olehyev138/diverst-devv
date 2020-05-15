@@ -28,7 +28,8 @@ import {
   JOIN_EVENT_ERROR,
   JOIN_EVENT_SUCCESS, LEAVE_EVENT_ERROR, LEAVE_EVENT_BEGIN, LEAVE_EVENT_SUCCESS
 } from './constants';
-import {toNumber} from "utils/floatRound";
+
+import { toNumber } from 'utils/floatRound';
 
 export const initialState = {
   isLoading: true,
