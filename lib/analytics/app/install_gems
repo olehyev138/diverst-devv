@@ -1,9 +1,9 @@
 # Script to be run within Lambda docker image
 
+# DEBUG
+echo 'Installing gems in mock lambda env...'
+
 bundle install
 
 mkdir -p /var/task/lib
 cp -a /usr/lib64/mysql/*.so.* /var/task/lib/
-
-
-
