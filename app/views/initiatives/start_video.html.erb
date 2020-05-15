@@ -137,7 +137,6 @@
       var z = document.getElementById('screen-share-area');
 
       if (this.id == 'screen-share-video') {
-        console.log('screen share activated!');
         if (this.parentElement.id == 'screen-share-area') {
           x.appendChild(this);
         }else if (this.parentElement.id == 'main-participant') {
@@ -201,7 +200,6 @@
       screenTrack.once('stopped', () => {
         detachTracks([screenTrack]);
         localParticipant.removeTrack(screenTrack);
-        console.log('screen sharing deactivated!');
       });    
     }
 
@@ -227,6 +225,8 @@
 
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
+      console.log(window.room.state);
+      $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
       window.location.href = "<%= group_event_path(@group, @initiative) %>";
     });
 

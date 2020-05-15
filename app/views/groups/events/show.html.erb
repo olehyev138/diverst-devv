@@ -173,7 +173,10 @@
         "href": "#",
         "data-confirm": "Please join this event before adding it to you calendar."
       });
-      virtual_button.remove();
+
+      if ('<%= @event.virtual && @event.ongoing? %>' == 'true') {
+        virtual_button.remove();
+      }
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count - 1;
     } else {
@@ -185,16 +188,19 @@
         "target": "_blank"
       }).removeAttr("data-confirm");
       $('#calendar_link2').attr({"href": "<%= export_ics_group_event_path(@group, @event) %>"}).removeAttr("data-confirm");
-      var anchor_tag = document.createElement('a');
-      var firstElement = document.getElementsByClassName('flex-row')[0].firstElementChild;
-      Object.assign(anchor_tag, {
-        'className': 'btn btn--secondary',
-        'href': '<%= start_video_group_initiative_path(@group, @event) %>', 
-        'id': 'virtual-event'
+      
+      if ('<%= @event.virtual && @event.ongoing? %>' == 'true') {
+        var anchor_tag = document.createElement('a');
+        var firstElement = document.getElementsByClassName('flex-row')[0].firstElementChild;
+        Object.assign(anchor_tag, {
+          'className': 'btn btn--secondary',
+          'href': '<%= start_video_group_initiative_path(@group, @event) %>', 
+          'id': 'virtual-event'
 
-      });
-      anchor_tag.innerHTML = 'Join Virtual Event';
-      firstElement.appendChild(anchor_tag);
+        });
+        anchor_tag.innerHTML = 'Join Virtual Event';
+        firstElement.appendChild(anchor_tag);
+      }
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count + 1;
     }

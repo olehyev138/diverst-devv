@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video, :leave_video]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -133,18 +133,18 @@ class InitiativesController < ApplicationController
   def start_video
     # Only user with permission to update group should be able to start a call
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
-
+    
     # check if user can start the session
     require 'twilio-ruby'
-
+    
     raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
     raise BadRequestException.new 'TWILIO_API_KEY Required' if ENV['TWILIO_API_KEY'].blank?
     raise BadRequestException.new 'TWILIO_SECRET Required' if ENV['TWILIO_SECRET'].blank?
-
+    
     account_sid = ENV['TWILIO_ACCOUNT_SID']
     api_key_sid = ENV['TWILIO_API_KEY']
     api_key_secret = ENV['TWILIO_SECRET']
-
+    
     @video_room_name = "#{request.domain}Initiative#{@initiative.id}"
     @enterprise = @group.enterprise
     # Create an Access Token
@@ -154,14 +154,22 @@ class InitiativesController < ApplicationController
       api_key_secret,
       identity: current_user.email
     )
-
+    
     # Grant access to Video
     grant = Twilio::JWT::AccessToken::VideoGrant.new
     grant.room = @video_room_name
     token.add_grant grant
-
+    
     # Serialize the token as a JWT
     @token = token.to_jwt
+
+    track_activity(@initiative, :start_video)
+  end
+
+  def leave_video
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+    track_activity(@initiative, :leave_video)
+    render nothing: true
   end
 
   def enable_virtual_meet

@@ -327,6 +327,7 @@ Rails.application.routes.draw do
       member do
         get 'start_video'
         get 'join_video'
+        patch 'leave_video'
       end
 
       scope module: 'initiatives' do
