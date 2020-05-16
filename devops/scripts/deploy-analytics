@@ -20,12 +20,17 @@ fi
 mkdir -p lib/analytics/deploy
 
 # Create analytics app deployment bundle
-zip -q -r "./lib/analytics/deploy/$APP_NAME" "./lib/analytics/app"
+echo 'Creating deployment bundle...'
+pushd "./lib/analytics/app"
+zip -q -r "../deploy/$APP_NAME" ./
+popd
 
 # Copy bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
+echo 'Uploading bundle to s3...'
 aws s3 cp "./lib/analytics/deploy/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME"
 
 # Update Lambda function
+echo 'Deploying to Lambda...'
 aws lambda update-function-code \
   --function devops-diverst-analytics \
   --s3-bucket "$BUNDLE_BUCKET_NAME" --s3-key "$APP_NAME"

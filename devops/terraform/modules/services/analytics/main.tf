@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
 resource "aws_lambda_function" "diverst_analytics" {
   function_name = "${var.env_name}-diverst-analytics"
 
-  s3_bucket = "devops-inmvlike"
+  s3_bucket = aws_s3_bucket.bucket-filestorage.id
   s3_key    = "deploy.zip"
 
   handler   = "main.main"
@@ -71,6 +71,12 @@ resource "aws_s3_bucket" "bucket-filestorage" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_object" "placeholder-object" {
+  bucket  = aws_s3_bucket.bucket-filestorage.id
+  key     = "deploy.zip"
+  source  = "${path.module}/placeholder/placeholder.zip"
+}
+
 #
 ## Cloudwatch resources to invoke function on interval
 #
@@ -86,7 +92,14 @@ resource "aws_cloudwatch_event_target" "analytics_invoke_rule_target" {
   target_id   = "lambda"
   arn         = aws_lambda_function.diverst_analytics.arn
 
-  input       = jsonencode({"env_name"=var.env_name})
+  input       = jsonencode({
+    "env_name"=var.env_name,
+    "db_host"=var.db_address,
+    "db_name"=var.db_name,
+    "db_username"=var.db_username,
+    "db_password"=var.db_password,
+    "db_port"=var.db_port
+  })
 }
 
 resource "aws_lambda_permission" "analytics_invoke_rule_permission" {

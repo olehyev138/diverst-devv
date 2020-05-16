@@ -2,18 +2,18 @@ require 'mysql2'
 require 'aws-sdk-s3'
 require 'json'
 
-POSTFIX_BUCKET_NAME = 'diverst-analytics'
+BASE_BUCKET_NAME = 'diverst-analytics'
 $s3 = Aws::S3::Resource.new(region: ENV['AWS_DEFAULT_REGION'])
 
-# TODO: env variables & secrets management
-$dbh = Mysql2::Client.new(
-    host: 'devops-db.chzb878zcht6.us-east-1.rds.amazonaws.com',
-    database: 'diverst',
-    username: 'mainuser',
-    password: 'password123',
-    port: 3306)
-
 def main(event:, context:)
+  # Have to put it here as we define it via function input arguments
+  $dbh = Mysql2::Client.new(
+      host: event['db_host'],
+      database: event['db_name'],
+      username: event['db_username'],
+      password: event['db_password'],
+      port: event['db_port'])
+
   graph_data = {
       group_population: group_population($dbh).to_json,
       group_growth: group_growth($dbh).to_json,
@@ -25,7 +25,7 @@ def main(event:, context:)
 end
 
 def upload_s3(env_name, graph_data)
-  data_bucket = $s3.bucket("#{env_name}-#{POSTFIX_BUCKET_NAME}")
+  data_bucket = $s3.bucket("#{env_name}-#{BASE_BUCKET_NAME}")
 
   # Create s3 object per graph
   graph_data.each do |graph, data|
