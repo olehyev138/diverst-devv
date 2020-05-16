@@ -24,10 +24,11 @@ workflows:
           requires:
             - backend-test
             - frontend-test
-          filters:
-            branches:
-              only: react_update
-
+        # DEBUG
+#          filters:
+#            branches:
+#              only: react_update
+#
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
