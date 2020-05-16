@@ -91,4 +91,6 @@ variable "db_password" {
   type    = string
 }
 
-variable "analytics_interval" {}
+variable "analytics_interval" {
+  type = string
+}

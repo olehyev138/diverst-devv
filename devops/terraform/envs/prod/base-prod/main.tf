@@ -97,8 +97,10 @@ module "filestorage" {
 module "analytics" {
   source = "../../../modules/services/analytics"
 
-  sn_db  = module.vpc.sn_db
-  sg_db  = module.sec.sg_db
+  env_name  = var.env_name
+  sn_db     = module.vpc.sn_db
+  sg_db     = module.sec.sg_db
+  interval  = var.analytics_interval
 }
 
 data "aws_instance" "bastion" {
