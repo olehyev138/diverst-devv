@@ -101,6 +101,12 @@ module "analytics" {
   sn_db     = module.vpc.sn_db
   sg_db     = module.sec.sg_db
   interval  = var.analytics_interval
+
+  db_address  = module.db.db_address
+  db_name     = var.db_name
+  db_port     = module.db.db_port
+  db_username = var.db_username
+  db_password = var.db_password
 }
 
 data "aws_instance" "bastion" {
