@@ -254,7 +254,7 @@ jobs:
       - checkout
       - run:
           name: Authenticate with AWS
-          command: echo $(./devops/scripts/cli-assume-role "$DEVOPS_ROLE_ARN") > $BASH_ENV
+          command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
       - run:
           name: Build & install gems for Lambda app
           # Build & install gems in docker container mocking a Lambda env, see docs for details
