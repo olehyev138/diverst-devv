@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Upload & deploy analytics service deployment package
+#  - zip analytics service app, upload to S3 & update lambda function
+# Usage: ./deploy-analytics <app-version-label> <bucket-name>
+
+VERSION_LABEL=$1
+BUNDLE_BUCKET_NAME=$2
+APP_NAME="analytics-diverst-$VERSION_LABEL.zip"
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+# Create deploy directory if it doesnt exist
+mkdir -p lib/analytics/deploy
+
+# Create analytics app deployment bundle
+echo 'Creating deployment bundle...'
+pushd "./lib/analytics/app"
+zip -q -r "../deploy/$APP_NAME" ./
+popd
+
+# Copy bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
+echo 'Uploading bundle to s3...'
+aws s3 cp "./lib/analytics/deploy/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME"
+
+# Update Lambda function
+echo 'Deploying to Lambda...'
+aws lambda update-function-code \
+  --function devops-diverst-analytics \
+  --s3-bucket "$BUNDLE_BUCKET_NAME" --s3-key "$APP_NAME"

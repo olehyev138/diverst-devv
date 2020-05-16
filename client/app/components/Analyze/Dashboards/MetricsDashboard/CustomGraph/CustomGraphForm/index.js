@@ -27,7 +27,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
-      enterpriseId: props.currentEnterprise.id,
+      fieldDefinerId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
       orderBy: 'fields.id',
       search: searchKey,
@@ -60,7 +60,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               fullWidth
               name='aggregation_id'
               id='aggregation_id'
-              label={<DiverstFormattedMessage {...messages.fields.aggregation} />}
+              label={<DiverstFormattedMessage {...messages.fields.aggregations} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.aggregation_id}
