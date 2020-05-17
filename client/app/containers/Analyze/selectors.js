@@ -6,9 +6,19 @@ import { formatBarGraphData, selectSeriesValues } from 'utils/metricsHelpers';
 
 const selectMetricsDomain = state => state.metrics || initialState;
 
+const selectGroupOverviewMetrics = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.groupOverviewMetrics
+);
+
+const selectGroupSpecificMetrics = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.groupSpecificMetrics
+);
+
 const selectGroupPopulation = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.groupPopulation, 0) || [])
+  metricsState => metricsState.metricsData.groupPopulation
 );
 
 const selectViewsPerGroup = () => createSelector(
@@ -26,9 +36,9 @@ const selectInitiativesPerGroup = () => createSelector(
   metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.initiativesPerGroup, 0) || [])
 );
 
-const selectMessagesPerGroup = () => createSelector(
+const selectNewsPerGroup = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.messagesPerGroup, 0) || [])
+  metricsState => metricsState.metricsData.newsPerGroup
 );
 
 const selectViewsPerNewsLink = () => createSelector(
@@ -38,7 +48,7 @@ const selectViewsPerNewsLink = () => createSelector(
 
 const selectViewsPerFolder = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerFolder, 0) || [])
+  metricsState => metricsState.metricsData.viewsPerFolder
 );
 
 const selectViewsPerResource = () => createSelector(
@@ -59,8 +69,8 @@ const selectGrowthOfUsers = () => createSelector(
 
 export {
   selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
-  selectGrowthOfGroups, selectInitiativesPerGroup, selectMessagesPerGroup,
+  selectGrowthOfGroups, selectInitiativesPerGroup, selectNewsPerGroup,
   selectViewsPerNewsLink, selectViewsPerFolder, selectViewsPerResource,
-  selectGrowthOfResources, selectGrowthOfUsers
-
+  selectGrowthOfResources, selectGrowthOfUsers, selectGroupOverviewMetrics,
+  selectGroupSpecificMetrics
 };

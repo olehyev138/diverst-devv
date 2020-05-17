@@ -34,7 +34,7 @@ import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/Cust
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 // messages
-import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -66,7 +66,8 @@ export function CustomGraphCreatePage(props) {
       customGraphAction={props.createCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
-      metricsDashboardId={metricsDashboardId}
+      metricsDashboardId={metricsDashboardId[0]}
+      currentEnterprise={props.currentEnterprise}
       buttonText={intl.formatMessage(messages.create)}
       links={links}
       isCommitting={props.isCommitting}

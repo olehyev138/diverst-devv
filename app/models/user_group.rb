@@ -43,7 +43,7 @@ class UserGroup < ApplicationRecord
   after_destroy { update_mentor_fields(false) }
 
   settings do
-    # dynamic template for field_data hash - maps value/data string to es type 'keyword'
+    # dynamic template for field_data hash - maps value/data string to elasticsearch type 'keyword'
     #  - they must be keywords in order to perform aggregations on them
     mappings dynamic_templates: [
       {
