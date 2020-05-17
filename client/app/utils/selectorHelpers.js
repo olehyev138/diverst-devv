@@ -2,6 +2,7 @@
 //    If the time zone we are currently mapping is what the user's timezone is set too
 //    set the timezone field to be also compatible with select fields
 import produce from 'immer';
+import dig from 'object-dig';
 
 export const timezoneMap = (timeZones, user, draft) => timeZones.map((element) => {
   if (element[1] === user.time_zone)
@@ -21,6 +22,15 @@ export const splitOptions = field => produce(field, (draft) => {
     ? field.options_text.split('\n').filter(o => o).map(o => ({ value: o, label: o }))
     : null;
 });
+
+export const mapFieldNames = (item, nameChanges = {}, base = {}) => {
+  const toChange = Object.keys(nameChanges);
+  return toChange.reduce((sum, n) => {
+    const parts = nameChanges[n].split('.');
+    sum[n] = dig(...[item, ...parts]);
+    return sum;
+  }, base);
+};
 
 export const mapSelectField = (item, label = 'name', additionalFields = []) => item
   ? { label: item[label], value: item.id, ...additionalFields.reduce((sum, field) => {

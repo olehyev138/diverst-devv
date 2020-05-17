@@ -5,8 +5,7 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { selectGroupsDomain } from '../Group/selectors';
-import { mapFieldData, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
+import { mapFieldData, mapFieldNames, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -70,6 +69,18 @@ const selectPostsTotal = () => createSelector(
 const selectPaginatedEvents = () => createSelector(
   selectUsersDomain,
   userState => userState.events
+);
+
+
+const selectCalendarEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.events.map(event => mapFieldNames(event,
+    {
+      groupId: 'group.id',
+      title: 'name',
+      backgroundColor: 'group.calendar_color',
+      borderColor: 'group.calendar_color',
+    }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 
 const selectEventsTotal = () => createSelector(
@@ -148,7 +159,7 @@ export {
   selectPaginatedSelectUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
-  selectIsLoadingEvents, selectFormUser,
+  selectIsLoadingEvents, selectFormUser, selectCalendarEvents,
   selectPaginatedPosts, selectPostsTotal,
   selectPaginatedEvents, selectEventsTotal,
   selectIsCommitting, selectIsFormLoading,
