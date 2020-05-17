@@ -32,5 +32,5 @@ aws s3 cp "./lib/analytics/deploy/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME"
 # Update Lambda function
 echo 'Deploying to Lambda...'
 aws lambda update-function-code \
-  --function devops-diverst-analytics \
+  --function "$ENV_NAME-diverst-analytics" \
   --s3-bucket "$BUNDLE_BUCKET_NAME" --s3-key "$APP_NAME"
