@@ -8,7 +8,9 @@ module Metrics
   end
 
   module ClassMethods
-    @@analytics_bucket = Aws::S3::Resource.new(region: 'us-east-1').bucket("#{ENV['ENV_NAME']}-diverst-analytics")
+    # Have to use oneline rescue, otherwise circle ci tests fail
+    @@analytics_bucket = Aws::S3::Resource.new(region: 'us-east-1')
+                           .bucket("#{ENV['ENV_NAME']}-diverst-analytics") rescue nil
 
     #
     ## Group metrics
