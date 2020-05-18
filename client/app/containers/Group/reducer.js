@@ -47,7 +47,8 @@ import {
   UPDATE_GROUP_POSITION_SUCCESS,
   UPDATE_GROUP_POSITION_ERROR,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
+  JOIN_SUBGROUPS_ERROR,
+  JOIN_SUBGROUPS_BEGIN,
 
 } from './constants';
 
@@ -128,8 +129,8 @@ function groupsReducer(state = initialState, action) {
       case CARRY_BUDGET_SUCCESS:
       case RESET_BUDGET_SUCCESS:
       case GROUP_CATEGORIZE_SUCCESS:
-      case UPDATE_GROUP_POSITION_SUCCESS:
       case JOIN_SUBGROUPS_SUCCESS:
+      case UPDATE_GROUP_POSITION_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;

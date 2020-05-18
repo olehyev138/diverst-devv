@@ -24,31 +24,19 @@ export function DroppableList(props) {
       tempCard.splice(dragIndex, 1);
       tempCard.splice(hoverIndex, 0, dragCard);
 
-      console.log(dragIndex);
-      console.log(hoverIndex);
       setCards(
         tempCard
       );
     },
-
     [cards],
   );
 
   if(props.save){
-    //Increment card positions based on position in the array
-    //
-    const abc = 0/0;
-    cards.map((c,index)=>{
-      //Card has moved back
-      if(c.position > index)
-        c.position = c.position - (cards.length - index - 1);
-
-      //Card has moved forward
-      //Card has not changed
-      //if(c.position==index)
-
+    cards.map((card,index)=>{
+      card.position = index + props.currentPage * cards.length;
+      props.updateGroupPositionBegin(card);
     })
-    props.updateGroupPositionBegin(cards);
+
   }
 
   const renderCard = (card, index) => (
@@ -75,4 +63,5 @@ DroppableList.propTypes = {
   classes: PropTypes.object,
   save: PropTypes.bool,
   updateGroupPositionBegin: PropTypes.func,
+  currentPage: PropTypes.number,
 };

@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
@@ -27,6 +27,7 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
 import csvReducer from 'containers/Shared/CsvFile/reducer';
 import csvSaga from 'containers/Shared/CsvFile/saga';
+import {hasClassName} from "enzyme/src/RSTTraversal";
 
 export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -34,22 +35,22 @@ export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'csv_files', reducer: csvReducer });
   useInjectSaga({ key: 'csv_files', saga: csvSaga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0,orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
     props.getGroupsBegin(params);
 
     return () => props.groupListUnmount();
-  }, []);
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
+    //const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getGroupsBegin(newParams);
-    setParams(newParams);
+    //props.getGroupsBegin(newParams);
+    //setParams(newParams);
   };
 
-  // Little bug around here
+console.log(props.groups);
   return (
     <React.Fragment>
         <GroupList
@@ -82,6 +83,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
@@ -89,7 +91,6 @@ const mapDispatchToProps = {
   groupListUnmount,
   deleteGroupBegin,
   createCsvFileBegin,
-  deleteGroupBegin,
   updateGroupPositionBegin
 };
 

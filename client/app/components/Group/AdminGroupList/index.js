@@ -79,15 +79,38 @@ export function AdminGroupList(props, context) {
   const handleDialogClose = () => setImportGroup(0);
   const handleDialogOpen = id => setImportGroup(id);
 
-  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
-  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
-    const initialExpandedGroups = {};
+  const importDialog = (
+    <Dialog
+      open={importGroup}
+      onClose={handleDialogClose}
+      aria-labelledby='alert-dialog-slide-title'
+      aria-describedby='alert-dialog-slide-description'
+    >
+      <DialogContent>
+        <Typography component='h2' variant='h6' className={classes.dataHeaders}>
+          Import instructions
+        </Typography>
+        <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
+          {'To batch import users to this group, upload a CSV file using the form below. The file should only contain a single column comprised of the users\' email adresses. The first row will be ignored, as it is reserved for the header.'}
+        </Typography>
+      </DialogContent>
+      <Formik
+        initialValues={{
+          group_id: importGroup,
+          import_file: null
+        }}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.importAction(values);
+          handleDialogClose();
+        }}
+      >
+        {formikProps => <ImportForm {...props} {...formikProps} />}
+      </Formik>
+    </Dialog>
+  );
 
-    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
-    setExpandedGroups(initialExpandedGroups);
-  }
+
   return (
     <React.Fragment>
       { importDialog }
@@ -140,6 +163,7 @@ export function AdminGroupList(props, context) {
           draggable={order}
           save={save}
           updateGroupPositionBegin={props.updateGroupPositionBegin}
+          currentPage={defaultParams.page}
         />
       </DiverstLoader>
       <DiverstPagination

@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -43,7 +43,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getGroups(action) {
   try {
     const response = yield call(api.groups.all.bind(api.groups), action.payload);
-
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
@@ -127,22 +126,15 @@ export function* updateGroup(action) {
   }
 }
 
-export function* updateGroupOrder(action) {
-  function* updateEachGroup(id, params) {
-    console.log(params);
-    yield call(api.groups.update.bind(api.groups),id, params);
-  }
+export function* updateGroupPosition(action) {
   try {
-    const payload = { groups : action.payload}
-    payload.groups.map((g)=> {
-      updateEachGroup(g.id,g.position);
-    });
+    const payload = { group : action.payload}
+    yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
     yield put(updateGroupPositionSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group order updated', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err);
     yield put(updateGroupPositionError(err));
 
     // TODO: intl message
@@ -153,6 +145,7 @@ export function* updateGroupOrder(action) {
 export function* updateGroupSettings(action) {
   try {
     const payload = { group: action.payload };
+
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
     yield put(updateGroupSettingsSuccess({ group: response.data.group }));
@@ -260,7 +253,7 @@ export default function* groupsSaga() {
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
-  yield takeLatest(UPDATE_GROUP_POSITION_BEGIN, updateGroupOrder);
+  yield takeEvery(UPDATE_GROUP_POSITION_BEGIN, updateGroupPosition);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);
