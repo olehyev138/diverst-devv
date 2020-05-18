@@ -10,7 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
 
-import { selectEventsTotal, selectIsLoading, selectPaginatedEvents } from 'containers/Event/selectors';
+import { selectEventsTotal, selectIsLoading, selectPaginatedEvents, selectCalendarEvents } from 'containers/Event/selectors';
 import { eventsUnmount, getEventsBegin } from 'containers/Event/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -46,8 +46,9 @@ export function EventsPage(props) {
 
   const [tab, setTab] = useState(EventTypes.upcoming);
   const [params, setParams] = useState(defaultParams);
+  const [calendar, setCalendar] = useState(null);
 
-  const getEvents = (scopes, resetParams = false) => {
+  const getEvents = (scopes = null, resetParams = false) => {
     const id = dig(props, 'currentGroup', 'id');
 
     if (resetParams)
@@ -57,9 +58,9 @@ export function EventsPage(props) {
       const newParams = {
         ...params,
         group_id: id,
-        query_scopes: scopes
+        query_scopes: scopes || params.query_scopes
       };
-      props.getEventsBegin(newParams);
+      props.getEventsBegin(calendar ? { ...newParams, query_scopes: ['not_archived'], count: -1 } : newParams);
       setParams(newParams);
     }
   };
@@ -71,6 +72,11 @@ export function EventsPage(props) {
       props.eventsUnmount();
     };
   }, []);
+
+  useEffect(() => {
+    if (calendar != null)
+      getEvents();
+  }, [calendar]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -87,6 +93,10 @@ export function EventsPage(props) {
       default:
         break;
     }
+  };
+
+  const handleChangeCalendar = () => {
+    setCalendar(!calendar);
   };
 
   const handlePagination = (payload) => {
@@ -106,6 +116,9 @@ export function EventsPage(props) {
       currentTab={tab}
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
+      handleCalendarChange={handleChangeCalendar}
+      calendar={calendar}
+      calendarEvents={props.calendarEvents}
       currentGroup={props.currentGroup}
       links={links}
       readonly={props.readonly}
@@ -118,6 +131,7 @@ EventsPage.propTypes = {
   getEventsBegin: PropTypes.func.isRequired,
   eventsUnmount: PropTypes.func.isRequired,
   events: PropTypes.array,
+  calendarEvents: PropTypes.array,
   eventsTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
@@ -130,6 +144,7 @@ EventsPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
+  calendarEvents: selectCalendarEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoading(),
 });

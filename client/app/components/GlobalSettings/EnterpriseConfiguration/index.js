@@ -314,9 +314,6 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
           >
             <DiverstFormattedMessage {...messages.save} />
           </Button>
-          <Button>
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
         </CardActions>
       </Form>
     </Card>
