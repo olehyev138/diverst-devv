@@ -128,11 +128,10 @@ export function* updateGroup(action) {
 
 export function* updateGroupOrder(action) {
   function* updateEachGroup(id, params) {
+    console.log(params);
     yield call(api.groups.update.bind(api.groups),id, params);
   }
   try {
-    console.log(action);
-    console.log(action.payload);
     const payload = { groups : action.payload}
     payload.groups.map((g)=> {
       updateEachGroup(g.id,g.position);

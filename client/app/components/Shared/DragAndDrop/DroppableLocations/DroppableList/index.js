@@ -15,8 +15,6 @@ import DraggableCard from '../../DraggableItems/DraggableCard';
 import DragDropContext from '../../DragDropContext';
 
 export function DroppableList(props) {
-
-
   const [cards, setCards] = useState(Object.values(props.list));
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
@@ -25,6 +23,9 @@ export function DroppableList(props) {
 
       tempCard.splice(dragIndex, 1);
       tempCard.splice(hoverIndex, 0, dragCard);
+
+      console.log(dragIndex);
+      console.log(hoverIndex);
       setCards(
         tempCard
       );
@@ -32,6 +33,23 @@ export function DroppableList(props) {
 
     [cards],
   );
+
+  if(props.save){
+    //Increment card positions based on position in the array
+    //
+    const abc = 0/0;
+    cards.map((c,index)=>{
+      //Card has moved back
+      if(c.position > index)
+        c.position = c.position - (cards.length - index - 1);
+
+      //Card has moved forward
+      //Card has not changed
+      //if(c.position==index)
+
+    })
+    props.updateGroupPositionBegin(cards);
+  }
 
   const renderCard = (card, index) => (
     <DraggableCard
@@ -55,4 +73,6 @@ export function DroppableList(props) {
 DroppableList.propTypes = {
   list: PropTypes.object,
   classes: PropTypes.object,
+  save: PropTypes.bool,
+  updateGroupPositionBegin: PropTypes.func,
 };

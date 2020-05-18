@@ -69,6 +69,8 @@ export const ItemTypes = {
 export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;
   const [order, setOrder] = useState(false);
+  const [save, setSave] = useState(false);
+
 
   return (
     <React.Fragment>
@@ -91,8 +93,7 @@ export function AdminGroupList(props, context) {
               size='large'
               startIcon={<ReorderIcon />}
               onClick={() => {
-                setOrder(false);
-                props.updateGroupPositionBegin([{id: 1 , position: 9},{id: 6 , position: 5}]);
+                setSave(true);
               }
               }
             >
@@ -120,6 +121,8 @@ export function AdminGroupList(props, context) {
           list={props.groups}
           classes={classes}
           draggable={order}
+          save={save}
+          updateGroupPositionBegin={props.updateGroupPositionBegin}
         />
       </DiverstLoader>
       <DiverstPagination
