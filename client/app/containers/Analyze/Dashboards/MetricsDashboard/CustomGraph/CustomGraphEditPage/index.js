@@ -24,13 +24,14 @@ import { getFieldsBegin } from 'containers/Shared/Field/actions';
 // selectors
 import { selectFormCustomGraph, selectIsCommitting, selectIsFormLoading } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectFields } from 'containers/Shared/Field/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 
 // messages
-import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { CustomGraphCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage';
@@ -64,6 +65,7 @@ export function CustomGraphEditPage(props) {
       fields={props.fields}
       buttonText={intl.formatMessage(messages.update)}
       customGraph={props.currentCustomGraph}
+      currentEnterprise={props.currentEnterprise}
       metricsDashboardId={metricsDashboardId[0]}
       links={links}
       isCommitting={props.isCommitting}
@@ -82,6 +84,7 @@ CustomGraphEditPage.propTypes = {
   customGraphUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -89,6 +92,7 @@ const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedSelectFields(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  currentEnterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {

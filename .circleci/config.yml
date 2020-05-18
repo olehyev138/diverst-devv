@@ -19,6 +19,14 @@ workflows:
           filters:
             branches:
               only: react_update
+      - deploy-analytics:
+          context: aws-context
+          requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
 
 jobs:
   lint:
@@ -200,7 +208,6 @@ jobs:
           RAILS_ENV: test
           RACK_ENV: test
     shell: /bin/bash --login
-    environment:
     steps:
       - checkout
       - run:
@@ -234,3 +241,30 @@ jobs:
       - run:
           name: Build & deploy frontend
           command: ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
+
+  #
+  ## Deploy Analytics service
+  #
+  deploy-analytics:
+    working_directory: ~/TeamDiverst/diverst-development
+    # Use machine image so we can run full docker commands
+    machine: true
+    shell: /bin/bash --login
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with AWS
+          command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
+      - run:
+          name: Build & install gems for Lambda app
+          # Build & install gems in docker container mocking a Lambda env, see docs for details
+          command: |
+            cd lib/analytics/app
+            docker run --rm -i -v "$PWD":/var/task -w /var/task awsdiverst/lambda-env-ruby2.7:0.0.1 bash < install_gems
+            ls -la
+      # Create deployment package, upload to s3 & deploy to Lambda
+      - run:
+          name: Deploy Analytics Service
+          command: |
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            ./devops/scripts/deploy-analytics "$VERSION_LABEL" "$AWS_MASTER_BUCKET"

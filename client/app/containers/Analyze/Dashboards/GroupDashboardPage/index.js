@@ -26,7 +26,6 @@ import SocialMediaDashboard from 'components/Analyze/Dashboards/GroupDashboard/S
 import ResourcesDashboard from 'components/Analyze/Dashboards/GroupDashboard/ResourcesDashboard';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { UserDashboardPage } from 'containers/Analyze/Dashboards/UserDashboardPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -42,14 +41,28 @@ export function GroupDashboardPage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const [params, setParams] = useState({ scoped_by_models: [] });
+  /**
+   * GroupDashboard supports group filtering/scoping as a `dashboard filter`
+   *  - Renders a `group scope select`, builds a `filter object` & passes it down to the
+   *    graphs for filtering.
+   *
+   *  - See metricsHelpers for details on filtering
+   */
+
   const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
 
-  const updateScope = (scope) => {
-    const newParams = { scoped_by_models: scope.groups ? scope.groups.map(g => g.value) : [] };
-    setParams(newParams);
-  };
+  /* Filter by default on only parent groups */
+  const [dashboardFilters, setDashboardFilters] = useState([]);
 
+  /* Callback function for GroupScopeSelect
+   *   - builds single filter object out of selected group names
+   */
+  const updateScope = (scope) => {
+    // build a list like [ 'group01', ... ] & filter for groups in this list
+    setDashboardFilters(scope.groups && scope.groups.length
+      ? [{ value: scope.groups.map(g => g.label), key: 'name', op: 'in' }]
+      : []);
+  };
   const handleDashboardChange = (_, newDashboard) => {
     setCurrentDashboard(newDashboard);
   };
@@ -57,9 +70,9 @@ export function GroupDashboardPage(props) {
   useEffect(() => () => () => metricsUnmount(), []);
 
   const dashboards = [
-    <OverviewDashboard dashboardParams={params} />,
-    <SocialMediaDashboard dashboardParams={params} />,
-    <ResourcesDashboard dashboardParams={params} />
+    <OverviewDashboard dashboardFilters={dashboardFilters} />,
+    <SocialMediaDashboard dashboardFilters={dashboardFilters} />,
+    <ResourcesDashboard dashboardFilters={dashboardFilters} />
   ];
 
   return (
@@ -110,7 +123,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  UserDashboardPage,
+  GroupDashboardPage,
   ['permissions.metrics_overview'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.analyze.dashboards.groupPage

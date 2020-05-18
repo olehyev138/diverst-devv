@@ -6,6 +6,14 @@ const GroupGraphs = new API({ controller: 'metrics/groups' });
 Object.assign(GroupGraphs, {
   // Overview
 
+  groupOverviewMetrics(params) {
+    return axios.get(`${this.url}/group_overview_metrics`, { params });
+  },
+
+  groupSpecificMetrics(params) {
+    return axios.get(`${this.url}/group_specific_metrics`, { params });
+  },
+
   groupPopulation(params) {
     return axios.get(`${this.url}/group_population`, { params });
   },
@@ -26,8 +34,8 @@ Object.assign(GroupGraphs, {
 
   // Social Media
 
-  messagesPerGroup(params) {
-    return axios.get(`${this.url}/messages_per_group`, { params });
+  newsPerGroup(params) {
+    return axios.get(`${this.url}/news_posts_per_group`, { params });
   },
 
   viewsPerNewsLink(params) {

@@ -38,6 +38,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
     value     = aws_iam_instance_profile.eb_instance_profile.name
+    resource  = ""
   }
 
   # VPC
@@ -130,6 +131,13 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   }
 
   # Env Variables
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name = "ENV_NAME"
+    value = var.env_name
+    resource    = ""
+  }
+
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_ENV"

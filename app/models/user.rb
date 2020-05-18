@@ -180,7 +180,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
-  # Format users field data for a ES index
+  # Format users field data for a elasticsearch index
   # Returns { <field_data.id> => <field_data.data } }
   def indexed_field_data
     field_data.to_h { |fd| [fd.field_id, fd.data] }

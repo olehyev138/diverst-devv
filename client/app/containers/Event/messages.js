@@ -62,6 +62,15 @@ export default defineMessages({
   leave: {
     id: `${scope}.index.button.leave`,
   },
+  view: {
+    id: `${scope}.index.button.view`,
+  },
+  calendar: {
+    id: `${scope}.index.button.calendar`,
+  },
+  list: {
+    id: `${scope}.index.button.list`,
+  },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
   },

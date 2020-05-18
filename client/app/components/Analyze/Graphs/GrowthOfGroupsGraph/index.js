@@ -7,6 +7,11 @@ import LineGraph from '../Base/LineGraph';
 export function GrowthOfGroupsGraph(props) {
   return (
     <LineGraph
+      config={{
+        x: { field: 'date', title: 'Date' },
+        y: { field: 'count', title: 'Member count' },
+        color: { field: 'name', title: 'Group' }
+      }}
       data={props.data}
       {...props}
     />
