@@ -15,11 +15,17 @@ export default defineMessages({
   export: {
     id: `${scope}.index.button.export`,
   },
+  exportTitle: {
+    id: `${scope}.export.title`,
+  },
   delete: {
     id: `${scope}.index.button.delete`,
   },
   changeScope: {
     id: `${scope}.index.label.changeScope`,
+  },
+  count: {
+    id: `${scope}.index.label.count`,
   },
   scopes: {
     accepted_users: {
@@ -84,6 +90,9 @@ export default defineMessages({
     },
   },
   columns: {
+    avatar: {
+      id: `${scope}.columns.avatar`,
+    },
     givenName: {
       id: `${scope}.columns.givenName`,
     },

@@ -51,11 +51,20 @@ export default defineMessages({
   email: {
     id: `${scope}.form.input.email`,
   },
+  avatar: {
+    id: `${scope}.form.input.avatar`,
+  },
   biography: {
     id: `${scope}.form.input.biography`,
   },
   time_zone: {
     id: `${scope}.form.input.time_zone`,
+  },
+  active: {
+    id: `${scope}.form.input.active`,
+  },
+  user_role: {
+    id: `${scope}.form.input.user_role`,
   },
   fields: {
     id: `${scope}.profile.fields`

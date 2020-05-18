@@ -98,9 +98,6 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
           >
             {<DiverstFormattedMessage {...messages.save} />}
           </Button>
-          <Button>
-            {<DiverstFormattedMessage {...messages.cancel} />}
-          </Button>
         </CardActions>
       </Form>
     </Card>

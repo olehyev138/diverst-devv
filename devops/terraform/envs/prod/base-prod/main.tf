@@ -1,7 +1,10 @@
 # Base env module for all production/client environments
 
 module "vpc" {
-  source = "../../../modules/networking/vpc"
+  source              = "../../../modules/networking/vpc"
+  ssh_key_name        = var.ssh_key_name
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
 }
 
 module "sec" {
@@ -26,6 +29,7 @@ module "db" {
   db_username   = var.db_username
   db_password   = var.db_password
 
+  multi_az                = var.multi_az
   db_class                = var.db_class
   allocated_storage       = var.db_allocated_storage
   backup_retention        = var.db_backup_retention
@@ -88,6 +92,21 @@ module "filestorage" {
   source = "../../../modules/data/filestorage"
 
   env_name = var.env_name
+}
+
+module "analytics" {
+  source = "../../../modules/services/analytics"
+
+  env_name  = var.env_name
+  sn_db     = module.vpc.sn_db
+  sg_db     = module.sec.sg_db
+  interval  = var.analytics_interval
+
+  db_address  = module.db.db_address
+  db_name     = var.db_name
+  db_port     = module.db.db_port
+  db_username = var.db_username
+  db_password = var.db_password
 }
 
 data "aws_instance" "bastion" {

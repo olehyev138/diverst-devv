@@ -93,7 +93,8 @@ module UserGroup::Actions
           :all,
           :joined_from,
           :joined_to,
-          :for_segment_ids
+          :for_segment_ids,
+          :user_search,
       ].map { |scope| scope.to_s }
     end
 

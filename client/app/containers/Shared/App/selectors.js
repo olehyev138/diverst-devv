@@ -16,6 +16,11 @@ const selectEnterprise = () => createSelector(
   globalState => dig(globalState.data, 'enterprise')
 );
 
+const selectEnterprisePrivacyMessage = () => createSelector(
+  selectGlobal,
+  globalState => dig(globalState.data.enterprise, 'privacy_statement')
+);
+
 const selectPermissions = () => createSelector(
   selectGlobal,
   globalState => dig(globalState.data, 'permissions')
@@ -34,6 +39,16 @@ const selectUserPolicyGroup = () => createSelector(
 const selectUser = () => createSelector(
   selectGlobal,
   globalState => globalState.data
+);
+
+const selectIsFetchingUserData = () => createSelector(
+  selectGlobal,
+  globalState => globalState.isFetchingUserData
+);
+
+const selectFetchUserDataError = () => createSelector(
+  selectGlobal,
+  globalState => globalState.fetchUserDataError
 );
 
 const selectCustomText = () => createSelector(
@@ -69,6 +84,7 @@ const selectFindEnterpriseError = () => createSelector(
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
-  selectUser, selectCustomText, selectMentoringInterests,
-  selectMentoringTypes, selectFindEnterpriseError, selectPermissions
+  selectUser, selectIsFetchingUserData, selectFetchUserDataError,
+  selectCustomText, selectMentoringInterests, selectMentoringTypes,
+  selectFindEnterpriseError, selectPermissions, selectEnterprisePrivacyMessage
 };

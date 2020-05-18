@@ -97,5 +97,28 @@ export default defineMessages({
     notMember: {
       id: `${scope}.family.notMember`,
     }
-  }
+  },
+  join: {
+    id: `${scope}.index.button.join`,
+  },
+  leave: {
+    id: `${scope}.index.button.leave`,
+  },
+  yes: {
+    id: `${scope}.index.button.yes`,
+  },
+  no: {
+    id: `${scope}.index.button.no`,
+  },
+  thanks: {
+    id: `${scope}.index.message.thanks`,
+  },
+  joinParent: {
+    id: `${scope}.index.message.joinParent`,
+  },
+  joinSubgroups: {
+    id: `${scope}.index.message.joinSubgroups`,
+  },
+
+
 });

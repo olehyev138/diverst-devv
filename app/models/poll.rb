@@ -1,5 +1,6 @@
 class Poll < ApplicationRecord
   include PublicActivity::Common
+  include Poll::Actions
   include DefinesFields
 
   @@field_users = [:responses]
@@ -104,6 +105,14 @@ class Poll < ApplicationRecord
         csv << response_column
       end
     end
+  end
+
+  def fields_count
+    fields.size
+  end
+
+  def responses_count
+    responses.size
   end
 
   protected

@@ -18,8 +18,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   Button, Card, CardContent, CardActions,
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
+  Dialog, DialogContent
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Formik, Form, Field } from 'formik';
+import { buildValues } from 'utils/formHelpers';
 
 import AddIcon from '@material-ui/icons/Add';
 import ReorderIcon from '@material-ui/icons/Reorder';
@@ -31,6 +34,7 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
 
+import { ImportForm } from 'components/User/UserImport';
 
 const styles = theme => ({
   progress: {
@@ -70,10 +74,23 @@ export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState({});
+  const [importGroup, setImportGroup] = useState(0);
+  const handleDialogClose = () => setImportGroup(0);
+  const handleDialogOpen = id => setImportGroup(id);
 
+  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
+  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
+    const initialExpandedGroups = {};
 
+    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
+    /* eslint-disable-next-line no-return-assign */
+    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
+    setExpandedGroups(initialExpandedGroups);
+  }
   return (
     <React.Fragment>
+      { importDialog }
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
@@ -144,7 +161,8 @@ AdminGroupList.propTypes = {
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  importAction: PropTypes.func,
 };
 
 export default compose(

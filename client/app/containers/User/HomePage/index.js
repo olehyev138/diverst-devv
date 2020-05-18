@@ -7,11 +7,14 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import messages from './messages';
 
 import Events from '../UserEventsPage';
 import News from '../UserNewsFeedPage';
+import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import {
   Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
@@ -19,8 +22,13 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstDialog from 'components/Shared/DiverstDialog';
 import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
+
+import { injectIntl, intlShape } from 'react-intl';
+import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   title: {
@@ -31,13 +39,32 @@ const styles = theme => ({
   dataHeaders: {
     paddingBottom: theme.spacing(1),
   },
+  privacyStatement: {
+    padding: theme.spacing(1),
+    textDecoration: 'underline',
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+  }
+
+handleClickOpen = () => {
+  this.setState({ open: true });
+};
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+
   render() {
     const { classes } = this.props;
-
     const events = (
       <Paper>
         <CardContent>
@@ -71,8 +98,45 @@ export class HomePage extends React.PureComponent {
       </Paper>
     );
 
+    const privacyMessage = (
+      <React.Fragment>
+        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary'>
+          <DiverstFormattedMessage {...messages.privacy} />
+        </Typography>
+        <DiverstDialog
+          open={this.state.open}
+          handleNo={this.handleClose}
+          textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
+          content={this.props.privacyMessage}
+          title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
+        />
+      </React.Fragment>
+    );
+
+    const sponsor = (
+      <SponsorCard
+        type='enterprise'
+        currentGroup={null}
+      />
+    );
+
+    const enterpriseMessage = (
+      <DiverstHTMLEmbedder
+        html={
+          this.props.enterprise
+            ? this.props.enterprise.home_message
+            : ''
+        }
+      />
+    );
+
     return (
       <React.Fragment>
+        <Grid container>
+          <Grid item>
+            {enterpriseMessage}
+          </Grid>
+        </Grid>
         <Grid container spacing={3}>
           <Grid item xs>
             {events}
@@ -81,16 +145,40 @@ export class HomePage extends React.PureComponent {
             {news}
           </Grid>
         </Grid>
+        <Grid item xs>
+          { sponsor }
+        </Grid>
+        <Grid item xs>
+          { privacyMessage }
+        </Grid>
       </React.Fragment>
     );
   }
 }
 
+const mapDispatchToProps = {
+};
+
+const mapStateToProps = createStructuredSelector({
+  privacyMessage: selectEnterprisePrivacyMessage(),
+  enterprise: selectEnterprise(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
 HomePage.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  privacyMessage: PropTypes.string,
+  intl: intlShape,
+  enterprise: PropTypes.object,
 };
 
 export default compose(
+  withConnect,
   memo,
+  injectIntl,
   withStyles(styles),
 )(HomePage);

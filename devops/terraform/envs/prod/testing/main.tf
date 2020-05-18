@@ -2,6 +2,13 @@ provider "aws" {
 }
 
 terraform {
+  required_version = "~> 0.12.24"
+
+  required_providers {
+    aws     = "~> 2.58"
+    random  = "~> 2.2"
+  }
+
   backend "s3" {
     bucket          = "testing-zmqglbkg"
     key             = "terraform/terraform.tfstate"
@@ -20,6 +27,9 @@ resource "aws_key_pair" "aws-tf-key" {
 module "prod" {
   source = "../base-prod"
 
+  az_count            = var.az_count
+  nat_gateway_enabled = var.nat_gateway_enabled
+
   backend_solution_stack  = var.backend_solution_stack
   backend_asg_min         = var.backend_asg_min
   backend_asg_max         = var.backend_asg_max
@@ -29,6 +39,7 @@ module "prod" {
   sidekiq_password = var.sidekiq_password
 
   db_class                    = var.db_class
+  multi_az                    = var.multi_az
   db_allocated_storage        = var.db_allocated_storage
   db_backup_retention         = var.db_backup_retention
   db_backup_window            = var.db_backup_window
@@ -42,4 +53,6 @@ module "prod" {
   db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
+
+  analytics_interval = var.analytics_interval
 }

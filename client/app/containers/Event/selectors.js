@@ -1,12 +1,24 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer/dist/immer';
+import { mapFieldNames } from 'utils/selectorHelpers';
 
 const selectEventsDomain = state => state.events || initialState;
 
 const selectPaginatedEvents = () => createSelector(
   selectEventsDomain,
   eventsState => eventsState.events
+);
+
+const selectCalendarEvents = () => createSelector(
+  selectEventsDomain,
+  eventsState => eventsState.events.map(event => mapFieldNames(event,
+    {
+      groupId: 'group.id',
+      title: 'name',
+      backgroundColor: 'group.calendar_color',
+      borderColor: 'group.calendar_color',
+    }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 
 const selectEventsTotal = () => createSelector(
@@ -24,9 +36,16 @@ const selectFormEvent = () => createSelector(
   eventsState => produce(eventsState.currentEvent, (draft) => {
     if (draft) {
       if (draft.pillar)
-        draft.pillar = { label: draft.pillar.name, value: draft.pillar.id };
+        draft.pillar = {
+          label: eventsState.currentEvent.pillar.name,
+          value: eventsState.currentEvent.pillar.id
+        };
       if (draft.budget_item)
-        draft.budget_item = { label: draft.budget_item.title_with_amount, value: draft.budget_item.id, available: draft.available };
+        draft.budget_item = {
+          label: eventsState.currentEvent.budget_item.title_with_amount,
+          value: eventsState.currentEvent.budget_item.id,
+          available: eventsState.currentEvent.budget_item.available_amount
+        };
     }
   })
 );
@@ -51,4 +70,4 @@ const selectHasChanged = () => createSelector(
   eventsState => eventsState.hasChanged
 );
 
-export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting, selectFormEvent, selectHasChanged };
+export { selectEventsDomain, selectPaginatedEvents, selectCalendarEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting, selectFormEvent, selectHasChanged };

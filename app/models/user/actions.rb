@@ -32,11 +32,13 @@ module User::Actions
     self
   end
 
-  def invite!(manager = nil)
-    # TODO Fix this, it seemed to work using Devise previously so not sure where "UserMailer"
-    # TODO or "regenerate_access_token" are (they aren't in react or development)
-    # regenerate_access_token
-    # UserMailer.delay(queue: 'mailers').send_invitation(self)
+  def sign_up(params)
+    if update_attributes(params)
+      update(invitation_token: nil, invitation_accepted_at: Time.now)
+      self
+    else
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
+    end
   end
 
   def posts(params)
@@ -198,6 +200,7 @@ module User::Actions
           :user_role,
           :news_links,
           :avatar_attachment,
+          :avatar_blob,
           field_data: [
                   :field,
                   { field: Field.base_preloads }

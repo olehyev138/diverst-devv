@@ -13,7 +13,8 @@ import GroupHome from 'components/Group/GroupHome';
 
 import {
   joinGroupBegin,
-  leaveGroupBegin
+  leaveGroupBegin,
+  joinSubgroupsBegin
 } from 'containers/Group/actions';
 import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
 
@@ -26,6 +27,7 @@ export function GroupHomePage(props) {
       currentGroup={props.currentGroup}
       joinGroup={props.joinGroupBegin}
       leaveGroup={props.leaveGroupBegin}
+      joinSubgroups={props.joinSubgroupsBegin}
     />
   );
 }
@@ -34,6 +36,7 @@ GroupHomePage.propTypes = {
   currentGroup: PropTypes.object,
   joinGroupBegin: PropTypes.func,
   leaveGroupBegin: PropTypes.func,
+  joinSubgroupsBegin: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -42,7 +45,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   joinGroupBegin,
-  leaveGroupBegin
+  leaveGroupBegin,
+  joinSubgroupsBegin,
 };
 
 const withConnect = connect(

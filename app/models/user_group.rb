@@ -28,13 +28,22 @@ class UserGroup < ApplicationRecord
   scope :joined_from, -> (from) { where('user_groups.created_at >= ?', from) }
   scope :joined_to, -> (to) { where('user_groups.created_at <= ?', to) }
 
+  scope :user_search, -> (name) { joins(:user).where(
+      'users.email LIKE ? OR '\
+      'CONCAT(LOWER(users.first_name), LOWER(users.last_name)) LIKE ? OR '\
+      'CONCAT(LOWER(users.last_name), LOWER(users.first_name)) LIKE ?',
+      "%#{name.downcase}%", "%#{name.downcase}%", "%#{name.downcase}%"
+    )
+                      }
+
+  before_create :accept_if_no_pending
   before_destroy :remove_leader_role
 
   after_create { update_mentor_fields(true) }
   after_destroy { update_mentor_fields(false) }
 
   settings do
-    # dynamic template for field_data hash - maps value/data string to es type 'keyword'
+    # dynamic template for field_data hash - maps value/data string to elasticsearch type 'keyword'
     #  - they must be keywords in order to perform aggregations on them
     mappings dynamic_templates: [
       {
@@ -66,6 +75,14 @@ class UserGroup < ApplicationRecord
         indexes :mentee, type: :boolean
       end
     end
+  end
+
+  def accept_if_no_pending
+    self.accepted_member = accepted_member || group.pending_users == 'disabled'
+  end
+
+  def is_accepted?
+    group.pending_users == 'disabled' || accepted_member
   end
 
   def as_indexed_json(options = {})

@@ -22,450 +22,459 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
     >
       <div />
       <WithStyles(ForwardRef(Divider)) />
-      <WithStyles(ForwardRef(List))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <EqualizerIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.analyze.index"
+      <WithStyles(Scrollbar)>
+        <WithStyles(ForwardRef(List))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <EqualizerIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.analyze.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
+            >
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                exact={true}
+                to="/admin/analyze"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.overview"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/users"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.users"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/groups"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.groups"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/custom"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.custom"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <DeviceHubIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.manage.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
+            >
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/groups"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.groups"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/segments"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.segments"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/folders"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.resources.index"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/archived"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.archived"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <AssignmentTurnedInIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.plan.index"
+                />
+              }
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              exact={true}
-              to="/admin/analyze"
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.overview"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/analyze/users"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.users"
+                to="/admin/plan/budgeting"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  Group Budgets
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <WbIncandescentIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.innovate.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/analyze/groups"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.groups"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/analyze/custom"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.custom"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <DeviceHubIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.manage.index"
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/manage/groups"
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.groups"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/manage/segments"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.segments"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                to="/admin/innovate/campaigns"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.innovate.campaigns"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
+                to="/admin/innovate/financials"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.innovate.financials"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            component={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
               }
-              to="/admin/manage/folders"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.resources.index"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/manage/archived"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.archived"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <AssignmentTurnedInIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.plan.index"
-              />
             }
-          />
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            to="/admin/polls"
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/plan/budgeting"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                Group Budgets
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <WbIncandescentIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.innovate.index"
-              />
-            }
-          />
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
-          >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/innovate/campaigns"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.innovate.campaigns"
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <HowToVoteIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.include.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/innovate/financials"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.innovate.financials"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <HowToVoteIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.include.index"
-              />
-            }
-          />
-        </WrappedComponent>
-        <WrappedComponent
-          button={true}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <GroupWorkIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.mentorship.index"
-              />
-            }
-          />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Divider)) />
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <SettingsIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.system.index"
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+          </WrappedComponent>
+          <WrappedComponent
+            button={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              isActive={[Function]}
-              to="/admin/system/settings"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.globalSettings"
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <GroupWorkIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.mentorship.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/system/users"
+            />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Divider)) />
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <SettingsIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.system.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.users"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/system/branding/theme"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.branding"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                isActive={[Function]}
+                to="/admin/system/settings"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.globalSettings"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="#"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.logs"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                to="/admin/system/users"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.users"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="#"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.diversity"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(Divider)) />
-      </WithStyles(ForwardRef(List))>
+                to="/admin/system/branding"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.branding"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/system/logs"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.logs"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="#"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.diversity"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WithStyles(ForwardRef(Divider)) />
+        </WithStyles(ForwardRef(List))>
+      </WithStyles(Scrollbar)>
     </WithStyles(ForwardRef(Drawer))>
   </Hidden>
   <Hidden
@@ -482,450 +491,459 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
     >
       <div />
       <WithStyles(ForwardRef(Divider)) />
-      <WithStyles(ForwardRef(List))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <EqualizerIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.analyze.index"
+      <WithStyles(Scrollbar)>
+        <WithStyles(ForwardRef(List))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <EqualizerIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.analyze.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
+            >
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                exact={true}
+                to="/admin/analyze"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.overview"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/users"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.users"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/groups"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.groups"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/analyze/custom"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.analyze.custom"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <DeviceHubIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.manage.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
+            >
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/groups"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.groups"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/segments"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.segments"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/folders"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.resources.index"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/archived"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.archived"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <AssignmentTurnedInIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.plan.index"
+                />
+              }
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              exact={true}
-              to="/admin/analyze"
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.overview"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/analyze/users"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.users"
+                to="/admin/plan/budgeting"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  Group Budgets
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <WbIncandescentIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.innovate.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/analyze/groups"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.groups"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/analyze/custom"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.analyze.custom"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <DeviceHubIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.manage.index"
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/manage/groups"
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.groups"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/manage/segments"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.segments"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                to="/admin/innovate/campaigns"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.innovate.campaigns"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
+                to="/admin/innovate/financials"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.innovate.financials"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WrappedComponent
+            button={true}
+            component={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
               }
-              to="/admin/manage/folders"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.resources.index"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/manage/archived"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.manage.archived"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <AssignmentTurnedInIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.plan.index"
-              />
             }
-          />
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+            to="/admin/polls"
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/plan/budgeting"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                Group Budgets
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <WbIncandescentIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.innovate.index"
-              />
-            }
-          />
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
-          >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              to="/admin/innovate/campaigns"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.innovate.campaigns"
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <HowToVoteIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.include.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/innovate/financials"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.innovate.financials"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WrappedComponent
-          button={true}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <HowToVoteIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.include.index"
-              />
-            }
-          />
-        </WrappedComponent>
-        <WrappedComponent
-          button={true}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <GroupWorkIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary={
-              <Memo(DiverstFormattedMessage)
-                id="diverst.containers.Routes.admin.mentorship.index"
-              />
-            }
-          />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Divider)) />
-        <WrappedComponent
-          button={true}
-          onClick={[Function]}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <SettingsIcon />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))>
-            <Memo(DiverstFormattedMessage)
-              id="diverst.containers.Routes.admin.system.index"
             />
-          </WithStyles(ForwardRef(ListItemText))>
-          <ExpandMoreIcon />
-        </WrappedComponent>
-        <WithStyles(ForwardRef(Collapse))
-          in={false}
-          timeout="auto"
-          unmountOnExit={true}
-        >
-          <WithStyles(ForwardRef(List))
-            disablePadding={true}
+          </WrappedComponent>
+          <WrappedComponent
+            button={true}
           >
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              isActive={[Function]}
-              to="/admin/system/settings"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.globalSettings"
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <GroupWorkIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary={
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.Routes.admin.mentorship.index"
                 />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
               }
-              to="/admin/system/users"
+            />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Divider)) />
+          <WrappedComponent
+            button={true}
+            onClick={[Function]}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <SettingsIcon />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))>
+              <Memo(Connect(DiverstFormattedMessage))
+                id="diverst.containers.Routes.admin.system.index"
+              />
+            </WithStyles(ForwardRef(ListItemText))>
+            <ExpandMoreIcon />
+          </WrappedComponent>
+          <WithStyles(ForwardRef(Collapse))
+            in={false}
+            timeout="auto"
+            unmountOnExit={true}
+          >
+            <WithStyles(ForwardRef(List))
+              disablePadding={true}
             >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.users"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="/admin/system/branding/theme"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.branding"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                isActive={[Function]}
+                to="/admin/system/settings"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.globalSettings"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="#"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.logs"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-            <WrappedComponent
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
+                to="/admin/system/users"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.users"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
                 }
-              }
-              to="#"
-            >
-              <WithStyles(ForwardRef(ListItemIcon))>
-                <ListIcon />
-              </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))>
-                <Memo(DiverstFormattedMessage)
-                  id="diverst.containers.Routes.admin.system.diversity"
-                />
-              </WithStyles(ForwardRef(ListItemText))>
-            </WrappedComponent>
-          </WithStyles(ForwardRef(List))>
-        </WithStyles(ForwardRef(Collapse))>
-        <WithStyles(ForwardRef(Divider)) />
-      </WithStyles(ForwardRef(List))>
+                to="/admin/system/branding"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.branding"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/system/logs"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.logs"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="#"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.system.diversity"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+            </WithStyles(ForwardRef(List))>
+          </WithStyles(ForwardRef(Collapse))>
+          <WithStyles(ForwardRef(Divider)) />
+        </WithStyles(ForwardRef(List))>
+      </WithStyles(Scrollbar)>
     </WithStyles(ForwardRef(Drawer))>
   </Hidden>
 </nav>

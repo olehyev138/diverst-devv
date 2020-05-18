@@ -11,6 +11,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Shared/Permissions/messages';
+import { redirectAction } from 'utils/reduxPushHelper';
+import config from 'app.config';
 
 function conditionalCheck(props, condition) {
   let parts;
@@ -20,6 +22,8 @@ function conditionalCheck(props, condition) {
   else
     parts = condition.split('.');
   const evaluated = dig(...[props, ...parts]);
+  if (evaluated == null)
+    return undefined;
   return neg ? !evaluated : evaluated;
 }
 
@@ -28,10 +32,19 @@ function conditionsMapper(props, conditions) {
 }
 
 function valid(props, conditions, reducer) {
-  return reducer(conditionsMapper(props, conditions));
+  if (reducer(conditionsMapper(props, conditions)))
+    return true;
+  if (config.environment === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('Failed Permissions');
+    // eslint-disable-next-line no-console
+    console.log(conditions.reduce((sum, cond) => {
+      sum[cond] = conditionalCheck(props, cond);
+      return sum;
+    }, {}));
+  }
+  return false;
 }
-
-const redirectAction = url => push(url);
 
 export default function Conditional(
   Component,
@@ -39,7 +52,7 @@ export default function Conditional(
   redirect = null,
   message = null,
   wait = false,
-  reducer = a => a.some(v => v)
+  reducer = a => a.some(v => v) || a.every(v => v === undefined)
 ) {
   const WrappedComponent = (props) => {
     const [first, setFirst] = useState(true);

@@ -1,21 +1,16 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
-import {
-  Paper, Typography, Grid, Button, Box, Card, CardContent, Link, Hidden, Divider, CardActions
-} from '@material-ui/core/index';
+import { Typography, Grid, Button, Box, Divider } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import GoToParentIcon from '@material-ui/icons/SubdirectoryArrowLeft';
-import PublicIcon from '@material-ui/icons/Public';
-import FolderIcon from '@material-ui/icons/Folder';
-import LockIcon from '@material-ui/icons/Lock';
 
 import classNames from 'classnames';
 
@@ -23,11 +18,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import messages from 'containers/Resource/Folder/messages';
-import resourceMessages from 'containers/Resource/Resource/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
-
-import KeyboardArrowRightIcon from '@material-ui/core/SvgIcon/SvgIcon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLoader from 'components/Shared/DiverstLoader';
@@ -36,6 +28,8 @@ import FolderListItem from 'components/Resource/Shared/FolderListItem';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+
+import download from 'downloadjs';
 
 const styles = theme => ({
   folderListItem: {
@@ -74,6 +68,15 @@ const styles = theme => ({
 export function Folder(props) {
   const { classes, type, permissions, currentGroup } = props;
   const folder = dig(props, 'folder');
+
+  const [fileName, setFileName] = useState(null);
+
+  useEffect(() => {
+    if (fileName && props.fileData.data) {
+      download(props.fileData.data, fileName, props.fileData.contentType);
+      setFileName(null);
+    }
+  }, [props.fileData.data]);
 
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !folder}>
@@ -248,6 +251,10 @@ export function Folder(props) {
                       isResource
                       deleteAction={props.deleteResourceBegin}
                       archiveResourceBegin={props.archiveResourceBegin}
+                      getFileDataBegin={props.getFileDataBegin}
+                      isDownloadingFileData={props.isDownloadingFileData}
+                      fileName={fileName}
+                      setFileName={setFileName}
                       links={props.links}
                     />
                   </Grid>
@@ -280,9 +287,12 @@ Folder.propTypes = {
   resources: PropTypes.array,
   resourcesTotal: PropTypes.number,
   currentUserId: PropTypes.number,
+  fileData: PropTypes.object,
+  isDownloadingFileData: PropTypes.bool,
   handleFolderPagination: PropTypes.func,
   handleResourcePagination: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
+  getFileDataBegin: PropTypes.func,
   intl: intlShape.isRequired,
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,

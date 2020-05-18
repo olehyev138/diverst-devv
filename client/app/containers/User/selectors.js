@@ -5,7 +5,7 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { selectGroupsDomain } from '../Group/selectors';
+import { mapFieldData, mapFieldNames, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -45,11 +45,11 @@ const selectFormUser = () => createSelector(
     if (user) {
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
-        draft.timezones = timezoneArray.map((element) => {
-          if (element[1] === user.time_zone)
-            draft.time_zone = { label: element[1], value: element[0] };
-          return { label: element[1], value: element[0] };
-        });
+        draft.timezones = timezoneMap(timezoneArray, user, draft);
+        draft.field_data = mapFieldData(user.field_data);
+        draft.user_role_id = mapSelectField(user.user_role, 'role_name');
+        draft.available_roles = user.available_roles
+          && user.available_roles.map(item => mapSelectField(item, 'role_name', ['default']));
       });
     }
     return null;
@@ -69,6 +69,18 @@ const selectPostsTotal = () => createSelector(
 const selectPaginatedEvents = () => createSelector(
   selectUsersDomain,
   userState => userState.events
+);
+
+
+const selectCalendarEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.events.map(event => mapFieldNames(event,
+    {
+      groupId: 'group.id',
+      title: 'name',
+      backgroundColor: 'group.calendar_color',
+      borderColor: 'group.calendar_color',
+    }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 
 const selectEventsTotal = () => createSelector(
@@ -147,7 +159,7 @@ export {
   selectPaginatedSelectUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
-  selectIsLoadingEvents, selectFormUser,
+  selectIsLoadingEvents, selectFormUser, selectCalendarEvents,
   selectPaginatedPosts, selectPostsTotal,
   selectPaginatedEvents, selectEventsTotal,
   selectIsCommitting, selectIsFormLoading,

@@ -27,7 +27,7 @@ import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { CardContent, Grid } from '@material-ui/core';
-import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
+import MentorshipMenu from 'components/Mentorship/MentorshipMenu/Loadable';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -139,8 +139,7 @@ export default compose(
   withStyles(styles),
 )(Conditional(
   MentorshipLayout,
-  ['enterprise.mentorship_module_enabled'],
+  ['enterprise.mentorship_module_enabled', '!enterprise'],
   (props, rs) => ROUTES.user.root.path(),
   permissionMessages.layouts.mentorship,
-  true
 ));

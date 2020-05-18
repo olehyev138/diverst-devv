@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
+  Button, Grid, Box, MenuItem
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -138,7 +137,7 @@ export function UserList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.tooltip.edit),
+                tooltip: intl.formatMessage(messages.tooltip.delete),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

@@ -1,0 +1,6 @@
+<p>Hello <%= @sender.name %>!</p>
+
+<p><%= @receiver.name %> has declined your request for mentorship. Click the link below to find another mentor/mentee.</p>
+
+<p><%= link_to "Find another mentor", ReactRoutes.user.mentorship.mentors(@sender) %></p>
+<p><%= link_to "Find another mentee", ReactRoutes.user.mentorship.mentees(@sender) %></p>

@@ -16,7 +16,8 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN
+  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN,
+  JOIN_SUBGROUPS_BEGIN
 } from './constants';
 
 import {
@@ -31,12 +32,12 @@ import {
   resetBudgetSuccess, resetBudgetError,
   leaveGroupSuccess, leaveGroupError,
   joinGroupSuccess, joinGroupError,
-  groupCategorizeSuccess, groupCategorizeError,
   updateGroupPositionSuccess, updateGroupPositionError,
+  groupCategorizeSuccess, groupCategorizeError,
+  joinSubgroupsSuccess, joinSubgroupsError,
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-
 
 
 export function* getGroups(action) {
@@ -239,6 +240,18 @@ export function* leaveGroup(action) {
   }
 }
 
+export function* joinSubgroups(action) {
+  try {
+    const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
+    yield put(joinSubgroupsSuccess());
+  } catch (err) {
+    yield put(joinSubgroupsError());
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
@@ -254,4 +267,5 @@ export default function* groupsSaga() {
   yield takeLatest(JOIN_GROUP_BEGIN, joinGroup);
   yield takeLatest(LEAVE_GROUP_BEGIN, leaveGroup);
   yield takeLatest(GROUP_CATEGORIZE_BEGIN, categorizeGroup);
+  yield takeLatest(JOIN_SUBGROUPS_BEGIN, joinSubgroups);
 }

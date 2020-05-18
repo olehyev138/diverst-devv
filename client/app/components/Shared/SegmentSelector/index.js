@@ -4,11 +4,11 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  getSegmentsBegin
+  getSegmentsBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
 import { compose } from 'redux';
@@ -16,15 +16,19 @@ import { connect } from 'react-redux';
 
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
-import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
+import { selectIsLoading, selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Segment/saga';
+import { permission } from 'utils/permissionsHelpers';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, label, ...rest }) => {
   useInjectReducer({ key: 'segments', reducer });
   useInjectSaga({ key: 'segments', saga });
+
+  const { getSegmentsBegin, segmentUnmount, ...selectProps } = rest;
 
   const segmentSelectAction = (searchKey = '') => {
     rest.getSegmentsBegin({
@@ -33,21 +37,32 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
     });
   };
 
+  useEffect(() => {
+    if (permission(rest, 'segments_view'))
+      segmentSelectAction();
+
+    return () => segmentUnmount();
+  }, []);
+
   return (
-    <DiverstSelect
-      name={segmentField}
-      id={segmentField}
-      margin='normal'
-      label={label}
-      isMulti
-      fullWidth
-      options={rest.segments}
-      value={values[segmentField]}
-      onChange={value => setFieldValue(segmentField, value)}
-      onInputChange={value => segmentSelectAction(value)}
-      hideHelperText
-      {...rest}
-    />
+    permission(rest, 'segments_view')
+    && (
+      <DiverstSelect
+        name={segmentField}
+        id={segmentField}
+        margin='normal'
+        label={label}
+        isMulti
+        fullWidth
+        isLoading={rest.isLoading}
+        options={rest.segments}
+        value={values[segmentField]}
+        onChange={value => setFieldValue(segmentField, value)}
+        onInputChange={value => segmentSelectAction(value)}
+        hideHelperText
+        {...selectProps}
+      />
+    )
   );
 };
 
@@ -60,14 +75,18 @@ SegmentSelector.propTypes = {
 
   getSegmentsBegin: PropTypes.func.isRequired,
   segments: PropTypes.array,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   segments: selectPaginatedSelectSegments(),
+  isLoading: selectIsLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
-  getSegmentsBegin
+  getSegmentsBegin,
+  segmentUnmount,
 };
 
 const withConnect = connect(

@@ -53,7 +53,7 @@ export function GroupMessagePage(props) {
     <GroupMessage
       commentAction={props.createGroupMessageCommentBegin}
       deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}

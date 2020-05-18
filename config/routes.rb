@@ -14,6 +14,11 @@ Diverst::Application.routes.draw do
       # match 'enterprises/update_enterprise' => 'enterprises#update_enterprise', via: :post
 
       resources :api_keys
+      resources :activities do
+        collection do
+          get 'export_csv'
+        end
+      end
       resources :annual_budgets
       resources :answers
       resources :answer_comments
@@ -240,6 +245,7 @@ Diverst::Application.routes.draw do
       resources :user_reward_actions
       resources :user, only: [] do
         collection do
+          get '/user_data', to: 'user#get_user_data'
           get '/posts', to: 'user#get_posts'
           get '/joined_events', to: 'user#get_joined_events'
           get '/all_events', to: 'user#get_all_events'
@@ -250,6 +256,9 @@ Diverst::Application.routes.draw do
         collection do
           get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
+          post '/sign_up_token', to: 'users#sign_up_token'
+          post '/sign_up', to: 'users#sign_up'
+          get 'prototype'
         end
       end
       resources :user_groups do
@@ -257,8 +266,7 @@ Diverst::Application.routes.draw do
           post 'join'
           post 'leave'
           get 'export_csv'
-          post 'leave'
-          post 'join'
+          post 'join_subgroups'
         end
       end
       resources :user_roles
@@ -288,9 +296,11 @@ Diverst::Application.routes.draw do
             get 'social_media'
             get 'resources'
 
+            get 'group_overview_metrics'
+            get 'group_specific_metrics'
             get 'group_population'
             get 'initiatives_per_group'
-            get 'messages_per_group'
+            get 'news_posts_per_group'
             get 'views_per_group'
             get 'views_per_folder'
             get 'views_per_resource'
