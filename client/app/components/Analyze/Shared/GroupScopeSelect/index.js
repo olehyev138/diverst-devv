@@ -29,8 +29,9 @@ const styles = theme => ({
 export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const groupSelectAction = (searchKey = '') => {
     props.getGroupsBegin({
-      count: 10, page: 0, order: 'asc',
+      count: 30, page: 0, order: 'asc',
       search: searchKey,
+      query_scopes: ['all_parents']
     });
   };
 
