@@ -4,6 +4,17 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
 <Fragment>
   <WithStyles(ForwardRef(Grid))
     container={true}
+  >
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
+      <Memo(WithStyles(WithTheme(DiverstHTMLEmbedder)))
+        html=""
+      />
+    </WithStyles(ForwardRef(Grid))>
+  </WithStyles(ForwardRef(Grid))>
+  <WithStyles(ForwardRef(Grid))
+    container={true}
     spacing={3}
   >
     <WithStyles(ForwardRef(Grid))
