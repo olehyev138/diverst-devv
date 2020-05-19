@@ -112,6 +112,7 @@ export function NewsFeedPage(props, context) {
         isLoading={props.isLoading}
         defaultParams={params}
         currentTab={tab}
+        pending={tab === NewsFeedTypes.pending}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         currentGroup={props.currentGroup}
