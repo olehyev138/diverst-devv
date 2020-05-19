@@ -213,6 +213,7 @@ export function FieldList(props, context) {
                 deleteFieldBegin={props.deleteFieldBegin}
                 field={field}
                 key={field.id}
+                toggles={props.toggles}
               />
             );
           })}
@@ -246,6 +247,17 @@ FieldList.propTypes = {
   checkboxField: PropTypes.bool,
   dateField: PropTypes.bool,
   numberField: PropTypes.bool,
+
+  toggles: PropTypes.shape({
+    visible: PropTypes.bool,
+    editable: PropTypes.bool,
+    required: PropTypes.bool,
+    memberList: PropTypes.bool,
+  })
+};
+
+FieldList.defaultProps = {
+  toggles: {}
 };
 
 export default compose(
