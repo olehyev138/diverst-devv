@@ -56,7 +56,7 @@ export const initialState = {
   isLoading: true,
   isFormLoading: true,
   isCommitting: false,
-  groupList: {},
+  groupList: [],
   groupTotal: null,
   currentGroup: null,
   hasChanged: false,

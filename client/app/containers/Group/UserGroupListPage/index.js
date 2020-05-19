@@ -61,7 +61,7 @@ UserGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  groups: PropTypes.object,
+  groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
 };

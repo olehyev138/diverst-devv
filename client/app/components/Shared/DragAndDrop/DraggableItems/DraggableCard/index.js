@@ -85,7 +85,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
 
   const importDialog = (
     <Dialog
-      open={importGroup}
+      open={false}
       onClose={handleDialogClose}
       aria-labelledby='alert-dialog-slide-title'
       aria-describedby='alert-dialog-slide-description'
@@ -405,4 +405,5 @@ DraggableCard.propTypes = {
   group: PropTypes.object,
   draggable: PropTypes.bool,
   classes: PropTypes.object,
+  importAction: PropTypes.func,
 };

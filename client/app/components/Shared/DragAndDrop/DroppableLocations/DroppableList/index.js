@@ -13,12 +13,12 @@ import DragDropContext from '../../DragDropContext';
 import { Grid } from '@material-ui/core';
 
 export function DroppableList(props) {
-  const [cards, setCards] = useState(Object.values(props.list));
+  const [cards, setCards] = useState(Object.values(props.items));
   const total = cards.length;
 
   useEffect(() => {
-    setCards(props.list);
-  }, [props.list]);
+    setCards(props.items);
+  }, [props.items]);
 
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
@@ -40,10 +40,10 @@ export function DroppableList(props) {
       card.position = index + props.currentPage * cards.length;
       props.updateGroupPositionBegin(card);
     });
-  
+
 
   const renderCard = (card, index) => (
-    <Grid item xs={12}>
+    <Grid item key={card.id} xs={12}>
       <DraggableCard
         key={card.id}
         index={index}
@@ -53,6 +53,7 @@ export function DroppableList(props) {
         group={card}
         classes={props.classes}
         draggable={props.draggable}
+        importAction={props.importAction}
       />
     </Grid>
   );
@@ -68,9 +69,10 @@ export function DroppableList(props) {
 }
 
 DroppableList.propTypes = {
-  list: PropTypes.object,
+  items: PropTypes.array,
   classes: PropTypes.object,
   save: PropTypes.bool,
   updateGroupPositionBegin: PropTypes.func,
   currentPage: PropTypes.number,
+  importAction: PropTypes.func,
 };
