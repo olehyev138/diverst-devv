@@ -80,6 +80,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
     <Grid item key={group.id} xs={12}>
       <Card
         ref={ref}
+        className={classes.groupCard}
       >
         <CardContent>
           <Grid container spacing={2} alignItems='center'>

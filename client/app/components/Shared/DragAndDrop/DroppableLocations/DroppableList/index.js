@@ -13,6 +13,7 @@ import update from 'immutability-helper';
 import produce from 'immer';
 import DraggableCard from '../../DraggableItems/DraggableCard';
 import DragDropContext from '../../DragDropContext';
+import {Grid} from "@material-ui/core";
 
 export function DroppableList(props) {
   const [cards, setCards] = useState(Object.values(props.list));
@@ -36,25 +37,29 @@ export function DroppableList(props) {
       card.position = index + props.currentPage * cards.length;
       props.updateGroupPositionBegin(card);
     });
-  
+
 
   const renderCard = (card, index) => (
-    <DraggableCard
-      key={card.id}
-      index={index}
-      id={card.id}
-      text={card.text}
-      moveCard={moveCard}
-      group={card}
-      classes={props.classes}
-      draggable={props.draggable}
-    />
+    <Grid item xs={12}>
+      <DraggableCard
+        key={card.id}
+        index={index}
+        id={card.id}
+        text={card.text}
+        moveCard={moveCard}
+        group={card}
+        classes={props.classes}
+        draggable={props.draggable}
+      />
+    </Grid>
   );
 
 
   return (
     <DragDropContext>
-      {cards.map((card, i) => renderCard(card, i))}
+      <Grid container spacing={3} justify='flex-end'>
+        {cards.map((card, i) => renderCard(card, i))}
+      </Grid>
     </DragDropContext>
   );
 }
