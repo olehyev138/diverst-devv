@@ -22,14 +22,12 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Formik, Form, Field } from 'formik';
-import { buildValues } from 'utils/formHelpers';
 
 import AddIcon from '@material-ui/icons/Add';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import DiverstImg from 'components/Shared/DiverstImg';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
@@ -65,10 +63,6 @@ const styles = theme => ({
     borderBottomLeftRadius: 4,
   },
 });
-
-export const ItemTypes = {
-  CARD: 'card',
-};
 
 export function AdminGroupList(props, context) {
   const { classes, defaultParams, intl } = props;

@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
@@ -21,13 +21,12 @@ import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupPosition
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { MetricsDashboardCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage';
+
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
 import csvReducer from 'containers/Shared/CsvFile/reducer';
 import csvSaga from 'containers/Shared/CsvFile/saga';
-import {hasClassName} from "enzyme/src/RSTTraversal";
 
 export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -38,8 +37,8 @@ export function AdminGroupListPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0,orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
-
     props.getGroupsBegin(params);
+
     return () => props.groupListUnmount();
   }, []);
 
@@ -50,7 +49,6 @@ export function AdminGroupListPage(props) {
     setParams(newParams);
   };
 
-console.log(props.groups);
   return (
     <React.Fragment>
       <GroupList
@@ -83,7 +81,6 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
-  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
