@@ -13,8 +13,10 @@ import saga from 'containers/News/saga';
 import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
-import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
+import {
+  deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin, approveNewsItemBegin
+} from 'containers/News/actions';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -143,6 +145,7 @@ NewsFeedPage.propTypes = {
   updateNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
@@ -172,6 +175,7 @@ const mapDispatchToProps = dispatch => ({
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
+  approveNewsItemBegin: payload => dispatch(approveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
   unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
   likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),

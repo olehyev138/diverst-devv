@@ -219,6 +219,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
 };
 
