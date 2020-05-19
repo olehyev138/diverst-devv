@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 import { DndProvider, useDrop } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import update from 'immutability-helper';
 import produce from 'immer';
 import DraggableCard from '../../DraggableItems/DraggableCard';
@@ -17,6 +17,11 @@ import {Grid} from "@material-ui/core";
 
 export function DroppableList(props) {
   const [cards, setCards] = useState(Object.values(props.list));
+
+  useEffect(() => {
+    setCards(props.list);
+  }, [props.list]);
+
   const moveCard = useCallback(
     (dragIndex, hoverIndex) => {
       const dragCard = cards[dragIndex];

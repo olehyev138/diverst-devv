@@ -32,8 +32,6 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
 
-import { ImportForm } from 'components/User/UserImport';
-
 const styles = theme => ({
   progress: {
     margin: theme.spacing(8),
@@ -62,6 +60,14 @@ const styles = theme => ({
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
   },
+  draggableCard: {
+    cursor: 'grab',
+    borderLeftWidth: 2,
+    borderLeftStyle: 'solid',
+    borderLeftColor: theme.palette.primary.main,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+  }
 });
 
 export function AdminGroupList(props, context) {
@@ -69,45 +75,9 @@ export function AdminGroupList(props, context) {
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState({});
-  const [importGroup, setImportGroup] = useState(0);
-  const handleDialogClose = () => setImportGroup(0);
-  const handleDialogOpen = id => setImportGroup(id);
-
-  const importDialog = (
-    <Dialog
-      open={importGroup}
-      onClose={handleDialogClose}
-      aria-labelledby='alert-dialog-slide-title'
-      aria-describedby='alert-dialog-slide-description'
-    >
-      <DialogContent>
-        <Typography component='h2' variant='h6' className={classes.dataHeaders}>
-          Import instructions
-        </Typography>
-        <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
-          {'To batch import users to this group, upload a CSV file using the form below. The file should only contain a single column comprised of the users\' email adresses. The first row will be ignored, as it is reserved for the header.'}
-        </Typography>
-      </DialogContent>
-      <Formik
-        initialValues={{
-          group_id: importGroup,
-          import_file: null
-        }}
-        enableReinitialize
-        onSubmit={(values, actions) => {
-          props.importAction(values);
-          handleDialogClose();
-        }}
-      >
-        {formikProps => <ImportForm {...props} {...formikProps} />}
-      </Formik>
-    </Dialog>
-  );
-
 
   return (
     <React.Fragment>
-      { importDialog }
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
