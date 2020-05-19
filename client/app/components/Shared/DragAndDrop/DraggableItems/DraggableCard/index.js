@@ -4,6 +4,7 @@
  */
 
 import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { useDrag, useDrop } from 'react-dnd';
 
@@ -19,8 +20,6 @@ import { permission } from 'utils/permissionsHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
-import PropTypes from "prop-types";
-import {UserGroupListPage} from "../../../../../containers/Group/UserGroupListPage";
 
 export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});

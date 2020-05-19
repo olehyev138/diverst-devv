@@ -132,7 +132,6 @@ export function* updateGroupPosition(action) {
     yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
     yield put(updateGroupPositionSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group order updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupPositionError(err));
