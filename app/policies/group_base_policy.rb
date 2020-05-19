@@ -101,8 +101,6 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def view_group_resource(permission)
-    return true if manage_group_resource(permission)
-
     # super admin
     return true if manage_all?
     # groups manager
