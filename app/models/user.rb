@@ -184,7 +184,7 @@ class User < ApplicationRecord
     super.merge({ name: name })
   end
 
-  # Format users field data for a ES index
+  # Format users field data for a elasticsearch index
   # Returns { <field_data.id> => <field_data.data } }
   def indexed_field_data
     field_data.to_h { |fd| [fd.field_id, fd.data] }

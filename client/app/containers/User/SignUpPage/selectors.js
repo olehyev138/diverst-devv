@@ -4,7 +4,8 @@ import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from './reducer';
-import { mapFieldData, timezoneMap } from 'utils/selectorHelpers';
+import { timezoneMap } from 'utils/selectorHelpers';
+import { mapFieldData } from 'utils/customFieldHelpers';
 
 const selectSignUpDomain = state => state.signUp || initialState;
 

@@ -32,6 +32,7 @@ export function GrowthOfUsersGraphPage(props) {
       from_date: '',
       to_date: ''
     },
+    scoped_by_models: props.dashboardParams.scoped_by_models
   });
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export function GrowthOfUsersGraphPage(props) {
 GrowthOfUsersGraphPage.propTypes = {
   data: PropTypes.object,
   getGrowthOfUsersBegin: PropTypes.func,
+  dashboardParams: PropTypes.object,
   metricsUnmount: PropTypes.func
 };
 

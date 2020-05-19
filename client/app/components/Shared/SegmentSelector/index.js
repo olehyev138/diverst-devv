@@ -21,6 +21,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Segment/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Segment/saga';
+import { permission } from 'utils/permissionsHelpers';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, label, ...rest }) => {
   useInjectReducer({ key: 'segments', reducer });
@@ -36,27 +38,31 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
   };
 
   useEffect(() => {
-    segmentSelectAction();
+    if (permission(rest, 'segments_view'))
+      segmentSelectAction();
 
     return () => segmentUnmount();
   }, []);
 
   return (
-    <DiverstSelect
-      name={segmentField}
-      id={segmentField}
-      margin='normal'
-      label={label}
-      isMulti
-      fullWidth
-      isLoading={rest.isLoading}
-      options={rest.segments}
-      value={values[segmentField]}
-      onChange={value => setFieldValue(segmentField, value || (selectProps.isMulti ? [] : null))}
-      onInputChange={value => segmentSelectAction(value)}
-      hideHelperText
-      {...selectProps}
-    />
+    permission(rest, 'segments_view')
+    && (
+      <DiverstSelect
+        name={segmentField}
+        id={segmentField}
+        margin='normal'
+        label={label}
+        isMulti
+        fullWidth
+        isLoading={rest.isLoading}
+        options={rest.segments}
+        value={values[segmentField]}
+        onChange={value => setFieldValue(segmentField, value || (selectProps.isMulti ? [] : null))}
+        onInputChange={value => segmentSelectAction(value)}
+        hideHelperText
+        {...selectProps}
+      />
+    )
   );
 };
 
@@ -75,6 +81,7 @@ SegmentSelector.propTypes = {
 const mapStateToProps = createStructuredSelector({
   segments: selectPaginatedSelectSegments(),
   isLoading: selectIsLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
