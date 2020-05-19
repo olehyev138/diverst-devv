@@ -105,6 +105,13 @@ export function FieldListPage(props) {
         checkboxField
         dateField
         numberField
+
+        toggles={{
+          visible: true,
+          editable: true,
+          memberList: true,
+          required: true,
+        }}
       />
     </React.Fragment>
   );
