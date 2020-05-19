@@ -125,6 +125,7 @@ export function NewsFeedPage(props, context) {
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
         archiveNewsItemBegin={props.archiveNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}

@@ -2,7 +2,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
   prepend Api::V1::Concerns::Archivable
 
   def approve
-    params[klass.symbol][:approved] = true
+    params[klass.symbol] = { approved: true }
     item = klass.find(params[:id])
     base_authorize(item)
 
@@ -20,6 +20,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
     params[klass.symbol][:is_pinned] = true
     item = klass.find(params[:id])
     base_authorize(item)
+    raise BadRequestException.new('Already Approved') if item.approved?
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
