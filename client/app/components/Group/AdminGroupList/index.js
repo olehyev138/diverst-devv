@@ -98,6 +98,7 @@ export function AdminGroupList(props, context) {
               startIcon={<ReorderIcon />}
               onClick={() => {
                 setSave(true);
+                setOrder(false);
               }
               }
             >
@@ -109,14 +110,15 @@ export function AdminGroupList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
-              onClick={() => { setOrder(true); }}
+              onClick={() => {
+                setSave(false);
+                setOrder(true);
+              }}
             >
               <DiverstFormattedMessage {...messages.change_order} />
             </Button>
           )
-
           }
-
         </Grid>
       </Grid>
       <Box mb={1} />

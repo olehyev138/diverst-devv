@@ -6,17 +6,15 @@
 
 import PropTypes from 'prop-types';
 
-import { DndProvider, useDrop } from 'react-dnd';
-import Backend from 'react-dnd-html5-backend';
-import React, {useState, useCallback, useEffect} from 'react';
-import update from 'immutability-helper';
-import produce from 'immer';
+import React, { useState, useCallback, useEffect } from 'react';
+
 import DraggableCard from '../../DraggableItems/DraggableCard';
 import DragDropContext from '../../DragDropContext';
-import {Grid} from "@material-ui/core";
+import { Grid } from '@material-ui/core';
 
 export function DroppableList(props) {
   const [cards, setCards] = useState(Object.values(props.list));
+  const total = cards.length;
 
   useEffect(() => {
     setCards(props.list);
@@ -42,7 +40,7 @@ export function DroppableList(props) {
       card.position = index + props.currentPage * cards.length;
       props.updateGroupPositionBegin(card);
     });
-
+  
 
   const renderCard = (card, index) => (
     <Grid item xs={12}>

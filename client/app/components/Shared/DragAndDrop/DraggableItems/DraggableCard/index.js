@@ -3,7 +3,7 @@
  * A card that can be dragged around and can also be dropped on
  */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useDrag, useDrop } from 'react-dnd';
@@ -20,7 +20,7 @@ import { permission } from 'utils/permissionsHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
-import {Formik} from "formik";
+import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
 
