@@ -82,7 +82,16 @@ export function NewsFeedPage(props, context) {
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup, props.hasChanged]);
+  }, [props.currentGroup]);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getNewsItemsBegin(params);
+
+    return () => {
+      props.newsFeedUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
