@@ -86,7 +86,7 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_SUCCESS:
-        draft.groupList = formatGroups(action.payload.items);
+        draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -161,7 +161,8 @@ function formatGroups(groups) {
   /* Format groups to hash by id:
    *   { <id>: { name: group_01, ... } }
    */
-  return groups.reduce((map, group) => {
+
+  return groups.reduce((map, group, index) => {
     map[group.id] = group;
     return map;
   }, {});

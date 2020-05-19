@@ -38,22 +38,22 @@ export function AdminGroupListPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0,orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
-    props.getGroupsBegin(params);
 
+    props.getGroupsBegin(params);
     return () => props.groupListUnmount();
-  }, [props.hasChanged]);
+  }, []);
 
   const handlePagination = (payload) => {
-    //const newParams = { ...params, count: payload.count, page: payload.page };
+    const newParams = { ...params, count: payload.count, page: payload.page };
 
-    //props.getGroupsBegin(newParams);
-    //setParams(newParams);
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
   };
 
 console.log(props.groups);
   return (
     <React.Fragment>
-        <GroupList
+      <GroupList
         isLoading={props.isLoading}
         groups={props.groups}
         groupTotal={props.groupTotal}
