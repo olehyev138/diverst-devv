@@ -20,7 +20,7 @@ import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shar
 import {
   selectFormFolder, selectFolder,
   selectPaginatedSelectFolders, selectValid,
-  selectIsCommitting, selectIsFormLoading
+  selectIsCommitting, selectIsFolderFormLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -166,7 +166,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
   isCommitting: selectIsCommitting(),
-  isFormLoading: selectIsFormLoading(),
+  isFormLoading: selectIsFolderFormLoading(),
   permissions: selectPermissions(),
 });
 

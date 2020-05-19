@@ -19,7 +19,7 @@ import RouteService from 'utils/routeHelpers';
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectPaginatedSelectFolders, selectValid,
-  selectFormResource, selectIsCommitting, selectIsFormLoading
+  selectFormResource, selectIsCommitting, selectIsResourceFormLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -109,7 +109,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
   isCommitting: selectIsCommitting(),
-  isFormLoading: selectIsFormLoading(),
+  isFormLoading: selectIsResourceFormLoading(),
   permissions: selectPermissions(),
 });
 
