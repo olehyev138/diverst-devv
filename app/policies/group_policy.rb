@@ -125,12 +125,20 @@ class GroupPolicy < ApplicationPolicy
     UserGroupPolicy.new(self, UserGroup).create?
   end
 
-  def news_create?
-    NewsFeedLinkPolicy.new(self, NewsFeedLink).create?
+  def message_create?
+    GroupMessagePolicy.new(self, GroupMessage).create?
+  end
+
+  def news_link_create?
+    NewsLinkPolicy.new(self, NewsLink).create?
   end
 
   def social_link_create?
-    user.enterprise.enable_social_media
+    user.enterprise.enable_social_media && SocialLinkPolicy.new(self, SocialLink).create?
+  end
+
+  def news_create?
+    message_create? || news_link_create? || social_link_create?
   end
 
   def resources_create?
