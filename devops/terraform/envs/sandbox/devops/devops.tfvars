@@ -24,3 +24,5 @@ db_maintenance_window       = null
 db_name       = "diverst"
 db_username   = "mainuser"
 db_password   = "password123"
+
+analytics_interval = "12 hours"

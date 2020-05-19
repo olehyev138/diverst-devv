@@ -7,6 +7,8 @@ class Graph < ApplicationRecord
   include Metrics::CampaignMetrics
   include Metrics::MetricsUtil
 
+  include Metrics
+
   belongs_to :poll
   belongs_to :metrics_dashboard
 
