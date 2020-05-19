@@ -235,27 +235,51 @@ export function GroupMemberList(props) {
         <Grid item md={4} container alignItems='stretch'>
           <Card>
             <CardContent>
-              <Grid
-                container
-                justify='space-between'
-                spacing={3}
-                alignContent='stretch'
-                alignItems='center'
-              >
-                <Grid item md='auto'>
-                  <Typography align='left' variant='h6' component='h2' color='primary'>
-                    <DiverstFormattedMessage {...messages.changeScope} />
-                  </Typography>
-                </Grid>
-                <Grid item md='auto'>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    size='large'
-                    onClick={handleClick}
+              <Grid container direction='column' spacing={3}>
+                <Grid item>
+                  <Grid
+                    container
+                    justify='space-between'
+                    spacing={3}
+                    alignContent='stretch'
+                    alignItems='center'
                   >
-                    <DiverstFormattedMessage {...messages.scopes[props.memberType]} />
-                  </Button>
+                    <Grid item md='auto'>
+                      <Typography align='left' variant='h6' component='h2' color='primary'>
+                        <DiverstFormattedMessage {...messages.changeScope} />
+                      </Typography>
+                    </Grid>
+                    <Grid item md='auto'>
+                      <Button
+                        variant='contained'
+                        color='secondary'
+                        size='large'
+                        onClick={handleClick}
+                      >
+                        <DiverstFormattedMessage {...messages.scopes[props.memberType]} />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid
+                    container
+                    justify='space-between'
+                    spacing={3}
+                    alignContent='stretch'
+                    alignItems='center'
+                  >
+                    <Grid item md='auto'>
+                      <Typography align='left' variant='h6' component='h2' color='primary'>
+                        <DiverstFormattedMessage {...messages.count} />
+                      </Typography>
+                    </Grid>
+                    <Grid item md='auto'>
+                      <Typography>
+                        {props.memberTotal}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </CardContent>

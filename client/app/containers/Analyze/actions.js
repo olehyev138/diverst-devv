@@ -5,11 +5,13 @@
  */
 
 import {
+  GET_GROUP_OVERVIEW_METRICS_BEGIN, GET_GROUP_OVERVIEW_METRICS_SUCCESS, GET_GROUP_OVERVIEW_METRICS_ERROR,
+  GET_GROUP_SPECIFIC_METRICS_BEGIN, GET_GROUP_SPECIFIC_METRICS_SUCCESS, GET_GROUP_SPECIFIC_METRICS_ERROR,
   GET_GROUP_POPULATION_BEGIN, GET_GROUP_POPULATION_SUCCESS, GET_GROUP_POPULATION_ERROR,
   GET_GROWTH_OF_GROUPS_BEGIN, GET_GROWTH_OF_GROUPS_SUCCESS, GET_GROWTH_OF_GROUPS_ERROR,
   GET_VIEWS_PER_GROUP_BEGIN, GET_VIEWS_PER_GROUP_SUCCESS, GET_VIEWS_PER_GROUP_ERROR,
   GET_INITIATIVES_PER_GROUP_BEGIN, GET_INITIATIVES_PER_GROUP_SUCCESS, GET_INITIATIVES_PER_GROUP_ERROR,
-  GET_MESSAGES_PER_GROUP_BEGIN, GET_MESSAGES_PER_GROUP_SUCCESS, GET_MESSAGES_PER_GROUP_ERROR,
+  GET_NEWS_PER_GROUP_BEGIN, GET_NEWS_PER_GROUP_SUCCESS, GET_NEWS_PER_GROUP_ERROR,
   GET_VIEWS_PER_NEWS_LINK_BEGIN, GET_VIEWS_PER_NEWS_LINK_SUCCESS, GET_VIEWS_PER_NEWS_LINK_ERROR,
   GET_VIEWS_PER_FOLDER_BEGIN, GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_FOLDER_ERROR,
   GET_VIEWS_PER_RESOURCE_BEGIN, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_VIEWS_PER_RESOURCE_ERROR,
@@ -17,6 +19,52 @@ import {
   GET_GROWTH_OF_USERS_BEGIN, GET_GROWTH_OF_USERS_SUCCESS, GET_GROWTH_OF_USERS_ERROR,
   METRICS_UNMOUNT,
 } from 'containers/Analyze/constants';
+
+/* Group overview metrics */
+
+export function getGroupOverviewMetricsBegin(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupOverviewMetricsSuccess(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_SUCCESS,
+    payload
+  };
+}
+
+export function getGroupOverviewMetricsError(payload) {
+  return {
+    type: GET_GROUP_OVERVIEW_METRICS_ERROR,
+    payload
+  };
+}
+
+/* Group specific metrics */
+
+export function getGroupSpecificMetricsBegin(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupSpecificMetricsSuccess(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_BEGIN,
+    payload
+  };
+}
+
+export function getGroupSpecificMetricsError(payload) {
+  return {
+    type: GET_GROUP_SPECIFIC_METRICS_ERROR,
+    payload
+  };
+}
 
 /* Group population */
 
@@ -110,25 +158,25 @@ export function getInitiativesPerGroupError(payload) {
   };
 }
 
-/* Messages per Group */
+/* News per Group */
 
-export function getMessagesPerGroupBegin(payload) {
+export function getNewsPerGroupBegin(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_BEGIN,
+    type: GET_NEWS_PER_GROUP_BEGIN,
     payload
   };
 }
 
-export function getMessagesPerGroupSuccess(payload) {
+export function getNewsPerGroupSuccess(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_SUCCESS,
+    type: GET_NEWS_PER_GROUP_SUCCESS,
     payload
   };
 }
 
-export function getMessagesPerGroupError(payload) {
+export function getNewsPerGroupError(payload) {
   return {
-    type: GET_MESSAGES_PER_GROUP_ERROR,
+    type: GET_NEWS_PER_GROUP_ERROR,
     payload
   };
 }

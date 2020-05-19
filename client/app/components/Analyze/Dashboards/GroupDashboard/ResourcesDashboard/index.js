@@ -13,22 +13,16 @@ import ViewsPerFolderGraphPage from 'containers/Analyze/Graphs/ViewsPerFolderGra
 import ViewsPerResourceGraphPage from 'containers/Analyze/Graphs/ViewsPerResourceGraphPage';
 import GrowthOfResourcesGraphPage from 'containers/Analyze/Graphs/GrowthOfResourcesGraphPage';
 
-const ResourcesDashboard = ({ dashboardParams }) => (
+const ResourcesDashboard = ({ dashboardFilters }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
-      <ViewsPerFolderGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-    <Grid item xs={12}>
-      <ViewsPerResourceGraphPage dashboardParams={dashboardParams} />
-    </Grid>
-    <Grid item xs={12}>
-      <GrowthOfResourcesGraphPage dashboardParams={dashboardParams} />
+      <ViewsPerFolderGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
   </Grid>
 );
 
 ResourcesDashboard.propTypes = {
-  dashboardParams: PropTypes.object
+  dashboardFilters: PropTypes.array
 };
 
 export default ResourcesDashboard;
