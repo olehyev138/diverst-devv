@@ -1,7 +1,7 @@
 class EmailTemplateMigration < ActiveRecord::Migration
   def change
     Enterprise.all.each do |enterprise|
-      campaign_email = enterprise.emails.find_by(name: 'Campaign Mailer')
+      campaign_email =  Email.where(enterprise: enterprise, name:  'Campaign Mailer')
       campaign_email&.update(:content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign.title}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n")
 
       welcome_email = Email.find_or_create_by(name: 'Welcome Mailer')
