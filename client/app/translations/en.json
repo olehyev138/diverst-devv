@@ -58,7 +58,7 @@
   "diverst.containers.App.errors.fetchUserData": "Unable to connect to server",
   "diverst.containers.HomePage.header": "This is the HomePage container!",
   "diverst.containers.HomePage.news": "Your Latest News",
-  "diverst.containers.HomePage.events": "Your Upcoming",
+  "diverst.containers.HomePage.events": "Your Upcoming Events",
   "diverst.containers.HomePage.privacy": "Privacy Statement",
   "diverst.containers.HomePage.close": "Close",
   "diverst.containers.Login.button.login": "Login",
