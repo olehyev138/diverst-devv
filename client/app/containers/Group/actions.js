@@ -46,9 +46,9 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
-} from 'containers/Group/constants';
-import {UPDATE_GROUP_POSITION_BEGIN, UPDATE_GROUP_POSITION_ERROR, UPDATE_GROUP_POSITION_SUCCESS} from "./constants";
+  JOIN_SUBGROUPS_ERROR,
+  UPDATE_GROUP_POSITION_BEGIN, UPDATE_GROUP_POSITION_ERROR, UPDATE_GROUP_POSITION_SUCCESS } from 'containers/Group/constants';
+
 
 /* Group listing */
 export function getGroupsBegin(payload) {

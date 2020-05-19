@@ -4,10 +4,8 @@
  */
 
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-
+import { useDrag, useDrop } from 'react-dnd';
 
 import {
   Button, Card, CardContent, CardActions,
@@ -18,8 +16,11 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
+import PropTypes from "prop-types";
+import {UserGroupListPage} from "../../../../../containers/Group/UserGroupListPage";
 
 export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
@@ -249,3 +250,13 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
     </Grid>
   );
 }
+
+DraggableCard.propTypes = {
+  id: PropTypes.number,
+  text: PropTypes.string,
+  index: PropTypes.number,
+  moveCard: PropTypes.func,
+  group: PropTypes.object,
+  draggable: PropTypes.bool,
+  classes: PropTypes.object,
+};

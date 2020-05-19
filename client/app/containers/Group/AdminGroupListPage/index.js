@@ -34,7 +34,7 @@ export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'csv_files', reducer: csvReducer });
   useInjectSaga({ key: 'csv_files', saga: csvSaga });
 
-  const [params, setParams] = useState({ count: 5, page: 0,orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -48,7 +48,7 @@ export function AdminGroupListPage(props) {
     props.getGroupsBegin(newParams);
     setParams(newParams);
   };
-
+  console.log(props.groups);
   return (
     <React.Fragment>
       <GroupList

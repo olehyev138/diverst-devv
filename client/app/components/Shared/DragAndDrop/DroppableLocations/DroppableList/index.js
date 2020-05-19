@@ -31,13 +31,12 @@ export function DroppableList(props) {
     [cards],
   );
 
-  if(props.save){
-    cards.map((card,index)=>{
+  if (props.save)
+    cards.map((card, index) => {
       card.position = index + props.currentPage * cards.length;
       props.updateGroupPositionBegin(card);
-    })
-
-  }
+    });
+  
 
   const renderCard = (card, index) => (
     <DraggableCard
@@ -51,6 +50,8 @@ export function DroppableList(props) {
       draggable={props.draggable}
     />
   );
+
+
   return (
     <DragDropContext>
       {cards.map((card, i) => renderCard(card, i))}
