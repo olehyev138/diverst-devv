@@ -133,18 +133,18 @@ class InitiativesController < ApplicationController
   def start_video
     # Only user with permission to update group should be able to start a call
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
-    
+
     # check if user can start the session
     require 'twilio-ruby'
-    
+
     raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
     raise BadRequestException.new 'TWILIO_API_KEY Required' if ENV['TWILIO_API_KEY'].blank?
     raise BadRequestException.new 'TWILIO_SECRET Required' if ENV['TWILIO_SECRET'].blank?
-    
+
     account_sid = ENV['TWILIO_ACCOUNT_SID']
     api_key_sid = ENV['TWILIO_API_KEY']
     api_key_secret = ENV['TWILIO_SECRET']
-    
+
     @video_room_name = "#{request.domain}Initiative#{@initiative.id}"
     @enterprise = @group.enterprise
     # Create an Access Token
@@ -154,12 +154,12 @@ class InitiativesController < ApplicationController
       api_key_secret,
       identity: current_user.email
     )
-    
+
     # Grant access to Video
     grant = Twilio::JWT::AccessToken::VideoGrant.new
     grant.room = @video_room_name
     token.add_grant grant
-    
+
     # Serialize the token as a JWT
     @token = token.to_jwt
 
@@ -187,9 +187,8 @@ class InitiativesController < ApplicationController
     name = params[:name]
     status = params[:status]
     group = Group.find(params[:group_id])
-    initiative = Initiative.find(params[:id])
     enterprise_id = group.enterprise_id
-    
+
     # add start_date to VideoRoom object
     room = VideoRoom.new(
       sid: sid,
@@ -200,7 +199,7 @@ class InitiativesController < ApplicationController
     if room.save
       render nothing: true, status: :ok
     else
-      render nothing: true, status: :unprocessable_entity      
+      render nothing: true, status: :unprocessable_entity
     end
   end
 
@@ -220,7 +219,7 @@ class InitiativesController < ApplicationController
       status: room.status,
       duration: room.duration,
       participants: room_context.participants.list.count,
-      start_date: room.date_created, 
+      start_date: room.date_created,
       end_date: room.end_time
     )
       render noting: true, status: :ok

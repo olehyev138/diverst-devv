@@ -7,12 +7,6 @@ class TwilioDashboardController < ApplicationController
 
   def index
     authorize User
-    
-    account_sid = "AC96e9f809a29495d4acc1431d8171d310"
-    auth_token = "4717433627706502339e922f5b2134a3"
-    
-    client = Twilio::REST::Client.new(account_sid, auth_token)
-    @rooms = client.video.rooms.list(status: 'completed') + client.video.rooms.list(status: 'in-progress')
   end
 
   private
