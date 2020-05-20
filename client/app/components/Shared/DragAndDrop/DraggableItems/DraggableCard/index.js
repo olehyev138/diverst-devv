@@ -68,8 +68,8 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
     item: { type: ItemTypes.CARD, id, index },
     canDrag: draggable,
     collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }),
+      isDragging: monitor.isDragging()
+    })
   });
   drag(drop(ref));
 
