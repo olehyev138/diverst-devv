@@ -1,19 +1,21 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
-import PropTypes from 'prop-types';
-
-import { withStyles } from '@material-ui/core/styles';
-import Fade from '@material-ui/core/Fade';
-
-import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
-import GroupLayout from 'containers/Layouts/GroupLayout';
-import { permission } from 'utils/permissionsHelpers';
-import { push } from 'connected-react-router';
-import RouteService from 'utils/routeHelpers';
-import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { push } from 'connected-react-router';
+import { matchPath, useLocation, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+import Fade from '@material-ui/core/Fade';
+import { withStyles } from '@material-ui/core/styles';
+
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
+
+import { permission } from 'utils/permissionsHelpers';
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 
 const styles = theme => ({
   content: {
@@ -29,8 +31,11 @@ const ManagePages = Object.freeze([
 
 const redirectAction = path => push(path);
 
-const GroupManageLayout = ({ component: Component, classes, defaultPage, ...rest }) => {
-  const { currentGroup, location, computedMatch, redirectAction, showSnackbar, ...other } = rest;
+const GroupManageLayout = (props) => {
+  const { classes, children, currentGroup, redirectAction, showSnackbar, ...rest } = props;
+
+  const location = useLocation();
+  const { group_id: groupId } = useParams();
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPage = ManagePages.find(page => location.pathname.includes(page));
@@ -38,18 +43,15 @@ const GroupManageLayout = ({ component: Component, classes, defaultPage, ...rest
   const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (defaultPage) {
-      const rs = new RouteService({ computedMatch, location });
-
+    if (matchPath(location.pathname, { path: ROUTES.group.manage.index.path(), exact: true }))
       if (permission(rest.currentGroup, 'update?'))
-        redirectAction(ROUTES.group.manage.settings.index.path(rs.params('group_id')));
+        redirectAction(ROUTES.group.manage.settings.index.path(groupId));
       else if (permission(rest.currentGroup, 'leaders_view?'))
-        redirectAction(ROUTES.group.manage.leaders.index.path(rs.params('group_id')));
+        redirectAction(ROUTES.group.manage.leaders.index.path(groupId));
       else {
         showSnackbar({ message: 'You do not have permission to manage this group', options: { variant: 'warning' } });
-        redirectAction(ROUTES.group.home.path(rs.params('group_id')));
+        redirectAction(ROUTES.group.home.path(groupId));
       }
-    }
 
     if (tab !== currentPage)
       setTab(currentPage);
@@ -57,33 +59,25 @@ const GroupManageLayout = ({ component: Component, classes, defaultPage, ...rest
 
   return (
     <React.Fragment>
-      <GroupLayout
+      <GroupManageLinks
+        currentTab={tab}
         {...rest}
-        component={matchProps => (
-          <React.Fragment>
-            <GroupManageLinks
-              currentTab={tab}
-              {...rest}
-              {...matchProps}
-            />
-            <Fade in appear>
-              <div className={classes.content}>
-                {Component ? <Component {...rest} {...matchProps} /> : <React.Fragment />}
-              </div>
-            </Fade>
-          </React.Fragment>
-        )}
       />
+      <Fade in appear>
+        <div className={classes.content}>
+          {renderChildrenWithProps(children, { ...rest })}
+        </div>
+      </Fade>
     </React.Fragment>
   );
 };
 
 GroupManageLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
-  pageTitle: PropTypes.object,
-  defaultPage: PropTypes.bool,
+  children: PropTypes.any,
   currentGroup: PropTypes.object,
+  redirectAction: PropTypes.func,
+  showSnackbar: PropTypes.func,
 };
 
 const mapDispatchToProps = {
