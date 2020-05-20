@@ -177,15 +177,15 @@ export function PolicyFormInner({
     },
     Resource: {
       View: 'group_resources_index',
-      Create: 'group_resources_index',
-      Manage: 'group_resources_index',
+      Create: 'group_resources_create',
+      Manage: 'group_resources_manage',
     },
     News: {
       View: 'group_posts_index',
       Create_Message: 'group_messages_create',
       Create_News_Link: 'news_links_create',
-      Create_Social_Link: 'initiatives_create',
-      Manage: 'social_links_create',
+      Create_Social_Link: 'social_links_create',
+      Manage: 'posts_manage',
     },
     Budgets: {
       View: 'groups_budgets_index',
