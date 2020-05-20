@@ -36,8 +36,8 @@ export function DroppableList(props) {
     [cards],
   );
 
-  if (props.save) { /* eslint-disable-next-line arrow-body-style */ }
-  cards.map((card, index) => {
+  if (props.save)
+  cards.forEach((card, index) => {
     card.position = index + props.currentPage * cards.length;
     props.updateGroupPositionBegin(card);
   });

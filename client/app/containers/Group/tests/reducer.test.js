@@ -27,7 +27,7 @@ describe('groupsReducer', () => {
 
   it('handles the getGroupsSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.groupList = { 37: { id: 37, name: 'dummy' } };
+      draft.groupList = [{ id: 37, name: 'dummy' }];
       draft.groupTotal = 49;
       draft.isLoading = false;
     });
@@ -52,7 +52,7 @@ describe('groupsReducer', () => {
     expect(
       groupsReducer(
         state,
-        getGroupSuccess([ { id: 37, name: 'dummy' } ])
+        getGroupSuccess({ id: 37, name: 'dummy' })
       )
     ).toEqual(expected);
   });
