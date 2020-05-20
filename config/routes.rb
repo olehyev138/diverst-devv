@@ -328,6 +328,7 @@ Rails.application.routes.draw do
       member do
         get 'start_video'
         get 'join_video'
+        patch 'leave_video'
         post 'register_room_in_database'
         patch 'update_registered_room_in_database'
       end
