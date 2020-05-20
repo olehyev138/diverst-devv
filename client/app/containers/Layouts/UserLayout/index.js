@@ -24,7 +24,7 @@ const styles = theme => ({
 });
 
 const UserLayout = (props) => {
-  const { classes, disableBreadcrumbs, ...rest } = props;
+  const { classes, disableBreadcrumbs, children, ...rest } = props;
 
   const location = useLocation();
   // eslint-disable-next-line comma-spacing
@@ -45,7 +45,7 @@ const UserLayout = (props) => {
               ) : (
                 <React.Fragment />
               )}
-              {renderChildrenWithProps(props.children, { ...rest })}
+              {renderChildrenWithProps(children, { ...rest })}
             </div>
           </Container>
         </Fade>
