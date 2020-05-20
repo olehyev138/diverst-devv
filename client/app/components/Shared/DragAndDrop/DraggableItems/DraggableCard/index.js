@@ -28,8 +28,8 @@ import { ImportForm } from 'components/User/UserImport';
 import { intlShape } from 'react-intl';
 
 export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
-  const [expandedGroups, setExpandedGroups] = useState({});
   const { intl } = props;
+  const [expandedGroups, setExpandedGroups] = useState({});
 
   const ref = useRef(null);
   const ItemTypes = {
