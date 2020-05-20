@@ -21,7 +21,7 @@ export default function DragAndDrop(props) {
 
 useDNDProviderElement.propTypes = {
   children: PropTypes.object,
-}
+};
 
 DragAndDrop.propTypes = {
   children: PropTypes.object,
