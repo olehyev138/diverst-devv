@@ -33,6 +33,27 @@ export const findTitleForPath = ({ path, object = ROUTES, params = [], textArgum
     }
   }
 
-    return [null, null];
-  }
-}
+  return [null, null];
+};
+
+export const expandRouteIntoPathArray = (routeObject, pathArray = []) => {
+  const pathSet = new Set(pathArray);
+
+  if (Array.isArray(routeObject))
+    routeObject.forEach(object => recursiveExpandRouteIntoPathSet(object, pathSet));
+  else
+    recursiveExpandRouteIntoPathSet(routeObject, pathSet);
+
+  return Array.from(pathSet);
+};
+
+const recursiveExpandRouteIntoPathSet = (routeObject, pathSet) => {
+  if (typeof routeObject !== 'object' || routeObject === null) return;
+
+  Object.values(routeObject).forEach((item) => {
+    if (item.path)
+      pathSet.add(item.path());
+    else
+      recursiveExpandRouteIntoPathSet(item, pathSet);
+  });
+};
