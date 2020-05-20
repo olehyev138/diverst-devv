@@ -170,6 +170,57 @@ class InitiativesController < ApplicationController
     render nothing: true
   end
 
+  def register_room_in_database
+    # need to skip authorization here because it is redundant? you are already in the room and data
+    # needs to be collected.
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+
+    sid = params[:sid]
+    name = params[:name]
+    status = params[:status]
+    group = Group.find(params[:group_id])
+    initiative = Initiative.find(params[:id])
+    enterprise_id = group.enterprise_id
+    
+    # add start_date to VideoRoom object
+    room = VideoRoom.new(
+      sid: sid,
+      name: name,
+      status: status,
+      enterprise_id: enterprise_id)
+
+    if room.save
+      render nothing: true, status: :ok
+    else
+      render nothing: true, status: :unprocessable_entity      
+    end
+  end
+
+  def update_registered_room_in_database
+    require 'twilio-ruby'
+
+    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
+    raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
+
+    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+    sid = params[:sid]
+    room_context = client.video.rooms(sid)
+    room = client.video.rooms(sid).fetch
+    video_room = VideoRoom.find_by(sid: sid)
+
+    if video_room && video_room.update(
+      status: room.status,
+      duration: room.duration,
+      participants: room_context.participants.list.count,
+      start_date: room.date_created, 
+      end_date: room.end_time
+    )
+      render noting: true, status: :ok
+    else
+      render nothing: true, status: :unprocessable_entity
+    end
+  end
+
 
   protected
 

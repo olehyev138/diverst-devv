@@ -277,6 +277,33 @@
       detachTracks(tracks);
     }
 
+    function registerRoomInDatabase(room) {
+      console.log(room.sid);
+      var room = room; 
+      $.ajax({
+        url: '<%= register_room_in_database_group_initiative_path(@group, @initiative) %>',
+        type: 'POST',
+        data: {
+          sid: room.sid,
+          name: room.name,
+          status: room.state
+        }
+      });
+    }
+
+    function updateRegisteredRoomInDatabase(room) {
+      console.log(room.sid, room.state);
+      var room = room;
+      $.ajax({
+        url: '<%= update_registered_room_in_database_group_initiative_path(@group, @initiative) %>',
+        type: 'PATCH',
+        data: {
+          sid: room.sid,
+          status: room.state
+        }
+      });
+    }
+
     // When we are about to transition away from this page, disconnect
     // from the room, if joined.
     window.addEventListener('beforeunload', leaveRoomIfJoined);
@@ -302,6 +329,7 @@
 
       log("Joined as '" + identity + "'");
 
+      registerRoomInDatabase(room);
       // Attach LocalParticipant's Tracks, if not already attached.
       var previewContainer = document.getElementById('video-grid');
       if (!previewContainer.querySelector('video')) {
@@ -318,13 +346,14 @@
       // When a Participant joins the Room, log the event.
       room.on('participantConnected', function(participant) {
         log("Joining: '" + participant.identity + "'");
+        // console.log(room.participants.size, room.sid);
 
         var previewContainer = document.getElementById('video-grid');
         attachParticipantTracks(participant, previewContainer);
       });
 
       // When a Participant adds a Track, attach it to the DOM.
-      room.on('trackAdded', function(track, participant) {
+      room.on('trackSubscribed', function(track, participant) {
         //log(participant.identity + " added track: " + track.kind);
         var previewContainer = document.getElementById('video-grid');
         var screenShareArea = document.getElementById('screen-share-area');
@@ -337,7 +366,7 @@
       });
 
       // When a Participant removes a Track, detach it from the DOM.
-      room.on('trackRemoved', function(track, participant) {
+      room.on('trackUnsubscribed', function(track, participant) {
         log(participant.identity + " removed track: " + track.kind);
         detachTracks([track]);
       });
@@ -356,6 +385,10 @@
           previewTracks.forEach(function(track) {
             track.stop();
           });
+        }
+
+        if (room.participants.size == 0){
+          updateRegisteredRoomInDatabase(room);
         }
         detachParticipantTracks(room.localParticipant);
         room.participants.forEach(detachParticipantTracks);
