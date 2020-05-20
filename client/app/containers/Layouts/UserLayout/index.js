@@ -1,15 +1,19 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 import Fade from '@material-ui/core/Fade';
 import UserLinks from 'components/User/UserLinks';
 import { withStyles } from '@material-ui/core/styles';
-import AuthenticatedLayout from '../AuthenticatedLayout';
 
 import Scrollbar from 'components/Shared/Scrollbar';
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+
+import { renderChildrenWithProps } from 'utils/componentHelpers';
+import { customTexts } from 'utils/customTextHelpers';
+import { findTitleForPath } from 'utils/routeHelpers';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -19,40 +23,40 @@ const styles = theme => ({
   },
 });
 
-const UserLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, disableBreadcrumbs, ...other } = rest;
+const UserLayout = (props) => {
+  const { classes, disableBreadcrumbs, ...rest } = props;
+
+  const location = useLocation();
+  // eslint-disable-next-line comma-spacing
+  const [title,] = findTitleForPath({
+    path: location.pathname,
+    textArguments: customTexts(),
+  });
 
   return (
-    <AuthenticatedLayout
-      position='relative'
-      data={data}
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          <UserLinks pageTitle={data.titleMessage} {...matchProps} />
-          <Scrollbar>
-            <Fade in appear>
-              <Container>
-                <div className={classes.content}>
-                  {disableBreadcrumbs !== true ? (
-                    <DiverstBreadcrumbs />
-                  ) : (
-                    <React.Fragment />
-                  )}
-                  <Component pageTitle={data.titleMessage} {...other} />
-                </div>
-              </Container>
-            </Fade>
-          </Scrollbar>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <UserLinks pageTitle={title} />
+      <Scrollbar>
+        <Fade in appear>
+          <Container>
+            <div className={classes.content}>
+              {disableBreadcrumbs !== true ? (
+                <DiverstBreadcrumbs />
+              ) : (
+                <React.Fragment />
+              )}
+              {renderChildrenWithProps(props.children, { ...rest })}
+            </div>
+          </Container>
+        </Fade>
+      </Scrollbar>
+    </React.Fragment>
   );
 };
 
 UserLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   pageTitle: PropTypes.object,
   disableBreadcrumbs: PropTypes.bool,
 };
