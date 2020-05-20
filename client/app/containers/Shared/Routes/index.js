@@ -277,7 +277,7 @@ export default function Routes(props) {
         </Route>
 
         {/* Authenticated */}
-        <Route path={[...expandRouteIntoPathArray(ROUTES.user), ROUTES.group.pathPrefix, ROUTES.admin.pathPrefix]}>
+        <Route path={[...expandRouteIntoPathArray(ROUTES.user), ROUTES.group.pathPrefix(), ROUTES.admin.pathPrefix]}>
           <AuthenticatedLayout>
             <Switch>
               {/* User */}
