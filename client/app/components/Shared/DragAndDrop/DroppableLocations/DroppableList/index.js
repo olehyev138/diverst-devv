@@ -37,10 +37,10 @@ export function DroppableList(props) {
   );
 
   if (props.save)
-      cards.forEach((card, index) => {
-        card.position = index + props.currentPage * cards.length;
-        props.updateGroupPositionBegin(card);
-      });
+    cards.forEach((card, index) => {
+      card.position = index + props.currentPage * cards.length;
+      props.updateGroupPositionBegin(card);
+    });
 
 
   const renderCard = (card, index) => (
