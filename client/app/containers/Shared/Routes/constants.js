@@ -68,6 +68,7 @@ const ROUTES = {
       }
     },
     mentorship: {
+      pathPrefix: '/mentorship',
       data: {
         titleMessage: messages.user.mentorship,
       },
@@ -149,7 +150,7 @@ const ROUTES = {
   },
 
   group: {
-    pathPrefix: '/groups',
+    pathPrefix: (groupId = ':group_id') => `/groups/${groupId}`,
     back: {
       data: {
         titleMessage: messages.groups.back,
@@ -254,6 +255,7 @@ const ROUTES = {
       }
     },
     plan: {
+      pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan`,
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/plan`,
         data: {
@@ -290,6 +292,7 @@ const ROUTES = {
           }
         },
         manage: {
+          pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
           index: {
             data: {
               pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
@@ -361,6 +364,7 @@ const ROUTES = {
         },
       },
       kpi: {
+        pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
         index: {
           data: {
             pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
@@ -407,6 +411,7 @@ const ROUTES = {
         },
       },
       budget: {
+        pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
           data: {
@@ -449,6 +454,7 @@ const ROUTES = {
       },
     },
     manage: {
+      pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/manage`,
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/manage`,
         data: {
