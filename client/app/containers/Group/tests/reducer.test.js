@@ -52,7 +52,7 @@ describe('groupsReducer', () => {
     expect(
       groupsReducer(
         state,
-        getGroupSuccess({ group: { id: 37, name: 'dummy' }})
+        getGroupSuccess({ group: { id: 37, name: 'dummy' } })
       )
     ).toEqual(expected);
   });
