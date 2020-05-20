@@ -139,6 +139,7 @@ export function GroupHome({ classes, ...props }) {
           >
             {intl.formatMessage(messages.join)}
           </Button>
+          {/* eslint-disable-next-line no-nested-ternary */}
           {props.currentGroup.parent_id === null
             ? (
               props.currentGroup.children.length > 0 ? (
