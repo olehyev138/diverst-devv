@@ -18,7 +18,8 @@ const SocialMediaDashboard = ({ dashboardParams }) => (
 );
 
 SocialMediaDashboard.propTypes = {
-  dashboardFilters: PropTypes.array
+  dashboardFilters: PropTypes.array,
+  dashboardParams: PropTypes.array
 };
 
 export default SocialMediaDashboard;
