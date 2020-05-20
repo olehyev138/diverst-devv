@@ -162,7 +162,7 @@ function formatGroups(groups) {
    *   { <id>: { name: group_01, ... } }
    */
 
-  return groups.reduce((map, group, index) => {
+  return groups.reduce((map, group) => {
     map[group.id] = group;
     return map;
   }, {});
