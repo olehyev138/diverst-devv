@@ -25,7 +25,7 @@ import messages from 'containers/Group/messages';
 import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
-import {intlShape} from "react-intl";
+import { intlShape } from 'react-intl';
 
 export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});

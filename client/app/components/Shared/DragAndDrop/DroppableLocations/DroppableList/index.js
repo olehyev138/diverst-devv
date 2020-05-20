@@ -36,11 +36,11 @@ export function DroppableList(props) {
     [cards],
   );
 
-  if (props.save)
-    cards.map((card, index) => {
-      card.position = index + props.currentPage * cards.length;
-      props.updateGroupPositionBegin(card);
-    });
+  if (props.save) { /* eslint-disable-next-line arrow-body-style */ }
+  cards.map((card, index) => {
+    card.position = index + props.currentPage * cards.length;
+    props.updateGroupPositionBegin(card);
+  });
 
 
   const renderCard = (card, index) => (
