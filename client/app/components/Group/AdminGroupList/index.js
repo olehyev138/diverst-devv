@@ -129,8 +129,10 @@ export function AdminGroupList(props, context) {
           draggable={order}
           save={save}
           updateGroupPositionBegin={props.updateGroupPositionBegin}
+          deleteGroupBegin={props.deleteGroupBegin}
           currentPage={defaultParams.page}
           importAction={props.importAction}
+          intl={props.intl}
         />
       </DiverstLoader>
       <DiverstPagination

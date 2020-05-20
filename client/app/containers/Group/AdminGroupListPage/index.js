@@ -21,6 +21,7 @@ import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupPosition
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -33,6 +34,8 @@ export function AdminGroupListPage(props) {
   useInjectSaga({ key: 'groups', saga });
   useInjectReducer({ key: 'csv_files', reducer: csvReducer });
   useInjectSaga({ key: 'csv_files', saga: csvSaga });
+
+  const { intl } = props;
 
   const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
@@ -60,6 +63,7 @@ export function AdminGroupListPage(props) {
         updateGroupPositionBegin={props.updateGroupPositionBegin}
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
+        intl={intl}
       />
     </React.Fragment>
   );
@@ -74,6 +78,7 @@ AdminGroupListPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
+  intl: intlShape,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -97,6 +102,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(Conditional(

@@ -13,6 +13,8 @@ import {
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden, Dialog, DialogContent,
 } from '@material-ui/core';
 
+import DiverstImg from 'components/Shared/DiverstImg';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Permission from 'components/Shared/DiverstPermission';
@@ -23,19 +25,11 @@ import messages from 'containers/Group/messages';
 import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
+import {intlShape} from "react-intl";
 
 export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
-
-  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
-  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
-    const initialExpandedGroups = {};
-
-    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
-    setExpandedGroups(initialExpandedGroups);
-  }
+  const { intl } = props;
 
   const ref = useRef(null);
   const ItemTypes = {
@@ -85,7 +79,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
 
   const importDialog = (
     <Dialog
-      open={false}
+      open={importGroup}
       onClose={handleDialogClose}
       aria-labelledby='alert-dialog-slide-title'
       aria-describedby='alert-dialog-slide-description'
@@ -406,4 +400,6 @@ DraggableCard.propTypes = {
   draggable: PropTypes.bool,
   classes: PropTypes.object,
   importAction: PropTypes.func,
+  deleteGroupBegin: PropTypes.func,
+  intl: intlShape,
 };

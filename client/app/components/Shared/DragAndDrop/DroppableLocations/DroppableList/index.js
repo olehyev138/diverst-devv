@@ -11,6 +11,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import DraggableCard from '../../DraggableItems/DraggableCard';
 import DragDropContext from '../../DragDropContext';
 import { Grid } from '@material-ui/core';
+import { intlShape } from 'react-intl';
 
 export function DroppableList(props) {
   const [cards, setCards] = useState(Object.values(props.items));
@@ -54,6 +55,8 @@ export function DroppableList(props) {
         classes={props.classes}
         draggable={props.draggable}
         importAction={props.importAction}
+        deleteGroupBegin={props.deleteGroupBegin}
+        intl={props.intl}
       />
     </Grid>
   );
@@ -75,4 +78,7 @@ DroppableList.propTypes = {
   updateGroupPositionBegin: PropTypes.func,
   currentPage: PropTypes.number,
   importAction: PropTypes.func,
+  deleteGroupBegin: PropTypes.func,
+  draggable: PropTypes.bool,
+  intl: intlShape,
 };
