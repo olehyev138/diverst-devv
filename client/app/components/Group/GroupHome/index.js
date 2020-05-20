@@ -141,18 +141,22 @@ export function GroupHome({ classes, ...props }) {
           </Button>
           {props.currentGroup.parent_id === null
             ? (
-              <DiverstDialog
-                open={openSubgroup}
-                title={intl.formatMessage(messages.thanks)}
-                content={(
-                  <SubgroupJoinForm
-                    subgroupJoinAction={props.joinSubgroups}
-                    handleClose={handleClose}
-                    handleCancel={handleJoinGroup}
-                    group={props.currentGroup}
-                  />
-                )}
-              />
+              props.currentGroup.children.length > 0 ? (
+                <DiverstDialog
+                  open={openSubgroup}
+                  title={intl.formatMessage(messages.thanks)}
+                  content={(
+                    <SubgroupJoinForm
+                      subgroupJoinAction={props.joinSubgroups}
+                      handleClose={handleClose}
+                      handleCancel={handleJoinGroup}
+                      group={props.currentGroup}
+                    />
+                  )}
+                />
+              ) : (
+                openSubgroup && handleJoinGroup()
+              )
             )
             : (
               <DiverstDialog
