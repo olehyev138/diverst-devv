@@ -34,6 +34,7 @@ const KPILayout = (props) => {
     <React.Fragment>
       <KPILinks
         currentTab={tab}
+        {...rest}
       />
       <Box mb={3} />
       <Fade in appear>
