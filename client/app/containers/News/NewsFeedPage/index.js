@@ -1,11 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
@@ -17,7 +16,6 @@ import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLi
   updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
@@ -40,18 +38,19 @@ export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
   useInjectSaga({ key: 'likes', saga: likeSaga });
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
 
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
-    newsLinkNew: ROUTES.group.news.news_links.new.path(rs.params('group_id')),
-    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(rs.params('group_id'), id),
-    socialLinkNew: ROUTES.group.news.social_links.new.path(rs.params('group_id')),
-    socialLinkEdit: id => ROUTES.group.news.social_links.edit.path(rs.params('group_id'), id),
+    newsFeedIndex: ROUTES.group.news.index.path(groupId),
+    newsLinkNew: ROUTES.group.news.news_links.new.path(groupId),
+    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(groupId, id),
+    socialLinkNew: ROUTES.group.news.social_links.new.path(groupId),
+    socialLinkEdit: id => ROUTES.group.news.social_links.edit.path(groupId, id),
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
-    groupMessageNew: ROUTES.group.news.messages.new.path(rs.params('group_id')),
-    groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id),
-    newsLinkShow: (groupId, id) => ROUTES.group.news.news_links.show.path(rs.params('group_id'), id),
+    groupMessageNew: ROUTES.group.news.messages.new.path(groupId),
+    groupMessageEdit: id => ROUTES.group.news.messages.edit.path(groupId, id),
+    newsLinkShow: (groupId, id) => ROUTES.group.news.news_links.show.path(groupId, id),
   };
 
   const [tab, setTab] = useState(NewsFeedTypes.approved);
@@ -188,6 +187,6 @@ export default compose(
 )(Conditional(
   NewsFeedPage,
   ['currentGroup.permissions.news_view?'],
-  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  (props, params) => props.readonly ? null : ROUTES.group.home.path(params.group_id),
   permissionMessages.news.NewsFeedPage
 ));
