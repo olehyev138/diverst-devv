@@ -4,12 +4,9 @@
  *
  */
 
-import React, {
-  memo, useContext, useEffect, useRef, useState
-} from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
@@ -57,8 +54,6 @@ const styles = theme => ({
 
 export function MetricsDashboardsList(props, context) {
   const { classes, intl } = props;
-
-  const routeContext = useContext(RouteContext);
 
   const columns = [
     { title: intl.formatMessage(messages.fields.name), field: 'name' }
