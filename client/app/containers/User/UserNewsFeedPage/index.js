@@ -1,11 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import dig from 'object-dig';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
@@ -17,7 +16,6 @@ import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'co
 import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
@@ -33,7 +31,6 @@ export function NewsFeedPage(props, context) {
     count: 5, page: 0, order: 'desc', order_by: 'created_at',
   });
 
-  const rs = new RouteService(useContext);
   const links = {
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
     newsLinkShow: (groupId, id) => ROUTES.group.news.news_links.show.path(groupId, id),
@@ -117,6 +114,6 @@ export default compose(
 )(Conditional(
   NewsFeedPage,
   ['permissions.news_view'],
-  (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
+  (props, params) => props.readonly ? null : ROUTES.user.home.path(),
   permissionMessages.user.newsFeedPage
 ));
