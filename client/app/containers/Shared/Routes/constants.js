@@ -4,7 +4,7 @@ const messages = require('./messages');
 const ROUTES = {
   // Session
   session: {
-    sign_up: {
+    signUp: {
       path: (token = ':token') => `/sign_up/${token}`,
     },
     login: {
