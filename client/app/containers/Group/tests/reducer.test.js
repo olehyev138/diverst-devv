@@ -13,7 +13,7 @@ describe('groupsReducer', () => {
       isLoading: true,
       isFormLoading: true,
       isCommitting: false,
-      groupList: {},
+      groupList: [],
       groupTotal: null,
       currentGroup: null,
       hasChanged: false,
@@ -52,7 +52,7 @@ describe('groupsReducer', () => {
     expect(
       groupsReducer(
         state,
-        getGroupSuccess({ group: { id: 37, name: 'dummy' }, })
+        getGroupSuccess([ { id: 37, name: 'dummy' } ])
       )
     ).toEqual(expected);
   });
