@@ -19,6 +19,10 @@ export default function DragAndDrop(props) {
   return <React.Fragment>{DNDElement}</React.Fragment>;
 }
 
+useDNDProviderElement.propTypes = {
+  children: PropTypes.object,
+}
+
 DragAndDrop.propTypes = {
   children: PropTypes.object,
 };
