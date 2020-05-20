@@ -129,7 +129,7 @@ class NewsFeedLink < ApplicationRecord
   def approve_link
     return if link.nil?
 
-    if GroupPostsPolicy.new(link.author, [link.group]).update?
+    if NewsFeedLinkPolicy.new(link.author, [link.group]).update?
       self.approved = true
       self.save!
     end

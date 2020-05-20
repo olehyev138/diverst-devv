@@ -120,7 +120,7 @@ RSpec.describe SocialLinkPolicy, type: :policy do
         before { user_role.policy_group_template.update social_links_create: true }
 
         it { is_expected.to permit_action :create }
-        it { is_expected.to forbid_actions([:index, :update, :destroy]) }
+        it { is_expected.to forbid_actions([:update, :destroy]) }
       end
 
       context 'and social_links_manage is true' do

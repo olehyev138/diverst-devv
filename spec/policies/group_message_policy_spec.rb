@@ -26,7 +26,7 @@ RSpec.describe GroupMessagePolicy, type: :policy do
           before { group_message.owner = create(:user) }
 
           context 'when ONLY manage_posts is true' do
-            before { user.policy_group.update manage_posts: true }
+            before { user.policy_group.update group_messages_manage: true }
             it { is_expected.to permit_action(:index) }
           end
 

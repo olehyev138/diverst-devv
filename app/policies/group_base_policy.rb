@@ -101,16 +101,18 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def view_group_resource(permission)
+    manage_group_resource(permission)
+
     # super admin
     return true if manage_all?
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? && leader_visible && policy_group[permission]
+    return true if is_a_leader? && leader_visible
     # group member
-    return true if is_a_member? && member_visible && policy_group[permission]
+    return true if is_a_member? && member_visible
 
-    publicly_visible && policy_group[permission]
+    publicly_visible
   end
 
   def manage?
