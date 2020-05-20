@@ -42,6 +42,9 @@ const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
   },
+  optionButton: {
+    margin: 5,
+  },
   groupCard: {
     borderLeftWidth: 2,
     borderLeftStyle: 'solid',
@@ -87,6 +90,7 @@ export function AdminGroupList(props, context) {
             size='large'
             component={WrappedNavLink}
             startIcon={<AddIcon />}
+            className={classes.optionButton}
           >
             <DiverstFormattedMessage {...messages.new} />
           </Button>
@@ -96,6 +100,7 @@ export function AdminGroupList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
+              className={classes.optionButton}
               onClick={() => {
                 setSave(true);
                 setOrder(false);
@@ -110,6 +115,7 @@ export function AdminGroupList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
+              className={classes.optionButton}
               onClick={() => {
                 setSave(false);
                 setOrder(true);
