@@ -91,7 +91,6 @@
     "history": "4.9.0",
     "hoist-non-react-statics": "3.3.0",
     "immer": "3.0.0",
-    "immutability-helper": "^3.0.2",
     "interweave": "12.1.1",
     "intl": "1.2.5",
     "invariant": "2.2.4",
