@@ -178,6 +178,7 @@
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
     "image-webpack-loader": "6.0.0",
+    "immutable": "^3.8.2",
     "imports-loader": "0.8.0",
     "jest": "^26.0.1",
     "jest-cli": "^26.0.1",
