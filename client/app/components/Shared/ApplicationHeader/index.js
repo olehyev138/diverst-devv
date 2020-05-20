@@ -127,7 +127,7 @@ export class ApplicationHeader extends React.PureComponent {
   render() {
     const { menuAnchor } = this.state;
     const {
-      classes, group, position, isAdmin, user, permissions
+      classes, group, isAdmin, user, permissions
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
@@ -193,7 +193,7 @@ export class ApplicationHeader extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <AppBar position={position} className={classes.appBar}>
+        <AppBar position='relative' className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             { isAdmin
               ? (
@@ -291,15 +291,10 @@ ApplicationHeader.propTypes = {
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
-  position: PropTypes.string,
   isAdmin: PropTypes.bool,
   logoutBegin: PropTypes.func,
   handleVisitAdmin: PropTypes.func,
   handleVisitHome: PropTypes.func,
-};
-
-ApplicationHeader.defaultProps = {
-  position: 'absolute'
 };
 
 export function mapDispatchToProps(dispatch, ownProps) {
