@@ -21,7 +21,11 @@ export function RouteWithProps(props) {
   // Route props
   const routeProps = { path, exact, strict, location, sensitive };
 
-  return <Route {...routeProps} render={() => renderChildrenWithProps(children, { ...propsToPassDown })} />;
+  return (
+    <Route {...routeProps}>
+      {renderChildrenWithProps(children, { ...propsToPassDown })}
+    </Route>
+  );
 }
 
 RouteWithProps.propTypes = {

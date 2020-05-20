@@ -9,10 +9,14 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 export function SwitchWithProps(props) {
   const { children, location, ...propsToPassDown } = props;
 
-  // Route props
+  // Switch props
   const switchProps = { location };
 
-  return <Switch {...switchProps} render={() => renderChildrenWithProps(children, { ...propsToPassDown })} />;
+  return (
+    <Switch {...switchProps}>
+      {renderChildrenWithProps(children, { ...propsToPassDown })}
+    </Switch>
+  );
 }
 
 SwitchWithProps.propTypes = {
