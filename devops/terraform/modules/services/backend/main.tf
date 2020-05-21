@@ -194,11 +194,10 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: generate this & store somewhere proper
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_MASTER_KEY"
-    value       = "0cd095760c9ff9a780b97332b683bc3a"
+    value       = var.rails_master_key
     resource    = ""
   }
 

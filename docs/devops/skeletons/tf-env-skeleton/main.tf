@@ -39,6 +39,7 @@ module "prod" {
   ssh_key_name  = var.ssh_key_name
 
   backend_solution_stack  = var.backend_solution_stack
+  rails_master_key        = var.rails_master_key
   backend_asg_min         = var.backend_asg_min
   backend_asg_max         = var.backend_asg_max
   backend_ec2_type        = var.backend_ec2_type
@@ -60,4 +61,13 @@ module "prod" {
   db_password   = var.db_password
 
   analytics_interval = var.analytics_interval
+
+  #
+  ## 3rd party services
+  #
+  rollbar_env             = var.rollbar_env
+  rollbar_access_token    = var.rollbar_access_token
+  mailgun_domain          = var.mailgun_domain
+  mailgun_api_key         = var.mailgun_api_key
+  embedly_key             = var.embedly_key
 }

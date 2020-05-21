@@ -1,6 +1,7 @@
-variable "env_name"       {}
-variable "vpc_id"         {}
-variable "solution_stack" {}
+variable "env_name"         {}
+variable "vpc_id"           {}
+variable "solution_stack"   {}
+variable "rails_master_key" {}
 
 variable "asg_min"    {}
 variable "asg_max"    {}

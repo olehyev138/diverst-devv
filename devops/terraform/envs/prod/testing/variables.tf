@@ -26,6 +26,10 @@ variable "backend_solution_stack" {
   type    = string
 }
 
+variable "rails_master_key" {
+  type    = string
+}
+
 variable "backend_asg_min" {
   type    = number
 }

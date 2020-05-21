@@ -57,10 +57,11 @@ module "backend" {
   region    = var.region
   vpc_id    = module.vpc.vpc.id
 
-  solution_stack  = var.backend_solution_stack
-  asg_min         = var.backend_asg_min
-  asg_max         = var.backend_asg_max
-  ec2_type        = var.backend_ec2_type
+  solution_stack    = var.backend_solution_stack
+  rails_master_key  = var.rails_master_key
+  asg_min           = var.backend_asg_min
+  asg_max           = var.backend_asg_max
+  ec2_type          = var.backend_ec2_type
 
   sn_elb  = module.vpc.sn_dmz
   sg_elb  = module.sec.sg_dmz

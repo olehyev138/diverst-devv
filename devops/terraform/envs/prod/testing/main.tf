@@ -31,6 +31,7 @@ module "prod" {
   nat_gateway_enabled = var.nat_gateway_enabled
 
   backend_solution_stack  = var.backend_solution_stack
+  rails_master_key        = var.rails_master_key
   backend_asg_min         = var.backend_asg_min
   backend_asg_max         = var.backend_asg_max
   backend_ec2_type        = var.backend_ec2_type
