@@ -27,3 +27,5 @@ db_maintenance_window       = null
 db_name       = "diverst_production"
 db_username   = "admin"
 db_password   = "<password>"
+
+analytics_interval = "12 hours"
