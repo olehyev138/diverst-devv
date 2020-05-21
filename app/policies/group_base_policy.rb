@@ -95,7 +95,7 @@ class GroupBasePolicy < ApplicationPolicy
 
     case visibility
     when 'public' then true
-    when 'group' then is_a_member?
+    when 'group' then is_a_member? || is_a_manager?
     when 'leader' then is_a_manager?
     else false
     end && has_permission(permission)
