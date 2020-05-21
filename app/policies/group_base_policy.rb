@@ -57,37 +57,28 @@ class GroupBasePolicy < ApplicationPolicy
     is_a_member? && !user_group.accepted_member?
   end
 
+  def is_a_manager?
+    is_admin_manager? || is_a_leader?
+  end
+
+  def is_admin_manager?
+    manage_all? || policy_group.groups_manage?
+  end
+
   def group_visibility_setting
   end
 
-  def publicly_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : is_an_accepted_member?
+  def visibility
+    case group[group_visibility_setting]
+    when 'public', 'global', 'non-members', nil then 'public'
+    when 'group' then 'group'
+    when 'leaders_only', 'managers_only' then 'leader'
+    else raise StandardError.new('Invalid Visibility Setting')
+    end
   end
 
-  def member_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members', 'group'].include?(group[group_visibility_setting]) : true
-  end
-
-  def leader_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members', 'group', 'managers_only', 'leaders_only'].include?(group[group_visibility_setting]) : true
-  end
-
-  def is_a_manager?(permission)
-    return true if is_admin_manager?(permission)
-
-    # return true if is_a_leader? &&  policy_group[permission]
-    has_group_leader_permissions?(permission)
-  end
-
-  def is_admin_manager?(permission)
-    # super admin
-    return true if manage_all?
-
-    # groups manager
-    policy_group.groups_manage? && policy_group[permission]
+  def has_permission(permission)
+    policy_group[permission] || has_group_leader_permissions?(permission)
   end
 
   def basic_group_leader_permission?(permission)
@@ -95,24 +86,19 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_group_leader_permissions?(permission)
-    return false unless is_a_leader?
-
-    group_leader[permission] || false
+    (is_a_leader? && group_leader[permission]) || false
   end
 
   def view_group_resource(permission)
-    manage_group_resource(permission)
-
     # super admin
     return true if manage_all?
-    # groups manager
-    return true if policy_group.groups_manage? && policy_group[permission]
-    # group leader
-    return true if is_a_leader? && leader_visible
-    # group member
-    return true if is_a_member? && member_visible
 
-    publicly_visible
+    case visibility
+    when 'public' then true
+    when 'group' then is_a_member?
+    when 'leader' then is_a_manager?
+    else false
+    end && has_permission(permission)
   end
 
   def manage?
@@ -122,14 +108,8 @@ class GroupBasePolicy < ApplicationPolicy
   def manage_group_resource(permission)
     # super admin
     return true if manage_all?
-    # groups manager
-    return true if policy_group.groups_manage? && policy_group[permission]
-    # group leader
-    return true if has_group_leader_permissions?(permission)
-    # group member
-    return true if is_an_accepted_member? && policy_group[permission]
 
-    false
+    (is_a_manager? || is_an_accepted_member?) && has_permission(permission)
   end
 
   def index?
