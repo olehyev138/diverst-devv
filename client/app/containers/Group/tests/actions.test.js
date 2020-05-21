@@ -173,7 +173,7 @@ describe('group actions', () => {
       it('has a type of RESET_BUDGET_SUCCESS and sets a given payload', () => {
         const expected = {
           type: RESET_BUDGET_SUCCESS,
-          error: { value: 703 }
+          payload: { value: 703 }
         };
 
         expect(resetBudgetSuccess({ value: 703 })).toEqual(expected);
@@ -184,7 +184,7 @@ describe('group actions', () => {
       it('has a type of RESET_BUDGET_ERROR and sets a given error', () => {
         const expected = {
           type: RESET_BUDGET_ERROR,
-          payload: { value: 701 }
+          error: { value: 701 }
         };
 
         expect(resetBudgetError({ value: 701 })).toEqual(expected);
