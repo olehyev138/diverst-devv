@@ -13,7 +13,6 @@ backend_asg_max         = 4
 backend_ec2_type        = "t2.small"
 
 sidekiq_username = "admin"
-sidekiq_password = "<password>"
 
 db_class                    = "db.t2.small"
 multi_az                    = false
@@ -26,6 +25,5 @@ db_maintenance_window       = null
 
 db_name       = "diverst_production"
 db_username   = "admin"
-db_password   = "<password>"
 
 analytics_interval = "12 hours"
