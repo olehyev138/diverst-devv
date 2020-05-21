@@ -15,8 +15,7 @@ after 'development:groups' do
                        sponsor_title: sponsors[s][1],
                        sponsor_message: 'I welcome everyone to this initiative.',
                        sponsorable_type: 'Group',
-                       sponsorable_id: group.id,
-                       sponsor_media: File.open(sponsors[s][2]))
+                       sponsorable_id: group.id)
       end
     end
 
@@ -28,8 +27,7 @@ after 'development:groups' do
                      sponsor_title: sponsors[s][1],
                      sponsor_message: 'I welcome everyone to this initiative.',
                      sponsorable_type: 'Enterprise',
-                     sponsorable_id: enterprise.id,
-                     sponsor_media: File.open(sponsors[s][2]))
+                     sponsorable_id: enterprise.id)
     end
 
     spinner.success("[DONE]")
