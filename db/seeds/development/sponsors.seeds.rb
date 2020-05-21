@@ -23,6 +23,7 @@ after 'development:groups' do
     # Enterprise sponsor TODO
 
     Enterprise.all.each do |enterprise|
+      s = sponsors.keys.sample
       Sponsor.create(sponsor_name: sponsors[s][0],
                      sponsor_title: sponsors[s][1],
                      sponsor_message: 'I welcome everyone to this initiative.',

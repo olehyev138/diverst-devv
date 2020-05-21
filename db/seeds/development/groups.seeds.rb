@@ -34,10 +34,11 @@ after 'development:users' do
     Enterprise.all.each do |enterprise|
       if enterprise.name != "BAD ENTERPRISE"
         # shuffle group_names & take first 10
-        group_names.shuffle.slice(0..no_groups).each do |group_name|
+        group_names.shuffle.slice(0..no_groups-1).each_with_index do |group_name, index|
           group_name = 'BAD ENTERPRISE ' + group_name if enterprise.name != 'Diverst Inc'
           group = enterprise.groups.create!(name: group_name, description: "",
-                                            created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
+                                            created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days),
+                                            position: index)
 
           # create subgroups
           (0..rand(0..max_subgroups)).each do |i|
@@ -61,7 +62,8 @@ after 'development:users' do
         name: mentor_group_name,
         description: "The Mentor Network is designed to assist associates with their ongoing career development through engagement with a mentor or mentee. The goal is to create a community in which mentors and mentees can learn from one another to foster career enrichment and advancement.",
         created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days),
-        default_mentor_group: true
+        default_mentor_group: true,
+        position: no_groups+1,
       )
 
       self.populate_group(enterprise, mentor_group)
