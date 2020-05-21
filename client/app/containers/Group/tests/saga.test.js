@@ -2,14 +2,35 @@
  * Test sagas
  */
 
-/* eslint-disable redux-saga/yield-effects */
-// import { take, call, put, select } from 'redux-saga/effects';
-// import groupsSaga from '../saga';
+import {
+  getGroups,
+} from 'containers/Group/saga';
 
-// const generator = groupsSaga();
+import {
+  getGroupsError,
+} from 'containers/Group/actions';
 
-xdescribe('groupsSaga Saga', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+import { push } from 'connected-react-router';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import recordSaga from 'utils/recordSaga';
+import * as Notifiers from 'containers/Shared/Notifier/actions';
+import api from 'api/api';
+import AuthService from 'utils/authService';
+
+describe('Get groups Saga', () => {
+  it('Should return grouplist', async () => {
+
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groups.all.mockImplementation(() => Promise.reject(response));
+    const results = [getGroupsError(response)];
+    const dispatched = await recordSaga(
+      getGroups,
+    );
+
+    expect(api.user.all).toHaveBeenCalled();
+    expect(dispatched).toEqual(results);
   });
 });
