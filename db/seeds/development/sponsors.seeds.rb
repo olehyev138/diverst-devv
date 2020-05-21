@@ -23,6 +23,15 @@ after 'development:groups' do
 
     # Enterprise sponsor TODO
 
+    Enterprise.all.each do |enterprise|
+      Sponsor.create(sponsor_name: sponsors[s][0],
+                     sponsor_title: sponsors[s][1],
+                     sponsor_message: 'I welcome everyone to this initiative.',
+                     sponsorable_type: 'Enterprise',
+                     sponsorable_id: enterprise.id,
+                     sponsor_media: File.open(sponsors[s][2]))
+    end
+
     spinner.success("[DONE]")
   end
 end
