@@ -183,6 +183,9 @@
       },
       "archived": {
         "index": "/admin/manage/archived"
+      },
+      "calendar": {
+        "index": "/admin/manage/calendar"
       }
     },
     "plan": {

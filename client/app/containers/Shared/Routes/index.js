@@ -226,6 +226,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={EFolderPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={EFoldersPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.calendar.index)} component={PlaceholderPage} />
 
       { /* Admin - Plan - Budget */ }
       <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />

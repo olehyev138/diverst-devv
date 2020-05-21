@@ -713,6 +713,14 @@ const ROUTES = {
           }
         }
       },
+      calendar: {
+        index: {
+          path: () => '/admin/manage/calendar',
+          data: {
+            titleMessage: messages.admin.manage.calendar,
+          }
+        }
+      },
     },
     plan: {
       index: {

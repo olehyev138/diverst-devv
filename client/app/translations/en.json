@@ -160,6 +160,7 @@
   "diverst.containers.Routes.admin.system.branding": "Branding",
   "diverst.containers.Routes.admin.system.globalSettings": "Global Settings",
   "diverst.containers.Routes.admin.manage.archived": "Archive",
+  "diverst.containers.Routes.admin.manage.calendar": "Calendar",
   "diverst.containers.Routes.admin.system.logs": "Logs",
   "diverst.containers.Routes.admin.system.diversity": "Diversity",
   "diverst.containers.Routes.admin.plan.index": "Plan",

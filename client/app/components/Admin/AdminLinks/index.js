@@ -301,6 +301,20 @@ class AdminLinks extends React.PureComponent {
                     <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
                   </ListItemText>
                 </MenuPermission>
+                <MenuPermission
+                  component={WrappedNavLink}
+                  to={ROUTES.admin.manage.calendar.index.path()}
+                  className={classes.nested}
+                  activeClassName={classes.navLinkActive}
+                  show={permission(this.props, 'groups_calendars')}
+                >
+                  <ListItemIcon>
+                    <ListIcon />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <DiverstFormattedMessage {...ROUTES.admin.manage.calendar.index.data.titleMessage} />
+                  </ListItemText>
+                </MenuPermission>
               </List>
             </Collapse>
 
