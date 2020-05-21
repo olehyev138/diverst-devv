@@ -1,6 +1,6 @@
 class GroupMessagePolicy < GroupBasePolicy
   def base_index_permission
-    'group_messages_index'
+    'group_posts_index'
   end
 
   def base_create_permission
@@ -8,7 +8,11 @@ class GroupMessagePolicy < GroupBasePolicy
   end
 
   def base_manage_permission
-    'group_messages_manage'
+    'manage_posts'
+  end
+
+  def group_visibility_setting
+    'latest_news_visibility'
   end
 
   def update?

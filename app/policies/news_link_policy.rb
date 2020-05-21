@@ -1,6 +1,6 @@
 class NewsLinkPolicy < GroupBasePolicy
   def base_index_permission
-    'news_links_index'
+    'group_posts_index'
   end
 
   def base_create_permission
@@ -8,7 +8,11 @@ class NewsLinkPolicy < GroupBasePolicy
   end
 
   def base_manage_permission
-    'news_links_manage'
+    'manage_posts'
+  end
+
+  def group_visibility_setting
+    'latest_news_visibility'
   end
 
   def update?

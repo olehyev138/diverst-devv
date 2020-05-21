@@ -11,9 +11,9 @@ RSpec.describe NewsLinkPolicy, type: :policy do
 
   before {
     no_access.policy_group.manage_all = false
-    no_access.policy_group.news_links_index = false
+    no_access.policy_group.group_posts_index = false
     no_access.policy_group.news_links_create = false
-    no_access.policy_group.news_links_manage = false
+    no_access.policy_group.manage_posts = false
     no_access.policy_group.save!
   }
 
@@ -22,8 +22,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
       context 'when current user IS NOT author' do
         before { news_link.author = create(:user) }
 
-        context 'when news_links_index is true' do
-          before { user.policy_group.update news_links_index: true }
+        context 'when group_posts_index is true' do
+          before { user.policy_group.update group_posts_index: true }
           it { is_expected.to permit_actions([:index, :show]) }
         end
 
@@ -32,8 +32,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
           it { is_expected.to permit_actions([:index, :show, :create]) }
         end
 
-        context 'when news_links_manage is true' do
-          before { user.policy_group.update news_links_manage: true }
+        context 'when manage_posts is true' do
+          before { user.policy_group.update manage_posts: true }
           it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
         end
       end
@@ -62,8 +62,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and news_links_index is true' do
-        before { user_role.policy_group_template.update news_links_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to forbid_action :index }
       end
@@ -74,8 +74,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
         it { is_expected.to forbid_action :create }
       end
 
-      context 'and news_links_manage is true' do
-        before { user_role.policy_group_template.update news_links_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to forbid_actions ([:index, :create, :update, :destroy]) }
       end
@@ -91,8 +91,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and news_links_index is true' do
-        before { user_role.policy_group_template.update news_links_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to permit_actions([:index, :show]) }
         it { is_expected.to forbid_actions([:create, :update, :destroy]) }
@@ -105,8 +105,8 @@ RSpec.describe NewsLinkPolicy, type: :policy do
         it { is_expected.to forbid_actions([:update, :destroy]) }
       end
 
-      context 'and news_links_manage is true' do
-        before { user_role.policy_group_template.update news_links_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to permit_actions ([:index, :show, :create, :update, :destroy]) }
       end
@@ -128,7 +128,7 @@ RSpec.describe NewsLinkPolicy, type: :policy do
     end
 
     context 'when initiatives_manage is true' do
-      before { user.policy_group.update news_links_manage: true }
+      before { user.policy_group.update manage_posts: true }
 
       it 'returns true' do
         expect(subject.manage?).to be(true)
