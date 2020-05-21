@@ -10,12 +10,11 @@ To securely store this information we make use of the cli tool `chamber`. Chambe
 
 - Will be described additionally in the environment initialization documents
 
-- After Terraform has created the new environments, we manually add the necessary secrets to chamber. 
+- After Terraform has created the new environments, we manually add the necessary secrets to chamber. Further down we describe a list of secrets that the Diverst environments make use of. And must be added upon initialization of a new environment.
+
+- Secrets are _never_ added to the `<env>.tfvars` file and are never put under version control in any manner. We write them manually to the parameter key store for the specific environment account using chamber, and upon launching of Terraform, chamber loads them into environment variables for use by the current shell session only.
 
 - The command to add a secret to the parameter key store with chamber is as follows:
-
-
-!!!! _TODO_: write out command for copy/paste !!!!
 
 ```
 chamber write terraform <variable_name> <secret>
@@ -30,6 +29,33 @@ chamber write terraform <variable_name> <secret>
 - The general command to apply a Terraform plan is as follows:
 
 ```
-../../../../scripts/tf-chamber-format terraform apply --var-file devops.tfvars  
+../../../../scripts/tf-chamber-format terraform apply --var-file <env-name>.tfvars  
 ```
 
+##### Diverst Secrets 
+
+Here we will list the secrets used by the Diverst environments and the mandatory format they must written to the parameter key store in, in order for Terraform to pick them up.
+
+- Rails Master Key
+
+Format: `rails_master_key`
+
+- Database Password
+
+Format: `db_password`
+
+- Sidekiq Password
+
+Format: `sidekiq_password`
+
+- Mailgun API Key
+
+Format: `mailgun_api_key`
+
+- Rollbar Access Token
+
+Format: `rollbar_access_token`
+
+- Embedly Key
+
+Format: `embedly_key`
