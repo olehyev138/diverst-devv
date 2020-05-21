@@ -178,35 +178,60 @@ class GroupBasePolicy < ApplicationPolicy
       v.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
     end
 
+    # ----------------------
+    # Identifiers
+    # ----------------------
     def manage_all
-      '(policy_groups.manage_all = true)'
+      'policy_groups.manage_all = true'
     end
 
+    def is_admin_manager
+      'policy_groups.groups_manage = true'
+    end
+
+    def is_a_leader
+      "group_leaders.user_id = #{quote_string(user.id)}"
+    end
+
+    def is_a_manager
+      "(#{is_admin_manager} OR #{is_a_leader})"
+    end
+
+    def is_a_member
+      "user_groups.user_id = #{quote_string(user.id)}"
+    end
+
+    # ----------------------------
+    # Permissions
+    # ----------------------------
     def policy_group(permission)
-      "policy_groups.#{quote_string(permission)} = true"
-    end
-
-    def group_manage(permission)
-      "(policy_groups.groups_manage = true AND #{policy_group(permission)})"
-    end
-
-    def is_member(permission)
-      "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
-    end
-
-    def is_not_a_member(permission)
-      nil
+      "policy_groups.#{quote_string(permission)} = TRUE"
     end
 
     def leader_policy(permission)
-      "group_leaders.#{quote_string(permission)} = true"
+      if group_has_permission(permission)
+        "group_leaders.#{quote_string(permission)} = TRUE"
+      else
+        'FALSE'
+      end
     end
 
-    def is_leader(permission)
-      if group_has_permission(permission)
-        "(group_leaders.user_id = #{quote_string(user.id)} AND #{leader_policy(permission)})"
+    def general_permission(permission)
+      "(#{policy_group(permission)} OR #{leader_policy(permission)})"
+    end
+
+    # ------------------------------
+    # Visibility Cases
+    # ------------------------------
+    def visibility
+      if group_visibility_setting
+        'CASE ' +
+            "WHEN groups.#{quote_string(group_visibility_setting)} IN ('public', 'global', 'non-members') THEN TRUE " +
+            "WHEN groups.#{quote_string(group_visibility_setting)} = 'group' THEN (#{is_a_manager} OR #{is_a_member}) " +
+            "WHEN groups.#{quote_string(group_visibility_setting)} IN ('leaders_only', 'managers_only') THEN #{is_a_manager} " +
+            'END'
       else
-        'false'
+        'TRUE'
       end
     end
 
@@ -216,6 +241,7 @@ class GroupBasePolicy < ApplicationPolicy
 
     delegate :index?, to: :policy
     delegate :group, to: :policy
+    delegate :group_visibility_setting, to: :policy
 
     def group_base
       group.send(scope.all.klass.model_name.collection)
@@ -236,7 +262,7 @@ class GroupBasePolicy < ApplicationPolicy
       scoped
           .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
           .where('enterprises.id = ?', user.enterprise_id)
-          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].compact.join(' OR '))
+          .where("#{manage_all} OR (#{visibility} AND #{general_permission(permission)})")
     end
 
     def resolve(permission)
