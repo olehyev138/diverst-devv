@@ -1,0 +1,13 @@
+$("#restored_initiative_<%= @initiative.id %>").fadeOut(500, function(){
+	$(this).remove();
+	var initiatives_count = parseInt("<%= @initiatives.size %>");
+	displayEmptyInitiatives(initiatives_count);
+});
+
+
+function displayEmptyInitiatives(initiatives_count){
+	if (initiatives_count == 0){
+		$('.card').append('<div class="card__section card__section--border">There are no active events in this Goal with this filter.</div>');
+	}
+}
+

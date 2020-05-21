@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, aliases: [:owner] do
     email { generate(:email_address) }
     first_name { Faker::Name.first_name }
@@ -8,11 +8,17 @@ FactoryGirl.define do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
-    provider "email"
-    time_zone "UTC"
-    user_role {enterprise.user_roles.where(:role_type => "admin").first}
+    provider 'email'
+    time_zone 'UTC'
+    user_role { enterprise.user_roles.where(role_type: 'admin').first }
+    data '{}'
     after(:create) do |user|
       user.policy_group = create(:policy_group)
+    end
+    seen_onboarding true
+
+    trait :with_notifications_email do
+      notifications_email { Faker::Internet.email }
     end
   end
 end

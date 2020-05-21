@@ -4,7 +4,7 @@
 		<div class="card__section">
 			<%= c_t(:sub_erg).pluralize %>(<%= @group.children.count %>)
 
-			<% if policy(@group).erg_leader_permissions? %>
+			<% if GroupPolicy.new(current_user, @group).manage? %>
 			<div class="dropdown">
 				<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 				<div class="dropdown-content">
@@ -13,23 +13,9 @@
 			</div>
 			<% end %>
 			<br>
-			<% if @group.children.count >= 5 %>
-		  	<% @group.children.limit(5).each do |child| %>
-		    	<%= link_to child.name, child, 'data-trackable-id': child.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %><br>
-		  	<% end %>
-		  	<%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
-		  	<%= link_to "View #{@group.children.count - 5} More", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
-
-		  	<% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
-		  	<div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
-			  	<ol><%= link_to sub_erg.name, group_url(sub_erg), 'data-trackable-id': sub_erg.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></ol>
-		  	</div>
-		  	<% end %>
-			<% else %>
 		  	<% @group.children.each do |child| %>
 		    	<%= link_to child.name, child, 'data-trackable-id': child.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %><br>
 		  	<% end %>
-			<% end %>
 		</div>
 	</div>
 	<% else %>

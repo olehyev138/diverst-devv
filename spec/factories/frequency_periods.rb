@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :frequency_period do
-    name {"day"}
+    name { 'day' }
   end
 end

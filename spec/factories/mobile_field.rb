@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mobile_field do
-  	field
-  	enterprise
+    field
+    enterprise
   end
 end

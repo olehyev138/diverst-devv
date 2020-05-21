@@ -1,9 +1,5 @@
 <div class="content__header">
-  <h1>Branding /<%= link_to emails_path do %>
-     <button class="btn btn--primary">
-       Emails
-     </button></h1>
-   <% end %>
+  <h1>Branding</h1>
 </div>
 
 <div class="content__main">
@@ -41,7 +37,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
         <%= f.label :banner, label: "User Home banner", input_html: { class: "field__label" } %>
         <% if @enterprise.banner? %>
           <div class="flex-row__cell fright">
@@ -51,7 +47,7 @@
         <%= f.input :banner, as: :attachment_preview, label: false %>
 
         <%= f.label :home_message, label: "User Home message", input_html: { class: "field__label" } %>
-        <%= f.input :home_message, label: false %>
+        <%= f.input :home_message, as: :ckeditor, label: false %>
 
         <%= f.button :submit, "Save user settings" %>
       <% end %>
@@ -62,10 +58,26 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
         <%= f.input :time_zone %>
 
         <%= f.button :submit, "Save timezone" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Onboarding Pop Up Message</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+        <%= f.input :onboarding_pop_up_content, as: :ckeditor, label: "Onboarding Pop Up" %>
+
+        <%= f.button :submit, "Save Onboarding Pop Content" %>
       <% end %>
     </div>
   </div>
@@ -78,22 +90,21 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
 
       <%= f.simple_fields_for :sponsors do |s| %>
-        <%= render 'sponsor_fields', f: s %>
+        <%= render 'shared/sponsors/sponsor_fields', f: s %>
       <% end %>
 
 
       <div class="enterprise_sponsor_link">
-        <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+        <%= link_to_add_association "Add a sponsor", f, :sponsors, partial: 'shared/sponsors/sponsor_fields' %>
       </div>
       <br>
 
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
-
-        <%= f.input :privacy_statement, label: "#{c_t(:privacy_statement)}" %>
+      <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
 
         <%= f.button :submit, "Save sponsor info" %>
       <% end %>

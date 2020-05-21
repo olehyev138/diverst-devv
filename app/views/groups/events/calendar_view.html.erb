@@ -7,7 +7,8 @@
   </div>
 </div>
 
-<%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
+<% if SegmentPolicy.new(current_user, nil).index? %>
+  <%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
@@ -15,7 +16,7 @@
             <%= f.input :initiative_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
-                  input_html: { class: "select2", multiple: true },
+                  input_html: { class: "select2-field-segments", multiple: true },
                   label: "Filter by #{ c_t(:segment) }",
                   required: false
             %>
@@ -27,5 +28,8 @@
       </div>
     </div>
   <% end %>
+<% end %>
 
 <div id="calendar" data-calendar-data-url="<%= calendar_data_group_events_path(@group, q: params[:q]) %>"></div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

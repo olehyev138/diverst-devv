@@ -12,7 +12,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def resolve_layout
     case action_name
     when 'edit'
-      false # No layout since we have no logged in user and the themes require one in the layout
+      false # No layout since wef.hi have no logged in user and the themes require one in the layout
     else
       'global_settings'
     end
@@ -28,11 +28,12 @@ class Users::InvitationsController < Devise::InvitationsController
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = 'manual'
       invitable.save
+      track_activity(invitable, :create) # user create action
     end
   end
 
   def after_invite_path_for(resource)
-    flash[:notice] = "Invitation has been sent"
+    flash[:notice] = 'Invitation has been sent'
     users_path
   end
 
@@ -47,7 +48,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def configure_permitted_parameters
     # Only add some parameters
     devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email, :role, group_ids: []]
-    devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, group_ids: []]
+    devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, :seen_onboarding, group_ids: []]
   end
 
   def ensure_policy

@@ -1,0 +1,18 @@
+<div class="content__header">
+  <h1>Edit Group Member details</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for [@group, @user], :url => group_group_member_path(@group, @user) do |f| %>
+        <%= render "form", f: f %>
+        <div class="card__section card__section--border">
+          <%= f.hidden_field :active, value: 0 %>
+          <%= f.input :active, label: 'Active user of Diverst' %>
+          <%= f.button :submit, "Save" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

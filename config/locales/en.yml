@@ -26,7 +26,7 @@ en:
     password: "Password"
     remember_me: "Remember Me"
     forgot_password: "Forgot Your Password?"
-  user_group:
+  user:
     hourly: Hourly
     real_time: Real Time
     daily: Daily
@@ -40,17 +40,17 @@ en:
     friday: "Friday"
     saturday: "Saturday"
   custom_text:
-    erg: ERG
-    program: Program
+    erg: Group
+    program: Goal
     structure: Structure
-    outcome: Outcome
+    outcome: Focus Areas
     badge: Badge
     segment: Segment
-    dci_full_title: Diversity Culture Index
-    dci_abbreviation: DCI
-    member_preference: Member Preference
+    dci_full_title: Engagement
+    dci_abbreviation: Engagement
+    member_preference: Member Survey
     parent: Parent
-    sub_erg: Sub Erg
+    sub_erg: Sub-Group
     privacy_statement: Privacy Statement
   time:
     formats:
@@ -59,3 +59,8 @@ en:
     attributes:
       mentoring_request:
         sender: ""
+  enumerize:
+    group:
+        upcoming_events_visibility:
+            public: "Public - View Only (non group members cannot join events)"
+            non_member: "Public - Allow Non Members to Join (non group members can join events)"

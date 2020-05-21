@@ -11,3 +11,12 @@
     <%= render "devise/shared/links" %>
   </div>
 <% end %>
+
+<script>
+  $(document).ready(function(){
+    var primary_color = $('body').data('primary-color');
+    if( primary_color ) {
+      $('body').css('background', primary_color);
+    }
+  });
+</script>

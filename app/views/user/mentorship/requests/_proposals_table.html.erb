@@ -1,0 +1,24 @@
+<table class="table--has-border">
+  <thead>
+    <th>User</th>
+    <th>Sent</th>
+    <th>Status</th>
+    <th>Cancel</th>
+  </thead>
+  <tbody>
+    <% proposals.each do |proposal| %>
+      <% accepting_requests = proposal.receiver.accepting_mentor_requests if proposal.mentoring_type == 'mentor' %>
+      <% accepting_requests = proposal.receiver.accepting_mentee_requests if proposal.mentoring_type == 'mentee' %>
+      <tr>
+        <td>
+          <%= active_link_to (proposal.receiver.first_name + " " + proposal.receiver.last_name), user_mentorship_path(:id => proposal.receiver.id) %>
+        </td>
+        <td><%= proposal.created_at.to_formatted_s(:short) %></td>
+        <td><%= proposal.status %><%= ": user is not currently accepting #{proposal.mentoring_type} requests" unless accepting_requests %></td>
+        <td>
+          <%= link_to "Cancel", mentoring_request_path(proposal), method: :delete, class: "error" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

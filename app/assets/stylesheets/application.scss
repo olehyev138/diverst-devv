@@ -6,12 +6,14 @@
 "tooltipster/dist/css/tooltipster.core.min",
 "tooltipster/dist/css/tooltipster.bundle.min",
 "tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min",
+"tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min",
 "fullcalendar/dist/fullcalendar",
-"hamburgers/dist/css-hamburgers.min",
-"jquery-dropdown/jquery.dropdown.min",
+"hamburgers/dist/hamburgers.min",
+"@claviska/jquery-dropdown/jquery.dropdown.min",
 "bootstrap/dist/css/bootstrap.min",
 "firepad/dist/firepad",
-"codemirror/lib/codemirror";
+"codemirror/lib/codemirror",
+"nvd3/build/nv.d3.min";
 
 // Partials
 
@@ -30,7 +32,8 @@
 "base/_global",
 "base/_grid",
 "base/_fonts",
-"base/_typography";
+"base/_typography",
+"base/_flip";
 
 
 // Modules
@@ -59,7 +62,11 @@
 "modules/_metric",
 "modules/_badge",
 "modules/_menu",
-"modules/_dropdown";
+"modules/_dropdown",
+"modules/_range-selector",
+"modules/_group-selector",
+"modules/_segment-selector",
+"modules/_spinner";
 
 
 // Layout
@@ -81,4 +88,4 @@
 "pages/_posts";
 
 @import
-"css/_timepicker"
+"css/_timepicker";

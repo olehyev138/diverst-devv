@@ -19,11 +19,11 @@
             </li>
         <% end %>
         <% if current_user.enterprise.plan_module_enabled %>
-          <% if default_group = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first %>
-            <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+          <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
+            <%= active_link_to "Budgeting", close_budgets_groups_path %>
           <% end %>
         <% end %>
-        <% if policy(Campaign).index? %>
+        <% if CampaignPolicy.new(current_user, Campaign).index? %>
           <li><%= active_link_to "Innovate", campaigns_path %></li>
         <% end %>
         <% if global_settings_path %>

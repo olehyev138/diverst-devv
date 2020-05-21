@@ -1,62 +1,71 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
 
-  layout 'plan'
+  layout 'erg'
 
   def index
-    authorize Initiative
-    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+    authorize [@group], :index?, policy_class: GroupEventsPolicy
+    @outcomes = @group.outcomes.includes(:pillars)
+
+    set_filter
   end
 
   def new
-    authorize Initiative
+    authorize [@group], :new?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new
   end
 
   def create
-    authorize Initiative
+    authorize [@group], :create?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
     @initiative.owner_group = @group
-    #bTODO add event to @group.own_initiatives
+    # bTODO add event to @group.own_initiatives
+
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
+    @initiative.annual_budget_id = annual_budget.id
 
     if @initiative.save
-      flash[:notice] = "Your event was created"
+      flash[:notice] = 'Your event was created'
       track_activity(@initiative, :create)
       redirect_to action: :index
     else
-      flash[:alert] = "Your event was not created. Please fix the errors"
+      flash[:alert] = 'Your event was not created. Please fix the errors'
       render :new
     end
   end
 
   def show
-    authorize @initiative
+    authorize [@group, @initiative], :show?, policy_class: GroupEventsPolicy
     @updates = @initiative.updates.order(created_at: :desc).limit(3).reverse # Shows the last 3 updates in chronological order
   end
 
   def edit
-    authorize @initiative
+    authorize [@group, @initiative], :edit?, policy_class: GroupEventsPolicy
   end
 
   def update
-    authorize @initiative
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+
+    AnnualBudgetManager.new(@group).re_assign_annual_budget(initiative_params['budget_item_id'], @initiative.id)
+
     if @initiative.update(initiative_params)
-      flash[:notice] = "Your event was updated"
+      flash[:notice] = 'Your event was updated'
       track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
     else
-      flash[:alert] = "Your event was not updated. Please fix the errors"
+      flash[:alert] = 'Your event was not updated. Please fix the errors'
       render :edit
     end
   end
 
   def finish_expenses
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
     # skip before_save :allocate_budget_funds because
     # finish_expenses primary responsibility is to close off
@@ -67,33 +76,80 @@ class InitiativesController < ApplicationController
   end
 
   def destroy
-    authorize @initiative
+    authorize [@group, @initiative], :destroy?, policy_class: GroupEventsPolicy
 
     track_activity(@initiative, :destroy)
     if @initiative.destroy
-      flash[:notice] = "Your event was deleted"
+      flash[:notice] = 'Your event was deleted'
       redirect_to action: :index
     else
-      flash[:alert] = "Your event was not deleted. Please fix the errors"
+      flash[:alert] = 'Your event was not deleted. Please fix the errors'
       redirect_to :back
     end
   end
 
   def todo
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
   end
 
-  def attendees
-    authorize @initiative, :update?
+  def export_attendees_csv
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
-    send_data User.basic_info_to_csv(users: @initiative.attendees),
-      filename: "attendees.csv"
+    EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
+    track_activity(@initiative, :export_attendees)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
   end
+
+  def export_csv
+    authorize [@group], :index?, policy_class: GroupEventsPolicy
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    set_filter
+
+    # Gets and filters the initiatives from outcomes on date
+    initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
+
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
+    track_activity(@group, :export_initiatives)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
+  end
+
+  def archive
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+
+    @initiative.skip_allocate_budget_funds = true
+    @initiatives = @group.initiatives.where(archived_at: nil).all
+    @initiative.update(archived_at: DateTime.now)
+    track_activity(@initiative, :archive)
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
 
   protected
 
+  def set_filter
+    @initiative = Initiative.new
+
+    if params[:initiative].present?
+      @initiative.from = Date.parse(initiative_params[:from]).beginning_of_day
+      @initiative.to = Date.parse(initiative_params[:to]).end_of_day
+    else
+      @initiative.from = 1.year.ago.beginning_of_day
+      @initiative.to = 1.month.from_now.end_of_day
+    end
+
+    @filter_from = @initiative.from
+    @filter_to = @initiative.to
+  end
+
   def set_group
-    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_initiative
@@ -101,7 +157,7 @@ class InitiativesController < ApplicationController
   end
 
   def set_segments
-    current_user ? @segments = current_user.enterprise.segments : user_not_authorized
+    @segments = current_user.enterprise.segments
   end
 
   def initiative_params
@@ -116,8 +172,13 @@ class InitiativesController < ApplicationController
         :pillar_id,
         :location,
         :picture,
+        :video,
         :budget_item_id,
         :estimated_funding,
+        :archived_at,
+        :from, # For filtering
+        :to, # For filtering
+        :annual_budget_id,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
@@ -138,7 +199,30 @@ class InitiativesController < ApplicationController
           :title,
           :is_done,
           :_destroy
-        ]
+        ],
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Initiative"
+    when 'new'
+      "#{@group.to_label} Initiative Creation"
+    when 'show'
+      "Event: #{@initiative.to_label}"
+    when 'edit'
+      "Initiative Edit: #{@initiative.to_label}"
+    when 'todo'
+      "Initiative Todo: #{@initiative.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

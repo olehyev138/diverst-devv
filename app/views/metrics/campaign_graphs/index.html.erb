@@ -1,0 +1,59 @@
+<div class="content__header">
+  <h1>Innovation</h1>
+
+  <select id="select2-field-campaigns" class="select2-field-campaigns" style="width: 500px;"></select>
+  <input type="button" class="model-scoper btn btn-primary" value="Update">
+</div>
+
+<div class="content__main">
+  <div class="row">
+   <div class="col md-6 sm-12" >
+     <div class="card">
+       <div class="card__section">
+         <div class="flex-row flex-row--middle">
+           <div class="flex-row__cell flex-row__cell--grow">
+             <h4>Contributions per <%= c_t(:erg) %></h4>
+             <div class="card__action">
+               <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+             </div>
+             <div id="group_population" class="graph" data-url="<%= contributions_per_erg_metrics_campaigns_path %>">
+               <svg></svg>
+             </div>
+             <input type="button" hidden class="drillout_button" value="Back"></input>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+    <div class="col md-6 sm-12" >
+      <div class="card">
+        <div class="card__section">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <h4>Total votes per user</h4>
+              <div class="card__action">
+                <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+              </div>
+              <div id="views_per_group" class="graph" data-url="<%= total_votes_per_user_metrics_campaigns_path %>">
+                <svg></svg>
+              </div>
+              <input type="button" hidden class="drillout_button" value="Back"></input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>
+
+<script>
+  // Add first campaign into select by default
+  $(document).on('ready page:load', function () {
+    $.get("<%= campaigns_path(format: 'json') %>", function(data) {
+      $('#select2-field-campaigns').append(new Option(data.data[0][1], data.data[0][0], true, true))
+      $('#select2-field-campaigns').trigger('change');
+    })
+  })
+</script>

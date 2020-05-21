@@ -1,14 +1,27 @@
 class Initiatives::ResourcesController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_group
+  before_action :set_group, except: [:restore, :destroy]
+
   include IsResources
 
+  layout 'erg'
 
-  layout 'plan'
+  def destroy
+    initiative_ids = current_user.enterprise.initiative_ids
+    @resources = Resource.where("resources.initiative_id IN (#{initiative_ids.join(',')}) AND archived_at IS NULL").all
+
+    track_activity(@resource, :destroy)
+    @resource.destroy
+
+    respond_to do |format|
+      format.html { redirect_to action: :index }
+      format.js
+    end
+  end
 
   protected
+
   def set_group
-    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_container

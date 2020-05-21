@@ -1,0 +1,33 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  <% if activity.trackable %>
+    <% if activity.trackable.resource %>
+      <% if activity.trackable.resource.container.group %>
+       	viewed a group resource <%= link_to activity.trackable.resource.title, group_folder_resources_path(group_id: activity.trackable.resource.container.group_id, folder_id: activity.trackable.resource.folder_id) %>
+	    <% elsif activity.trackable.resource.container.enterprise %>
+	 	    viewed an enterprise resource <%= link_to activity.trackable.resource.title, enterprise_folder_resources_path(enterprise_id: activity.trackable.resource.container.enterprise_id, folder_id: activity.trackable.resource.folder_id) %>
+	    <% end %>
+
+    <% elsif activity.trackable.group %>
+      viewed a group <%= link_to activity.trackable.group.name, group_path(activity.trackable.group) %>  
+    
+    <% elsif activity.trackable.folder %>
+      viewed a 
+      <% if activity.trackable.folder.group %>
+        group folder <%= link_to activity.trackable.folder.name, group_folder_resources_path(group_id: activity.trackable.folder.group_id, folder_id: activity.trackable.folder_id) %>
+      <% elsif activity.trackable.folder.enterprise %>
+        enterprise folder <%= link_to activity.trackable.folder.name, enterprise_folder_resources_path(enterprise_id: activity.trackable.folder.enterprise_id, folder_id: activity.trackable.folder_id) %>  
+      <% end %>
+
+    <% elsif activity.trackable.news_feed_link %>
+      <% if activity.trackable.news_feed_link.news_link %>
+        viewed a news link <%= link_to activity.trackable.news_feed_link.news_link.title, comments_group_news_link_path(group_id: activity.trackable.news_feed_link.news_link.group, id: activity.trackable.news_feed_link.news_link_id) %>
+      <% else %>
+        viewed a news link which has since been removed 
+      <% end %>   
+    <% end %>      
+  <% else %>
+    viewed an item which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

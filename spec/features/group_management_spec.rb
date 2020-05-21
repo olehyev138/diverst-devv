@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.feature 'Group management' do
-
   let(:user) { create(:user) }
 
   before do
@@ -28,7 +27,7 @@ RSpec.feature 'Group management' do
       fill_in 'group_short_description', with: group[:short_description]
       fill_in 'group_description', with: group[:description]
 
-      select 'None', from: "group_parent_id"
+      select 'None', from: 'group_parent_id'
 
       click_on 'Create Group'
 
@@ -36,10 +35,10 @@ RSpec.feature 'Group management' do
     end
 
     scenario 'user creates a sub-group', js: true do
-      parent_group = create(:group, name: "Parent Group", enterprise: user.enterprise)
+      parent_group = create(:group, name: 'Parent Group', enterprise: user.enterprise)
 
       sub_group = {
-        name: "first sub-group",
+        name: 'first sub-group',
         description: "Lorem Ipsum is simply dummy text of the printing
         and typesetting industry. Lorem Ipsum has been the industry's
         standard dummy text ever since the 1500s, when an unknown printer
@@ -113,7 +112,7 @@ RSpec.feature 'Group management' do
 
       click_on 'Delete'
 
-      expect(page).to have_content 'Your ERG was deleted'
+      expect(page).to have_content 'Your Group was deleted'
       expect(page).to have_no_content 'Parent Group'
       expect(page).to have_no_content 'Sub Group ONE'
       expect(page).to have_no_content 'Sub Group TWO'
@@ -146,23 +145,30 @@ RSpec.feature 'Group management' do
 
   context 'group categorization' do
     let!(:parent_group) { create(:group, name: 'Parent Group', enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                         group_category_type_id: nil, group_category_id: nil)
+    }
     let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                       group_category_type_id: nil, group_category_id: nil)
+    }
     let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                       group_category_type_id: nil, group_category_id: nil)
+    }
 
     let!(:color_codes) { create(:group_category_type, name: 'Color Codes', enterprise_id: user.enterprise_id) }
     let!(:red) { create(:group_category, name: 'Red', enterprise_id: user.enterprise_id,
-      group_category_type_id: color_codes.id) }
+                                         group_category_type_id: color_codes.id)
+    }
     let!(:blue) { create(:group_category, name: 'Blue', enterprise_id: user.enterprise_id,
-      group_category_type_id: color_codes.id) }
+                                          group_category_type_id: color_codes.id)
+    }
 
     let!(:regions) { create(:group_category_type, name: 'Regions', enterprise_id: user.enterprise_id) }
     let!(:eastern_province) { create(:group_category, name: 'Eastern Province', enterprise_id: user.enterprise_id,
-      group_category_type_id: regions.id) }
+                                                      group_category_type_id: regions.id)
+    }
     let!(:central_province) { create(:group_category, name: 'Central Province', enterprise_id: user.enterprise_id,
-      group_category_type_id: regions.id) }
+                                                      group_category_type_id: regions.id)
+    }
 
     context 'via edit form' do
       scenario 'categorize sub-erg' do
@@ -177,13 +183,13 @@ RSpec.feature 'Group management' do
         expect(current_path).to eq edit_group_path(sub_group1)
 
         expect(page).to have_field('Name', with: sub_group1.name)
-        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
-        expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
+        expect(page).to have_select('Parent', selected: parent_group.name)
+        expect(page).to have_select('Group category', selected: nil) # NOTE: here, nil stands in for 'None'
 
         select 'Red', from: 'Group category'
         click_on 'Update Group'
 
-        expect(page).to have_content 'Your ERG was updated'
+        expect(page).to have_content 'Your Group was updated'
         expect(page).to have_select('Group category', selected: 'Red')
       end
 
@@ -204,13 +210,13 @@ RSpec.feature 'Group management' do
         expect(current_path).to eq edit_group_path(sub_group1)
 
         expect(page).to have_field('Name', with: sub_group1.name)
-        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+        expect(page).to have_select('Parent', selected: parent_group.name)
         expect(page).to have_select('Group category', selected: 'Blue')
 
         select 'Eastern Province', from: 'Group category'
         click_on 'Update Group'
 
-        expect(page).to have_content 'Your ERG was not updated. Please fix the errors'
+        expect(page).to have_content 'Your Group was not updated. Please fix the errors'
         expect(page).to have_content 'wrong label for Color Codes'
       end
     end

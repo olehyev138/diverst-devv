@@ -1,60 +1,46 @@
 <div class="col-xs-8">
-  <div class="card">
-    <div class="card__section">
-      <% if @mentorship_requests.count > 0 %>
-        <table class="table--has-border">
-          <thead>
-            <th>User</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Approve/Decline</th>
-          </thead>
-          <tbody>
-            <% @mentorship_requests.each do |mentorship_request| %>
-              <tr>
-                <td><%= mentorship_request.sender.first_name %> <%= mentorship_request.sender.last_name %></td>
-                <td><%= mentorship_request.status %></td>
-                <td><%= mentorship_request.notes %></td>
-                <td>
-                  <%= link_to "Approve", mentoring_request_path(mentorship_request), method: :put %>
-                  <%= link_to "Decline", mentoring_request_path(mentorship_request), method: :delete, class: "error" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+  <% if @user.accepting_mentor_requests || @user.accepting_mentee_requests %>
+    <div class="card">
+      <% if @mentorship_requests.size + @menteeship_requests.size > 0 %>
+        <% if @mentorship_requests.size > 0 %>
+          <div class="card__section card__section--border">
+            <h3>The following users would like you to be their mentor:</h3>
+            <%= render "user/mentorship/requests/requests_table", requests: @mentorship_requests %>
+          </div>
+        <% end %>
+
+        <% if @menteeship_requests.size > 0 %>
+          <div class="card__section card__section--border">
+            <h3>The following users would like to be your mentor:</h3>
+            <%= render "user/mentorship/requests/requests_table", requests: @menteeship_requests %>
+          </div>
+        <% end %>
       <% else %>
-        <h4 class="text-center">You currently don't have pending mentorship requests</h4>
+        <div class="card__section">
+          <h4 class="text-center">You currently don't have pending mentorship requests</h4>
+        </div>
       <% end %>
     </div>
-  </div>
+  <% end %>
   <div class="card">
-    <div class="card__section">
-      <% if @mentorship_proposals.count > 0 %>
-      
-        <table class="table--has-border">
-          <thead>
-            <th>User</th>
-            <th>Status</th>
-            <th>Cancel</th>
-          </thead>
-          <tbody>
-            <% @mentorship_proposals.each do |mentorship_proposal| %>
-              <tr>
-                <td><%= mentorship_proposal.receiver.first_name %> <%= mentorship_proposal.receiver.last_name %></td>
-                <td><%= mentorship_proposal.status %></td>
-                <td>
-                  <%= link_to "Cancel", mentoring_request_path(mentorship_proposal), method: :delete, class: "error" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      
-      
-      <% else %>
+    <% if @mentorship_proposals.size + @menteeship_proposals.size > 0 %>
+      <% if @mentorship_proposals.size > 0 %>
+        <div class="card__section card__section--border">
+          <h3>You have requested for the following users to be your mentor:</h3>
+          <%= render "user/mentorship/requests/proposals_table", proposals: @mentorship_proposals %>
+        </div>
+      <% end %>
+
+      <% if @menteeship_proposals.size > 0 %>
+        <div class="card__section card__section--border">
+          <h3>You have requested to be a mentor for the following users:</h3>
+          <%= render "user/mentorship/requests/proposals_table", proposals: @menteeship_proposals %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="card__section">
         <h4 class="text-center">You currently don't have pending mentorship proposals</h4>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>

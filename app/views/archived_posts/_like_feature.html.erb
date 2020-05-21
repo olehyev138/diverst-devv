@@ -1,0 +1,4 @@
+<% unless news_feed_link.news_feed.group.enterprise.disable_likes || news_feed_link.approved == false %>
+    <img class="svglikeImgFill" width="36px" height="36px" src="<%= image_path('icons/like.svg') %>" />
+    <%= news_feed_link.likes.size %>
+<% end %>

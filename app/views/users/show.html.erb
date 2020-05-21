@@ -1,12 +1,12 @@
 <div class="content__header">
   <h1>User details</h1>
   <div class="flex-row flex-row--middle">
-    <% if policy(@user).update? %>
+    <% if UserPolicy.new(current_user, @user).update? %>
       <div class="flex-row__cell">
         <%= link_to "Edit User", edit_user_path(@user), class: "btn btn--primary" %>
       </div>
     <% end %>
-    <% if  @user.has_answered_group_surveys? %>
+    <% if  @user.belongs_to_group_with_survey? %>
       <div class="flex-row__cell">
         <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--secondary" %>
       </div>
@@ -19,7 +19,8 @@
   <div class="card">
     <div class="card__section card__section--border">
       <label><strong>Name</strong></label>
-      <p><%= @user.name %></p>
+      <p><%= @user.name %><%= linkedin_logo_for_connected_users(@user) %>
+      </p>
     </div>
     <div class="card__section card__section--border">
       <label><strong>Status</strong></label>
@@ -28,6 +29,10 @@
     <div class="card__section card__section--border">
       <label><strong>Email</strong></label>
       <p><%= @user.email %></p>
+    </div>
+    <div class="card__section card__section--border">
+      <label><strong>Notifications Email</strong></label>
+      <p><%= @user.notifications_email || 'None' %></p>
     </div>
     <div class="card__section card__section--border">
       <label><strong>Biography</strong></label>
@@ -39,8 +44,16 @@
     </div>
   </div>
 
-
-  <% if policy(@user).access_hidden_info? %>
+  <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
+    <div class="card">
+      <% @user.enterprise.fields.each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
     <div class="card">
       <div class="card__section card__section--border">
         <h2>Hidden info</h2>
@@ -52,7 +65,385 @@
           <p><%= @user.string_for_field(field) %></p>
         </div>
       <% end %>
-    </div>
+    </div>  
   <% end %>
 
+  <div class="card">
+    <div class="card__section card__section--border" >
+      <h2>Group Membership</h2>
+      <h4>Member of the following <%= c_t(:erg) %>(s)</h4>
+      <% @user.groups.each do |group| %>
+        <%= group.name %>
+        <% unless group == @user.groups.last %>
+          ,
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if UserPolicy.new(current_user, @user).manage? %>
+    <% policy_group = @user.policy_group %>
+
+    <%= simple_form_for :policy_group_template, url: policy_group_template_path do |f| %>
+      <div class="card">
+        <div class="card__section card__section--border">
+          <h2>User Permissions</h2>
+        </div>
+        <div class="card__section card__section--border">
+          <h3>Enterprise</h3>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Logs</h4>
+              <%= f.input :logs_view, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.logs_view } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Permissions</h4>
+              <%= f.input :permissions_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.permissions_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>SSO</h4>
+              <%= f.input :sso_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.sso_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Global Calendar</h4>
+              <%= f.input :global_calendar, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.global_calendar } %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Enterprise resources</h4>
+              <%= f.input :enterprise_resources_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.enterprise_resources_index } %>
+              <%= f.input :enterprise_resources_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.enterprise_resources_create } %>
+              <%= f.input :enterprise_resources_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.enterprise_resources_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Diversity and Culture Index</h4>
+              <%= f.input :diversity_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.diversity_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Branding</h4>
+              <%= f.input :branding_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.branding_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Metrics dashboards</h4>
+              <%= f.input :metrics_dashboards_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.metrics_dashboards_index } %>
+              <%= f.input :metrics_dashboards_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.metrics_dashboards_create } %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Users</h4>
+              <%= f.input :users_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.users_index } %>
+              <%= f.input :users_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.users_manage } %>
+            </div>
+            <div class="col md-3">
+              <h4><%= c_t(:segment).pluralize %></h4>
+              <%= f.input :segments_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.segments_index } %>
+              <%= f.input :segments_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.segments_create } %>
+              <%= f.input :segments_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.segments_manage } %>
+            </div>
+            <div class="col md-3">
+              <h4>Mentorship</h4>
+              <%= f.input :mentorship_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.mentorship_manage } %>
+            </div>
+          </div>
+        </div>
+
+        <div class="card__section card__section--border">
+          <h3>General</h3>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Campaigns</h4>
+              <%= f.input :campaigns_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.campaigns_index } %>
+              <%= f.input :campaigns_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.campaigns_create } %>
+              <%= f.input :campaigns_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.campaigns_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Surveys</h4>
+              <%= f.input :polls_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.polls_index } %>
+              <%= f.input :polls_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.polls_create } %>
+              <%= f.input :polls_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.polls_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4><%= c_t(:erg).pluralize %></h4>
+              <%= f.input :groups_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.groups_index } %>
+              <%= f.input :groups_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.groups_create } %>
+              <%= f.input :groups_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.groups_manage } %>
+            </div>
+          </div>
+        </div>
+
+        <div class="card__section card__section--border">
+          <h3><%= c_t(:erg) %> management</h3>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Events</h4>
+              <%= f.input :initiatives_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.initiatives_index } %>
+              <%= f.input :initiatives_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.initiatives_create } %>
+              <%= f.input :initiatives_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.initiatives_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Messages</h4>
+              <%= f.input :group_messages_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.group_messages_index } %>
+              <%= f.input :group_messages_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.group_messages_create } %>
+              <%= f.input :group_messages_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.group_messages_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Members</h4>
+              <%= f.input :groups_members_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.groups_members_index } %>
+              <%= f.input :groups_members_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.groups_members_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Budgets</h4>
+              <%= f.input :groups_budgets_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.groups_budgets_index } %>
+              <%= f.input :groups_budgets_request, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Request", input_html: { checked: policy_group.groups_budgets_request } %>
+              <%= f.input :budget_approval, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Approval", input_html: { checked: policy_group.budget_approval } %>
+              <%= f.input :groups_budgets_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.groups_budgets_manage } %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>News</h4>
+              <%= f.input :news_links_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.news_links_index } %>
+              <%= f.input :news_links_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.news_links_create } %>
+              <%= f.input :news_links_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.news_links_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Leaders</h4>
+              <%= f.input :group_leader_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.group_leader_index } %>
+              <%= f.input :group_leader_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.group_leader_manage } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Posts</h4>
+              <%= f.input :group_posts_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.group_posts_index } %>
+              <%= f.input :manage_posts, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.manage_posts } %>
+            </div>
+
+            <div class="col md-3">
+              <h4>Layouts</h4>
+              <%= f.input :groups_layouts_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: policy_group.groups_layouts_manage } %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
+            <div class="col md-3">
+              <h4>Settings</h4>
+              <%= f.input :group_settings_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage Group Settings", input_html: { checked: policy_group.group_settings_manage } %>
+            </div>
+            <div class="col md-3">
+              <h4>Insights</h4>
+              <%= f.input :groups_insights_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage Group Insights", input_html: { checked: policy_group.groups_insights_manage } %>
+            </div>
+            <div class="col md-3">
+              <h4>Social Links</h4>
+              <%= f.input :social_links_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.social_links_index } %>
+              <%= f.input :social_links_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.social_links_create } %>
+              <%= f.input :social_links_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.social_links_manage } %>
+            </div>
+            <div class="col md-3">
+              <h4>Resources</h4>
+              <%= f.input :group_resources_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: policy_group.group_resources_index } %>
+              <%= f.input :group_resources_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: policy_group.group_resources_create } %>
+              <%= f.input :group_resources_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: policy_group.group_resources_manage } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% user_role_ids = @user.group_leaders.pluck(:user_role_id).uniq %>
+    <% PolicyGroupTemplate.where(:user_role_id => user_role_ids).each do |template| %>
+      <%= simple_form_for :policy_group_template, url: policy_group_template_path do |f| %>
+        <div class="card">
+          <div class="card__section card__section--border">
+            <h2><%= template.user_role.role_name %> Permissions for <%=(@user.groups.joins(:group_leaders).where(:group_leaders => {:user_role_id => template.user_role_id}).pluck(:name).uniq.join(", ")) %></h2>
+          </div>
+
+          <div class="card__section card__section--border">
+            <h3>Enterprise</h3>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Logs</h4>
+                <%= f.input :logs_view, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.logs_view } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Permissions</h4>
+                <%= f.input :permissions_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.permissions_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>SSO</h4>
+                <%= f.input :sso_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.sso_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Global Calendar</h4>
+                <%= f.input :global_calendar, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.global_calendar } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Enterprise resources</h4>
+                <%= f.input :enterprise_resources_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.enterprise_resources_index } %>
+                <%= f.input :enterprise_resources_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.enterprise_resources_create } %>
+                <%= f.input :enterprise_resources_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.enterprise_resources_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Diversity and Culture Index</h4>
+                <%= f.input :diversity_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.diversity_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Branding</h4>
+                <%= f.input :branding_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.branding_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Metrics dashboards</h4>
+                <%= f.input :metrics_dashboards_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.metrics_dashboards_index } %>
+                <%= f.input :metrics_dashboards_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.metrics_dashboards_create } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Users</h4>
+                <%= f.input :users_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.users_index } %>
+                <%= f.input :users_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.users_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4><%= c_t(:segment).pluralize %></h4>
+                <%= f.input :segments_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.segments_index } %>
+                <%= f.input :segments_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.segments_create } %>
+                <%= f.input :segments_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.segments_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4>Mentorship</h4>
+                <%= f.input :mentorship_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.mentorship_manage } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="card__section card__section--border">
+            <h3>General</h3>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Campaigns</h4>
+                <%= f.input :campaigns_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.campaigns_index } %>
+                <%= f.input :campaigns_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.campaigns_create } %>
+                <%= f.input :campaigns_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.campaigns_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Surveys</h4>
+                <%= f.input :polls_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.polls_index } %>
+                <%= f.input :polls_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.polls_create } %>
+                <%= f.input :polls_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.polls_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4><%= c_t(:erg).pluralize %></h4>
+                <%= f.input :groups_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.groups_index } %>
+                <%= f.input :groups_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.groups_create } %>
+                <%= f.input :groups_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.groups_manage } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="card__section card__section--border">
+            <h3><%= c_t(:erg) %> management</h3>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Events</h4>
+                <%= f.input :initiatives_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.initiatives_index } %>
+                <%= f.input :initiatives_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.initiatives_create } %>
+                <%= f.input :initiatives_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.initiatives_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Messages</h4>
+                <%= f.input :group_messages_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.group_messages_index } %>
+                <%= f.input :group_messages_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.group_messages_create } %>
+                <%= f.input :group_messages_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.group_messages_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Members</h4>
+                <%= f.input :groups_members_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.groups_members_index } %>
+                <%= f.input :groups_members_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.groups_members_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Budgets</h4>
+                <%= f.input :groups_budgets_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.groups_budgets_index } %>
+                <%= f.input :groups_budgets_request, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Request", input_html: { checked: template.groups_budgets_request } %>
+                <%= f.input :budget_approval, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Approval", input_html: { checked: template.budget_approval } %>
+                <%= f.input :groups_budgets_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.groups_budgets_manage } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>News</h4>
+                <%= f.input :news_links_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.news_links_index } %>
+                <%= f.input :news_links_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.news_links_create } %>
+                <%= f.input :news_links_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.news_links_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Leaders</h4>
+                <%= f.input :template_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.group_leader_index } %>
+                <%= f.input :template_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.group_leader_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Posts</h4>
+                <%= f.input :group_posts_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.group_posts_index } %>
+                <%= f.input :manage_posts, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.manage_posts } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Layouts</h4>
+                <%= f.input :groups_layouts_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.groups_layouts_manage } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Settings</h4>
+                <%= f.input :group_settings_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage Group Settings", input_html: { checked: template.group_settings_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4>Insights</h4>
+                <%= f.input :groups_insights_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage Group Insights", input_html: { checked: template.groups_insights_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4>Social Links</h4>
+                <%= f.input :social_links_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.social_links_index } %>
+                <%= f.input :social_links_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.social_links_create } %>
+                <%= f.input :social_links_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.social_links_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4>Resources</h4>
+                <%= f.input :group_resources_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.group_resources_index } %>
+                <%= f.input :group_resources_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.group_resources_create } %>
+                <%= f.input :group_resources_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.group_resources_manage } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>

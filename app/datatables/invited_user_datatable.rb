@@ -8,6 +8,7 @@ class InvitedUserDatatable < AjaxDatatablesRails::Base
   def initialize(view_context, users)
     super(view_context)
     @users = users
+    @user = view_context.current_user
   end
 
   def sortable_columns
@@ -22,11 +23,17 @@ class InvitedUserDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      [
-        html_escape(record.email),
-        "#{link_to "Re-send invitation", resend_invitation_user_path(record), method: :put, class: "primary", data: { confirm: "Are you sure?" }}",
-        "#{link_to "Revoke invitation", user_path(record), method: :delete, class: "error", data: { confirm: "Are you sure?" }}"
-      ]
+      if UserPolicy.new(@user, record).update?
+        [
+          html_escape(record.email),
+          "#{link_to "Re-send invitation", resend_invitation_user_path(record), method: :put, class: "primary", data: { confirm: "Are you sure?" }}",
+          "#{link_to "Revoke invitation", user_path(record), method: :delete, class: "error", data: { confirm: "Are you sure?" }}"
+        ]
+      else
+        [
+          html_escape(record.email), '', ''
+        ]
+      end
     end
   end
 

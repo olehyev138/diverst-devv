@@ -1,0 +1,21 @@
+<div class="row row--equal-height">
+  <% @graphs.each do |graph| %>
+    <div class="col-xs-12 col-md-6">
+      <div class="card">
+        <div class="card__section">
+          <div class="card__action">
+            <%= link_to "Edit", [:edit, :metrics, @metrics_dashboard, graph] if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %> -
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%=export_csv_metrics_metrics_dashboard_graph_url(@metrics_dashboard.id, graph.id)%>">Export CSV - </a>
+            <%= link_to "Remove", [:metrics, @metrics_dashboard, graph], method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %>
+          </div>
+          <h4 class="no-margin"><%= graph.title %></h4>
+          <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
+          <%= render 'components/range_selector' %>
+          <div id="graph_<%= graph.id %>" class="graph" data-url="<%= data_metrics_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,4 +1,4 @@
-class AnswerExpense < ActiveRecord::Base
+class AnswerExpense < BaseClass
   belongs_to :answer
   belongs_to :expense
 

@@ -45,7 +45,8 @@
     flex-direction: row;
   }
 
-  h1 {
+  h1,
+  div.grow {
     flex: 1;
 
     @include mq(small) {

@@ -16,7 +16,9 @@
 
           <div id="all-custom-fields">
             <% current_user.enterprise.fields.each do |cf| %>
-              <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+              <% if !cf.private %>
+                <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+              <% end %>
             <% end %>
           </div>
 

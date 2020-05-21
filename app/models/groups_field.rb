@@ -4,19 +4,19 @@ class GroupsField < Field
   include Optionnable
 
   def elasticsearch_field
-    'combined_info.groups'
+    'group.name'
   end
 
   def format_value_name(value)
     Group.find(value).name
   rescue
-    'Deleted ERG'
+    "Deleted #{self.enterprise ? self.enterprise.custom_text.erg : 'ERG'}"
   end
 
   private
 
   def init
-    self.title = 'ERGs'
+    self.title = self.enterprise ? self.enterprise.custom_text.erg.pluralize : 'ERGs'
     self.elasticsearch_only = true
   end
 end

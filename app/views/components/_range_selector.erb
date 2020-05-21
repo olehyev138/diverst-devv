@@ -1,0 +1,32 @@
+<!-- Range selector -->
+<div id="range-selector" class="graph-date-range">
+  <div class="container-fluid">
+    <div class="flex-row flex-row--wrap">
+      <div class="flex-row__cell">
+        <div class="btn-group" role="group" aria-label="Range Selector Buttons">
+          <button class="range-btn btn btn--tertiary btn-sm" value="1m">1m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="3m">3m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="6m">6m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="ytd">YTD</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="1y">1y</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="all">All</button>
+        </div>
+      </div>
+      <div class="flex-row__cell flex-row" style="padding: 0;">
+        <div class="flex-row__cell">
+          <div class="input-group">
+            <input readonly type="text" style="border-radius: 4px;" class="form-control from_input date_time_picker date_time_picker_input" placeholder="From Date">
+          </div>
+        </div>
+        <div class="flex-row__cell">
+          <div class="input-group">
+            <input readonly type="text" class="form-control to_input date_time_picker date_time_picker_input" placeholder="To Date">
+            <span class="input-group-btn">
+              <button class="filter-btn btn btn-primary" type="button"><img class="svg refreshIcon" width="18px" height="18px" src="<%= image_path('icons/refresh.svg') %>" /></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,17 +1,9 @@
-class InitiativeCommentPolicy < ApplicationPolicy
-  def erg_leader?
-    @user.erg_leader? && @record.present?
-  end
-
-  def approve?
-  	erg_leader?
-  end
-
-  def disapprove?
-  	erg_leader?
+class InitiativeCommentPolicy < GroupBasePolicy
+  def create?
+    manage_comments?
   end
 
   def destroy?
-  	erg_leader?
+    create?
   end
 end

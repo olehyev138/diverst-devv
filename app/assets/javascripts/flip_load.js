@@ -29,7 +29,7 @@ $(document).on('ready page:load', function(){
       var backHeight = $(this).find('.back').height();
       var biggerHeight = frontHeight > backHeight ? frontHeight : backHeight;
 
-      // Only apply flip if fron element contains anything
+      // Only apply flip if front element contains anything
       if($front.html().trim() ) {
         $(this).flip(flippableOptions).height(biggerHeight);
         $(this).on('flip:done', function(event) {

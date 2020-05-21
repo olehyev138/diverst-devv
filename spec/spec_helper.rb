@@ -19,6 +19,8 @@
 
 require 'paperclip/matchers'
 require 'pundit/rspec'
+require 'rspec/retry'
+
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -35,6 +37,20 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
+  # show retry status in spec process
+  config.verbose_retry = true
+
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  config.around(:each) do |ex|
+    if ENV['TEST_RETRY'] == 'true'
+      ex.run_with_retry retry: 3
+    else
+      ex.run
+    end
+  end
+
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
   config.mock_with :rspec do |mocks|
@@ -48,7 +64,7 @@ RSpec.configure do |config|
   # to individual examples or groups you care about by tagging them with
   # `:focus` metadata. When nothing is tagged with `:focus`, all examples
   # get run.
-  config.filter_run :focus => true unless ENV['CI']
+  config.filter_run focus: true unless ENV['CI']
   config.run_all_when_everything_filtered = true
 
   # Allows RSpec to persist some state between runs in order to support
@@ -94,8 +110,59 @@ RSpec.configure do |config|
 
   # https://stackoverflow.com/questions/3175591/rails3-warning-toplevel-constant-applicationcontroller-referenced-by?rq=1
   config.before(:each) do
-    Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
+    Dir[File.expand_path('app/controllers/user/*.rb')].each do |file|
       require file
     end
+  end
+
+  config.before(:each) do
+    formatter = OpenStruct.new({
+      title: true,
+      parser: OpenStruct.new({ extractors: true,
+                               date_range: true, get_elements: true }),
+      add_elements: true
+    })
+
+    query = OpenStruct.new({
+      terms_agg: true,
+      bool_filter_agg: true,
+      add_filter_clause: true })
+
+    graph = double('Graph',
+                   search: true,
+                   query: query,
+                   build: true,
+                   set_enterprise_filter: true,
+                   formatter: formatter)
+
+    allow(UserGroup).to receive(:get_graph_builder).and_return(graph)
+    allow(UsersSegment).to receive(:get_graph_builder).and_return(graph)
+    allow(Initiative).to receive(:get_graph_builder).and_return(graph)
+    allow(GroupMessage).to receive(:get_graph_builder).and_return(graph)
+    allow(View).to receive(:get_graph_builder).and_return(graph)
+    allow(Resource).to receive(:get_graph_builder).and_return(graph)
+    allow(MentoringSession).to receive(:get_graph_builder).and_return(graph)
+    allow(MentorshipInterest).to receive(:get_graph_builder).and_return(graph)
+    allow(Answer).to receive(:get_graph_builder).and_return(graph)
+
+    allow(graph).to receive(:set_enterprise_filter)
+    allow(graph).to receive(:query=)
+    allow(graph).to receive(:query).and_return(query)
+
+    allow(graph).to receive(:drilldown_graph)
+    allow(graph).to receive(:search)
+    allow(graph).to receive(:build).and_return({ title: "#{c_t(:erg)} Population" })
+
+    allow(query).to receive(:terms_agg)
+    allow(query).to receive(:add_filter_clause)
+    allow(query).to receive(:bool_filter_agg)
+
+    allow(graph.formatter).to receive(:title)
+    allow(graph.formatter).to receive(:add_elements)
+
+    allow(graph.formatter.parser).to receive(:get_elements)
+    allow(graph.formatter.parser).to receive(:extractors=)
+    allow(graph.formatter.parser).to receive(:extractors)
+    allow(graph.formatter.parser).to receive(:date_range)
   end
 end

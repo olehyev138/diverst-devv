@@ -1,4 +1,4 @@
-<% if news.news_link %>
+<% if news.news_link && NewsLinkPolicy.new(current_user, nil).index? %>
   <% news_link = NewsLink.find(news.news_link.id) %>
   <div class="row block-section-news">
     <div class="col-xs-4">
@@ -20,7 +20,7 @@
     </div>
     <%= render "groups/news_links/modal/form" %>
   </div>
-<% elsif news.group_message %>
+<% elsif news.group_message && UserMessagePolicy.new(current_user, nil).index?  %>
   <div class="block block-section-news">
     <% message = GroupMessage.includes(:owner, :group).find(news.group_message.id) %>
     <div class="flex-row flex-row--middle">
@@ -38,14 +38,14 @@
       </div>
     </div>
   </div>
-<% elsif news.social_link %>
-
+<% elsif news.social_link && SocialLinkPolicy.new(current_user, nil).index? %>
   <% if news.social_link.url.include?("facebook") %>
-      <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.social_link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-  <% elsif news.social_link.url.include?("instagram") %>
-      <iframe width="320" height="440" src="<%= news.social_link.url %>embed" frameborder="0"></iframe>
+    <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.social_link.url_safe %>&width=330&show_text=true&height=290&appId"
+            width="330"
+            height="<%= news.social_link.url_safe.include?('video') ? '320' : '500' %>"
+            style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">
+    </iframe>
   <% else %>
-      <%= raw news.social_link.embed_code %>
+    <%= raw small ? news.social_link.small_embed_code : news.social_link.embed_code %>
   <% end %>
-
 <% end %>

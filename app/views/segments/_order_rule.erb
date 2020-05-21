@@ -1,0 +1,17 @@
+<div class="nested-fields space-bottom segment-rule order-rule">
+  <div class="flex-row flex-row--baseline">
+    <div class="flex-row__cell">
+      <%= link_to_remove_association f do %>
+        <%= inline_svg('icons/remove.svg', class: "icon") %>
+      <% end %>
+    </div>
+    <div class="flex-row__cell">
+      <!-- operatorField !-->
+      <%= f.input :field, label: false, collection: SegmentOrderRule.fields %>
+    </div>
+    <div class="flex-row__cell">
+      <!-- operatorField !-->
+      <%= f.input :operator, label: false, include_blank: false, collection: SegmentOrderRule.operators %>
+    </div>
+  </div>
+</div>

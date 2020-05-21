@@ -3,7 +3,7 @@
 </div>
 
 <div class="content__main">
-  <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_auth') do |f| %>
+  <%= simple_form_for @enterprise, :url => update_auth_enterprise_path(@enterprise) do |f| %>
     <div class="card">
       <div class="card__section">
         <div class="row">
@@ -12,11 +12,6 @@
             <%= f.input :has_enabled_saml,
                 label: "Enable SAML?",
                 input_html: { autofocus: true } %>
-          </div>
-          <div class="col sm-6">
-            <%= f.hidden_field :has_enabled_onboarding_email, value: 0 %>
-            <%= f.input :has_enabled_onboarding_email,
-                label: "Enable onboarding emails?" %>
           </div>
         </div>
       </div>

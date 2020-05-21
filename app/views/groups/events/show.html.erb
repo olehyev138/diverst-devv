@@ -3,33 +3,47 @@
     <%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
   </h1>
-  <div class="flex-row hidden-xs">
-    <div class="flex-row__cell">
-      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
+  <% unless @event.archived? %>
+    <div class="flex-row hidden-xs">
+      <div class="flex-row__cell">
+        <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
+      </div>
+      <div class="flex-row__cell">
+        <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
+      </div>
+      <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
+        <div class="flex-row__cell hidden-sm hidden-xs">
+          <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
+        </div>
+      <% end %>
+      <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+        <% if !@event.full? || @participation.present? %>
+          <div class="flex-row__cell">
+            <a
+              href="#"
+              class="btn btn--primary js-join-event"
+              data-joined="<%= @participation.present? %>"
+            >
+              <%= @participation.present? ? "Leave event" : "Join event" %>
+            </a>
+          </div>
+        <% end %>
+      <% end %>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
-    </div>
-    <div class="flex-row__cell hidden-sm hidden-xs">
-      <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary hidden-xs" if policy(@event).edit? %>
-    </div>
-    <% if !@event.full? || current_user.initiatives.include?(@event) %>
-    <div class="flex-row__cell">
-      <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
-    </div>
-    <% end %>
-  </div>
-  <div class="container-fluid visible-xs">
-    <div class="row">
-      <div class="col-xs-12 text-center">
-        <div class="btn-group">
-          <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
-          <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if policy(@event).edit? %>
-          <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave" : "Join" %></a>
+    <div class="container-fluid visible-xs">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <div class="btn-group">
+            <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
+            <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
+            <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave" : "Join" %></a>
+          <% end %>
+            </div>
         </div>
       </div>
     </div>
-  </div>
+  <% end %>
 </div>
 
 <div class="content__main">
@@ -37,13 +51,18 @@
     <div class="card__section">
       <div class="row">
         <div class="col-sm-8 col-xs-12">
-          <% if @event.picture.exists? %>
-            <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>);" class="card__section--image-preview"></div>
+          <% if @event.video.exists? %>
+            <%= video_tag(@event.video.expiring_url(36000), controls: true, size: "400x400") %>
+          <% elsif @event.picture.exists? %>
+            <div class="card__section--image-preview">
+              <%= link_to image_tag(@event.picture.expiring_url(3600, :medium)), @event.picture.expiring_url(3600, :original) %>
+            </div>
           <% end %>
+
           <h4>Date &amp; time</h4>
           <p>
             <%= @event.time_string %>
-            <%= "(#{current_user.default_time_zone} timezone)"%>
+            <%= "(#{current_user.default_time_zone} timezone)" %>
           </p>
           <h4>Description</h4>
           <p><%= sanitize @event.description %></p>
@@ -53,25 +72,60 @@
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col-sm-4 col-xs-12">
-          <h4>Attendees (<%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %>)<% if @event.full? %> <b>Full</b><% end %></h4>
-          <p>
-            <% @event.attendees.limit(10).each do |attendee| %>
-              <%= attendee.name_with_status %><br>
+          <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
+            <h4>Attendees (<span id="attendees_count"><%= @event.attendees.size %>
+              <% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)
+              <% if @event.full? %> <b>Full</b>
+              <% end %></h4>
+            <p>
+              <% @event.attendees.limit(10).each do |attendee| %>
+                <%= attendee.name_with_status %><br>
+              <% end %>
+              <%= link_to "View #{@event.attendees.size - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.size > 10 %>
+            </p>
+          <% end %>
+          <% unless @event.archived? %>
+            <% if @participation.present? %>
+              <%= link_to "Add to Outlook Calendar", add_to_outlook_group_event_path(@group, @event), method: :post, class: "hidden-xs member", id: 'calendar_link2' if current_user.outlook_datum.present? %>
+              <br>
+              <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
+              <br>
+              <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
+            <% else %>
+              <%= link_to "Add to Outlook Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' if current_user.outlook_datum.present? %>
+              <br>
+              <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
+              <br>
+              <%= link_to "Add to calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link2' %>
             <% end %>
-            <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
-          </p>
-          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs" %>
-          <br>
-          <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs" %>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<% if current_user.is_group_leader_of?(@group) %>
 <div class="content__header" style="margin-top: 30px;">
-  <h1>Comments</h1>
+  <h1><%= pluralize(@all_comments.count, "Comment") %></h1>
 </div>
+
+  <% if @all_comments.any? %>
+    <% @all_comments.each do |comment| %>
+      <%= render 'event_comment', comment: comment, group: @group %>
+    <% end %>
+  <% end %>
+<% else %>
+<div class="content__header" style="margin-top: 30px;">
+  <h1><%= pluralize(@approved_comments.count, "Comment") %></h1>
+</div>
+
+  <% if @approved_comments.any? %>
+    <% @approved_comments.each do |comment| %>
+      <%= render 'event_comment', comment: comment, group: @group %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <% if @comment.persisted? %>
   <div class="content__section">
@@ -84,30 +138,48 @@
     </div>
   </div>
 <% else %>
-  <div class="content__section">
-    <div class="card">
-      <div class="card__section">
-        <%= simple_form_for [@group, @event, @comment], url: group_event_comments_path(@group.id, @event.id) do |f| %>
-          <%= f.input :content,
-                label: "Tell us about what you learned during this event, what you liked / disliked, etc." %>
-          <%= f.button :submit, value: "Submit" %>
-        <% end %>
+  <% unless @event.archived? %>
+    <div class="content__section">
+      <div class="card">
+        <div class="card__section">
+          <%= simple_form_for [@group, @event, @comment], url: group_event_comments_path(@group.id, @event.id) do |f| %>
+            <%= f.input :content,
+                        label: "Tell us about what you learned during this event, what you liked / disliked, etc." %>
+            <%= f.button :submit, value: "Submit" %>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
 <% end %>
 
 <script>
-  $('.js-join-event').click(function() {
+  $('.js-join-event').click(function () {
     if ($(this).data('joined')) {
-      $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'DELETE' });
+      $.ajax({url: '<%= group_event_attendance_path(@group, @event) %>', type: 'DELETE'});
       $(this).data('joined', false)
       $(this).text('Join event')
-    }
-    else {
-      $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'POST' });
+      $('#calendar_link1').attr({
+        "href": "#",
+        "data-confirm": "Please join this event before adding it to you calendar."
+      }).removeAttr("target");
+      $('#calendar_link2').attr({
+        "href": "#",
+        "data-confirm": "Please join this event before adding it to you calendar."
+      });
+      var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
+      document.getElementById('attendees_count').innerHTML = attendees_count - 1;
+    } else {
+      $.ajax({url: '<%= group_event_attendance_path(@group, @event) %>', type: 'POST'});
       $(this).data('joined', true)
       $(this).text('Leave event')
+      $('#calendar_link1').attr({
+        "href": "<%= GoogleCalendar.build_link(@event) %>",
+        "target": "_blank"
+      }).removeAttr("data-confirm");
+      $('#calendar_link2').attr({"href": "<%= export_ics_group_event_path(@group, @event) %>"}).removeAttr("data-confirm");
+      var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
+      document.getElementById('attendees_count').innerHTML = attendees_count + 1;
     }
   });
 </script>

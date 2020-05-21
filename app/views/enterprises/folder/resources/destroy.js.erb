@@ -1,0 +1,18 @@
+$("#archived_enterprise_resource_<%= @resource.id %>").fadeOut(500, function(){
+	$(this).remove();
+	var resource_count = parseInt("<%= @resources.size %>");
+	decreaseResourceCount();
+	removeResourceRow(resource_count);
+});
+
+function removeResourceRow(resource_count) {
+	if(resource_count == 0){
+		$('tbody').append('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">No data available in table</td></tr>');
+		$("#restore_buttons").hide();
+	}
+}
+
+function decreaseResourceCount() {
+	var archived_resource_count = parseInt(document.getElementById('resource_count').innerHTML);
+    document.getElementById('resource_count').innerHTML = archived_resource_count - 1;
+}

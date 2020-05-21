@@ -28,7 +28,7 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-      <%= render partial: 'groups/show_layouts/blocks/sponsor', locals: { group_sponsors: @group_sponsors } %>
+      <%= render partial: 'shared/carousel/sponsor_card', locals: { sponsors: @group_sponsors } %>
 
       <%= render 'groups/show_layouts/blocks/join_button_and_member_preferences' %>
 
@@ -43,8 +43,6 @@
       <%= render 'groups/show_layouts/blocks/group_parent' %>
 
       <%= render 'groups/show_layouts/blocks/group_children' %>
-
-      <%= render 'groups/show_layouts/blocks/notifications_settings' %>
 
       <%= render 'groups/show_layouts/blocks/leave_erg_button' %>
     </div>

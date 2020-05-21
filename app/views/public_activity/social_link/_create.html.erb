@@ -2,7 +2,7 @@
   <%= render 'public_activity/shared/owner', activity: activity %>
   created a social link
   <% if activity.trackable %>
-    <%= link_to activity.trackable.url, group_social_link_path(activity.trackable.group, activity.trackable) %>
+    (<%= activity.trackable.url %>)
   <% else %>
     which has since been removed
   <% end %>

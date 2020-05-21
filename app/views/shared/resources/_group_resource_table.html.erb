@@ -1,0 +1,53 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="resources-table">
+        <thead>
+          <th></th>
+          <th>Title</th>
+          <th>URL</th>
+          <th class="hidden-xs">Creation date</th>
+          <th class="hidden-xs">Tags</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <% @resources.each do |resource| %>
+            <tr id="group_resource_<%= resource.id %>">
+              <% if resource.url.nil? || resource.url.empty? %>
+                <td class="icon-column">
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                </td>
+                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
+                <td>N/A</td>
+              <% else %>
+                <td class="icon-column">
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                </td>
+                <td><%= link_to resource.title, resource.url, target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
+                <td><%= link_to 'Link', resource.url, target: '_blank' %></td>
+              <% end %>
+              <td class="hidden-xs"><%= resource.created_at.to_s :reversed_slashes %></td>
+              <td class="hidden-xs"><%= resource.tags.map(&:name).join(", ") %></td>
+              <td>
+                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if GroupFolderPolicy.new(current_user, [@container.group, resource]).destroy? %> -
+                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } if GroupFolderPolicy.new(current_user, [@container.group, resource]).destroy? %> - 
+                <%= link_to "Archive", polymorphic_path(@container_path + [resource], action: :archive), method: :patch, class: 'highlight', remote: true if EnterpriseFolderPolicy.new(current_user, [@container.group, resource]).index? %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#resources-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2  , "desc"]]
+    }));
+  });
+</script>

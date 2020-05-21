@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'collaborate'
 
@@ -29,11 +30,11 @@ class QuestionsController < ApplicationController
     @question = @campaign.questions.new(question_params)
 
     if @question.save
-      flash[:notice] = "Your question was created"
+      flash[:notice] = 'Your question was created'
       track_activity(@question, :create)
       redirect_to action: :index
     else
-      flash[:alert] = "Your question was not created. Please fix the errors"
+      flash[:alert] = 'Your question was not created. Please fix the errors'
       render :new
     end
   end
@@ -53,11 +54,11 @@ class QuestionsController < ApplicationController
     @question.solved_at = Time.current if question_params[:conclusion].present?
 
     if @question.update(question_params)
-      flash[:notice] = "Your question was updated"
+      flash[:notice] = 'Your question was updated'
       track_activity(@question, :update)
       redirect_to @question
     else
-      flash[:alert] = "Your question was not updated. Please fix the errors"
+      flash[:alert] = 'Your question was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -72,7 +73,7 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:campaign_id]) : user_not_authorized
+    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question
@@ -100,5 +101,26 @@ class QuestionsController < ApplicationController
           ]
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@campaign.to_label} Questions"
+    when 'new'
+      "Create Question for #{@campaign.to_label}"
+    when 'show'
+      "#{@question.campaign.to_label} Question: #{@question.to_label}"
+    when 'edit'
+      "#{@question.campaign.to_label} Question Edit: #{@question.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

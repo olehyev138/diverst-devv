@@ -1,5 +1,5 @@
 <div class="content__main">
-  <%= simple_form_for @group do |f| %>
+  <%= simple_form_for @group, :url => update_settings_group_path(@group) do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.hidden_field :active, value: 0 %>
@@ -7,6 +7,7 @@
 
         <%= f.input :pending_users, input_html: { autofocus: true } %>
         <%= f.input :members_visibility %>
+        <%= f.input :event_attendance_visibility %>
         <%= f.input :messages_visibility %>
         <%= f.input :latest_news_visibility %>
         <%= f.input :upcoming_events_visibility %>
@@ -22,19 +23,41 @@
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
 
         <%= f.simple_fields_for :sponsors do |s| %>
-          <%= render 'sponsor_fields', f: s %>
+          <%= render 'shared/sponsors/sponsor_fields', f: s %>
         <% end %>
 
         
         <div class="group_sponsor_link">
-          <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+          <%= link_to_add_association "Add a sponsor", f, :sponsors, partial: 'shared/sponsors/sponsor_fields' %>
         </div>
         <br>
         
         <%= f.input :yammer_group_link %>
+
+        <h3>Archive Settings</h3>
+        <div id="auto_archive_switch">  
+          <%= f.hidden_field :auto_archive, value: 0 %>
+          <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
+        </div>
+          <div id="auto_archive_settings" style='<%= @group.auto_archive? ? "display: block" : "display: none" %>'>
+            <p>Set expiration settings for news, resources and events</p>
+            <%= f.input :unit_of_expiry_age %>
+            <%= f.input :expiry_age_for_news %>
+            <%= f.input :expiry_age_for_resources %>
+            <%= f.input :expiry_age_for_events %>
+          </div>
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $(document).on('ready page:load', function(){
+    $("#auto_archive_switch").on("change", function(e){
+      $("#auto_archive_settings").toggle();
+      $.ajax({url: '<%= auto_archive_switch_path(@group) %>', type: 'PATCH'});
+    });
+  });
+</script>

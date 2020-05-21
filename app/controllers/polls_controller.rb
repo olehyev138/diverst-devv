@@ -2,6 +2,7 @@ class PollsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'market_scope'
 
@@ -22,10 +23,10 @@ class PollsController < ApplicationController
 
     if @poll.save
       track_activity(@poll, :create)
-      flash[:notice] = "Your survey was created"
+      flash[:notice] = 'Your survey was created'
       redirect_to action: :index
     else
-      flash[:alert] = "Your survey was not created. Please fix the errors"
+      flash[:alert] = "#{@poll.errors.full_messages.first}"
       render :new
     end
   end
@@ -47,10 +48,10 @@ class PollsController < ApplicationController
     authorize @poll
     if @poll.update(poll_params)
       track_activity(@poll, :update)
-      flash[:notice] = "Your survey was updated"
+      flash[:notice] = 'Your survey was updated'
       redirect_to @poll
     else
-      flash[:alert] = "Your survey was not updated. Please fix the errors"
+      flash[:alert] = 'Your survey was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -65,13 +66,15 @@ class PollsController < ApplicationController
 
   def export_csv
     authorize @poll, :show?
-    send_data @poll.responses_csv, filename: "#{@poll.title}_responses.csv"
+    PollDownloadJob.perform_later(current_user.id, @poll.id)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
   end
 
   protected
 
   def set_poll
-    current_user ? @poll = current_user.enterprise.polls.find(params[:id]) : user_not_authorized
+    @poll = current_user.enterprise.polls.find(params[:id])
   end
 
   def poll_params
@@ -101,5 +104,26 @@ class PollsController < ApplicationController
           :alternative_layout
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Polls'
+    when 'new'
+      'Poll Creation'
+    when 'show'
+      "Poll: #{@poll.to_label}"
+    when 'edit'
+      "Poll Edit: #{@poll.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

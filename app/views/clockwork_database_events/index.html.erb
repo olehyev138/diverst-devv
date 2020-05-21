@@ -1,0 +1,40 @@
+<div class="content__header">
+  <h1>Email Events</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="clockwork_database_events-table">
+        <thead>
+          <th>Name</th>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Disabled</th>
+          <th>Last update</th>
+        </thead>
+        <tbody>
+          <% @clockwork_database_events.each do |clockwork_database_event| %>
+            <tr>
+              <td><%= link_to clockwork_database_event.name, edit_clockwork_database_event_path(clockwork_database_event) %></td>
+              <td><%= clockwork_database_event.day %></td>
+              <td><%= clockwork_database_event.at %></td>
+              <td><%= clockwork_database_event.disabled? ? "Yes" : "No" %></td>
+              <td><%= time_ago_in_words(clockwork_database_event.updated_at) %> ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#clockwork_database_events-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

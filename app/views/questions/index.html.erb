@@ -3,7 +3,7 @@
     <%= link_to "Campaigns", campaigns_path %> /
     <%= @campaign.title %>
   </h1>
-  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" if policy(@campaign).edit? %>
+  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" if CampaignPolicy.new(current_user, @campaign).edit? %>
 </div>
 
 <div class="content__main">
@@ -21,7 +21,7 @@
             <th>Creation date</th>
             <th>Total ROI</th>
             <th>Solved?</th>
-            <% if policy(@campaign).edit? %>
+            <% if CampaignPolicy.new(current_user, @campaign).edit? %>
               <th>Options</th>
             <% end %>
           </thead>
@@ -29,12 +29,12 @@
             <% @questions.each do |question| %>
               <tr>
                 <td><%= link_to question.title, question_path(question) %></td>
-                <td><%= question.answers.count %></td>
+                <td><%= question.answers.size %></td>
                 <td><%= question.created_at.to_s :dateonly %></td>
                 <td><%= number_to_currency(question.answers.where.not(value: nil).sum(:value), precision: 0) %></td>
                 <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
                 <td>
-                  <% if policy(@campaign).edit? %>
+                  <% if CampaignPolicy.new(current_user, @campaign).edit? %>
                     <%= link_to "Edit", edit_question_path(question) %> - <%= link_to "Delete", question_path(question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                   <% end %>
                 </td>
@@ -54,18 +54,22 @@
           <div class="card__action">
             <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>"></div>
+          <div id="contributions_group" class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h3>Top performers</h3>
+          <h3>Total votes per user</h3>
           <div class="card__action">
             <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>"></div>
+          <div id="top_performers" class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>

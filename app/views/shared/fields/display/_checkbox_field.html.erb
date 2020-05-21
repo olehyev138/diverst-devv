@@ -7,11 +7,25 @@
     <span class="error"><%= field_errors(resource, cf) %></span>
     <div class="field__input-wrapper">
       <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-      <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple" id="<%= cf.title.downcase %>_<%= cf.id %>">
-        <% cf.options.each do |option| %>
-          <option value="<%= option %>"<%= selected="selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
-        <% end %>
-      </select>
+
+      <% if cf.show_on_vcard %>
+
+        <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple" id="<%= cf.title.downcase %>_<%= cf.id %>">
+          <% cf.options.each do |option| %>
+            <option value="<%= option %>"<%= selected="selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
+          <% end %>
+        </select>
+
+      <% else %>
+
+        <select disabled class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple" id="<%= cf.title.downcase %>_<%= cf.id %>">
+          <% cf.options.each do |option| %>
+            <option value="<%= option %>"<%= selected="selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
+          <% end %>
+        </select>
+
+      <% end %>
+
     </div>
   </div>
 <% else # Checkboxes %>
@@ -21,11 +35,11 @@
       <%= cf.title %>
     </label>
     <span class="error"><%= field_errors(resource, cf) %></span>
-    <% cf.options.each do |option| %>
-      <label class="control">
-        <%= check_box_tag "custom-fields[#{cf.id}][]", option, resource.info[cf] && resource.info[cf].include?(option), class: "control__input" %>
-        <span class="control__indicator control__indicator--checkbox"></span><span class="control__label"><%= option %></span>
-      </label>
+      <% cf.options.each do |option| %>
+        <label class="control">
+          <%= check_box_tag "custom-fields[#{cf.id}][]", option, resource.info[cf] && resource.info[cf].include?(option), class: "control__input", disabled: !cf.show_on_vcard %>
+          <span class="control__indicator control__indicator--checkbox"></span><span class="control__label"><%= option %></span>
+        </label>
     <% end %>
   </div>
 <% end %>

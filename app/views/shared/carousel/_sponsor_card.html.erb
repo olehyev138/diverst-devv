@@ -1,0 +1,59 @@
+<% if sponsors.any? { |sps| show_sponsor?(sps) } %>
+  <% random = SecureRandom.hex %>
+  <div class="card card--secondary">
+    <% if sponsors.count > 1 %>
+      <span style="float: left;">
+        <a href="#sponsor_carousel_<%= random %>" role="button" data-slide="prev">
+          <%= inline_svg('icons/left-arrow.svg', class: "icon") %>
+          <span class="sr-only">Previous</span>
+        </a>
+      </span>
+
+      <span style="float: right;">
+        <a href="#sponsor_carousel_<%= random %>" role="button" data-slide="next">
+          <%= inline_svg('icons/right-arrow.svg', class: "icon") %>
+          <span class="sr-only">Next</span>
+        </a>
+      </span>
+    <% end %>
+
+    <div class="card__section">
+      <div id ="sponsor_carousel_<%= random %>" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+
+          <% sponsors.each_with_index do |sponsor, index| %>
+            <div class="item <%= 'active' if index == 0 %>">
+              <% if show_sponsor?(sponsor) %>
+                <% if sponsor.sponsor_media.present? %>
+
+                  <% show_sponsor_media?(sponsor, "sponsor_media_content_type") do %>
+                    <%= image_tag(sponsor.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px; cursor: pointer;') %>
+                  <% end %>
+
+                  <% show_sponsor_video?(sponsor, "sponsor_media_content_type") do %>
+                      <%= video_tag(sponsor.sponsor_media.expiring_url(3600), controls: true, size: "200x200") %>
+                  <% end %>
+
+                <% else %>
+                  <%= image_tag("missing_user.png", size: "70x70") %>
+                <% end %>
+
+                <p style="font-style: italic;"><%= sponsor.sponsor_name %><br>
+                <%= sponsor.sponsor_title.present? ? sponsor.sponsor_title : nil %></p>
+                <% if SponsorPolicy.new(current_user, sponsor).sponsor_message_visibility? %>
+                  <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(sponsor.sponsor_message, length: 200) %></p>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $('.carousel').carousel({
+    interval: false
+  })
+</script>

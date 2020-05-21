@@ -10,22 +10,17 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Campaigns", campaigns_path if policy(Campaign).index? %>
+        <%= active_link_to "Campaigns", campaigns_path if CampaignPolicy.new(current_user, Campaign).manage? %>
       </li>
       <li>
-        <%= active_link_to "Financials", expenses_path if policy(Campaign).index? %>
+        <%= active_link_to "Financials", expenses_path if CampaignPolicy.new(current_user, Campaign).manage? %>
       </li>
       <% if manage_erg_root_path %>
         <li>
           <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
         </li>
       <% end %>
-      <% if current_user.enterprise.plan_module_enabled %>
-        <% if default_group = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first %>
-          <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
-        <% end %>
-      <% end %>
-      <% if policy(Poll).index? %>
+      <% if PollPolicy.new(current_user, Poll).manage? %>
         <li><%= active_link_to "Include", polls_path %></li>
       <% end %>
       <% if global_settings_path %>

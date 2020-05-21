@@ -16,28 +16,29 @@ class LikesController < ApplicationController
       @like.save!
     end
 
-    render json: { :like_success => @like.persisted? }
+    render json: { like_success: @like.persisted? }
   end
 
   def unlike
     @like.destroy
 
-    render json: { :unlike_success => @like.destroyed? }
+    render json: { unlike_success: @like.destroyed? }
   end
 
   protected
-    def set_like
-      if params[:news_feed_link_id].blank?
-        @like = Like.find_by(:user => current_user, :answer_id => params[:answer_id], :enterprise => current_user.enterprise)
-      else
-        @like = Like.find_by(:user => current_user, :news_feed_link_id => params[:news_feed_link_id], :enterprise => current_user.enterprise)
-      end
-    end
 
-    def like_params
-      params.require(:like).permit(
-        :news_feed_link_id,
-        :answer_id
-      )
+  def set_like
+    if params[:news_feed_link_id].blank?
+      @like = Like.find_by(user: current_user, answer_id: params[:answer_id], enterprise: current_user.enterprise)
+    else
+      @like = Like.find_by(user: current_user, news_feed_link_id: params[:news_feed_link_id], enterprise: current_user.enterprise)
     end
+  end
+
+  def like_params
+    params.require(:like).permit(
+      :news_feed_link_id,
+      :answer_id
+    )
+  end
 end

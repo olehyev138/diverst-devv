@@ -2,5 +2,5 @@
   <%= button_tag data: { news_feed_link_id: news_feed_link.id, is_liked: is_post_liked?(news_feed_link.id) }, class: "likeBtn" do %>
     <img class="svg <%= is_post_liked?(news_feed_link.id) ? "likeImgFill" : "likeImg" %>" width="36px" height="36px" src="<%= image_path('icons/like.svg') %>" />
   <% end %>
-  <span class="likeCount" id="likeCount<%= news_feed_link.id %>"><%= news_feed_link.likes.count %></span>
+  <span class="likeCount" id="likeCount<%= news_feed_link.id %>"><%= news_feed_link.likes.size %></span>
 <% end %>

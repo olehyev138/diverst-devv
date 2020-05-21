@@ -1,0 +1,29 @@
+$("#archived_news_<%= @post.id %>").fadeOut(500, function(){
+	$(this).remove();
+	decreasePostsCount();
+});
+
+$("#archived_message_<%= @post.id %>").fadeOut(500, function(){
+	$(this).remove();
+	decreasePostsCount();
+});
+
+$("#archived_social_link_<%= @post.id %>").fadeOut(500, function(){
+	$(this).remove();
+	decreasePostsCount();
+});
+
+
+function decreasePostsCount() {
+	var archived_posts_count = parseInt(document.getElementById('archived_posts_count').innerHTML);
+	document.getElementById('archived_posts_count').innerHTML = archived_posts_count - 1;
+	displayEmptyArchive();
+}
+
+function displayEmptyArchive(){
+	var archived_posts_count = parseInt(document.getElementById('archived_posts_count').innerHTML);
+	if (archived_posts_count == 0){		
+		$("#archive_buttons").hide();
+		$('.content__main').append('<div class="card"><div class="card__section"><p>No Archived Posts.</p></div> </div>');
+	}
+}

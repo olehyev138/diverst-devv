@@ -1,0 +1,177 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h1>At a glance</h1>
+      <div class="flex-row">
+        <div class="flex-row__cell">
+          <big>Users</big><br>
+          <strong><%= @general_metrics[:nb_users] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big><%= c_t(:erg).pluralize %></big><br>
+          <strong><%= @general_metrics[:nb_ergs] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big><%= c_t(:segment).pluralize %></big><br>
+          <strong><%= @general_metrics[:nb_segments] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Resources</big><br>
+          <strong><%= @general_metrics[:nb_resources] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Surveys</big><br>
+          <strong><%= @general_metrics[:nb_polls] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Ongoing campaigns</big><br>
+          <strong><%= @general_metrics[:nb_ongoing_campaigns] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Average # of members per <%= c_t(:erg) %></big><br>
+          <strong><%= @general_metrics[:average_nb_members_per_group] %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="card-title flex-row" style="margin-bottom: 10px;">
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Users</h1></div>
+        <div class="flex-row__cell"><span><%= link_to('See more...', metrics_users_path) %></span></div>
+      </div>
+
+      <div class="row">
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total Active Users</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_users] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>User Growth (6 Months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_growth] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>New <%= c_t(:erg) %> Memberships (6 months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="card-title flex-row" style="margin-bottom: 10px;">
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;"><%= c_t(:erg).pluralize %></h1></div>
+        <div class="flex-row__cell"><span><%= link_to('See more...', metrics_groups_path) %></span></div>
+      </div>
+
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="card-title flex-row" style="margin-bottom: 10px;">
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;"><%= c_t(:segment).pluralize.capitalize %></h1></div>
+        <div class="flex-row__cell"><span><%= link_to('See more...', metrics_segments_path) %></span></div>
+      </div>
+      <div class="row">
+        <div class="col md-12 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:segment).capitalize.pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_segments] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
+    <div class="card">
+      <div class="card__section">
+        <div class="card-title flex-row" style="margin-bottom: 10px;">
+          <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Mentorship</h1></div>
+          <div class="flex-row__cell"><span><%= link_to('See more...', metrics_mentorships_path) %></span></div>
+        </div>
+
+        <div class="row">
+          <div class="col md-6 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Mentorship Sessions (Past Month)</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @mentorship_metrics[:mentoring_sessions] %></b></p></div>
+            </div>
+          </div>
+
+          <div class="col md-6 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Active Mentorships</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @mentorship_metrics[:active_mentorships] %></b></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <div class="card-title flex-row" style="margin-bottom: 10px;">
+            <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Polls</h1></div>
+            <div class="flex-row__cell"><span><%= link_to('See more...', polls_path) %></span></div>
+          </div>
+          <div class="row">
+            <div class="col md-12 sm-12">
+              <div class="panel panel--primary text-center margin-bottom-0">
+                <div class="panel-headline"><p><strong>Total Polls (Last Month)</strong></p></div>
+                <div class="panel-data"><p><b class="accent"><%= @poll_metrics[:total_polls] %></b></p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <div class="card-title flex-row" style="margin-bottom: 10px;">
+            <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Innovation</h1></div>
+            <div class="flex-row__cell"><span><%= link_to('See more...', metrics_campaigns_path) %></span></div>
+          </div>
+          <div class="row">
+            <div class="col md-12 sm-12">
+              <div class="panel panel--primary text-center margin-bottom-0">
+                <div class="panel-headline"><p><strong>Total Campaigns (Last Month)</strong></p></div>
+                <div class="panel-data"><p><b class="accent"><%= @innovation_metrics[:total_campaigns] %></b></p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

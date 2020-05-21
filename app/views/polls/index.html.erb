@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Surveys</h1>
-  <%= link_to "New Survey", new_poll_path, class: "btn btn--primary" if policy(Poll).new? %>
+  <%= link_to "New Survey", new_poll_path, class: "btn btn--primary" if PollPolicy.new(current_user, Poll).new? %>
 </div>
 
 <div class="content__main">
@@ -30,9 +30,9 @@
                     <%= link_to "Link", new_poll_poll_response_path(poll), target: '_blank' %>
                     -
                   <% end %>
-                  <%= link_to "Edit", edit_poll_path(poll) if policy(poll).edit? %>
+                  <%= link_to "Edit", edit_poll_path(poll) if PollPolicy.new(current_user, poll).edit? %>
                   -
-                  <%= link_to "Delete", poll_path(poll), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(poll).destroy? %></td>
+                  <%= link_to "Delete", poll_path(poll), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if PollPolicy.new(current_user, poll).destroy? %></td>
                 <td><%= poll.decorate.status %></td>
               </tr>
             <% end %>

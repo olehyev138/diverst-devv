@@ -10,6 +10,7 @@
       </div>
       <div class="card__section">
         <%= f.input :description, input_html: { autofocus: true } %>
+        <%= f.hidden_field :annual_budget_id, value: @annual_budget_id %>
       </div>
     </div>
     <div class="card">
@@ -47,7 +48,21 @@
 $(document).on('ready page:load', function(){
     $('.select2-field').select2({
     ajax: {
-      url: "<%= users_path(policy_groups: {:budget_approval => 1}, :limit => 10, format: :json) %>",
+      url: "<%= users_path(
+          group_leaders:
+          {
+            :group_id => @group.id,
+            :budget_approval => 1
+          },
+          policy_groups:
+          {
+            :budget_approval => 1,
+            :manage_all => 1,
+          },
+          :limit => 10,
+          :type => 'budget_permission',
+          format: :json
+        ) %>",
       theme: 'bootstrap',
       allowClear: true,
       type: "GET",

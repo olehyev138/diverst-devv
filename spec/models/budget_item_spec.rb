@@ -2,54 +2,60 @@ require 'rails_helper'
 
 RSpec.describe BudgetItem, type: :model do
   describe 'factory' do
-    let(:budget_item) { FactoryGirl.build_stubbed(:budget_item) }
+    let(:budget_item) { build_stubbed(:budget_item) }
 
     it 'is valid' do
       expect(budget_item).to be_valid
     end
 
-    it 'requires a title' do
-      budget_item.title = nil
-      expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Title can't be blank")
-    end
-
-    it 'requires a title' do
-      budget_item.title = "o"
-      expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Title is too short (minimum is 2 characters)")
-    end
-
-    it 'requires estimated_amount to be a number' do
-      budget_item.estimated_amount = "o"
-      expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Estimated amount number of digits must not exceed 6")
-    end
-
-    it 'requires available_amount to be less_than_or_equal_to estimated_amount' do
-      budget_item.estimated_amount = 1
-      budget_item.available_amount = 2
-      expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Available amount must be less than or equal to 1.0")
-    end
+    it { expect(budget_item).to validate_presence_of(:title) }
+    it { expect(budget_item).to validate_length_of(:title).is_at_least(2).is_at_most(191) }
+    it { expect(budget_item).to validate_numericality_of(:estimated_amount)
+       .is_less_than_or_equal_to(999999).with_message('number of digits must not exceed 6')
+    }
+    it { expect(budget_item).to validate_numericality_of(:available_amount)
+    }
 
     describe 'when validating' do
       it { expect(budget_item).to belong_to(:budget) }
       it { expect(budget_item).to have_many(:initiatives) }
     end
-  end
 
-  describe 'validation' do
-    let(:budget_item) { FactoryGirl.build(:budget_item) }
+    describe 'test scopes' do
+      before { build(:budget_item, is_done: false) }
 
-    describe 'available_amount' do
-      before do
-        budget_item.estimated_amount = 100
-        budget_item.available_amount = 1000
+      it 'return available budget items' do
+        expect(BudgetItem.available.count).to eq 3
       end
 
-      it 'is invalid when greater than estimated_amount' do
-        expect(budget_item).to_not be_valid
+      it 'return allocated budget items' do
+        BudgetItem.last.update(is_done: true)
+        expect(BudgetItem.allocated.count).to eq 1
+      end
+    end
+
+    describe 'test instance_methods' do
+      it '#title_with_amount' do
+        bi = build(:budget_item, title: 'budget item one')
+        expect(bi.title).to eq 'budget item one'
+      end
+
+      context '#available_amount' do
+        it 'returns 0' do
+          bi = build(:budget_item, is_done: true)
+          expect(bi.available_amount).to eq 0
+        end
+
+        it 'return value' do
+          bi = build(:budget_item)
+          expect(bi.available_amount).not_to eq 0
+        end
+      end
+
+      it '#approve!' do
+        bi = build(:budget_item)
+        bi.approve!
+        expect(bi.available_amount).to eq bi.estimated_amount
       end
     end
   end

@@ -22,7 +22,7 @@
 
 
 <% if @parent.children.empty? %>
-<dh2>No <%= c_t(:sub_erg) %> available.</h2>
+<h2>No <%= c_t(:sub_erg) %> available.</h2>
 <% else %>
     <%= form_tag update_all_sub_groups_url, method: :post do %>
 	<div class="card">

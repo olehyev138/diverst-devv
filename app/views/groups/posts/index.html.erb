@@ -1,16 +1,16 @@
 <div class="content__header visible-xs">
-    <div class="container-fluid visible-xs">
+  <div class="container-fluid visible-xs">
     <div class="row">
       <div class="col-xs-12">
-        <% if policy(@group).erg_leader_permissions? %>
+        <% if GroupPostsPolicy.new(current_user, [@group]).update? %>
           <h2 class="text-center">
             <span>
               Posts
               <span class="label label-default"><%= @count %></span>
               /
-               <%= link_to pending_group_posts_path(@group) do %>
+              <%= link_to pending_group_posts_path(@group) do %>
                <button class="btn btn-sm btn-primary">
-                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+                 Pending (<%= @pending_posts_count %>)
                </button>
              <% end %>
             </span>
@@ -22,70 +22,129 @@
     <div class="row">
       <div class="col-xs-12 text-center">
         <div class="btn-group">
-          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if policy(NewsLink).new? %>
-          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if policy(GroupMessage).new? %>
+          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
+
+          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if GroupMessagePolicy.new(current_user, [@group]).new? %>
           <% if @group.enterprise.enable_social_media? %>
-            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if policy(SocialLink).new? %>
+            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if GroupSocialLinkPolicy.new(current_user, [@group]).new? %>
           <% end %>
         </div>
       </div>
     </div>
   </div>
-
 </div>
+
 <div class="content__header hidden-xs">
-   <% if policy(@group).erg_leader_permissions? %>
-   <h1>Posts(<%= @count %>)/
-     <%= link_to pending_group_posts_path(@group) do %>
-     <button class="btn btn--primary">
-       <% if @group.enterprise.enable_social_media? %>
-         Pending(<%= @group.news_feed_links.includes(:group_message, :news_link, :social_link).not_approved.count %>)
-       <% else %>
-         Pending(<%= @group.news_feed_links.includes(:group_message, :news_link).not_approved.count %>)
-       <% end %>
-     </button>
-     <% end %>
-   </h1>
-   <% end %>
+  <% if GroupPostsPolicy.new(current_user, [@group]).update? %>
+    <h1>Posts (<span id="posts_count"><%= @count %></span>)/
+      <%= link_to pending_group_posts_path(@group) do %>
+        <button class="btn btn--primary">
+          Pending(<%= @pending_posts_count %>)
+        </button>
+      <% end %>
+    </h1>
+  <% end %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
+      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if GroupMessagePolicy.new(current_user, [@group]).new? %>
     </div>
     <div class="flex-row__cell">
       <% if @group.enterprise.enable_social_media? %>
-        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if GroupSocialLinkPolicy.new(current_user, [@group]).new? %>
       <% end %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "Manage Twitter Feed", group_twitter_accounts_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
     </div>
   </div>
 </div>
 
 <div class="content__main">
   <div class="card">
-    <% if @posts.empty? %>
-      <div class="card__section">
-        <p>No posts have been published yet.</p>
-      </div>
-    <% else %>
-      <% @posts.each do |news| %>
-        <% if news.news_link %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
-        <% elsif news.group_message %>
-          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
-        <% elsif news.social_link %>
-          <% if @group.enterprise.enable_social_media? %>
-            <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
-          <% end %>
-        <% end %>
+    <div class="card__section">
+      <%= simple_form_for @group.news_feed, url: group_posts_path(@group), method: :get do |f| %>
+        <%= f.input :search,
+                    as: :fake,
+                    label: "Search",
+                    input_html: {value:  @search || ''}%>
+        <%= f.button :submit, 'Search', class: 'btn btn-primary btn-sm' %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>
 
-<% unless @posts.count === @count%>
+<% if @posts.empty? && @tweets.empty? %>
+  <div class="content__main">
+    <div class="card">
+      <div class="card__section" id="empty_posts">
+        <p>No posts have been published yet.</p>
+      </div>
+    </div>
+  </div>
+<% elsif @posts.present? && @tweets.empty? %>
+  <div class="content__main">
+    <div class="card">
+      <% @posts.each do |news| %>
+        <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id)} %>
+        <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
+          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id)} %>
+        <% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
+          <% if @group.enterprise.enable_social_media? %>
+            <%= render partial: "groups/shared/social_links", locals: {small: false, social_link: SocialLink.includes(:group).find(news.link.id)} %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% elsif @posts.empty? && @tweets.present? %>
+  <div class="content__main">
+    <div class="card">
+      <% @tweets.find_all do |twt| %>
+        <% twt_embedded = TwitterClient.get_html(twt.id) %>
+        <%= raw(twt_embedded) %>
+      <% end %>
+    </div>
+  </div>
+<% elsif @posts.present? && @tweets.present? %>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-sm-12">
+        <div class="content__main">
+          <div class="card">
+            <% @posts.each do |news| %>
+              <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
+                <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id)} %>
+              <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
+                <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id)} %>
+              <% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
+                <% if @group.enterprise.enable_social_media? %>
+                  <%= render partial: "groups/shared/social_links", locals: {small: true, social_link: SocialLink.includes(:group).find(news.link.id)} %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <div class="content__main">
+          <div class="card">
+            <% @tweets.find_all do |twt| %>
+              <% twt_embedded = TwitterClient.get_html(twt.id) %>
+              <%= raw(twt_embedded) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% unless @posts.size === @count %>
   <div class="flex-row__cell text-center">
-    <%= link_to "Load More", group_posts_path(:page => @page + 1), class: "btn btn--primary" %>
+    <%= link_to "Load More", group_posts_path(:page => @page + 1, search: @search), class: "btn btn--primary" %>
   </div>
 <% end %>

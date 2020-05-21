@@ -1,6 +1,12 @@
 <div class="content__header">
   <h1>Folders</h1>
-  <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).create? %>
+  
+  <% if @group %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@group]).create? %>
+  <% else %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).create? %>
+  <% end %>
+  
 </div>
 <div class="container-fluid">
   <% if @folders.empty? %>
@@ -19,10 +25,15 @@
           <% if folder.password_protected %>
             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
           <% end %>
-          &nbsp;<%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %>
+          &nbsp;
+          <% if @group %>
+            <%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if GroupFolderPolicy.new(current_user, [@group]).destroy? %>
+          <% else %>
+            <%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, folder).destroy? %>
+          <% end %>
         </h4>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path(@container_path + [folder] + [:resources]) if !folder.password_protected %>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), @container_path + [folder], method: :get, remote: true if folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path(@container_path + [folder] + [:resources]), 'data-trackable-id': folder.id, 'data-trackable-type': "folder", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id if !folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), @container_path + [folder], method: :get, remote: true, 'data-trackable-id': folder.id, 'data-trackable-type': "folder", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id if folder.password_protected %>
       </div>
     
     <% end %>

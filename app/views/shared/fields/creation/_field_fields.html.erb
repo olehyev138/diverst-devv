@@ -1,10 +1,10 @@
-<div class="nested-fields card__section card__section--border card__section--accordion">
-  <div class="card__action">
+<div class="nested-fields card__section card__section--border card__section--accordion row">
+  <div class="card__action col-xs-3">
     <a href="#" class="expand-link">Edit</a> -
     <%= link_to_remove_association "Remove", f, class: "error" %>
   </div>
 
-  <h4 class="card__title"><%= f.object.title %></h4>
+  <h4 class="card__title col-xs-9"><%= f.object.title %></h4>
 
   <div class="card__content">
     <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
@@ -14,11 +14,13 @@
     <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
 
     <%= f.hidden_field :private, value: 0 %>
-    <%= f.input :private, label: "Hide from users" %>
+    <%= f.input :private, label: "Hide from users", input_html: { class: "private_toggle" } %>
     <%= f.hidden_field :show_on_vcard, value: 0 %>
-    <%= f.input :show_on_vcard, label: "Allow user to edit" %>
+    <%= f.input :show_on_vcard, label: "Allow user to edit", input_html: { class: "show_on_vcard_toggle" } %>
     <%= f.hidden_field :required, value: 0 %>
-    <%= f.input :required, label: "Set as mandatory" %>
+    <%= f.input :required, label: "Set as mandatory", input_html: { class: "required_toggle" } %>
+    <%= f.hidden_field :add_to_member_list, value: 0 %>
+    <%= f.input :add_to_member_list, label: 'Show field in member list', input_html: { class: 'add_to_member_list_toggle' } %>
     <%= f.hidden_field :type %>
     <%= f.input :saml_attribute %>
   </div>

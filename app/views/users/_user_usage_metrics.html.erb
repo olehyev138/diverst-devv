@@ -1,0 +1,62 @@
+<div class="content__header">
+  <h1><%= "#{@user.name}'s Usage Stats" %></h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% @fields.each do |fld| %>
+      <div class="card__section">
+        <div class="row">
+          <div class="col md-6 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Number of <%= @user_metrics[fld.to_sym][:name] %></strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @user_metrics[fld.to_sym][:count] %></b></p></div>
+            </div>
+          </div>
+          <div class="col md-6 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Ranking</strong></p></div>
+              <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[fld.to_sym][:percentile] %>%</b></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<h3>Most Visited Pages</h3>
+<div class="card">
+  <div class="card__action">
+    <a href="#" id="page_visitation_data_csv" data-url="<%= user_url_usage_data_user_path(@user, format: :csv) %>">Export CSV</a>
+  </div>
+  <div class="card__section">
+    <%= render 'url_table', source: user_url_usage_data_user_path(@user, format: :json) %>
+  </div>
+</div>
+
+<script>
+
+    $(document).on('ready page:load', function () {
+        $('#user_page_visitation_data').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#user_page_visitation_data').data('source')
+            },
+            "pagingType": "full_numbers",
+            "order": [[ 4, "desc" ]]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $('#page_visitation_data_csv').click(function () {
+        $.get($('#page_visitation_data_csv').data('url'),  function(data) {
+            Utility.displayFlash(data);
+        }, "JSON");
+    });
+
+</script>

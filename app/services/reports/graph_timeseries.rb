@@ -6,7 +6,7 @@ class Reports::GraphTimeseries
   end
 
   def get_header
-    @graph_content.map{ |s| s[:name] }.unshift("")
+    @graph_content.map { |s| s[:name] }.unshift('')
   end
 
   def get_body
@@ -14,13 +14,14 @@ class Reports::GraphTimeseries
     column_length = @graph_content.length
     grouped_dates.each do |date, infos|
       columns = Array.new(column_length, 0)
-      infos.each{ |info| columns[info.keys.first] = info.values.first }
+      infos.each { |info| columns[info.keys.first] = info.values.first }
       body << [date] + columns
     end
     body
   end
 
   private
+
   def grouped_dates
     dates_info = {}
     @graph_content.each_with_index do |content, i|
@@ -33,6 +34,6 @@ class Reports::GraphTimeseries
   end
 
   def to_date(miliseconds)
-    DateTime.strptime((miliseconds/1000).to_s,'%s')
+    DateTime.strptime((miliseconds / 1000).to_s, '%s')
   end
 end

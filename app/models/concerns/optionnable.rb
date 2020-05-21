@@ -3,7 +3,17 @@ module Optionnable
 
   included do
     after_initialize :set_options_array
+    before_save :trim_options_whitespace
     attr_accessor :options
+  end
+
+  # Remove all spaces from beginning and end option and remove tabs and carriage returns from options text
+  def trim_options_whitespace
+    return if options_text.nil?
+
+    options_array = options_text.split(/\n+/)
+    self.options_text = options_array.reduce('') { |options, s| options + "#{s.strip}\n" }
+    options_text.delete!("\t\r")
   end
 
   def serialize_value(value)
@@ -46,15 +56,15 @@ module Optionnable
     aggs = if aggr_field.nil?
       es_term_aggregation
     else
-     {
-       aggregation: {
-          terms: {
-            field: aggr_field.elasticsearch_field,
-            min_doc_count: 0
-          },
-          aggs: es_term_aggregation
-        }
-      }
+      {
+        aggregation: {
+           terms: {
+             field: aggr_field.elasticsearch_field,
+             min_doc_count: 0
+           },
+           aggs: es_term_aggregation
+         }
+       }
     end
 
     execute_elasticsearch_query(
@@ -67,7 +77,7 @@ module Optionnable
     )
   end
 
-  def elastic_timeseries(segments: , groups:)
+  def elastic_timeseries(segments:, groups:)
     aggs = es_term_aggregation(
       aggs: {
         date_histogram: {
@@ -109,7 +119,7 @@ module Optionnable
   def execute_elasticsearch_query(segments:, groups:, search_hash:, index:)
     # Filter the query by segments if there are any specified
     terms = []
-    if !segments.nil? && !segments.empty?
+    if segments.present?
       terms << {
         terms: {
           'combined_info.segments' => segments.ids
@@ -117,7 +127,7 @@ module Optionnable
       }
     end
 
-    if !groups.nil? && !groups.empty?
+    if groups.present?
       terms << {
         terms: {
           'combined_info.groups' => groups.ids
@@ -125,8 +135,8 @@ module Optionnable
       }
     end
 
-    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
-    
+    search_hash['query'] = { filtered: { filter: { bool: { should: terms } } } }
+
     # Execute the elasticsearch query
     Elasticsearch::Model.client.search(
       index: index,
@@ -137,23 +147,22 @@ module Optionnable
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
   def highcharts_stats(aggr_field: nil, segments: [], groups: [])
-    
     data = elastic_stats(aggr_field: aggr_field, segments: segments, groups: groups)
 
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
 
       options = data['aggregations']['aggregation']['buckets'].map { |aggr_bucket|
-        if aggr_field.type === "GroupsField" and groups.length > 0
-          aggr_bucket['terms']['buckets'].map {|option_bucket| option_bucket['key'] if groups.ids.include?(option_bucket['key']) }.compact
+        if (aggr_field.type === 'GroupsField') && (groups.length > 0)
+          aggr_bucket['terms']['buckets'].map { |option_bucket| option_bucket['key'] if groups.ids.include?(option_bucket['key']) }.compact
         else
           aggr_bucket['terms']['buckets'].map do |option_bucket|
             option_bucket['key']
           end
         end
       }.flatten.uniq
-      
-      if aggr_field.type === "GroupsField" and groups.length > 0
+
+      if (aggr_field.type === 'GroupsField') && (groups.length > 0)
         groups.ids.each do |id|
           if not options.include?(id)
             options.push(id)
@@ -274,6 +283,7 @@ module Optionnable
 
   def highcharts_timeseries(segments: [], groups: [])
     data = elastic_timeseries(segments: segments, groups: groups)
+
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
 
@@ -292,7 +302,7 @@ module Optionnable
   end
 
   def elasticsearch_field
-    "combined_info.#{id}.raw"
+    "user_combined_info.#{id}"
   end
 
   def elasticsearch_sample_field
@@ -303,6 +313,7 @@ module Optionnable
 
   def set_options_array
     return self.options = [] if options_text.nil?
+
     self.options = options_text.lines.map(&:chomp)
   end
 end

@@ -1,7 +1,7 @@
 <h1><%= c_t(:privacy_statement) %></h1>
 <br>
 <% if @enterprise.privacy_statement.present? %>
-  <%= allow_newlines @enterprise.privacy_statement %>
+  <%= raw @enterprise.privacy_statement %>
 <% else %>
   <%= render 'users/default_privacy_statement' %>
 <% end %>

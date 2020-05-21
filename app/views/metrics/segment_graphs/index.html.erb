@@ -1,0 +1,34 @@
+<div class="content__header">
+  <h1><%= c_t(:segment).capitalize.pluralize %></h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:segment).capitalize.pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:segment_count] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4><%= c_t(:segment).capitalize %> Population (All Users)</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", segment_population_metrics_segments_path(format: :csv), class: "hidden-xs" %>
+          </div>
+          <div id="users_per_group" class="graph" data-url="<%= segment_population_metrics_segments_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

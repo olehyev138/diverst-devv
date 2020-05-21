@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181015134320) do
+ActiveRecord::Schema.define(version: 20200314230356) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,6 +29,24 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+  create_table "annual_budgets", force: :cascade do |t|
+    t.integer  "group_id",         limit: 4
+    t.integer  "enterprise_id",    limit: 4
+    t.decimal  "amount",                     precision: 10, default: 0
+    t.boolean  "closed",                                    default: false
+    t.decimal  "available_budget",           precision: 10, default: 0
+    t.decimal  "approved_budget",            precision: 10, default: 0
+    t.decimal  "expenses",                   precision: 10, default: 0
+    t.decimal  "leftover_money",             precision: 10, default: 0
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
+  end
+
+  add_index "annual_budgets", ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id", using: :btree
+  add_index "annual_budgets", ["group_id"], name: "index_annual_budgets_on_group_id", using: :btree
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -67,7 +85,11 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.string   "supporting_document_content_type", limit: 191
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
+    t.integer  "contributing_group_id",            limit: 4
+    t.integer  "likes_count",                      limit: 4
   end
+
+  add_index "answers", ["contributing_group_id"], name: "index_answers_on_contributing_group_id", using: :btree
 
   create_table "badges", force: :cascade do |t|
     t.integer  "enterprise_id",      limit: 4,   null: false
@@ -83,55 +105,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
 
-  create_table "biases", force: :cascade do |t|
-    t.integer  "user_id",                  limit: 4
-    t.text     "from_data",                limit: 65535
-    t.text     "to_data",                  limit: 65535
-    t.boolean  "anonymous",                              default: true
-    t.integer  "severity",                 limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description",              limit: 65535
-    t.boolean  "spoken_words",                           default: false
-    t.boolean  "marginalized_in_meetings",               default: false
-    t.boolean  "called_name",                            default: false
-    t.boolean  "contributions_ignored",                  default: false
-    t.boolean  "in_documents",                           default: false
-    t.boolean  "unfairly_criticized",                    default: false
-    t.boolean  "sexual_harassment",                      default: false
-    t.boolean  "inequality",                             default: false
-  end
-
-  create_table "biases_from_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_from_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_from_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
-
-  create_table "biases_to_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_to_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_to_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
-
   create_table "budget_items", force: :cascade do |t|
     t.integer  "budget_id",        limit: 4
     t.string   "title",            limit: 191
@@ -145,16 +118,17 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.text     "description",    limit: 65535
+    t.text     "description",        limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "approver_id",    limit: 4
-    t.integer  "requester_id",   limit: 4
-    t.integer  "event_id",       limit: 4
-    t.integer  "group_id",       limit: 4
-    t.text     "comments",       limit: 65535
-    t.string   "decline_reason", limit: 191
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "approver_id",        limit: 4
+    t.integer  "requester_id",       limit: 4
+    t.integer  "group_id",           limit: 4
+    t.text     "comments",           limit: 65535
+    t.string   "decline_reason",     limit: 191
+    t.integer  "annual_budget_id",   limit: 4
+    t.integer  "budget_items_count", limit: 4
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -188,6 +162,7 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "banner_updated_at"
     t.integer  "owner_id",            limit: 4
     t.integer  "status",              limit: 4,     default: 0
+    t.integer  "questions_count",     limit: 4
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -223,12 +198,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "initiative_id", limit: 4
   end
 
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",    limit: 191
     t.string   "data_content_type", limit: 191
@@ -262,48 +231,38 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_index "clockwork_database_events", ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id", using: :btree
 
   create_table "csvfiles", force: :cascade do |t|
-    t.string   "import_file_file_name",    limit: 191
-    t.string   "import_file_content_type", limit: 191
-    t.integer  "import_file_file_size",    limit: 4
+    t.string   "import_file_file_name",      limit: 191
+    t.string   "import_file_content_type",   limit: 191
+    t.integer  "import_file_file_size",      limit: 4
     t.datetime "import_file_updated_at"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.integer  "user_id",                  limit: 4,   null: false
-    t.integer  "group_id",                 limit: 4
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "user_id",                    limit: 4,   null: false
+    t.integer  "group_id",                   limit: 4
+    t.string   "download_file_file_name",    limit: 191
+    t.string   "download_file_content_type", limit: 191
+    t.integer  "download_file_file_size",    limit: 4
+    t.datetime "download_file_updated_at"
+    t.string   "download_file_name",         limit: 191
   end
 
   create_table "custom_texts", force: :cascade do |t|
-    t.text    "erg",               limit: 65535
+    t.string  "erg",               limit: 191, default: "Group"
     t.integer "enterprise_id",     limit: 4
-    t.text    "program",           limit: 65535
-    t.text    "structure",         limit: 65535
-    t.text    "outcome",           limit: 65535
-    t.text    "badge",             limit: 65535
-    t.text    "segment",           limit: 65535
-    t.text    "dci_full_title",    limit: 65535
-    t.text    "dci_abbreviation",  limit: 65535
-    t.text    "member_preference", limit: 65535
-    t.text    "parent",            limit: 65535
-    t.text    "sub_erg",           limit: 65535
-    t.text    "privacy_statement", limit: 65535
+    t.string  "program",           limit: 191, default: "Goal"
+    t.string  "structure",         limit: 191, default: "Structure"
+    t.string  "outcome",           limit: 191, default: "Focus Areas"
+    t.string  "badge",             limit: 191, default: "Badge"
+    t.string  "segment",           limit: 191, default: "Segment"
+    t.string  "dci_full_title",    limit: 191, default: "Engagement"
+    t.string  "dci_abbreviation",  limit: 191, default: "Engagement"
+    t.string  "member_preference", limit: 191, default: "Member Survey"
+    t.string  "parent",            limit: 191, default: "Parent"
+    t.string  "sub_erg",           limit: 191, default: "Sub-Group"
+    t.string  "privacy_statement", limit: 191, default: "Privacy Statement"
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
-
-  create_table "departments", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4,   null: false
-    t.string   "name",          limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  create_table "devices", force: :cascade do |t|
-    t.string   "token",      limit: 191
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "platform",   limit: 191
-  end
 
   create_table "email_variables", force: :cascade do |t|
     t.integer  "email_id",                     limit: 4
@@ -319,14 +278,15 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   create_table "emails", force: :cascade do |t|
     t.string   "name",          limit: 191
     t.integer  "enterprise_id", limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.string   "subject",       limit: 191
-    t.text     "content",       limit: 65535, null: false
-    t.string   "mailer_name",   limit: 191,   null: false
-    t.string   "mailer_method", limit: 191,   null: false
+    t.text     "content",       limit: 65535,                 null: false
+    t.string   "mailer_name",   limit: 191,                   null: false
+    t.string   "mailer_method", limit: 191,                   null: false
     t.string   "template",      limit: 191
-    t.string   "description",   limit: 191,   null: false
+    t.string   "description",   limit: 191,                   null: false
+    t.boolean  "custom",                      default: false
   end
 
   create_table "enterprise_email_variables", force: :cascade do |t|
@@ -361,7 +321,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.text     "cdo_message",                           limit: 65535
     t.boolean  "collaborate_module_enabled",                          default: true,  null: false
     t.boolean  "scope_module_enabled",                                default: true,  null: false
-    t.boolean  "bias_module_enabled",                                 default: false, null: false
     t.boolean  "plan_module_enabled",                                 default: true,  null: false
     t.string   "banner_file_name",                      limit: 191
     t.string   "banner_content_type",                   limit: 191
@@ -388,51 +347,20 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.string   "default_from_email_address",            limit: 191
     t.string   "default_from_email_display_name",       limit: 191
     t.boolean  "enable_social_media",                                 default: false
-  end
-
-  create_table "event_attendances", force: :cascade do |t|
-    t.integer  "event_id",   limit: 4
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  create_table "event_comments", force: :cascade do |t|
-    t.integer "event_id", limit: 4
-    t.integer "user_id",  limit: 4
-    t.text    "content",  limit: 65535
-  end
-
-  create_table "event_fields", force: :cascade do |t|
-    t.integer "field_id", limit: 4
-    t.integer "event_id", limit: 4
-  end
-
-  create_table "event_invitees", force: :cascade do |t|
-    t.integer "event_id", limit: 4
-    t.integer "user_id",  limit: 4
-  end
-
-  create_table "events", force: :cascade do |t|
-    t.string   "title",                limit: 191
-    t.text     "description",          limit: 65535
-    t.datetime "start"
-    t.datetime "end"
-    t.string   "location",             limit: 191
-    t.integer  "max_attendees",        limit: 4
-    t.integer  "group_id",             limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "picture_file_name",    limit: 191
-    t.string   "picture_content_type", limit: 191
-    t.integer  "picture_file_size",    limit: 4
-    t.datetime "picture_updated_at"
-    t.integer  "owner_id",             limit: 4
-  end
-
-  create_table "events_segments", force: :cascade do |t|
-    t.integer "event_id",   limit: 4
-    t.integer "segment_id", limit: 4
+    t.boolean  "redirect_all_emails",                                 default: false
+    t.string   "redirect_email_contact",                limit: 191
+    t.boolean  "disable_emails",                                      default: false
+    t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
+    t.string   "unit_of_expiry_age",                    limit: 191
+    t.boolean  "auto_archive",                                        default: false
+    t.integer  "groups_count",                          limit: 4
+    t.integer  "segments_count",                        limit: 4
+    t.integer  "polls_count",                           limit: 4
+    t.integer  "users_count",                           limit: 4
+    t.boolean  "slack_enabled",                                       default: false
+    t.boolean  "onboarding_consent_enabled",                          default: false
+    t.boolean  "enable_outlook",                                      default: false
+    t.text     "onboarding_pop_up_content",             limit: 65535
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -474,10 +402,10 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "required",                         default: false
     t.string   "field_type",         limit: 191
     t.integer  "enterprise_id",      limit: 4
-    t.integer  "event_id",           limit: 4
     t.integer  "group_id",           limit: 4
     t.integer  "poll_id",            limit: 4
     t.integer  "initiative_id",      limit: 4
+    t.boolean  "add_to_member_list",               default: false
   end
 
   create_table "folder_shares", force: :cascade do |t|
@@ -497,6 +425,7 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "parent_id",          limit: 4
     t.integer  "enterprise_id",      limit: 4
     t.integer  "group_id",           limit: 4
+    t.integer  "views_count",        limit: 4
   end
 
   create_table "frequency_periods", force: :cascade do |t|
@@ -556,6 +485,33 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "groups_budgets_index",                               default: false, null: false
     t.boolean  "initiatives_manage",                                 default: false, null: false
     t.boolean  "groups_manage",                                      default: false, null: false
+    t.boolean  "initiatives_create",                                 default: false
+    t.boolean  "groups_budgets_request",                             default: false
+    t.boolean  "group_messages_manage",                              default: false
+    t.boolean  "group_messages_index",                               default: false
+    t.boolean  "group_messages_create",                              default: false
+    t.boolean  "news_links_index",                                   default: false
+    t.boolean  "news_links_create",                                  default: false
+    t.boolean  "news_links_manage",                                  default: false
+    t.boolean  "social_links_index",                                 default: false
+    t.boolean  "social_links_create",                                default: false
+    t.boolean  "social_links_manage",                                default: false
+    t.boolean  "group_leader_index",                                 default: false
+    t.boolean  "group_leader_manage",                                default: false
+    t.boolean  "groups_members_index",                               default: false
+    t.boolean  "groups_members_manage",                              default: false
+    t.boolean  "groups_insights_manage",                             default: false
+    t.boolean  "groups_layouts_manage",                              default: false
+    t.boolean  "group_settings_manage",                              default: false
+    t.boolean  "group_resources_index",                              default: false
+    t.boolean  "group_resources_create",                             default: false
+    t.boolean  "group_resources_manage",                             default: false
+    t.boolean  "group_posts_index",                                  default: false
+    t.boolean  "budget_approval",                                    default: false
+    t.boolean  "groups_budgets_manage",                              default: false
+    t.boolean  "manage_posts",                                       default: false
+    t.boolean  "initiatives_index",                                  default: false
+    t.integer  "position",                               limit: 4
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -591,53 +547,63 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer  "enterprise_id",              limit: 4
-    t.string   "name",                       limit: 191
-    t.text     "description",                limit: 65535
-    t.datetime "created_at",                                                                       null: false
-    t.datetime "updated_at",                                                                       null: false
-    t.string   "logo_file_name",             limit: 191
-    t.string   "logo_content_type",          limit: 191
-    t.integer  "logo_file_size",             limit: 4
+    t.integer  "enterprise_id",               limit: 4
+    t.string   "name",                        limit: 191
+    t.text     "description",                 limit: 65535
+    t.datetime "created_at",                                                                        null: false
+    t.datetime "updated_at",                                                                        null: false
+    t.string   "logo_file_name",              limit: 191
+    t.string   "logo_content_type",           limit: 191
+    t.integer  "logo_file_size",              limit: 4
     t.datetime "logo_updated_at"
     t.boolean  "send_invitations"
-    t.integer  "participation_score_7days",  limit: 4
+    t.integer  "participation_score_7days",   limit: 4
     t.boolean  "yammer_create_group"
     t.boolean  "yammer_group_created"
-    t.string   "yammer_group_name",          limit: 191
+    t.string   "yammer_group_name",           limit: 191
     t.boolean  "yammer_sync_users"
-    t.string   "yammer_group_link",          limit: 191
-    t.integer  "yammer_id",                  limit: 4
-    t.integer  "manager_id",                 limit: 4
-    t.integer  "owner_id",                   limit: 4
-    t.integer  "lead_manager_id",            limit: 4
-    t.string   "pending_users",              limit: 191
-    t.string   "members_visibility",         limit: 191
-    t.string   "messages_visibility",        limit: 191
-    t.decimal  "annual_budget",                            precision: 8, scale: 2
-    t.decimal  "leftover_money",                           precision: 8, scale: 2, default: 0.0
-    t.string   "banner_file_name",           limit: 191
-    t.string   "banner_content_type",        limit: 191
-    t.integer  "banner_file_size",           limit: 4
+    t.string   "yammer_group_link",           limit: 191
+    t.integer  "yammer_id",                   limit: 4
+    t.integer  "manager_id",                  limit: 4
+    t.integer  "owner_id",                    limit: 4
+    t.integer  "lead_manager_id",             limit: 4
+    t.string   "pending_users",               limit: 191
+    t.string   "members_visibility",          limit: 191
+    t.string   "messages_visibility",         limit: 191
+    t.decimal  "annual_budget",                             precision: 8, scale: 2
+    t.decimal  "leftover_money",                            precision: 8, scale: 2, default: 0.0
+    t.string   "banner_file_name",            limit: 191
+    t.string   "banner_content_type",         limit: 191
+    t.integer  "banner_file_size",            limit: 4
     t.datetime "banner_updated_at"
-    t.string   "calendar_color",             limit: 191
-    t.integer  "total_weekly_points",        limit: 4,                             default: 0
-    t.boolean  "active",                                                           default: true
-    t.integer  "parent_id",                  limit: 4
-    t.string   "sponsor_image_file_name",    limit: 191
-    t.string   "sponsor_image_content_type", limit: 191
-    t.integer  "sponsor_image_file_size",    limit: 4
+    t.string   "calendar_color",              limit: 191
+    t.integer  "total_weekly_points",         limit: 4,                             default: 0
+    t.boolean  "active",                                                            default: true
+    t.integer  "parent_id",                   limit: 4
+    t.string   "sponsor_image_file_name",     limit: 191
+    t.string   "sponsor_image_content_type",  limit: 191
+    t.integer  "sponsor_image_file_size",     limit: 4
     t.datetime "sponsor_image_updated_at"
-    t.string   "company_video_url",          limit: 191
-    t.string   "latest_news_visibility",     limit: 191
-    t.string   "upcoming_events_visibility", limit: 191
-    t.integer  "group_category_id",          limit: 4
-    t.integer  "group_category_type_id",     limit: 4
-    t.boolean  "private",                                                          default: false
-    t.text     "short_description",          limit: 65535
-    t.string   "layout",                     limit: 191
-    t.text     "home_message",               limit: 65535
-    t.boolean  "default_mentor_group",                                             default: false
+    t.string   "company_video_url",           limit: 191
+    t.string   "latest_news_visibility",      limit: 191
+    t.string   "upcoming_events_visibility",  limit: 191
+    t.integer  "group_category_id",           limit: 4
+    t.integer  "group_category_type_id",      limit: 4
+    t.boolean  "private",                                                           default: false
+    t.text     "short_description",           limit: 65535
+    t.string   "layout",                      limit: 191
+    t.text     "home_message",                limit: 65535
+    t.boolean  "default_mentor_group",                                              default: false
+    t.integer  "position",                    limit: 4
+    t.integer  "expiry_age_for_news",         limit: 4,                             default: 0
+    t.integer  "expiry_age_for_resources",    limit: 4,                             default: 0
+    t.integer  "expiry_age_for_events",       limit: 4,                             default: 0
+    t.string   "unit_of_expiry_age",          limit: 191
+    t.boolean  "auto_archive",                                                      default: false
+    t.string   "event_attendance_visibility", limit: 191
+    t.integer  "views_count",                 limit: 4
+    t.string   "slack_webhook",               limit: 191
+    t.text     "slack_auth_data",             limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -660,12 +626,13 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
-    t.string   "description",   limit: 191
-    t.integer  "amount",        limit: 4
-    t.integer  "owner_id",      limit: 4
-    t.integer  "initiative_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "description",      limit: 191
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
+    t.integer  "owner_id",         limit: 4
+    t.integer  "initiative_id",    limit: 4
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+    t.integer  "annual_budget_id", limit: 4
   end
 
   create_table "initiative_fields", force: :cascade do |t|
@@ -706,8 +673,9 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   create_table "initiative_users", force: :cascade do |t|
     t.integer  "initiative_id", limit: 4
     t.integer  "user_id",       limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "outlook_id",    limit: 191
   end
 
   create_table "initiatives", force: :cascade do |t|
@@ -730,6 +698,12 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.string   "location",             limit: 191
     t.integer  "budget_item_id",       limit: 4
     t.boolean  "finished_expenses",                                          default: false
+    t.datetime "archived_at"
+    t.integer  "annual_budget_id",     limit: 4
+    t.string   "video_file_name",      limit: 191
+    t.string   "video_content_type",   limit: 191
+    t.integer  "video_file_size",      limit: 4
+    t.datetime "video_updated_at"
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -752,22 +726,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_index "likes", ["user_id", "answer_id", "enterprise_id"], name: "index_likes_on_user_id_and_answer_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
-
-  create_table "matches", force: :cascade do |t|
-    t.integer  "user1_id",            limit: 4
-    t.integer  "user2_id",            limit: 4
-    t.integer  "user1_status",        limit: 4,  default: 0
-    t.integer  "user2_status",        limit: 4,  default: 0
-    t.float    "score",               limit: 24
-    t.time     "score_calculated_at"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.boolean  "archived",                       default: false
-    t.integer  "topic_id",            limit: 4
-    t.integer  "user1_rating",        limit: 4
-    t.integer  "user2_rating",        limit: 4
-    t.datetime "both_accepted_at"
-  end
 
   create_table "mentoring_interests", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
@@ -793,6 +751,17 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "updated_at"
     t.string   "mentoring_type", limit: 191,   default: "mentor",  null: false
   end
+
+  create_table "mentoring_session_comments", force: :cascade do |t|
+    t.text     "content",              limit: 65535
+    t.integer  "user_id",              limit: 4
+    t.integer  "mentoring_session_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "mentoring_session_comments", ["mentoring_session_id"], name: "index_mentoring_session_comments_on_mentoring_session_id", using: :btree
+  add_index "mentoring_session_comments", ["user_id"], name: "index_mentoring_session_comments_on_user_id", using: :btree
 
   create_table "mentoring_session_topics", force: :cascade do |t|
     t.integer  "mentoring_interest_id", limit: 4, null: false
@@ -860,12 +829,12 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                  null: false
-    t.string   "role",                 limit: 191,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                  null: false
-    t.boolean  "attending",                        default: true
+    t.integer  "user_id",              limit: 4,                       null: false
+    t.string   "role",                 limit: 191,                     null: false
+    t.integer  "mentoring_session_id", limit: 4,                       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",               limit: 191, default: "pending", null: false
   end
 
   create_table "mentorship_types", force: :cascade do |t|
@@ -907,6 +876,14 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "social_link_segment_id",    limit: 4
   end
 
+  create_table "news_feed_link_tags", id: false, force: :cascade do |t|
+    t.integer "news_feed_link_id", limit: 4
+    t.string  "news_tag_name",     limit: 191
+  end
+
+  add_index "news_feed_link_tags", ["news_feed_link_id", "news_tag_name"], name: "index_news_feed_link_tags_on_news_feed_link_id_and_news_tag_name", using: :btree
+  add_index "news_feed_link_tags", ["news_tag_name", "news_feed_link_id"], name: "index_news_feed_link_tags_on_news_tag_name_and_news_feed_link_id", using: :btree
+
   create_table "news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_id",     limit: 4
     t.boolean  "approved",                   default: false
@@ -916,6 +893,9 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "group_message_id", limit: 4
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
+    t.datetime "archived_at"
+    t.integer  "views_count",      limit: 4
+    t.integer  "likes_count",      limit: 4
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -964,12 +944,53 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "author_id",            limit: 4
   end
 
+  create_table "news_tags", id: false, force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "outcomes", force: :cascade do |t|
     t.string   "name",       limit: 191
     t.integer  "group_id",   limit: 4
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "outlook_data", force: :cascade do |t|
+    t.integer  "user_id",                    limit: 4
+    t.text     "encrypted_token_hash",       limit: 65535
+    t.text     "encrypted_token_hash_iv",    limit: 65535
+    t.boolean  "auto_add_event_to_calendar",               default: true
+    t.boolean  "auto_update_calendar_event",               default: true
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+  end
+
+  create_table "page_names", id: false, force: :cascade do |t|
+    t.string "page_url",  limit: 191
+    t.string "page_name", limit: 191
+  end
+
+  add_index "page_names", ["page_name", "page_url"], name: "index_page_names_on_page_name_and_page_url", using: :btree
+  add_index "page_names", ["page_url", "page_name"], name: "index_page_names_on_page_url_and_page_name", using: :btree
+
+  create_table "page_visitation_data", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4
+    t.string   "page_url",     limit: 191
+    t.string   "controller",   limit: 191
+    t.string   "action",       limit: 191
+    t.integer  "visits_day",   limit: 4,   default: 0
+    t.integer  "visits_week",  limit: 4,   default: 0
+    t.integer  "visits_month", limit: 4,   default: 0
+    t.integer  "visits_year",  limit: 4,   default: 0
+    t.integer  "visits_all",   limit: 4,   default: 0
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "page_visitation_data", ["page_url", "user_id"], name: "index_page_visitation_data_on_page_url_and_user_id", using: :btree
+  add_index "page_visitation_data", ["user_id", "page_url"], name: "index_page_visitation_data_on_user_id_and_page_url", using: :btree
 
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
@@ -990,9 +1011,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "polls_index",                             default: false
     t.boolean  "polls_create",                            default: false
     t.boolean  "polls_manage",                            default: false
-    t.boolean  "events_index",                            default: false
-    t.boolean  "events_create",                           default: false
-    t.boolean  "events_manage",                           default: false
     t.boolean  "group_messages_index",                    default: false
     t.boolean  "group_messages_create",                   default: false
     t.boolean  "group_messages_manage",                   default: false
@@ -1020,7 +1038,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
     t.boolean  "logs_view",                               default: false
-    t.boolean  "annual_budget_manage",                    default: false
     t.boolean  "branding_manage",                         default: false
     t.boolean  "sso_manage",                              default: false
     t.boolean  "permissions_manage",                      default: false
@@ -1031,6 +1048,22 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
     t.boolean  "budget_approval",                         default: false
+    t.boolean  "manage_all",                              default: false
+    t.boolean  "enterprise_manage",                       default: false
+    t.boolean  "groups_budgets_manage",                   default: false
+    t.boolean  "group_leader_index",                      default: false
+    t.boolean  "groups_insights_manage",                  default: false
+    t.boolean  "groups_layouts_manage",                   default: false
+    t.boolean  "group_resources_index",                   default: false
+    t.boolean  "group_resources_create",                  default: false
+    t.boolean  "group_resources_manage",                  default: false
+    t.boolean  "social_links_index",                      default: false
+    t.boolean  "social_links_create",                     default: false
+    t.boolean  "social_links_manage",                     default: false
+    t.boolean  "group_settings_manage",                   default: false
+    t.boolean  "group_posts_index",                       default: false
+    t.boolean  "mentorship_manage",                       default: false
+    t.boolean  "auto_archive_manage",                     default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
@@ -1040,9 +1073,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "polls_index",                           default: false
     t.boolean  "polls_create",                          default: false
     t.boolean  "polls_manage",                          default: false
-    t.boolean  "events_index",                          default: false
-    t.boolean  "events_create",                         default: false
-    t.boolean  "events_manage",                         default: false
     t.boolean  "group_messages_index",                  default: false
     t.boolean  "group_messages_create",                 default: false
     t.boolean  "group_messages_manage",                 default: false
@@ -1073,7 +1103,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "initiatives_manage",                    default: false
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
-    t.boolean  "annual_budget_manage",                  default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
@@ -1082,6 +1111,22 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "global_calendar",                       default: false
     t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
+    t.boolean  "manage_all",                            default: false
+    t.boolean  "enterprise_manage",                     default: false
+    t.boolean  "groups_budgets_manage",                 default: false
+    t.boolean  "group_leader_index",                    default: false
+    t.boolean  "groups_insights_manage",                default: false
+    t.boolean  "groups_layouts_manage",                 default: false
+    t.boolean  "group_resources_index",                 default: false
+    t.boolean  "group_resources_create",                default: false
+    t.boolean  "group_resources_manage",                default: false
+    t.boolean  "social_links_index",                    default: false
+    t.boolean  "social_links_create",                   default: false
+    t.boolean  "social_links_manage",                   default: false
+    t.boolean  "group_settings_manage",                 default: false
+    t.boolean  "group_posts_index",                     default: false
+    t.boolean  "mentorship_manage",                     default: false
+    t.boolean  "auto_archive_manage",                   default: false
   end
 
   add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree
@@ -1120,13 +1165,14 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string   "title",       limit: 191
-    t.text     "description", limit: 65535
-    t.integer  "campaign_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "title",         limit: 191
+    t.text     "description",   limit: 65535
+    t.integer  "campaign_id",   limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.datetime "solved_at"
-    t.text     "conclusion",  limit: 65535
+    t.text     "conclusion",    limit: 65535
+    t.integer  "answers_count", limit: 4
   end
 
   create_table "resources", force: :cascade do |t|
@@ -1145,6 +1191,8 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.integer  "folder_id",            limit: 4
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
+    t.datetime "archived_at"
+    t.integer  "views_count",          limit: 4
   end
 
   create_table "reward_actions", force: :cascade do |t|
@@ -1184,6 +1232,35 @@ ActiveRecord::Schema.define(version: 20181015134320) do
 
   add_index "samples", ["user_id"], name: "index_samples_on_user_id", using: :btree
 
+  create_table "segment_group_scope_rule_groups", force: :cascade do |t|
+    t.integer  "segment_group_scope_rule_id", limit: 4
+    t.integer  "group_id",                    limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "segment_group_scope_rule_groups", ["group_id"], name: "index_segment_group_scope_rule_groups_on_group_id", using: :btree
+  add_index "segment_group_scope_rule_groups", ["segment_group_scope_rule_id"], name: "segment_group_rule_group_index", using: :btree
+
+  create_table "segment_group_scope_rules", force: :cascade do |t|
+    t.integer  "segment_id", limit: 4
+    t.integer  "operator",   limit: 4, null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "segment_group_scope_rules", ["segment_id"], name: "index_segment_group_scope_rules_on_segment_id", using: :btree
+
+  create_table "segment_order_rules", force: :cascade do |t|
+    t.integer  "segment_id", limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "operator",   limit: 4, null: false
+    t.integer  "field",      limit: 4, null: false
+  end
+
+  add_index "segment_order_rules", ["segment_id"], name: "index_segment_order_rules_on_segment_id", using: :btree
+
   create_table "segment_rules", force: :cascade do |t|
     t.integer  "segment_id", limit: 4
     t.integer  "field_id",   limit: 4
@@ -1193,24 +1270,27 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "updated_at",               null: false
   end
 
-  create_table "segmentations", force: :cascade do |t|
-    t.integer  "parent_id",  limit: 4
-    t.integer  "child_id",   limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "segmentations", ["child_id"], name: "fk_rails_9a097e6024", using: :btree
-  add_index "segmentations", ["parent_id", "child_id"], name: "index_segmentations_on_parent_id_and_child_id", unique: true, using: :btree
-
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 191
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
+    t.integer  "limit",               limit: 4
+    t.integer  "job_status",          limit: 4,   default: 0, null: false
+    t.integer  "parent_id",           limit: 4
   end
+
+  add_index "segments", ["parent_id"], name: "index_segments_on_parent_id", using: :btree
+
+  create_table "shared_metrics_dashboards", force: :cascade do |t|
+    t.integer "user_id",              limit: 4
+    t.integer "metrics_dashboard_id", limit: 4
+  end
+
+  add_index "shared_metrics_dashboards", ["metrics_dashboard_id"], name: "index_shared_metrics_dashboards_on_metrics_dashboard_id", using: :btree
+  add_index "shared_metrics_dashboards", ["user_id"], name: "index_shared_metrics_dashboards_on_user_id", using: :btree
 
   create_table "shared_news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4, null: false
@@ -1227,12 +1307,13 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   end
 
   create_table "social_network_posts", force: :cascade do |t|
-    t.integer  "author_id",  limit: 4
-    t.text     "embed_code", limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.string   "url",        limit: 191
-    t.integer  "group_id",   limit: 4
+    t.integer  "author_id",        limit: 4
+    t.text     "embed_code",       limit: 65535
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.text     "url",              limit: 65535
+    t.integer  "group_id",         limit: 4
+    t.text     "small_embed_code", limit: 65535
   end
 
   create_table "sponsors", force: :cascade do |t|
@@ -1240,17 +1321,16 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.string   "sponsor_title",              limit: 191
     t.text     "sponsor_message",            limit: 65535
     t.boolean  "disable_sponsor_message"
-    t.integer  "sponsorable_id",             limit: 4
-    t.string   "sponsorable_type",           limit: 191
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
     t.string   "sponsor_media_file_name",    limit: 191
     t.string   "sponsor_media_content_type", limit: 191
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
+    t.integer  "enterprise_id",              limit: 4
+    t.integer  "group_id",                   limit: 4
+    t.integer  "campaign_id",                limit: 4
   end
-
-  add_index "sponsors", ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id", using: :btree
 
   create_table "survey_managers", force: :cascade do |t|
     t.integer "survey_id", limit: 4
@@ -1296,16 +1376,22 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "updated_at",                  null: false
   end
 
+  create_table "twitter_accounts", force: :cascade do |t|
+    t.integer  "group_id",   limit: 4
+    t.string   "name",       limit: 191, null: false
+    t.string   "account",    limit: 191, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",                 limit: 4
-    t.integer  "group_id",                limit: 4
+    t.integer  "user_id",             limit: 4
+    t.integer  "group_id",            limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",                       default: false
-    t.integer  "notifications_frequency", limit: 4,     default: 2
-    t.integer  "total_weekly_points",     limit: 4,     default: 0
-    t.text     "data",                    limit: 65535
-    t.integer  "notifications_date",      limit: 4,     default: 5
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "total_weekly_points", limit: 4,     default: 0
+    t.text     "data",                limit: 65535
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -1333,11 +1419,13 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
 
   create_table "user_rewards", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.integer  "reward_id",  limit: 4, null: false
-    t.integer  "points",     limit: 4, null: false
+    t.integer  "user_id",    limit: 4,     null: false
+    t.integer  "reward_id",  limit: 4,     null: false
+    t.integer  "points",     limit: 4,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "status",     limit: 4
+    t.text     "comment",    limit: 65535
   end
 
   add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
@@ -1364,6 +1452,7 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
     t.string   "email",                          limit: 191
+    t.string   "notifications_email",            limit: 191
     t.string   "encrypted_password",             limit: 191
     t.string   "reset_password_token",           limit: 191
     t.datetime "reset_password_sent_at"
@@ -1409,6 +1498,19 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.text     "mentorship_description",         limit: 65535
     t.integer  "groups_notifications_frequency", limit: 4,     default: 2
     t.integer  "groups_notifications_date",      limit: 4,     default: 5
+    t.boolean  "accepting_mentor_requests",                    default: true
+    t.boolean  "accepting_mentee_requests",                    default: true
+    t.datetime "last_group_notification_date"
+    t.boolean  "seen_onboarding",                              default: false
+    t.integer  "initiatives_count",              limit: 4
+    t.integer  "social_links_count",             limit: 4
+    t.integer  "own_messages_count",             limit: 4
+    t.integer  "own_news_links_count",           limit: 4
+    t.integer  "answer_comments_count",          limit: 4
+    t.integer  "message_comments_count",         limit: 4
+    t.integer  "news_link_comments_count",       limit: 4
+    t.integer  "mentors_count",                  limit: 4
+    t.integer  "mentees_count",                  limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1427,12 +1529,11 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_index "users_segments", ["user_id"], name: "index_users_segments_on_user_id", using: :btree
 
   create_table "views", force: :cascade do |t|
-    t.integer  "user_id",           limit: 4,             null: false
+    t.integer  "user_id",           limit: 4, null: false
     t.integer  "news_feed_link_id", limit: 4
     t.integer  "enterprise_id",     limit: 4
-    t.integer  "view_count",        limit: 4, default: 0, null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
@@ -1446,6 +1547,8 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "annual_budgets", "enterprises"
+  add_foreign_key "annual_budgets", "groups"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
@@ -1454,15 +1557,37 @@ ActiveRecord::Schema.define(version: 20181015134320) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentoring_session_comments", "mentoring_sessions"
+  add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
-  add_foreign_key "segmentations", "segments", column: "child_id"
+  add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
+  add_foreign_key "shared_metrics_dashboards", "users"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+
+  create_view "duplicate_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
+  SQL
+  create_view "unique_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) = 1))
+  SQL
+  create_view "page_visitation_by_names", sql_definition: <<-SQL
+      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+  SQL
+  create_view "page_visitations", sql_definition: <<-SQL
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
+  SQL
+  create_view "total_page_visitation_by_names", sql_definition: <<-SQL
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+  SQL
+  create_view "total_page_visitations", sql_definition: <<-SQL
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
 end

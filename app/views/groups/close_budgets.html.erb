@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <% if current_user.enterprise.groups.count == 0 %>
+          <% if current_user.enterprise.groups.size == 0 %>
             There are no groups yet. Start by <%= link_to 'creating', new_group_path %> one.
           <% end %>
 
@@ -47,7 +47,14 @@
               <td>
                 <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %> -
                 <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(group), method: 'post'%> -
-                <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>
+                <% if group.initiatives.any? { |initiative| initiative.unfinished_expenses? } %>
+                  <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post', data: { confirm: "Before the annual budget can be Reset, please ensure that you have done the following::
+                    1. close all expenses
+                    2. CSV export budget info for #{group.name}. 
+                    Once Reset, all budget-related info will be deleted." } %>
+                  <% else %>
+                    <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>  
+                  <% end %>  
               </td>
             </tr>
 
@@ -63,7 +70,14 @@
                 <td>
                   <%= link_to 'Edit', edit_annual_budget_group_budgets_path(child) %> -
                   <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(child), method: 'post' %> -
-                  <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post' %>
+                  <% if group.initiatives.any? { |initiative| initiative.unfinished_expenses? } %>
+                    <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post', data: { confirm: "Before the annual budget can be Reset, please ensure that you have done the following::
+                    1. close all expenses
+                    2. CSV export budget info for #{child.name}. 
+                    Once Reset, all budget-related info will be deleted."  } %>
+                  <% else %>
+                    <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>  
+                  <% end %>  
                 </td>
               </tr>
             <% end %>

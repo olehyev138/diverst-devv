@@ -1,0 +1,14 @@
+<div class="content__header">
+  <h1>Archived Resources(<span id="resource_count"><%= @resources.size %></span>)</h1>
+  <% unless @resources.size == 0 %>
+  <div class="flex-row flex-row--middle"  id="restore_buttons">
+      <div class="flex-row__cell">
+        <%= link_to "Restore All", restore_all_enterprise_resources_path(current_user.enterprise), remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
+      </div>	
+      <div class="flex-row__cell">
+	    <%= link_to "Delete All", delete_all_enterprise_resources_path(current_user.enterprise), remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--danger' %>
+      </div>
+    </div>
+	<% end %>    
+</div>
+<%= render 'archived_resources', resources: @resources, container_path: @container_path %>

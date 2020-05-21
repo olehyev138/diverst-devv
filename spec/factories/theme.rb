@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :theme do
     primary_color { generate(:hex_color) }
     secondary_color { generate(:hex_color) }

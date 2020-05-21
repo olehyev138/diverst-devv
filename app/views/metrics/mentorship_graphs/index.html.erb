@@ -1,0 +1,273 @@
+<div class="content__header">
+  <h1>Mentorship</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Mentorship Sessions (Past Month)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:mentoring_sessions] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Active Mentorships</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:active_mentorships] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Mentors</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:total_mentors] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Mentees</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:total_mentees] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Number of mentors per <%= c_t(:erg) %></h4>
+          <div
+            id="user_mentorship_and_menteeship"
+            class="graph"
+            data-url="<%= mentors_per_group_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>Top Mentors</h4>
+          <div id="top_mentors" class="graph" data-url="<%= top_mentors_metrics_mentorships_path(number: 10, type: 'mentor') %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>Top Mentees</h4>
+          <div id="top_mentees" class="graph" data-url="<%= top_mentors_metrics_mentorships_path(number: 10, type: 'mentee') %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-12 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <div class="card__action">
+            <a href="#" id="users_mentors_csv_1" data-url="<%= users_mentorship_metrics_mentorships_path(format: :csv, version: 1) %>">Export CSV Version 1</a>
+            <br>
+            <a href="#" id="users_mentors_csv_2" data-url="<%= users_mentorship_metrics_mentorships_path(format: :csv, version: 2) %>">Export CSV Version 2</a>
+          </div>
+          <h2>
+            Mentor/Mentee Count By User
+          </h2>
+          <%= render 'users_mentor_count', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'has_either') %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h2>
+            Users With Mentors but no Mentee
+          </h2>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'no_mentee'), id: 'without_mentee_list' %>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h2>
+            Users With Mentees but no Mentors
+          </h2>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'no_mentor'), id: 'without_mentor_list' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-12 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h2>
+            Users Without Mentees or Mentors
+          </h2>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'has_neither'), id: 'has_neither_list' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>User mentorship interest per <%= c_t(:erg) %></h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", user_mentorship_interest_per_group_metrics_mentorships_path(format: :csv) %>
+          </div>
+          <div
+            id="user_mentorship_interest"
+            class="graph"
+            data-url="<%= user_mentorship_interest_per_group_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Mentoring Sessions per creator</h4>
+          <%= render 'components/range_selector' %>
+          <div class="card__action">
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= mentoring_sessions_per_creator_metrics_mentorships_path %>">Export CSV</a>
+          </div>
+          <div id="mentoring_sessions_per_creator" class="graph" data-url="<%= mentoring_sessions_per_creator_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Mentoring Interests</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", mentoring_interests_metrics_mentorships_path(format: :csv), class: "hidden-xs" %>
+          </div>
+          <div id="mentoring_interests" class="graph" data-url="<%= mentoring_interests_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).on('ready page:load', function () {
+        $('#users_mentorship_count').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#users_mentorship_count').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [5,]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#without_mentee_list').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#without_mentee_list').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [2]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#without_mentor_list').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#without_mentor_list').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [2]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#has_neither_list').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#has_neither_list').data('source')
+            },
+            "pagingType": "full_numbers"
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:change', function () {
+        $('#users_mentors_csv_1').click(function () {
+            $.get($('#users_mentors_csv_1').data('url'), function (data) {
+                Utility.displayFlash(data);
+            }, "JSON");
+        });
+    });
+
+    $(document).on('ready page:change', function () {
+        $('#users_mentors_csv_2').click(function () {
+            $.get($('#users_mentors_csv_2').data('url'), function (data) {
+                Utility.displayFlash(data);
+            }, "JSON");
+        });
+    });
+</script>

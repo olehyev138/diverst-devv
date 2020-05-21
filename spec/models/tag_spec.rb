@@ -6,6 +6,6 @@ RSpec.describe Tag, type: :model do
 
     it { expect(tag).to belong_to(:resource) }
 
-    it { expect(tag).to validate_presence_of(:name)}
+    it { expect(tag).to validate_presence_of(:name) }
   end
 end

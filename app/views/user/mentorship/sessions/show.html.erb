@@ -4,32 +4,46 @@
     <div class="col-xs-8">
       <div class="card">
         <div class="card__section card__section--border">
-            <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session)  %>&nbsp;/
+            <% user_session = @mentoring_session.mentorship_sessions.find_by(user_id: current_user.id) %>
+            <% if user_session.present? %>
+              <%= link_to "Accept", accept_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), method: :post, class: "btn btn--primary" if MentorshipSessionPolicy.new(current_user, user_session).accept? %>
+              <%= link_to "Decline", decline_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), method: :post, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if MentorshipSessionPolicy.new(current_user, user_session).decline? %>
+            <% end %>
+            <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session) if MentoringSessionPolicy.new(current_user, @mentoring_session).update? %>&nbsp;/
             <%= link_to "Add to Google Calendar", GoogleCalendar.build_mentor_link(@mentoring_session), target: :_blank %>&nbsp;/
             <%= link_to "Export to Outlook", export_ics_mentoring_session_path(@mentoring_session) %>&nbsp;/
-            <%= link_to "Delete", mentoring_session_path(@mentoring_session), method: :delete, class: "error", data: { confirm: "Are you sure?"}  %>
+            <%= link_to "Delete", mentoring_session_path(@mentoring_session), method: :delete, class: "error", data: { confirm: "Are you sure?"} if MentoringSessionPolicy.new(current_user, @mentoring_session).destroy? %>
         </div>
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>
-            <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
-            <% # check if the start time of the session is within 5 minutes %>
-            <% if @mentoring_session.can_start(current_user.id) %>
-                <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
-             <% end %>
-             
-            <% # check if users can join the link %>
-            <% if @mentoring_session.access_token %>
-                <%= link_to "JOIN SESSION", join_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
-             <% end %>
+            <p><%= @mentoring_session.start.strftime("%m/%d/%Y %I:%M %p") %></p>
+            <%# check if the start time of the session is within 5 minutes and that they can start it %>
+            <% if @mentoring_session.can_start(current_user.id) && MentoringSessionPolicy.new(current_user, @mentoring_session).start? %>
+              <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "btn btn--primary", role: "button", 'aria-label': "Start" %>
+            <% end %>
+
+            <%# check if users can join the link %>
+            <% if @mentoring_session.access_token && MentoringSessionPolicy.new(current_user, @mentoring_session).join? %>
+              <%= link_to "JOIN SESSION", join_mentoring_session_path(@mentoring_session), target: "_blank", class: "btn btn--primary", role: "button", 'aria-label': "Start" %>
+            <% end %>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Ends</strong></label>
-            <p><%= @mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></p>
+            <p><%= @mentoring_session.end.strftime("%m/%d/%Y %I:%M %p") %></p>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Attending</strong></label>
             <% @mentoring_session.users.each do |user| %>
-                <p><%= user.first_name %> <%= user.last_name %> - <%= user.email %></p>
+                <% user_session = @mentoring_session.mentorship_sessions.find_by(user_id: user.id) %>
+                <p><%= user.first_name %> <%= user.last_name %> - <%= user.email %>
+                   <% if user_session.present? %>
+                     <% if user_session.creator? %>
+                      - Creator
+                     <% else %>
+                      <%= "- " + user_session.status.titleize %>
+                     <% end %>
+                   <% end %>
+                </p>
             <% end %>
          </div>
         <div class="card__section card__section--border">
@@ -69,6 +83,58 @@
             <% end %>
          </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-8 pull-right">
+    <div class="content__header">
+      <h2>Comments</h2>
+    </div>
+
+    <div class="content__main">
+      <div class="card">
+        <% if @comments.empty? %>
+          <div class="card__section">
+            <p>No comments have been left yet.</p>
+          </div>
+        <% else %>
+          <% @comments.each do |comment| %>
+            <div class="card__section card__section--border">
+              <div class="row">
+                <div class="col sm-1">
+                  <% if comment.user.present? %>
+                    <%= image_tag comment.user.avatar.expiring_url(3600, :thumb), width: '100%' %>
+                  <% else %>
+                    <%= image_tag '/assets/missing_user.png', width: '100%' %>
+                  <% end %>
+                </div>
+                <div class="col sm-11">
+                  <div class="flex-row flex-row--middle">
+                    <div class="flex-row__cell flex-row__cell--grow">
+                      <h4><%= comment.user.name_with_status %> said:</h4>
+                      <p>
+                        <%= comment.content %>
+                        <br>
+                        <small class="muted">
+                          <%= time_ago_in_words comment.created_at %> ago
+                        </small>
+                      </p>
+                    </div>
+                    <div class="flex-row__cell link-group">
+                      <%= link_to "Edit", edit_mentoring_session_mentoring_session_comment_path(:mentoring_session_id => @mentoring_session.id, :id => comment.id), method: :get, class: "btn btn--secondary" if MentoringSessionCommentPolicy.new(current_user, comment).update? %>
+                      <%= link_to "Delete", mentoring_session_mentoring_session_comment_path(:mentoring_session_id => @mentoring_session.id, :id => comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if MentoringSessionCommentPolicy.new(current_user, comment).destroy? %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <%= render "user/mentorship/sessions/comments_form" if MentoringSessionPolicy.new(current_user, @mentoring_session).create_comment? %>
     </div>
   </div>
 </div>

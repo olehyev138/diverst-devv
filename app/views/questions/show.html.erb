@@ -13,7 +13,7 @@
       <div class="card__section card__section--border">
         <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
         <p><%= @question.conclusion %></p>
-        <% if policy(@question.campaign).edit? %>
+        <% if CampaignPolicy.new(current_user, @question.campaign).edit? %>
           <%= simple_form_for @question, url: reopen_question_path(@question) do |f| %>
             <div class="flex-row">
               <div class="flex-row__cell">
@@ -35,7 +35,7 @@
       <p><%= @question.description %></p>
       <div class="flex-row flex-row--middle">
         <small class="flex-row__cell">Submitted <%= time_ago_in_words(@question.created_at) %> ago</small>
-        <small class="flex-row__cell highlight"><%= pluralize(@answers.count, 'answer') %> </small>
+        <small class="flex-row__cell highlight"><%= pluralize(@answers.size, 'answer') %> </small>
       </div>
     </div>
 

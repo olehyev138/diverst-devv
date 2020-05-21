@@ -6,7 +6,7 @@
   <div class="content__header" style="margin-bottom: 0px;">
     <h2>Default fields</h2>
   </div>
-  <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
+  <%= simple_form_for @enterprise, :url => update_mapping_enterprise_path(@enterprise) do |f| %>
     For SSO logins, specify which attributes should be mapped to User <strong>First Name</strong> and <strong>Last Name</strong>
     <div class="card">
       <div class="card__section row">
@@ -27,7 +27,7 @@
 </div>
 <div class="row">
   <div class="col sm-12">
-    <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
+    <%= simple_form_for @enterprise, :url => update_fields_enterprise_path(@enterprise) do |f| %>
       <%= render "shared/fields/creation/custom_fields", f: f %>
       <%= f.button :submit, value: "Save user fields" %>
     <% end %>

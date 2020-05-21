@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Posts</h1>
+  <h1>Posts(<span id="posts_count"><%= @count %></span>)</h1>
 </div>
 
 <div class="content__main">
@@ -10,19 +10,19 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if news.news_link %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } unless news.link.segments.count > 0 and news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
-        <% elsif news.group_message %>
-          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } unless news.link.segments.count > 0 and news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
-        <% elsif news.social_link %>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } unless news.link.segments.count > 0 and news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
+        <% if news.news_link && NewsLinkPolicy.new(current_user, nil).index? %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
+        <% elsif news.group_message && UserMessagePolicy.new(current_user, nil).index? %>
+          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
+        <% elsif news.social_link && SocialLinkPolicy.new(current_user, nil).index? %>
+          <%= render partial: "groups/shared/social_links", locals: {small: false, social_link: SocialLink.includes(:group).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
         <% end %>
       <% end %>
     <% end %>
   </div>
 </div>
 
-<% unless @posts.count === @count%>
+<% unless @posts.size === @count%>
   <div class="flex-row__cell text-center">
     <%= link_to "Load More", user_news_links_path(:page => @page + 1), class: "btn btn--primary" %>
   </div>

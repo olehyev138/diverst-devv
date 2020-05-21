@@ -2,7 +2,7 @@
   <h1>Events</h1>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if (policy(@group).erg_leader_permissions? || current_user.policy_group.initiatives_create?) %>
+      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if GroupEventsPolicy.new(current_user, [@group]).create? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Calendar view",   calendar_view_group_events_path(@group), class: "btn btn--secondary" %>
@@ -11,7 +11,7 @@
 </div>
 
 <div class="content__main">
-<% if policy(@group).view_upcoming_and_ongoing_events? %>
+<% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_and_ongoing_events? %>
   <% unless @ongoing_events.empty? %>
     <h3>Ongoing events</h3>
     <div class="card">

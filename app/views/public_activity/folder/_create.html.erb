@@ -3,10 +3,10 @@
   created
   <% if activity.trackable %>
     <% resource = activity.trackable %>
-    <% if resource.enterprise %>
+    <% if resource.enterprise.present? %>
       enterprise folder
       <%= link_to resource.name, enterprise_folders_path(enterprise_id: resource.enterprise.id) %>
-    <% else %>
+    <% elsif resource.group.present? %>
       group folder
       <%= link_to resource.name, group_folders_path(group_id: resource.group.id) %>
     <% end %>

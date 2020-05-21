@@ -1,0 +1,35 @@
+<div class="content__header">
+  <h1> Archived Posts(<span id="archived_posts_count"><%= @posts.size %></span>)</h1>
+  <% unless @posts.empty? %>
+    <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
+    <div class="flex-row flex-row--middle"  id="archive_buttons">
+      <div class="flex-row__cell">
+        <%= link_to "Restore All", restore_all_archived_posts_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
+      </div>
+      <div class="flex-row__cell">
+      <%= link_to "Delete All", delete_all_archived_posts_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--danger' %>
+      </div>
+    </div>
+    <% end %>
+  <% end %>
+</div>
+<br>
+<div class="content__main">
+  <div class="card">
+    <% if @posts.empty? %>
+      <div class="card__section" id="empty_archive">
+        <p>No Archived Posts.</p>
+      </div>
+    <% else %>
+      <% @posts.each do |news| %>
+        <% if news.news_link && NewsLinkPolicy.new(current_user, NewsLink).index? %>
+          <%= render "archived_news_link", news_link: NewsLink.find(news.link.id) %>
+        <% elsif news.group_message && NewsLinkPolicy.new(current_user, NewsLink).index? %>
+          <%= render "archived_group_message", message: GroupMessage.find(news.link.id) %>
+        <% elsif news.social_link &&NewsLinkPolicy.new(current_user, NewsLink).index? %>
+            <%= render "archived_social_link", social_link: SocialLink.find(news.link.id) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

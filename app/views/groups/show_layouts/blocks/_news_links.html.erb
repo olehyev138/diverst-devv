@@ -1,11 +1,11 @@
 <h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
-<%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.count < 1 %>
-<% if policy(@group).view_latest_news? %>
+<% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
+  <%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.size < 1 %>
   <% if @posts.empty? %>
     <p>No posts have been published yet.</p>
   <% else %>
     <% @posts.each do |news| %>
-      <%= render "shared/flippable/news_link", news: news %>
+      <%= render "groups/shared/flippable/news_link", news: news, small: true %>
     <% end %>
   <% end %>
 <% else %>

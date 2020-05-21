@@ -7,6 +7,7 @@ class Enterprises::EventsController < ApplicationController
   end
 
   private
+
   def set_enterprise
     @enterprise = Enterprise.find(params[:enterprise_id])
   end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::PasswordsController, type: :controller do
-  let(:user){ create(:user) }
+  let(:user) { create(:user) }
 
   before :each do
     @request.env['devise.mapping'] = Devise.mappings[:user]

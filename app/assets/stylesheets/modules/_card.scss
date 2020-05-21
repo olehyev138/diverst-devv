@@ -37,6 +37,14 @@
   & + &:not(.card__section--border) {
     padding-top: 0;
   }
+
+  &.pad-top {
+    padding-top: $spacing-medium !important;
+  }
+
+  &.no-pad-top {
+    padding-top: 0 !important;
+  }
 }
 
 .card__section--accordion {
@@ -103,6 +111,20 @@
   margin-right: $spacing-small;
   top: -2px;
   fill: $primary-color;
+}
+
+.card__yellow {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $diverst-yellow;
+}
+
+.card__black {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $diverst-black;
 }
 
 

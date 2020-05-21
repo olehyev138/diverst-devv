@@ -9,28 +9,7 @@
   </button>
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
-      <li>
-        <%= active_link_to "Overview", plan_overview_groups_path if current_user.policy_group.groups_budgets_index? %>
-      </li>
-      <% if @group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.present? %>
-        <% if policy(Initiative).index? %>
-          <li>
-            <%= active_link_to "Events", group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.first) %>
-          </li>
-        <% end %>
-        <% if current_user.policy_group.groups_manage? %>
-          <li>
-            <%= active_link_to "KPI", metrics_group_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first) %>
-          </li>
-          <li>
-            <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first) %>
-          </li>
-          <li>
-            <%= active_link_to "Updates", group_updates_path(@group ||  GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first) %>
-          </li>
-        <% end %>
-      <% end %>
-        <% if current_user.policy_group.annual_budget_manage? %>
+        <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
               <li>
           <%= active_link_to "Budgeting", close_budgets_groups_path %>
                 </li>
@@ -40,10 +19,10 @@
           <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
         </li>
       <% end %>
-      <% if policy(Campaign).index? %>
+      <% if CampaignPolicy.new(current_user, Campaign).index? %>
         <li><%= active_link_to "Innovate", campaigns_path %></li>
       <% end %>
-      <% if policy(Poll).index? %>
+      <% if PollPolicy.new(current_user, Poll).index? %>
         <li><%= active_link_to "Include", polls_path %></li>
       <% end %>
       <% if global_settings_path %>
@@ -53,14 +32,7 @@
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_budgets_index? %>
-  <% if @group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.present? %>
-    <%= active_link_to "Events", group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] if policy(Initiative).index?  %>
-    <%= active_link_to "KPI", metrics_group_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
-    <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
-    <%= active_link_to "Updates", group_updates_path(@group ||  GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
-  <% end %>
-  <% if current_user.policy_group.annual_budget_manage? %>
+  <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
     <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
 </div>

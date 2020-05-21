@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :group_category do
-    name "MyString"
+    name 'MyString'
   end
 end

@@ -1,3 +1,5 @@
-<% if notice.present? %><p class="notice"><%= notice %></p><% end %>
-<% if alert.present? %><p class="alert"><%= alert %></p><% end %>
-<% if flash["reward"].present? %><p class="reward"><%= flash["reward"] %></p><% end %>
+<div class="flash_container">
+  <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+  <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+  <% if flash["reward"].present? %><p class="reward"><%= flash["reward"] %></p><% end %>
+</div>

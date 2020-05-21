@@ -1,14 +1,4 @@
-
-
-<p>Welcome to Diverst!</p>
-
-<p>
-<% if @resource.enterprise.cdo_message.present? %>
-  <%= simple_format @resource.enterprise.cdo_message %>
-<% else %>
-  At <%= @resource.enterprise.name %>, we want to recognize and celebrate our diversity with our users. We believe this is a core strength that leads to greater alignment. Please share with us a little bit about yourself so we can help you make the important connections that make your work with us more fulfilling and allow us all to celebrate what makes us unique.
-<% end %>
-</p>
+<%= raw @mailer_text %>
 
 <p>*<% if @resource.enterprise.custom_text.privacy_statement.present? %>
 	  <%= @resource.enterprise.custom_text.privacy_statement %>.
@@ -21,5 +11,3 @@
   <%= render 'users/default_privacy_statement' %>
 <% end %>
 </p>
-
-<p><%= link_to "Set up my profile", accept_invitation_url(@resource, :invitation_token => @token) %></p>

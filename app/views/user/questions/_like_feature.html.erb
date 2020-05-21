@@ -4,6 +4,6 @@
     <img class="svg <%= is_answer_liked?(answer.id) ? "likeImgFill" : "likeImg" %>" width="32px" height="32px" src="<%= image_path('icons/like.svg') %>" />
   <% end %>
   <br />
-  <span class="likeCount" id="likeCount<%= answer.id %>" style="font-size: 0.8em;"><%= answer.likes.count %></span>
+  <span class="likeCount" id="likeCount<%= answer.id %>" style="font-size: 0.8em;"><%= answer.likes.size %></span>
 </div>
 <% end %>

@@ -12,4 +12,5 @@
   <%= render 'shared/fields/creation/date_field', f: f, label: label if f.object.type == 'DateField' %>
 
   <%= f.hidden_field :type %>
+  <%= f.hidden_field :show_on_vcard, value: 1 %>
 </div>

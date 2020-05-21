@@ -1,4 +1,9 @@
-<div class="card__section card__section--border">
+<div class="card__section card__section--border" id="restored_message_<%= message.id %>">
+  <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && message.news_feed_link.approved? %>
+    <%= link_to archive_group_group_message_path(message.group, message), method: :patch, remote: true do %>
+      <%= inline_svg('icons/archive.svg', class: "icon card__icon", title: 'Archive') %>
+    <% end %>
+  <% end %>
   <div class="row">
     <div class="col-xs-2">
       <% if message.owner.present? %>
@@ -17,6 +22,15 @@
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
+            <p>
+              <% unless message.news_tags.size == 0 %>
+                <strong>Tags: </strong>
+                <% message.news_tags.limit(5).each do |tag| %>
+                  <%= link_to "##{tag.name}", group_posts_path(message.group, search: tag.name) %>
+                <% end %>
+                <%= '...' if message.news_tags.size > 5 %>
+              <% end %>
+            </p>
             <div class="row">
               <div class="col commentsLink">
                 <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
@@ -33,16 +47,14 @@
   <div class="row">
     <div class="col-xs-8">
       <div class="hidden-xs pull-right">
-        <% if policy(message).destroy? %>
-          <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
-          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
-          <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
-        <% end %>
+        <%= link_to "Approve", approve_group_posts_path(:group_id => message.group_id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if GroupPostsPolicy.new(current_user, [message.group]).update? && !message.news_feed_link.approved? %>
+        <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if GroupMessagePolicy.new(current_user, [message.group, message]).edit? %>
+        <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupMessagePolicy.new(current_user, [message.group, message]).destroy? %>
       </div>
       <div class="btn-group visible-xs pull-right group-capybara">
-          <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn-primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
-          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn-secondary" if policy(message).update? %>
-          <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => message.group_id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn-primary" if GroupPostsPolicy.new(current_user, [message.group]).update? && !message.news_feed_link.approved? %>
+          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn-secondary" if GroupMessagePolicy.new(current_user, [message.group, message]).edit? %>
+          <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } if GroupMessagePolicy.new(current_user, [message.group, message]).destroy? %>
       </div>
     </div>
   </div>

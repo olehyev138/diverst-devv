@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :segment_rule do
     segment
     field

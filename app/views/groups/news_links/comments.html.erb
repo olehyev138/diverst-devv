@@ -25,13 +25,27 @@
             </div>
           </div>
         </div>
+            <div class="col">
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: @news_link.news_feed_link} %>
+            </div>
       </div>
+      <% if @tags.present? %>
+        <row>
+          <div class="col">
+            <p>
+              <% @tags.each do |tag| %>
+                <%= link_to "##{tag.name}", group_posts_path(@group, search: tag.name) %>
+              <% end %>
+            </p>
+          </div>
+        </row>
+      <% end %>
     </div>
   </div>
 </div>
 
 <div class="content__header">
-  <h2><%= pluralize(@comments.count, 'Comment') %></h2>
+  <h2><%= pluralize(@comments.size, 'Comment') %></h2>
 </div>
 
 <div class="content__main">
@@ -43,7 +57,7 @@
     <% else %>
       <% @comments.each do |comment| %>
         <%# only show comment if its been approved OR pending comments are not enabled OR if user is an erg leader %>
-        <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (policy(@news_link.group).erg_leader_permissions?) %>
+        <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (GroupPostsPolicy.new(current_user, [@group, @news_link]).update?) %>
           <div class="card__section card__section--border">
           <div class="row">
             <div class="col sm-1">
@@ -66,7 +80,7 @@
                   </p>
                 </div>
                 <div class="flex-row__cell link-group">
-                  <%= link_to "Approve", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id, news_link_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and policy(@news_link.group).erg_leader_permissions? %>
+                  <%= link_to "Approve", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id, news_link_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and GroupPostsPolicy.new(current_user, [@group, @message]).update? %>
                   <%= link_to "Edit", edit_group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :get, class: "btn btn--secondary" if current_user === comment.author %>
                   <%= link_to "Delete", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if current_user === comment.author %>
                 </div>

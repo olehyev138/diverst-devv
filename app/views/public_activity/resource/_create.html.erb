@@ -3,18 +3,18 @@
   created
   <% if activity.trackable %>
     <% resource = activity.trackable %>
-    <% if resource.container.class.name == "Initiative" %>
+    <% if resource.container.class.name == "Initiative" && resource.container.group.present? %>
       event resource
       <%= link_to resource.title, group_initiative_resources_path(group_id: resource.container.group.id, initiative_id: resource.container.id)%>
-    <% elsif resource.container.enterprise %>
+    <% elsif resource.container.enterprise.present? %>
       enterprise resource
       <%= link_to resource.title, enterprise_folder_resources_path(enterprise_id: resource.container.enterprise.id, folder_id: resource.folder_id) %>
-    <% else %>
+    <% elsif resource.container.group.present? %>
       group resource
       <%= link_to resource.title, group_folder_resources_path(group_id: resource.container.group.id, folder_id: resource.folder_id) %>
     <% end %>
   <% else %>
-    which has since been removed
+    a resource which has since been removed
   <% end %>
   (<%= activity.created_at.to_s :datetime %>)
 </div>

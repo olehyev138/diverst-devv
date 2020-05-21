@@ -1,12 +1,12 @@
-class GroupCategory < ActiveRecord::Base
-  #NOTE: on user-interface, this entity is references as label
+class GroupCategory < BaseClass
+  # NOTE: on user-interface, this entity is references as label
   has_many :groups, dependent: :nullify
   belongs_to :group_category_type
   belongs_to :enterprise
-  
+
   validates :name, presence: true
 
   def to_s
-  	name
+    name
   end
 end

@@ -6,7 +6,14 @@
         <%= f.input :name,
               label: "Give this folder a name!".html_safe,
               input_html: { autofocus: true } %>
-        <%= f.association :parent, label: "Move to Folder", include_blank: true, input_html: { class: "select2" }, collection: @container.folders - [@folder] %>
+
+        <%= f.association :parent,
+            include_blank: true,
+            as: :select,
+            input_html: { class: 'select2-field', autofocus: true, data: { id: @folder.id } },
+            label: 'Move to Folder'
+        %>
+
         <%= f.hidden_field :password_protected, id: "password_protected_1", value: 0 %>
         <%= f.input :password_protected, name: "password_protected", id: "password_protected_2", label: "Password Protected?" %>
 
@@ -15,9 +22,9 @@
                 type: "password",
                 label: "Password",
                 input_html: {value: f.object.password} %>
-              
+
       <% if @folder.enterprise %>
-          <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2" } %>
+          <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2-field-groups" } %>
       <% end %>
 
       <%= f.button :submit %>
@@ -27,6 +34,18 @@
 
 </div>
 
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>
+
+<script>
+ $(document).on('ready page:load', function() {
+   $('.select2-field').select2(
+     async_select(
+       '<%= get_folders_url(@folder, limit: 10, format: :json) %>',
+       async_select_objects.FOLDERS,
+       { current_folder_id: $('.select2-field').data('id' ) }
+     ));
+ });
+</script>
 <script>
 
   $(document).ready(function(){
@@ -44,5 +63,4 @@
       }
     });
   }); //endof document.ready
-
 </script>

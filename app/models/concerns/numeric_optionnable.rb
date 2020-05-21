@@ -62,7 +62,7 @@ module NumericOptionnable
 
     # Filter the query by segments if there are any specified
     terms = []
-    if !segments.nil? && !segments.empty?
+    if segments.present?
       terms << {
         terms: {
           'combined_info.segments' => segments.ids
@@ -70,7 +70,7 @@ module NumericOptionnable
       }
     end
 
-    if !groups.nil? && !groups.empty?
+    if groups.present?
       terms << {
         terms: {
           'combined_info.groups' => groups.ids
@@ -78,8 +78,8 @@ module NumericOptionnable
       }
     end
 
-    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
-    
+    search_hash['query'] = { filtered: { filter: { bool: { should: terms } } } }
+
     # Execute the elasticsearch query
     enterprise.search_users(search_hash)
   end
@@ -94,7 +94,7 @@ module NumericOptionnable
 
     ranges = data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
-    return {
+    {
       series: series,
       categories: ranges,
       xAxisTitle: title

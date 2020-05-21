@@ -20,7 +20,7 @@
                   include_blank: true,
                   selected: @poll.initiative.try(:id) || params[:initiative_id],
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>event</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe,
+                  label: "Event Targeted".html_safe,
                   disabled: disabled_input?
             %>
             <%= f.input :initiative_id,
@@ -31,13 +31,13 @@
           <div class="col sm-12 poll_group_segment_box <%= poll_others_visibility_class(@poll, params) %>">
             <%= f.association :groups,
                   collection: @poll.enterprise.groups,
-                  input_html: { class: "select2" },
+                  input_html: { class: "select2-field-groups" },
                   label: "Choose the <strong>#{ c_t(:erg).pluralize }</strong> you want to target".html_safe
             %>
 
             <%= f.association :segments,
                   collection: @poll.enterprise.segments,
-                  input_html: { class: "select2" },
+                  input_html: { class: "select2-field-segments" },
                   label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe
             %>
           </div>
@@ -67,3 +67,5 @@
     <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" if f.object.can_be_saved_as_draft? %>
   <% end %>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %> 

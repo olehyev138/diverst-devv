@@ -1,0 +1,62 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="resources-table">
+        <thead>
+          <th></th>
+          <th>Title</th>
+          <th>URL</th>
+          <th class="hidden-xs">Creation date</th>
+          <th class="hidden-xs">Tags</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <% resources.each do |resource| %>
+            <tr id="archived_enterprise_resource_<%= resource.id %>">
+              <% if resource.url.nil? || resource.url.empty? %>
+                <td class="icon-column">
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                </td>
+                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
+                <td>N/A</td>
+              <% else %>
+                <td class="icon-column">
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                </td>
+                <td><%= link_to resource.title, resource.url, target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
+                <td><%= link_to 'Link', resource.url, target: '_blank' %></td>
+              <% end %>
+              <td class="hidden-xs"><%= resource.created_at.to_s :reversed_slashes %></td>
+              <td class="hidden-xs"><%= resource.tags.map(&:name).join(", ") %></td>
+              <td>
+                <% if resource.folder %>
+                  <% if resource.folder.enterprise.present? %>
+                    <%= link_to "Delete", enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
+                    <%= link_to "Restore", restore_enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).index? %>
+                  <% elsif resource.folder.present? %>
+                    <%= link_to "Delete", group_folder_resource_path(resource.folder.group, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if GroupFolderPolicy.new(current_user, []).destroy? %> -
+                    <%= link_to "Restore", restore_group_folder_resource_path(resource.folder.group, resource.folder, resource), method: :patch, remote: true if GroupFolderPolicy.new(current_user, []).destroy? %>
+                  <% end %>
+                <% elsif resource.initiative %>
+                    <%= link_to "Delete", remove_initiative_resource_path(resource.initiative, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
+                    <%= link_to "Restore", restore_initiative_resource_path(resource.initiative, resource), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).index? %>
+                <% end %>  
+               </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#resources-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2  , "desc"]]
+    }));
+  });
+</script>

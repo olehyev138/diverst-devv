@@ -1,26 +1,8 @@
-<div class="content__header">
-  <div class="flex-row flex-row--middle full-width">
-    <div class="flex-row__cell">
-      <div class="field__input-wrapper" style="width: 250px;">
-        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-        <select class="field__input field__input--right-add-on" id="js-group-select">
-          <% GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.each do |group| %>
-            <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
-          <% end %>
-        </select>
-      </div>
-    </div>
-    <div class="flex-row__cell flex-row__cell--grow">
-      <h1> / Planning <%= c_t(:structure) %></h1>
-    </div>
-  </div>
-</div>
-
 <div class="content__main">
 
   <div class="card">
     <div class="card__section">
-      <p>This section allows you to edit the structrure of this <%= c_t(:erg) %>'s plan. Add <%= c_t(:program).pluralize %> and events within each <%= c_t(:outcome) %> to plan your diversity approach.</p>
+      <p>This section allows you to edit the structure of this <%= c_t(:erg) %>'s plan. Add <%= c_t(:program).pluralize %> and events within each <%= c_t(:outcome) %> to plan your diversity approach.</p>
     </div>
   </div>
 
@@ -35,9 +17,3 @@
     </div>
   <% end %>
 </div>
-
-<script>
-  $('#js-group-select').change(function() {
-    location = "/groups/" + $(this).find(":selected").val() + '/outcomes';
-  });
-</script>

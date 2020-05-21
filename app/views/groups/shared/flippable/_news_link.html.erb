@@ -1,0 +1,52 @@
+<% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
+  <% news_link = NewsLink.find(news.news_link.id) %>
+  <div class="row block-section-news">
+    <div class="col-xs-4">
+      <% if news_link.photos.count > 0 %>
+        <%= render partial: "shared/carousel/template", locals: {news_link: news_link } %>
+      <% else %>
+        <%= news_link_picture(news_link) %>
+      <% end %>
+    </div>
+    <div class="col-xs-8">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+            <%= link_to news_link.title, group_posts_url(news_link.group, anchor: "news_link_#{news_link.id}"), 'data-trackable': news_link.news_feed_link.id, class: 'underline_text' %>
+            <br>
+          <small><%= sanitize news_link.description.truncate(90) %></small><br>
+          <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+        </div>
+      </div>
+    </div>
+    <%= render "groups/news_links/modal/form" %>
+  </div>
+<% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index?  %>
+  <div class="block block-section-news">
+    <% message = GroupMessage.includes(:owner, :group).find(news.group_message.id) %>
+    <div class="flex-row flex-row--middle">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <span class="highlight"><%= link_to message.subject, group_group_message_path(message.group, message), class: "underline_text" %></span><br>
+        <small><%= sanitize message.content.truncate(90) %></small><br>
+        <small class="muted"><%= message.created_at.to_s :slashes %>
+          <% if message.owner.present? %>
+            by <%= message.owner.name_with_status %>
+          <% end %>
+        </small>
+      </div>
+      <div class="flex-row__cell">
+        <span class="icon icon--chevron-right"></span>
+      </div>
+    </div>
+  </div>
+<% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
+
+  <% if news.social_link.url.include?("facebook") %>
+      <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.social_link.url_safe %>&width=330&show_text=true&height=290&appId"
+              width="330"
+              height="<%= news.social_link.url_safe.include?('video') ? '320' : '500' %>"
+              style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">
+      </iframe>
+  <% else %>
+      <%= raw small ? news.social_link.small_embed_code : news.social_link.embed_code %>
+  <% end %>
+<% end %>

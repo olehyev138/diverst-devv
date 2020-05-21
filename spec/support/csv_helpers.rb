@@ -6,7 +6,7 @@ module CsvHelpers
         csv << row
       end
     end
-    File.open(Rails.root + "tmp/users.csv", "w"){ |file| file.write(data) }
-    File.open(Rails.root + "tmp/users.csv")
+    File.open(Rails.root + 'tmp/users.csv', 'w') { |file| file.write(data) }
+    File.open(Rails.root + 'tmp/users.csv')
   end
 end

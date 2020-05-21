@@ -1,12 +1,10 @@
 class Groups::FoldersController < ApplicationController
   include Folders
 
-  before_action :authenticate_user!
-
   layout 'erg'
 
   def index
-    if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
+    if GroupPolicy.new(current_user, @group).manage? || GroupPolicy.new(current_user, @group).is_an_accepted_member?
       super
     else
       @folders = []
@@ -17,11 +15,7 @@ class Groups::FoldersController < ApplicationController
   protected
 
   def set_container
-    if current_user
-      @group = @container = current_user.enterprise.groups.find(params[:group_id])
-    else
-      user_not_authorized
-    end
+    @group = @container = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_container_path

@@ -9,15 +9,15 @@
 server '18.215.115.79', user: 'ubuntu', roles: %w(app web)
 server '54.88.218.161', user: 'ubuntu', roles: %w(app web)
 server '18.215.221.60', user: 'ubuntu', roles: %w(app web)
-server '54.89.153.46', user: 'ubuntu', roles: %w(background clockwork db)
+server '54.89.153.46', user: 'ubuntu', roles: %w(app background clockwork db)
 
 set :deploy_to, '/var/www/diverst'
 
 set :clockwork_role, :clockwork
 set :sidekiq_role, :background
 
-#52.39.50.54 new one
-#52.90.48.218 sandbox3
+# 52.39.50.54 new one
+# 52.90.48.218 sandbox3
 
 # role-based syntax
 # ==================
@@ -42,7 +42,7 @@ set :sidekiq_role, :background
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "kp"
+set :rollbar_env, 'kp'
 
 
 # Custom SSH Options
@@ -53,11 +53,11 @@ set :rollbar_env, "kp"
 #
 # Global options
 # --------------
- set :ssh_options, {
-#    keys: %w(/home/rlisowski/.ssh/id_rsa),
-   forward_agent: true,
-#    auth_methods: %w(password)
- }
+set :ssh_options, {
+  #    keys: %w(/home/rlisowski/.ssh/id_rsa),
+  forward_agent: true,
+  #    auth_methods: %w(password)
+}
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------

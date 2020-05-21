@@ -1,13 +1,12 @@
 class LogCsv < Julia::Builder
-  
   column 'user_id', :owner_id
-  
+
   column :first_name do |activity|
-    activity.owner.present? ? activity.owner.first_name : ""
+    activity.owner.present? ? activity.owner.first_name : ''
   end
-  
+
   column :last_name do |activity|
-    activity.owner.present? ? activity.owner.last_name : ""
+    activity.owner.present? ? activity.owner.last_name : ''
   end
 
   column :trackable_id

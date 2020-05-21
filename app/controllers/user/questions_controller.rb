@@ -2,11 +2,13 @@ class User::QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
+  after_action :visit_page, only: [:index, :show]
 
   layout 'user'
 
   def index
     @questions = @campaign.questions.order(created_at: :desc)
+    @sponsors = @campaign.sponsors
   end
 
   def show
@@ -20,10 +22,27 @@ class User::QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:user_campaign_id]) : user_not_authorized
+    @campaign = current_user.enterprise.campaigns.find(params[:user_campaign_id])
   end
 
   def set_question
-    current_user ? @question = current_user.enterprise.questions.find(params[:id]) : user_not_authorized
+    @question = current_user.enterprise.questions.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User\'s Campaigns Questions'
+    when 'show'
+      'User\'s Campaigns Answer'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

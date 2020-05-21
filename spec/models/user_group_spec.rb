@@ -1,56 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe UserGroup do
-  describe "when validating" do
-    let(:user_group){ build_stubbed(:user_group) }
+  describe 'when validating' do
+    let(:user_group) { build_stubbed(:user_group) }
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
-    
-    it "validates 1 user per group" do
+
+    it 'validates 1 user per group' do
       group_member = create(:user)
       group = create(:group)
-      group_member_1 = create(:user_group, :user => group_member, :group => group)
-      group_member_2 = build(:user_group, :user => group_member, :group => group)
-      
+      group_member_1 = create(:user_group, user: group_member, group: group)
+      group_member_2 = build(:user_group, user: group_member, group: group)
+
       expect(group_member.valid?).to be(true)
       expect(group.valid?).to be(true)
       expect(group_member_1.valid?).to be(true)
-      
+
       # ensure the user cannot be added as a member to the same group twice
       expect(group_member_2.valid?).to be(false)
-      expect(group_member_2.errors.full_messages.first).to eq("User is already a member of this group")
+      expect(group_member_2.errors.full_messages.first).to eq('User is already a member of this group')
     end
   end
 
-  describe "when scoping" do
-    let(:user_group){ build_stubbed(:user_group) }
+  describe 'when scoping' do
+    let(:user_group) { build_stubbed(:user_group) }
 
-    context "top_participants" do
-      let(:first){ create(:user_group, total_weekly_points: 30) }
-      let(:third){ create(:user_group, total_weekly_points: 10) }
-      let(:second){ create(:user_group, total_weekly_points: 20) }
+    context 'top_participants' do
+      let(:first) { create(:user_group, total_weekly_points: 30) }
+      let(:third) { create(:user_group, total_weekly_points: 10) }
+      let(:second) { create(:user_group, total_weekly_points: 20) }
 
       it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
-      it { expect(user_group).to define_enum_for(:notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
-      it { expect(user_group).to define_enum_for(:notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
     end
 
-    context "notifications_status" do
-      let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
-      let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-
-      it "returns user_group with specific notifications_frequency" do
-        expect(UserGroup.notifications_status("hourly")).to eq [hourly]
-      end
-    end
-
-    describe ".accepted_users" do
-      let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
-      let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-
+    describe '.accepted_users' do
       let(:enterprise) { create :enterprise }
       let(:user1) { create :user, enterprise: enterprise }
       let(:user2) { create :user, enterprise: enterprise }
@@ -77,17 +61,13 @@ RSpec.describe UserGroup do
           expect(group.user_groups.accepted_users).to include user_group2
         end
       end
-
-      it "returns user_group with specific notifications_frequency" do
-        expect(UserGroup.notifications_status("hourly")).to eq [hourly]
-      end
     end
   end
 
-  describe 'when describing callbacks' do
-    let!(:user){ create(:user) }
+  describe 'when describing callbacks', skip: true do
+    let!(:user) { create(:user) }
 
-    it "should reindex user on elasticsearch after create" do
+    it 'should reindex user on elasticsearch after create' do
       user_group = build(:user_group, user:  user)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
@@ -100,8 +80,8 @@ RSpec.describe UserGroup do
       end
     end
 
-    it "should reindex user on elasticsearch after destroy" do
-      user_group = create(:user_group, user:  user)
+    it 'should reindex user on elasticsearch after destroy' do
+      user_group = create(:user_group, user: user)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
           model_name: 'User',
@@ -114,180 +94,94 @@ RSpec.describe UserGroup do
     end
   end
 
-  describe "#notifications_date" do
-    it "returns sunday" do
-      user_group = create(:user_group, :notifications_date => 0)
-      expect(user_group.notifications_date).to eq("sunday")
-    end
-    it "returns default monday" do
-      user_group = create(:user_group, :notifications_date => 1)
-      expect(user_group.notifications_date).to eq("monday")
-    end
-    it "returns tuesday" do
-      user_group = create(:user_group, :notifications_date => 2)
-      expect(user_group.notifications_date).to eq("tuesday")
-    end
-    it "returns wednesday" do
-      user_group = create(:user_group, :notifications_date => 3)
-      expect(user_group.notifications_date).to eq("wednesday")
-    end
-    it "returns thursday" do
-      user_group = create(:user_group, :notifications_date => 4)
-      expect(user_group.notifications_date).to eq("thursday")
-    end
-    it "returns default friday" do
-      user_group = create(:user_group)
-      expect(user_group.notifications_date).to eq("friday")
-    end
-    it "returns saturday" do
-      user_group = create(:user_group, :notifications_date => 6)
-      expect(user_group.notifications_date).to eq("saturday")
+  describe '#string_for_field' do
+    it 'returns the string field' do
+      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale")
+      select_field.save!
+      user_group = create(:user_group, data: "{\"#{select_field.id}\":[\"Female\"]}")
+      expect(user_group.string_for_field(select_field)).to eq('Female')
     end
   end
 
-  describe "#string_for_field" do
-    it "returns the string field" do
-      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale")
-      select_field.save!
-      user_group = create(:user_group, :data => "{\"#{select_field.id}\":[\"Female\"]}")
-      expect(user_group.string_for_field(select_field)).to eq("Female")
-    end
-  end
-  
-  describe "#remove_leader_role" do
-    context "when user is a basic user and role is elevated to group leader" do
-      it "sets the basic users role to group_leader then back to basic user when removed as group member" do
+  describe '#remove_leader_role' do
+    context 'when user is a basic user and role is elevated to group leader' do
+      it 'does not set the basic users role to group_leader' do
         enterprise = create(:enterprise)
-        admin = create(:user, :user_role => enterprise.user_roles.where(:role_name => "admin").first, :enterprise => enterprise)
+        admin = create(:user, user_role: enterprise.user_roles.where(role_name: 'admin').first, enterprise: enterprise)
         enterprise = admin.enterprise
-        basic_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_name => "user").first)
-        group = create(:group, :enterprise => enterprise)
-        
-        expect(basic_user.user_role.role_name).to eq("user")
-        user_group = create(:user_group, :user => basic_user, :group => group)
-        create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => basic_user, :group => group)
-        
-        # expect the user role to change
-        expect(basic_user.user_role.role_name).to eq("group_leader")
-        
+        basic_user = create(:user, enterprise: enterprise, user_role: enterprise.user_roles.where(role_name: 'user').first)
+        group = create(:group, enterprise: enterprise)
+
+        expect(basic_user.user_role.role_name).to eq('user')
+        user_group = create(:user_group, user: basic_user, group: group)
+        create(:group_leader, user_role: enterprise.user_roles.where(role_name: 'group_leader').first, user: basic_user, group: group)
+
+        # expect the user role to not change
+        expect(basic_user.user_role.role_name).to eq('user')
+
         # remove the group member and check the role
         user_group.destroy
         basic_user.reload
-        
-        expect(basic_user.user_role.role_name).to eq("user")
-        expect(GroupLeader.where(:user_id => basic_user.id).count).to eq(0)
-      end
-    end
-    
-    context "when user has multiple group_leader roles but is removed as a group_leader with higher priority" do
-      it "sets the group_leader role to group_treasurer" do
-        enterprise = create(:enterprise)
-        enterprise.user_roles.create(:role_name => "group_treasurer", :role_type => "group", :priority => 2)
-        basic_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_name => "user").first)
-        group = create(:group, :enterprise => enterprise)
-        
-        
-        expect(basic_user.user_role.role_name).to eq("user")
-        create(:user_group, :group => group, :user => basic_user)
-        group_leader = create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => basic_user, :group => group)
-        
-        # expect the user role to change
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("group_leader")
-        
-        group_2 = create(:group, :enterprise => enterprise)
-        user_group = create(:user_group, :group => group_2, :user => basic_user)
-        create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first, :user => basic_user, :group => group_2)
-        
-        # expect the user role to NOT change
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("group_leader")
 
-        # remove the group_leader
-        group_leader.destroy!
-        
-        # expect the user role to change to group_treasurer
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("group_treasurer")
-        
-        # remove the group_treasurer group member role
-        user_group.destroy
-        
-        # expect the user role to change back to basic_user
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("user")
-      end
-    end
-    
-    context "when user has multiple group_leader roles and is elevated to an admin role" do
-      it "sets the group_leader role to admin" do
-        enterprise = create(:enterprise)
-        create(:user, :user_role => enterprise.user_roles.where(:role_name => "admin").first, :enterprise => enterprise)
-        enterprise.user_roles.create(:role_name => "group_treasurer", :role_type => "group", :priority => 2)
-        basic_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_name => "user").first)
-        group = create(:group, :enterprise => enterprise)
-        
-        expect(basic_user.user_role.role_name).to eq("user")
-        create(:user_group, :group => group, :user => basic_user)
-        group_leader = create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => basic_user, :group => group)
-        
-        # expect the user role to change
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("group_leader")
-        
-        group_2 = create(:group, :enterprise => enterprise)
-        user_group = create(:user_group, :group => group_2, :user => basic_user)
-        create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first, :user => basic_user, :group => group_2)
-        
-        # change the user's role to admin
-        basic_user.user_role = enterprise.user_roles.where(:role_name => "admin").first
-        basic_user.save!
-        group_leader.save!
-        
-        expect(basic_user.user_role.role_name).to eq("admin")
-        
-        # remove the group_leader
-        group_leader.destroy
-        
-        # expect the user role to NOT change
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("admin")
-        
-        # remove the group_treasurer group member role
-        user_group.destroy
-        
-        # expect the user role to NOT change
-        basic_user.reload
-        expect(basic_user.user_role.role_name).to eq("admin")
+        expect(basic_user.user_role.role_name).to eq('user')
+        expect(GroupLeader.where(user_id: basic_user.id).count).to eq(0)
       end
     end
   end
-  
-  describe "#update_mentor_fields" do
-    it "updates mentor fields to true" do
+
+  describe '#update_mentor_fields' do
+    it 'updates mentor fields to true' do
       user = create(:user)
-      group = create(:group, :default_mentor_group => true)
-      create(:user_group, :group => group, :user => user)
+      group = create(:group, default_mentor_group: true)
+      create(:user_group, group: group, user: user)
       user.reload
-      
+
       expect(user.mentor?).to be(true)
       expect(user.mentee?).to be(true)
     end
-    
-    it "updates mentor fields to true and then back to false" do
+
+    it 'updates mentor fields to true and then back to false' do
       user = create(:user)
-      group = create(:group, :default_mentor_group => true)
-      user_group = create(:user_group, :group => group, :user => user)
+      group = create(:group, default_mentor_group: true)
+      user_group = create(:user_group, group: group, user: user)
       user.reload
-      
+
       expect(user.mentor?).to be(true)
       expect(user.mentee?).to be(true)
-      
+
       user_group.destroy
       user.reload
-      
+
       expect(user.mentor?).to be(false)
       expect(user.mentee?).to be(false)
+    end
+  end
+
+  describe 'elasticsearch methods' do
+    context '#as_indexed_json' do
+      let!(:object) { create(:user_group) }
+
+      it 'serializes the correct fields with the correct data' do
+        hash = {
+          'user_id' => object.user_id,
+          'group_id' => object.group_id,
+          'created_at' => object.created_at.beginning_of_hour,
+          'group' => {
+            'enterprise_id' => object.group.enterprise_id,
+            'name' => object.group.name,
+            'parent_id' => object.group.parent_id
+          },
+          'user' => {
+            'created_at' => object.user.created_at.beginning_of_hour,
+            'enterprise_id' => object.user.enterprise_id,
+            'mentor' => object.user.mentor,
+            'mentee' => object.user.mentee,
+            'active' => object.user.active
+          },
+          'user_combined_info' => object.user_combined_info
+        }
+        expect(object.as_indexed_json).to eq(hash)
+      end
     end
   end
 end

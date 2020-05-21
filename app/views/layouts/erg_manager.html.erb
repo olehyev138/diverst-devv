@@ -10,29 +10,36 @@
     <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
-          <%= active_link_to "Metrics", metrics_dashboards_path if policy(MetricsDashboard).index? %>
+          <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if GroupPolicy.new(current_user, Group).create? %>
         </li>
         <li>
-          <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if policy(Group).manage? %>
+          <%= active_link_to c_t(:segment).pluralize, segments_path if SegmentPolicy.new(current_user, Segment).index? %>
         </li>
         <li>
-          <%= active_link_to c_t(:segment).pluralize, segments_path if policy(Segment).index? %>
+          <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
-          <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if policy(Resource).index? %>
+          <%= active_link_to "Archived Posts", archived_posts_path if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
         </li>
         <li>
-          <%= active_link_to "Calendar", calendar_groups_path if current_user.policy_group.global_calendar? %>
+          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+        <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+        <li>
+          <%= active_link_to "Calendar", calendar_groups_path if GroupPolicy.new(current_user, Group).calendar? %>
         </li>
         <% if current_user.enterprise.plan_module_enabled %>
-          <% if default_group = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first %>
-            <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+          <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
+            <li><%= active_link_to "Budgeting", close_budgets_groups_path %>
+            </li>
           <% end %>
         <% end %>
-        <% if policy(Campaign).index? %>
+        <% if CampaignPolicy.new(current_user, Campaign).create? %>
           <li><%= active_link_to "Innovate", campaigns_path %></li>
         <% end %>
-        <% if policy(Poll).index? %>
+        <% if PollPolicy.new(current_user, Poll).create? %>
           <li><%= active_link_to "Include", polls_path %></li>
         <% end %>
         <% if global_settings_path %>
@@ -43,11 +50,25 @@
   </div>
 
   <div class="menu menu--desktop">
-    <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if policy(MetricsDashboard).index? %>
-    <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).manage? %>
-    <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
-    <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Resource).index? %>
-    <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.global_calendar? %>
+    <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPolicy.new(current_user, Group).create? %>
+    <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if SegmentPolicy.new(current_user, Segment).index? %>
+    <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
+
+    <%= active_link_to 'Archive&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Archive", "aria-control": "navigation", "data-jq-dropdown": "#archive", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+    <nav id="archive" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <li>
+          <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>     
+        </li>
+        <li>
+          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+        <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path, class: 'secondary-header__tab' if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+      </ul>
+    </nav>
+    <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPolicy.new(current_user, Group).calendar? %>
   </div>
 <% end %>
 

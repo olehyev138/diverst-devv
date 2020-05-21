@@ -4,7 +4,16 @@
   <title>Diverst</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'https://platform.twitter.com/widgets.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'http://www.instagram.com/embed.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag '//cdn.embedly.com/widgets/platform.js', 'data-turbolinks-track' => true, 'charset' => 'UTF-8' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <style>
+    iframe {
+      margin-left: auto;   /* Automatic margin from left */
+      margin-right: auto; /* Automatic margin from right */
+    }
+  </style>
   <%= csrf_meta_tags %>
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
@@ -20,12 +29,14 @@
         <% end %>
       </div>
       <div class="flex-row__cell">
-        <% if root_admin_path %>
-          <%= link_to "Admin Dashboard", root_admin_path, class: "white" %>
+        <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>
         &nbsp;|&nbsp;
+        <% if root_admin_path %>
+          <%= link_to "Admin Dashboard", root_admin_path, class: 'title_bar' %>
+          &nbsp;|&nbsp;
         <% end %>
 
-        <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
+        <%= link_to current_user.name, user_user_path(current_user), class: 'title_bar' %>
       </div>
     </div>
   </header>
@@ -46,17 +57,17 @@
           </li>
           <% if current_user.enterprise.collaborate_module_enabled %>
             <li>
-              <%= active_link_to "Innovate", user_user_campaigns_path %>
+              <%= active_link_to "Innovate", user_user_campaigns_path if CampaignPolicy.new(current_user, Campaign).index? %>
             </li>
           <% end %>
           <li>
-            <%= active_link_to "News", user_news_links_path %>
+            <%= active_link_to "News", user_news_links_path if NewsLinkPolicy.new(current_user, NewsLink).index? %>
           </li>
           <li>
-            <%= active_link_to "Events", user_events_path %>
+            <%= active_link_to "Events", user_events_path if InitiativePolicy.new(current_user, Initiative).index? %>
           </li>
           <li>
-            <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path %>
+            <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path if GroupPolicy.new(current_user, Group).index? %>
           </li>
           <% if current_user.enterprise.mentorship_module_enabled %>
             <li>
@@ -68,11 +79,9 @@
               <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path %>
             </li>
           <% end %>
-          <% if current_user.enterprise.bias_module_enabled %>
-            <li>
-              <%= active_link_to "Bias", new_bias_path %>
-            </li>
-          <% end %>
+          <li>
+            <%= active_link_to "Downloads", user_downloads_path %>
+          </li>
           <li>
             <%= link_to "Log out", destroy_user_session_path, method: :delete %>
           </li>
@@ -83,20 +92,18 @@
     <div class="menu menu--desktop">
       <%= active_link_to "Home", user_root_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <% if current_user.enterprise.collaborate_module_enabled %>
-        <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+        <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if CampaignPolicy.new(current_user, Campaign).index? %>
       <% end %>
-      <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <% if current_user.enterprise.mentorship_module_enabled %>  
+      <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if NewsLinkPolicy.new(current_user, NewsLink).index? %>
+      <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if InitiativePolicy.new(current_user, Initiative).index? %>
+      <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPolicy.new(current_user, Group).index? %>
+      <% if current_user.enterprise.mentorship_module_enabled %>
         <%= active_link_to "Mentorship", edit_user_mentorship_path(:id => current_user.id), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <% if current_user.enterprise.enable_rewards? %>
         <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
-      <% if current_user.enterprise.bias_module_enabled %>
-        <%= active_link_to "Bias", new_bias_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <% end %>
+      <%= active_link_to "Downloads", user_downloads_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>
     </div>
   </header>

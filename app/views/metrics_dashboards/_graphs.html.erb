@@ -1,20 +1,18 @@
 <div class="row row--equal-height">
   <% @graphs.each do |graph| %>
-    <div class="col sm-12 md-6">
+    <div class="col-xs-12 col-md-6">
       <div class="card">
         <div class="card__section">
           <div class="card__action">
-            <%= link_to "Edit", [:edit, @metrics_dashboard, graph] %> -
-            <%= link_to "Export CSV", [:export_csv, @metrics_dashboard, graph], class: "hidden-xs" %> -
-            <%= link_to "Remove", graph_path(graph.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+            <%= link_to "Edit", [:edit, @metrics_dashboard, graph] if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %> -
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%=export_csv_metrics_dashboard_graph_url(@metrics_dashboard.id, graph.id)%>">Export CSV - </a>
+            <%= link_to "Remove", graph_path(graph.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %>
           </div>
           <h4 class="no-margin"><%= graph.title %></h4>
           <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-          <div
-            class="graph"
-            data-method="GET"
-            data-url="<%= data_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>"
-            data-time-series="<%= graph.time_series %>">
+          <%= render 'components/range_selector' %>
+          <div id="graph_<%= graph.id %>" class="graph" data-method="GET" data-url="<%= data_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>">
+            <svg></svg>
           </div>
         </div>
       </div>

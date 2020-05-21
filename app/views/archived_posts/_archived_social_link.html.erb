@@ -1,0 +1,33 @@
+<div class="card__section card__section--border" id="archived_social_link_<%= social_link.news_feed_link.id %>">
+  <div class="row">
+    <div class="col-xs-12">
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>  
+        <%= link_to restore_archived_post_path(social_link.news_feed_link.id), method: :patch, remote: true do %>
+          Restore
+        <% end %>
+      <% end %>
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <% if social_link.url.include?("facebook") %>
+            <iframe src="https://www.facebook.com/plugins/post.php?href=<%= social_link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+          <% elsif social_link.url.include?("instagram") %>
+            <iframe width="320" height="440" src="<%= social_link.url %>embed" frameborder="0"></iframe>
+          <% else %>
+            <%= raw social_link.embed_code %>
+          <% end %>
+          <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <span class="hidden-xs pull-right">
+        <%= link_to "Delete", archived_post_path(social_link.news_feed_link.id), method: :delete, remote: true, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+      </span>
+      <div class="btn-group visible-xs pull-right">
+        <%= link_to "Delete", archived_post_path(social_link.news_feed_link.id), method: :delete, remote: true, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+      </div>
+    </div>
+  </div>
+</div>

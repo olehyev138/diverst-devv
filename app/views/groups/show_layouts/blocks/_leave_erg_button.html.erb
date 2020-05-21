@@ -1,4 +1,4 @@
-<% if @group.active_members.include? current_user %>
+<% if GroupPolicy.new(current_user, @group).is_an_accepted_member? %>
     <%= link_to "Leave this #{ c_t(:parent) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error', style: 'font-size: 12px;' if @group.is_parent_group? %>
     <%= link_to "Leave this #{ c_t(:sub_erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error', style: 'font-size: 12px;' if @group.is_sub_group? %>
     <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error', style: 'font-size: 12px;' if @group.is_standard_group? %>

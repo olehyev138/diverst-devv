@@ -1,14 +1,17 @@
 <div class="content__header">
   <h1><%= c_t(:erg).pluralize %></h1>
-  <%= link_to "New #{ c_t(:erg) }", new_group_path, class: "btn btn--primary" if policy(Group).new? %>
+  <%= link_to "New #{ c_t(:erg) }", new_group_path, class: "btn btn--primary" if GroupPolicy.new(current_user, Group).new? %>
 </div>
 
 <div class="content__main">
-  <div class="card">
-    <% @groups.each do |group| %>
-      <div class="card__section card__section--border">
+  <div class="card" id="groups" data-url="<%= sort_groups_path %>">
+    <% @groups.all_parents.each do |group| %>
+      <div class="card__section card__section--border" id="group_<%= group.id %>">
+        <label class="field__label" id="handle" style="float: left; margin-top: 10px;">  
+          <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>
+        </label>
         <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell">
+          <div class="flex-row__cell" id="handle">
             <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.active_members.count, "member" %></div>
@@ -26,10 +29,10 @@
             <% end %>
 
 
-            <%= link_to "Export", export_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if policy(group).edit? and current_user.admin? %>
-            <%= link_to "Import", import_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Import" if policy(group).edit? %>
-            <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
-            <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(group).destroy? %>
+            <%= link_to "Export", export_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if GroupPolicy.new(current_user, group).edit? and current_user.is_admin? %>
+            <%= link_to "Import", import_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Import" if GroupPolicy.new(current_user, group).edit? %>
+            <%= link_to "Edit", edit_group_path(group), class: "muted" if GroupPolicy.new(current_user, group).edit? %>
+            <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if GroupPolicy.new(current_user, group).destroy? %>
           </div>
         </div>
 
@@ -46,10 +49,10 @@
               <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></span>
               </div>
             <div class="flex-row__cell link-group">
-              <%= link_to "Export", export_csv_group_path(child), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if policy(child).edit? %>
-              <%= link_to "Import", import_csv_group_path(child), class: "muted hidden-xs", role: "button", 'aria-label': "Import" if policy(child).edit? %>
-              <%= link_to "Edit", edit_group_path(child), class: "muted" if policy(child).edit? %>
-              <%= link_to "Delete", group_path(child), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(child).destroy? %>
+              <%= link_to "Export", export_csv_group_path(child), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if GroupPolicy.new(current_user, child).edit? %>
+              <%= link_to "Import", import_csv_group_path(child), class: "muted hidden-xs", role: "button", 'aria-label': "Import" if GroupPolicy.new(current_user, child).edit? %>
+              <%= link_to "Edit", edit_group_path(child), class: "muted" if GroupPolicy.new(current_user, child).edit? %>
+              <%= link_to "Delete", group_path(child), method: :delete, class: "error", data: { confirm: "Are you sure?" } if GroupPolicy.new(current_user, child).destroy? %>
             </div>
           </div>
         </div>
@@ -61,6 +64,23 @@
 </div>
 
 <script>
+  $(document).on('ready page:load', function(){
+    $('#groups').sortable(
+    {
+      handle: '#handle',
+      cursor: 'move',
+      axis: 'y',
+      update: function() {
+         $.ajax({
+          type: "POST",
+          url: $(this).data('url'),
+          data: $(this).sortable('serialize')
+         });
+      }
+    }
+    );
+  });
+
   $('a.nested_show').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).show();

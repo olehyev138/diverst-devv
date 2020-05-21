@@ -2,7 +2,7 @@ class Users::SessionsController < Devise::SessionsController
   include PublicActivity::StoreController
   include Onboard
 
-  after_filter :after_login, :only => :create
+  after_filter :after_login, only: :create
 
   def new
     if session[:saml_for_enterprise].present?
@@ -32,6 +32,6 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def after_login
-    track_activity(current_user, :login) if current_user.present?
+    track_activity(current_user, :login, { ip: current_user.current_sign_in_ip }) if current_user.present?
   end
 end

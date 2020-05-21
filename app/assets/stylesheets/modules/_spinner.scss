@@ -1,0 +1,36 @@
+@mixin spinner {
+  border-style: solid;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@mixin spinnerColors($colorOne, $colorTwo) {
+  border-color: $colorTwo;
+  border-top-color: $colorOne;
+}
+
+@mixin spinnerSize($size, $borderSize) {
+  width: $size;
+  height: $size;
+  border-width: $borderSize;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  @include spinner;
+  @include spinnerColors($diverst-grey, $diverst-grey-lightest);
+  @include spinnerSize(50px, 8px);
+}
+
+.spinner-primary {
+  @include spinnerColors($primary-color, $diverst-grey-lightest);
+}
+
+.spinner-lg {
+  @include spinnerSize(100px, 16px);
+}
+

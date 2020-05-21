@@ -4,8 +4,8 @@ class Importers::Users
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.read file, col_sep: get_delimiter, :encoding => 'ISO-8859-1', headers: true, header_converters: lambda { |h|
-      h.split.join(" ").downcase
+    @table = CSV.read file, col_sep: get_delimiter, encoding: 'ISO-8859-1', headers: true, header_converters: lambda { |h|
+      h.split.join(' ').downcase
     }
     @manager = manager
     @enterprise = manager.enterprise
@@ -37,18 +37,20 @@ class Importers::Users
   end
 
   private
+
   def parse_from_csv_row(row)
     user = update_user(row) || initialize_user(row)
-    (0..row.length-1).each do |i|
-      field = @enterprise.fields.where("LOWER(title) = ?", row.headers[i]).first
-      user.info[field] = field.process_field_value row[i] if field && !row[i].blank?
+    (0..row.length - 1).each do |i|
+      field = @enterprise.fields.where('LOWER(title) = ?', row.headers[i]).first
+      user.info[field] = field.process_field_value row[i] if field && row[i].present?
     end
     user
   end
 
   def update_user(row)
-    user = User.where(email: row["email"]).first
+    user = User.where(email: row['email']).first
     return nil unless user
+
     user.attributes = user_attributes(row, user)
     user
   end
@@ -60,12 +62,13 @@ class Importers::Users
   def user_attributes(row, user)
     id = user.present? ? user.user_role_id : @enterprise.default_user_role # default_user_role returns the ID of the default role
 
-    return {
-      first_name: row["first name"],
-      last_name: row["last name"],
-      email: row["email"],
-      biography: (row["biography"].present?) ? row["biography"] : user&.biography,
-      active: process_active_column( row["active"] ),
+    {
+      first_name: row['first name'],
+      last_name: row['last name'],
+      email: row['email'],
+      notifications_email: (row['notifications email'].present?) ? row['notifications email'] : user&.notifications_email,
+      biography: (row['biography'].present?) ? row['biography'] : user&.biography,
+      active: process_active_column(row['active']),
       user_role_id: id
     }
   end
@@ -76,12 +79,8 @@ class Importers::Users
     truthy_values.include? column_value
   end
 
-  def get_delimiter()
+  def get_delimiter
     custom_delimiter = ENV['CSV_COLUMN_SEPARATOR']
-    if custom_delimiter.present?
-      custom_delimiter
-    else
-      DEFAULT_COLUMN_DELIMITER
-    end
+    custom_delimiter.presence || DEFAULT_COLUMN_DELIMITER
   end
 end

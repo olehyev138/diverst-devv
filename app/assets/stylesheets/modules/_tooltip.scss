@@ -52,3 +52,35 @@
     margin-left: -6px;
   }
 }
+
+// Tooltipster tooltips
+
+.tooltipster {
+  display: inline-block;
+  height: inherit;
+}
+
+.tooltipster-punk > .tooltipster-box {
+  border-bottom-color: $primary-color !important;
+}
+
+.tooltipster-punk > .tooltipster-box > .tooltipster-content ul {
+  color: inherit;
+}
+
+.tooltipster-punk > .tooltipster-box > .tooltipster-content ul li {
+  margin-bottom: 0;
+}
+
+.tooltipster-punk > .tooltipster-arrow .tooltipster-arrow-border {
+  border-top-color: $primary-color !important;
+}
+
+.tooltipster > svg {
+  vertical-align: middle;
+  margin-top: -25%;
+}
+
+.tooltip_templates {
+  display: none;
+}

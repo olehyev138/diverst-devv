@@ -1,119 +1,108 @@
 require 'rails_helper'
 
 RSpec.feature 'Survey Management' do
-	let!(:enterprise) { create(:enterprise) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
-	let!(:group) { create(:group, enterprise_id: enterprise.id) }
+  let!(:enterprise) { create(:enterprise) }
+  let!(:admin_user) { create(:user, enterprise: enterprise) }
+  let!(:group) { create(:group, enterprise_id: enterprise.id) }
 
-	before do
-		login_as(admin_user, scope: :user)
-	end
+  before do
+    login_as(admin_user, scope: :user)
+  end
 
-	scenario 'create survey', js: true do
-		visit new_poll_path
 
-		fill_in 'poll[title]', with: 'First Group Survey'
-		fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
-		select group.name, from: 'Choose the ERGs you want to target'
+  context 'when creating a survey' do
+    before do
+      visit new_poll_path
 
-		click_on 'Save and publish'
+      fill_in 'poll[title]', with: 'First Group Survey'
+      fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
+      select group.name, from: 'Choose the Groups you want to target'
+    end
 
-		expect(page).to have_content 'First Group Survey'
-	end
+    scenario 'add custom text field', js: true do
+      click_on 'Add text field'
 
-	context 'when creating a survey' do
-		before do
-			visit new_poll_path
+      fill_in '* Title', with: 'Where do you live?'
 
-			fill_in 'poll[title]', with: 'First Group Survey'
-			fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
-			select group.name, from: 'Choose the ERGs you want to target'
-		end
+      click_on 'Save and publish'
 
-		scenario 'add custom text field', js: true do
-			click_on 'Add text field'
+      poll = Poll.find_by(title: 'First Group Survey')
+      tf_id = TextField.last.id
 
-			fill_in '* Title', with: 'Where do you live?'
+      visit new_poll_poll_response_path(poll)
 
-			click_on 'Save and publish'
+      expect(page).to have_field(id: "where do you live?_#{tf_id}", type: 'text')
+    end
 
-			poll = Poll.find_by(title: 'First Group Survey')
-			tf_id = TextField.last.id
+    scenario 'add custom text field with multiple lines', js: true do
+      click_on 'Add text field'
 
-			visit new_poll_poll_response_path(poll)
+      fill_in '* Title', with: 'Where do you live?'
+      page.find_field('Allow multiple lines').trigger('click')
 
-			expect(page).to have_field(id: "where do you live?_#{tf_id}", type: 'text')
-		end
+      click_on 'Save and publish'
 
-		scenario 'add custom text field with multiple lines', js: true do
-			click_on 'Add text field'
+      poll = Poll.find_by(title: 'First Group Survey')
+      tf_id = TextField.last.id
 
-			fill_in '* Title', with: 'Where do you live?'
-			page.find_field('Allow multiple lines').trigger('click')
+      visit new_poll_poll_response_path(poll)
 
-			click_on 'Save and publish'
+      expect(page).to have_field(id: "where do you live?_#{tf_id}", type: 'textarea')
+    end
 
-			poll = Poll.find_by(title: 'First Group Survey')
-			tf_id = TextField.last.id
+    scenario 'add custom select field', js: true do
+      click_on 'Add select field'
 
-			visit new_poll_poll_response_path(poll)
+      fill_in '* Title', with: 'What programming languages are you proficient in?'
+      fill_in 'Options (one per line)', with: "Ruby\nJava\nElixir\nJavaScript"
 
-			expect(page).to have_field(id: "where do you live?_#{tf_id}", type: 'textarea')
-		end
+      click_on 'Save and publish'
 
-		scenario 'add custom select field', js: true do
-			click_on 'Add select field'
+      poll = Poll.find_by(title: 'First Group Survey')
+      sf_id = SelectField.last.id
 
-			fill_in '* Title', with: 'What programming languages are you proficient in?'
-			fill_in 'Options (one per line)', with: "Ruby\nJava\nElixir\nJavaScript"
+      visit new_poll_poll_response_path(poll)
 
-			click_on 'Save and publish'
+      expect(page).to have_select(id: "what programming languages are you proficient in?_#{sf_id}",
+                                  with_options: ['Ruby', 'Java', 'Elixir', 'JavaScript'])
+    end
 
-			poll = Poll.find_by(title: 'First Group Survey')
-			sf_id = SelectField.last.id
+    context 'add' do
+      before do
+        click_on 'Add checkbox field'
 
-			visit new_poll_poll_response_path(poll)
+        fill_in '* Title', with: 'What country(ies) is/are your preferred destination?'
+        fill_in 'Options (one per line)', with: "Spain\nArgentina\nBrazil\nGermany\nCanada"
+      end
 
-			expect(page).to have_select(id: "what programming languages are you proficient in?_#{sf_id}",
-				with_options: ["Ruby", "Java", "Elixir", "JavaScript"])
-		end
+      scenario 'custom checkbox field', js: true do
+        click_on 'Save and publish'
 
-		context 'add' do
-			before do
-				click_on 'Add checkbox field'
+        poll = Poll.find_by(title: 'First Group Survey')
 
-				fill_in '* Title', with: 'What country(ies) is/are your preferred destination?'
-				fill_in 'Options (one per line)', with: "Spain\nArgentina\nBrazil\nGermany\nCanada"
-			end
+        visit new_poll_poll_response_path(poll)
 
-			scenario 'custom checkbox field', js: true do
-				click_on 'Save and publish'
+        expect(page).to have_content 'What country(ies) is/are your preferred destination?'
+        expect(page).to have_unchecked_field('Spain', type: 'checkbox')
+        expect(page).to have_unchecked_field('Argentina', type: 'checkbox')
+        expect(page).to have_unchecked_field('Brazil', type: 'checkbox')
+        expect(page).to have_unchecked_field('Germany', type: 'checkbox')
+        expect(page).to have_unchecked_field('Canada', type: 'checkbox')
+      end
 
-				poll = Poll.find_by(title: 'First Group Survey')
+      scenario 'custom checkbox field with multi-select option', js: true do
+        page.find_field('Use multi-select field').trigger('click')
 
-				visit new_poll_poll_response_path(poll)
+        click_on 'Save and publish'
 
-				expect(page).to have_content 'What country(ies) is/are your preferred destination?'
-				expect(page).to have_unchecked_field('Spain', type: 'checkbox')
-				expect(page).to have_unchecked_field('Argentina', type: 'checkbox')
-				expect(page).to have_unchecked_field('Brazil', type: 'checkbox')
-				expect(page).to have_unchecked_field('Germany', type: 'checkbox')
-				expect(page).to have_unchecked_field('Canada', type: 'checkbox')
-			end
+        poll = Poll.find_by(title: 'First Group Survey')
+        cf_id = CheckboxField.last.id
+        visit new_poll_poll_response_path(poll)
 
-			scenario 'custom checkbox field with multi-select option', js: true do
-				page.find_field('Use multi-select field').trigger('click')
-
-				click_on 'Save and publish'
-
-				poll = Poll.find_by(title: 'First Group Survey')
-				cf_id = CheckboxField.last.id
-				visit new_poll_poll_response_path(poll)
-
-				expect(page).to have_content 'What country(ies) is/are your preferred destination?'
-				expect(page).to have_select(id: "what country(ies) is/are your preferred destination?_#{cf_id}",
-					with_options: ["Spain", "Argentina", "Brazil", "Germany", "Canada"])
-			end
-		end
-	end
+        expect(page).to have_content 'What country(ies) is/are your preferred destination?'
+        expect(page).to have_select(id: "what country(ies) is/are your preferred destination?_#{cf_id}",
+                                    with_options: ['Spain', 'Argentina', 'Brazil', 'Germany', 'Canada'])
+      end
+    end
+  end
 end

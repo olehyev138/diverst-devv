@@ -1,4 +1,4 @@
-RSpec.shared_examples "correct public activity" do
+RSpec.shared_examples 'correct public activity' do
   it 'creates public activity with correct params' do
     activity = PublicActivity::Activity.last
 

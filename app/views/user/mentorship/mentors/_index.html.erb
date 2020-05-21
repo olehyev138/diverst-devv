@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card__section">
       <h4>My Mentors</h4>
-      <% if @mentors.count > 0 %>
+      <% if @mentorings.size > 0 %>
         <table
           class="table--has-border" id="mentors-table">
           <thead>
@@ -11,13 +11,15 @@
             <th></th>
           </thead>
           <tbody>
-              <% @mentors.each do |mentor| %>
+              <% @mentorings.each do |mentoring| %>
+                <% mentor = mentoring.mentor %>
                 <tr>
                     <td>
                       <%= active_link_to mentor.name, user_mentorship_path(:id => mentor.id) %>
                     </td>
                     <td><%= mentor.email %></td>
                     <td><%= link_to('Schedule Session', new_mentoring_session_path(:user_id => mentor.id)) %></td>
+                    <td><%= link_to "End Menteeship", mentoring_path(mentoring.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
                 </tr>
               <% end %>
           </tbody>

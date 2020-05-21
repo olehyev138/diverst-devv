@@ -2,20 +2,25 @@ require 'rails_helper'
 
 RSpec.describe SegmentRule, type: :model do
   describe 'when validating' do
-    let(:segment_rule){ build_stubbed(:segment_rule) }
+    let(:segment_rule) { build_stubbed(:segment_rule) }
 
-    it{ expect(segment_rule).to belong_to(:field) }
-    it{ expect(segment_rule).to belong_to(:segment) }
+    it { expect(segment_rule).to belong_to(:field) }
+    it { expect(segment_rule).to belong_to(:segment) }
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
-    #it { is_expected.to validate_presence_of(:values) }
+    # it { is_expected.to validate_presence_of(:values) }
+
+    it { is_expected.to validate_length_of(:values).is_at_most(65535) }
   end
 
-  describe "#values" do
-    it "allows a length of values over 255 characters" do
-      values = "[\"Atlanta\", \"BrookwoodBirmAL\", \"Charlotte-Hearst Tower\", \"Columbia 1333\", \"Columbia, SC\", \"Fort Myers - 4211 Metro Pkwy\", \"Ft. Lauderdale 401 E Las Olas\", \"GreensboroNC800Valley\", \"HallandaleBchFL\", \"Jacksonville - 76 Laura St\", \"Lithia Springs GA\", \"Ft. Lauderdale 401 E Las Olas\", \"GreensboroNC800Valley\", \"HallandaleBchFL\", \"Jacksonville - 76 Laura St\", \"Lithia Springs GA\", \"Nashville, TN\", \"Miami, FL\", \"Raleigh, NC\"]"
-      expect(values.length).to eq(422)
+  describe '#values' do
+    it 'allows a length of values over 255 characters' do
+      values = '["Atlanta", "BrookwoodBirmAL", "Charlotte-Hearst Tower", "Columbia 1333", "Columbia, SC", "Fort Myers - 4211 Metro Pkwy",
+                 "Ft. Lauderdale 401 E Las Olas", "GreensboroNC800Valley", "HallandaleBchFL", "Jacksonville - 76 Laura St", "Lithia Springs GA",
+                 "Nashville, TN", "Miami, FL", "Raleigh, NC"]'
+
+      expect(values.length).to eq(328)
 
       segment_rule = build(:segment_rule)
       segment_rule.values = values
@@ -25,8 +30,24 @@ RSpec.describe SegmentRule, type: :model do
     end
   end
 
+  describe '#values_array' do
+    it 'returns parsed values' do
+      values = '["Atlanta", "BrookwoodBirmAL", "Charlotte-Hearst Tower"]'
+      segment_rule = create(:segment_rule, values: values)
+
+      expect(segment_rule.values_array).to eq(JSON.parse(values))
+    end
+  end
+
+  describe '#followed_by?' do
+    it 'returns true if field is nil' do
+      segment_rule = build(:segment_rule, field: nil)
+      expect(segment_rule.followed_by?(create(:user))).to eq(true)
+    end
+  end
+
   describe 'test class methods' do
-    context '.operatores should return data of frozen hash' do
+    describe '.operators should return data of frozen hash' do
       it 'equals: 0' do
         expect(described_class.operators[:equals]).to eq 0
       end
@@ -56,7 +77,7 @@ RSpec.describe SegmentRule, type: :model do
       end
     end
 
-    context '.operator_text(id) returns stringified keys of the operator hash' do
+    describe '.operator_text(id) returns stringified keys of the operator hash' do
       it "returns 'equals' when id is 0" do
         expect(described_class.operator_text(0)).to eq 'equals'
       end
@@ -84,6 +105,19 @@ RSpec.describe SegmentRule, type: :model do
       it "returns 'does not contain' when id is 6" do
         expect(described_class.operator_text(6)).to eq 'does not contain'
       end
+    end
+
+    describe '.operators' do
+      operators_hash = {
+                        equals: 0,
+                        greater_than: 1,
+                        lesser_than: 2,
+                        is_not: 3,
+                        contains_any_of: 4,
+                        contains_all_of: 5,
+                        does_not_contain: 6
+                       }.freeze
+      it { expect(described_class.operators).to eq(operators_hash) }
     end
   end
 end

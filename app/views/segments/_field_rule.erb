@@ -1,0 +1,21 @@
+<div class="nested-fields space-bottom segment-rule field-rule row">
+  <div class="flex-row flex-row--baseline">
+    <div class="flex-row__cell col-xs-2">
+      <%= link_to_remove_association f do %>
+        <%= inline_svg('icons/remove.svg', class: "icon") %>
+      <% end %>
+    </div>
+    <div class="flex-row__cell custom-field col-xs-6">
+      <!-- customField with data-operators, data-type and data-options !-->
+      <%= f.input :field_id, label: false, collection: current_user.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-type" => field.class, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]} %>
+    </div>
+    <div class="flex-row__cell operator col-xs-2" style="display: none;">
+      <!-- operatorField !-->
+      <%= f.input :operator, label: false, input_html: { 'data-operator-id' => f.object.operator }, collection: [] %>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow value-select col-xs-2" style="display: none;">
+      <!-- valueField !-->
+      <%= f.input :values, label: false, input_html: { class: "field__input", 'data-selected-values' => f.object.values, multiple: "multiple" }, collection: [], value: "", include_hidden: false %>
+    </div>
+  </div>
+</div>

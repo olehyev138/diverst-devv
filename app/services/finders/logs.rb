@@ -12,7 +12,7 @@ class Finders::Logs
     logs = @logs
       .joins("LEFT JOIN initiatives ON activities.trackable_type = 'Initiative' \
                 AND activities.trackable_id = initiatives.id")
-      .joins("LEFT JOIN initiative_groups ON initiative_groups.initiative_id = initiatives.id")
+      .joins('LEFT JOIN initiative_groups ON initiative_groups.initiative_id = initiatives.id')
       .joins("LEFT JOIN groups_polls ON activities.trackable_type = 'Poll' \
                 AND activities.trackable_id = groups_polls.poll_id")
       .joins("LEFT JOIN user_groups ON activities.trackable_type = 'User' \
@@ -22,11 +22,12 @@ class Finders::Logs
                 OR groups_polls.group_id IN (#{group_ids}) \
                 OR user_groups.group_id IN (#{group_ids}) \
                 OR (activities.trackable_type = 'Group' AND activities.trackable_id IN (#{group_ids}))")
-    return Finders::Logs.new(logs)
+    Finders::Logs.new(logs)
   end
 
   private
+
   def format_in_clause(array)
-    array.collect{ |e| "'#{e}'" }.join(", ")
+    array.collect { |e| "'#{e}'" }.join(', ')
   end
 end

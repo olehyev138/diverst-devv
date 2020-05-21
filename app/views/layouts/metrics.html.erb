@@ -1,0 +1,61 @@
+<% content_for :secondary_nav do %>
+<div class="menu menu--mobile">
+  <button
+    class="m-hamburger"
+    aria-label="Menu"
+    aria-controls="navigation"
+    data-jq-dropdown="#navigation">
+    <span>Menu</span>
+  </button>
+  <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li><%= active_link_to "Overview", metrics_overview_index_path %></li>
+    </ul>
+  </nav>
+</div>
+<div class="menu menu--desktop">
+  <%= active_link_to "Overview", metrics_overview_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics/overview_graphs'], []] %>
+  <%= active_link_to 'Users', metrics_users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% if GroupPolicy.new(current_user, Group).create? %>
+    <%= active_link_to "#{c_t(:erg).pluralize}&nbsp;<span class='caret'></span>".html_safe, "",
+                       "aria-label": c_t(:erg), "aria_control": "navigation", "data-jq-dropdown": "#group_dashboards",
+                       class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics/group_graphs'], []] %>
+    <nav id="group_dashboards" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <li>
+          <%= active_link_to "Overview", metrics_groups_path, class: "secondary-header__tab" %>
+        </li>
+        <% if InitiativePolicy.new(current_user, Initiative).create? %>
+          <li>
+            <%= active_link_to "Events", initiatives_metrics_groups_path, class: "secondary-header__tab" %>
+          </li>
+        <% end %>
+        <% if NewsLinkPolicy.new(current_user, NewsLink).create? %>
+          <li>
+            <%= active_link_to "Social Media", social_media_metrics_groups_path, class: "secondary-header__tab" %>
+          </li>
+        <% end %>
+        <li>
+          <% if EnterpriseFolderPolicy.new(current_user, Folder).index? %>
+            <%= active_link_to "Resources", resources_metrics_groups_path, class: "secondary-header__tab" %>
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  <% end %>
+  <% if SegmentPolicy.new(current_user, Segment).index? %>
+    <%= active_link_to c_t(:segment).pluralize, metrics_segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% end %>
+  <% if CampaignPolicy.new(current_user, Campaign).create? %>
+    <%= active_link_to 'Innovation', metrics_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% end %>
+  <% if PollPolicy.new(current_user, Poll).create? %>
+    <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% end %>
+  <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
+    <%= active_link_to 'Mentorship', metrics_mentorships_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% end %>
+  <%= active_link_to 'Custom', metrics_metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+</div>
+<% end %>
+<%= render template: "layouts/dashboard" %>

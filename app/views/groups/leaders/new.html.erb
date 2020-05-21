@@ -4,16 +4,69 @@
 
 <div class="content__main">
   <%= simple_form_for @group, url: group_leaders_path, method: :post do |f| %>
-    <div class="card" id="sortable">
-      <%= f.simple_fields_for :group_leaders do |g| %>
-        <%= render "group_leader_fields", f: g %>
-      <% end %>
-
+    <div class="card">
+      <div id="sortable-list">
+        <%= f.simple_fields_for :group_leaders do |g| %>
+          <%= render "group_leader_fields", f: g %>
+        <% end %>
+      </div>
       <div class="card__section card__section--border">
-        <%= link_to_add_association "Add a leader", f, :group_leaders %>
+        <%= link_to_add_association "Add a leader", f, :group_leaders, class: 'add_leader' %>
       </div>
     </div>
 
     <%= f.button :submit, "Save Leaders" %>
   <% end %>
 </div>
+
+<script>
+  $(document).on('ready page:load', function(){
+    $(".add_leader").
+      data("association-insertion-method", 'append').
+      data("association-insertion-node", '#sortable-list');
+
+    function init_select2(selector){
+      $(selector).select2({
+        ajax: {
+          url: "<%= users_path(active: 1, user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>",
+          theme: 'bootstrap',
+          allowClear: true,
+          type: "GET",
+          dataType: "json",
+          minimumInputLength: 3,
+          multiple:true,
+          delay: 1000,
+          data: function (params) {
+            var query = {
+              search: {
+                value: params.term
+              }
+            }
+
+      // Query parameters will be ?search=[term]&type=public
+      return query;
+    },
+    processResults: function (data) {
+      var int = 1;
+
+      // Tranforms the top-level key of the response object from 'items' to 'results'
+      return {
+        results: $.map(data.data, function(item){
+          return {id: item[0], text: item[1] + " " + item[2] + " - " + item[3] } } )
+      };
+    },
+    templateSelection: function(item) {
+      return item[0]
+    }
+  }
+});
+    };
+
+    init_select2(".select2-field")
+
+    $("form").on("cocoon:after-insert", function(_, row){
+      field = $(row).find(".select2-field")
+      init_select2(field);
+    });
+  });
+</script>

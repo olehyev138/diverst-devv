@@ -3,7 +3,7 @@
 </div>
 
 <div class="content__main">
-  <% if (policy(@budget).approve? || policy(@budget).decline?) && @budget.is_approved.nil? %>
+  <% if (GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? || GroupBudgetPolicy.new(current_user, [@group, @budget]).decline?) && @budget.is_approved.nil? %>
   <div class="card">
     <div class="card__section card__section--border">
       Manage Budget Request
@@ -68,40 +68,6 @@
       </div>
     <% end %>
   </div>
-  <% if @budget.is_approved == false %>
-    <div class="card">
-      <div class="card__section card__section--border">
-        <strong>Reason why this request was declined</strong><br />
-        <div class="border-accent" style="margin-top: 8px;">
-          <% if @budget.decline_reason.blank? %>
-            No Reason Provided
-          <% else %>
-            <i><%= @budget.decline_reason %></i>
-          <% end %>
-        </div>
-      </div>
-      <% if policy(@budget).approve? && policy(@budget).decline? %>
-        <div class="card">
-          <div class="card__section">
-            <%= f.input :comments %>
-          </div>
-        </div>
-      <% else %>
-        <div class="card">
-          <div class="card__section card__section--border">
-            Comments
-          </div>
-          <div class="card__section">
-            <% if @budget.comments.present? && @budget.comments.length > 0 %>
-              <%= @budget.comments %>  
-            <% else %>
-              No comments left
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
 
   <%= simple_form_for @budget, url: group_budget_approve_path(@group, @budget), method: :post do |f| %>
     <% if @budget.is_approved.nil? %>
@@ -114,15 +80,53 @@
         </div>
       </div>
       <div class="row">
-        <% if policy(@budget).approve? %>
+        <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? %>
           <div class="col">
+            <%= f.hidden_field :annual_budget_id, value: @annual_budget_id %>
             <%= f.button :submit, 'Approve Budget' %>
           </div>
           <% #bTODO check if vulnerabilities %>
         <% end %>
-        <% if policy(@budget).decline? %>
+        <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).decline? %>
           <div class="col btn-padding" id="decline_wrapper">
             <button type="button" class="accent" id="decline_button" onclick='declineClicked()'>Decline Budget</button>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <% if @budget.is_approved == false %>
+      <div class="card">
+        <div class="card__section card__section--border">
+          <strong>Reason why this request was declined</strong><br />
+          <div class="border-accent" style="margin-top: 8px;">
+            <% if @budget.decline_reason.blank? %>
+              No Reason Provided
+            <% else %>
+              <i><%= @budget.decline_reason %></i>
+            <% end %>
+          </div>
+        </div>
+        <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? && GroupBudgetPolicy.new(current_user, [@group, @budget]).decline? %>
+          <div class="card">
+            <div class="card__section">
+              <%= f.input :comments %>
+            </div>
+            <div class="col">
+              <%= f.button :submit, 'Add Comment' %>
+            </div>
+          </div>
+        <% else %>
+          <div class="card">
+            <div class="card__section card__section--border">
+              Comments
+            </div>
+            <div class="card__section">
+              <% if @budget.comments.present? && @budget.comments.length > 0 %>
+                <%= @budget.comments %>  
+              <% else %>
+                No comments left
+              <% end %>
+            </div>
           </div>
         <% end %>
       </div>

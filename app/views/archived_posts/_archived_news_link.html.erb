@@ -1,0 +1,68 @@
+<div class="card__section card__section--border" id="archived_news_<%= news_link.news_feed_link.id %>">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-2 pull-left">
+      <% if  EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>  
+        <%= link_to restore_archived_post_path(news_link.news_feed_link.id), method: :patch, remote: true do %>
+          <%= inline_svg('icons/archive.svg', class: "icon card__black", title: 'UnArchive') %>
+        <% end %>
+      <% end %>
+      </div>
+      <div class="col-xs-2">
+        <% if news_link.photos.count > 0 %>
+          <%= render partial: "shared/carousel/template", locals: {news_link: news_link } %>
+        <% else %>
+          <%= news_link_picture(news_link) %>
+        <% end %>
+      </div>
+      <div class="col-xs-8" id="news_link_<%= news_link.id %>">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
+            <p class="postContent">
+              <%= sanitize news_link.description %>
+              <% if news_link.url.present? %>
+                <p>
+                  <%= link_to nil, news_link.url, target: '_blank', 'data-trackable-id': news_link.news_feed_link.id, 'data-trackable-type': "news_feed_link", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %>
+                </p>
+              <% end %>
+              <% if news_link.author.present? %>
+                <span class="muted">Posted by <%= news_link.author.name_with_status %> - <span><%= time_ago_in_words(news_link.created_at) %> ago (<%= news_link.created_at.to_formatted_s(:short) %>)</span></span>
+              <% end %>
+
+              <div class="row">
+                <div class="col commentsLink">
+                  <%= "Comments(#{news_link.comments_count})" %>
+                  <%= render "like_feature", news_feed_link: news_link.news_feed_link %>
+                </div>
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row visible-xs">
+      <div class="col-xs-12">
+        <p>
+          <%= raw news_link.description %>
+          <% if news_link.url.present? %>
+            <p>
+              <%= link_to nil, news_link.url, target: '_blank', 'data-trackable-id': news_link.news_feed_link.id, 'data-trackable-type': "news_feed_link", class: "trackable-views" %>
+            </p>
+          <% end %>
+          <% if news_link.author.present? %>
+            <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
+          <% end %>
+          <br>
+          <%= "Comments(#{news_link.comments_count})" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-8">
+        <span class="hidden-xs pull-right">
+          <%= link_to "Delete", archived_post_path(news_link.news_feed_link.id), method: :delete, remote: true, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

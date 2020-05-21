@@ -11,13 +11,15 @@
     <ul class="jq-dropdown-menu">
       <li>
         <%= active_link_to "Topics", mentoring_interests_path %>
+        <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).update? %>
       </li>
     </ul>
   </nav>
 </div>
 
 <div class="menu menu--desktop">
-  <%= active_link_to "Topics", mentoring_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'questions', 'answers'], []] %>
+  <%= active_link_to "Topics", mentoring_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["mentoring_interests"], []] %>
+  <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["algorithm"], []] if EnterprisePolicy.new(current_user, current_user.enterprise).update? %>
 </div>
 <% end %>
 

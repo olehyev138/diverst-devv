@@ -2,26 +2,37 @@ class Enterprises::ResourcesController < ApplicationController
   include IsResources
 
   before_action :set_resource_type, only: [:new]
-  before_action :authenticate_user!
-  before_filter :prepend_view_paths, :only => [:index]
+  before_filter :prepend_view_paths, only: [:index]
 
   layout 'erg_manager'
 
   def index
-    @admin_resources = @container.resources.where(:resource_type => "admin")
-    @national_resources = @container.resources.where(:resource_type => "national")
+    @admin_resources = @container.resources.where(resource_type: 'admin')
+    @national_resources = @container.resources.where(resource_type: 'national')
     render '/index'
   end
 
   def new
-    @resource = @container.resources.new(:resource_type => @resource_type)
+    @resource = @container.resources.new(resource_type: @resource_type)
     render '/new'
+  end
+
+  def archived
+    super
+  end
+
+  def restore_all
+    super
+  end
+
+  def delete_all
+    super
   end
 
   protected
 
   def set_container
-    current_user ? @container = current_user.enterprise : user_not_authorized
+    @container = current_user.enterprise
   end
 
   def set_container_path

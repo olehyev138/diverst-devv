@@ -9,4 +9,8 @@ class TextField < Field
       !user.info[rule.field].include? rule.values_array[0]
     end
   end
+
+  def to_string(data)
+    data.to_s
+  end
 end

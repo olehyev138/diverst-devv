@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Sponsor, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    let(:sponsor) { build_stubbed(:sponsor) }
+
+    it { expect(sponsor).to have_attached_file(:sponsor_media) }
+  end
 end

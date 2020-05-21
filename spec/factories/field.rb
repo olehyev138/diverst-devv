@@ -1,19 +1,20 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :field do
     type 'TextField'
     title { Faker::Lorem.sentence(3) }
     gamification_value 1
     show_on_vcard false
     saml_attribute nil
+    add_to_member_list false
 
     factory :checkbox_field do
       type 'CheckboxField'
-      options_text "Yes\nNo"
+      options_text "YES\nNO\nMAYBE"
     end
 
     factory :select_field do
       type 'SelectField'
-      options_text "Yes\nNo"
+      options_text "yes\nno\nmaybe"
     end
 
     factory :numeric_field do

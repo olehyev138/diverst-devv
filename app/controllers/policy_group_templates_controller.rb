@@ -1,6 +1,7 @@
 class PolicyGroupTemplatesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_policy_group_template, only: [:edit, :update]
+  after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
 
@@ -17,11 +18,11 @@ class PolicyGroupTemplatesController < ApplicationController
     authorize PolicyGroupTemplate
 
     if @policy_group_template.update(policy_group_template_params)
-      flash[:notice] = "Your policy group template was updated"
+      flash[:notice] = 'Your policy group template was updated'
       track_activity(@policy_group_template, :update)
       redirect_to action: :index
     else
-      flash[:alert] = "Your policy group template was not updated. Please fix the errors"
+      flash[:alert] = 'Your policy group template was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -29,11 +30,7 @@ class PolicyGroupTemplatesController < ApplicationController
   protected
 
   def set_policy_group_template
-    if current_user
-      @policy_group_template = current_user.enterprise.policy_group_templates.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @policy_group_template = current_user.enterprise.policy_group_templates.find(params[:id])
   end
 
   def policy_group_template_params
@@ -78,14 +75,47 @@ class PolicyGroupTemplatesController < ApplicationController
         :groups_budgets_index,
         :groups_budgets_request,
         :budget_approval,
-        :annual_budget_manage,
         :group_leader_manage,
         :sso_manage,
         :permissions_manage,
         :diversity_manage,
         :manage_posts,
         :branding_manage,
-        :global_calendar
+        :global_calendar,
+        :manage_all,
+        :enterprise_manage,
+        :groups_budgets_manage,
+        :group_leader_index,
+        :groups_insights_manage,
+        :groups_layouts_manage,
+        :group_resources_index,
+        :group_resources_create,
+        :group_resources_manage,
+        :social_links_index,
+        :social_links_create,
+        :social_links_manage,
+        :group_settings_manage,
+        :group_posts_index,
+        :mentorship_manage,
+        :auto_archive_manage,
+        :onboarding_consent_manage
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Policy Group Templates'
+    when 'edit'
+      "Policy Group Edit: #{@policy_group_template.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

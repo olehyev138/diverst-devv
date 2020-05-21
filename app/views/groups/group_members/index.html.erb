@@ -1,27 +1,77 @@
 <div class="content__header">
-  <h1>Members (<%= @members.count %>)</h1>
-  <% if policy(@group).manage_members? %>
-    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+  <h1>Members (<%= @members.size %>)</h1>
+  <% if GroupMemberPolicy.new(current_user, [@group]).export_group_members_list_csv? %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary hidden-xs" %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn-primary visible-xs" %>
     <div class="flex-row__cell">
-      <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn--primary' %>
+      <%= active_link_to 'Export Group Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"ExportGroupMembers", "aria-control": "navigation", "data-jq-dropdown": "#export_group_members", class: "btn btn--secondary hidden-xs", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+          <nav id="export_group_members" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+              <li><%= link_to "Export All Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "all_members") %></li>
+              <li><%= link_to "Export Active Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "active_members") %></li>
+              <li><%= link_to "Export Inactive Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "inactive_members") %></li>
+              <% if @group.pending_users.enabled? %>
+                <li><%= link_to "Export Pending Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "pending_members") %></li>
+              <% end %>
+              
+              <% if @group.is_parent_group?%>
+                <li>
+                  <%= link_to view_list_of_sub_groups_for_export_group_group_members_path, remote: true do %>
+                    <p>Export Members of <%= c_t(:sub_erg).pluralize %></p> 
+                  <% end %>
+                </li> 
+              <% end %>
+
+              <% if @group.is_sub_group? %>
+                <li><%= link_to "Export Members of #{c_t(:parent)}",  export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
+              <% end %>
+            </ul>
+          </nav>
+
+      <%= active_link_to 'Export Group Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"ExportGroupMembers", "aria-control": "navigation", "data-jq-dropdown": "#export_group_members_small", class: "btn btn-secondary visible-xs", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+      <nav id="export_group_members_small" class="jq-dropdown jq-dropdown-tip">
+        <ul class="jq-dropdown-menu">
+          <li><%= link_to "Export All Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "all_members") %></li>
+          <li><%= link_to "Export Active Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "active_members") %></li>
+          <li><%= link_to "Export Inactive Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "inactive_members") %></li>
+          <li><%= link_to "Export Pending Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "pending_members") %></li>
+
+          <% if @group.pending_users.enabled? %>
+            <% if @group.is_parent_group?%>
+              <li>
+                <%= link_to view_list_of_sub_groups_for_export_group_group_members_path, remote: true do %>
+                  <p>Export Members of <%= c_t(:sub_erg).pluralize %></p> 
+                <% end %>
+              </li> 
+            <% end %>
+
+            <% if @group.is_sub_group? %>
+              <li><%= link_to "Export Members of #{c_t(:parent)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
+            <% end %>
+          <% end %>  
+        </ul>
+      </nav>
     </div>
   <% end %>
 </div>
+
 
 <div class="content__main">
   <%= search_form_for @q, url: group_group_members_path(@group), builder: SimpleForm::FormBuilder do |f| %>
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col xs-5">
-            <%= f.input :users_segments_segment_id_in,
-                  as: :select,
-                  collection: @segments,
-                  input_html: { class: "select2", multiple: true },
-                  label: "Filter by #{ c_t(:segment) }",
-                  required: false
-            %>
-          </div>
+          <% if SegmentPolicy.new(current_user, nil).index? %>
+            <div class="col xs-5">
+              <%= f.input :users_segments_segment_id_in,
+                    as: :select,
+                    collection: @segments,
+                    input_html: { class: "select2-field-segments", multiple: true },
+                    label: "Filter by #{ c_t(:segment) }",
+                    required: false
+              %>
+            </div>
+          <% end %>
           <div class="col xs-6">
             <%= f.input :user_groups_created_at_gteq,
                   as: :date_picker,
@@ -72,3 +122,6 @@
     <% end %>
   </div>
 </div>
+
+<%= render 'groups/group_members/sub_groups_list_modal' %>
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

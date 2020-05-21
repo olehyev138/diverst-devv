@@ -1,8 +1,51 @@
-version: 2
+version: 2.1
+executors:
+  primary-image:
+    docker:
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
 jobs:
-  build:
+  lint:
     working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 1
+    shell: /bin/bash --login
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    executor: primary-image
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dep-{{ .Branch }}-
+            - v1-dep-staging-
+            - v1-dep-
+      - run: gem update --system
+      - run: gem install bundler --version '1.17.3'
+      - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
+          --jobs=4 --retry=3'
+      - save_cache:
+          key: v1-dep-{{ .Branch }}-{{ epoch }}
+          paths:
+            - vendor/bundle
+            - ~/virtualenvs
+            - ~/.m2
+            - ~/.ivy2
+            - ~/.bundle
+            - ~/.go_workspace
+            - ~/.gradle
+            - ~/.cache/bower
+            - public/assets
+            - ./node_modules
+      - run:
+          command: |
+            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
+            export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
+            git fetch origin development:refs/remotes/origin/development
+            bundle exec pronto run -f github_status github_pr -c origin/development --exit-code
+      - store_artifacts:
+          path: /tmp/circleci-artifacts
+  test:
+    working_directory: ~/TeamDiverst/diverst-development
+    parallelism: 2
     shell: /bin/bash --login
     # CircleCI 2.0 does not support environment variables that refer to each other the same way as 1.0 did.
     # If any of these refer to each other, rewrite them so that they don't or see https://circleci.com/docs/2.0/env-vars/#interpolating-environment-variables-to-set-other-environment-variables .
@@ -18,9 +61,7 @@ jobs:
     # VM instead of a container) see https://circleci.com/docs/2.0/executor-types/
     # To see the list of pre-built images that CircleCI provides for most common languages see
     # https://circleci.com/docs/2.0/circleci-images/
-    docker:
-    - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-      command: /sbin/init
+    executor: primary-image
     steps:
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
@@ -36,10 +77,6 @@ jobs:
         command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
           -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
           restart; '
-    - run:
-        working_directory: ~/TeamDiverst/diverst-development
-        command: 'sudo service elasticsearch status || sudo service elasticsearch
-          start; '
     # Dependencies
     #   This would typically go in either a build or a build-and-test job when using workflows
     # Restore the dependency cache
@@ -52,12 +89,16 @@ jobs:
         # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
         - v1-dep-
     # This is based on your 1.0 configuration file or project settings
-    - run: gem install bundler
+    #- run: gem install bundler
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: if [ -z "${NODE_ENV:-}" ]; then export NODE_ENV=test; fi
     - run: export PATH="~/TeamDiverst/diverst-development/node_modules/.bin:$PATH"
-    - run: npm install
+    - run: npm install -g yarn
+    - run: nvm install 8 && nvm use 8 && yarn
     - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
+    - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
+    - run: gem update --system
+    - run: gem install bundler --version '1.17.3'
     - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
         --jobs=4 --retry=3 '
     # Save dependency cache
@@ -99,15 +140,15 @@ jobs:
     #   This would typically be a build job when using workflows, possibly combined with build
     # This is based on your 1.0 configuration file or project settings
     - run: bundle exec rake db:migrate
-    - run: sudo ln -s /etc/elasticsearch/ /usr/share/elasticsearch/config
     - run:
         command: bundle exec rake assets:precompile assets:clean
         environment:
           RAILS_GROUPS: assets
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
+    - run: export TEST_RETRY="true" # Enable Rspec retry
     - run:
-        command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress spec
+        command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -126,15 +167,49 @@ jobs:
         path: /tmp/circleci-artifacts
     - store_artifacts:
         path: /tmp/circleci-test-results
-  
+
   #  build and test jobs go here
-  deploy:
+  deploy-testing:
     working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
-    docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+    executor: primary-image
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
+      - checkout
+      # Log the current branch
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      # Restore cache from the build job which contains the
+      # dist folder that needs to be deployed
+      # Restore the dependency cache
+      - restore_cache:
+          keys:
+          # This branch if available
+          - v1-dep-{{ .Branch }}-
+          # Default branch if not
+          - v1-dep-development-
+          # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
+          - v1-dep-
+      # This is based on your 1.0 configuration file or project settings
+      - run: gem update --system
+      - run: gem install bundler --version '1.17.3'
+      - run: bundle install
+      - run:
+          name: Deploy to AWS if tests pass and branch is Development
+          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
+
+  #  build and test jobs go here
+  deploy-staging:
+    working_directory: ~/TeamDiverst/diverst-development
+    shell: /bin/bash --login
+    executor: primary-image
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
       - checkout
       # Log the current branch
       - run:
@@ -152,20 +227,31 @@ jobs:
           # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
           - v1-dep-
       # This is based on your 1.0 configuration file or project settings
-      - run: gem install bundler
+      - run: gem update --system
+      - run: gem install bundler --version '1.17.3'
       - run: bundle install
       - run:
           name: Deploy to AWS if tests pass and branch is Staging
-          command: bundle exec cap staging deploy
+          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap staging deploy
 
 workflows:
   version: 2
-  build-deploy:
+  lint-test-deploy:
     jobs:
-      - build
-      #- deploy:
-          #requires:
-            #- build
-          #filters:
-            #branches:
-              #only: staging
+      - lint
+      - test:
+          context: backend-test
+          requires:
+            - lint
+      - deploy-testing:
+          requires:
+            - test
+          filters:
+            branches:
+              only: development
+      - deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: staging

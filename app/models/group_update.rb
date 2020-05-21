@@ -1,10 +1,12 @@
-class GroupUpdate < ActiveRecord::Base
+class GroupUpdate < BaseClass
   include PublicActivity::Common
   include ContainsFields
 
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
   belongs_to :group
 
+  validates_length_of :comments, maximum: 65535
+  validates_length_of :data, maximum: 65535
   validates :created_at, presence: true
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
@@ -21,16 +23,17 @@ class GroupUpdate < ActiveRecord::Base
   # Returns the delta (just like `variance_with`) with the last update for the specified field
   def variance_from_previous(field)
     return nil if !self.previous
+
     self.variance_with(other_update: self.previous, field: field)
   end
 
   # The next update in chronological order
   def next
-    self.class.where(group: self.group).where("created_at > ?", self.created_at).order(created_at: :asc).first
+    self.class.where(group: self.group).where('created_at > ?', self.created_at).order(created_at: :asc).first
   end
 
   # The previous update in chronological order
   def previous
-    self.class.where(group: self.group).where("created_at < ?", self.created_at).order(created_at: :asc).last
+    self.class.where(group: self.group).where('created_at < ?', self.created_at).order(created_at: :asc).last
   end
 end

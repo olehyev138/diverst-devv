@@ -2,51 +2,51 @@ require 'rails_helper'
 
 RSpec.describe Groups::CommentsController, type: :controller do
   let(:user) { create :user }
-  let(:group){ create(:group, enterprise: user.enterprise) }
-  let(:initiative){ initiative_of_group(group) }
+  let(:group) { create(:group, enterprise: user.enterprise) }
+  let(:initiative) { initiative_of_group(group) }
 
 
   describe 'POST#create' do
     describe 'when user is logged in' do
       login_user_from_let
-      let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "feedback_on_event", points: 80) }
+      let!(:reward_action) { create(:reward_action, enterprise: user.enterprise, key: 'feedback_on_event', points: 80) }
       before do
-        request.env["HTTP_REFERER"] = "back"
+        request.env['HTTP_REFERER'] = 'back'
         user.enterprise.update(enable_rewards: true)
       end
 
       context 'with valid attributes' do
         it 'creates and saves comment object' do
-          expect{post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }}
+          expect { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' } }
           .to change(InitiativeComment, :count).by(1)
         end
 
         it 'flashes a reward message' do
-          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
+          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' }
           user.reload
           expect(flash[:reward]).to eq "Your comment was created. Now you have #{ user.credits } points"
         end
 
 
-        it "rewards a user with points of this action" do
+        it 'rewards a user with points of this action' do
           expect(user.points).to eq 0
 
-          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
+          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' }
 
           user.reload
           expect(user.points).to eq 80
         end
 
         it 'redirects to previous page' do
-          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
-          expect(response).to redirect_to "back"
+          post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' }
+          expect(response).to redirect_to 'back'
         end
       end
 
 
       context 'with invalid attributes' do
         it 'does not save comment object' do
-          expect{post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil }}
+          expect { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil } }
           .to change(InitiativeComment, :count).by(0)
         end
 
@@ -57,7 +57,7 @@ RSpec.describe Groups::CommentsController, type: :controller do
 
         it 'redirects to previous page' do
           post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil }
-          expect(response).to redirect_to "back"
+          expect(response).to redirect_to 'back'
         end
       end
     end
@@ -65,20 +65,20 @@ RSpec.describe Groups::CommentsController, type: :controller do
 
     describe 'when user is an erg leader' do
       let!(:user) { create :user }
-      let!(:group){ create(:group, enterprise: user.enterprise) }
-      let!(:initiative){ initiative_of_group(group) }
-      let!(:user_group){ create(:user_group, group: group, user: user) }
+      let!(:group) { create(:group, enterprise: user.enterprise) }
+      let!(:initiative) { initiative_of_group(group) }
+      let!(:user_group) { create(:user_group, group: group, user: user) }
       let!(:group_leader) { create(:group_leader, user: user, group: group) }
 
       login_user_from_let
       before do
-        request.env["HTTP_REFERER"] = "back"
+        request.env['HTTP_REFERER'] = 'back'
         user.enterprise.update(enable_rewards: true)
       end
 
 
       it 'automatically approves comment' do
-        post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
+        post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' }
         expect(InitiativeComment.last.approved?).to eq true
       end
     end
@@ -86,173 +86,71 @@ RSpec.describe Groups::CommentsController, type: :controller do
 
     describe 'if user is not an erg leader' do
       let(:user) { create :user }
-      let(:group){ create(:group, enterprise: user.enterprise) }
-      let(:initiative){ initiative_of_group(group) }
+      let(:group) { create(:group, enterprise: user.enterprise) }
+      let(:initiative) { initiative_of_group(group) }
 
       login_user_from_let
       before do
-        request.env["HTTP_REFERER"] = "back"
+        request.env['HTTP_REFERER'] = 'back'
         user.enterprise.update(enable_rewards: true)
-      end
-
-      it 'comment is not approved by default' do
-        post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
-        expect(InitiativeComment.last.disapproved?).to eq true
       end
     end
 
 
     describe 'when user is not logged in' do
-      before { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" } }
-      it_behaves_like "redirect user to users/sign_in path"
-    end
-  end
-
-  describe 'PATCH#approve' do
-    let!(:user) { create :user }
-    let!(:group){ create(:group, enterprise: user.enterprise) }
-    let!(:initiative){ initiative_of_group(group) }
-    let!(:comment) { create(:initiative_comment, initiative: initiative) }
-
-    before do
-      request.env["HTTP_REFERER"] = "back"
-      user.enterprise.update(enable_rewards: true)
-    end
-
-    context 'before action to approve' do
-      it 'comment should be disapproved' do
-        expect(comment.disapproved?).to eq true
-      end
-    end
-
-    context 'when user is an erg leader' do
-      let!(:user_group){ create(:user_group, group: group, user: user) }
-      let!(:group_leader) { create(:group_leader, user: user, group: group) }
-
-      login_user_from_let
-      before { patch :approve, id: comment.id }
-
-      it 'approves comment' do
-        expect(assigns[:comment].approved?).to eq true
-      end
-
-      it 'flashes a notice message' do
-        expect(flash[:notice]).to eq "You just approved a comment"
-      end
-
-      it 'redirects to back' do
-        expect(response).to redirect_to "back"
-      end
-    end
-
-    context 'when user is not an erg leader' do
-      login_user_from_let
-      before { patch :approve, id: comment.id }
-
-      it 'flashes an alert message' do
-        expect(flash[:alert]).to eq "You are not authorized to perform this action."
-      end
-
-      it 'redirects to back' do
-        expect(response).to redirect_to "back"
-      end
-    end
-  end
-
-  describe 'PATCH#disapprove' do
-    let!(:user) { create :user }
-    let!(:group){ create(:group, enterprise: user.enterprise) }
-    let!(:initiative){ initiative_of_group(group) }
-    let!(:comment) { create(:initiative_comment, initiative: initiative, approved: true) }
-
-    before do
-      request.env["HTTP_REFERER"] = "back"
-      user.enterprise.update(enable_rewards: true)
-    end
-
-    context 'before action to disapprove' do
-      it 'comment should be approved' do
-        expect(comment.approved?).to eq true
-      end
-    end
-
-    context 'when user is an erg leader' do
-      let!(:user_group){ create(:user_group, group: group, user: user) }
-      let!(:group_leader) { create(:group_leader, user: user, group: group) }
-
-      login_user_from_let
-      before { patch :disapprove, id: comment.id }
-
-      it 'disapproves comment' do
-        expect(assigns[:comment].disapproved?).to eq true
-      end
-
-      it 'flashes a notice message' do
-        expect(flash[:notice]).to eq "You just disapproved a comment"
-      end
-
-      it 'redirects to back' do
-        expect(response).to redirect_to "back"
-      end
-    end
-
-    context 'when user is not an erg leader' do
-      login_user_from_let
-      before { patch :disapprove, id: comment.id }
-
-      it 'flashes an alert message' do
-        expect(flash[:alert]).to eq "You are not authorized to perform this action."
-      end
-
-      it 'redirects to back' do
-        expect(response).to redirect_to "back"
-      end
+      before { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: 'comment' } }
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
   describe 'DELETE#destroy' do
     let!(:user) { create :user }
-    let!(:group){ create(:group, enterprise: user.enterprise) }
-    let!(:initiative){ initiative_of_group(group) }
+    let!(:group) { create(:group, enterprise: user.enterprise) }
+    let!(:initiative) { initiative_of_group(group) }
     let!(:comment) { create(:initiative_comment, initiative: initiative, approved: true) }
 
     before do
-      request.env["HTTP_REFERER"] = "back"
+      request.env['HTTP_REFERER'] = 'back'
       user.enterprise.update(enable_rewards: true)
     end
 
 
     context 'when user is an erg leader' do
-      let!(:user_group){ create(:user_group, group: group, user: user) }
+      let!(:user_group) { create(:user_group, group: group, user: user) }
       let!(:group_leader) { create(:group_leader, user: user, group: group) }
 
       login_user_from_let
 
       it 'removes a comment' do
-        expect{delete :destroy, id: comment.id}.to change(InitiativeComment, :count).by(-1)
+        expect { delete :destroy, id: comment.id }.to change(InitiativeComment, :count).by(-1)
       end
 
       it 'flashes a notice message' do
         delete :destroy, id: comment.id
-        expect(flash[:notice]).to eq "You just deleted a comment"
+        expect(flash[:notice]).to eq 'You just deleted a comment'
       end
 
       it 'redirects to back' do
         delete :destroy, id: comment.id
-        expect(response).to redirect_to "back"
+        expect(response).to redirect_to 'back'
       end
     end
 
     context 'when user is not an erg leader' do
       login_user_from_let
-      before { delete :destroy, id: comment.id }
+      before {
+        user.policy_group.manage_all = false
+        user.policy_group.manage_posts = false
+        user.policy_group.save!
+        delete :destroy, id: comment.id
+      }
 
       it 'flashes an alert message' do
-        expect(flash[:alert]).to eq "You are not authorized to perform this action."
+        expect(flash[:alert]).to eq 'You are not authorized to perform this action.'
       end
 
       it 'redirects to back' do
-        expect(response).to redirect_to "back"
+        expect(response).to redirect_to 'back'
       end
     end
   end

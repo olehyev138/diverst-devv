@@ -1,0 +1,16 @@
+<div class="card__section">
+  <% resource = activity.trackable %>
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  <% if resource %>
+     <% if resource.container.group %>
+       restored a group resource
+       <%= link_to resource.title, group_folder_resources_path(group_id: resource.container.group_id, folder_id: resource.folder_id) %>
+   <% elsif resource.container.enterprise %>
+     restored an enterprise resource
+    <%= link_to resource.title, enterprise_folder_resources_path(enterprise_id: resource.container.enterprise_id, folder_id: resource.folder_id) %>
+   <% end %>    
+  <% else %>
+    restored a resource which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

@@ -3,6 +3,7 @@ class NumericField < Field
 
   def string_value(value)
     return '-' if value.nil?
+
     value
   end
 
@@ -29,7 +30,7 @@ class NumericField < Field
     high_delta = values.max - values.min
     delta = (e1_value - e2_value).abs
 
-    return delta.to_f / high_delta
+    delta.to_f / high_delta
   end
 
   def validates_rule_for_user?(rule:, user:)
@@ -69,11 +70,15 @@ class NumericField < Field
     ranges = []
     nb_buckets.times do |i|
       from = min + i * bucket_size
-      to = i == nb_buckets-1 ? max + 1 : from + bucket_size
+      to = i == nb_buckets - 1 ? max + 1 : from + bucket_size
 
       ranges << { from: from, to: to }
     end
 
     ranges
+  end
+
+  def to_string(data)
+    data.to_s
   end
 end

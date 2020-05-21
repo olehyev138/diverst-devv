@@ -1,4 +1,4 @@
 class TopicSerializer < ActiveModel::Serializer
   attributes :id,
-    :statement
+             :statement
 end

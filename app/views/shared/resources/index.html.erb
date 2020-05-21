@@ -2,34 +2,40 @@
   <h1><%= @container.name %></h1>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell hidden-xs">
-      <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if policy(@container).edit? %>
-    </div>
-    <div class="flex-row__cell hidden-xs">
-      <% if @container.class.name === "Initiative" %>
-        <%= link_to "+ Add folder", polymorphic_path([@container] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
-      <% elsif @container.enterprise %>
-        <%= link_to "+ Add folder", polymorphic_path([@container.enterprise] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+      <% if @container.enterprise %>
+        <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, @container).edit? %>
       <% elsif @container.group %>
-        <%= link_to "+ Add folder", polymorphic_path([@container.group] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+        <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@container.group, @container]).edit? %>
       <% end %>
     </div>
     <div class="flex-row__cell hidden-xs">
-      <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if policy(Resource).new? %>
+      <% if @container.enterprise %>
+        <%= link_to "+ Add folder", polymorphic_path([@container.enterprise] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).create? && @container.class.name === "Folder" %>
+      <% elsif @container.group %>
+        <%= link_to "+ Add folder", polymorphic_path([@container.group] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@container.group]).create? && @container.class.name === "Folder" %>
+      <% end %>
+    </div>
+    <div class="flex-row__cell hidden-xs">
+      <% if @container.enterprise %>
+        <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
+      <% elsif @container.group %>
+        <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@container.group]).new? %>
+      <% end %>
     </div>
   </div>
   <div class="container-fluid">
     <div class="row visible-xs text-center">
       <div class="col-xs-12">
         <div class="btn-group">
-          <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if policy(@container).edit? %>
-          <% if @container.class.name === "Initiative" %>
-            <%= link_to "+ Folder", polymorphic_path([@container] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
-          <% elsif @container.enterprise %>
-            <%= link_to "+ Folder", polymorphic_path([@container.enterprise] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+          <% if @container.enterprise %>
+            <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn-primary" if EnterpriseFolderPolicy.new(current_user, @container).edit? %>
+            <%= link_to "+ Folder", polymorphic_path([@container.enterprise] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn-primary" if EnterpriseFolderPolicy.new(current_user, @container).create? && @container.class.name === "Folder" %>
+            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
           <% elsif @container.group %>
-            <%= link_to "+ Folder", polymorphic_path([@container.group] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+            <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group, @container]).edit? %>
+            <%= link_to "+ Folder", polymorphic_path([@container.group] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group]).create? && @container.class.name === "Folder" %>
+            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group]).new? %>
           <% end %>
-          <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn-primary" if policy(Resource).new? %>
         </div>
       </div>
     </div>
@@ -47,7 +53,7 @@
           <% if folder.password_protected %>
             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
           <% end %>
-          &nbsp;<%= link_to "Delete", [@container.enterprise || @container.group] + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %>
+          &nbsp;<%= link_to "Delete", [@container.enterprise || @container.group] + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, folder).destroy? %>
         </h4>
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path([@container.enterprise || @container.group] + [folder] + [:resources]) if !folder.password_protected %>
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), [@container.enterprise || @container.group] + [folder], method: :get, remote: true if folder.password_protected %>
@@ -60,4 +66,8 @@
 
 <% end %>
 
-<%= render 'shared/resources/table' %>
+<% if @container.enterprise_id %>
+  <%= render 'shared/resources/enterprise_resource_table' %>
+<% elsif @container.group_id %>
+  <%= render 'shared/resources/group_resource_table' %>
+<% end %>

@@ -47,8 +47,11 @@
     });
 
     $('.js-graph-type-button').click(function() {
-      var isRangeVisible = $(this).data('value') ? 'block' : 'none';
-      $('.js-date-range').css('display', isRangeVisible);
+      if ($(this).data('value')) {
+        $('.js-date-range').removeClass('hidden');
+      } else {
+        $('.js-date-range').addClass('hidden');
+      }
     });
   </script>
 <% end %>

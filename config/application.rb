@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module Diverst
   class Application < Rails::Application
+    def port
+      Rails.env.test? ? 3000 : Rails::Server.new.options[:Port] || 3000
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -16,7 +20,7 @@ module Diverst
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.default_timezone = :local
-    
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
@@ -30,14 +34,16 @@ module Diverst
 
     config.autoload_paths << Rails.root.join('app/models/csv_export')
 
-    config.assets.paths   << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
+    # Yarn assets
+    config.assets.paths   << Rails.root.join('node_modules')
+
     config.assets.paths   << Rails.root.join('tmp', 'themes') # Custom themes
 
     config.active_job.queue_adapter = :sidekiq
 
-    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
-    
-    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || "localhost:#{port}"
+
+    config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 
     ActionMailer::Base.delivery_method = :smtp
   end

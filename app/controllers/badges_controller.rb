@@ -3,6 +3,7 @@ class BadgesController < ApplicationController
   before_action :set_enterprise
   before_action :set_badge, only: [:edit, :update, :destroy]
   after_action :verify_authorized
+  after_action :visit_page, only: [:new, :edit]
 
   layout 'global_settings'
 
@@ -15,6 +16,7 @@ class BadgesController < ApplicationController
     authorize @enterprise, :update?
     @badge = @enterprise.badges.new(badge_params)
     if @badge.save
+      track_activity(@badge, :create)
       flash[:notice] = "Your #{ c_t(:badge) } was created"
       redirect_to rewards_path
     else
@@ -49,7 +51,7 @@ class BadgesController < ApplicationController
   private
 
   def set_enterprise
-    current_user ? @enterprise = current_user.enterprise : user_not_authorized
+    @enterprise = current_user.enterprise
   end
 
   def set_badge
@@ -58,5 +60,22 @@ class BadgesController < ApplicationController
 
   def badge_params
     params.require(:badge).permit(:label, :points, :image)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Badge Creation'
+    when 'edit'
+      'Badge Editor'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

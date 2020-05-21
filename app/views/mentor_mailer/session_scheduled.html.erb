@@ -1,5 +1,15 @@
 <p>Hello <%= @user.name %>!</p>
 
-<p>Your mentoring session has been scheduled from <%= @mentoring_session.start.strftime("%m/%d/%Y %I:%M %p") %> to <%= @mentoring_session.end.strftime("%m/%d/%Y %I:%M %p") %>. Click the link below to add the session to your calendar.</p>
+<p>
+  <% if @mentorship_session && @mentorship_session.creator? %>
+    You created
+  <% else %>
+    <%= "#{@mentoring_session.creator.name} has invited you to" %>
+  <% end %>
+  a mentoring session scheduled from <%= @mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %> to <%= @mentoring_session.end.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %>. Click the Export to Outlook link below to add the session to your calendar.</p>
 
-<p><%= link_to "Session Details", mentoring_session_url(id: @mentoring_session.id, saml_for_enterprise: @user.enterprise.id) %></p>
+<p>
+  <%= link_to "Accept/Decline", mentoring_session_url(@mentoring_session.id, saml_for_enterprise: @user.enterprise.id), target: :_blank unless @mentorship_session && @mentorship_session.creator? %><br>
+  <%= link_to "Session Details", mentoring_session_url(id: @mentoring_session.id, saml_for_enterprise: @user.enterprise.id), target: :_blank %><br>
+  <%= link_to "Export to Outlook", export_ics_mentoring_session_url(@mentoring_session, saml_for_enterprise: @user.enterprise.id), target: :_blank %>
+</p>

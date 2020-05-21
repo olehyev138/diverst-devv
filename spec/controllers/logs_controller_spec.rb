@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe LogsController, type: :controller do
+  include ActiveJob::TestHelper
+
   describe 'GET #index' do
     def get_index
       get :index
@@ -39,8 +41,8 @@ RSpec.describe LogsController, type: :controller do
           expect(response).to be_success
         end
 
-        it "return html format" do
-          expect(response.content_type).to eq "text/html"
+        it 'return html format' do
+          expect(response.content_type).to eq 'text/html'
         end
 
         describe 'enterprise' do
@@ -54,32 +56,41 @@ RSpec.describe LogsController, type: :controller do
       end
 
       context 'csv output' do
-        before { get :index, :format => :csv }
+        before {
+          allow(LogsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = 'back'
+          get :index, format: :csv
+        }
 
-        it 'renders a csv file' do
-          content_type = response.headers["Content-Type"]
-          expect(content_type).to eq "text/csv"
+        it 'returns to previous page' do
+          expect(response).to redirect_to 'back'
         end
 
-        it 'renders correct number of rows in csv file' do
-          body = response.body.split("\n")
-
-          # One row plus header
-          expect(body.count).to eq 2
+        it 'flashes' do
+          expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
         end
 
-        it 'creates csv file with correct name' do
-          filename_header = response.headers["Content-Disposition"]
+        it 'calls job' do
+          expect(LogsDownloadJob).to have_received(:perform_later)
+        end
 
-          expect(filename_header).to include enterprise1.name
-          expect(filename_header).to include Date.today.to_s
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              allow(LogsDownloadJob).to receive(:perform_later)
+              expect { get :index, format: :csv }
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
         end
       end
     end
 
     context 'without logged user' do
       before { get_index }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end

@@ -2,12 +2,14 @@ class SelectField < Field
   include Optionnable
 
   def string_value(value)
-    return '-' if value.nil? || value.empty?
+    return '-' if value.blank?
+
     value[0]
   end
 
   def csv_value(value)
-    return '' if value.nil? || value.empty?
+    return '' if value.blank?
+
     value[0]
   end
 
@@ -41,16 +43,16 @@ class SelectField < Field
 
     # Size score
     size_score = if e1_value == e2_value
-                   1 - e1_popularity
-                 else
-                   1 - e1_popularity + e2_popularity
+      1 - e1_popularity
+    else
+      1 - e1_popularity + e2_popularity
     end
 
     # Contrast score
     popularity_total = if e1_value == e2_value
-                         e1_popularity
-                       else
-                         e1_popularity + e2_popularity
+      e1_popularity
+    else
+      e1_popularity + e2_popularity
     end
 
     contrast_score = (e1_popularity - e2_popularity).abs / popularity_total
@@ -58,10 +60,10 @@ class SelectField < Field
     # Total score
     (size_score + contrast_score).to_f / 2
   end
-  
+
   def validates_rule_for_user?(rule:, user:)
     return false if user.info[rule.field].nil?
-    
+
     field_value = user.info[rule.field][0]
 
     case rule.operator
@@ -71,5 +73,8 @@ class SelectField < Field
       !rule.values_array.include?(field_value)
     end
   end
-  
+
+  def to_string(data)
+    data.join(', ')
+  end
 end

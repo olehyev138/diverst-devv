@@ -1,0 +1,8 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  updated their
+  <% if activity.trackable %>
+    <%= link_to "mentorship profile", user_mentorship_path(activity.trackable) %>
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

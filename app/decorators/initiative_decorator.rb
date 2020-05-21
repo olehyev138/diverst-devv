@@ -1,21 +1,27 @@
 class InitiativeDecorator < Draper::Decorator
-    decorates_association :updates
+  decorates_association :updates
 
-    def progress_percentage
-        return nil if !initiative.start || !initiative.end
-        return 100 if Time.current >= initiative.end
-        (Time.current - initiative.start) / (initiative.end - initiative.start) * 100
-    end
+  def progress_percentage
+    return nil if !initiative.start || !initiative.end
+    return 100 if Time.current >= initiative.end
 
-    def budget_percentage
-        #Show empty bar if no funds is allocated
-        return 0 if initiative.estimated_funding == 0
+    (Time.current - initiative.start) / (initiative.end - initiative.start) * 100
+  end
 
-        #Show just barely visible bar if expences are expected but not published yet.
-        initiative_expences = initiative.expenses.sum(:amount).to_f
+  def budget_percentage
+    initiative_expences = initiative.expenses.sum(:amount).to_f
 
-        return 2 if initiative_expences == 0
+    # show red bar if expenses are greater than estimated_funding
+    return 100 if initiative_expences > initiative.estimated_funding
 
-        initiative_expences / initiative.estimated_funding * 100
-    end
+    # Show empty bar if no funds is allocated
+    return 0 if initiative.estimated_funding == 0
+
+    # Show empty bar if expences is zero.
+    return 0 if initiative_expences == 0
+
+    return 100 if initiative_expences > initiative.estimated_funding
+
+    initiative_expences / initiative.estimated_funding * 100
+  end
 end

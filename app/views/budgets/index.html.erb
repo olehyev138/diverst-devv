@@ -2,11 +2,14 @@
   <h1><%= @group.name%> budgets</h1>
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Export CSV", export_csv_group_budgets_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV"  if policy(@group).request_budget? %>
+      <%= link_to "Export CSV", export_csv_group_budgets_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV"  if GroupBudgetPolicy.new(current_user, [@group]).create? %>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
-    </div>
+    <% @annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id]) %>
+    <% unless @annual_budget.closed? %>
+      <div class="flex-row__cell">
+        <%= link_to "New Budget Request", new_group_budget_path(@group, annual_budget_id: params[:annual_budget_id]), class: "btn btn--primary" if GroupBudgetPolicy.new(current_user, [@group]).create? %>
+      </div>
+    <% end %>  
   </div>
 </div>
 
@@ -35,10 +38,10 @@
                 </td>
                 <td><%= budget.status_title + " by " + approver_name(budget) %></td>
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
-                <td><%= budget.budget_items.count %></td>
+                <td><%= budget.budget_items.size %></td>
                 <td><%= budget.description %></td>
-                <th><%= link_to 'Details', group_budget_path(@group, budget) %></th>
-                <th><%= link_to "Delete", group_budget_path(@group, budget), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %></th>
+                <th><%= link_to 'Details', group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]) %></th>
+                <th><%= link_to "Delete", group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]), method: :delete, class: 'error', data: { confirm: "Are you sure?" } if GroupBudgetPolicy.new(current_user, [@group, budget]).destroy? %></th>
               </tr>
             <% end %>
           </tbody>

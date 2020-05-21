@@ -1,0 +1,51 @@
+.refreshIcon > g > g {
+  fill: $diverst-background;
+}
+
+.refreshIcon {
+  width: 18px;
+  height: 18px;
+  margin-bottom: -5px;
+}
+
+#range-selector input {
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+  height: 30px;
+  max-width: 110px;
+}
+
+#range-selector .range-btn, #range-selector .filter-btn {
+  padding: 5px 6px;
+  font-size: 12px;
+  outline: 0;
+}
+
+#range-selector .filter-btn {
+  border-color: $primary-color;
+}
+
+#range-selector .filter-btn:active,
+#range-selector .filter-btn:focus {
+  background-color: darken($primary-color, 5%);
+}
+
+#range-selector .range-btn:not(:last-child):not(:first-child) {
+  border-left: 1px solid #777777;
+  border-right: 1px solid #777777;
+}
+
+#range-selector .range-btn:last-child {
+  border-left: 1px solid #777777;
+}
+
+#range-selector .range-btn:first-child {
+  border-right: 1px solid #777777;
+}
+
+#range-selector .range-btn:disabled {
+  background-color: #111111;
+  opacity: 0.8;
+  color: $diverst-grey-light;
+}

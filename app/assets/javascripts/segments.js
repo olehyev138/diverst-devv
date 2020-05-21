@@ -29,12 +29,12 @@ $(document).on('ready page:load', function(){
     isMultiSelect: true
   }];
 
-  $('#rules').on('cocoon:after-insert', function(e, containerDiv) {
+  $('#field-rules').on('cocoon:after-insert', function(e, containerDiv) {
     var customField = $(containerDiv).find(".custom-field select");
     listenCustomField(containerDiv, customField);
   });
 
-  $('.segment-rule').each(function() {
+  $('.field-rule').each(function() {
     var customField = $(this).find(".custom-field select");
     listenCustomField($(this), customField);
   });

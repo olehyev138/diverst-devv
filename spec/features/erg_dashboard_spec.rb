@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.feature 'An ERG dashboard' do
   let(:user) { create(:user) }
-  let(:group) { create(:group_with_users, :with_outcomes, users_count: 5, enterprise: user.enterprise) }
+  let(:group) { create(:group_with_users, users_count: 5, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user, run_callbacks: false)
   end
 
   scenario 'shows the upcoming events' do
+    group.upcoming_events_visibility = 'public'
+    group.save!
+
     initiative = create :initiative, owner_group: group, start: 2.days.from_now
     group.outcomes.first.pillars.first.initiatives << initiative
     group.members << user
@@ -35,13 +38,13 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   context 'in sub-erg section' do
-    let!(:category_type) { create(:group_category_type, name: "Color Code") }
-    let!(:red_label) { create(:group_category, name: "Red", group_category_type_id: category_type.id) }
+    let!(:category_type) { create(:group_category_type, name: 'Color Code') }
+    let!(:red_label) { create(:group_category, name: 'Red', group_category_type_id: category_type.id) }
 
     scenario 'show categorized sub-ergs', js: true do
       group.update(group_category_type_id: category_type.id)
       red_sub_groups = create_list(:group, 2, parent_id: group.id, group_category_type_id: category_type.id,
-       group_category_id: red_label.id, enterprise_id: user.enterprise.id)
+                                              group_category_id: red_label.id, enterprise_id: user.enterprise.id)
 
       visit group_path(group)
       expect(page).to have_content red_label.name
@@ -51,15 +54,15 @@ RSpec.feature 'An ERG dashboard' do
     end
 
     scenario 'show uncategorized sub-ergs as normal list' do
-      sub_group = create(:group, parent_id: group.id, :enterprise => user.enterprise)
+      sub_group = create(:group, parent_id: group.id, enterprise: user.enterprise)
 
       visit group_path(group)
 
-      expect(page).not_to have_content "Red"
+      expect(page).not_to have_content 'Red'
       expect(page).to have_content sub_group.name
     end
 
-    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', js: true do
+    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', skip: true, js: true do
       sub_groups = create_list(:group, 7, parent_id: group.id)
 
       visit group_path(group)
@@ -90,7 +93,7 @@ RSpec.feature 'An ERG dashboard' do
       click_on 'Create new message'
       fill_in 'group_message_subject', with: message_subject
       fill_in 'group_message_content', with: message_content
-      page.first('#group_message_segment_ids option').select_option # Select a segment
+      page.first('.select2-field-segments option').select_option # Select a segment
       submit_form
 
       expect(page).to have_content message_subject

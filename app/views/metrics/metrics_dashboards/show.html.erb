@@ -1,0 +1,54 @@
+<div class="content__header">
+  <h1><%= @metrics_dashboard.name %></h1>
+  <div class="flex-row flex-row--middle">
+    <p class="no-margin flex-row__cell"><%= @metrics_dashboard.target.count %> users (<%= @metrics_dashboard.percentage_of_total %>% of total)</p>
+    <div class="flex-row__cell">
+      <div class="field__input-wrapper" style="width: 250px;">
+        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+        <select class="field__input field__input--right-add-on" id="dashboard-select">
+          <% policy_scope(MetricsDashboard).each do |metrics_dashboard| %>
+            <option value="<%= metrics_dashboard.id %>"<%= " selected disabled" if metrics_dashboard == @metrics_dashboard %>><%= metrics_dashboard.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Dashboard", new_metrics_metrics_dashboard_path, class: "btn btn--secondary" if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).create? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Graph", new_metrics_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %>
+    </div>
+    <% if @metrics_dashboard.shareable_token %>
+      <div class="flex-row__cell">
+        <%= link_to "Share", shared_dashboard_metrics_metrics_dashboard_path(@metrics_dashboard, token: @metrics_dashboard.shareable_token) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="content__main">
+  <div class="flex-row">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="card">
+        <div class="card__section">
+          <strong><%= c_t(:erg).pluralize %> included:</strong> <%= @metrics_dashboard.groups.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.groups.empty? %>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="card">
+        <div class="card__section">
+          <strong><%= c_t(:segment).pluralize.capitalize %> included:</strong> <%= @metrics_dashboard.segments.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.segments.empty? %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'graphs' %>
+</div>
+
+<script>
+  $('#dashboard-select').change(function() {
+    location = "/metrics_dashboards/" + $(this).find(":selected").val();
+  });
+</script>

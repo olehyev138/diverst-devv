@@ -5,10 +5,10 @@ RSpec.describe User::DashboardController, type: :controller do
 
 
   describe 'GET #home' do
-    describe "when user is logged in" do
+    describe 'when user is logged in' do
       login_user_from_let
 
-      it "renders home template" do
+      it 'renders home template' do
         get :home
         expect(response).to render_template :home
       end
@@ -17,7 +17,7 @@ RSpec.describe User::DashboardController, type: :controller do
         let(:group) { create :group, enterprise: user.enterprise }
         let(:news_feed) { create :news_feed, group: group }
 
-        let!(:news_feed_link) { create :news_feed_link, news_feed: news_feed}
+        let!(:news_feed_link) { create :news_feed_link, news_feed: news_feed }
         let!(:foreign_news_feed_link) { create :news_feed_link }
 
         before {
@@ -39,9 +39,9 @@ RSpec.describe User::DashboardController, type: :controller do
       end
     end
 
-    describe "users not logged in" do
+    describe 'users not logged in' do
       before { get :home }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -49,14 +49,14 @@ RSpec.describe User::DashboardController, type: :controller do
     describe 'when user is logged in' do
       login_user_from_let
 
-      it "render rewards template" do
+      it 'render rewards template' do
         get :rewards
         expect(response).to render_template :rewards
       end
 
       describe 'rewards' do
         let!(:enterprise) { create(:enterprise) }
-        let!(:user) { create(:user, enterprise: enterprise)}
+        let!(:user) { create(:user, enterprise: enterprise) }
         let!(:reward_action1) { create(:reward_action, enterprise: enterprise, points: 22) }
         let!(:reward_action2) { create(:reward_action, enterprise: enterprise, points: 5) }
         let!(:reward1) { create(:reward, enterprise: enterprise, points: 18) }
@@ -67,24 +67,23 @@ RSpec.describe User::DashboardController, type: :controller do
         before { get :rewards }
         subject { assigns[:reward_actions] }
 
-        it "return reward actions for an enterprise in ascending order of points" do
+        it 'return reward actions for an enterprise in ascending order of points' do
           expect(subject).to eq [reward_action2, reward_action1]
         end
 
-        it "return rewards for an enterprise in ascending order of points" do
+        it 'return rewards for an enterprise in ascending order of points' do
           expect(assigns[:rewards]).to eq [reward2, reward1]
         end
 
-        it "returns badges for an enterprise in ascending order of points" do
+        it 'returns badges for an enterprise in ascending order of points' do
           expect(assigns[:badges]).to eq [badge2, badge1]
         end
-
       end
     end
 
-    describe "when user is not logged in" do
+    describe 'when user is not logged in' do
       before { get :rewards }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end

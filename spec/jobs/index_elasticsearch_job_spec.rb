@@ -1,62 +1,49 @@
 require 'rails_helper'
 
 RSpec.describe IndexElasticsearchJob, type: :job do
+  include ActiveJob::TestHelper
+
   let!(:user) { create(:user) }
-  let!(:index_name) { User.es_index_name(enterprise: user.enterprise) }
+
+  before {
+    @client = double('Client', delete: true)
+    allow(Elasticsearch::Client).to receive(:new).and_return(@client)
+    allow(@client).to receive(:delete)
+
+    allow(Rails.env).to receive(:test?).and_return(false)
+    @object = double('__elasticsearch__', index_document: true, update_document: true, document_type: true, index_name: true)
+    allow_any_instance_of(User).to receive(:__elasticsearch__).and_return(@object)
+    allow(User).to receive(:__elasticsearch__).and_return(@object)
+    allow(@object).to receive(:index_document).and_return(true)
+    allow(@object).to receive(:update_document).and_return(true)
+  }
 
   context 'when indexing user' do
-    it "should add the index on Elasticsearch" do
-      IndexElasticsearchJob.perform_now(model_name: 'User',operation: 'index',index: index_name,record_id: user.id)
-      User.__elasticsearch__.refresh_index!(index: index_name)
-
-      expect(Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits", 0, "_source", "id")).
-        to eq user.id
+    it 'should add the index on Elasticsearch' do
+      subject.perform(model_name: 'User', operation: 'index', record_id: user.id)
+      expect(@object).to have_received(:index_document)
     end
   end
 
   context 'when updating an user' do
-    before :each do
-      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'index', index: index_name, record_id: user.id)
-    end
-
-    it "should update the index on Elasticsearch" do
-      User.__elasticsearch__.refresh_index!(index: index_name)
-      expect(Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits", 0, "_source", "first_name")).
-        to eq user.first_name
-
-      user.update(first_name: "New name")
-      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'update', index: index_name, record_id: user.id)
-      User.__elasticsearch__.refresh_index!(index: index_name)
-
-      expect(Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits", 0, "_source", "first_name")).
-        to eq "New name"
+    it 'should update the index on Elasticsearch' do
+      subject.perform(model_name: 'User', operation: 'update', record_id: user.id)
+      expect(@object).to have_received(:update_document)
     end
   end
 
   context 'when deleting an user' do
-    before :each do
-      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'index', index: index_name, record_id: user.id)
-    end
-
-    it "should delete the index from Elasticsearch" do
-      User.__elasticsearch__.refresh_index!(index: index_name)
-      expect(Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits", 0, "_source", "id")).
-        to eq user.id
-
-      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'delete', index: index_name, record_id: user.id)
-      User.__elasticsearch__.refresh_index!(index: index_name)
-
-      expect(Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits", 0, "_source", "id")).
-        to eq nil
+    it 'should delete the index from Elasticsearch' do
+      subject.perform(model_name: 'User', operation: 'delete', record_id: user.id)
+      expect(@client).to have_received(:delete)
     end
   end
 
   context 'when trying to do an unknown action' do
-    it "should raise an argument error" do
+    it 'should raise an argument error' do
       allow(Rollbar).to receive(:error)
-      
-      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'unknown', index: index_name, record_id: user.id)
-      
+      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'unknown', record_id: user.id)
+
       expect(Rollbar).to have_received(:error)
     end
   end

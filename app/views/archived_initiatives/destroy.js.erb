@@ -1,0 +1,21 @@
+$("#archived_initiative_<%= @initiative.id %>").fadeOut(500, function(){
+	$(this).remove();
+	decreaseInitiativesCount();
+});
+
+
+function decreaseInitiativesCount() {
+	var initiatives_count = parseInt(document.getElementById('archived_initiatives_count').innerHTML);
+	document.getElementById('archived_initiatives_count').innerHTML = initiatives_count - 1;
+	displayEmptyArchive();
+}
+
+function displayEmptyArchive(){
+	var initiatives_count = parseInt(document.getElementById('archived_initiatives_count').innerHTML);
+	if (initiatives_count == 0){
+		$("#archive_buttons").hide();
+		$('.card').append('<div class="card__section card__section--border">No Archived Events.</div>');
+	}
+}
+
+

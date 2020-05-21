@@ -15,7 +15,7 @@ Devise.setup do |config|
   config.mailer_sender = 'info@diverst.com'
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  config.mailer = 'DiverstMailer'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
@@ -191,8 +191,8 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  if  ENV["SESSION_TIMEOUT"]
-    config.timeout_in = ENV["SESSION_TIMEOUT"]
+  if ENV['SESSION_TIMEOUT']
+    config.timeout_in = ENV['SESSION_TIMEOUT']
   else
     config.timeout_in = 7.days
   end

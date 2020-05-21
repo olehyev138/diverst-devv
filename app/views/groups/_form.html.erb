@@ -8,7 +8,7 @@
         <%= f.hidden_field :private, value: 0 %>
         <%= f.input :private, label: 'Set as private' %>
         <%= f.input :logo, as: :attachment_preview %>
-        <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
+        <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2-field-segments"}, wrapper_html: { style: "display: none;" } %>
       </div>
 
       <div class="card__section card__section--border">
@@ -20,8 +20,8 @@
 
       <div class="card__section card__section--border">
         <%= f.association :parent,
-              collection: @group.enterprise.groups,
-              input_html: { class: "select2" },
+              collection: @available_groups,
+              input_html: { class: "select2-field-groups" },
               :include_blank => "None",
               label: "#{c_t(:parent).titleize}-#{ c_t(:erg).titleize}" %>
       </div>
@@ -33,8 +33,8 @@
       </div>
       <div class="card__section card__section--border">
         <%= f.association :children,
-              collection: @group.enterprise.groups,
-              input_html: { class: "select2" },
+              collection: @available_groups,
+              input_html: { class: "select2-field-groups" },
               label: "Sub-#{ c_t(:erg).titleize.pluralize}" %>
       </div>
 
@@ -75,6 +75,8 @@
 
   <% end %>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>
 
 <script>
   $sendInvitations = $('#group_send_invitations');

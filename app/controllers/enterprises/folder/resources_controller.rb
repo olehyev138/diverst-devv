@@ -1,12 +1,18 @@
 class Enterprises::Folder::ResourcesController < ApplicationController
   include IsResources
 
-  before_action :authenticate_user!
-
   layout 'erg_manager'
 
+  def restore
+    super
+  end
+
+  def archive
+    super
+  end
+
   protected
-  
+
   def set_enterprise
     @enterprise = Enterprise.find(params[:enterprise_id])
   end

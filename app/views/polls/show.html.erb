@@ -5,7 +5,7 @@
       <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary hidden-xs" %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" if policy(@poll).edit? %>
+      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" if PollPolicy.new(current_user, @poll).edit? %>
     </div>
   </div>
 </div>
@@ -49,17 +49,19 @@
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
-              <% if policy(@poll).edit? %>
+              <% if PollPolicy.new(current_user, @poll).edit? %>
                 <div class="card__action">
-                  <%= link_to "Edit", edit_poll_graph_path(graph, @poll) %> -
+                  <%= link_to "Edit", edit_poll_graph_path(@poll, graph) %> -
                 </div>
               <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div
+                id="graph_<%= graph.id %>"
                 class="graph"
-                data-url="<%= data_graph_path(graph) %>"
+                data-url="<%= data_metrics_metrics_dashboard_graph_path(@poll, graph) %>"
                 data-time-series="<%= graph.time_series %>">
+                <svg></svg>
               </div>
             </div>
           </div>

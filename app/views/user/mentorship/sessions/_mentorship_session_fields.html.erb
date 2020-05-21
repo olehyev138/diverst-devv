@@ -1,10 +1,11 @@
 <div class="nested-fields">
   <%= link_to_remove_association "Remove", f, class: "error" %>
     x
-  </br>
-  <%= f.input :user_id, as: :select, collection: @mentoring_session.users, input_html: { class: "select2-field"}, :label_method => :email, :value_method => :id, :label => "User" %>
+  <br />
+  <div style="font-size: 14px; font-weight: bold;" class="font-weight-bold">User</div>
+  <small class="muted">To search - type user full name or email</small>
+  <%= f.input :user_id, as: :select, collection: @mentoring_session.users, input_html: { class: "select2-field"}, :label_method => :email, :value_method => :id, :label => false %>
   <%= f.input :role, input_html: {value: "presenter"}, as: :hidden %>
-  <%= f.input :attending, input_html: {value: 0}, as: :hidden %>
 </div>
 
 <script>

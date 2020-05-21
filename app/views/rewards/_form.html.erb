@@ -5,25 +5,28 @@
       <div class="card__section card__section--border">
         <%= f.input :label,
               input_html: { autofocus: true },
-              label: "Choose a <strong>name</strong> that best describes the prize.".html_safe %>
+              label: "Choose a <strong>name</strong> that best describes the reward.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.input :points,
-              label: "How many <strong>points</strong> are needed to redeem the prize?".html_safe %>
+              label: "How many <strong>points</strong> are needed to redeem the reward?".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.association :responsible,
-              include_blank: true,
-              input_html: { class: "select2" },
-              label: "Who is <strong>responsible</strong> for checking this prize request?".html_safe %>
+            as: :select,
+            include_blank: true,
+            input_html: { class: "select2-field" },
+            label: "Who is <strong>responsible</strong> for approving this reward request?".html_safe
+        %>
       </div>
+
 
       <div class="card__section card__section--border">
         <%= f.input :picture,
               as: :attachment_preview,
-              label: "Choose a <strong>picture</strong> that best describes the prize.".html_safe %>
+              label: "Choose a <strong>picture</strong> that best describes the reward.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
@@ -31,6 +34,15 @@
       </div>
     </div>
 
-    <%= f.button :submit, "Save prize" %>
+    <%= f.button :submit, "Save reward" %>
   <% end %>
 </div>
+<script>
+ $(document).on('ready page:load', function() {
+   $('.select2-field').select2(
+     async_select(
+       '<%= users_path(limit: 10, format: :json) %>',
+       async_select_objects.USERS)
+   );
+ });
+</script>

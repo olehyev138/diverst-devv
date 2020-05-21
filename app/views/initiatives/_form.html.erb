@@ -17,7 +17,7 @@
           <div class="card__section card__section--border">
             <%= f.input :budget_item_id,
                   collection: Budget.pre_approved_events_for_select(@group, current_user),
-                  include_blank: "#{@initiative.budget_item.title} ($#{@initiative.budget_item.estimated_amount.to_f})",
+                  include_blank: "#{@initiative.budget_item&.title} ($#{@initiative.budget_item&.estimated_amount.to_f})",
                   label: "<strong>budget</strong> for this event is closed".html_safe,
                   # disable field if there are no budget_items for approved budgets
                   disabled: true
@@ -28,8 +28,8 @@
         <div class="col sm-6">
           <div class="card__section card__section--border">
             <%= f.input :budget_item_id,
-                  collection: Budget.pre_approved_events_for_select(@group, current_user),
-                  include_blank: 'Create new free event ($0)',
+                  collection: Budget.pre_approved_events_for_select(@group, current_user, @initiative),
+                  include_blank: 'Create new free event ($0)', 
                   label: "Attach a <strong>budget</strong> to the event.".html_safe,
 
                   # disable field if there are no budget_items for approved budgets
@@ -66,9 +66,9 @@
 
       <div class="card__section card__section--border">
         <%= f.association :participating_groups,
-          label: "You may also specify <strong>participating groups</strong>".html_safe,
+          label: "You may also invite other groups".html_safe,
           collection: @group.possible_participating_groups,
-          input_html: {class: 'select2', multiple: true} %>
+          input_html: {class: 'select2-field-groups', multiple: true} %>
       </div>
 
       <div class="card__section card__section--border">
@@ -100,26 +100,33 @@
       <div class="card__section card__section--border">
         <%= f.association :segments,
               collection: @segments,
-              input_html: { class: "select2" },
+              input_html: { class: "select2-field-segments" },
               label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target".html_safe %>
       </div>
 
       <div class="row">
-        <div class="col sm-4">
+        <div class="col sm-3">
           <div class="card__section card__section--border">
             <%= f.input :max_attendees, label: "Specify maximum <strong>attendees</strong>".html_safe %>
           </div>
         </div>
-        <div class="col sm-4">
+        <div class="col sm-3">
           <div class="card__section card__section--border">
             <%= f.input :location, label: "Specify the <strong>location</strong>".html_safe %>
           </div>
         </div>
-        <div class="col sm-4">
+        <div class="col sm-3">
           <div class="card__section card__section--border">
             <%= f.input :picture, as: :attachment_preview, label: "Specify the <strong>picture</strong>".html_safe %>
           </div>
         </div>
+        <div class="col sm-3">
+          <div class="card__section card__section--border">
+            <%= f.input :video, label: "Upload the<strong> video</strong>".html_safe %>
+          </div>
+        </div>
+
+
       </div>
     </div>
 
@@ -160,3 +167,5 @@
     <%= f.button :submit, 'Submit' %>
   <% end %>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

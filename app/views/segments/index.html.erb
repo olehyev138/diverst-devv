@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1><%= c_t(:segment).pluralize %></h1>
-  <%= link_to "+ New #{ c_t(:segment) }", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
+  <%= link_to "+ New #{ c_t(:segment) }", new_segment_path, class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
 </div>
 
 <%= render "segments", source: segments_path(format: :json) %>

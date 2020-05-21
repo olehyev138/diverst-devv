@@ -5,27 +5,47 @@
 
   <div class="flex-row__cell">
     <h1 style="margin-bottom: 5px;">
-      <%= @user.name %>
+      <%= @user.name %><%= linkedin_logo_for_connected_users(@user) %>
       <% @user.badges.each do |badge| %>
         <%= image_tag badge.image.expiring_url(3600), class: "icon icon--bg icon--large" %>
       <% end %>
     </h1>
     <%= link_to "Edit profile", edit_user_user_path, class: "btn btn--primary" %>
-    <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.has_answered_group_surveys? %>
-    <% if @user.linkedin_profile_url.present? %>
-      <%= link_to @user.linkedin_profile_url do %>
-          <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">
-        <% end %>
+    <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.belongs_to_group_with_survey? %>
+    <%# unless @user.linkedin_profile_url.nil? %>
+      <%#= link_to @user.linkedin_profile_url do %>
+<!--        <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">-->
+      <%# end %>
+      <%#= link_to 'Delete LinkedIn information', linkedin_user_user_path(@user), method: :delete, data: {confirm: 'Are you sure'}, class: "btn btn-sm btn-danger" %>
+    <%# else %>
+      <%#= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
+    <%# end %>
+    <% if @user.outlook_datum.blank? %>
+    <%=  link_to 'Connect with Outlook', @outlook_url, class: "btn btn--secondary" %>
     <% else %>
-      <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
-    <% end %>
+      <%= link_to 'Outlook Settings', edit_outlook_user_user_path(@user), class: "btn btn-sm btn-secondary" %>
+      <%= link_to 'Delete Outlook information', outlook_user_user_path(@user), method: :delete, data: {confirm: 'Are you sure'}, class: "btn btn-sm btn-danger"  %>
+    <%  end %>
   </div>
+  <% if @user.enterprise.enable_rewards? %>
+    <div class="flex-row__cell--grow">
+      <div align="right">
+        <h2>
+          <%= c_t(:dci_abbreviation) %> Point(s): <%= @user.points %>
+        </h2>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="card" style="margin-top: 30px;">
   <div class="card__section card__section--border">
     <label><strong>Email</strong></label>
     <p><%= @user.email %></p>
+  </div>
+  <div class="card__section card__section--border">
+    <label><strong>Notifications Email</strong></label>
+    <p><%= @user.notifications_email || 'None' %></p>
   </div>
   <div class="card__section card__section--border">
     <label><strong>Name</strong></label>
@@ -39,18 +59,44 @@
     <label><strong>Time zone</strong></label>
     <p><%= @user.default_time_zone %></p>
   </div>
-  <% if policy(@user).access_hidden_info? %>
-  <div class="card__section card__section--border">
-    <label><h2>Hidden info</h2></label>
-    <label><h4>Only D&I Management can see hidden fields</h4></label>
-  </div>  
-    <% @user.enterprise.fields.where(private: false).each do |field| %>
-    <div class="card__section card__section--border">
-      <label><strong><%= field.title %></strong></label>
-      <p><%= @user.string_for_field(field) %></p>
+
+  <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
+    <div class="card">
+      <% @user.enterprise.fields.each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
     </div>
-    <% end %>
+  <% else %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <h2>Hidden info</h2>
+        <h4>Only D&I Management can see hidden fields</h4>
+      </div>
+      <% @user.enterprise.fields.where(private: false).each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
+    </div>
   <% end %>
+
+  <div class="card">
+    <div class="card__section card__section--border" >
+      <h2>Group Membership</h2>
+      <h4>Member of the following <%= c_t(:erg) %>(s)</h4>
+      <% @user.groups.each do |group| %>
+        <%= group.name %>
+        <% unless group == @user.groups.last %>
+          ,
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
   <div class="card__section card__section--border">
     <label><h2>Groups Notifications Settings</h2></label>
     <br>

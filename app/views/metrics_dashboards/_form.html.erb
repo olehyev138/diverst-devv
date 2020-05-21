@@ -1,26 +1,35 @@
 <div class="content__main">
   <%= simple_form_for @metrics_dashboard do |f| %>
-
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.association :groups,
-              collection: @metrics_dashboard.enterprise.groups,
-              label: "Choose what <strong>groups</strong> should be included in this dashboard".html_safe,
-              input_html: { class: "select2", autofocus: true } %>
+              label: "Choose what <strong>#{ c_t(:erg).pluralize }</strong> should be included in this dashboard".html_safe,
+              input_html: { class: "select2-field-groups", id: "select2-field-groups", autofocus: true } %>
+        <a href="#" class="select2-select-all" data-select-id="select2-field-groups" data-select-all-path="<%= get_all_groups_groups_path %>">Select All</a> |
+        <a href="#" class="select2-clear-all" data-select-id="select2-field-groups">Clear Selection</a>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.association :segments,
-              collection: @metrics_dashboard.enterprise.segments,
               label: "Drill down further by selecting the <strong>#{ c_t(:segment).pluralize }</strong> that should be included".html_safe,
-              input_html: { class: "select2" } %>
+              input_html: { class: "select2-field-segments", id: "select2-field-segments" } %>
+        <a href="#" class="select2-select-all" data-select-id="select2-field-segments" data-select-all-path="<%= get_all_segments_segments_path %>">Select All</a> |
+        <a href="#" class="select2-clear-all" data-select-id="select2-field-segments">Clear Selection</a>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.input :name, label: "<strong>Name</strong> your dashboard".html_safe %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.association :shared_users,
+              label: 'Share with other <strong>Users</strong>'.html_safe,
+              input_html: { class: "select2-field-users", multiple: true } %>
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

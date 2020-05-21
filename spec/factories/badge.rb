@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :badge do
     label { Faker::Lorem.sentence }
     points 100

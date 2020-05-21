@@ -5,10 +5,25 @@
 <span class="error"><%= field_errors(resource, cf) %></span>
 <div class="field__input-wrapper">
   <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-  <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]" id="<%= cf.title.downcase %>_<%= cf.id %>">
-    <option disabled selected value> -- Select an option -- </option>
-    <% cf.options.each do |option| %>
-      <option value="<%= option %>"<%= selected= "selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
-    <% end %>
-  </select>
+
+  <% if cf.show_on_vcard %>
+
+    <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]" id="<%= cf.title.downcase %>_<%= cf.id %>">
+      <option disabled selected value> -- Select an option -- </option>
+      <% cf.options.each do |option| %>
+        <option value="<%= option %>"<%= selected= "selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
+      <% end %>
+    </select>
+
+  <% else %>
+
+    <select disabled class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]" id="<%= cf.title.downcase %>_<%= cf.id %>">
+      <option disabled selected value> -- Select an option -- </option>
+      <% cf.options.each do |option| %>
+        <option value="<%= option %>"<%= selected= "selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
+      <% end %>
+    </select>
+
+  <% end %>
+
 </div>

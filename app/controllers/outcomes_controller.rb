@@ -3,8 +3,9 @@ class OutcomesController < ApplicationController
   before_action :set_group
   before_action :set_outcome, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit]
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize Outcome
@@ -21,16 +22,16 @@ class OutcomesController < ApplicationController
     @outcome = Outcome.new(outcome_params)
 
     # don't think this belongs here
-    #@outcome.enterprise = current_user.enterprise
-    #@outcome.estimated_funding *= 100
-    #@outcome.owner = current_user
+    # @outcome.enterprise = current_user.enterprise
+    # @outcome.estimated_funding *= 100
+    # @outcome.owner = current_user
 
     if @outcome.save
       flash[:notice] = "Your #{ c_t(:outcome) } was created"
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not created. Please fix the errors"
-      render :new #new template does not exist
+      render :new # new template does not exist
     end
   end
 
@@ -45,7 +46,7 @@ class OutcomesController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
-      render :edit #edit template exist. however, form partial does not
+      render :edit # edit template exist. however, form partial does not
     end
   end
 
@@ -58,11 +59,7 @@ class OutcomesController < ApplicationController
   protected
 
   def set_group
-    if current_user
-      @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
-    else
-      user_not_authorized
-    end
+    @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
   end
 
   def set_outcome
@@ -76,5 +73,24 @@ class OutcomesController < ApplicationController
         :name,
         :group_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Outcomes'
+    when 'new'
+      'Outcome Creation'
+    when 'edit'
+      "Outcome Edit: #{@outcome.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

@@ -1,0 +1,21 @@
+<% news_feed_link = activity.trackable %>
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  approved a
+  <% if news_feed_link %>
+    <% if news_feed_link.group_message %>
+      <%= link_to "group message", group_group_message_path(news_feed_link.group, news_feed_link.link) %>
+    <% elsif news_feed_link.news_link %>
+      <%= link_to "news link", comments_group_news_link_path(news_feed_link.group, news_feed_link.link) %>
+    <% elsif news_feed_link.social_link %>
+      social link (<%= news_feed_link.social_link.url %>)
+    <% end %>
+    <% if news_feed_link.group %>
+      for group
+      <%= link_to news_feed_link.group.name, group_path(news_feed_link.group) %>
+    <% end %>
+  <% else %>
+    which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

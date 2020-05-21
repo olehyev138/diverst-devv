@@ -12,15 +12,17 @@
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col sm-5">
-            <%= f.input :trackable_id_in,
-                  as: :select,
-                  collection: @groups,
-                  input_html: { class: "select2", multiple: true },
-                  label: "Filter by group",
-                  required: false
-            %>
-          </div>
+          <% if GroupPolicy.new(current_user, nil).index? %>
+            <div class="col sm-5">
+              <%= f.input :trackable_id_in,
+                    as: :select,
+                    collection: @groups,
+                    input_html: { class: "select2-field-groups", multiple: true },
+                    label: "Filter by group",
+                    required: false
+              %>
+            </div>
+          <% end %>
           <div class="col sm-5">
             <div class="col sm-6">
               <%= f.input :created_at_gteq,
@@ -50,3 +52,5 @@
     <%= paginate @activities_page %>
   </div>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

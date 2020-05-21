@@ -26,8 +26,8 @@
               <% end %>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td>
-                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if policy(resource).edit? and policy(resource.container).edit? %> -
-                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } and policy(resource.container).destroy? %>
+                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if resource_policy(resource).edit? and resource_policy(resource).edit? %> -
+                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } and resource_policy(resource).destroy? %>
               </td>
             </tr>
           <% end %>

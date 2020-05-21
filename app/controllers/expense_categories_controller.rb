@@ -2,6 +2,7 @@ class ExpenseCategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_expense_category, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'collaborate'
 
@@ -20,11 +21,11 @@ class ExpenseCategoriesController < ApplicationController
     @expense_category = current_user.enterprise.expense_categories.new(expense_params)
 
     if @expense_category.save
-      flash[:notice] = "Your expense category was created"
+      flash[:notice] = 'Your expense category was created'
       track_activity(@expense_category, :create)
       redirect_to action: :index
     else
-      flash[:alert] = "Your expense category was not created. Please fix the errors"
+      flash[:alert] = 'Your expense category was not created. Please fix the errors'
       render :new
     end
   end
@@ -36,11 +37,11 @@ class ExpenseCategoriesController < ApplicationController
   def update
     authorize @expense_category
     if @expense_category.update(expense_params)
-      flash[:notice] = "Your expense category was updated"
+      flash[:notice] = 'Your expense category was updated'
       track_activity(@expense_category, :update)
       redirect_to action: :index
     else
-      flash[:alert] = "Your expense category was not updated. Please fix the errors"
+      flash[:alert] = 'Your expense category was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -55,11 +56,7 @@ class ExpenseCategoriesController < ApplicationController
   protected
 
   def set_expense_category
-    if current_user
-      @expense_category = current_user.enterprise.expense_categories.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @expense_category = current_user.enterprise.expense_categories.find(params[:id])
   end
 
   def expense_params
@@ -72,5 +69,24 @@ class ExpenseCategoriesController < ApplicationController
         :income,
         :icon
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Expense Categories'
+    when 'new'
+      'Expense Category Creation'
+    when 'edit'
+      "Expense Category Edit: #{@expense_category.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

@@ -15,8 +15,10 @@
         <div class="card__section">
           <h4>Attendance by <%= c_t(:erg) %></h4>
           <div
-            data-url="<%= erg_graph_group_event_attendance_path(@group, @event) %>"
-            class="graph">
+            id="attendees_per_group"
+            class="graph"
+            data-url="<%= erg_graph_group_event_attendance_path(@group, @event) %>">
+            <svg></svg>
           </div>
         </div>
       </div>
@@ -27,8 +29,10 @@
         <div class="card__section">
           <h4>Attendance by <%= c_t(:segment) %></h4>
           <div
-            data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>"
-            class="graph">
+            id="attendees_per_segments"
+            class="graph"
+            data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>">
+            <svg></svg>
           </div>
         </div>
       </div>
@@ -36,24 +40,26 @@
 
   </div>
 
-  <div class="card">
-    <div class="card__section">
-      <table class="table--has-border" id="attendees-table">
-        <thead>
-          <th>Name</th>
-          <th>Date joined</th>
-        </thead>
-        <tbody>
-          <% @attendances.each do |attendance| %>
-            <tr>
-              <td><%= link_to attendance.name, user_path(attendance) %></td>
-              <td><%= attendance.created_at.to_s :reversed_slashes %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <% if @attendances.present? %>
+    <div class="card">
+      <div class="card__section">
+        <table class="table--has-border" id="attendees-table">
+          <thead>
+            <th>Name</th>
+            <th>Date joined</th>
+          </thead>
+          <tbody>
+            <% @attendances.each do |attendance| %>
+              <tr>
+                <td><%= link_to attendance.name, user_path(attendance) %></td>
+                <td><%= attendance.created_at.to_s :reversed_slashes %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>
 
 <script>

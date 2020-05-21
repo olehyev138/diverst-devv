@@ -25,8 +25,8 @@
               <% end %>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td>
-                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if policy(resource).edit? %> -
-                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(resource).destroy? %>
+                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if EnterpriseFolderPolicy.new(current_user, nil).edit? %> -
+                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %>
               </td>
             </tr>
           <% end %>

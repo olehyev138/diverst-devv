@@ -1,10 +1,10 @@
-class Like < ActiveRecord::Base
+class Like < BaseClass
   belongs_to :enterprise
   belongs_to :user
 
   # Objects that can be liked
-  belongs_to :news_feed_link
-  belongs_to :answer
+  belongs_to :news_feed_link, counter_cache: true
+  belongs_to :answer, counter_cache: true
 
   validates :enterprise_id, presence: true
   validates :user_id, presence: true

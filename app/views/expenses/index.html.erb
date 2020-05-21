@@ -3,10 +3,10 @@
 
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Manage categories", expense_categories_path, class: "btn btn--secondary" if policy(ExpenseCategory).index? %>
+      <%= link_to "Manage categories", expense_categories_path, class: "btn btn--secondary" if ExpenseCategoryPolicy.new(current_user, ExpenseCategory).index? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Item", new_expense_path, class: "btn btn--primary" if policy(Expense).new? %>
+      <%= link_to "New Item", new_expense_path, class: "btn btn--primary" if ExpensePolicy.new(current_user, Expense).new? %>
     </div>
   </div>
 </div>
@@ -32,7 +32,7 @@
                 <td><%= number_to_currency expense.price %></td>
                 <td><%= image_tag expense.category.icon.expiring_url(3600, :thumb), class: "icon icon--large" %> <%= expense.category.name %></td>
                 <td><%= expense.income? ? "Income" : "Expense" %></td>
-                <td><%= link_to "Edit", edit_expense_path(expense) if policy(expense).edit? %> - <%= link_to "Delete", expense_path(expense), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(expense).destroy? %></td>
+                <td><%= link_to "Edit", edit_expense_path(expense) if ExpensePolicy.new(current_user, expense).edit? %> - <%= link_to "Delete", expense_path(expense), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if ExpensePolicy.new(current_user, expense).destroy? %></td>
               </tr>
             <% end %>
           </tbody>

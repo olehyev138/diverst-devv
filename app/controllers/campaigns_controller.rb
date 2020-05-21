@@ -1,14 +1,19 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show,
-    :contributions_per_erg, :top_performers]
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout :resolve_layout
 
   def index
     authorize Campaign
     @campaigns = policy_scope(Campaign)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { data: @campaigns.limit(10).map { |c| [c.id, c.title ] } } }
+    end
   end
 
   def new
@@ -21,16 +26,16 @@ class CampaignsController < ApplicationController
   def create
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
-    #TODO Remove. Hack to make question validation pass
+    # TODO Remove. Hack to make question validation pass
     @campaign.questions.each { |q| q.campaign = @campaign }
     @campaign.owner = current_user
 
     if @campaign.save
       track_activity(@campaign, :create)
-      flash[:notice] = "Your campaign was created"
+      flash[:notice] = 'Your campaign was created'
       redirect_to action: :index
     else
-      flash[:alert] = "Your campaign was not created. Please fix the errors"
+      flash[:alert] = 'Your campaign was not created. Please fix the errors'
       render :new
     end
   end
@@ -48,10 +53,10 @@ class CampaignsController < ApplicationController
     authorize @campaign
     if @campaign.update(campaign_params)
       track_activity(@campaign, :update)
-      flash[:notice] = "Your campaign was updated"
+      flash[:notice] = 'Your campaign was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your campaign was not updated. Please fix the errors"
+      flash[:alert] = 'Your campaign was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -67,23 +72,17 @@ class CampaignsController < ApplicationController
   def contributions_per_erg
     authorize @campaign, :show?
 
-    data = @campaign.contributions_per_erg
+    graph = Graph.new
+    graph.enterprise_id = current_user.enterprise_id
+
     respond_to do |format|
       format.json {
-        render json: {
-          highcharts: data,
-          type: 'pie'
-        }
+        render json: graph.contributions_per_erg(@campaign)
       }
       format.csv {
-        flatten_data = data[:series].map{ |d| d[:data] }.flatten
-        strategy = Reports::GraphStatsGeneric.new(
-          title: "Contributions per #{ c_t(:erg) }",
-          categories: flatten_data.map{ |d| d[:name] }.uniq,
-          data: flatten_data.map{ |d| d[:y] }
-        )
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "contributions_per_erg.csv"
+        CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+        redirect_to :back
       }
     end
   end
@@ -91,31 +90,26 @@ class CampaignsController < ApplicationController
   def top_performers
     authorize @campaign, :show?
 
-    data = @campaign.top_performers
+    graph = Graph.new
+    graph.enterprise_id = current_user.enterprise_id
+
     respond_to do |format|
       format.json {
-        render json: {
-          highcharts: data,
-          type: 'bar'
-        }
+        render json: graph.top_performers(@campaign)
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
-          categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "top_performers.csv"
+        CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+        redirect_to :back
       }
     end
   end
 
+
   protected
 
   def set_campaign
-    if current_user
-      @campaign = current_user.enterprise.campaigns.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @campaign = current_user.enterprise.campaigns.find(params[:id])
   end
 
   def campaign_params
@@ -130,6 +124,7 @@ class CampaignsController < ApplicationController
         :image,
         :banner,
         :status,
+        :input,
         group_ids: [],
         segment_ids: [],
         manager_ids: [],
@@ -138,12 +133,43 @@ class CampaignsController < ApplicationController
           :_destroy,
           :title,
           :description
+        ],
+        sponsors_attributes: [
+          :id,
+          :sponsor_name,
+          :sponsor_title,
+          :sponsor_message,
+          :sponsor_media,
+          :disable_sponsor_message,
+          :_destroy
         ]
       )
   end
 
   def resolve_layout
     return 'user' if current_user.nil?
+
     'collaborate'
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Campaigns'
+    when 'new'
+      'Campaign Creation'
+    when 'show'
+      "Campaign: #{@campaign.to_label}"
+    when 'edit'
+      'Campaign Edit'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

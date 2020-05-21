@@ -1,0 +1,210 @@
+<%= render partial: 'components/group_selector', locals: {id: "group-scope-selector", multiselect: true} %>
+
+<div class="content__header">
+  <h1>Users</h1>
+</div>
+
+<div class="content__main">
+
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total Active Users</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:total_active_users] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>User Growth (6 Months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_growth] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>New <%= c_t(:erg) %> Memberships (6 months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>User Population per <%= c_t(:erg) %> (All Users)</h4>
+          <%= render 'components/range_selector' %>
+          <div class="card__action">
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= users_per_group_metrics_users_path(format: :csv) %>">Export CSV</a>
+          </div>
+          <div id="users_per_group" class="graph" data-url="<%= users_per_group_metrics_users_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>User Population per <%= c_t(:segment) %></h4>
+          <div class="card__action">
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= users_per_segment_metrics_users_path(format: :csv) %>">Export CSV</a>
+          </div>
+          <div id="users_per_segment" class="graph" data-url="<%= users_per_segment_metrics_users_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'aggregate_usage_metrics' %>
+
+  <div class="card">
+    <div class="card__section">
+      <h2>User <%= c_t(:dci_abbreviation) %> Point and Usage Stats</h2>
+
+      <table class="table--has-border" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
+        <thead>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Usage Stats</th>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="card">
+  <div class="card__section">
+    <div class="flex-row flex-row--middle">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <h4>User Growth (All Users)</h4>
+        <%= render 'components/range_selector' %>
+        <div id="user_growth" class="graph" data-url="<%= user_growth_metrics_users_path %>">
+          <svg></svg>
+        </div>
+        <input type="button" hidden class="drillout_button" value="Back"></input>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card__section">
+    <h2><%= c_t(:erg) %> Membership Cross Section</h2>
+    <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
+            data-target="#group-scope-selector">Intersect <%= c_t(:erg).pluralize %></button>
+    <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container"
+            aria-expanded="false" aria-controls="groups-list-container">Show Intersections
+    </button>
+
+    <br><br>
+    <div id="groups-list-container" class="collapse">
+      <div class="card__section--border">
+        <h4><b>Intersected <%= c_t(:erg).pluralize %></b></h4>
+        <div class="groups-list"><h4>No filter</h4></div>
+        <br>
+      </div>
+    </div>
+
+    <div class="card__action">
+      <a href="#" id="users_intersection_csv" data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
+    </div>
+
+    <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id='users-table'>
+      <thead>
+      <th>ID</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Email</th>
+      <th>Details</th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<script>
+    $(document).on('ready page:load', function () {
+        $('#users-usage-table').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#users-usage-table').data('source')
+            },
+            "pagingType": "full_numbers",
+            "order": [[3, "desc"]]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('page:change', function () {
+        $(document).off('page:change');
+
+        var scoped_by_models = [];
+
+        var table = $('#users-table').DataTable(Utility.mergeWithDTDefaults({
+            serverSide: true,
+            ajax: {
+                url: "<%= user_groups_intersection_metrics_users_path(format: :json) %>", data: function (d) {
+                    d.scoped_by_models = scoped_by_models
+                }
+            },
+            columnDefs: [
+                {bSortable: false, targets: [3, 4]}
+            ]
+        }));
+
+        var table2 = $('#users-show_usage-table').DataTable(Utility.mergeWithDTDefaults({
+            serverSide: true,
+            ajax: {
+                url: "<%= user_usage_data_metrics_users_path(format: :json) %>", data: function (d) {
+                    d.scoped_by_models = scoped_by_models
+                }
+            },
+            columnDefs: [
+                {bSortable: false, targets: [4]}
+            ]
+        }));
+
+        $(".group-selector").on('saveGroups', function (e, selectedGroups) {
+            let ids = $.map(selectedGroups, function (group, key) {
+                return group.id;
+            });
+
+            let groupTexts = $.map(selectedGroups, function (group, key) {
+                return "<span class='group-selected-text'>" + group.text + "</span>";
+            });
+
+            if (selectedGroups.length > 0)
+                $(".groups-list").html(groupTexts.join(" "));
+            else
+                $(".groups-list").html("<h4>No filter</h4>");
+
+            scoped_by_models = ids;
+            table.ajax.reload();
+        });
+
+        $('#users_intersection_csv').click(function () {
+            $.get($('#users_intersection_csv').data('url'), {scoped_by_models: scoped_by_models}, function (data) {
+                Utility.displayFlash(data);
+            }, "JSON");
+        });
+    });
+</script>

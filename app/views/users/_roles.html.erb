@@ -18,7 +18,7 @@
                 <td><%= UserRoleDecorator.decorate(role).default_role %></td>
                 <td><%= role.priority %></td>
                 <td><%= link_to role.policy_group_template.name, edit_policy_group_template_path(role.policy_group_template) %></td>
-                <td><%= link_to "Delete", user_role_path(role), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(role).destroy? && !role.default? %></td>
+                <td><%= link_to "Delete", user_role_path(role), method: :delete, class: "error", data: { confirm: "Are you sure?" } if UserRolePolicy.new(current_user, role).destroy? && !role.default? %></td>
             </tr>
           <% end %>
       </tbody>

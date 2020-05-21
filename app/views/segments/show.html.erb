@@ -1,54 +1,307 @@
-<h1><%= @segment.name %></h1>
-<div class="content__header">
-  <div class="flex-row flex-row--middle full-width">
-    <div class="flex-row__cell flex-row__cell--grow">
-      <div class="field__input-wrapper" style="width: 450px;">
-        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-        <select class="field__input field__input--right-add-on" id="js-group-select">
-          <option <%= " selected disabled" if @group.nil? %>></option>
-          <% current_user.manageable_groups.each do |group| %>
-            <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
-          <% end %>
-        </select>
+<%= simple_form_for @segment do |f| %>
+  <div class="content__header">
+    <div class="grow"><%= f.input :name, label: false, placeholder: "#{c_t(:segment)} Name", input_html: { style: "font-size: 18px; width: auto;" }%></div>
+    <div class="flex-row flex-row--middle">
+      <% unless @segment.new_record? %>
+        <div class="flex-row__cell">
+          <%= link_to "Export", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.is_admin? %>
+        </div>
+      <% end %>
+      <div class="flex-row__cell">
+        <%= f.button :submit, "create #{c_t(:segment)}", id: 'submit-button' %>
       </div>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.admin? %>
+  </div>
+
+  <div class="content__main">
+    <div class="card">
+      <div class="card__section card__section--border">
+        <div class="row">
+          <div class="col sm-5">
+            <%= f.input :active_users_filter, include_blank: false %>
+          </div>
+          <div class="col sm-5 pull-right">
+            <%= f.input :limit, label: ("Limit" + ' <span class="tooltipster" data-tooltip-content="#limit_tooltip">' + inline_svg('icons/information.svg', size: "14px") + "</span>").html_safe %>
+            <div class="tooltip_templates">
+              <div id="limit_tooltip">
+                Take the top N users.
+                <br><br>
+                <small>Ex. '50' for the top 50 users.</small>
+              </div>
+            </div>
+          </div>
+          <%= f.association :parent, as: :hidden %>
+        </div>
+      </div>
+      <div class="card__section pad-top">
+        <div class="flex-row">
+          <div class="flex-row__cell">
+            <div class="link">
+              <%= link_to_add_association "+ Field Rule", f, :field_rules, partial: 'field_rule', id: 'add_field_rule', data: { 'association-insertion-node': "#field-rules", 'association-insertion-method': 'append' } %>
+            </div>
+          </div>
+          <div class="flex-row__cell">
+            <div class="link">
+              <%= link_to_add_association "+ Order Rule", f, :order_rules, partial: 'order_rule', id: 'add_order_rule', data: { 'association-insertion-node': "#order-rules", 'association-insertion-method': 'append' } %>
+            </div>
+          </div>
+          <div class="flex-row__cell">
+            <div class="link">
+              <%= link_to_add_association "+ Scope Rule", f, :group_rules, partial: 'group_rule', id: 'add_group_rule', data: { 'association-insertion-node': "#group-rules", 'association-insertion-method': 'append' } %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card__section" id="field-rules-container" <%= 'style="display: none;"'.html_safe if @segment.field_rules.empty? %>>
+        <h4><b>Criteria</b></h4>
+        <div id="field-rules">
+          <%= f.simple_fields_for :field_rules, partial: 'field_rule' do |field| %>
+            <%= render 'field_rule', f: field %>
+          <% end %>
+        </div>
+      </div>
+      <div class="card__section" id="order-rules-container" <%= 'style="display: none;"'.html_safe if @segment.order_rules.empty? %>>
+        <h4><b>Order <span class="tooltipster" data-tooltip-content="#order_rules_tooltip"><%= inline_svg('icons/information.svg', size: "14px") %></span></b></h4>
+        <div class="tooltip_templates">
+          <div id="order_rules_tooltip">
+            Order rules allow you to sort your user list using user data.
+            <br>
+            <br>
+            <small>Tip: Combine this with 'Limit' to get a fixed top users list based on the order attribute.</small>
+          </div>
+        </div>
+        <div id="order-rules">
+          <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
+            <%= render 'order_rule', f: field %>
+          <% end %>
+        </div>
+      </div>
+      <div class="card__section" id="group-rules-container" <%= 'style="display: none;"'.html_safe if @segment.group_rules.empty? %>>
+        <h4><b>Scopes <span class="tooltipster" data-tooltip-content="#group_scopes_tooltip"><%= inline_svg('icons/information.svg', size: "14px") %></span></b></h4>
+        <div class="tooltip_templates">
+          <div id="group_scopes_tooltip">
+            Scope rules allow you to filter on users based on their <%= c_t(:erg) %> memberships.
+            <br>
+            <br>
+            <small>
+              Operations:
+              <ul>
+                <li><b>Join:</b> Users that are members of <i>any</i> chosen <%= c_t(:erg).pluralize %>.</li>
+                <li><b>Intersect:</b> Users that are members of <i>every</i> chosen <%= c_t(:erg) %>.</li>
+              </ul>
+            </small>
+          </div>
+        </div>
+        <div id="group-rules">
+          <%= f.simple_fields_for :group_rules, partial: 'group_rule' do |field| %>
+            <%= render 'group_rule', f: field %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
+  <% unless @segment.new_record? %>
+    <br>
+    <div class="flex-row__cell">
+      <h3><%= c_t(:segment) %> Users <span id="member-count-wrapper" style="display: none;">(<b><span id="member-count"></span></b>)</span></h3>
+    </div>
+    <br>
 
-<div class="content__main">
-  <ul>
-    <% @segment.rules.each do |rule| %>
-      <li><%= rule.field&.title || 'Associated field no longer exists!' %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
-    <% end %>
-  </ul>
+    <div class="card">
+      <div class="card__section">
+        <div id="job_status" style="text-align: center; display: none;">
+          <div class="spinner spinner-primary" style="display: inline-block"></div>
+        </div>
+        <div id="segment-members-table-container">
+          <%= render 'members_table', source: segment_url(@segment, format: :json) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 
-  <%= render 'members_table', source: segment_path(@segment, format: :json) %>
-</div>
+<% unless @segment.new_record? %>
+  <div class="sub_segments">
+    <div class="content__header">
+      <h1>Sub-<%= c_t(:segment).pluralize %></h1>
+      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_path(@segment, parent_id: @segment.id), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
+    </div>
 
-<div class="content__header">
-  <h1>Sub-<%= c_t(:segment).pluralize %></h1>
-  <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if policy(Segment).new? %>
-</div>
-
-<%= render "table" %>
+    <div class="content__main">
+      <%= render "table" %>
+    </div>
+  </div>
+<% end %>
 
 <script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
+  <% unless @segment.new_record? %>
 
-    $('#js-group-select').change(function() {
-      var url = location.protocol + '//' + location.host + location.pathname;
-      var group_id = $(this).find(":selected").val();
+    var interval = null;
 
-      if(group_id){
-        url+= '?group_id=' + group_id;
-      }
+    $(document).on('page:change', function() {
+      $(document).off('page:change');
 
-      location = url
+      let membersTable;
+
+      membersTable = $('#segment-members-table').DataTable({
+        deferLoading: -1,
+        autoWidth: false,
+        pagingType: "full_numbers",
+        dom: "frtpl",
+        language: {
+          search: "",
+          searchPlaceholder: "Search...",
+          emptyTable: "No users match your <%= c_t(:segment) %> rules"
+        },
+        serverSide: true,
+        ajax: { url: "", type: 'GET' },
+        order: []
+      });
+
+      membersTable.on('preDraw', function () {
+        let memberCount = membersTable.page.info().recordsTotal;
+
+        // First load without data
+        if (memberCount === -1) {
+          membersTable.ajax.url("<%= segment_url(@segment, format: :json) %>"); // Set AJAX URL
+
+          // Don't set member count when not loading proper data
+          return;
+        }
+
+        $('#member-count').text(memberCount); // Set the member count text
+        $('#member-count-wrapper').show();
+      });
+
+      // ********** Cache segment member job handling **********
+
+      // Get initial state
+      $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
+        // Segment member caching job is active
+        if (data.status === 'active') {
+
+          // Hide/Show various elements
+          $('#job_status').show();
+          $('#submit-button').attr("disabled", true);
+          $('#segment-members-table-container').hide();
+          $('#member-count-wrapper').hide();
+
+          // Create polling interval
+          interval = setInterval(function () {
+            $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
+              // Segment member caching job is complete
+              if (data.status === 'inactive') {
+                // Stop polling
+                clearInterval(interval);
+
+                // Show/Hide various elements
+                $('#job_status').hide();
+                $('#submit-button').attr("disabled", false);
+                $('#segment-members-table-container').show();
+
+                // Reload the table data
+                membersTable.ajax.reload();
+              }
+            });
+          }, 3000);
+        }
+        else
+          membersTable.ajax.reload();
+      });
+
+    });
+
+    // Clear interval on unload
+    $(document).on("page:before-unload", function() {
+        clearInterval(interval);
+    });
+  <% end %>
+
+  var group_rule_count = 0;
+
+  $(document).on('ready page:load', function() {
+    $('.group-rule').each(function (i) {
+      setup_group_rule($(this));
+    });
+
+    $('#add_field_rule').click(function () {
+      $('#field-rules-container').show();
+    });
+
+    $('#add_order_rule').click(function () {
+      $('#order-rules-container').show();
+    });
+
+    $('#add_group_rule').click(function () {
+      $('#group-rules-container').show();
+    });
+
+
+    $('#field-rules').on('cocoon:after-remove', function(e, removedItem) {
+      if ($('#field-rules > div:visible').length <= 0)
+        $('#field-rules-container').hide();
+    });
+
+    $('#order-rules').on('cocoon:after-remove', function(e, removedItem) {
+      if ($('#order-rules > div:visible').length <= 0)
+        $('#order-rules-container').hide();
+
+    });
+
+    $('#group-rules').on('cocoon:after-remove', function(e, removedItem) {
+      if ($('#group-rules > div:visible').length <= 0)
+        $('#group-rules-container').hide();
+    });
+
+    $('#group-rules').on('cocoon:after-insert', function() {
+      setup_group_rule($('.group-rule').last());
     });
   });
+
+  function setup_group_rule($group_rule) {
+    // Set id for this new rule
+    $($group_rule).attr('id', 'group-rule' + group_rule_count);
+
+    // Load group selector
+    var group_ids = <%= @segment.group_rules.map { |r| r.groups.map(&:id) } %>;
+    $('body').prepend("<%= escape_javascript render partial: 'components/group_selector', locals: { id: 'group-scope-selector', multiselect: true } %>");
+    $('#group-scope-selector').attr("data-preselected-groups", JSON.stringify(group_ids[group_rule_count]));
+    group_selector = new GroupSelector($('#group-scope-selector'));
+
+    let group_selector_id = "group-scope-selector" + group_rule_count;
+    $('#group-scope-selector').attr("id", group_selector_id);
+
+    $('#choose-groups-btn', $group_rule).attr("data-target", "#" + group_selector_id);
+    $('#choose-groups-btn', $group_rule).attr("id", "choose-groups-btn" + group_rule_count);
+
+    let $group_input = $('.group-input', $group_rule);
+    $($group_input).select2();
+
+    $('#' + group_selector_id).on('saveGroups', function(e, selectedGroups) {
+      $($group_input).val(null);
+
+      $.map(selectedGroups, function(group, key) {
+        if ($($group_input).find("option[value='" + group.id + "']").length)
+        {
+          // If the list of selected items is an array, select it with the other options
+          if ($.isArray($($group_input).val()))
+            $($group_input).val($($group_input).val().concat(group.id));
+          // If the list of the selected items is a single item, create an array with the old item and new item
+          else if ($($group_input).val() != undefined && $($group_input).val() != null)
+            $($group_input).val([$($group_input).val(), group.id]);
+          // If the list of selected items is empty, create an array with the new item
+          else
+            $($group_input).val([group.id]);
+        }
+        // If the option doesn't exist, create it and start selected
+        else
+          $($group_input).append(new Option(group.text, group.id, false, true));
+      });
+
+      $($group_input).trigger('change');
+    });
+
+    group_rule_count += 1;
+  }
 </script>

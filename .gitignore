@@ -17,8 +17,8 @@
 # Redis dump
 dump.rdb
 
-# Bower components
-vendor/assets/bower_components
+# Yarn
+bower_components
 
 # Node Modules
 node_modules

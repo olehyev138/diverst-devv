@@ -8,6 +8,7 @@ class DateField < Field
 
   def string_value(value)
     return '-' if value.nil?
+
     value.to_s :slashes
   end
 
@@ -19,16 +20,19 @@ class DateField < Field
 
   def deserialize_value(value)
     return nil if value.nil?
+
     Time.at(value)
   end
 
   def serialize_value(value)
     return nil if value.nil?
+
     value.strftime('%s').to_i
   end
 
   def csv_value(value)
     return '' if value.nil?
+
     value.strftime('%F')
   end
 
@@ -48,6 +52,7 @@ class DateField < Field
 
     high_delta = values.max - values.min
     return 0 if high_delta == 0 # Lets not divide by zero shall we
+
     delta = (e1_value - e2_value).abs
     delta.to_f / high_delta
   end
@@ -55,7 +60,7 @@ class DateField < Field
   def validates_rule_for_user?(rule:, user:)
     rule_date = Date.parse(rule.values_array[0])
     user_date = user.info[rule.field]
-    
+
     case rule.operator
     when SegmentRule.operators[:equals]
       user_date == rule_date
@@ -75,7 +80,7 @@ class DateField < Field
     ranges = []
     nb_buckets.times do |i|
       from = min + i * bucket_size
-      to = i == nb_buckets-1 ? max + 1 : from + bucket_size
+      to = i == nb_buckets - 1 ? max + 1 : from + bucket_size
 
       ranges << { key: "#{ Time.at(from).strftime('%m/%d/%Y') }-#{ Time.at(to).strftime('%m/%d/%Y') }", from: from, to: to }
     end
@@ -85,6 +90,11 @@ class DateField < Field
 
   def set_options_array
     return self.options = [] if options_text.nil?
+
     self.options = options_text.lines.map(&:chomp)
+  end
+
+  def to_string(data)
+    Time.at(data).to_s
   end
 end

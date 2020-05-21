@@ -1,22 +1,26 @@
-class Field < ActiveRecord::Base
-  include Indexable
-
+class Field < BaseClass
   belongs_to :enterprise
-  belongs_to :event
   belongs_to :group
   belongs_to :poll
   belongs_to :initiative
-  
+
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
-
+  validates_length_of :field_type, maximum: 191
+  validates_length_of :options_text, maximum: 65535
+  validates_length_of :saml_attribute, maximum: 191
+  validates_length_of :title, maximum: 191
+  validates_length_of :type, maximum: 191
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
-  unless: Proc.new { |object| (object.type == "SegmentsField" || object.type == "GroupsField") }, if: :container_type_is_enterprise?
+                    unless: :is_segment_or_group_field?, if: :container_type_is_enterprise?
 
   def container_type_is_enterprise?
     enterprise_id.present?
+  end
+
+  def is_segment_or_group_field?
+    type == 'SegmentsField' || type == 'GroupsField'
   end
 
   # The typical field value flow would look like this:
@@ -59,7 +63,7 @@ class Field < ActiveRecord::Base
   end
 
   def numeric?
-    type == "NumericField" || type == "DateField"
+    type == 'NumericField' || type == 'DateField'
   end
 
   def format_value_name(value)
@@ -68,7 +72,6 @@ class Field < ActiveRecord::Base
 
   def enterprise
     return Enterprise.find_by_id(enterprise_id) if enterprise_id.present?
-    return event.group.enterprise if event_id.present?
     return group.enterprise if group_id.present?
     return poll.enterprise if poll_id.present?
     return initiative.enterprise if initiative_id.present?

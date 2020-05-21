@@ -5,7 +5,76 @@
       <div class="card">
         <div class="card__section">
           <%= simple_form_for @enterprise do |f| %>
-            <%= f.input :time_zone %>
+            <%= f.input :name %>
+            </br>
+            
+            <%= f.input :time_zone, :hint => "Set the default time zone for all users in the company" %>
+            </br>
+            
+            <%= f.hidden_field :mentorship_module_enabled, value: 0 %>
+            <%= f.input :mentorship_module_enabled %>
+            </br>
+            
+            <%= f.hidden_field :disable_likes, value: 0 %>
+            <%= f.input :disable_likes, :hint => "Users will not be able to 'like' news posts, group messages, etc when disabled" %>
+            </br>
+            
+            <%= f.hidden_field :enable_pending_comments, value: 0 %>
+            <%= f.input :enable_pending_comments %>
+            </br>
+            
+            <%= f.hidden_field :collaborate_module_enabled, value: 0 %>
+            <%= f.input :collaborate_module_enabled %>
+            
+            <%= f.hidden_field :scope_module_enabled, value: 0 %>
+            <%= f.input :scope_module_enabled %>
+            
+            
+            <%= f.hidden_field :has_enabled_onboarding_email, value: 0 %>
+            <%= f.input :has_enabled_onboarding_email, label: "Enable onboarding emails?" %>
+            
+            <%= f.hidden_field :disable_emails, value: 0 %>
+            <%= f.input :disable_emails, label: "Disable all emails?", :hint => "Prevent emails from going off the system" %>
+            
+            <%= f.input :default_from_email_address, :hint => "This is the default email address that will show up in emails to users" %>
+            
+            <%= f.input :default_from_email_display_name, :hint => "This is the default name that will show up in emails to users" %>
+            
+            <%= f.hidden_field :redirect_all_emails, value: 0 %>
+            <%= f.input :redirect_all_emails %>
+            
+            <%= f.input :redirect_email_contact, :hint => "This is the email address that all emails will be redirected to" %>
+            
+            <%= f.hidden_field :enable_rewards, value: 0 %>
+            <%= f.input :enable_rewards %>
+            
+            <%= f.hidden_field :enable_social_media, value: 0 %>
+            <%= f.input :enable_social_media %>
+            
+            <%= f.hidden_field :plan_module_enabled, value: 0 %>
+            <%= f.input :plan_module_enabled %>
+
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+                <div id="auto_archive_switch">
+                    <%= f.hidden_field :auto_archive, value: 0 %>
+                    <%= f.input :auto_archive, label: 'Auto archive switch' %>
+                </div>
+
+                <div id="auto_archive_settings" style='<%= @enterprise.auto_archive? ? "display: block" : "display: none" %>'>
+                    <p>Set expiration settings for resources</p>
+                    <%= f.input :unit_of_expiry_age %>
+                    <%= f.input :expiry_age_for_resources %>
+                </div>
+            <% end %>  
+            <br>
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+              <div id="onboarding_consent" >
+                <%= f.hidden_field :onboarding_consent_enabled, value: 0 %>
+                <%= f.input :onboarding_consent_enabled, label: 'Enable onboarding consent' %>
+              </div>
+            <% end %>  
+            <br>
+            
             <%= f.button :submit %>
           <% end %>
         </div>
@@ -13,3 +82,16 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).on('ready page:load', function(){
+    $("#auto_archive_switch").on("change", function(e){
+      $("#auto_archive_settings").toggle();
+      $.ajax({url: '<%= auto_archive_switch_enterprise_path(@enterprise) %>', type: 'PATCH'});
+    });
+
+    $("#onboarding_consent").on('change', function(e){
+      $.ajax({url: '<%= enable_onboarding_consent_enterprise_path(@enterprise) %>', type: 'PATCH'});
+    });
+  });
+</script>

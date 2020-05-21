@@ -1,13 +1,28 @@
 <div class="card">
-  <% @user_groups.each do |user_group| %>
-    <div class="card__section card__section--border">
-      <h3>Answers for <%= "#{c_t(:erg)} #{user_group.group.name}" %></h3>
-    <% user_group.group.survey_fields.each do |field| %>
-      <div class="card__section card__section--border">
-        <label><strong><%= field.title %></strong></label>
-        <p><%= user_group.string_for_field(field) %></p>
-      </div>
+  <% unless @user_groups.nil? %>
+    <% @user_groups.each do |user_group| %>
+      <% if user_group.group.survey_fields.present? %>
+        <div class="card__section card__section--border">
+          <h3>Answers for <%= "#{c_t(:erg)} #{user_group.group.name}" %></h3>
+          <% if user_group.data.present? && user_group.data != '{}' %>
+            <% user_group.group.survey_fields.each do |field| %>
+              <div class="card__section card__section--border">
+                <label><strong><%= field.title %></strong></label>
+                <p><%= user_group.string_for_field(field) %></p>
+              </div>
+            <% end %>
+          <% else %>
+            <h3><%= @is_own_survey?'You':'User'%> didn't complete this survey</h3>
+          <% end %>
+          <% if @is_own_survey  %>
+            <%= link_to "Edit Answers", survey_group_questions_path(user_group.group), class: "btn btn--primary" %>
+          <% end %>
+        </div>
+      <% elsif @individual %>
+        <div class="card__section card__section--border">
+          <h3><%= "#{user_group.group.name} does not have a survey" %></h3>
+        </div>
+      <% end %>
     <% end %>
-    </div>
   <% end %>
 </div>

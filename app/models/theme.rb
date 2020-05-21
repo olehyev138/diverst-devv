@@ -1,7 +1,13 @@
-class Theme < ActiveRecord::Base
+class Theme < BaseClass
   has_one :enterprise
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  validates_length_of :logo_redirect_url, maximum: 191
+  validates_length_of :secondary_color, maximum: 191
+  validates_length_of :digest, maximum: 191
+  validates_length_of :primary_color, maximum: 191
+  validates_length_of :logo_content_type, maximum: 191
+  validates_length_of :logo_file_name, maximum: 191
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   validates :primary_color, presence: true, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }
@@ -50,7 +56,7 @@ class Theme < ActiveRecord::Base
     enterprise_id = enterprise.id
     enterprise.theme_id = nil
     enterprise.save!
-    
+
     ThemeCompilerJob.perform_later(id, enterprise_id)
   end
 

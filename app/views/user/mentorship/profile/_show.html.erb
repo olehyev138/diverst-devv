@@ -6,7 +6,7 @@
           <%= image_tag(@user.avatar.expiring_url(3600), height: '100') %>
         </div>
         <div class="col-xs-10">
-          <h1 class="text-center"><%= @user.name %></h1>
+          <h1 class="text-center"><%= @user.name %><%= linkedin_logo_for_connected_users(@user) %></h1>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <% if not @user.linkedin_profile_url.blank? %>
+    <% unless @user.linkedin_profile_url.blank? %>
       <div class="card__section card__section--border">
         <div class="row">
           <div class="col-sm-6 col-xs-12">

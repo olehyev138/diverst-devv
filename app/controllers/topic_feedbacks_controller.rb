@@ -2,6 +2,7 @@ class TopicFeedbacksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
+  after_action :visit_page, only: [:new]
 
   layout 'guest'
 
@@ -38,7 +39,7 @@ class TopicFeedbacksController < ApplicationController
   protected
 
   def set_topic
-    current_user ? @topic = current_user.enterprise.topics.find(params[:topic_id]) : user_not_authorized
+    @topic = current_user.enterprise.topics.find(params[:topic_id])
   end
 
   def set_feedback
@@ -60,5 +61,20 @@ class TopicFeedbacksController < ApplicationController
         :content,
         :featured
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Feedback Creation'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

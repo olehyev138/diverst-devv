@@ -1,0 +1,48 @@
+<script>
+  var defaultResultsMapping = function(item) {
+      return { id: item[0], text: item[1] };
+  };
+
+  $(document).on('ready page:load', function(){
+    function init_select2(selector, url, resultsMapping = defaultResultsMapping){
+      $(selector).select2({
+        ajax: {
+          url: url,
+          theme: 'bootstrap',
+          allowClear: true,
+          type: "GET",
+          dataType: "json",
+          minimumInputLength: 3,
+          multiple: true,
+          delay: 1000,
+          data: function (params) {
+            var query = {
+              search: {
+                value: params.term
+              }
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+          },
+          processResults: function (data) {
+            // Tranforms the top-level key of the response object from 'items' to 'results'
+            return {
+              results: $.map(data.data, function(item) { return resultsMapping(item); })
+            };
+          },
+          templateSelection: function(item) {
+            return item[0]
+          }
+        }
+      });
+    };
+
+    init_select2(".select2-field-tags", "<%= tags_path(format: :json, )  %>")
+    init_select2(".select2-field-campaigns", "<%= campaigns_path(format: :json) %>");
+    init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>");
+    init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>");
+    init_select2(".select2-field-users", "<%= users_path(active: 1, not_current_user: true, can_metrics_dashboard_create: true, :limit => 10, format: :json) %>", function(item) {
+        return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
+    });
+  });
+</script>

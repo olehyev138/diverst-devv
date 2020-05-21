@@ -1,9 +1,12 @@
-class SegmentRule < ActiveRecord::Base
+class SegmentRule < BaseClass
   belongs_to :segment
   belongs_to :field
 
+  validates_length_of :values, maximum: 65535
   validates :field, presence: true
-  #TODO validate that operator is in @@operators
+  validates :field_id, presence: true
+
+  # TODO validate that operator is in @@operators
   validates :operator, presence: true
   validates :values, presence: true
 
@@ -22,7 +25,7 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def values
-    self[:values].blank? ? "[]" : self[:values]
+    self[:values].presence || '[]'
   end
 
   def self.operator_text(id)
@@ -30,7 +33,7 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def values_array
-    JSON.parse self[:values]
+    JSON.parse values
   end
 
   def followed_by?(user)
@@ -43,15 +46,15 @@ class SegmentRule < ActiveRecord::Base
   def self.operators_for_field(field)
     case field
     when TextField
-      return [operators[:equals], operators[:is_not]]
+      [operators[:equals], operators[:is_not]]
     when DateField
-      return [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
+      [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
     when NumericField
-      return [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
+      [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
     when SelectField
-      return [operators[:contains_any_of], operators[:is_not]]
+      [operators[:contains_any_of], operators[:is_not]]
     when CheckboxField
-      return [operators[:contains_any_of], operators[:contains_all_of], operators[:does_not_contain]]
+      [operators[:contains_any_of], operators[:contains_all_of], operators[:does_not_contain]]
     end
   end
 

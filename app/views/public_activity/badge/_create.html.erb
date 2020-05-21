@@ -1,0 +1,10 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  created
+  <% if activity.trackable %>
+    <%= link_to "badge", badges_path(activity.trackable) %>
+  <% else %>
+    badge which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

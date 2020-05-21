@@ -1,0 +1,117 @@
+<div class="content__header">
+  <h1> Archived Events(<span id="archived_initiatives_count"><%= @initiatives.size %></span>)</h1>
+  <% unless @initiatives.empty? %>
+  <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
+  <div class="flex-row flex-row--middle"  id="archive_buttons">
+    <div class="flex-row__cell">
+      <%= link_to "Restore All", restore_all_archived_initiatives_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
+    </div>	
+    <div class="flex-row__cell">
+     <%= link_to "Delete All", delete_all_archived_initiatives_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--danger' %>
+   </div>
+ </div>
+ <% end %>
+ <% end %>
+</div>
+<br>
+<div class="content__main">
+  <div class="card">
+    <% if @initiatives.empty? %>
+    <div class="card__section" id="empty_archive">
+      <p>No Archived Events.</p>
+    </div>
+    <% else %>
+    <% @initiatives.each do |initiative| %>
+    <div class="card__section card__section--border" id="archived_initiative_<%= initiative.id %>">
+      <div class="row">
+        <div class="col-xs-4">
+          <h3><%= link_to initiative.name, group_event_path(initiative.owner_group, initiative) %></h3>
+        </div>
+        <div class="col-xs-8">
+          <p>
+            To Do -
+            Resources -
+            Budget -
+            Updates -
+            KPI |
+            Edit -
+            Survey -
+            <%= link_to 'Restore', restore_archived_initiative_path(initiative), remote: true, method: :patch %> -
+            <%= link_to "Delete", archived_initiative_path(initiative), remote: true, method: :delete, data: { confirm: "Are you sure?" }, class: "error" if GroupEventsPolicy.new(current_user, [initiative.owner_group]).destroy? %>
+          </p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-6 col-xs-12">
+          <% if last_update = initiative.updates.last %>
+          <% initiative.fields.each_slice(3) do |field_row| %>
+          <div class="flex-row flex-row--spacing-bottom">
+            <% field_row.each do |field| %>
+            <div class="flex-row__cell flex-row__cell--grow metric">
+              <span class="metric__title"><%= field.title %></span>
+              <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
+              <div
+              class="metric__sparkline graph"
+              data-url="<%= time_series_group_initiative_field_path(initiative.owner_group, initiative, field) %>"
+              data-title="<%= field.title %>"
+              data-spark="true"
+              data-time-series="true"
+              >
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+        <% else %>
+        <p class="text-center">Publish an update to see data on this event</p>
+        <% end %>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+          <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
+            <div class="flex-row__cell flex-row__cell--spaced">
+              <strong>Expenses</strong>
+              <br>
+              <% if initiative.finished_expenses? %>
+              (closed)
+              <br>
+              <% end %>
+              <%= number_to_currency initiative.expenses.sum(:amount) %>
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+              <div class="progress-bar">
+                <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).budget_percentage %>%;"></div>
+              </div>
+            </div>
+            <div class="flex-row__cell flex-row__cell--spaced">
+              <strong>Budget</strong><br>
+              <%= number_to_currency initiative.estimated_funding %>
+            </div>
+          </div>
+        </div>
+        <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+          <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
+            <div class="flex-row__cell flex-row__cell--spaced">
+              <strong>Start date</strong>
+              <br>
+              <%= initiative.initiative_date("start") %>
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+              <div class="progress-bar">
+                <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).progress_percentage %>%;"></div>
+              </div>
+            </div>
+            <div class="flex-row__cell flex-row__cell--spaced">
+              <strong>End date</strong><br>
+              <%= initiative.initiative_date("end") %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+  <% end %>
+</div>
+</div>

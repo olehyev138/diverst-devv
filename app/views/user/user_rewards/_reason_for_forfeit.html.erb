@@ -1,0 +1,14 @@
+<div class="modal-header">
+  <h2 class="modal-title text-center">
+      Please provide a reason why this request is declined.
+  </h2>
+</div>
+<div class="modal-body">
+    <%= simple_form_for(pending_reward, url: forfeit_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch) do |f| %>
+    
+      <%= f.input :comment %>
+  <br>        
+    <%= f.button :submit, 'Post Comment', class: 'btn btn-primary' %>
+    <% end %>    
+</div>
+
