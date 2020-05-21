@@ -33,7 +33,7 @@ const defaultParams = Object.freeze({
   page: 0,
   order: 'desc',
   orderBy: 'news_feed_links.created_at',
-  news_feed_id: -1,
+  group_id: -1,
 });
 
 export function NewsFeedPage(props, context) {
@@ -59,6 +59,7 @@ export function NewsFeedPage(props, context) {
 
   const getNewsFeedItems = (scopes, resetParams = false) => {
     const newsFeedId = props.currentGroup.news_feed.id;
+    const groupId = props.currentGroup.id;
 
     if (resetParams)
       setParams(defaultParams);
@@ -66,7 +67,7 @@ export function NewsFeedPage(props, context) {
     if (newsFeedId) {
       const newParams = {
         ...params,
-        news_feed_id: newsFeedId,
+        group_id: groupId,
         query_scopes: scopes
       };
       props.getNewsItemsBegin(newParams);
@@ -148,6 +149,7 @@ NewsFeedPage.propTypes = {
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
+    id: PropTypes.number,
     news_feed: PropTypes.shape({
       id: PropTypes.number
     })

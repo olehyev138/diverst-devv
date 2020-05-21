@@ -86,7 +86,7 @@ export function NewsFeed(props) {
 
 
   const actions = [];
-  if (permission(props.currentGroup, 'messages_create?'))
+  if (permission(props.currentGroup, 'message_create?'))
     actions.push({
       icon: <MessageIcon />,
       name: <DiverstFormattedMessage {...messages.group_message} />,
