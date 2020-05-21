@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# Source: https://github.com/segmentio/chamber/issues/117
+
+# Takes a terraform / terragrunt command as an argument.
+# Uses a system call to grab terraform secrets from AWS parameter store via chamber
+# Injects those secrets into the environment in the terraform variable format i.e TF_VAR_the_variable
+# Performs a system call of the argument array that is passed
+#
+# Usage Examples
+#
+#  terrachamber terraform apply
+#  terrachamber terragrunt apply --terragrunt-source-update
+#  aws-vault exec dev-admin -- terrachamber terraform apply
+#
+
+require 'json'
+
+JSON.parse(`chamber export terraform`).each { |k, v| ENV["TF_VAR_#{k}"] = v }
+system(*ARGV)
