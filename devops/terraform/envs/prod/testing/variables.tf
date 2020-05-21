@@ -94,3 +94,27 @@ variable "db_password" {
 variable "analytics_interval" {
   type = string
 }
+
+#
+## 3rd party services
+#
+
+variable "rollbar_env" {
+  type = string
+}
+
+variable "rollbar_access_token" {
+  type = string
+}
+
+variable "mailgun_domain" {
+  type = string
+}
+
+variable "mailgun_api_key" {
+  type = string
+}
+
+variable "embedly_key" {
+  type = string
+}

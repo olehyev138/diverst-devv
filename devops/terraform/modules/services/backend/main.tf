@@ -180,7 +180,6 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: use vars & secrets
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "SIDEKIQ_DASHBOARD_USERNAME"
@@ -188,7 +187,6 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: use vars & secrets
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "SIDEKIQ_DASHBOARD_PASSWORD"
@@ -259,6 +257,50 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_PORT"
     value       = var.db_port
+    resource    = ""
+  }
+
+  #
+  ## env variables for 3rd party services
+  #
+
+  ## Rollbar
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "ROLLBAR_ENV"
+    value       = var.rollbar_env
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "ROLLBAR_ACCESS_TOKEN"
+    value       = var.rollbar_access_token
+    resource    = ""
+  }
+
+  ## Mailgun
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "MAILGUN_DOMAIN"
+    value       = var.mailgun_domain
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "MAILGUN_API_KEY"
+    value       = var.mailgun_api_key
+    resource    = ""
+  }
+
+  # Embedly
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "EMBEDLY_KEY"
+    value       = var.embedly_key
     resource    = ""
   }
 }

@@ -55,4 +55,13 @@ module "prod" {
   db_password   = var.db_password
 
   analytics_interval = var.analytics_interval
+
+  #
+  ## 3rd party services
+  #
+  rollbar_env             = var.rollbar_env
+  rollbar_access_token    = var.rollbar_access_token
+  mailgun_domain          = var.mailgun_domain
+  mailgun_api_key         = var.mailgun_api_key
+  embedly_key             = var.embedly_key
 }

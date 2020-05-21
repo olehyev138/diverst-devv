@@ -25,3 +25,6 @@ db_name                     = "diverst_production"
 db_username                 = "admin"
 
 analytics_interval = "12 hours"
+
+rollbar_env     = "beta-testing"
+mailgun_domain  = "mg.diverst.com"

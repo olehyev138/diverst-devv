@@ -79,7 +79,16 @@ module "backend" {
   job_store_endpoint = module.job_store.endpoint
 
   filestorage_bucket_id = module.filestorage.filestorage_bucket_id
-  ssh_key_name = var.ssh_key_name
+  ssh_key_name          = var.ssh_key_name
+
+  #
+  ## 3rd party services
+  #
+  rollbar_env             = var.rollbar_env
+  rollbar_access_token    = var.rollbar_access_token
+  mailgun_domain          = var.mailgun_domain
+  mailgun_api_key         = var.mailgun_api_key
+  embedly_key             = var.embedly_key
 }
 
 module "frontend" {

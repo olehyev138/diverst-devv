@@ -25,3 +25,9 @@ variable "job_store_endpoint"     {}
 variable "filestorage_bucket_id"  {}
 variable "ssh_key_name"           {}
 variable "region"                 {}
+
+variable "rollbar_env"          {}
+variable "rollbar_access_token" {}
+variable "mailgun_domain"       {}
+variable "mailgun_api_key"      {}
+variable "embedly_key"          {}
