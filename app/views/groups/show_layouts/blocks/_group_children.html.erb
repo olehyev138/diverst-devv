@@ -35,7 +35,7 @@
 	<% else %>
 	<div class="card card--secondary">
 		<div class="card__section">
-			Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
+			<%= c_t(:sub_erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
 			<ol>
 				<% @group.group_category_type.group_categories.each do |category| %>
 			  	<% if category.groups.where(parent_id: @group).count > 0  %>
