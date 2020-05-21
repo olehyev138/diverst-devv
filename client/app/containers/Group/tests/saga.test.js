@@ -17,6 +17,8 @@ import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 import AuthService from 'utils/authService';
 
+api.groups.all = jest.fn();
+
 describe('Get groups Saga', () => {
   it('Should return grouplist', async () => {
 
