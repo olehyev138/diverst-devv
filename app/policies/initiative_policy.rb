@@ -1,7 +1,7 @@
 class InitiativePolicy < GroupBasePolicy
   def initialize(user, context, params = {})
     if Class === context && User === user
-      super(user, [Group.find_by_id(params[:owner_group_id]), context], params)
+      super(user, [Group.find_by_id(params[:owner_group_id] || params[:group_id]), context], params)
     else
       super(user, context, params)
     end

@@ -20,7 +20,7 @@ module Session::Actions
           settings.name_identifier_value = session.user.email
         end
 
-        logout_link = logout_request.create(settings, RelayState: ENV['DOMAIN'])
+        logout_link = logout_request.create(settings, RelayState: ENV['BACKEND_DOMAIN'])
         return { logout_link: logout_link }
       end
 

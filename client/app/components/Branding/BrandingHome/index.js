@@ -11,11 +11,8 @@ import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -23,12 +20,11 @@ import {
   Button, Card, CardActions, CardContent, Grid, Paper,
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
-import Select from 'components/Shared/DiverstSelect';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
-
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,22 +34,25 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const { intl } = props;
+  const getRichTextHtmlValue = (editorHtml) => {
+    values.home_message = editorHtml;
+  };
   return (
     <Card>
       <Form>
         <CardContent>
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
-              { /* TODO: replace with proper wysiwyg editor */ }
               <Field
-                component={TextField}
+                component={DiverstRichTextInput}
                 required
-                onChange={handleChange}
+                onChange={value => setFieldValue('home_message', value)}
                 fullWidth
                 id='home_message'
                 name='home_message'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.Home.message} />}
+                label={intl.formatMessage(messages.Home.message)}
                 value={values.home_message}
               />
             </Grid>
@@ -126,10 +125,13 @@ BrandingHomeInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  intl: intlShape,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(BrandingHome);

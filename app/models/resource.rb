@@ -27,7 +27,7 @@ class Resource < ApplicationRecord
   validates_length_of :resource_type, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of   :title
-  validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
+  validates_presence_of   :url, if: Proc.new { |r| !r.file.attached? }
   validates_length_of     :url, maximum: 255
 
   scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
@@ -88,9 +88,15 @@ class Resource < ApplicationRecord
   end
 
   def file_location
-    return nil if !file.attached?
+    return nil unless file.attached?
 
     Rails.application.routes.url_helpers.url_for(file)
+  end
+
+  def path_for_file_download
+    return nil unless self.file.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(self.file, only_path: true, disposition: 'attachment')
   end
 
   def expiration_time

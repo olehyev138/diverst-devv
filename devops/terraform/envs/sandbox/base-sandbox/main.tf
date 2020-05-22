@@ -94,6 +94,25 @@ module "filestorage" {
   env_name = var.env_name
 }
 
+module "analytics" {
+  source  = "../../../modules/services/analytics"
+
+  env_name  = var.env_name
+  sn_db     = module.vpc.sn_db
+  sg_db     = module.sec.sg_db
+  interval  = var.analytics_interval
+
+  db_address  = module.db.db_address
+  db_name     = var.db_name
+  db_port     = module.db.db_port
+  db_username = var.db_username
+  db_password = var.db_password
+}
+
+module "secrets_key" {
+  source  = "../../../modules/services/secrets_key"
+}
+
 data "aws_instance" "bastion" {
   depends_on = [module.bastion]
 
@@ -116,3 +135,4 @@ data "aws_instance" "app" {
     values  = ["running"]
   }
 }
+

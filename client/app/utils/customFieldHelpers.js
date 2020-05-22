@@ -12,6 +12,7 @@ import dig from 'object-dig';
 import { TextField } from '@material-ui/core';
 import Select from 'react-select';
 import { Field } from 'formik';
+import produce from 'immer';
 
 function serializeFieldData(fieldData) {
   const serializedFieldData = [];
@@ -79,19 +80,32 @@ function deserializeDatum(fieldDatum) {
   }
 }
 
+// maps each field to transform select/checkbox field options to an array compatible with the Select Field
+function mapFieldData(fieldData) {
+  return fieldData.map(fieldDatum => produce(fieldDatum, (draft) => {
+    draft.field = splitOptions(fieldDatum.field);
+    draft.data = deserializeDatum(fieldDatum);
+  }));
+}
+
+// Takes fields and transforms the options texts in the form of ("Option1\nOption2\nOption3\n")
+// and turns it into an array of select field options [{label: "Option1", value: "Option1"}, ...]
+function splitOptions(field) {
+  return produce(field, (draft) => {
+    draft.options = field.options_text
+      ? field.options_text.split('\n').filter(o => o && o.length).map(o => ({ value: o, label: o }))
+      : null;
+  });
+}
+
 function deserializeOptionsText(field) {
   /* Fields with multiple 'options' store them as new line separated strings
    *  - Split them on '\n' into an array
    *  - Map array to a list of 'select' objects - [ { label: <>, value: <> ] } ... ]
    */
-
-  const optionsText = field.options_text;
-
-  return optionsText
-    ? field.options_text
-      .split('\n')
-      .map(option => ({ label: option, value: option }))
-    : optionsText;
+  return field.options_text
+    ? field.options_text.split('\n').filter(o => o && o.length).map(o => ({ value: o, label: o }))
+    : null;
 }
 
 function serializeSegment(segment) {
@@ -126,6 +140,6 @@ function serializeSegment(segment) {
 export {
   serializeFieldData, serializeDatum,
   deserializeDatum, deserializeOptionsText,
-  serializeSegment,
+  serializeSegment, splitOptions, mapFieldData,
   serializeFieldDataWithFieldId
 };

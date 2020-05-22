@@ -9,11 +9,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
 import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
-import { selectEnterprise } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
-  getEnterpriseBegin,
   updateEnterpriseBegin,
-  configurationUnmount
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -23,21 +20,13 @@ import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectEnterprise } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
   const { intl } = props;
-
-  useEffect(() => {
-    props.getEnterpriseBegin();
-
-    return () => {
-      props.configurationUnmount();
-    };
-  }, []);
 
   return (
     <React.Fragment>
@@ -53,9 +42,7 @@ export function BrandingHomePage(props) {
 BrandingHomePage.propTypes = {
   intl: intlShape,
   enterprise: PropTypes.object,
-  getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
-  configurationUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -64,9 +51,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getEnterpriseBegin,
   updateEnterpriseBegin,
-  configurationUnmount
 };
 
 const withConnect = connect(

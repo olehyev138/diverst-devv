@@ -23,7 +23,6 @@ export function DiverstHTMLEmbedder({ html, gridProps, interweaveProps }) {
         <Interweave
           content={html}
           {...interweaveProps}
-          allowList={['iframe', 'div', 'blockquote', 'h4', 'a', 'p']}
         />
       </Grid>
     </Grid>

@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Analyze/Dashboards/UserDashboardPage/index'));
+export default loadable(() => import('./index'));
