@@ -85,18 +85,20 @@ export function NewsFeed(props) {
   }, [props.newsItems]);
 
 
-  const actions = [
-    {
+  const actions = [];
+  if (permission(props.currentGroup, 'message_create?'))
+    actions.push({
       icon: <MessageIcon />,
       name: <DiverstFormattedMessage {...messages.group_message} />,
       linkPath: props.links.groupMessageNew,
-    },
-    {
+    });
+
+  if (permission(props.currentGroup, 'news_link_create?'))
+    actions.push({
       icon: <NewsIcon />,
       name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
-    },
-  ];
+    });
 
   if (permission(props.currentGroup, 'social_link_create?'))
     actions.push({
@@ -116,7 +118,7 @@ export function NewsFeed(props) {
       {!props.readonly && (
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
-          <Permission show={permission(props.currentGroup, 'news_create?')}>
+          <Permission show={actions.length > 0}>
             <SpeedDial
               ariaLabel={props.intl.formatMessage(messages.add)}
               className={classes.speedDial}

@@ -73,25 +73,29 @@ RSpec.describe GroupPostsPolicy, type: :policy do
       context 'when group.latest_news_visibility is set to group' do
         before { group.latest_news_visibility = 'group' }
 
-        context 'when ONLY manage_posts is true' do
-          before { user.policy_group.update manage_posts: true }
+        context 'and user is a member' do
+          before { group.members << user }
 
-          it 'returns true' do
-            expect(subject.view_latest_news?).to eq true
+          context 'when ONLY manage_posts is true' do
+            before { user.policy_group.update manage_posts: true }
+
+            it 'returns true' do
+              expect(subject.view_latest_news?).to eq true
+            end
           end
-        end
 
-        context 'when ONLY group_posts_index' do
-          before { user.policy_group.update group_posts_index: true }
+          context 'when ONLY group_posts_index' do
+            before { user.policy_group.update group_posts_index: true }
 
-          it 'returns true' do
-            expect(subject.view_latest_news?).to eq true
+            it 'returns true' do
+              expect(subject.view_latest_news?).to eq true
+            end
           end
-        end
 
-        context 'when group_posts_index and manage_posts are false' do
-          it 'returns false' do
-            expect(subject.view_latest_news?).to eq false
+          context 'when group_posts_index and manage_posts are false' do
+            it 'returns false' do
+              expect(subject.view_latest_news?).to eq false
+            end
           end
         end
       end
@@ -141,7 +145,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
 
         context 'when group_posts_index and manage_posts are false' do
           it 'returns false' do
-            expect(subject.view_latest_news?).to eq false
+            expect(subject.view_latest_news?).to eq true
           end
         end
 
