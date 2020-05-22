@@ -52,7 +52,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
-import AuthService from 'utils/authService';
 
 api.groups.all = jest.fn();
 api.groups.create = jest.fn();
@@ -70,6 +69,52 @@ api.userGroups.joinSubgroups = jest.fn();
 beforeEach(() => {
   jest.resetAllMocks();
 });
+
+const group = {
+  id: 1,
+  name: 'Disability Caregivers Network',
+  short_description: '',
+  description: 'aaa',
+  pending_users: 'disabled',
+  members_visibility: 'managers_only',
+  messages_visibility: 'managers_only',
+  active: true,
+  parent_id: null,
+  latest_news_visibility: 'leaders_only',
+  upcoming_events_visibility: 'leaders_only',
+  annual_budget: '0.0',
+  annual_budget_leftover: '0.0',
+  private: false,
+  home_message: null,
+  default_mentor_group: false,
+  position: 0,
+  group_category: null,
+  group_category_type: null,
+  news_feed: {
+  },
+  enterprise_id: 1,
+  event_attendance_visibility: 'managers_only',
+  calendar_color: 'cccccc',
+  auto_archive: false,
+  current_user_is_member: true,
+  banner: null,
+  banner_file_name: null,
+  banner_data: null,
+  permissions: {
+  },
+  logo: null,
+  logo_file_name: null,
+  logo_data: null,
+  parent: null,
+  annual_budget_currency: 'USD'
+};
+const budget = {
+  total: 13,
+  type: 'group',
+  sum: null,
+  items: []
+};
+
 
 describe('Get groups Saga', () => {
   it('Should return grouplist', async () => {
@@ -103,7 +148,16 @@ describe('Get groups Saga', () => {
 
 describe('Get group Saga', () => {
   it('Should return a group', async () => {
+    api.groups.get.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [getGroupSuccess(group)];
+    const initialAction = { payload: { id: 5 } };
 
+    const dispatched = await recordSaga(
+      getGroup,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -132,8 +186,24 @@ describe('Get group Saga', () => {
 });
 
 describe('Get annual group budget', () => {
-  it('Should return a group', async () => {
-
+  //TODO : complete
+  xit('Should return a group budget', async () => {
+    api.groups.get.mockImplementation(() => Promise.resolve({ data: { ...budget } }));
+    const results = [getAnnualBudgetsSuccess(budget)];
+    const initialAction = { payload: {
+      count: 10,
+      page: 0,
+      order: 'asc',
+      query_scopes: [
+        'all_parents'
+      ]
+    }
+    };
+    const dispatched = await recordSaga(
+      getAnnualBudgets,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -190,7 +260,7 @@ describe('Create group', () => {
   });
 });
 
-// TODO
+// TODO Bug might be present
 describe('Categorize group', () => {
   it('Should categorize a group', async () => {
 
