@@ -8,6 +8,9 @@ import {
   GET_GROUPS_BEGIN,
   GET_GROUPS_SUCCESS,
   GET_GROUPS_ERROR,
+  GET_COLORS_BEGIN,
+  GET_COLORS_SUCCESS,
+  GET_COLORS_ERROR,
   GET_ANNUAL_BUDGETS_BEGIN,
   GET_ANNUAL_BUDGETS_SUCCESS,
   GET_ANNUAL_BUDGETS_ERROR,
@@ -67,6 +70,27 @@ export function getGroupsSuccess(payload) {
 export function getGroupsError(error) {
   return {
     type: GET_GROUPS_ERROR,
+    error,
+  };
+}
+
+export function getColorsBegin(payload) {
+  return {
+    type: GET_COLORS_BEGIN,
+    payload,
+  };
+}
+
+export function getColorsSuccess(payload) {
+  return {
+    type: GET_COLORS_SUCCESS,
+    payload,
+  };
+}
+
+export function getColorsError(error) {
+  return {
+    type: GET_COLORS_ERROR,
     error,
   };
 }

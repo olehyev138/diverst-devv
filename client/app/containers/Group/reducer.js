@@ -45,7 +45,7 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
+  JOIN_SUBGROUPS_ERROR, GET_COLORS_BEGIN, GET_COLORS_SUCCESS
 
 } from './constants';
 
@@ -78,11 +78,13 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_BEGIN:
+      case GET_COLORS_BEGIN:
       case GET_ANNUAL_BUDGETS_BEGIN:
         draft.isLoading = true;
         break;
 
       case GET_GROUPS_SUCCESS:
+      case GET_COLORS_SUCCESS:
         draft.groupList = formatGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
@@ -95,6 +97,7 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_ERROR:
+      case GET_COLORS_SUCCESS:
       case GET_ANNUAL_BUDGETS_ERROR:
         draft.isLoading = false;
         break;
