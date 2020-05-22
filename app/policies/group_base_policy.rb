@@ -237,7 +237,8 @@ class GroupBasePolicy < ApplicationPolicy
 
     def visibility
       if group_visibility_setting
-        "((#{group_visible} AND #{is_a_member}) OR " +
+        "((#{publicly_visible}) OR " +
+        "(#{group_visible} AND #{is_a_member}) OR " +
         "(#{is_a_manager}))"
       else
         'TRUE'

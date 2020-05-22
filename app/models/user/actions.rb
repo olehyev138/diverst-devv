@@ -48,12 +48,11 @@ module User::Actions
     order_by = params[:order_by].to_sym rescue :created_at
 
     # get the news_feed_ids
-    news_feed_ids = NewsFeed.where(group_id: groups.ids).ids
+    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public', 'global', 'non-members'] }).ids
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
                   .preload(NewsFeedLink.base_preloads)
-                  .joins(:news_feed)
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
 
