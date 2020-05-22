@@ -11,7 +11,6 @@ backend_asg_max         = 4
 backend_ec2_type        = "t2.small"
 
 sidekiq_username = "admin"
-sidekiq_password = "8XS0WoHBdNBW4HPfa7kNh4*JZ2MGoo2%"
 
 db_class                    = "db.t2.micro"
 multi_az                    = false
@@ -24,6 +23,8 @@ db_maintenance_window       = null
 
 db_name                     = "diverst_production"
 db_username                 = "admin"
-db_password                 = "h2^9W5fEmN*^XzRp"
 
 analytics_interval = "12 hours"
+
+rollbar_env     = "beta-testing"
+mailgun_domain  = "mg.diverst.com"
