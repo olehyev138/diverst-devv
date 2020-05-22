@@ -13,7 +13,7 @@ class NewsLinkSerializer < ApplicationRecordSerializer
   end
 
   def news_feed_link_id
-    news_feed_link.id
+    object.news_feed_link.id
   end
 
   def serialize_all_fields
