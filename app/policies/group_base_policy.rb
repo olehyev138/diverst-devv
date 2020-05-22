@@ -95,7 +95,7 @@ class GroupBasePolicy < ApplicationPolicy
 
     case visibility
     when 'public' then true
-    when 'group' then is_a_member? || is_a_manager?
+    when 'group' then is_a_member? || is_admin_manager?
     when 'leader' then is_a_manager?
     else false
     end && has_permission(permission)
@@ -223,13 +223,22 @@ class GroupBasePolicy < ApplicationPolicy
     # ------------------------------
     # Visibility Cases
     # ------------------------------
+    def publicly_visible
+      "groups.#{quote_string(group_visibility_setting)} IN ('public', 'global', 'non-members')"
+    end
+
+    def group_visible
+      "groups.#{quote_string(group_visibility_setting)} IN ('group', 'public', 'global', 'non-members')"
+    end
+
+    def leader_visible
+      'TRUE'
+    end
+
     def visibility
       if group_visibility_setting
-        'CASE ' +
-            "WHEN groups.#{quote_string(group_visibility_setting)} IN ('public', 'global', 'non-members') THEN TRUE " +
-            "WHEN groups.#{quote_string(group_visibility_setting)} = 'group' THEN (#{is_a_manager} OR #{is_a_member}) " +
-            "WHEN groups.#{quote_string(group_visibility_setting)} IN ('leaders_only', 'managers_only') THEN #{is_a_manager} " +
-            'END'
+        "((#{group_visible} AND #{is_a_member}) OR " +
+        "(#{is_a_manager}))"
       else
         'TRUE'
       end
