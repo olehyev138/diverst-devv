@@ -177,6 +177,16 @@ export function NewsFeed(props) {
           })}
         </Grid>
       </DiverstLoader>
+      {!props.isLoading && props.newsItems && Object.values(props.newsItems).length <= 0 && (
+        <React.Fragment>
+          <Grid item sm>
+            <Box mt={3} />
+            <Typography variant='h6' align='center' color='textSecondary'>
+              <DiverstFormattedMessage {...messages.no_news[props.pending ? 'pending' : 'approved']} />
+            </Typography>
+          </Grid>
+        </React.Fragment>
+      )}
       <DiverstPagination
         isLoading={props.isLoading}
         rowsPerPage={props.defaultParams.count}
@@ -199,6 +209,7 @@ NewsFeed.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.object,
   readonly: PropTypes.bool,
+  pending: PropTypes.bool,
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
@@ -208,6 +219,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
 };
 

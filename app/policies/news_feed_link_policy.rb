@@ -29,6 +29,7 @@ class NewsFeedLinkPolicy < GroupBasePolicy
 
   alias_method :pin?, :group_update?
   alias_method :un_pin?, :group_update?
+  alias_method :approve?, :group_update?
   alias_method :archive?, :group_update?
   alias_method :un_archive?, :group_update?
 
