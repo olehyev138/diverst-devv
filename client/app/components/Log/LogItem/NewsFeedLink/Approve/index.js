@@ -27,7 +27,7 @@ export function NewsFeedLinkApprove(props) {
               <React.Fragment>
                 <Link
                   component={WrappedNavLink}
-                  to={ROUTES.group.news.messages.show.path(activity.trackable.group.id, activity.trackable_id)}
+                  to={ROUTES.group.news.messages.show.path(activity.trackable.group_id, activity.trackable_id)}
                 >
                   {'group message'}
                 </Link>
@@ -36,7 +36,7 @@ export function NewsFeedLinkApprove(props) {
               <React.Fragment>
                 <Link
                   component={WrappedNavLink}
-                  to={ROUTES.group.news.news_links.show.path(activity.trackable.group.id, activity.trackable_id)}
+                  to={ROUTES.group.news.news_links.show.path(activity.trackable.group_id, activity.trackable_id)}
                 >
                   {'news link'}
                 </Link>
