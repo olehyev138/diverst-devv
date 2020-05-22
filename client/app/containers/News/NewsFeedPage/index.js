@@ -13,8 +13,10 @@ import saga from 'containers/News/saga';
 import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
-import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
+import {
+  deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin, approveNewsItemBegin
+} from 'containers/News/actions';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -81,7 +83,16 @@ export function NewsFeedPage(props, context) {
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup, props.hasChanged]);
+  }, [props.currentGroup]);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getNewsItemsBegin(params);
+
+    return () => {
+      props.newsFeedUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -113,6 +124,7 @@ export function NewsFeedPage(props, context) {
         isLoading={props.isLoading}
         defaultParams={params}
         currentTab={tab}
+        pending={tab === NewsFeedTypes.pending}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         currentGroup={props.currentGroup}
@@ -123,6 +135,7 @@ export function NewsFeedPage(props, context) {
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
         archiveNewsItemBegin={props.archiveNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
@@ -143,6 +156,7 @@ NewsFeedPage.propTypes = {
   updateNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
@@ -173,6 +187,7 @@ const mapDispatchToProps = dispatch => ({
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
+  approveNewsItemBegin: payload => dispatch(approveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
   unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
   likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),

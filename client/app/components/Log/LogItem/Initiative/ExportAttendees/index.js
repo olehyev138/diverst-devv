@@ -25,7 +25,7 @@ export function InitiativeExportAttendees(props) {
           <React.Fragment>
             <Link
               component={WrappedNavLink}
-              to={ROUTES.group.events.show.path(activity.trackable.group.id, activity.trackable_id)}
+              to={ROUTES.group.events.show.path(activity.trackable.group_id, activity.trackable_id)}
             >
               {activity.trackable.title}
             </Link>
