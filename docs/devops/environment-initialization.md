@@ -138,6 +138,8 @@ In `<env-name>.tfvars`, fill in the variables. In `main.tf`, fill in the name of
 
 Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION` & the secure note.
 
+Write secrets to the _parameter key store_ with `chamber`. Consult the _secrets_ document for details. All secrets listed `secrets.md` must be written in the proper format via chamber. 
+
 #### E) Run Terraform
 
 To run terraform, one simply needs to `cd` into the new environment module, initialize and run terraform, passing it the `tfvars` file.
@@ -146,7 +148,7 @@ To run terraform, one simply needs to `cd` into the new environment module, init
 
 - `terraform init`
 
-- `terraform apply -var-file='<env-name>.tfvars`
+- `../../../../scripts/tf-chamber-format terraform apply --var-file <env-name>.tfvars `
 
 Record the ips & endpoints it outputs in the secure note.
 
