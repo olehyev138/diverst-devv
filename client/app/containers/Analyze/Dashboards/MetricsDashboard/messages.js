@@ -21,14 +21,14 @@ export default defineMessages({
   create: {
     id: `${scope}.form.button.create`,
   },
-  creategraph: {
-    id: `${scope}.index.button.creategraph`,
-  },
   update: {
     id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
+  },
+  creategraph: {
+    id: `${scope}.index.button.creategraph`,
   },
   tabs: {
     overview: {
@@ -45,8 +45,8 @@ export default defineMessages({
     field: {
       id: `${scope}.fields.field`,
     },
-    aggregation: {
-      id: `${scope}.fields.aggregation`,
+    aggregations: {
+      id: `${scope}.fields.aggregations`,
     },
     groups: {
       id: `${scope}.fields.groups`,

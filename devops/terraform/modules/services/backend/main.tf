@@ -38,6 +38,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
     value     = aws_iam_instance_profile.eb_instance_profile.name
+    resource  = ""
   }
 
   # VPC
@@ -132,6 +133,13 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   # Env Variables
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
+    name = "ENV_NAME"
+    value = var.env_name
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_ENV"
     value       = "production"
     resource    = ""
@@ -172,7 +180,6 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: use vars & secrets
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "SIDEKIQ_DASHBOARD_USERNAME"
@@ -180,7 +187,6 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: use vars & secrets
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "SIDEKIQ_DASHBOARD_PASSWORD"
@@ -188,11 +194,10 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource    = ""
   }
 
-  # TODO: generate this & store somewhere proper
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_MASTER_KEY"
-    value       = "0cd095760c9ff9a780b97332b683bc3a"
+    value       = var.rails_master_key
     resource    = ""
   }
 
@@ -251,6 +256,50 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "DATABASE_PORT"
     value       = var.db_port
+    resource    = ""
+  }
+
+  #
+  ## env variables for 3rd party services
+  #
+
+  ## Rollbar
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "ROLLBAR_ENV"
+    value       = var.rollbar_env
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "ROLLBAR_ACCESS_TOKEN"
+    value       = var.rollbar_access_token
+    resource    = ""
+  }
+
+  ## Mailgun
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "MAILGUN_DOMAIN"
+    value       = var.mailgun_domain
+    resource    = ""
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "MAILGUN_API_KEY"
+    value       = var.mailgun_api_key
+    resource    = ""
+  }
+
+  # Embedly
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "EMBEDLY_KEY"
+    value       = var.embedly_key
     resource    = ""
   }
 }

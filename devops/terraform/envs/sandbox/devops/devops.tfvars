@@ -10,7 +10,6 @@ backend_asg_max         = 2
 backend_ec2_type        = "t2.micro"
 
 sidekiq_username = "admin"
-sidekiq_password = "password123"
 
 db_class                    = "db.t2.micro"
 multi_az                    = false
@@ -23,4 +22,5 @@ db_maintenance_window       = null
 
 db_name       = "diverst"
 db_username   = "mainuser"
-db_password   = "password123"
+
+analytics_interval = "12 hours"

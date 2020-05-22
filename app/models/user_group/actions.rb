@@ -8,8 +8,8 @@ module UserGroup::Actions
   module ClassMethods
     def csv_attributes(current_user = nil, params = {})
       group = params[:group_id].present? ? Group.find(params[:group_id]) : nil
-      user_fields = current_user.present? ? current_user.fields : Field.none
-      survey_fields = group.present? ? group.survey_fields : Field.none
+      user_fields = current_user.present? ? current_user.fields.where(add_to_member_list: true) : Field.none
+      survey_fields = group.present? && GroupLeader.exists?(group_id: group.id, user_id: current_user&.id) ? group.survey_fields : Field.none
 
       {
           titles: ['First name',

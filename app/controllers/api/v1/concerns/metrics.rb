@@ -1,9 +1,13 @@
 module Api::V1::Concerns::Metrics
   extend ActiveSupport::Concern
 
+  ## !! Deprecated !!
+
   included do
     # before_action :authenticate_user! - TODO: authentication
-    before_action :set_graph
+    # before_action :set_graph
+
+    # before_action :set_data_bucket
     before_action :parse_csv_date_range, only: [:group_population,
                                                 :users_per_group,
                                                 :initiatives_per_group,

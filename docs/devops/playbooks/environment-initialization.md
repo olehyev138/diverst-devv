@@ -88,6 +88,8 @@ Create a new _secure note_ in our password manager, under `aws-environments`, th
 
 - Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION` & what was recorded in the secure note.
 
+- Write out secrets to the _parameter key store_ with chamber. All secrets listed in `secrets` document must be written in proper format.
+
 ##### Run Terraform
 
 - Change directory into the new environment module
@@ -95,6 +97,12 @@ Create a new _secure note_ in our password manager, under `aws-environments`, th
 - Initialize terraform: `terraform init`
 
 - Run terraform with the `tfvars` file: `terraform apply -var-file=<env-name>.tfvars`
+
+- Run terraform with the `tfvars` file & `chamber:
+
+```
+../../../../scripts/tf-chamber-format terraform apply --var-file <env-name>.tfvars `
+``` 
 
 - Record the outputted values
 

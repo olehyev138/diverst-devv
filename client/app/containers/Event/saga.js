@@ -34,7 +34,7 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
-  exportAttendeesSuccess, exportAttendeesError
+  exportAttendeesSuccess, exportAttendeesError, leaveEventSuccess
 } from './actions';
 
 
@@ -206,7 +206,7 @@ export function* joinEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
     const response = yield call(api.initiativeUsers.join.bind(api.initiativeUsers), payload);
-    yield put(joinEventSuccess());
+    yield put(joinEventSuccess(payload));
   } catch (err) {
     yield put(joinEventError(err));
 
@@ -219,9 +219,9 @@ export function* leaveEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
     const response = yield call(api.initiativeUsers.leave.bind(api.initiativeUsers), payload);
-    yield put(joinEventSuccess());
+    yield put(leaveEventSuccess(payload));
   } catch (err) {
-    yield put(joinEventError(err));
+    yield put(leaveEventSuccess(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));

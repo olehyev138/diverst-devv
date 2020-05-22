@@ -9,33 +9,32 @@ import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 
 // Graphs
+import GroupOverviewMetricsPage from 'containers/Analyze/Metrics/GroupOverviewMetricsPage';
 import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
 import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 import InitiativesPerGroupGraphPage from 'containers/Analyze/Graphs/InitiativesPerGroupGraphPage';
+import NewsPerGroupGraphPage from 'containers/Analyze/Graphs/NewsPerGroupGraphPage';
 
-const OverviewDashboard = ({ dashboardParams }) => (
+const OverviewDashboard = ({ dashboardFilters }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
-      <GroupPopulationGraphPage dashboardParams={dashboardParams} />
+      <GroupOverviewMetricsPage />
     </Grid>
-
     <Grid item xs={12}>
-      <ViewsPerGroupGraphPage dashboardParams={dashboardParams} />
+      <GroupPopulationGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
-
     <Grid item xs={12}>
-      <GrowthOfGroupsGraphPage dashboardParams={dashboardParams} />
+      <GrowthOfGroupsGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
-
     <Grid item xs={12}>
-      <InitiativesPerGroupGraphPage dashboardParams={dashboardParams} />
+      <NewsPerGroupGraphPage dashboardFilters={dashboardFilters} />
     </Grid>
   </Grid>
 );
 
 OverviewDashboard.propTypes = {
-  dashboardParams: PropTypes.object
+  dashboardFilters: PropTypes.array
 };
 
 export default OverviewDashboard;

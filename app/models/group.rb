@@ -263,6 +263,10 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  def color_hash
+    calendar_color.starts_with?('#') ? calendar_color : "##{calendar_color}"
+  end
+
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
 
