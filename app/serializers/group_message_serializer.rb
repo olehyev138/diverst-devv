@@ -4,6 +4,10 @@ class GroupMessageSerializer < ApplicationRecordSerializer
   has_one :owner
   has_many :comments
 
+  def news_feed_link_id
+    news_feed_link.id
+  end
+
   def serialize_all_fields
     true
   end

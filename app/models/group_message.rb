@@ -70,10 +70,6 @@ class GroupMessage < ApplicationRecord
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
-  def news_feed_link_id
-    news_feed_link.id
-  end
-
   def approve_link
     return if news_feed_link.nil?
 
