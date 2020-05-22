@@ -195,7 +195,7 @@ export function* joinGroup(action) {
     const response = yield call(api.userGroups.join.bind(api.userGroups), payload);
     yield put(joinGroupSuccess());
   } catch (err) {
-    yield put(joinGroupError());
+    yield put(joinGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join group', options: { variant: 'warning' } }));
@@ -209,7 +209,7 @@ export function* leaveGroup(action) {
 
     yield put(leaveGroupSuccess());
   } catch (err) {
-    yield put(leaveGroupError());
+    yield put(leaveGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave group', options: { variant: 'warning' } }));
@@ -221,7 +221,7 @@ export function* joinSubgroups(action) {
     const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
     yield put(joinSubgroupsSuccess());
   } catch (err) {
-    yield put(joinSubgroupsError());
+    yield put(joinSubgroupsError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
