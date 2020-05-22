@@ -73,6 +73,29 @@ class Api::V1::GroupsController < DiverstController
     end
   end
 
+  def colors
+    base_authorize(klass)
+
+    render status: 200, json: {
+        items: klass
+                   .select(:id, :name, :calendar_color, :enterprise_id)
+                   .preload(:enterprise, enterprise: [:theme])
+                   .where(enterprise_id: current_user.enterprise_id)
+                   .map do |g|
+                 {
+                     id: g.id,
+                     name: g.name,
+                     calendar_color: g.color_hash,
+                 }
+               end
+    }
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   private
 
   def load_sums(result)
