@@ -47,8 +47,11 @@ class Api::V1::NewsFeedLinksController < DiverstController
     end
   end
 
-  def forbidden_attributes
-    super + ['approved', 'is_pinned', 'news_link_id', 'group_message_id', 'social_link_id', 'author_id']
+  def payload
+    params.require(klass.symbol).permit(
+        'news_feed_id',
+        'news_feed_id',
+      )
   end
 
   private def model_map(model)
