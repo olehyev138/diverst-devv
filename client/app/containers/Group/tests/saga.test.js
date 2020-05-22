@@ -186,7 +186,7 @@ describe('Get group Saga', () => {
 });
 
 describe('Get annual group budget', () => {
-  //TODO : complete
+  // TODO : complete
   xit('Should return a group budget', async () => {
     api.groups.get.mockImplementation(() => Promise.resolve({ data: { ...budget } }));
     const results = [getAnnualBudgetsSuccess(budget)];
