@@ -9,11 +9,14 @@ class AlternativeActivationController < ApplicationController
     notifications_email = activation_params[:notifications_email]
     user = User.find_by(email: activation_params[:email])
 
+    # format custom date service
+    dob = CustomDateFormatter.format_date(dob)
+
     if user.present?
       user_dob = user.birthday
 
       if user_dob == dob
-        user&.update notifications_email: activation_params[:notifications_email]
+        user&.update notifications_email: notifications_email
         flash[:notice] = 'You will receive an email shortly with a link to activate your account.'
         user&.invite!
         render :new
