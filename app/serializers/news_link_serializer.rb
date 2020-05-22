@@ -1,5 +1,5 @@
 class NewsLinkSerializer < ApplicationRecordSerializer
-  attributes :author, :photos, :picture_location
+  attributes :author, :photos, :picture_location, :news_feed_link_id
   has_many :comments
 
   def picture_location
@@ -10,6 +10,10 @@ class NewsLinkSerializer < ApplicationRecordSerializer
     object.photos.map do |photo|
       NewsLinkPhotoSerializer.new(photo, scope: scope, root: false)
     end
+  end
+
+  def news_feed_link_id
+    object.news_feed_link.id
   end
 
   def serialize_all_fields
