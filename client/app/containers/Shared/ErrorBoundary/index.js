@@ -8,12 +8,12 @@ import messages from 'containers/Shared/ErrorBoundary/messages';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null, info: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error, info) {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+    return { hasError: true, error, info };
   }
 
   componentDidCatch(error, info) {
@@ -23,28 +23,33 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    const ErrorRender = this.props.render;
+
     if (this.state.hasError)
       // You can render any custom fallback UI
-      return (
-        <React.Fragment>
-          <Grid
-            container
-            spacing={0}
-            direction='column'
-            alignItems='center'
-            justify='center'
-            style={{ minHeight: '100vh', textAlign: 'center' }}
-          >
-            <Grid item xs={6}>
-              <img src={robot} alt='Oops!' height='150' width='150' />
+      if (this.props.render)
+        return <ErrorRender error={this.state.error} info={this.state.info} />;
+      else
+        return (
+          <React.Fragment>
+            <Grid
+              container
+              spacing={0}
+              direction='column'
+              alignItems='center'
+              justify='center'
+              style={{ minHeight: '100vh', textAlign: 'center' }}
+            >
+              <Grid item xs={6}>
+                <img src={robot} alt='Oops!' height='150' width='150' />
 
-              { /* TODO: translation strings */ }
-              <h4><DiverstFormattedMessage {...messages.message} /></h4>
-              <Button><DiverstFormattedMessage {...messages.home} /></Button>
+                { /* TODO: translation strings */ }
+                <h4><DiverstFormattedMessage {...messages.message} /></h4>
+                <Button><DiverstFormattedMessage {...messages.home} /></Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </React.Fragment>
-      );
+          </React.Fragment>
+        );
 
 
     return this.props.children;
@@ -53,6 +58,7 @@ class ErrorBoundary extends React.Component {
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node,
+  render: PropTypes.node,
 };
 
 export default ErrorBoundary;
