@@ -13,19 +13,19 @@ RSpec.describe SocialLinkPolicy, type: :policy do
 
   before {
     no_access.policy_group.manage_all = false
-    no_access.policy_group.social_links_index = false
+    no_access.policy_group.group_posts_index = false
     no_access.policy_group.social_links_create = false
-    no_access.policy_group.social_links_manage = false
+    no_access.policy_group.manage_posts = false
     no_access.policy_group.save!
   }
 
 
   describe 'for users with access' do
     context 'when manage_all is false' do
-      context 'when social_links_index is true' do
+      context 'when group_posts_index is true' do
         before do
           social_link.author = create(:user)
-          user.policy_group.update social_links_index: true
+          user.policy_group.update group_posts_index: true
         end
 
         it { is_expected.to permit_action(:index) }
@@ -53,16 +53,16 @@ RSpec.describe SocialLinkPolicy, type: :policy do
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
 
-      context 'social_links_index, social_links_create, and social_links_manage are false, current user IS NOT author' do
+      context 'group_posts_index, social_links_create, and manage_posts are false, current user IS NOT author' do
         before { social_link.author = create(:user) }
 
         it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
       end
 
-      context 'when social_links_manage is true' do
+      context 'when manage_posts is true' do
         before do
           social_link.author = create(:user)
-          user.policy_group.update social_links_manage: true
+          user.policy_group.update manage_posts: true
         end
 
         it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
@@ -80,8 +80,8 @@ RSpec.describe SocialLinkPolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and social_links_index is true' do
-        before { user_role.policy_group_template.update social_links_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to forbid_action :index }
       end
@@ -92,8 +92,8 @@ RSpec.describe SocialLinkPolicy, type: :policy do
         it { is_expected.to forbid_action :create }
       end
 
-      context 'and social_links_manage is true' do
-        before { user_role.policy_group_template.update social_links_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to forbid_actions ([:index, :create, :update, :destroy]) }
       end
@@ -109,8 +109,8 @@ RSpec.describe SocialLinkPolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and social_links_index is true' do
-        before { user_role.policy_group_template.update social_links_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to permit_action :index }
         it { is_expected.to forbid_actions([:update, :destroy]) }
@@ -120,11 +120,11 @@ RSpec.describe SocialLinkPolicy, type: :policy do
         before { user_role.policy_group_template.update social_links_create: true }
 
         it { is_expected.to permit_action :create }
-        it { is_expected.to forbid_actions([:index, :update, :destroy]) }
+        it { is_expected.to forbid_actions([:update, :destroy]) }
       end
 
-      context 'and social_links_manage is true' do
-        before { user_role.policy_group_template.update social_links_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to permit_actions ([:index, :create, :update, :destroy]) }
       end
@@ -150,9 +150,9 @@ RSpec.describe SocialLinkPolicy, type: :policy do
       end
     end
 
-    context 'when social_links_manage is true' do
+    context 'when manage_posts is true' do
       before do
-        user.policy_group.update social_links_manage: true
+        user.policy_group.update manage_posts: true
         social_link
       end
 

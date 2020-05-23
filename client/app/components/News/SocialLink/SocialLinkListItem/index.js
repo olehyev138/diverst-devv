@@ -168,7 +168,7 @@ export function SocialLinkListItem(props) {
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                props.approveNewsItemBegin({ id: newsItemId, group_id: groupId });
               }}
             >
               {<DiverstFormattedMessage {...messages.approve} />}
@@ -216,6 +216,7 @@ SocialLinkListItem.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

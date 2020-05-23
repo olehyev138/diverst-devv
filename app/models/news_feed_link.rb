@@ -13,6 +13,7 @@ class NewsFeedLink < ApplicationRecord
   has_many :segments, through: :news_feed_link_segments
   has_many :shared_news_feed_links, class_name: 'SharedNewsFeedLink', source: :news_feed_link, dependent: :destroy
   has_many :shared_news_feeds, through: :shared_news_feed_links, source: :news_feed
+  has_many :shared_groups, through: :shared_news_feeds, source: :group
 
   has_many :likes, dependent: :destroy
   has_many :views, dependent: :destroy
@@ -129,7 +130,7 @@ class NewsFeedLink < ApplicationRecord
   def approve_link
     return if link.nil?
 
-    if GroupPostsPolicy.new(link.author, [link.group]).update?
+    if NewsFeedLinkPolicy.new(link.author, [link.group]).update?
       self.approved = true
       self.save!
     end

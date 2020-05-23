@@ -18,6 +18,7 @@ export default function renderNewsItem(item, props, small = false) {
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         small={small}
         currentGroup={props.currentGroup}
       />
@@ -37,6 +38,7 @@ export default function renderNewsItem(item, props, small = false) {
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         small={small}
         currentGroup={props.currentGroup}
       />
@@ -56,6 +58,7 @@ export default function renderNewsItem(item, props, small = false) {
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         small={small}
         currentGroup={props.currentGroup}
       />
