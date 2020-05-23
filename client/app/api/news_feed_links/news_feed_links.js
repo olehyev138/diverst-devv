@@ -10,6 +10,9 @@ Object.assign(NewsFeedLinks, {
   un_archive(id, payload) {
     return axios.put(`${this.url}/${id}/un_archive`, payload);
   },
+  approve(id, payload = null) {
+    return axios.post(`${this.url}/${id}/approve`, payload);
+  },
   pin(id, payload) {
     return axios.post(`${this.url}/${id}/pin`, payload);
   },

@@ -19,25 +19,60 @@ import {
   DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
   ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_SUCCESS, ARCHIVE_NEWS_ITEM_ERROR,
   PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
-  UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR,
+  UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR, APPROVE_NEWS_ITEM_BEGIN,
 } from 'containers/News/constants';
 
 import {
-  getNewsItemsSuccess, getNewsItemsError,
-  getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
-  updateNewsItemBegin, updateNewsItemError, updateNewsItemSuccess,
-  createGroupMessageSuccess, createGroupMessageError,
-  createGroupMessageCommentError, updateGroupMessageSuccess,
-  createGroupMessageCommentSuccess, createNewsLinkBegin,
-  createNewsLinkSuccess, createNewsLinkError, createNewsLinkCommentError,
-  updateNewsLinkSuccess, createNewsLinkCommentSuccess,
-  createSocialLinkBegin, deleteGroupMessageBegin, deleteGroupMessageError, deleteGroupMessageSuccess,
-  createSocialLinkSuccess, createSocialLinkError, createSocialLinkCommentError,
-  updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
-  deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
-  deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
-  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess, archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError, pinNewsItemBegin, pinNewsItemSuccess, pinNewsItemError,
-  unpinNewsItemBegin, unpinNewsItemSuccess, unpinNewsItemError
+  getNewsItemsSuccess,
+  getNewsItemsError,
+  getNewsItemBegin,
+  getNewsItemSuccess,
+  getNewsItemError,
+  updateNewsItemBegin,
+  updateNewsItemError,
+  updateNewsItemSuccess,
+  createGroupMessageSuccess,
+  createGroupMessageError,
+  createGroupMessageCommentError,
+  updateGroupMessageSuccess,
+  createGroupMessageCommentSuccess,
+  createNewsLinkBegin,
+  createNewsLinkSuccess,
+  createNewsLinkError,
+  createNewsLinkCommentError,
+  updateNewsLinkSuccess,
+  createNewsLinkCommentSuccess,
+  createSocialLinkBegin,
+  deleteGroupMessageBegin,
+  deleteGroupMessageError,
+  deleteGroupMessageSuccess,
+  createSocialLinkSuccess,
+  createSocialLinkError,
+  createSocialLinkCommentError,
+  updateSocialLinkSuccess,
+  createSocialLinkCommentSuccess,
+  deleteNewsLinkBegin,
+  deleteNewsLinkError,
+  deleteNewsLinkSuccess,
+  deleteSocialLinkBegin,
+  deleteSocialLinkError,
+  deleteSocialLinkSuccess,
+  deleteGroupMessageCommentBegin,
+  deleteGroupMessageCommentError,
+  deleteGroupMessageCommentSuccess,
+  deleteNewsLinkCommentBegin,
+  deleteNewsLinkCommentError,
+  deleteNewsLinkCommentSuccess,
+  archiveNewsItemBegin,
+  archiveNewsItemSuccess,
+  archiveNewsItemError,
+  pinNewsItemBegin,
+  pinNewsItemSuccess,
+  pinNewsItemError,
+  unpinNewsItemBegin,
+  unpinNewsItemSuccess,
+  unpinNewsItemError,
+  approveNewsItemSuccess, approveNewsItemError
 } from 'containers/News/actions';
 
 export function* getNewsItems(action) {
@@ -296,6 +331,20 @@ export function* archiveNewsItem(action) {
   }
 }
 
+export function* approveNewsItem(action) {
+  try {
+    const { callback, id, ...rest } = action.payload;
+    const response = yield call(api.newsFeedLinks.approve.bind(api.newsFeedLinks), id);
+    yield put(approveNewsItemSuccess(response.data));
+  } catch (err) {
+    yield put(approveNewsItemError(err));
+    yield put(showSnackbar({
+      message: 'Failed to approve news item',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export function* pinNewsItem(action) {
   try {
     const payload = { news_feed_link: action.payload };
@@ -344,6 +393,7 @@ export default function* newsSaga() {
   yield takeLatest(DELETE_SOCIALLINK_BEGIN, deleteSocialLink);
   yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);
   yield takeLatest(ARCHIVE_NEWS_ITEM_BEGIN, archiveNewsItem);
+  yield takeLatest(APPROVE_NEWS_ITEM_BEGIN, approveNewsItem);
   yield takeLatest(PIN_NEWS_ITEM_BEGIN, pinNewsItem);
   yield takeLatest(UNPIN_NEWS_ITEM_BEGIN, unpinNewsItem);
 }
