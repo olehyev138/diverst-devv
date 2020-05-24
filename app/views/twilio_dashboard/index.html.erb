@@ -4,31 +4,20 @@
     <div class="card__section">
       <h2>Virtual Events Stats</h2>
 
-      <table id="twilio-usage" class="table--has-border">
+      <table 
+        id="twilio-usage-datatable"
+        data-no-sortable='3'
+        class="table--has-border data-table" 
+        data-source="<%= twilio_dashboard_index_path(format: :json) %>">
         <thead>
-        <th>SID</th>
-        <th>Type</th>
         <th>Room/Event Name</th>
         <th>Status</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Duration</th>
+        <th>Duration(in seconds)</th>
         <th>Number of Participants</th>
         </thead>
-        <tbody>
-            <% @rooms.each do |room| %>
-            <tr>
-              <td><%= room.sid %></td>
-              <td><%= room.type %></td>
-              <td><%= room.unique_name %></td>
-              <td><%= room.status %></td>
-              <td><%= room.date_created %></td>
-              <td><%= room.end_time %></td>
-              <td><%= room.duration %>s</td>
-              <td><%= room.max_participants %></td>
-            </tr>
-            <% end %>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>

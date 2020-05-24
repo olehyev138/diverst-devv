@@ -7,6 +7,13 @@ class TwilioDashboardController < ApplicationController
 
   def index
     authorize User
+
+    @rooms = VideoRoom.where(enterprise_id: @enterprise.id).all
+
+    respond_to do |format|
+      format.html
+      format.json { render json: TwilioUsageDatatable.new(view_context, @rooms) }
+    end
   end
 
   private
