@@ -6,7 +6,7 @@
   <% unless @event.archived? %>
     <div class="flex-row hidden-xs">
       <div class="flex-row__cell">
-        <%= link_to "Join virtual event", start_video_group_initiative_path(@group, @event), class: "btn btn--secondary", id: 'virtual-event' if @event.virtual? && @participation.present? %>
+        <%= link_to "Join virtual event", start_video_group_initiative_path(@group, @event), class: "btn btn--secondary", id: 'virtual-event' if @event.virtual? && @event.ongoing? %>
       </div>
       <div class="flex-row__cell">
         <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
