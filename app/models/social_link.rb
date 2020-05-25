@@ -21,7 +21,6 @@ class SocialLink < BaseClass
   before_create :build_default_link, :add_trailing_slash
   after_create :hack_temp_solution
 
-
   after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {

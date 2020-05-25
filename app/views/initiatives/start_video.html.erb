@@ -5,43 +5,89 @@
     <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
-    <script src="//media.twiliocdn.com/sdk/js/video/releases/1.20.1/twilio-video.min.js"></script>
+    <%= javascript_include_tag 'twilio_video' %>
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
       video {
-        height: 200px;
+        width: 100%;
         position: relative;
         top: 75px;
         display: inline-block;
+      }
+
+      #video-grid {
+        display: grid;
+        grid-template-columns: 35% 35% 35%;
+        grid-template-rows: auto auto auto;
+        max-height: 300px;
+        margin: auto;
+      }
+
+      .content__inner { 
+        padding: 0px;
+        margin-left: 0px;
+        max-width: initial;
+      }
+
+      #main-participant {
+        position: absolute;
+        z-index: 999;
+        max-height: 100%;
+        min-width: 100%;
+      }
+
+      #control-panel {
+        float: right;
+        margin-left: 70px;
+      }
+
+      #mute-mic, #mute-video, #screen-share {
+        fill: white;
+        height: 35px;
+        width: 60px;
+      }
+
+      #mute-video {
+        margin-right: 50px;
+      }
+
+      #leave-call {
+        fill: red;
+        height: 35px;
+        width: 60px;
       }
     </style>
   </head>
   <body onload="init()" data-env="<%= Rails.env %>">
     <%= render 'partials/js_branding_color_variables' %>
 
-    <header class="primary-header">
+    <header class="primary-header" style="height: 40px; position: fixed; top: 130px;">
+      <span style="font-size: 25px; margin-left: 8%;">Documents</span>
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
-            <h2 class="text-center">Video call</h2>
+            <span class="text-center" style="font-size: 25px;"><%= @initiative.name %><span id="control-panel">
+              <%= inline_svg('icons/technology.svg', size: '55px*25px', id: 'screen-share', title: 'screen share') %>
+              <%= inline_svg('icons/microphone.svg', size: '55px*25px', id: 'mute-mic', title: 'mute mic') %>
+              <%= inline_svg('icons/no-video1.svg', size: '55px*25px', id: 'mute-video', title: 'turn off video') %>
+              <%= inline_svg('icons/phone.svg', size: '55px*25px', id: 'leave-call', title: 'end video call') %>
+            </span></span>
           </div>
         </div>
       </div>
+      <span style="font-size: 25px; margin-right: 12%;">Chat</span>
     </header>
-
-    <div class="row" style="overflow-x: scroll;">
-      <div class="col-xs-8">
+    
+    <div class="row" style="overflow-x: scroll; margin-top: -35px;">
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 0px;">
+        <div id="screen-share-area"></div>
+      </div>
+      <div class="col-xs-6" style="padding-left: auto;">
         <div class="row">
-          <ul class="list-inline text-center">
-            <li></li>
-            <li>
-              <div id="local-media" style="height:200px; width: 200px;"></div>
-            </li>
-            <li></li>
-            <li>
-              <div id="remote-media" style="height:200px; width: 200px;"></div>
-            </li>
-          </ul>
+          <div class="col-xs-12" style="padding: 0px;">
+            <div id="main-participant"></div>
+            <div id="video-grid"></div>
+          </div>
         </div>
         <div class="row" style="position: relative; top: 75px;">
           <div class="col-xs-12">
@@ -49,10 +95,9 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4" style="background-color: white; height: 550px; margin-top: 75px;">
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
         <div class="row">
           <div class="col-xs-12">
-            <h3 class="text-center">Chat</h3>
           </div>
         </div>
         <div class="row" style="height: 475px;">
@@ -65,7 +110,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Send a message..." id="message">
                 <span class="input-group-btn">
-                  <button class="btn" style="background-color: #7B77C9;" type="button" id="send">Send!</button>
+                  <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
                 </span>
               </div><!-- /input-group -->
             </div>
@@ -75,7 +120,7 @@
   </body>
   <script>
   $(document).ready(function(){
-  var token= '<%= @token %>';
+    var token= '<%= @token %>';
     var twilio = Twilio.Video;
     var dataTrack = new twilio.LocalDataTrack();
     var chatElement = document.getElementById('chat');
@@ -85,11 +130,121 @@
     var previewTracks;
     var identity = '<%= current_user.email %>';
 
+    // enlarge video trackmain participant
+    function enlargeParticipantVideoTrack() {
+      var x = document.getElementById('main-participant');
+      var y = document.getElementById('video-grid');
+      var z = document.getElementById('screen-share-area');
+
+      if (this.id == 'screen-share-video') {
+        if (this.parentElement.id == 'screen-share-area') {
+          x.appendChild(this);
+        }else if (this.parentElement.id == 'main-participant') {
+          z.appendChild(this);
+        }
+      }else{
+        if (x.childElementCount==0) {
+          x.appendChild(this);
+        }else if (x.childElementCount == 1) {
+          var oldChildElement = x.firstElementChild;
+  
+          x.replaceChild(this, oldChildElement);
+          y.appendChild(oldChildElement);
+        }
+      }
+    }
+
+    function attachEventListenersToTracks(track) {    
+        track.addEventListener('click', enlargeParticipantVideoTrack);
+    }
+
+    function muteAudioOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-mic');
+      localParticipant.audioTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = 'white';
+        }
+      });
+    }
+
+    function muteVideoOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-video');
+      localParticipant.videoTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = 'white';
+        }
+      });
+    }
+
+    async function screenShareOFLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      const stream = await navigator.mediaDevices.getDisplayMedia();
+      const screenTrack = new twilio.LocalVideoTrack(stream.getTracks()[0], { name: 'screen-share' });
+      window.room.localParticipant.publishTrack(screenTrack);
+      attachTracks([screenTrack], document.getElementById('screen-share-area'));
+
+      screenTrack.once('stopped', () => {
+        detachTracks([screenTrack]);
+        localParticipant.removeTrack(screenTrack);
+      });    
+    }
+
+
+    function disconnectLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('leave-call');
+      localParticipant.tracks.forEach(function(publication){
+        const attachedElements = publication.track.detach();
+        attachedElements.forEach(function(element) {
+          element.remove();
+        })
+      })
+    }
+
+    $('#mute-mic').on('click', function(){
+      muteAudioOfLocalParticipant();
+    });
+
+    $('#mute-video').on('click', function(){
+      muteVideoOfLocalParticipant();
+    });
+
+    $('#leave-call').on('click', function(){
+      leaveRoomIfJoined();
+      console.log(window.room.state);
+      $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
+      window.location.href = "<%= group_event_path(@group, @initiative) %>";
+    });
+
+    $('#screen-share').on('click', function(){
+      screenShareOFLocalParticipant();
+    });
+
+
+
     // Attach the Tracks to the DOM.
     function attachTracks(tracks, container) {
       tracks.forEach(function(track) {
           if (track.kind === 'audio' || track.kind === 'video') {
-                container.appendChild(track.attach());
+            var video_element = track.attach();
+            if (container.id == 'screen-share-area'){
+              video_element.setAttribute('id', 'screen-share-video')
+            }
+            attachEventListenersToTracks(container.appendChild(video_element));
           }else if (track.kind === 'data') {
             track.on('message', function(data) {
                 var response = JSON.parse(data);
@@ -128,7 +283,7 @@
 
     twilio.createLocalTracks({
       audio: true,
-      video: { width: 640 }
+      video: { width: 640, height: 480 }
       }).then(localTracks => {
       localTracks.push(dataTrack)
         return twilio.connect(token, {
@@ -148,7 +303,7 @@
       log("Joined as '" + identity + "'");
 
       // Attach LocalParticipant's Tracks, if not already attached.
-      var previewContainer = document.getElementById('local-media');
+      var previewContainer = document.getElementById('video-grid');
       if (!previewContainer.querySelector('video')) {
         attachParticipantTracks(room.localParticipant, previewContainer);
       }
@@ -156,7 +311,7 @@
       // Attach the Tracks of the Room's Participants.
       room.participants.forEach(function(participant) {
         log("Already in Room: '" + participant.identity + "'");
-        var previewContainer = document.getElementById('remote-media');
+        var previewContainer = document.getElementById('video-grid');
         attachParticipantTracks(participant, previewContainer);
       });
 
@@ -164,15 +319,21 @@
       room.on('participantConnected', function(participant) {
         log("Joining: '" + participant.identity + "'");
 
-        var previewContainer = document.getElementById('remote-media');
+        var previewContainer = document.getElementById('video-grid');
         attachParticipantTracks(participant, previewContainer);
       });
 
       // When a Participant adds a Track, attach it to the DOM.
       room.on('trackAdded', function(track, participant) {
         //log(participant.identity + " added track: " + track.kind);
-        var previewContainer = document.getElementById('remote-media');
-        attachTracks([track], previewContainer);
+        var previewContainer = document.getElementById('video-grid');
+        var screenShareArea = document.getElementById('screen-share-area');
+
+        if (track.name == 'screen-share') {
+          attachTracks([track], screenShareArea);
+        }else{
+          attachTracks([track], previewContainer);
+        }
       });
 
       // When a Participant removes a Track, detach it from the DOM.
@@ -243,6 +404,13 @@
 
     var chatInput = document.getElementById('send');
     chatInput.addEventListener('click', sendMessage);
+
+    $('input').on('keydown', function(e){
+      if(e.keyCode===13) {
+        sendMessage();
+      }
+    });
+
 
     function init() {
       // Initialize Firebase.
