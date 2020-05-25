@@ -598,5 +598,98 @@ RSpec.describe InitiativesController, type: :controller do
         it_behaves_like 'redirect user to users/sign_in path'
       end
     end
+
+    describe 'PATCH #leave_video' do
+      login_user_from_let
+
+      before { initiative.save }
+
+      context 'renders no template' do
+        before { post :leave_video, group_id: group.id, id: initiative.id }
+        it { expect(response).to render_template(nil) }
+      end
+
+      context 'successfully track activity' do
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect {
+                post :leave_video, group_id: group.id, id: initiative.id
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { initiative }
+            let(:owner) { user }
+            let(:key) { 'initiative.leave_video' }
+
+            before {
+              perform_enqueued_jobs do
+                post :leave_video, group_id: group.id, id: initiative.id
+              end
+            }
+
+            include_examples 'correct public activity'
+          end
+        end
+      end
+    end
+
+    describe 'POST #register_room_in_database' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group1) { create(:group, enterprise_id: enterprise.id) }
+
+      login_user_from_let
+
+      before { initiative.save }
+
+      def register_room(sid, name, status)
+        post :register_room_in_database, xhr: true,
+                                         params: { sid: sid,
+                                                   name: name,
+                                                   status: status },
+                                         group_id: group1.id,
+                                         id: initiative.id
+      end
+
+      context 'successfully' do
+        it 'registers room in database' do
+          expect { register_room('xyz234', 'Virtual Event', 'in-progress') }.to change(VideoRoom, :count).by(1)
+        end
+
+        it 'renders nothing' do
+          register_room('xyz234', 'Virtual Event', 'in-progress')
+          expect(response).to render_template(nil)
+        end
+
+        it 'returns http_status_code of :ok' do
+          register_room('xyz234', 'Virtual Event', 'in-progress')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'does not' do
+        before { create(:video_room, sid: 'xyz234', name: 'Virtual Event', status: 'in-progress', enterprise_id: enterprise.id) }
+
+        it 'register room in database' do
+          expect { register_room('xyz234', 'Virtual Event', 'in-progress') }.to change(VideoRoom, :count).by(0)
+        end
+
+        it 'render template' do
+          register_room('xyz234', 'Virtual Event', 'in-progress')
+          expect(response).to render_template(nil)
+        end
+
+        it 'return http_status :ok. Instead returns :unproccessable_entity' do
+          register_room('xyz234', 'Virtual Event', 'in-progress')
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+
+    describe 'PATCH #update_registered_room_in_database'
   end
 end

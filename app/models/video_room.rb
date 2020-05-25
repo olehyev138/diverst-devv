@@ -14,7 +14,7 @@ class VideoRoom < ActiveRecord::Base
   private
 
   def duration_per_minute
-    (((duration || 0))/60.0)
+    (((duration || 0)) / 60.0)
   end
 
   def number_of_participants
