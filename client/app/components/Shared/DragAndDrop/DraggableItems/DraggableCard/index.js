@@ -197,6 +197,13 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
               <Button
                 size='small'
                 color='primary'
+                onClick={() => handleDialogOpen(group.id)}
+              >
+                Import Users
+              </Button>
+              <Button
+                size='small'
+                color='primary'
                 to={{
                   pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
                   state: { id: group.id }
@@ -291,6 +298,13 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
                 ) : (
                   <DiverstFormattedMessage {...messages.children_expand} />
                 )}
+              </Button>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => handleDialogOpen(group.id)}
+              >
+                Import Users
               </Button>
               <Button
                 size='small'
