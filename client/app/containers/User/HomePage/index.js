@@ -163,6 +163,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = createStructuredSelector({
   privacyMessage: selectEnterprisePrivacyMessage(),
+  enterprise: selectEnterprise()
 });
 
 const withConnect = connect(
@@ -173,6 +174,7 @@ const withConnect = connect(
 HomePage.propTypes = {
   classes: PropTypes.object,
   privacyMessage: PropTypes.string,
+  enterprise: PropTypes.object,
   intl: intlShape,
 };
 
