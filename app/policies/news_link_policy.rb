@@ -1,36 +1,25 @@
-class NewsLinkPolicy < ApplicationPolicy
-  def index?
-    return true if create?
-    return true if basic_group_leader_permission?('news_links_index')
-
-    @policy_group.news_links_index?
+class NewsLinkPolicy < GroupBasePolicy
+  def base_index_permission
+    'group_posts_index'
   end
 
-  def show?
-    index?
+  def base_create_permission
+    'news_links_create'
   end
 
-  def create?
-    return true if manage?
-    return true if basic_group_leader_permission?('news_links_create')
-
-    @policy_group.news_links_create?
+  def base_manage_permission
+    'manage_posts'
   end
 
-  def manage?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('news_links_manage')
-
-    @policy_group.news_links_manage?
+  def group_visibility_setting
+    'latest_news_visibility'
   end
 
   def update?
-    return true if manage?
-
-    @record.author == @user
+    record.author === user || super
   end
 
   def destroy?
-    update?
+    record.author === user || super
   end
 end
