@@ -45,7 +45,10 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR, GET_COLORS_BEGIN, GET_COLORS_SUCCESS
+  JOIN_SUBGROUPS_ERROR,
+  GET_COLORS_BEGIN,
+  GET_COLORS_SUCCESS,
+  GET_COLORS_ERROR,
 
 } from './constants';
 
@@ -97,7 +100,7 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_ERROR:
-      case GET_COLORS_SUCCESS:
+      case GET_COLORS_ERROR:
       case GET_ANNUAL_BUDGETS_ERROR:
         draft.isLoading = false;
         break;
