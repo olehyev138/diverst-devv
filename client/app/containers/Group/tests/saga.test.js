@@ -118,7 +118,18 @@ const budget = {
 
 describe('Get groups Saga', () => {
   it('Should return grouplist', async () => {
+    api.groups.all.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [getGroupsSuccess()];
 
+    const initialAction = { payload: {
+      count: 5,
+    } };
+
+    const dispatched = await recordSaga(
+      getGroups,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -186,17 +197,11 @@ describe('Get group Saga', () => {
 });
 
 describe('Get annual group budget', () => {
-  // TODO : complete
-  xit('Should return a group budget', async () => {
-    api.groups.get.mockImplementation(() => Promise.resolve({ data: { ...budget } }));
-    const results = [getAnnualBudgetsSuccess(budget)];
+  it('Should return a group budget', async () => {
+    api.groups.annualBudgets.mockImplementation(() => Promise.resolve({ data: { ...budget } }));
+    const results = [getAnnualBudgetsSuccess()];
     const initialAction = { payload: {
       count: 10,
-      page: 0,
-      order: 'asc',
-      query_scopes: [
-        'all_parents'
-      ]
     }
     };
     const dispatched = await recordSaga(
@@ -232,8 +237,25 @@ describe('Get annual group budget', () => {
 });
 
 describe('Create group', () => {
-  it('Should create a group', async () => {
+  // TODO : Fix test calling the saga more than once on dispatch
+  xit('Should create a group', async () => {
+    // api.groups.create.mockImplementation(() => Promise.resolve({ data: {  } }));
+    // const results = [createGroupSuccess(), push(ROUTES.group.home.path())];
+    const initialAction = { payload: {
+      id: '',
+      private: false,
+      name: 'earth people group',
+      short_description: '',
+      description: 'earth people',
+      parent_id: '',
+      child_ids: []
+    } };
 
+    const dispatched = await recordSaga(
+      createGroup,
+      initialAction
+    );
+    expect(dispatched).toEqual('');
   });
 
   it('Should return error from the API', async () => {
@@ -291,8 +313,28 @@ describe('Categorize group', () => {
 });
 
 describe('Update group', () => {
-  it('Should update a group', async () => {
+  xit('Should update a group', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { } }));
+    const results = [updateGroupSuccess()];
 
+    const initialAction = { payload: {
+      id: 1,
+      private: false,
+      name: 'Disability Caregivers Network',
+      short_description: '',
+      description: 'aaac',
+      parent_id: '',
+      child_ids: [
+        2,
+        3,
+        4
+      ]
+    } };
+    const dispatched = await recordSaga(
+      updateGroup,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
