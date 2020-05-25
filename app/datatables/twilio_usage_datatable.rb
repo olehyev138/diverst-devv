@@ -12,7 +12,7 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
   end
 
   def searchable_columns
-    @searchable_columns ||= ['VideoRoom.name', 'VideoRoom.status',
+    @searchable_columns ||= ['VideoRoom.status',
                              'VideoRoom.duration', 'VideoRoom.participants']
   end
 
@@ -25,8 +25,9 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
         record.status,
         record.start_date,
         record.end_date,
-        record.duration || 0,
-        record.participants
+        "#{record.duration || 0}s",
+        record.participants || 0,
+        "$#{record.billing}"
       ]
     end
   end
