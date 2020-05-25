@@ -322,13 +322,16 @@ class GroupPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    def index?
-      GroupPolicy.new(user, nil).index?
-    end
+    delegate :manage?, to: :policy
+    delegate :index?, to: :policy
 
     def resolve
-      if index?
+      if manage?
         scope.where(enterprise_id: user.enterprise_id).all
+      elsif index?
+        scope.joins(:user_groups)
+            .where(enterprise_id: user.enterprise_id)
+            .where('user_groups.user_id = ? OR groups.private = FALSE', user.id).all
       else
         scope.none
       end
