@@ -204,7 +204,7 @@ export function NewsLinkListItem(props) {
                 size='small'
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                  props.approveNewsItemBegin({ id: newsItemId });
                 }}
               >
                 {<DiverstFormattedMessage {...messages.approve} />}
@@ -233,6 +233,7 @@ NewsLinkListItem.propTypes = {
   pinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

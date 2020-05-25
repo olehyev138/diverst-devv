@@ -22,6 +22,7 @@ import {
   DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS,
   ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS,
   PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
+  APPROVE_NEWS_ITEM_BEGIN, APPROVE_NEWS_ITEM_SUCCESS, APPROVE_NEWS_ITEM_ERROR,
   UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR, } from 'containers/News/constants';
 
 export function getNewsItemsBegin(payload) {
@@ -429,6 +430,27 @@ export function archiveNewsItemSuccess(payload) {
 export function archiveNewsItemError(error) {
   return {
     type: ARCHIVE_NEWS_ITEM_ERROR,
+    error,
+  };
+}
+
+export function approveNewsItemBegin(payload) {
+  return {
+    type: APPROVE_NEWS_ITEM_BEGIN,
+    payload,
+  };
+}
+
+export function approveNewsItemSuccess(payload) {
+  return {
+    type: APPROVE_NEWS_ITEM_SUCCESS,
+    payload,
+  };
+}
+
+export function approveNewsItemError(error) {
+  return {
+    type: APPROVE_NEWS_ITEM_ERROR,
     error,
   };
 }

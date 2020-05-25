@@ -491,6 +491,8 @@
   "diverst.containers.News.index.button.news.delete_confirm": "Delete news link?",
   "diverst.containers.News.index.button.social.delete_confirm": "Delete social link?",
   "diverst.containers.News.index.button.group_message.new": "New Group Message",
+  "diverst.containers.News.index.no_news.approved": "No posts",
+  "diverst.containers.News.index.no_news.pending": "No pending posts",
   "diverst.containers.News.form.button.create": "Create",
   "diverst.containers.News.form.button.update": "Update",
   "diverst.containers.News.form.button.cancel": "Cancel",
