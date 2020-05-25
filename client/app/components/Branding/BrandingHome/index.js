@@ -66,9 +66,6 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
           >
             <DiverstFormattedMessage {...messages.save} />
           </Button>
-          <Button>
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
         </CardActions>
       </Form>
     </Card>
