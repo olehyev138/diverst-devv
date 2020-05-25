@@ -20,8 +20,7 @@ export function DiverstRichTextInput(props) {
   const [iniValue, setIniValue] = useState(true);
 
   useEffect(() => {
-    if (value != "" && iniValue)
-    {
+    if (value !== '' && iniValue) {
       setEditorState(EditorState.createWithContent(
         ContentState.createFromBlockArray(
           htmlToDraft(value)
