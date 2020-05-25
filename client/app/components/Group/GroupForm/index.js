@@ -111,6 +111,8 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               value={values.short_description}
               label={<DiverstFormattedMessage {...messages.short_description} />}
             />
+          </CardContent>
+          <CardContent>
             <Field
               component={DiverstRichTextInput}
               required
