@@ -4,9 +4,9 @@ class VideoRoom < ActiveRecord::Base
 
   def billing
     if number_of_participants <= 4
-      (0.004 * number_of_participants * duration_per_minute).round(4)
+      (0.008 * number_of_participants * duration_per_minute).round(4)
     else
-      (0.01 * number_of_participants * duration_per_minute).round(4)
+      (0.02 * number_of_participants * duration_per_minute).round(4)
     end
   end
 
