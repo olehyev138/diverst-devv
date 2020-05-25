@@ -58,8 +58,9 @@ export function* getColors(action) {
   try {
     const response = yield call(api.groups.colors.bind(api.groups));
 
-    yield put(getColorsSuccess(response.data.page));
+    yield put(getColorsSuccess(response.data));
   } catch (err) {
+    console.log(err);
     yield put(getColorsError(err));
 
     // TODO: intl message

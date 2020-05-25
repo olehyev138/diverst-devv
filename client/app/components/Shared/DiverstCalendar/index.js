@@ -8,6 +8,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
 
 import 'stylesheets/main.scss';
 
@@ -29,27 +30,30 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
 
   return (
-    <div className={classes.wrapper}>
-      <FullCalendar
-        ref={calendarRef}
-        defaultView='dayGridMonth'
-        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-        header={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek'
-        }}
-        events={events}
-        {...rest}
-      />
-      {isLoading && (
-        <Grid container justify='center' alignContent='center'>
-          <Grid item>
-            <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+    <React.Fragment>
+      <DiverstGroupLegend />
+      <div className={classes.wrapper}>
+        <FullCalendar
+          ref={calendarRef}
+          defaultView='dayGridMonth'
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+          header={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+          }}
+          events={events}
+          {...rest}
+        />
+        {isLoading && (
+          <Grid container justify='center' alignContent='center'>
+            <Grid item>
+              <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-    </div>
+        )}
+      </div>
+    </React.Fragment>
   );
 }
 
