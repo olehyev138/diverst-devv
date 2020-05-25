@@ -48,7 +48,6 @@ export function DiverstRichTextInput(props) {
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
-        editorStyle={editorStyle}
       />
     </React.Fragment>
   );
