@@ -27,6 +27,7 @@ import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 import messages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   title: {
@@ -189,7 +190,13 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const description = (
-    <Typography>{props.currentGroup.description}</Typography>
+        <DiverstHTMLEmbedder
+          html={
+            props.currentGroup
+              ? props.currentGroup.description
+              : ''
+          }
+        />
   );
 
   return (
