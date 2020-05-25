@@ -190,13 +190,13 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const description = (
-        <DiverstHTMLEmbedder
-          html={
-            props.currentGroup
-              ? props.currentGroup.description
-              : ''
-          }
-        />
+    <DiverstHTMLEmbedder
+      html={
+        props.currentGroup
+          ? props.currentGroup.description
+          : ''
+      }
+    />
   );
 
   return (
