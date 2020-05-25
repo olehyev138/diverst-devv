@@ -133,10 +133,10 @@ handleClickOpen = () => {
             </Grid>
           </Grid>
           <Grid item xs>
-            { sponsor }
+            {sponsor}
           </Grid>
           <Grid item xs>
-            { privacyMessage }
+            {privacyMessage}
           </Grid>
         </Grid>
       </React.Fragment>
