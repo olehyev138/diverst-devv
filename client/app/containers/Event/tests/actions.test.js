@@ -14,7 +14,28 @@ import {
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
-  EVENTS_UNMOUNT
+  EVENTS_UNMOUNT,
+  ARCHIVE_EVENT_BEGIN,
+  ARCHIVE_EVENT_SUCCESS,
+  ARCHIVE_EVENT_ERROR,
+  CREATE_EVENT_COMMENT_BEGIN,
+  CREATE_EVENT_COMMENT_SUCCESS,
+  CREATE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_SUCCESS,
+  FINALIZE_EXPENSES_BEGIN,
+  FINALIZE_EXPENSES_SUCCESS,
+  FINALIZE_EXPENSES_ERROR,
+  JOIN_EVENT_ERROR,
+  JOIN_EVENT_SUCCESS,
+  JOIN_EVENT_BEGIN,
+  LEAVE_EVENT_BEGIN,
+  LEAVE_EVENT_ERROR,
+  LEAVE_EVENT_SUCCESS,
+  EXPORT_ATTENDEES_BEGIN,
+  EXPORT_ATTENDEES_SUCCESS,
+  EXPORT_ATTENDEES_ERROR,
 } from 'containers/Event/constants';
 
 import {
@@ -33,7 +54,13 @@ import {
   deleteEventBegin,
   deleteEventSuccess,
   deleteEventError,
-  eventsUnmount
+  eventsUnmount,
+  archiveEventBegin,
+  archiveEventError,
+  archiveEventSuccess,
+  createEventCommentBegin,
+  createEventCommentSuccess,
+  createEventCommentError,
 } from 'containers/Event/actions';
 
 describe('Event actions', () => {
@@ -215,6 +242,74 @@ describe('Event actions', () => {
         };
 
         expect(eventsUnmount()).toEqual(expected);
+      });
+    });
+  });
+
+  describe('Archiving actions', () => {
+    describe('ArchiveEventBegin', () => {
+      it('has a type of ARCHIVE_EVENT_BEGIN', () => {
+        const expected = {
+          type: ARCHIVE_EVENT_BEGIN,
+        };
+
+        expect(archiveEventBegin()).toEqual(expected);
+      });
+    });
+
+    describe('archiveEventSuccess', () => {
+      it('has a type of ARCHIVE_EVENT_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: ARCHIVE_EVENT_SUCCESS,
+          payload: {}
+        };
+
+        expect(archiveEventSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('archiveEventError', () => {
+      it('has a type of ARCHIVE_EVENT_ERROR and sets a given error', () => {
+        const expected = {
+          type: ARCHIVE_EVENT_ERROR,
+          error: 'error'
+        };
+
+        expect(archiveEventError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('Creating event comments actions', () => {
+    describe('CreateEventCommentBegin', () => {
+      it('has a type of CREATE_EVENT_COMMENT_BEGIN', () => {
+        const expected = {
+          type: CREATE_EVENT_COMMENT_BEGIN,
+        };
+
+        expect(createEventCommentBegin()).toEqual(expected);
+      });
+    });
+
+    describe('CreateEventCommentSuccess', () => {
+      it('has a type of CREATE_EVENT_COMMENT_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: CREATE_EVENT_COMMENT_SUCCESS,
+          payload: {}
+        };
+
+        expect(createEventCommentSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('createEventCommentError', () => {
+      it('has a type of CREATE_EVENT_COMMENT_ERROR and sets a given error', () => {
+        const expected = {
+          type: CREATE_EVENT_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(createEventCommentError('error')).toEqual(expected);
       });
     });
   });

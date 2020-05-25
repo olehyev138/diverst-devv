@@ -118,8 +118,8 @@ const budget = {
 
 describe('Get groups Saga', () => {
   it('Should return grouplist', async () => {
-    api.groups.all.mockImplementation(() => Promise.resolve({ data: { ...group } }));
-    const results = [getGroupsSuccess()];
+    api.groups.all.mockImplementation(() => Promise.resolve({ data: { page: {...group } } }));
+    const results = [getGroupsSuccess(group)];
 
     const initialAction = { payload: {
       count: 5,
@@ -128,7 +128,11 @@ describe('Get groups Saga', () => {
     const dispatched = await recordSaga(
       getGroups,
       initialAction
-    );
+    )
+    console.log(dispatched);
+    console.log("VS");
+    console.log(results);
+
     expect(dispatched).toEqual(results);
   });
 
@@ -161,7 +165,7 @@ describe('Get group Saga', () => {
   it('Should return a group', async () => {
     api.groups.get.mockImplementation(() => Promise.resolve({ data: { ...group } }));
     const results = [getGroupSuccess(group)];
-    const initialAction = { payload: { id: 5 } };
+    const initialAction = { payload: { id: group.id } };
 
     const dispatched = await recordSaga(
       getGroup,
@@ -237,10 +241,18 @@ describe('Get annual group budget', () => {
 });
 
 describe('Create group', () => {
-  // TODO : Fix test calling the saga more than once on dispatch
-  xit('Should create a group', async () => {
-    // api.groups.create.mockImplementation(() => Promise.resolve({ data: {  } }));
-    // const results = [createGroupSuccess(), push(ROUTES.group.home.path())];
+  it('Should create a group', async () => {
+    api.groups.create.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to create group',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createGroupSuccess(), push(ROUTES.group.home.path(group.id)), notified];
     const initialAction = { payload: {
       id: '',
       private: false,
@@ -255,7 +267,8 @@ describe('Create group', () => {
       createGroup,
       initialAction
     );
-    expect(dispatched).toEqual('');
+
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -363,8 +376,24 @@ describe('Update group', () => {
 });
 
 describe('Update group settings', () => {
-  it('Should update some group settings', async () => {
+  xit('Should update some group settings', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [updateGroupSettingsSuccess()];
 
+    const initialAction = { payload: {
+      id: 1,
+      private: false,
+      name: 'Disability Caregivers Network',
+      short_description: '',
+      description: 'aaac',
+      parent_id: '',
+      child_ids: []
+    } };
+    const dispatched = await recordSaga(
+      updateGroupSettings,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -393,8 +422,21 @@ describe('Update group settings', () => {
 });
 
 describe('Delete group', () => {
-  it('Should delete a group', async () => {
+  xit('Should delete a group', async () => {
+    api.groups.destroy.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [deleteGroupSuccess()];
 
+    const initialAction = { payload: {
+      id: 1,
+      name: 'Disability Caregivers Network'
+    } };
+
+    const dispatched = await recordSaga(
+      deleteGroup,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -511,7 +553,15 @@ describe('Join group', () => {
 
 describe('Leave group', () => {
   it('Should let a user leave a group', async () => {
+    api.userGroups.leave.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [leaveGroupSuccess()];
 
+    const initialAction = { payload: { group_id: 1 } };
+    const dispatched = await recordSaga(
+      leaveGroup,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
@@ -540,7 +590,15 @@ describe('Leave group', () => {
 
 describe('Join subgroups', () => {
   it('Should let a user join some subgroups', async () => {
+    api.userGroups.join.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [joinGroupSuccess()];
 
+    const initialAction = { payload: { group_id: 1 } };
+    const dispatched = await recordSaga(
+      joinGroup,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
