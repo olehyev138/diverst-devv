@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography, TextField, FormLabel } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
@@ -17,8 +17,22 @@ export function DiverstRichTextInput(props) {
       )
     )
   );
+  const [iniValue, setIniValue] = useState(true);
+
+  useEffect(() => {
+    if (value != "" && iniValue)
+    {
+      setEditorState(EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          htmlToDraft(value)
+        )
+      ));
+      setIniValue(false);
+    }
+  }, [value]);
 
   const onEditorStateChange = (newEditorState) => {
+    setIniValue(false);
     setEditorState(newEditorState);
     if (props.onChange)
       props.onChange(
@@ -34,6 +48,7 @@ export function DiverstRichTextInput(props) {
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
+        editorStyle={editorStyle}
       />
     </React.Fragment>
   );
