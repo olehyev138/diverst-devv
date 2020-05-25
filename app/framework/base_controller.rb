@@ -92,7 +92,7 @@ module BaseController
 
   def payload
     params.require(klass.symbol).permit(
-      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'owner_id']
+      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'owner_id'] - klass.attribute_names.select { |attr| attr.ends_with? '_count' }
     )
   end
 

@@ -144,7 +144,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         before { user.policy_group.update manage_all: true }
 
         it 'returns true' do
-          expect(subject.is_a_manager?('silly permissions')).to be(true)
+          expect(subject.is_a_manager?).to be(true)
         end
       end
 
@@ -157,7 +157,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         end
 
         it 'returns true' do
-          expect(subject.is_a_manager?('groups_manage')).to eq true
+          expect(subject.is_a_manager?).to eq true
         end
       end
     end
@@ -167,7 +167,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         before { user.policy_group.update manage_all: true }
 
         it 'returns true' do
-          expect(subject.is_admin_manager?('silly permissions')).to be(true)
+          expect(subject.is_admin_manager?).to be(true)
         end
       end
 
@@ -175,7 +175,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         before { user.policy_group.update groups_manage: true }
 
         it 'returns true' do
-          expect(subject.is_admin_manager?('groups_manage')).to be(true)
+          expect(subject.is_admin_manager?).to be(true)
         end
       end
     end

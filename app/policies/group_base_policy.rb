@@ -57,37 +57,28 @@ class GroupBasePolicy < ApplicationPolicy
     is_a_member? && !user_group.accepted_member?
   end
 
+  def is_a_manager?
+    is_admin_manager? || is_a_leader?
+  end
+
+  def is_admin_manager?
+    manage_all? || policy_group.groups_manage?
+  end
+
   def group_visibility_setting
   end
 
-  def publicly_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : is_an_accepted_member?
+  def visibility
+    case group[group_visibility_setting]
+    when 'public', 'global', 'non-members', nil then 'public'
+    when 'group' then 'group'
+    when 'leaders_only', 'managers_only' then 'leader'
+    else raise StandardError.new('Invalid Visibility Setting')
+    end
   end
 
-  def member_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members', 'group'].include?(group[group_visibility_setting]) : true
-  end
-
-  def leader_visible
-    group_visibility_setting.present? ?
-        ['public', 'global', 'non-members', 'group', 'managers_only', 'leaders_only'].include?(group[group_visibility_setting]) : true
-  end
-
-  def is_a_manager?(permission)
-    return true if is_admin_manager?(permission)
-
-    # return true if is_a_leader? &&  policy_group[permission]
-    has_group_leader_permissions?(permission)
-  end
-
-  def is_admin_manager?(permission)
-    # super admin
-    return true if manage_all?
-
-    # groups manager
-    policy_group.groups_manage? && policy_group[permission]
+  def has_permission(permission)
+    policy_group[permission] || has_group_leader_permissions?(permission)
   end
 
   def basic_group_leader_permission?(permission)
@@ -95,24 +86,19 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_group_leader_permissions?(permission)
-    return false unless is_a_leader?
-
-    group_leader[permission] || false
+    (is_a_leader? && group_leader[permission]) || false
   end
 
   def view_group_resource(permission)
-    return true if manage_group_resource(permission)
-
     # super admin
     return true if manage_all?
-    # groups manager
-    return true if policy_group.groups_manage? && policy_group[permission]
-    # group leader
-    return true if is_a_leader? && leader_visible && policy_group[permission]
-    # group member
-    return true if is_a_member? && member_visible && policy_group[permission]
 
-    publicly_visible && policy_group[permission]
+    case visibility
+    when 'public' then true
+    when 'group' then is_a_member? || is_admin_manager?
+    when 'leader' then is_a_manager?
+    else false
+    end && has_permission(permission)
   end
 
   def manage?
@@ -122,14 +108,8 @@ class GroupBasePolicy < ApplicationPolicy
   def manage_group_resource(permission)
     # super admin
     return true if manage_all?
-    # groups manager
-    return true if policy_group.groups_manage? && policy_group[permission]
-    # group leader
-    return true if has_group_leader_permissions?(permission)
-    # group member
-    return true if is_an_accepted_member? && policy_group[permission]
 
-    false
+    (is_a_manager? || is_an_accepted_member?) && has_permission(permission)
   end
 
   def index?
@@ -198,35 +178,70 @@ class GroupBasePolicy < ApplicationPolicy
       v.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
     end
 
+    # ----------------------
+    # Identifiers
+    # ----------------------
     def manage_all
-      '(policy_groups.manage_all = true)'
+      'policy_groups.manage_all = true'
     end
 
+    def is_admin_manager
+      'policy_groups.groups_manage = true'
+    end
+
+    def is_a_leader
+      "group_leaders.user_id = #{quote_string(user.id)}"
+    end
+
+    def is_a_manager
+      "(#{is_admin_manager} OR #{is_a_leader})"
+    end
+
+    def is_a_member
+      "user_groups.user_id = #{quote_string(user.id)}"
+    end
+
+    # ----------------------------
+    # Permissions
+    # ----------------------------
     def policy_group(permission)
-      "policy_groups.#{quote_string(permission)} = true"
-    end
-
-    def group_manage(permission)
-      "(policy_groups.groups_manage = true AND #{policy_group(permission)})"
-    end
-
-    def is_member(permission)
-      "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
-    end
-
-    def is_not_a_member(permission)
-      nil
+      "policy_groups.#{quote_string(permission)} = TRUE"
     end
 
     def leader_policy(permission)
-      "group_leaders.#{quote_string(permission)} = true"
+      if group_has_permission(permission)
+        "group_leaders.#{quote_string(permission)} = TRUE"
+      else
+        'FALSE'
+      end
     end
 
-    def is_leader(permission)
-      if group_has_permission(permission)
-        "(group_leaders.user_id = #{quote_string(user.id)} AND #{leader_policy(permission)})"
+    def general_permission(permission)
+      "(#{policy_group(permission)} OR #{leader_policy(permission)})"
+    end
+
+    # ------------------------------
+    # Visibility Cases
+    # ------------------------------
+    def publicly_visible
+      "groups.#{quote_string(group_visibility_setting)} IN ('public', 'global', 'non-members')"
+    end
+
+    def group_visible
+      "groups.#{quote_string(group_visibility_setting)} IN ('group', 'public', 'global', 'non-members')"
+    end
+
+    def leader_visible
+      'TRUE'
+    end
+
+    def visibility
+      if group_visibility_setting
+        "((#{publicly_visible}) OR " +
+        "(#{group_visible} AND #{is_a_member}) OR " +
+        "(#{is_a_manager}))"
       else
-        'false'
+        'TRUE'
       end
     end
 
@@ -236,6 +251,7 @@ class GroupBasePolicy < ApplicationPolicy
 
     delegate :index?, to: :policy
     delegate :group, to: :policy
+    delegate :group_visibility_setting, to: :policy
 
     def group_base
       group.send(scope.all.klass.model_name.collection)
@@ -256,7 +272,7 @@ class GroupBasePolicy < ApplicationPolicy
       scoped
           .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
           .where('enterprises.id = ?', user.enterprise_id)
-          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].compact.join(' OR '))
+          .where("#{manage_all} OR (#{visibility} AND #{general_permission(permission)})")
     end
 
     def resolve(permission)

@@ -10,6 +10,13 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
     <WithStyles(ForwardRef(Grid))
       item={true}
     >
+      <Memo(WithStyles(WithTheme(DiverstHTMLEmbedder)))
+        html=""
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
       <WithStyles(ForwardRef(Grid))
         container={true}
         spacing={3}

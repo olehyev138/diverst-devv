@@ -60,7 +60,7 @@ import {
 
   UNPIN_NEWS_ITEM_BEGIN,
   UNPIN_NEWS_ITEM_SUCCESS,
-  UNPIN_NEWS_ITEM_ERROR,
+  UNPIN_NEWS_ITEM_ERROR, APPROVE_NEWS_ITEM_BEGIN, APPROVE_NEWS_ITEM_SUCCESS, APPROVE_NEWS_ITEM_ERROR,
 } from 'containers/News/constants';
 
 export const initialState = {
@@ -152,6 +152,21 @@ function newsReducer(state = initialState, action) {
         break;
       case NEWS_FEED_UNMOUNT:
         return initialState;
+      case APPROVE_NEWS_ITEM_BEGIN:
+        draft.isCommitting = true;
+        draft.hasChanged = false;
+        break;
+      case APPROVE_NEWS_ITEM_SUCCESS:
+        draft.isCommitting = false;
+        if (state.newsItems.every(news => news.approved === false)) {
+          draft.newsItems = state.newsItems.filter(news => news.id !== action.payload.news_feed_link.id);
+          draft.newsItemsTotal -= 1;
+        } else
+          draft.hasChanged = true;
+        break;
+      case APPROVE_NEWS_ITEM_ERROR:
+        draft.isCommitting = false;
+        break;
       case ARCHIVE_NEWS_ITEM_BEGIN:
       case PIN_NEWS_ITEM_BEGIN:
       case UNPIN_NEWS_ITEM_BEGIN:

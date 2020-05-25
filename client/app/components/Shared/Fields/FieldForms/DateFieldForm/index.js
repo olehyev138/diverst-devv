@@ -18,12 +18,14 @@ import {
 
 import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import { Toggles } from 'components/Shared/Fields/FieldForms/Toggles';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'DateField';
 
 /* eslint-disable object-curly-newline */
-export function DareFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
+export function DareFieldFormInner(props) {
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...rest } = props;
   return (
     <Card>
       <Form>
@@ -39,6 +41,7 @@ export function DareFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             value={values.title}
             label={<DiverstFormattedMessage {...messages.title} />}
           />
+          <Toggles {...props} />
         </CardContent>
         <Divider />
         <CardActions>
@@ -65,6 +68,11 @@ export function DareFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
     id: dig(props, 'field', 'id') || '',
+    show_on_vcard: dig(props, 'field', 'show_on_vcard') || true,
+    alternative_layout: dig(props, 'field', 'alternative_layout') || false,
+    private: dig(props, 'field', 'private') || false,
+    required: dig(props, 'field', 'required') || false,
+    add_to_member_list: dig(props, 'field', 'add_to_member_list') || false,
     type: FIELD_TYPE
   };
 

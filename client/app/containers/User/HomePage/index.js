@@ -27,7 +27,8 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprisePrivacyMessage } from 'containers/Shared/App/selectors';
+import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   title: {
@@ -106,7 +107,7 @@ handleClickOpen = () => {
           open={this.state.open}
           handleNo={this.handleClose}
           textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
-          message={this.props.privacyMessage}
+          content={this.props.privacyMessage}
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
@@ -119,9 +120,22 @@ handleClickOpen = () => {
       />
     );
 
+    const enterpriseMessage = (
+      <DiverstHTMLEmbedder
+        html={
+          this.props.enterprise
+            ? this.props.enterprise.home_message
+            : ''
+        }
+      />
+    );
+
     return (
       <React.Fragment>
         <Grid container spacing={3} direction='column'>
+          <Grid item>
+            {enterpriseMessage}
+          </Grid>
           <Grid item>
             <Grid container spacing={3}>
               <Grid item xs>

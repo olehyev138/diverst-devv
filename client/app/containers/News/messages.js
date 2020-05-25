@@ -87,4 +87,12 @@ export default defineMessages({
   social_url: {
     id: `${scope}.form.social.input.social_url`,
   },
+  no_news: {
+    approved: {
+      id: `${scope}.index.no_news.approved`,
+    },
+    pending: {
+      id: `${scope}.index.no_news.pending`,
+    },
+  },
 });

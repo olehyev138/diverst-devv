@@ -85,18 +85,20 @@ export function NewsFeed(props) {
   }, [props.newsItems]);
 
 
-  const actions = [
-    {
+  const actions = [];
+  if (permission(props.currentGroup, 'message_create?'))
+    actions.push({
       icon: <MessageIcon />,
       name: <DiverstFormattedMessage {...messages.group_message} />,
       linkPath: props.links.groupMessageNew,
-    },
-    {
+    });
+
+  if (permission(props.currentGroup, 'news_link_create?'))
+    actions.push({
       icon: <NewsIcon />,
       name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
-    },
-  ];
+    });
 
   if (permission(props.currentGroup, 'social_link_create?'))
     actions.push({
@@ -116,7 +118,7 @@ export function NewsFeed(props) {
       {!props.readonly && (
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
-          <Permission show={permission(props.currentGroup, 'news_create?')}>
+          <Permission show={actions.length > 0}>
             <SpeedDial
               ariaLabel={props.intl.formatMessage(messages.add)}
               className={classes.speedDial}
@@ -177,6 +179,16 @@ export function NewsFeed(props) {
           })}
         </Grid>
       </DiverstLoader>
+      {!props.isLoading && props.newsItems && Object.values(props.newsItems).length <= 0 && (
+        <React.Fragment>
+          <Grid item sm>
+            <Box mt={3} />
+            <Typography variant='h6' align='center' color='textSecondary'>
+              <DiverstFormattedMessage {...messages.no_news[props.pending ? 'pending' : 'approved']} />
+            </Typography>
+          </Grid>
+        </React.Fragment>
+      )}
       <DiverstPagination
         isLoading={props.isLoading}
         rowsPerPage={props.defaultParams.count}
@@ -199,6 +211,7 @@ NewsFeed.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.object,
   readonly: PropTypes.bool,
+  pending: PropTypes.bool,
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
@@ -208,6 +221,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
 };
 
