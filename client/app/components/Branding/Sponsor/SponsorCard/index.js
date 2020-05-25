@@ -60,17 +60,16 @@ export function SponsorCard(props) {
         {sponsorList.map(sponsor => (
           <Card key={sponsor.id}>
             <CardContent>
-              <Grid container spacing={2} alignItems='center'>
+              <Grid container spacing={2} direction='column'>
                 {sponsor.sponsor_media_data && (
                   <React.Fragment>
                     <Hidden xsDown>
-                      <Grid item xs='auto'>
+                      <Grid item xs={12}>
                         <DiverstImg
                           data={sponsor.sponsor_media_data}
-                          maxWidth='70px'
-                          maxHeight='70px'
-                          minWidth='70px'
-                          minHeight='70px'
+                          maxWidth='100%'
+                          maxHeight='100px'
+                          height='auto'
                         />
                       </Grid>
                     </Hidden>
@@ -78,10 +77,10 @@ export function SponsorCard(props) {
                 )}
                 <Grid item>
                   <Typography variant='h6'>
-                    { sponsor.sponsor_name}
+                    {sponsor.sponsor_name}
                   </Typography>
                   <Typography>
-                    { sponsor.sponsor_title}
+                    {sponsor.sponsor_title}
                   </Typography>
                 </Grid>
               </Grid>
