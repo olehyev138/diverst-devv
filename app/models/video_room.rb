@@ -10,9 +10,6 @@ class VideoRoom < ActiveRecord::Base
     end
   end
 
-
-  private
-
   def duration_per_minute
     (((duration || 0)) / 60.0)
   end

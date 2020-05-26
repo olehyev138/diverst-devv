@@ -189,7 +189,6 @@ class InitiativesController < ApplicationController
     group = Group.find(params[:group_id])
     enterprise_id = group.enterprise_id
 
-    # add start_date to VideoRoom object
     room = VideoRoom.new(
       sid: sid,
       name: name,
