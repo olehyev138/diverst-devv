@@ -81,6 +81,9 @@ class Initiative < ApplicationRecord
   scope :for_segments, ->(segment_ids) {
     joins(:initiative_segments).where(initiative_segments: { segment_id: segment_ids })
   }
+  scope :date_range, ->(start = Time.now, fin = Time.now) {
+    where('end > ? AND start < ?', start, fin)
+  }
   scope :available_events_for_user, ->(user_id) {
     # SCOPE AND
     # ( INVITED OR (

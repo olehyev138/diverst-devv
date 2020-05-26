@@ -160,6 +160,7 @@ export function EventsList(props, context) {
           events={props.events}
           joinEventBegin={props.joinEventBegin}
           leaveEventBegin={props.leaveEventBegin}
+          calendarDateCallback={props.calendarDateCallback}
         />
       ) : (
         <React.Fragment>
@@ -236,6 +237,7 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
   currentGroupID: PropTypes.number
 };
 

@@ -8,6 +8,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import { formatDate } from '@fullcalendar/core';
 import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
 
 import 'stylesheets/main.scss';
@@ -22,6 +23,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import EventLite from 'components/Event/EventLite';
 import SegmentSelector from 'components/Shared/SegmentSelector';
+import dig from 'object-dig';
 
 const styles = theme => ({
   wrapper: {
@@ -132,6 +134,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
           }}
           events={calendarEvents}
           eventClick={clickEvent}
+          datesRender={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(view.currentStart, view.currentEnd))}
           {...rest}
         />
         {isLoading && (
@@ -164,6 +167,7 @@ DiverstCalendar.propTypes = {
   isCommitting: PropTypes.bool,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
 };
 
 export default compose(

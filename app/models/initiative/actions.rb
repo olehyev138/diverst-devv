@@ -29,6 +29,7 @@ module Initiative::Actions
           'available_events_for_user',
           'for_groups',
           'for_segments',
+          'date_range',
       ]
     end
 
