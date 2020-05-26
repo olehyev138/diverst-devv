@@ -78,6 +78,9 @@ class Initiative < ApplicationRecord
   scope :for_groups, ->(group_ids) {
     joins(:outcome).where(outcomes: { group_id: group_ids })
   }
+  scope :for_segments, ->(segment_ids) {
+    joins(:initiative_segments).where(initiative_segments: { segment_id: segment_ids })
+  }
   scope :available_events_for_user, ->(user_id) {
     # SCOPE AND
     # ( INVITED OR (

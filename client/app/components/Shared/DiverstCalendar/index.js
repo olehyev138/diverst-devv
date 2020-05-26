@@ -21,6 +21,7 @@ import { toNumber } from 'utils/floatRound';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import EventLite from 'components/Event/EventLite';
+import SegmentSelector from 'components/Shared/SegmentSelector';
 
 const styles = theme => ({
   wrapper: {
@@ -65,25 +66,38 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
   const groupFilter = (
     <Formik
       initialValues={{
-        group_ids: ''
+        group_ids: [],
+        segment_ids: [],
       }}
       enableReinitialize
       onSubmit={(values, actions) => {
         if (rest.groupFilterCallback)
-          rest.groupFilterCallback(mapFields(values, ['group_ids']));
+          rest.groupFilterCallback(mapFields(values, ['group_ids', 'segment_ids']));
       }}
     >
       {formikProps => (
         <Form>
           <Card>
             <CardContent>
-              <GroupSelector
-                groupField='group_ids'
-                label={<DiverstFormattedMessage {...messages.groups} />}
-                isMulti
-                inputCallback={(props, searchKey = '') => searchKey}
-                {...formikProps}
-              />
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <GroupSelector
+                    groupField='group_ids'
+                    label={<DiverstFormattedMessage {...messages.groups} />}
+                    isMulti
+                    inputCallback={(props, searchKey = '') => searchKey}
+                    {...formikProps}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <SegmentSelector
+                    segmentField='segment_ids'
+                    label={<DiverstFormattedMessage {...messages.segments} />}
+                    isMulti
+                    {...formikProps}
+                  />
+                </Grid>
+              </Grid>
             </CardContent>
             <CardActions>
               <DiverstSubmit>

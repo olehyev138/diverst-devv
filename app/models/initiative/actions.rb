@@ -28,6 +28,7 @@ module Initiative::Actions
           'joined_events_for_user',
           'available_events_for_user',
           'for_groups',
+          'for_segments',
       ]
     end
 

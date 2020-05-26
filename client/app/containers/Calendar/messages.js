@@ -15,4 +15,7 @@ export default defineMessages({
   groups: {
     id: `${scope}.form.groups`,
   },
+  segments: {
+    id: `${scope}.form.segments`,
+  },
 });
