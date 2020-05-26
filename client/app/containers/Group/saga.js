@@ -60,7 +60,6 @@ export function* getColors(action) {
 
     yield put(getColorsSuccess(response.data));
   } catch (err) {
-    console.log(err);
     yield put(getColorsError(err));
 
     // TODO: intl message
