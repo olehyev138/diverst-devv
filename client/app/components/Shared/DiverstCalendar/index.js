@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { CircularProgress, Grid, Card, CardContent, Box } from '@material-ui/core';
+import { CircularProgress, Grid, Card, CardContent, Box, CardActions } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -13,8 +13,10 @@ import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLe
 import 'stylesheets/main.scss';
 import { Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Poll/messages';
+import messages from 'containers/Calendar/messages';
 import GroupSelector from 'components/Shared/GroupSelector';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import {mapFields} from "utils/formHelpers";
 
 const styles = theme => ({
   wrapper: {
@@ -36,12 +38,12 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const groupFilter = (
     <Formik
       initialValues={{
-        group_ids: ''
+        group_id: ''
       }}
       enableReinitialize
       onSubmit={(values, actions) => {
         if (rest.groupFilterCallback)
-          rest.groupFilterCallback(values);
+          rest.groupFilterCallback(mapFields(values, ['group_id']));
       }}
     >
       {formikProps => (
@@ -49,13 +51,18 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
           <Card>
             <CardContent>
               <GroupSelector
-                groupField='group_ids'
-                label={<DiverstFormattedMessage {...messages.form.groups} />}
+                groupField='group_id'
+                label={<DiverstFormattedMessage {...messages.groups} />}
                 isMulti
-                inputCallback={(props, searchKey = '') => ''}
+                inputCallback={(props, searchKey = '') => searchKey}
                 {...formikProps}
               />
             </CardContent>
+            <CardActions>
+              <DiverstSubmit>
+                <DiverstFormattedMessage {...messages.filter} />
+              </DiverstSubmit>
+            </CardActions>
           </Card>
         </Form>
       )}

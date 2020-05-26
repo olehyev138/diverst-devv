@@ -966,6 +966,8 @@
   "diverst.containers.Archive.field.type.group_message": "Group Message",
   "diverst.containers.Archive.field.type.social_link": "Social Link",
   "diverst.containers.Archive.field.type.error": "Error",
+  "diverst.containers.Calendar.form.filter": "Filter",
+  "diverst.containers.Calendar.form.groups": "Groups",
   "diverst.components.PlaceholderPage.example": "Example Content",
   "diverst.components.DiverstFileInput.replace": "Replace File",
   "diverst.components.DiverstFileInput.choose": "Choose File",
