@@ -66,7 +66,7 @@ export function GroupHomeFamily({ classes, ...props }) {
           <Box mb={1} />
           <Divider />
           <Box mb={1} />
-          { renderGroup(child) }
+          {renderGroup(child)}
         </React.Fragment>
       ))}
     </React.Fragment>
@@ -80,7 +80,7 @@ export function GroupHomeFamily({ classes, ...props }) {
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
       <CardContent>
-        { props.currentGroup.parent && (
+        {props.currentGroup.parent && (
           <React.Fragment>
             <Typography variant='h6'>
               <DiverstFormattedMessage {...appMessages.custom_text.parent} />
