@@ -444,6 +444,7 @@
   "diverst.containers.Branding.Sponsors.input.name": "Sponsor Name",
   "diverst.containers.Branding.Sponsors.input.title": "Sponsor Title",
   "diverst.containers.Branding.Sponsors.input.message": "Sponsor Message",
+  "diverst.containers.Branding.Sponsors.input.media": "Sponsor Image",
   "diverst.containers.Branding.Sponsors.list.name": "Name",
   "diverst.containers.Branding.Sponsors.list.title": "Title",
   "diverst.containers.Branding.Sponsors.table.title": "Sponsors",
