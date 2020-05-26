@@ -88,7 +88,7 @@ export function EventsList(props) {
                     <Grid item xs>
                       <Typography variant='h6'>
                         {pillar.name}
-                        {hasEvent=false}
+                        {hasEvent = false}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -108,27 +108,29 @@ export function EventsList(props) {
                   </Grid>
                 </CardContent>
                 {pillar.initiatives && pillar.initiatives.length > 0 && pillar.initiatives.map(initiative => (
-                  initiative.participating_groups.length == 0 && <React.Fragment key={initiative.id}>
-                    <Divider className={classes.divider} />
-                    <Link
-                      className={classes.eventLink}
-                      component={WrappedNavLink}
-                      to={props.links.eventManage(initiative.id)}
-                    >
-                      <CardActionArea>
-                        <Grid container>
-                          <Grid item className={classes.eventListItemSpacer} />
-                          <Grid item xs>
-                            <CardContent>
-                              <EventListItem item={initiative} />
-                              {hasEvent=true}
-                              <Box mb={1} />
-                            </CardContent>
+                  initiative.participating_groups.length === 0 && (
+                    <React.Fragment key={initiative.id}>
+                      <Divider className={classes.divider} />
+                      <Link
+                        className={classes.eventLink}
+                        component={WrappedNavLink}
+                        to={props.links.eventManage(initiative.id)}
+                      >
+                        <CardActionArea>
+                          <Grid container>
+                            <Grid item className={classes.eventListItemSpacer} />
+                            <Grid item xs>
+                              <CardContent>
+                                <EventListItem item={initiative} />
+                                {hasEvent = true}
+                                <Box mb={1} />
+                              </CardContent>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      </CardActionArea>
-                    </Link>
-                  </React.Fragment>
+                        </CardActionArea>
+                      </Link>
+                    </React.Fragment>
+                  )
                 ))}
                 {pillar.initiatives && !hasEvent && (
                   <React.Fragment>
