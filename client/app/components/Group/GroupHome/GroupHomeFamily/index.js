@@ -77,8 +77,6 @@ export function GroupHomeFamily({ classes, ...props }) {
   const needExpand = ((props.currentGroup.parent ? 2 : 0)
     + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 5;
 
-  const CollapseConditional = needExpand ? Collapse : React.Fragment;
-
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
       <CardContent>
@@ -94,9 +92,9 @@ export function GroupHomeFamily({ classes, ...props }) {
           </React.Fragment>
         )}
         {props.currentGroup.children.length > 0 && (needExpand ? (
-          <CollapseConditional in={expand} collapsedHeight={125}>
+          <Collapse in={expand} collapsedHeight={125}>
             {renderSubgroups(props.currentGroup.children)}
-          </CollapseConditional>
+          </Collapse>
         ) : (<React.Fragment>{renderSubgroups(props.currentGroup.children)}</React.Fragment>)
         )}
         {needExpand && (
