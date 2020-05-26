@@ -17,6 +17,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
+import ShareIcon from '@material-ui/icons/Share';
 
 const styles = theme => ({
   arrowRight: {
@@ -56,6 +57,8 @@ export function EventListItem(props) {
       <Grid item xs>
         <Typography color='primary' variant='h6' component='h2'>
           {item.name}
+          &ensp;
+          {item.participating_groups.length > 0 && <ShareIcon />}
         </Typography>
         <hr className={classes.divider} />
         {item.description && (
