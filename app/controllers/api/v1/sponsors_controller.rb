@@ -23,4 +23,18 @@ class Api::V1::SponsorsController < DiverstController
     else nil
     end
   end
+
+  def payload
+    params
+        .require(:sponsor)
+        .permit(
+            :id,
+            :sponsor_title,
+            :sponsor_name,
+            :sponsor_message,
+            :sponsor_media,
+            :sponsorable_type,
+            :sponsorable_id,
+          )
+  end
 end
