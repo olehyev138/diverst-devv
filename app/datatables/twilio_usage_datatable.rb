@@ -21,7 +21,7 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        record.name,
+        record.event_name,
         record.status,
         record.start_date&.strftime('%a, %d %b %Y %H:%M %p'),
         record.end_date&.strftime('%a, %d %b %Y %H:%M %p'),

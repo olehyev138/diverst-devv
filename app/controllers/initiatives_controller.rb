@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video, :leave_video]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video, :leave_video, :register_room_in_database, :update_registered_room_in_database]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -186,6 +186,7 @@ class InitiativesController < ApplicationController
     sid = params[:sid]
     name = params[:name]
     status = params[:status]
+    event =
     group = Group.find(params[:group_id])
     enterprise_id = group.enterprise_id
 
@@ -193,7 +194,9 @@ class InitiativesController < ApplicationController
       sid: sid,
       name: name,
       status: status,
-      enterprise_id: enterprise_id)
+      enterprise_id: enterprise_id,
+      initiative_id: @initiative.id
+    )
 
     if room.save
       render nothing: true, status: :ok

@@ -17,4 +17,8 @@ class VideoRoom < ActiveRecord::Base
   def number_of_participants
     participants || 0
   end
+
+  def event_name
+    Initiative.find_by(id: initiative_id)&.name
+  end
 end
