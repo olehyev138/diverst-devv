@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -57,6 +57,7 @@ const styles = theme => ({
 export function EventsList(props) {
   const { classes } = props;
   const outcomes = dig(props, 'outcomes');
+  let hasEvent;
 
   return (
     <React.Fragment>
@@ -87,6 +88,7 @@ export function EventsList(props) {
                     <Grid item xs>
                       <Typography variant='h6'>
                         {pillar.name}
+                        {hasEvent=false}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -106,7 +108,7 @@ export function EventsList(props) {
                   </Grid>
                 </CardContent>
                 {pillar.initiatives && pillar.initiatives.length > 0 && pillar.initiatives.map(initiative => (
-                  <React.Fragment key={initiative.id}>
+                  initiative.participating_groups.length == 0 && <React.Fragment key={initiative.id}>
                     <Divider className={classes.divider} />
                     <Link
                       className={classes.eventLink}
@@ -119,6 +121,7 @@ export function EventsList(props) {
                           <Grid item xs>
                             <CardContent>
                               <EventListItem item={initiative} />
+                              {hasEvent=true}
                               <Box mb={1} />
                             </CardContent>
                           </Grid>
@@ -127,7 +130,7 @@ export function EventsList(props) {
                     </Link>
                   </React.Fragment>
                 ))}
-                {pillar.initiatives && pillar.initiatives.length <= 0 && (
+                {pillar.initiatives && !hasEvent && (
                   <React.Fragment>
                     <Divider />
                     <Box p={2}>
