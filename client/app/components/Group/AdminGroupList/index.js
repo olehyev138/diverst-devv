@@ -27,7 +27,7 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import { DroppableGroupList } from 'components/Shared/DragAndDrop/DroppableLocations/DroppableList/DroppableGroupList';
+import { DroppableGroupList } from 'components/Shared/DragAndDrop/DroppableLocations/DroppableGroupList';
 
 const styles = theme => ({
   progress: {

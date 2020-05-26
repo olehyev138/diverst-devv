@@ -10,8 +10,9 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 import { intlShape } from 'react-intl';
-import DraggableGroupAdminCard from '../../../DraggableItems/DraggableCard/DraggableGroupAdminCard';
-import { DroppableList } from '../index';
+
+import { DroppableList } from '../DroppableList';
+import DraggableGroupAdminCard from '../../DraggableItems/DraggableCard/DraggableGroupAdminCard';
 
 export function DroppableGroupList(props) {
   const renderCard = (card, index, moveCard) => (
@@ -31,9 +32,6 @@ export function DroppableGroupList(props) {
       />
     </Grid>
   );
-console.log(props.items);
-console.log(props.draggable);
-console.log(props.save);
 
   return (
     <DroppableList

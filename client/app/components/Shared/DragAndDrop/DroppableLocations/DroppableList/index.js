@@ -1,7 +1,7 @@
 /*
  * Droppable List
- * A list of draggable cards
- *
+ * A re-usable context setter from dropping location
+ * Renders the different card that has been passed in
  */
 
 import PropTypes from 'prop-types';
