@@ -75,6 +75,9 @@ class Initiative < ApplicationRecord
 
     merge(user.initiatives.custom_or(user.invited_initiatives))
   }
+  scope :for_groups, ->(group_ids) {
+    joins(:outcome).where(outcomes: { group_id: group_ids })
+  }
   scope :available_events_for_user, ->(user_id) {
     # SCOPE AND
     # ( INVITED OR (

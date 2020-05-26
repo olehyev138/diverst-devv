@@ -52,7 +52,11 @@ export function AdminCalendarPage(props) {
   }, []);
 
   const handleGroupFilter = (value) => {
-    getEvents(value);
+    getEvents({
+      query_scopes: value.group_ids.length > 0
+        ? ['not_archived', ['for_groups', value.group_ids]]
+        : ['not_archived']
+    });
   };
 
   return (
