@@ -57,8 +57,7 @@ const styles = theme => ({
 export function EventsList(props) {
   const { classes } = props;
   const outcomes = dig(props, 'outcomes');
-  let hasEvent;
-
+  const hasSharedEvent = (currentEvent) => currentEvent.participating_groups.length > 0;
   return (
     <React.Fragment>
       <Permission show={permission(props.currentGroup, 'update?')}>
@@ -88,7 +87,6 @@ export function EventsList(props) {
                     <Grid item xs>
                       <Typography variant='h6'>
                         {pillar.name}
-                        {hasEvent = false}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -122,7 +120,6 @@ export function EventsList(props) {
                             <Grid item xs>
                               <CardContent>
                                 <EventListItem item={initiative} />
-                                {hasEvent = true}
                                 <Box mb={1} />
                               </CardContent>
                             </Grid>
@@ -132,7 +129,7 @@ export function EventsList(props) {
                     </React.Fragment>
                   )
                 ))}
-                {pillar.initiatives && !hasEvent && (
+                {pillar.initiatives && pillar.initiatives.every(hasSharedEvent) && (
                   <React.Fragment>
                     <Divider />
                     <Box p={2}>
