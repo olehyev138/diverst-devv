@@ -1057,6 +1057,7 @@
   "diverst.containers.Permissions.innovate.campaign.campaignShowPage": "You don't have permission to view this campaign",
   "diverst.containers.Permissions.innovate.campaign.campaignCreatePage": "You don't have permission to create campaigns",
   "diverst.containers.Permissions.archive.archivesPage": "You don't have permission to view archived items",
+  "diverst.containers.Permissions.calendar.adminCalendarPage": "You don't have permission to view the calendar",
   "diverst.containers.Permissions.resource.groupResource.resourceCreatePage": "You don't have permission to create resources",
   "diverst.containers.Permissions.resource.groupResource.resourceEditPage": "You don't have permission to edit this resource",
   "diverst.containers.Permissions.resource.enterpriseFolder.folderCreatePage": "You don't have permission to create folders",

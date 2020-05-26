@@ -312,6 +312,11 @@ export default defineMessages({
       id: `${scope}.archive.archivesPage`
     }
   },
+  calendar: {
+    indexPage: {
+      id: `${scope}.calendar.adminCalendarPage`
+    }
+  },
   resource: {
     groupResource: {
       resourceCreatePage: {
