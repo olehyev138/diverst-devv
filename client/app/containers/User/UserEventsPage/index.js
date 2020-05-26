@@ -54,6 +54,7 @@ export function EventsPage(props) {
 
   const [tab, setTab] = useState(EventTypes.upcoming);
   const [participateTab, setParticipateTab] = useState(ParticipationTypes.participating);
+  const [dateRange, setDateRange] = useState([]);
   const [calendar, setCalendar] = useState(null);
   const [params, setParams] = useState(defaultParams);
 
@@ -93,13 +94,23 @@ export function EventsPage(props) {
           break;
       }
 
-    const newParams = {
-      ...params,
-      userId: props.currentSession.user_id,
-      query_scopes: scopes,
-      participation
-    };
-    props.getUserEventsBegin(calendar ? { ...newParams, query_scopes: ['not_archived'], count: -1 } : newParams);
+    let newParams;
+    if (calendar)
+      newParams = {
+        ...params,
+        userId: props.currentSession.user_id,
+        query_scopes: ['not_archived', ['date_range', ...dateRange]],
+        count: -1,
+        participation
+      };
+    else
+      newParams = {
+        ...params,
+        userId: props.currentSession.user_id,
+        query_scopes: scopes,
+        participation
+      };
+    props.getUserEventsBegin(newParams);
     setParams(newParams);
   };
 
@@ -114,7 +125,7 @@ export function EventsPage(props) {
   useEffect(() => {
     if (calendar != null)
       getEvents();
-  }, [calendar]);
+  }, [dateRange]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -147,8 +158,14 @@ export function EventsPage(props) {
     }
   };
 
+  const handleCalendarPage = (start, end) => {
+    setDateRange([start, end]);
+  };
+
   const handleChangeCalendar = () => {
     setCalendar(!calendar);
+    if (calendar) // was calendar noe list
+      setDateRange([]);
   };
 
   const handlePagination = (payload) => {
@@ -176,6 +193,7 @@ export function EventsPage(props) {
       links={links}
       loaderProps={props.loaderProps}
       readonly
+      calendarDateCallback={handleCalendarPage}
     />
   );
 }
