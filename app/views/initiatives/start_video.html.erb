@@ -292,7 +292,6 @@
     }
 
     function updateRegisteredRoomInDatabase(room) {
-      console.log(room.sid, room.state);
       var room = room;
       $.ajax({
         url: '<%= update_registered_room_in_database_group_initiative_path(@group, @initiative) %>',

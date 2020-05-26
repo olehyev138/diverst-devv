@@ -605,7 +605,7 @@ RSpec.describe InitiativesController, type: :controller do
       before { initiative.save }
 
       context 'renders no template' do
-        before { post :leave_video, group_id: group.id, id: initiative.id }
+        before { patch :leave_video, group_id: group.id, id: initiative.id }
         it { expect(response).to render_template(nil) }
       end
 
@@ -616,7 +616,7 @@ RSpec.describe InitiativesController, type: :controller do
           it 'creates public activity record' do
             perform_enqueued_jobs do
               expect {
-                post :leave_video, group_id: group.id, id: initiative.id
+                patch :leave_video, group_id: group.id, id: initiative.id
               }.to change(PublicActivity::Activity, :count).by(1)
             end
           end
@@ -628,7 +628,7 @@ RSpec.describe InitiativesController, type: :controller do
 
             before {
               perform_enqueued_jobs do
-                post :leave_video, group_id: group.id, id: initiative.id
+                patch :leave_video, group_id: group.id, id: initiative.id
               end
             }
 
@@ -639,20 +639,17 @@ RSpec.describe InitiativesController, type: :controller do
     end
 
     describe 'POST #register_room_in_database' do
-      let!(:enterprise) { create(:enterprise) }
-      let!(:group1) { create(:group, enterprise_id: enterprise.id) }
+      # let!(:enterprise1) { create(:enterprise) }
+      # let!(:group1) { create(:group, enterprise_id: enterprise1.id) }
 
       login_user_from_let
 
       before { initiative.save }
 
       def register_room(sid, name, status)
-        post :register_room_in_database, xhr: true,
-                                         params: { sid: sid,
-                                                   name: name,
-                                                   status: status },
-                                         group_id: group1.id,
-                                         id: initiative.id
+        xhr :post, :register_room_in_database, group_id: group.id, id: initiative.id, sid: sid,
+                                                         name: name,
+                                                         status: status, format: :js
       end
 
       context 'successfully' do
@@ -672,7 +669,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
 
       context 'does not' do
-        before { create(:video_room, sid: 'xyz234', name: 'Virtual Event', status: 'in-progress', enterprise_id: enterprise.id) }
+        before { create(:video_room, sid: 'xyz234', name: 'Virtual Event', status: 'in-progress', enterprise_id: group.enterprise.id) }
 
         it 'register room in database' do
           expect { register_room('xyz234', 'Virtual Event', 'in-progress') }.to change(VideoRoom, :count).by(0)
