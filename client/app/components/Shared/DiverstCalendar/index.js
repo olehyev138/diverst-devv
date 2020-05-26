@@ -36,7 +36,7 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const groupFilter = (
     <Formik
       initialValues={{
-        group_ids: []
+        group_ids: ''
       }}
       enableReinitialize
       onSubmit={(values, actions) => {
@@ -52,6 +52,7 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
                 groupField='group_ids'
                 label={<DiverstFormattedMessage {...messages.form.groups} />}
                 isMulti
+                inputCallback={(props, searchKey = '') => ''}
                 {...formikProps}
               />
             </CardContent>

@@ -7,15 +7,14 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from 'containers/Archive/reducer';
-import saga from 'containers/Archive/saga';
+import reducer from 'containers/Event/reducer';
+import saga from 'containers/Event/saga';
 import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectPaginatedEvents } from 'containers/Event/selectors';
-import { selectIsFetchingEvents } from 'containers/GlobalSettings/Email/Event/selectors';
+import { selectIsLoading, selectCalendarEvents } from 'containers/Event/selectors';
 import DiverstCalendar from 'components/Shared/DiverstCalendar';
 
 const defaultParams = Object.freeze({
@@ -34,8 +33,8 @@ const ArchiveTypes = Object.freeze({
 
 
 export function AdminCalendarPage(props) {
-  useInjectReducer({ key: 'archives', reducer });
-  useInjectSaga({ key: 'archives', saga });
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
 
   const [params, setParams] = useState(defaultParams);
 
@@ -69,7 +68,7 @@ export function AdminCalendarPage(props) {
 
 AdminCalendarPage.propTypes = {
   events: PropTypes.array,
-  getEventsBegin: PropTypes.bool,
+  getEventsBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   isLoading: PropTypes.bool,
   permissions: PropTypes.object,
@@ -77,8 +76,8 @@ AdminCalendarPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
-  events: selectPaginatedEvents(),
-  isLoading: selectIsFetchingEvents(),
+  events: selectCalendarEvents(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

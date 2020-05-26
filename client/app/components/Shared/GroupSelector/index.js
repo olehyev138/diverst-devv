@@ -22,19 +22,14 @@ import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 
-const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label, queryScopes, ...rest }) => {
+const GroupSelector = (props) => {
+  const { handleChange, values, groupField, setFieldValue, label, queryScopes, ...rest } = props;
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 
-  const groupSelectAction = (searchKey = '') => {
-    rest.getGroupsBegin({
-      count: 10, page: 0, order: 'asc',
-      search: searchKey,
-      query_scopes: queryScopes || []
-    });
-  };
+  const groupSelectAction = (searchKey = '') => props.inputCallback(props, searchKey);
 
   useEffect(() => {
     groupSelectAction();
@@ -51,7 +46,7 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       fullWidth
       options={rest.groups}
       value={values[groupField]}
-      onChange={value => setFieldValue(groupField, value)}
+      onChange={value => setFieldValue(groupField, value || (selectProps.isMulti ? [] : ''))}
       onInputChange={groupSelectAction}
       hideHelperText
       {...selectProps}
@@ -71,6 +66,18 @@ GroupSelector.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   groups: PropTypes.array,
+
+  inputCallback: PropTypes.func,
+};
+
+GroupSelector.defaultProps = {
+  inputCallback: (props, searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      query_scopes: props.queryScopes || []
+    });
+  },
 };
 
 const mapStateToProps = createStructuredSelector({
