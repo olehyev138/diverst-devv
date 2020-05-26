@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Grid, Card, CardContent, Box } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -11,6 +11,10 @@ import listPlugin from '@fullcalendar/list';
 import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
 
 import 'stylesheets/main.scss';
+import { Formik, Form } from 'formik';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Poll/messages';
+import GroupSelector from 'components/Shared/GroupSelector';
 
 const styles = theme => ({
   wrapper: {
@@ -29,9 +33,43 @@ const styles = theme => ({
 export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
 
+  const groupFilter = (
+    <Formik
+      initialValues={{
+        group_ids: []
+      }}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        if (rest.groupFilterCallback)
+          rest.groupFilterCallback(values);
+      }}
+    >
+      {formikProps => (
+        <Form>
+          <Card>
+            <CardContent>
+              <GroupSelector
+                groupField='group_ids'
+                label={<DiverstFormattedMessage {...messages.form.groups} />}
+                isMulti
+                {...formikProps}
+              />
+            </CardContent>
+          </Card>
+        </Form>
+      )}
+    </Formik>
+  );
+
   return (
     <React.Fragment>
-      <DiverstGroupLegend />
+      {rest.groupLegend && (
+        <React.Fragment>
+          {groupFilter}
+          <Box mb={1} />
+        </React.Fragment>
+      )}
+      {rest.groupLegend && <DiverstGroupLegend />}
       <div className={classes.wrapper}>
         <FullCalendar
           ref={calendarRef}
@@ -60,6 +98,9 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
 DiverstCalendar.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
+  groupLegend: PropTypes.bool,
+  groupFilter: PropTypes.bool,
+  groupFilterCallback: PropTypes.func,
   events: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     groupId: PropTypes.number,
