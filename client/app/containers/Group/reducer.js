@@ -92,7 +92,7 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_ANNUAL_BUDGETS_SUCCESS:
-        draft.groupList = formatGroups(flattenChildrenGroups(action.payload.items));
+        draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
