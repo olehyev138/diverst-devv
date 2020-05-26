@@ -27,7 +27,7 @@ import { Formik } from 'formik';
 import { ImportForm } from 'components/User/UserImport';
 import { intlShape } from 'react-intl';
 
-export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const { intl } = props;
   const [expandedGroups, setExpandedGroups] = useState({});
 
@@ -405,7 +405,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
   );
 }
 
-DraggableCard.propTypes = {
+DraggableGroupAdminCard.propTypes = {
   id: PropTypes.number,
   text: PropTypes.string,
   index: PropTypes.number,
