@@ -9,12 +9,12 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
-import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
+import { getEventsBegin, eventsUnmount, joinEventBegin, leaveEventBegin } from 'containers/Event/actions';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectIsLoading, selectCalendarEvents } from 'containers/Event/selectors';
+import { selectIsLoading, selectCalendarEvents, selectPaginatedEvents } from 'containers/Event/selectors';
 import DiverstCalendar from 'components/Shared/DiverstCalendar';
 
 const defaultParams = Object.freeze({
@@ -62,30 +62,39 @@ export function AdminCalendarPage(props) {
   return (
     <DiverstCalendar
       events={props.events}
+      calendarEvents={props.calendarEvents}
       groupLegend
       groupFilter
       groupFilterCallback={handleGroupFilter}
       isLoading={props.isLoading}
+      joinEventBegin={props.joinEventBegin}
+      leaveEventBegin={props.leaveEventBegin}
     />
   );
 }
 
 AdminCalendarPage.propTypes = {
   events: PropTypes.array,
+  calendarEvents: PropTypes.array,
   getEventsBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
-  events: selectCalendarEvents(),
+  events: selectPaginatedEvents(),
+  calendarEvents: selectCalendarEvents(),
   isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {
   getEventsBegin,
+  joinEventBegin,
+  leaveEventBegin,
   eventsUnmount,
 };
 

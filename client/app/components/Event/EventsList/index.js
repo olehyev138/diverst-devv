@@ -88,33 +88,9 @@ export function EventsList(props, context) {
   const { classes, intl } = props;
 
   const routeContext = useContext(RouteContext);
-  const [eventId, setEvent] = useState(null);
-
-  const clickEvent = (info) => {
-    const { event } = info;
-    // const extra = event.extendedProps;
-    setEvent(toNumber(event.id));
-  };
-
-  const dialog = (
-    <Dialog
-      open={!!eventId}
-      onClose={() => setEvent(null)}
-    >
-      <DialogContent>
-        <EventLite
-          event={props.events.find(event => event.id === eventId)}
-          isCommiting={props.isCommitting}
-          joinEventBegin={props.joinEventBegin}
-          leaveEventBegin={props.leaveEventBegin}
-        />
-      </DialogContent>
-    </Dialog>
-  );
 
   return (
     <React.Fragment>
-      {dialog}
       {!props.readonly && (
         <React.Fragment>
           <Permission show={permission(props.currentGroup, 'events_create?')}>
@@ -179,9 +155,11 @@ export function EventsList(props, context) {
       <br />
       { props.calendar ? (
         <DiverstCalendar
-          events={props.calendarEvents}
+          calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          eventClick={clickEvent}
+          events={props.events}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
         />
       ) : (
         <React.Fragment>

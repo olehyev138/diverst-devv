@@ -16,7 +16,11 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Calendar/messages';
 import GroupSelector from 'components/Shared/GroupSelector';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import {mapFields} from "utils/formHelpers";
+import { mapFields } from 'utils/formHelpers';
+import { toNumber } from 'utils/floatRound';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import EventLite from 'components/Event/EventLite';
 
 const styles = theme => ({
   wrapper: {
@@ -32,8 +36,31 @@ const styles = theme => ({
   },
 });
 
-export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
+export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
+  const [eventId, setEvent] = useState(null);
+
+  const clickEvent = (info) => {
+    const { event } = info;
+    // const extra = event.extendedProps;
+    setEvent(toNumber(event.id));
+  };
+
+  const dialog = (
+    <Dialog
+      open={!!eventId}
+      onClose={() => setEvent(null)}
+    >
+      <DialogContent>
+        <EventLite
+          event={events.find(event => event.id === eventId)}
+          isCommiting={rest.isCommitting}
+          joinEventBegin={rest.joinEventBegin}
+          leaveEventBegin={rest.leaveEventBegin}
+        />
+      </DialogContent>
+    </Dialog>
+  );
 
   const groupFilter = (
     <Formik
@@ -71,6 +98,7 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
 
   return (
     <React.Fragment>
+      {dialog}
       {rest.groupLegend && (
         <React.Fragment>
           {groupFilter}
@@ -88,7 +116,8 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
-          events={events}
+          events={calendarEvents}
+          eventClick={clickEvent}
           {...rest}
         />
         {isLoading && (
@@ -109,7 +138,8 @@ DiverstCalendar.propTypes = {
   groupLegend: PropTypes.bool,
   groupFilter: PropTypes.bool,
   groupFilterCallback: PropTypes.func,
-  events: PropTypes.arrayOf(PropTypes.shape({
+  events: PropTypes.array,
+  calendarEvents: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     groupId: PropTypes.number,
     start: PropTypes.string,
@@ -117,6 +147,9 @@ DiverstCalendar.propTypes = {
     title: PropTypes.string,
     color: PropTypes.string,
   })),
+  isCommitting: PropTypes.bool,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
 };
 
 export default compose(
