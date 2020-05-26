@@ -25,6 +25,7 @@ import {
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -77,6 +78,18 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 value={values.sponsor_message}
               />
             </Grid>
+            <Grid item className={classes.noBottomPadding}>
+              <Field
+                component={DiverstFileInput}
+                id='sponsor_media'
+                name='sponsor_media'
+                margin='normal'
+                fileName={props.sponsor && props.sponsor.sponsor_media_file_name}
+                fullWidth
+                label={<DiverstFormattedMessage {...messages.Sponsors.media} />}
+                value={values.sponsor_media}
+              />
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -105,6 +118,7 @@ export function SponsorForm(props) {
     sponsor_name: { default: '' },
     sponsor_title: { default: '' },
     sponsor_message: { default: '' },
+    sponsor_media: { default: null },
   });
 
   return (
@@ -136,6 +150,7 @@ SponsorFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  sponsor: PropTypes.object,
   links: PropTypes.shape({
     sponsorIndex: PropTypes.string
   })

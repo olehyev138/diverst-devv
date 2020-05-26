@@ -64,6 +64,9 @@ export default defineMessages({
     message: {
       id: `${scope}.Sponsors.input.message`,
     },
+    media: {
+      id: `${scope}.Sponsors.input.media`,
+    },
     tabletitle: {
       id: `${scope}.Sponsors.table.title`,
     },
