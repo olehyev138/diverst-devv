@@ -57,7 +57,7 @@ const styles = theme => ({
 export function EventsList(props) {
   const { classes } = props;
   const outcomes = dig(props, 'outcomes');
-  const hasSharedEvent = (currentEvent) => currentEvent.participating_groups.length > 0;
+  const hasSharedEvent = currentEvent => currentEvent.participating_groups.length > 0;
   return (
     <React.Fragment>
       <Permission show={permission(props.currentGroup, 'update?')}>
