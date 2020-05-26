@@ -6,5 +6,9 @@ module Sponsors::Actions
     def valid_scopes
       ['group_sponsor', 'enterprise_sponsor']
     end
+
+    def base_attributes_preloads
+      [ :sponsor_media_attachment ]
+    end
   end
 end
