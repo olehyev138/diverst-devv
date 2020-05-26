@@ -56,6 +56,22 @@ export function GroupHomeFamily({ classes, ...props }) {
     </Grid>
   );
 
+  const renderSubgroups = groups => (
+    <React.Fragment>
+      <Typography variant='h6'>
+        <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
+      </Typography>
+      {groups.map(child => (
+        <React.Fragment key={`child:${child.id}`}>
+          <Box mb={1} />
+          <Divider />
+          <Box mb={1} />
+          { renderGroup(child) }
+        </React.Fragment>
+      ))}
+    </React.Fragment>
+  );
+
   const [expand, setExpand] = useState(false);
 
   const needExpand = ((props.currentGroup.parent ? 2 : 0)
@@ -66,35 +82,24 @@ export function GroupHomeFamily({ classes, ...props }) {
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
       <CardContent>
-        <CollapseConditional in={expand} collapsedHeight={125}>
-          { props.currentGroup.parent && (
-            <React.Fragment>
-              <Typography variant='h6'>
-                <DiverstFormattedMessage {...appMessages.custom_text.parent} />
-              </Typography>
-              <Box mb={1} />
-              <Divider />
-              <Box mb={1} />
-              { renderGroup(props.currentGroup.parent) }
-            </React.Fragment>
-          )}
-          { props.currentGroup.children.length > 0 && (
-            <React.Fragment>
-              <Typography variant='h6'>
-                <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
-              </Typography>
-              {props.currentGroup.children.map(child => (
-                <React.Fragment key={`child:${child.id}`}>
-                  <Box mb={1} />
-                  <Divider />
-                  <Box mb={1} />
-                  { renderGroup(child) }
-                </React.Fragment>
-              ))}
-            </React.Fragment>
-          )}
-        </CollapseConditional>
-        { needExpand && (
+        { props.currentGroup.parent && (
+          <React.Fragment>
+            <Typography variant='h6'>
+              <DiverstFormattedMessage {...appMessages.custom_text.parent} />
+            </Typography>
+            <Box mb={1} />
+            <Divider />
+            <Box mb={1} />
+            { renderGroup(props.currentGroup.parent) }
+          </React.Fragment>
+        )}
+        {props.currentGroup.children.length > 0 && (needExpand ? (
+          <CollapseConditional in={expand} collapsedHeight={125}>
+            {renderSubgroups(props.currentGroup.children)}
+          </CollapseConditional>
+        ) : (<React.Fragment>{renderSubgroups(props.currentGroup.children)}</React.Fragment>)
+        )}
+        {needExpand && (
           <React.Fragment>
             <Box mb={1} />
             <Button
