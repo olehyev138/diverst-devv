@@ -1,5 +1,6 @@
 import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
+import {floatRound} from "utils/floatRound";
 
 export const currencyOptions = Object.freeze([
   { value: 'USD', label: '$ (USD)' },
@@ -68,4 +69,6 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   return numberProps;
 };
 
-export const toCurrencyString = (intl, amount, currency, localeOverride = null) => intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount);
+export const toCurrencyString = (intl, amount, currency = 'USD', localeOverride = null) => intl
+  ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
+  : `$ ${floatRound(amount, 2)}`;

@@ -41,6 +41,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import {toCurrencyString} from "utils/currencyHelpers";
 
 const styles = theme => ({
   arrowRight: {
@@ -83,13 +84,13 @@ export function Budget(props) {
       title: intl.formatMessage(messages.columns.requested),
       field: 'estimated_amount',
       query_field: 'budget_items.estimated_amount',
-      render: rowData => rowData.estimated_amount ? `$${floatRound(rowData.estimated_amount, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(props.intl, rowData.estimated_amount || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.available),
       field: 'available_amount',
       query_field: 'budget_items.available_amount',
-      render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.endDate),

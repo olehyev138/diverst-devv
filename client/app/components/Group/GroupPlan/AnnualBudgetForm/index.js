@@ -32,7 +32,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
-import { getCurrency } from 'utils/currencyHelpers';
+import {getCurrency, toCurrencyString} from 'utils/currencyHelpers';
 
 const { form: formMessages } = messages;
 
@@ -97,12 +97,12 @@ export function AnnualBudgetFormInner(
               >
                 <Grid item sm={6}>
                   <Typography color='secondary' variant='body1' component='h3'>
-                    {`$${floatRound(annualBudget.leftover, 2)}`}
+                    {toCurrencyString(intl, annualBudget.leftover || 0, annualBudget.currency)}
                   </Typography>
                 </Grid>
                 <Grid item sm={6}>
                   <Typography color='secondary' variant='body1' component='h3'>
-                    {`$${floatRound(annualBudget.approved, 2)}`}
+                    {toCurrencyString(intl, annualBudget.approved || 0, annualBudget.currency)}
                   </Typography>
                 </Grid>
               </Grid>

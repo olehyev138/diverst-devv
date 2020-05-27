@@ -31,6 +31,7 @@ import DiverstProgress from 'components/Shared/DiverstProgress';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
+import {toCurrencyString} from "utils/currencyHelpers";
 
 const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
 const beforeNowTime = datetime => DateTime.local() > datetime;
@@ -67,7 +68,7 @@ export function ExpenseList(props, context) {
       title: intl.formatMessage(messages.columns.amount),
       field: 'amount',
       query_field: 'amount',
-      render: rowData => rowData.amount ? `$${floatRound(rowData.amount, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(props.intl, rowData.amount || 0, initiative.currency),
     },
     {
       title: intl.formatMessage(messages.columns.createdAt),
@@ -185,7 +186,7 @@ export function ExpenseList(props, context) {
                     : <DiverstFormattedMessage {...messages.total} />}
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2'>
-                  {`$${floatRound(props.expenseSumTotal, 2)}`}
+                  {toCurrencyString(props.intl, props.expenseSumTotal || 0, initiative.currency)}
                 </Typography>
               </Grid>
               <Grid item xs={10}>
@@ -202,7 +203,7 @@ export function ExpenseList(props, context) {
                   <DiverstFormattedMessage {...messages.estimated} />
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2' align='right'>
-                  {`$${floatRound(props.initiative.estimated_funding, 2)}`}
+                  {toCurrencyString(props.intl, props.initiative.estimated_funding || 0, initiative.currency)}
                 </Typography>
               </Grid>
             </Grid>
