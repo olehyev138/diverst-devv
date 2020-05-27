@@ -11,11 +11,11 @@ export function DiverstRichTextInput(props) {
   const { label, value, ...rest } = props;
 
   const editorStyle = {
-      border: '1px solid lightgray',
-      padding: '10px',
-      borderRadius: '4px',
-      width: '100%',
-    };
+    border: '1px solid lightgray',
+    padding: '10px',
+    borderRadius: '4px',
+    width: '100%',
+  };
 
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(
