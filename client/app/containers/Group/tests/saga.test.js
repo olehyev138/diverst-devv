@@ -118,7 +118,7 @@ const budget = {
 
 describe('Get groups Saga', () => {
   it('Should return grouplist', async () => {
-    api.groups.all.mockImplementation(() => Promise.resolve({ data: { page: {...group } } }));
+    api.groups.all.mockImplementation(() => Promise.resolve({ data: { page: { ...group } } }));
     const results = [getGroupsSuccess(group)];
 
     const initialAction = { payload: {
@@ -128,10 +128,7 @@ describe('Get groups Saga', () => {
     const dispatched = await recordSaga(
       getGroups,
       initialAction
-    )
-    console.log(dispatched);
-    console.log("VS");
-    console.log(results);
+    );
 
     expect(dispatched).toEqual(results);
   });
@@ -246,7 +243,7 @@ describe('Create group', () => {
     const notified = {
       notification: {
         key: 1590092641484,
-        message: 'Failed to create group',
+        message: 'group created',
         options: { variant: 'warning' }
       },
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
@@ -326,10 +323,19 @@ describe('Categorize group', () => {
 });
 
 describe('Update group', () => {
-  xit('Should update a group', async () => {
-    api.groups.update.mockImplementation(() => Promise.resolve({ data: { } }));
-    const results = [updateGroupSuccess()];
+  it('Should update a group', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
+    const results = [updateGroupSuccess(), push(ROUTES.admin.manage.groups.index.path()), notified];
     const initialAction = { payload: {
       id: 1,
       private: false,
