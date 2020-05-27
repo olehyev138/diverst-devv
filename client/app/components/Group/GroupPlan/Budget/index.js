@@ -41,7 +41,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
-import {toCurrencyString} from "utils/currencyHelpers";
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const styles = theme => ({
   arrowRight: {

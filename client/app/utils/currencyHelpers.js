@@ -1,6 +1,6 @@
 import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
-import {floatRound} from "utils/floatRound";
+import { floatRound } from 'utils/floatRound';
 
 export const currencyOptions = Object.freeze([
   { value: 'USD', label: '$ (USD)' },

@@ -32,7 +32,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
-import {getCurrency, toCurrencyString} from 'utils/currencyHelpers';
+import { getCurrency, toCurrencyString } from 'utils/currencyHelpers';
 
 const { form: formMessages } = messages;
 
