@@ -35,9 +35,6 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
-  const getRichTextHtmlValue = (editorHtml) => {
-    values.home_message = editorHtml;
-  };
   return (
     <Card>
       <Form>
@@ -65,9 +62,6 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
             type='submit'
           >
             <DiverstFormattedMessage {...messages.save} />
-          </Button>
-          <Button>
-            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>
