@@ -186,7 +186,6 @@ class InitiativesController < ApplicationController
     sid = params[:sid]
     name = params[:name]
     status = params[:status]
-    event =
     group = Group.find(params[:group_id])
     enterprise_id = group.enterprise_id
 

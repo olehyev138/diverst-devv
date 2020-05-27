@@ -37,24 +37,16 @@
       }
 
       #control-panel {
-        float: right;
         margin-left: 70px;
       }
 
-      #mute-mic, #mute-video, #screen-share {
-        fill: white;
-        height: 35px;
+      #mute-mic, #mute-video, #screen-share, #leave-call {
+        height: 60px;
         width: 60px;
       }
 
       #mute-video {
         margin-right: 50px;
-      }
-
-      #leave-call {
-        fill: red;
-        height: 35px;
-        width: 60px;
       }
     </style>
   </head>
@@ -66,12 +58,15 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12" style="padding-top:2%;">
-            <span class="text-center" style="font-size: 25px;"><%= @initiative.name %><span id="control-panel">
+            <span id="control-panel">
+            <span style="font-size: 25px; float: left; padding-top: 1%;">
+              <%= @initiative.name.truncate(29) %>
+            </span>
               <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share') %>
               <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic') %>
               <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video') %>
               <%= inline_svg('icons/phone0.svg', id: 'leave-call', title: 'end video call') %>
-            </span></span>
+            </span>
           </div>
         </div>
       </div>
@@ -165,6 +160,9 @@
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
           track.mediaStreamTrack.muted = true;
+          var path = svgElement.getElementsByTagName('path');
+          path[0].setAttribute('class', 'st1')
+          path[1].setAttribute('class', 'st1')
           svgElement.style.fill = 'red';
         }else{
           track.enable();
@@ -181,6 +179,8 @@
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
           track.mediaStreamTrack.muted = true;
+          var path = svgElement.getElementsByTagName('path');
+          path[0].setAttribute('class', 'st2')
           svgElement.style.fill = 'red';
         }else{
           track.enable();
@@ -225,7 +225,6 @@
 
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
-      console.log(window.room.state);
       $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
       window.location.href = "<%= group_event_path(@group, @initiative) %>";
     });
