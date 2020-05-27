@@ -95,7 +95,7 @@ export function EventsList(props, context) {
     // const extra = event.extendedProps;
     setEvent(toNumber(event.id));
   };
-  console.log(props.currentGroupID);
+
   const dialog = (
     <Dialog
       open={!!eventId}
