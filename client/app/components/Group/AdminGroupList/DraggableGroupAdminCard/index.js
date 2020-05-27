@@ -46,7 +46,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
 
   const importDialog = (
     <Dialog
-      open={importGroup}
+      open={importGroup !== 0}
       onClose={handleDialogClose}
       aria-labelledby='alert-dialog-slide-title'
       aria-describedby='alert-dialog-slide-description'
