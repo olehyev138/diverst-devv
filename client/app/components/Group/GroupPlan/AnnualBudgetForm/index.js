@@ -31,7 +31,7 @@ import {
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
-import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import { getCurrency } from 'utils/currencyHelpers';
 
 const { form: formMessages } = messages;
@@ -62,7 +62,7 @@ export function AnnualBudgetFormInner(
               onChange={value => setFieldValue('amount', value)}
 
               currencyForm
-              currency={values.currency}
+              currency={getCurrency(values.currency)}
               currency_name='currency'
               currency_id='currency'
               onCurrencyChange={value => setFieldValue('currency', value)}
