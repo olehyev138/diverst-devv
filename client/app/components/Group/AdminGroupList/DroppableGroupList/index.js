@@ -5,14 +5,14 @@
  */
 
 import PropTypes from 'prop-types';
-
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
 import { intlShape } from 'react-intl';
 
-import { DroppableList } from '../DroppableList';
-import DraggableGroupAdminCard from '../../DraggableItems/DraggableCard/DraggableGroupAdminCard';
+import { DroppableList } from 'components/Shared/DragAndDrop/DroppableLocations/DroppableList';
+import DraggableGroupAdminCard from '../DraggableGroupAdminCard';
+
 
 export function DroppableGroupList(props) {
   const renderCard = (card, index, moveCard) => (
