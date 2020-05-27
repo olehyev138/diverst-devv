@@ -93,7 +93,8 @@ export function EventsList(props) {
                       <Permission show={permission(props.currentGroup, 'events_create?')}>
                         <Button
                           variant='contained'
-                          to={props.links.eventNew}
+                          to={{ pathname: props.links.eventNew,
+                            state: { pillar: { value: pillar.id, label: pillar.name } } }}
                           color='default'
                           size='medium'
                           component={WrappedNavLink}
