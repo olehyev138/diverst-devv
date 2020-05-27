@@ -25,6 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import groupmessages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import { intl } from '../../../../containers/Shared/LanguageProvider/GlobalLanguageProvider';
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -38,19 +39,19 @@ const SETTINGS_OPTIONS = Object.freeze({
     { label: 'Disabled', value: 'disabled' }
   ],
   membersVisibility: [
-    { label: 'Global', value: 'global' },
+    { label: 'Public', value: 'global' },
     { label: 'Group', value: 'group' },
-    { label: 'Managers Only', value: 'managers_only' }
+    { label: 'Leaders Only', value: 'managers_only' }
   ],
   eventAttendanceVisibility: [
-    { label: 'Global', value: 'global' },
+    { label: 'Public', value: 'global' },
     { label: 'Group', value: 'group' },
-    { label: 'Managers Only', value: 'managers_only' }
+    { label: 'Leaders Only', value: 'managers_only' }
   ],
   messagesVisibility: [
-    { label: 'Global', value: 'global' },
+    { label: 'Public', value: 'global' },
     { label: 'Group', value: 'group' },
-    { label: 'Managers Only', value: 'managers_only' }
+    { label: 'Leaders Only', value: 'managers_only' }
   ],
   latestNewsVisibility: [
     { label: 'Public', value: 'public' },
@@ -64,6 +65,27 @@ const SETTINGS_OPTIONS = Object.freeze({
     { label: 'Non member', value: 'non_member' }
   ],
 });
+
+function setHeader(value) {
+  switch (value) {
+    case 'leaders_only':
+    case 'managers_only':
+      return intl.formatMessage(messages.visibility.leaders);
+    case 'global':
+      return intl.formatMessage(messages.visibility.public);
+    case 'group':
+      return intl.formatMessage(messages.visibility.group);
+    case 'non_member':
+      return intl.formatMessage(messages.visibility.non_member);
+    case 'disabled':
+      return intl.formatMessage(messages.visibility.disabled);
+    case 'enabled':
+      return intl.formatMessage(messages.visibility.enabled);
+    default:
+      return '';
+  }
+}
+
 
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -121,7 +143,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.pending_users} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.pendingUsers}
-                value={{ value: values.pending_users, label: prettify(values.pending_users) }}
+                value={{ value: values.pending_users, label: setHeader(values.pending_users) }}
                 onChange={value => setFieldValue('pending_users', value.value)}
               />
             </Grid>
@@ -134,7 +156,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.members_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.membersVisibility}
-                value={{ value: values.members_visibility, label: prettify(values.members_visibility) }}
+                value={{ value: values.members_visibility, label: setHeader(values.members_visibility) }}
                 onChange={value => setFieldValue('members_visibility', value.value)}
               />
             </Grid>
@@ -147,7 +169,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.event_attendance_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.eventAttendanceVisibility}
-                value={{ value: values.event_attendance_visibility, label: prettify(values.event_attendance_visibility) }}
+                value={{ value: values.event_attendance_visibility, label: setHeader(values.event_attendance_visibility) }}
                 onChange={value => setFieldValue('event_attendance_visibility', value.value)}
               />
             </Grid>
@@ -160,7 +182,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.messages_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.messagesVisibility}
-                value={{ value: values.messages_visibility, label: prettify(values.messages_visibility) }}
+                value={{ value: values.messages_visibility, label: setHeader(values.messages_visibility) }}
                 onChange={value => setFieldValue('messages_visibility', value.value)}
               />
             </Grid>
@@ -173,7 +195,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.latest_news_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.latestNewsVisibility}
-                value={{ value: values.latest_news_visibility, label: prettify(values.latest_news_visibility) }}
+                value={{ value: values.latest_news_visibility, label: setHeader(values.latest_news_visibility) }}
                 onChange={value => setFieldValue('latest_news_visibility', value.value)}
               />
             </Grid>
@@ -186,7 +208,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.upcoming_events_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.upcomingEventsVisibility}
-                value={{ value: values.upcoming_events_visibility, label: prettify(values.upcoming_events_visibility) }}
+                value={{ value: values.upcoming_events_visibility, label: setHeader(values.upcoming_events_visibility) }}
                 onChange={value => setFieldValue('upcoming_events_visibility', value.value)}
               />
             </Grid>
