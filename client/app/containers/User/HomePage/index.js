@@ -131,24 +131,26 @@ export class HomePage extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Grid container>
+        <Grid container spacing={3} direction='column'>
           <Grid item>
             {enterpriseMessage}
           </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs>
-            {events}
+          <Grid item>
+            <Grid container spacing={3}>
+              <Grid item xs>
+                {events}
+              </Grid>
+              <Grid item xs>
+                {news}
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs>
-            {news}
+            {sponsor}
           </Grid>
-        </Grid>
-        <Grid item xs>
-          { sponsor }
-        </Grid>
-        <Grid item xs>
-          { privacyMessage }
+          <Grid item xs>
+            {privacyMessage}
+          </Grid>
         </Grid>
       </React.Fragment>
     );
@@ -160,7 +162,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = createStructuredSelector({
   privacyMessage: selectEnterprisePrivacyMessage(),
-  enterprise: selectEnterprise(),
+  enterprise: selectEnterprise()
 });
 
 const withConnect = connect(
@@ -171,8 +173,8 @@ const withConnect = connect(
 HomePage.propTypes = {
   classes: PropTypes.object,
   privacyMessage: PropTypes.string,
-  intl: intlShape,
   enterprise: PropTypes.object,
+  intl: intlShape,
 };
 
 export default compose(
