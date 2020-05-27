@@ -10,6 +10,13 @@ import htmlToDraft from 'html-to-draftjs';
 export function DiverstRichTextInput(props) {
   const { label, value, ...rest } = props;
 
+  const editorStyle = {
+      border: '1px solid lightgray',
+      padding: '10px',
+      borderRadius: '4px',
+      width: '100%',
+    };
+
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(
       ContentState.createFromBlockArray(
@@ -34,6 +41,7 @@ export function DiverstRichTextInput(props) {
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
+        editorStyle={editorStyle}
       />
     </React.Fragment>
   );
