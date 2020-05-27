@@ -57,7 +57,7 @@ const styles = theme => ({
 export function EventsList(props) {
   const { classes } = props;
   const outcomes = dig(props, 'outcomes');
-  const hasSharedEvent = currentEvent => currentEvent.participating_groups.length > 0;
+
   return (
     <React.Fragment>
       <Permission show={permission(props.currentGroup, 'update?')}>
@@ -106,30 +106,28 @@ export function EventsList(props) {
                   </Grid>
                 </CardContent>
                 {pillar.initiatives && pillar.initiatives.length > 0 && pillar.initiatives.map(initiative => (
-                  initiative.participating_groups.length === 0 && (
-                    <React.Fragment key={initiative.id}>
-                      <Divider className={classes.divider} />
-                      <Link
-                        className={classes.eventLink}
-                        component={WrappedNavLink}
-                        to={props.links.eventManage(initiative.id)}
-                      >
-                        <CardActionArea>
-                          <Grid container>
-                            <Grid item className={classes.eventListItemSpacer} />
-                            <Grid item xs>
-                              <CardContent>
-                                <EventListItem item={initiative} />
-                                <Box mb={1} />
-                              </CardContent>
-                            </Grid>
+                  <React.Fragment key={initiative.id}>
+                    <Divider className={classes.divider} />
+                    <Link
+                      className={classes.eventLink}
+                      component={WrappedNavLink}
+                      to={props.links.eventManage(initiative.id)}
+                    >
+                      <CardActionArea>
+                        <Grid container>
+                          <Grid item className={classes.eventListItemSpacer} />
+                          <Grid item xs>
+                            <CardContent>
+                              <EventListItem item={initiative} />
+                              <Box mb={1} />
+                            </CardContent>
                           </Grid>
-                        </CardActionArea>
-                      </Link>
-                    </React.Fragment>
-                  )
+                        </Grid>
+                      </CardActionArea>
+                    </Link>
+                  </React.Fragment>
                 ))}
-                {pillar.initiatives && pillar.initiatives.every(hasSharedEvent) && (
+                {pillar.initiatives && pillar.initiatives.length <= 0 && (
                   <React.Fragment>
                     <Divider />
                     <Box p={2}>
