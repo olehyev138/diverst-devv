@@ -24,7 +24,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
-import {toCurrencyString} from "utils/currencyHelpers";
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const { adminList: listMessages } = messages;
 

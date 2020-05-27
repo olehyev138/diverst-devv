@@ -30,7 +30,7 @@ import messages from 'containers/Group/GroupPlan/Budget/messages';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
-import {toCurrencyString} from "utils/currencyHelpers";
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const styles = theme => ({
   budgetListItem: {

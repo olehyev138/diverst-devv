@@ -31,7 +31,7 @@ import DiverstProgress from 'components/Shared/DiverstProgress';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
-import {toCurrencyString} from "utils/currencyHelpers";
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
 const beforeNowTime = datetime => DateTime.local() > datetime;
