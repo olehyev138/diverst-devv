@@ -85,7 +85,7 @@ AdminAnnualBudgetPage.propTypes = {
   handleVisitEditPage: PropTypes.func.isRequired,
   isFetchingAnnualBudgets: PropTypes.bool,
   hasChanged: PropTypes.bool,
-  groups: PropTypes.object,
+  groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
 };

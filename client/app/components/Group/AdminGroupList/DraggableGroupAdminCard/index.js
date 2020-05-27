@@ -6,8 +6,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { useDrag, useDrop } from 'react-dnd';
-
 import {
   Button, Card, CardContent, CardActions,
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden, Dialog, DialogContent,
@@ -26,8 +24,10 @@ import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
 import { intlShape } from 'react-intl';
+import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
 
-export default function DraggableCard({ id, text, index, moveCard, group, classes, draggable }, props) {
+
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable }, props) {
   const { intl } = props;
   const [expandedGroups, setExpandedGroups] = useState({});
 
@@ -36,41 +36,8 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
     CARD: 'card',
   };
 
-  const [, drop] = useDrop({
-    accept: ItemTypes.CARD,
-    hover(item, monitor) {
-      if (!ref.current)
-        return;
-
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      if (dragIndex === hoverIndex)
-        return;
-
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY)
-        return;
-
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY)
-        return;
-
-      moveCard(dragIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
-  });
-
-  const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.CARD, id, index },
-    canDrag: draggable,
-    collect: monitor => ({
-      isDragging: monitor.isDragging()
-    })
-  });
+  const drop = getListDrop(index, moveCard, ref);
+  const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
 
   const [importGroup, setImportGroup] = useState(0);
@@ -197,6 +164,13 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
               <Button
                 size='small'
                 color='primary'
+                onClick={() => handleDialogOpen(group.id)}
+              >
+                Import Users
+              </Button>
+              <Button
+                size='small'
+                color='primary'
                 to={{
                   pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
                   state: { id: group.id }
@@ -298,6 +272,13 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
               <Button
                 size='small'
                 color='primary'
+                onClick={() => handleDialogOpen(group.id)}
+              >
+                Import Users
+              </Button>
+              <Button
+                size='small'
+                color='primary'
                 to={{
                   pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
                   state: { id: group.id }
@@ -394,7 +375,7 @@ export default function DraggableCard({ id, text, index, moveCard, group, classe
   );
 }
 
-DraggableCard.propTypes = {
+DraggableGroupAdminCard.propTypes = {
   id: PropTypes.number,
   text: PropTypes.string,
   index: PropTypes.number,

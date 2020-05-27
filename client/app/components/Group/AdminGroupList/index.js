@@ -21,16 +21,14 @@ import {
   Dialog, DialogContent
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Formik, Form, Field } from 'formik';
 
 import AddIcon from '@material-ui/icons/Add';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import Permission from 'components/Shared/DiverstPermission';
-import { permission } from 'utils/permissionsHelpers';
-import { DroppableList } from '../../Shared/DragAndDrop/DroppableLocations/DroppableList';
+import { DroppableGroupList } from './DroppableGroupList';
+
 
 const styles = theme => ({
   progress: {
@@ -74,10 +72,9 @@ const styles = theme => ({
 });
 
 export function AdminGroupList(props, context) {
-  const { classes, defaultParams, intl } = props;
+  const { classes, defaultParams } = props;
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState({});
 
   return (
     <React.Fragment>
@@ -129,7 +126,7 @@ export function AdminGroupList(props, context) {
       </Grid>
       <Box mb={1} />
       <DiverstLoader isLoading={props.isLoading}>
-        <DroppableList
+        <DroppableGroupList
           items={props.groups}
           classes={classes}
           draggable={order}
