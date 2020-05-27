@@ -41,8 +41,10 @@
       }
 
       #mute-mic, #mute-video, #screen-share, #leave-call {
-        height: 60px;
-        width: 60px;
+        height: 33px;
+        width: 36px;
+        background: #fff;
+        border-radius: 100%;
       }
 
       #mute-video {
@@ -59,13 +61,13 @@
         <div class="row">
           <div class="col-xs-12" style="padding-top:2%;">
             <span id="control-panel">
-            <span style="font-size: 25px; float: left; padding-top: 1%;">
+            <span style="font-size: 25px; float: left; margin-top: -1%;">
               <%= @initiative.name.truncate(29) %>
             </span>
-              <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share') %>
-              <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic') %>
-              <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video') %>
-              <%= inline_svg('icons/phone0.svg', id: 'leave-call', title: 'end video call') %>
+              <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
+              <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
+              <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
+              <%= inline_svg('icons/phone0.svg', id: 'leave-call', title: 'end video call', class: 'svg-color') %>
             </span>
           </div>
         </div>
@@ -124,6 +126,7 @@
     var activeRoom;
     var previewTracks;
     var identity = '<%= current_user.email %>';
+    var primaryColor = '<%= current_user.enterprise.theme&.primary_color %>';
 
     // enlarge video trackmain participant
     function enlargeParticipantVideoTrack() {
@@ -159,15 +162,12 @@
       localParticipant.audioTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
-          track.mediaStreamTrack.muted = true;
-          var path = svgElement.getElementsByTagName('path');
-          path[0].setAttribute('class', 'st1')
-          path[1].setAttribute('class', 'st1')
+          track.mediaStreamTrack.muted = true;          
           svgElement.style.fill = 'red';
         }else{
           track.enable();
           track.mediaStreamTrack.muted = false;
-          svgElement.style.fill = 'white';
+          svgElement.style.fill = primaryColor;
         }
       });
     }
@@ -179,13 +179,11 @@
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
           track.mediaStreamTrack.muted = true;
-          var path = svgElement.getElementsByTagName('path');
-          path[0].setAttribute('class', 'st2')
           svgElement.style.fill = 'red';
         }else{
           track.enable();
           track.mediaStreamTrack.muted = false;
-          svgElement.style.fill = 'white';
+          svgElement.style.fill = primaryColor;
         }
       });
     }
