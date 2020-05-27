@@ -95,7 +95,7 @@ export function EventsList(props, context) {
     // const extra = event.extendedProps;
     setEvent(toNumber(event.id));
   };
-
+  console.log(props.currentGroupID);
   const dialog = (
     <Dialog
       open={!!eventId}
@@ -203,7 +203,7 @@ export function EventsList(props, context) {
                       >
                         <CardActionArea>
                           <CardContent>
-                            <EventListItem item={item} />
+                            <EventListItem item={item} currentGroupID={props.currentGroupID} />
                           </CardContent>
                         </CardActionArea>
                       </Link>
@@ -258,6 +258,7 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  currentGroupID: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({
