@@ -26,7 +26,8 @@ module Initiative::Actions
           'archived',
           'of_annual_budget',
           'joined_events_for_user',
-          'available_events_for_user'
+          'available_events_for_user',
+          'not_shared'
       ]
     end
 

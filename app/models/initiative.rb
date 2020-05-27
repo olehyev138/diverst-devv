@@ -56,6 +56,7 @@ class Initiative < ApplicationRecord
   has_one :outcome, through: :pillar
   has_one :group, through: :outcome
 
+  scope :not_shared, -> { includes(:initiative_participating_groups).where(initiative_participating_groups: { initiative_id: nil }) }
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ? AND archived_at IS NULL', Time.current).order(start: :asc) }
