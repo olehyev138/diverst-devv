@@ -17,21 +17,21 @@ export function DiverstRichTextInput(props) {
       )
     )
   );
-  const [iniValue, setIniValue] = useState(true);
+  const [initialValue, setInitialValue] = useState(true);
 
   useEffect(() => {
-    if (value !== '' && iniValue) {
+    if (value !== '' && initialValue) {
       setEditorState(EditorState.createWithContent(
         ContentState.createFromBlockArray(
           htmlToDraft(value)
         )
       ));
-      setIniValue(false);
+      setInitialValue(false);
     }
   }, [value]);
 
   const onEditorStateChange = (newEditorState) => {
-    setIniValue(false);
+    setInitialValue(false);
     setEditorState(newEditorState);
     if (props.onChange)
       props.onChange(
