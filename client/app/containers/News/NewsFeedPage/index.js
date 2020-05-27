@@ -13,8 +13,10 @@ import saga from 'containers/News/saga';
 import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
-import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
+import {
+  deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin, approveNewsItemBegin
+} from 'containers/News/actions';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -33,7 +35,7 @@ const defaultParams = Object.freeze({
   page: 0,
   order: 'desc',
   orderBy: 'news_feed_links.created_at',
-  news_feed_id: -1,
+  group_id: -1,
 });
 
 export function NewsFeedPage(props, context) {
@@ -59,6 +61,7 @@ export function NewsFeedPage(props, context) {
 
   const getNewsFeedItems = (scopes, resetParams = false) => {
     const newsFeedId = props.currentGroup.news_feed.id;
+    const groupId = props.currentGroup.id;
 
     if (resetParams)
       setParams(defaultParams);
@@ -66,7 +69,7 @@ export function NewsFeedPage(props, context) {
     if (newsFeedId) {
       const newParams = {
         ...params,
-        news_feed_id: newsFeedId,
+        group_id: groupId,
         query_scopes: scopes
       };
       props.getNewsItemsBegin(newParams);
@@ -80,7 +83,16 @@ export function NewsFeedPage(props, context) {
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup, props.hasChanged]);
+  }, [props.currentGroup]);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getNewsItemsBegin(params);
+
+    return () => {
+      props.newsFeedUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -112,6 +124,7 @@ export function NewsFeedPage(props, context) {
         isLoading={props.isLoading}
         defaultParams={params}
         currentTab={tab}
+        pending={tab === NewsFeedTypes.pending}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         currentGroup={props.currentGroup}
@@ -122,6 +135,7 @@ export function NewsFeedPage(props, context) {
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
         archiveNewsItemBegin={props.archiveNewsItemBegin}
+        approveNewsItemBegin={props.approveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
         unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
@@ -142,12 +156,14 @@ NewsFeedPage.propTypes = {
   updateNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  approveNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
+    id: PropTypes.number,
     news_feed: PropTypes.shape({
       id: PropTypes.number
     })
@@ -171,6 +187,7 @@ const mapDispatchToProps = dispatch => ({
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
+  approveNewsItemBegin: payload => dispatch(approveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
   unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
   likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),

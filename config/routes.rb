@@ -186,6 +186,7 @@ Diverst::Application.routes.draw do
         member do
           post 'archive'
           put 'un_archive'
+          post 'approve'
           post 'pin'
           put 'un_pin'
         end

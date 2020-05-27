@@ -57,10 +57,11 @@ module "backend" {
   region    = var.region
   vpc_id    = module.vpc.vpc.id
 
-  solution_stack  = var.backend_solution_stack
-  asg_min         = var.backend_asg_min
-  asg_max         = var.backend_asg_max
-  ec2_type        = var.backend_ec2_type
+  solution_stack    = var.backend_solution_stack
+  rails_master_key  = var.rails_master_key
+  asg_min           = var.backend_asg_min
+  asg_max           = var.backend_asg_max
+  ec2_type          = var.backend_ec2_type
 
   sn_elb  = module.vpc.sn_dmz
   sg_elb  = module.sec.sg_dmz
@@ -79,7 +80,16 @@ module "backend" {
   job_store_endpoint = module.job_store.endpoint
 
   filestorage_bucket_id = module.filestorage.filestorage_bucket_id
-  ssh_key_name = var.ssh_key_name
+  ssh_key_name          = var.ssh_key_name
+
+  #
+  ## 3rd party services
+  #
+  rollbar_env             = var.rollbar_env
+  rollbar_access_token    = var.rollbar_access_token
+  mailgun_domain          = var.mailgun_domain
+  mailgun_api_key         = var.mailgun_api_key
+  embedly_key             = var.embedly_key
 }
 
 module "frontend" {
@@ -107,6 +117,10 @@ module "analytics" {
   db_port     = module.db.db_port
   db_username = var.db_username
   db_password = var.db_password
+}
+
+module "secrets_key" {
+  source  = "../../../modules/services/secrets_key"
 }
 
 data "aws_instance" "bastion" {

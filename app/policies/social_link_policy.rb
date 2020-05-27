@@ -1,39 +1,26 @@
-class SocialLinkPolicy < ApplicationPolicy
-  def index?
-    return true if manage?
-    return true if basic_group_leader_permission?('social_links_index')
-
-    @policy_group.social_links_index?
+class SocialLinkPolicy < GroupBasePolicy
+  def base_index_permission
+    'group_posts_index'
   end
 
-  def create?
-    return true if manage?
-    return true if basic_group_leader_permission?('social_links_create')
-
-    @policy_group.social_links_create?
+  def base_create_permission
+    'social_links_create'
   end
 
-  def manage?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('social_links_manage')
+  def base_manage_permission
+    'manage_posts'
+  end
 
-    @policy_group.social_links_manage?
+  def group_visibility_setting
+    'latest_news_visibility'
   end
 
   def update?
-    return true if manage?
-
-    @record.author == @user
+    record.author === user || super
   end
 
   def destroy?
-    return true if manage?
-
-    @record.author == @user
-  end
-
-  def show?
-    index?
+    record.author === user || super
   end
 
   class Scope < Scope

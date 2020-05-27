@@ -29,16 +29,26 @@ class NewsFeedLinkPolicy < GroupBasePolicy
 
   alias_method :pin?, :group_update?
   alias_method :un_pin?, :group_update?
+  alias_method :approve?, :group_update?
   alias_method :archive?, :group_update?
   alias_method :un_archive?, :group_update?
 
   class Scope < Scope
-    def is_member(permission)
-      "(groups.latest_news_visibility IN ('public', 'non_member', 'group') AND user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
-    end
-
-    def is_not_a_member(permission)
-      "(groups.latest_news_visibility IN ('public', 'non_member') AND #{policy_group(permission)})"
+    def joined_with_group
+      scope.joins(
+          'LEFT OUTER JOIN `shared_news_feed_links` ' +
+              'ON `news_feed_links`.`id` = `shared_news_feed_links`.`news_feed_link_id` ' +
+              'LEFT OUTER JOIN `news_feeds` ' +
+              'ON `news_feeds`.`id` = `news_feed_links`.`news_feed_id` OR `news_feeds`.`id` = `shared_news_feed_links`.`news_feed_id`' +
+              'LEFT OUTER JOIN `groups` ' +
+              'ON `groups`.`id` = `news_feeds`.`group_id` ' +
+              'LEFT OUTER JOIN `enterprises` ' +
+              'ON `enterprises`.`id` = `groups`.`enterprise_id` ' +
+              'LEFT OUTER JOIN `group_leaders` ' +
+              'ON `group_leaders`.`group_id` = `groups`.`id` ' +
+              'LEFT OUTER JOIN `user_groups` ' +
+              'ON `user_groups`.`group_id` = `groups`.`id`'
+        )
     end
 
     def group_base
