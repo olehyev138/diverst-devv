@@ -373,7 +373,7 @@ export default function Routes(props) {
                     {/* Folder Create */}
                     <RouteWithProps path={ROUTES.group.resources.folders.new.path()}><FolderCreatePage /></RouteWithProps>
                     {/* Folder Edit */}
-                    <RouteWithProps path={ROUTES.group.resources.folders.new.path()}><FolderEditPage /></RouteWithProps>
+                    <RouteWithProps path={ROUTES.group.resources.folders.edit.path()}><FolderEditPage /></RouteWithProps>
                     {/* Folder Show */}
                     <RouteWithProps exact path={ROUTES.group.resources.folders.show.path()}><FolderPage /></RouteWithProps>
 
@@ -392,9 +392,9 @@ export default function Routes(props) {
                     {/* News Link Show */}
                     <RouteWithProps exact path={ROUTES.group.news.news_links.show.path()}><NewsLinkPage /></RouteWithProps>
                     {/* Social Link Create */}
-                    <RouteWithProps exact path={ROUTES.group.news.social_links.new.path()}><SocialLinkCreatePage /></RouteWithProps>
+                    <RouteWithProps path={ROUTES.group.news.social_links.new.path()}><SocialLinkCreatePage /></RouteWithProps>
                     {/* Social Link Edit */}
-                    <RouteWithProps exact path={ROUTES.group.news.social_links.edit.path()}><SocialLinkEditPage /></RouteWithProps>
+                    <RouteWithProps path={ROUTES.group.news.social_links.edit.path()}><SocialLinkEditPage /></RouteWithProps>
 
                     {/* Plan */}
                     <RouteWithProps path={ROUTES.group.plan.pathPrefix()}>
@@ -403,9 +403,9 @@ export default function Routes(props) {
                           {/* Outcomes */}
                           <RouteWithProps exact path={ROUTES.group.plan.outcomes.index.path()}><OutcomesPage /></RouteWithProps>
                           {/* Outcome Create */}
-                          <RouteWithProps exact path={ROUTES.group.plan.outcomes.new.path()}><OutcomeCreatePage /></RouteWithProps>
+                          <RouteWithProps path={ROUTES.group.plan.outcomes.new.path()}><OutcomeCreatePage /></RouteWithProps>
                           {/* Outcome Edit */}
-                          <RouteWithProps exact path={ROUTES.group.plan.outcomes.edit.path()}><OutcomeEditPage /></RouteWithProps>
+                          <RouteWithProps path={ROUTES.group.plan.outcomes.edit.path()}><OutcomeEditPage /></RouteWithProps>
 
                           {/* Events */}
                           <RouteWithProps exact path={ROUTES.group.plan.events.index.path()}><GroupPlanEventsPage /></RouteWithProps>
