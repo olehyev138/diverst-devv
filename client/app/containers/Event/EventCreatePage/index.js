@@ -61,6 +61,7 @@ EventCreatePage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
+  location: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
