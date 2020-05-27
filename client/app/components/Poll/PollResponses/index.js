@@ -52,7 +52,7 @@ export function PollResponses(props, context) {
   ];
 
   const detailPanel = [{
-    tooltip: <DiverstFormattedMessage {...messages.responses.show} />,
+    tooltip: props.intl.formatMessage(messages.responses.show),
     render: rowData => rowData.field_data && rowData.field_data.map((fieldDatum, i) => (
       <div key={fieldDatum.id}>
         <CardContent>
@@ -80,7 +80,7 @@ export function PollResponses(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={<DiverstFormattedMessage {...messages.responses.title} />}
+            title={props.intl.formatMessage(messages.responses.title)}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.responsesLoading}
