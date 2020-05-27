@@ -132,7 +132,7 @@ class InitiativesController < ApplicationController
 
   def start_video
     # Only user with permission to update group should be able to start a call
-    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+    authorize [@group, @initiative], :start_video?, policy_class: GroupEventsPolicy
 
     # check if user can start the session
     require 'twilio-ruby'
@@ -169,12 +169,6 @@ class InitiativesController < ApplicationController
   def leave_video
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
     track_activity(@initiative, :leave_video)
-    render nothing: true
-  end
-
-  def enable_virtual_meet
-    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
-    @initiative.virtual_toggle
     render nothing: true
   end
 
