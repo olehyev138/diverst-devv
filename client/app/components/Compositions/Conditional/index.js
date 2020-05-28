@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { push, goBack } from 'connected-react-router';
+import { useParams, useLocation } from 'react-router-dom';
 import dig from 'object-dig';
 import NotAuthorizedPage from 'containers/Shared/NotAuthorizedPage';
 
 import PropTypes from 'prop-types';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { injectIntl, intlShape } from 'react-intl';
-import messages from 'containers/Shared/Permissions/messages';
 import { redirectAction } from 'utils/reduxPushHelper';
 import config from 'app.config';
 
@@ -57,8 +55,9 @@ export default function Conditional(
     const [first, setFirst] = useState(true);
     const show = valid(props, conditions, reducer);
     const params = useParams();
+    const location = useLocation();
 
-    const path = redirect && redirect(props, params);
+    const path = redirect && redirect(props, params, location);
 
     useEffect(() => {
       if (!show && wait && first)
