@@ -41,6 +41,8 @@ const styles = theme => ({
 
 export function GroupHome({ classes, ...props }) {
   const { intl } = props;
+  console.log('component');
+  console.log(props.subgroupCateogries);
   const groupImage = props.currentGroup.banner_data && (
     <DiverstImg
       data={props.currentGroup.banner_data}
@@ -225,6 +227,7 @@ GroupHome.propTypes = {
   leaveGroup: PropTypes.func,
   joinSubgroups: PropTypes.func,
   intl: intlShape,
+  subgroupCateogries: PropTypes.object
 };
 
 export default compose(
