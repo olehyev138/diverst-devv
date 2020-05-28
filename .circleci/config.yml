@@ -221,10 +221,13 @@ jobs:
           command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
       - run:
           name: Deploy backend
+          #
+          ## !!! DEBUG !!!
+          #
           command: |
-            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
-            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
-            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+             # VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            # ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
+            # ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
       #
       ## Install node modules for frontend building
       #
@@ -248,7 +251,7 @@ jobs:
           name: Build & deploy frontend
           command: |
             ./devops/scripts/load-client-env testing
-            ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
+            # ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
 
   #
   ## Deploy Analytics service
