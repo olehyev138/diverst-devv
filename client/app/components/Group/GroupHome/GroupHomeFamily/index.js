@@ -55,28 +55,18 @@ export function GroupHomeFamily({ classes, ...props }) {
       </Grid>
     </Grid>
   );
-
-  const renderSubgroups = groups => (
-    <React.Fragment>
-      <Typography variant='h6'>
-        <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
-      </Typography>
-      {groups.map(child => (
-        <React.Fragment key={`child:${child.id}`}>
-          <Box mb={1} />
-          <Divider />
-          <Box mb={1} />
-          {renderGroup(child)}
-        </React.Fragment>
-      ))}
-    </React.Fragment>
-  );
-
-  const [expand, setExpand] = useState(false);
-
-  const needExpand = ((props.currentGroup.parent ? 2 : 0)
-    + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 5;
-
+console.log(subGroups);
+  const groupBy = function(array){
+    return array.reduce(function(newArray,x){
+    if (x.group_category != null){
+      (newArray[x.group_category.name] = newArray[x.group_category.name] || []).push(x);
+    }
+    return newArray;
+    },{}
+    );
+  }
+  const subGroups = groupBy(props.currentGroup.children)
+console.log(subGroups.length);
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
       <CardContent>
@@ -91,23 +81,24 @@ export function GroupHomeFamily({ classes, ...props }) {
             { renderGroup(props.currentGroup.parent) }
           </React.Fragment>
         )}
-        {props.currentGroup.children.length > 0 && (needExpand ? (
-          <Collapse in={expand} collapsedHeight={125}>
-            {renderSubgroups(props.currentGroup.children)}
-          </Collapse>
-        ) : (<React.Fragment>{renderSubgroups(props.currentGroup.children)}</React.Fragment>)
-        )}
-        {needExpand && (
-          <React.Fragment>
-            <Box mb={1} />
-            <Button
-              size='small'
-              onClick={() => setExpand(!expand)}
-            >
-              {expand ? <DiverstFormattedMessage {...messages.family.showLess} /> : <DiverstFormattedMessage {...messages.family.showMore} />}
-            </Button>
-          </React.Fragment>
-        )}
+
+
+        {props.currentGroup.children.length > 0 &&
+        <React.Fragment>
+          <Typography variant='h6'>
+            <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
+          </Typography>
+          {props.currentGroup.children.map(child => (
+          child.group_category == null &&
+            <React.Fragment key={`child:${child.id}`}>
+              <Box mb={1} />
+              <Divider />
+              <Box mb={1} />
+              {renderGroup(child)}
+            </React.Fragment>
+          ))}
+         </React.Fragment>
+        }
       </CardContent>
     </Card>
   );
