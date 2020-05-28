@@ -18,18 +18,6 @@ const ROUTES = {
   // User
   user: {
     get root() { return this.home; },
-    show: {
-      path: (userId = ':user_id') => `/user/${userId}`,
-      data: {
-        titleMessage: messages.user.profile,
-      }
-    },
-    edit: {
-      path: (userId = ':user_id') => `/user/${userId}/edit`,
-      data: {
-        titleMessage: messages.user.edit,
-      }
-    },
     home: {
       path: () => '/',
       data: {
@@ -65,6 +53,18 @@ const ROUTES = {
       path: () => '/downloads',
       data: {
         titleMessage: messages.user.downloads,
+      }
+    },
+    show: {
+      path: (userId = ':user_id') => `/user/${userId}`,
+      data: {
+        titleMessage: messages.user.profile,
+      }
+    },
+    edit: {
+      path: (userId = ':user_id') => `/user/${userId}/edit`,
+      data: {
+        titleMessage: messages.user.edit,
       }
     },
     mentorship: {
