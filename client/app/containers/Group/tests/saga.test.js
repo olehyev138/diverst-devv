@@ -382,23 +382,27 @@ describe('Update group', () => {
 });
 
 describe('Update group settings', () => {
-  xit('Should update some group settings', async () => {
-    api.groups.update.mockImplementation(() => Promise.resolve({ data: { ...group } }));
-    const results = [updateGroupSettingsSuccess()];
-
+  it('Should update some group settings', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupSettingsSuccess({ group }), push(ROUTES.group.home.path(group.id)), notified];
     const initialAction = { payload: {
       id: 1,
-      private: false,
-      name: 'Disability Caregivers Network',
-      short_description: '',
-      description: 'aaac',
-      parent_id: '',
-      child_ids: []
     } };
     const dispatched = await recordSaga(
       updateGroupSettings,
       initialAction
     );
+    console.log(dispatched);
+    console.log(results);
     expect(dispatched).toEqual(results);
   });
 
@@ -428,9 +432,19 @@ describe('Update group settings', () => {
 });
 
 describe('Delete group', () => {
-  xit('Should delete a group', async () => {
-    api.groups.destroy.mockImplementation(() => Promise.resolve({ data: { ...group } }));
-    const results = [deleteGroupSuccess()];
+  it('Should delete a group', async () => {
+    api.groups.destroy.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group deleted',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
+    const results = [deleteGroupSuccess(), push(ROUTES.admin.manage.groups.index.path()), notified];
 
     const initialAction = { payload: {
       id: 1,

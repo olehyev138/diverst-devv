@@ -89,56 +89,56 @@ describe('Event selectors', () => {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '00:43',
-          at12: '12:43 a.m.',
+          at12: '12:43 AM',
           day: { label: 0, value: 'sunday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'B', value: 'b' },
           at: '03:43',
-          at12: '3:43 a.m.',
+          at12: '3:43 AM',
           day: { label: 1, value: 'monday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'B', value: 'b' },
           at: '06:43',
-          at12: '6:43 a.m.',
+          at12: '6:43 AM',
           day: { label: 2, value: 'tuesday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '09:43',
-          at12: '9:43 a.m.',
+          at12: '9:43 PM',
           day: { label: 3, value: 'wednesday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '12:43',
-          at12: '12:43 p.m.',
+          at12: '12:43 PM',
           day: { label: 4, value: 'thursday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'B', value: 'b' },
           at: '15:43',
-          at12: '3:43 p.m.',
+          at12: '3:43 PM',
           day: { label: 5, value: 'friday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '18:43',
-          at12: '6:43 p.m.',
+          at12: '6:43 PM',
           day: { label: 6, value: 'saturday' }
         },
         {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '21:43',
-          at12: '9:43 p.m.',
+          at12: '9:43 PM',
           day: { label: -1, value: '' }
         },
       ];
@@ -180,7 +180,7 @@ describe('Event selectors', () => {
         timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
         tz: { label: 'A', value: 'a' },
         at: '00:43',
-        at12: '12:43 a.m.',
+        at12: '12:43 AM',
         day: { label: 0, value: 'sunday' }
       });
     });
