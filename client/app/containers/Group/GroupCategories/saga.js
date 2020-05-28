@@ -23,6 +23,7 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+
 export function* getGroupCategories(action) {
   try {
     const response = yield call(api.groupCategoryTypes.all.bind(api.groupCategoryTypes), action.payload);
