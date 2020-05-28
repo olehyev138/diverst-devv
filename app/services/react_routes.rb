@@ -6,7 +6,10 @@ class ReactRoutes
   end
 
   def self.domain
-    ENV['REACT_DOMAIN'] || 'http://localhost:8082'
+    #
+    ## TEMP: `beta` is a temporary prefix
+    #
+    ENV['ENV_NAME'] ? "https://beta-#{ENV['ENV_NAME']}.diverst.com" : 'http://localhost:8082'
   end
 
   def self.make_class(routes)
