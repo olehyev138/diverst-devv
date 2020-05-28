@@ -56,16 +56,13 @@ export function GroupHomeFamily({ classes, ...props }) {
     </Grid>
   );
 
-  const groupBy = function (array) {
-    return array.reduce((newArray, x) => {
-      if (x.group_category != null)
-        (newArray[x.group_category.name] = newArray[x.group_category.name] || []).push(x);
+  const groupByCategory = array => array.reduce((newArray, x) => {
+    if (x.group_category != null)
+      (newArray[x.group_category.name] = newArray[x.group_category.name] || []).push(x);
+    return newArray;
+  }, {});
 
-      return newArray;
-    }, {});
-  };
-
-  const subGroups = groupBy(props.currentGroup.children);
+  const subGroups = groupByCategory(props.currentGroup.children);
 
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
@@ -82,13 +79,31 @@ export function GroupHomeFamily({ classes, ...props }) {
           </React.Fragment>
         )}
 
-
         {props.currentGroup.children.length > 0
         && (
           <React.Fragment>
             <Typography variant='h6'>
               <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
+(
+              {props.currentGroup.children.length}
+)
             </Typography>
+            {Object.keys(subGroups).map(category => (
+              <React.Fragment key={category}>
+                <Box mb={1} />
+                <Divider />
+                <Box mb={1} />
+                <Typography variant='h6' className={classes.groupName}>
+                  {category}
+(
+                  {subGroups[`${category}`].length}
+)
+                </Typography>
+                {subGroups[`${category}`].map(subgroup => (
+                  renderGroup(subgroup)))}
+              </React.Fragment>
+            ))
+            }
             {props.currentGroup.children.map(child => (
               child.group_category == null
             && (
