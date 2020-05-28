@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,7 +14,6 @@ import saga from 'containers/Event/saga';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
@@ -22,6 +22,8 @@ import { selectIsCommitting } from 'containers/Event/selectors';
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
+
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -29,17 +31,17 @@ export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
 
-  useEffect(() => () => {}, []);
+  const { group_id: groupId } = useParams();
 
   const { currentUser, currentGroup } = props;
-  const rs = new RouteService(useContext);
   const links = {
-    eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
+    eventsIndex: ROUTES.group.events.index.path(groupId),
   };
   const { intl } = props;
 
   return (
     <React.Fragment>
+      <DiverstBreadcrumbs />
       <EventForm
         eventAction={props.createEventBegin}
         isCommitting={props.isCommitting}
@@ -84,6 +86,6 @@ export default compose(
 )(Conditional(
   EventCreatePage,
   ['currentGroup.permissions.events_create?'],
-  (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.events.index.path(params.group_id),
   permissionMessages.event.createPage
 ));
