@@ -55,7 +55,7 @@ export function ResourceCreatePage(props) {
       resourceAction={props.createResourceBegin}
       buttonText={props.intl.formatMessage(messages.create)}
       currentUser={currentUser}
-      currentGroup={currentGroup}
+      currentEnterprise={currentEnterprise}
       currentFolder={currentFolder}
       permissions={props.permissions}
       links={links}

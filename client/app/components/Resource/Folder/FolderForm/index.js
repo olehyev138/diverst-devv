@@ -25,24 +25,20 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const getGroupId = () => {
-    if (props.type === 'group' && props.currentGroup)
-      return props.currentGroup.id;
-    return null;
-  };
+  const groupId = props.type === 'group' && props.currentGroup ? {
+    group_id: props.currentGroup.id,
+  } : {};
 
-  const getEnterpriseId = () => {
-    if (props.type === 'admin' && props.currentEnterprise)
-      return props.currentEnterprise.id;
-    return null;
-  };
+  const enterpriseId = props.type === 'admin' && props.currentEnterprise ? {
+    enterprise_id: props.currentEnterprise.id
+  } : {};
 
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      group_id: getGroupId(),
-      enterprise_id: getEnterpriseId(),
+      ...groupId,
+      ...enterpriseId,
     });
   };
 
