@@ -16,21 +16,18 @@ import {
   leaveGroupBegin,
   joinSubgroupsBegin
 } from 'containers/Group/actions';
-import {
-  categoriesUnmount
-} from 'containers/Group/GroupCategories/actions';
 import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
 
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+
   return (
     <GroupHome
       currentGroup={props.currentGroup}
       joinGroup={props.joinGroupBegin}
       leaveGroup={props.leaveGroupBegin}
       joinSubgroups={props.joinSubgroupsBegin}
-      subgroupCategories={props.subgroupCategories}
     />
   );
 }

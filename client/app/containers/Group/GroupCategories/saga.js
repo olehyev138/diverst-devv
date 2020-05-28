@@ -11,7 +11,6 @@ import {
   CREATE_GROUP_CATEGORIES_BEGIN,
   DELETE_GROUP_CATEGORIES_BEGIN,
   UPDATE_GROUP_CATEGORIES_BEGIN,
-  GET_SUBGROUP_CATEGORIES_BEGIN,
 } from 'containers/Group/GroupCategories/constants';
 
 import {
