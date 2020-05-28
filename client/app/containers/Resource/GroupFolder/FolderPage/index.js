@@ -1,16 +1,15 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
@@ -41,9 +40,10 @@ import {
   getFolderEditPath,
   getFolderShowPath,
   getResourceNewPath,
-  getResourceEditPath, getFolderIndexPath,
+  getResourceEditPath,
 } from 'utils/resourceHelpers';
 
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
@@ -61,7 +61,7 @@ export function FolderPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
+  const { item_id: folderId } = useParams();
 
   const {
     currentUser,
@@ -133,20 +133,16 @@ export function FolderPage(props) {
   };
 
   useEffect(() => {
-    const folderId = rs.params('item_id');
-
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
     getFolders(folderId);
     getResources(folderId);
 
     return () => props.foldersUnmount();
-  }, []);
+  }, [folderId]);
 
   useEffect(() => {
     if (props.hasChanged) {
-      const folderId = rs.params('item_id');
-
       // get folder specified in path
       props.getFolderBegin({ id: folderId });
       getFolders(folderId);
@@ -178,9 +174,8 @@ export function FolderPage(props) {
           }}
           enableReinitialize
           onSubmit={(values, actions) => {
-            const folderId = rs.params('item_id');
             props.validateFolderPasswordBegin({
-              id: folderId[0],
+              id: folderId,
               password: values.password
             });
           }}
@@ -215,27 +210,30 @@ export function FolderPage(props) {
         />
       )}
       { valid === true && (
-        <Folder
-          currentUserId={currentUser.id}
-          currentGroup={props.currentGroup}
-          deleteFolderBegin={props.deleteFolderBegin}
-          deleteResourceBegin={props.deleteResourceBegin}
-          folder={currentFolder}
-          folders={subFolders}
-          foldersTotal={props.foldersTotal}
-          resourcesTotal={props.resourcesTotal}
-          handleResourcePagination={handleResourcePagination}
-          handleFolderPagination={handleFolderPagination}
-          archiveResourceBegin={props.archiveResourceBegin}
-          getFileDataBegin={props.getFileDataBegin}
-          type='group'
-          resources={resources}
-          fileData={props.fileData}
-          isDownloadingFileData={props.isDownloadingFileData}
-          isLoading={props.isLoading}
-          isFormLoading={props.isFormLoading}
-          links={links}
-        />
+        <React.Fragment>
+          <DiverstBreadcrumbs />
+          <Folder
+            currentUserId={currentUser.id}
+            currentGroup={props.currentGroup}
+            deleteFolderBegin={props.deleteFolderBegin}
+            deleteResourceBegin={props.deleteResourceBegin}
+            folder={currentFolder}
+            folders={subFolders}
+            foldersTotal={props.foldersTotal}
+            resourcesTotal={props.resourcesTotal}
+            handleResourcePagination={handleResourcePagination}
+            handleFolderPagination={handleFolderPagination}
+            archiveResourceBegin={props.archiveResourceBegin}
+            getFileDataBegin={props.getFileDataBegin}
+            type='group'
+            resources={resources}
+            fileData={props.fileData}
+            isDownloadingFileData={props.isDownloadingFileData}
+            isLoading={props.isLoading}
+            isFormLoading={props.isFormLoading}
+            links={links}
+          />
+        </React.Fragment>
       )}
     </div>
   );
@@ -307,6 +305,6 @@ export default compose(
 )(Conditional(
   FolderPage,
   ['currentFolder.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.group.resources.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.resources.index.path(params.group_id),
   permissionMessages.resource.groupFolder.folderPage
 ));
