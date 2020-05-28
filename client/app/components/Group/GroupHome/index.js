@@ -41,7 +41,6 @@ const styles = theme => ({
 
 export function GroupHome({ classes, ...props }) {
   const { intl } = props;
-
   const groupImage = props.currentGroup.banner_data && (
     <DiverstImg
       data={props.currentGroup.banner_data}
