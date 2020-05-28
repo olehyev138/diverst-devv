@@ -20,7 +20,6 @@ import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 
 import Scrollbar from 'components/Shared/Scrollbar';
-import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -64,7 +63,6 @@ const GroupLayout = (props) => {
             <div className={classes.content}>
               {currentGroup && (
                 <React.Fragment>
-                  <DiverstBreadcrumbs />
                   {renderChildrenWithProps(props.children, { currentGroup, permission, ...rest })}
                 </React.Fragment>
               )}
