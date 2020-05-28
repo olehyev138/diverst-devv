@@ -84,9 +84,9 @@ export function GroupHomeFamily({ classes, ...props }) {
           <React.Fragment>
             <Typography variant='h6'>
               <DiverstFormattedMessage {...appMessages.custom_text.sub_erg} />
-(
+              (
               {props.currentGroup.children.length}
-)
+              )
             </Typography>
             {Object.keys(subGroups).map(category => (
               <React.Fragment key={category}>
@@ -95,9 +95,9 @@ export function GroupHomeFamily({ classes, ...props }) {
                 <Box mb={1} />
                 <Typography variant='h6' className={classes.groupName}>
                   {category}
-(
+                  (
                   {subGroups[`${category}`].length}
-)
+                  )
                 </Typography>
                 {subGroups[`${category}`].map(subgroup => (
                   renderGroup(subgroup)))}
