@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Usage: ./load-client-env <environment>
+
+ENVIRONMENT=$1
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+# Load variables from parameter key store into environment variables
+# Create client .env file based on environment variable values
+chamber export --format dotenv "$ENVIRONMENT" > client/.env
+echo "ENVIRONMENT=development" >> client/.env
+
