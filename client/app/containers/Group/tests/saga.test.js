@@ -3,48 +3,23 @@
  */
 
 import {
-  getGroups,
-  getGroup,
-  getAnnualBudgets,
-  createGroup,
-  categorizeGroup,
-  updateGroup,
-  updateGroupSettings,
-  deleteGroup,
-  carryBudget,
-  resetBudget,
-  joinGroup,
-  leaveGroup,
+  getGroups, getGroup, getAnnualBudgets,
+  createGroup, categorizeGroup, updateGroup,
+  updateGroupSettings, deleteGroup, carryBudget,
+  resetBudget, joinGroup, leaveGroup,
   joinSubgroups
 } from 'containers/Group/saga';
 
 import {
-  getGroupsError,
-  getGroupsSuccess,
-  getGroupError,
-  getGroupSuccess,
-  getAnnualBudgetsSuccess,
-  getAnnualBudgetsError,
-  createGroupSuccess,
-  createGroupError,
-  groupCategorizeSuccess,
-  groupCategorizeError,
-  updateGroupSuccess,
-  updateGroupError,
-  updateGroupSettingsSuccess,
-  updateGroupSettingsError,
-  deleteGroupSuccess,
-  deleteGroupError,
-  carryBudgetSuccess,
-  carryBudgetError,
-  resetBudgetSuccess,
-  resetBudgetError,
-  joinGroupSuccess,
-  joinGroupError,
-  leaveGroupSuccess,
-  leaveGroupError,
-  joinSubgroupsSuccess,
-  joinSubgroupsError,
+  getGroupsError, getGroupsSuccess, getGroupError,
+  getGroupSuccess, getAnnualBudgetsSuccess, getAnnualBudgetsError,
+  createGroupSuccess, createGroupError, groupCategorizeSuccess,
+  groupCategorizeError, updateGroupSuccess, updateGroupError,
+  updateGroupSettingsSuccess, updateGroupSettingsError, deleteGroupSuccess,
+  deleteGroupError, carryBudgetSuccess, carryBudgetError,
+  resetBudgetSuccess, resetBudgetError, joinGroupSuccess,
+  joinGroupError, leaveGroupSuccess, leaveGroupError,
+  joinSubgroupsSuccess, joinSubgroupsError,
 } from 'containers/Group/actions';
 
 import { push } from 'connected-react-router';
@@ -510,7 +485,7 @@ describe('Carry budget', () => {
     expect(dispatched).toEqual(results);
   });
 });
-
+// TODO
 describe('reset budget', () => {
   it('Should reset a group budget', async () => {
 
@@ -542,7 +517,14 @@ describe('reset budget', () => {
 
 describe('Join group', () => {
   it('Should let a user join a group', async () => {
-
+    api.userGroups.join.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const results = [joinGroupSuccess()];
+    const initialAction = { payload: { group_id: 4 } };
+    const dispatched = await recordSaga(
+      joinGroup,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
   });
 
   it('Should return error from the API', async () => {
