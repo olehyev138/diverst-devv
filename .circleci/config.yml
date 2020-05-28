@@ -16,12 +16,9 @@ workflows:
           requires:
             - backend-test
             - frontend-test
-      #
-      ## !!!!!!!!!!!!!! DEBUG !!!!!!!!!!!!!!
-      #
-#          filters:
-#            branches:
-#              only: react_update
+          filters:
+            branches:
+              only: react_update
       - deploy-analytics:
           context: aws-context
           requires:
