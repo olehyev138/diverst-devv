@@ -686,7 +686,7 @@ class User < ApplicationRecord
         indexes :enable_rewards,                type: :boolean
         indexes :enable_pending_comments,       type: :boolean
         indexes :mentorship_module_enabled,     type: :boolean
-        indexes :disable_likes,                 type: :boolean
+        indexes :enable_likes,                 type: :boolean
         indexes :enable_social_media,           type: :boolean
 
         indexes :created_at,        type: :date
