@@ -401,8 +401,6 @@ describe('Update group settings', () => {
       updateGroupSettings,
       initialAction
     );
-    console.log(dispatched);
-    console.log(results);
     expect(dispatched).toEqual(results);
   });
 
