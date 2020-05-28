@@ -56,9 +56,9 @@ export function GroupHomeFamily({ classes, ...props }) {
     </Grid>
   );
 
-  const groupByCategory = array => array.reduce((newArray, x) => {
-    if (x.group_category != null)
-      (newArray[x.group_category.name] = newArray[x.group_category.name] || []).push(x);
+  const groupByCategory = array => array.reduce((newArray, item) => {
+    if (item.group_category != null)
+      (newArray[item.group_category.name] = newArray[item.group_category.name] || []).push(item);
     return newArray;
   }, {});
 
