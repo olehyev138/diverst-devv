@@ -26,10 +26,6 @@ const selectGroupCategories = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => groupCategoriesState.currentGroup
 );
-const selectSubgroupCategories = () => createSelector(
-  selectGroupCategoriesDomain,
-  groupCategoriesState => groupCategoriesState.subgroupCategoriesList
-);
 
 const selectGroupCategoriesIsLoading = () => createSelector(
   selectGroupCategoriesDomain,

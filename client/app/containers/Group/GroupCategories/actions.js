@@ -169,24 +169,3 @@ export function categoriesUnmount() {
     type: CATEGORIES_UNMOUNT,
   };
 }
-
-export function getSubgroupCategoriesBegin(payload) {
-  return {
-    type: GET_SUBGROUP_CATEGORIES_BEGIN,
-    payload
-  };
-}
-
-export function getSubgroupCategoriesSuccess(payload) {
-  return {
-    type: GET_SUBGROUP_CATEGORIES_SUCCESS,
-    payload
-  };
-}
-
-export function getSubgroupCategoriesError(error) {
-  return {
-    type: GET_SUBGROUP_CATEGORIES_ERROR,
-    error,
-  };
-}

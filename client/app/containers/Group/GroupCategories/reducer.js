@@ -13,7 +13,7 @@ import {
   ADD_GROUP_CATEGORIES_BEGIN, ADD_GROUP_CATEGORIES_SUCCESS, ADD_GROUP_CATEGORIES_ERROR,
   DELETE_GROUP_CATEGORIES_BEGIN, DELETE_GROUP_CATEGORIES_SUCCESS, DELETE_GROUP_CATEGORIES_ERROR,
   UPDATE_GROUP_CATEGORY_TYPE_BEGIN, UPDATE_GROUP_CATEGORY_TYPE_SUCCESS, UPDATE_GROUP_CATEGORY_TYPE_ERROR,
-  CATEGORIES_UNMOUNT, GET_SUBGROUP_CATEGORIES_BEGIN, GET_SUBGROUP_CATEGORIES_SUCCESS, GET_SUBGROUP_CATEGORIES_ERROR,
+  CATEGORIES_UNMOUNT,
 } from 'containers/Group/GroupCategories/constants';
 
 export const initialState = {
@@ -42,18 +42,14 @@ function groupCategoriesReducer(state = initialState, action) {
         break;
 
       case GET_GROUP_CATEGORIES_BEGIN:
-      case GET_SUBGROUP_CATEGORIES_BEGIN:
         draft.isLoading = true;
         break;
       case GET_GROUP_CATEGORIES_SUCCESS:
-      case GET_SUBGROUP_CATEGORIES_SUCCESS:
-        draft.subgroupCategoriesList = action.payload.items;
         draft.groupCategoriesList = formatGroupCategories(action.payload.items);
         draft.groupCategoriesTotal = action.payload.total;
         draft.isLoading = false;
         break;
       case GET_GROUP_CATEGORIES_ERROR:
-      case GET_SUBGROUP_CATEGORIES_ERROR:
         draft.isLoading = false;
         break;
       case CREATE_GROUP_CATEGORIES_BEGIN:

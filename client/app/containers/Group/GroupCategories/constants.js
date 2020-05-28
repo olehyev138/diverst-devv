@@ -34,7 +34,3 @@ export const UPDATE_GROUP_CATEGORY_TYPE_SUCCESS = 'app/Group/GroupCategories/UPD
 export const UPDATE_GROUP_CATEGORY_TYPE_ERROR = 'app/Group/GroupCategories/UPDATE_GROUP_CATEGORY_TYPE_ERROR';
 
 export const CATEGORIES_UNMOUNT = 'app/Group/GroupCategories/CATEGORIES_UNMOUNT';
-
-export const GET_SUBGROUP_CATEGORIES_BEGIN = 'app/Group/GroupCategories/GET_SUBGROUP_CATEGORIES_BEGIN';
-export const GET_SUBGROUP_CATEGORIES_SUCCESS = 'app/Group/GroupCategories/GET_SUBGROUP_CATEGORIES_SUCCESS';
-export const GET_SUBGROUP_CATEGORIES_ERROR = 'app/Group/GroupCategories/GET_SUBGROUP_CATEGORIES_ERROR';
