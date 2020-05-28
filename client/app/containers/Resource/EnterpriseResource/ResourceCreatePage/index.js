@@ -44,7 +44,7 @@ export function ResourceCreatePage(props) {
 
   useEffect(() => {
     const folderId = rs.params('folder_id');
-    props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
+    props.getFolderBegin({ id: folderId });
     return () => props.resourcesUnmount();
   }, []);
 

@@ -66,6 +66,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             <Field
               component={Select}
               fullWidth
+              required
               disabled={props.isCommitting}
               id='folder_id'
               name='folder_id'
@@ -76,7 +77,6 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
               onChange={value => setFieldValue('folder_id', value)}
               onInputChange={value => parentSelectAction(value)}
               onBlur={() => setFieldTouched('folder_id', true)}
-              isClearable
             />
             <h4>
               Resource Type:
