@@ -26,6 +26,10 @@ const selectGroupCategories = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => groupCategoriesState.currentGroup
 );
+const selectSubgroupCategories = () => createSelector(
+  selectGroupCategoriesDomain,
+  groupCategoriesState => groupCategoriesState.subgroupCategoriesList
+);
 
 const selectGroupCategoriesIsLoading = () => createSelector(
   selectGroupCategoriesDomain,
@@ -60,5 +64,5 @@ const selectFormGroupCategories = () => createSelector(
 export {
   selectGroupCategoriesDomain, selectPaginatedGroupCategories, selectPaginatedSelectGroupCategories,
   selectGroupCategoriesTotal, selectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsLoading,
-  selectGroupCategoriesIsCommitting, selectGroupCategoriesIsFormLoading
+  selectGroupCategoriesIsCommitting, selectGroupCategoriesIsFormLoading, selectSubgroupCategories
 };

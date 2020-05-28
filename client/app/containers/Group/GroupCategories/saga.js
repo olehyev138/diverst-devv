@@ -10,7 +10,8 @@ import {
   GET_GROUP_CATEGORY_BEGIN,
   CREATE_GROUP_CATEGORIES_BEGIN,
   DELETE_GROUP_CATEGORIES_BEGIN,
-  UPDATE_GROUP_CATEGORIES_BEGIN
+  UPDATE_GROUP_CATEGORIES_BEGIN,
+  GET_SUBGROUP_CATEGORIES_BEGIN,
 } from 'containers/Group/GroupCategories/constants';
 
 import {
@@ -19,10 +20,26 @@ import {
   createGroupCategoriesBegin, createGroupCategoriesSuccess, createGroupCategoriesError,
   deleteGroupCategoriesBegin, deleteGroupCategoriesSuccess, deleteGroupCategoriesError,
   updateGroupCategoriesBegin, updateGroupCategoriesSuccess, updateGroupCategoriesError,
+  getSubgroupCategoriesBegin, getSubgroupCategoriesSuccess, getSubgroupCategoriesError,
 } from 'containers/Group/GroupCategories/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+export function* getSubgroupCategories(action) {
+  try {
+    console.log('saga');
+    console.log(action.payload);
+    const response = yield call(api.groupCategories.all.bind(api.groupCategories), action.payload);
+    console.log(response.data.page);
+    yield put(getSubgroupCategoriesSuccess(response.data.page));
+  } catch (err) {
+    console.log(err.response);
+    yield put(getSubgroupCategoriesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load groups categories', options: { variant: 'warning' } }));
+  }
+}
 
 export function* getGroupCategories(action) {
   try {
@@ -99,4 +116,5 @@ export default function* groupsSaga() {
   yield takeLatest(CREATE_GROUP_CATEGORIES_BEGIN, createGroupCategories);
   yield takeLatest(DELETE_GROUP_CATEGORIES_BEGIN, deleteGroupCategories);
   yield takeLatest(UPDATE_GROUP_CATEGORIES_BEGIN, updateGroupCategories);
+  yield takeLatest(GET_SUBGROUP_CATEGORIES_BEGIN, getSubgroupCategories);
 }

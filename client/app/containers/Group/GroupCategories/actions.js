@@ -12,7 +12,7 @@ import {
   ADD_GROUP_CATEGORIES_BEGIN, ADD_GROUP_CATEGORIES_SUCCESS, ADD_GROUP_CATEGORIES_ERROR,
   DELETE_GROUP_CATEGORIES_BEGIN, DELETE_GROUP_CATEGORIES_SUCCESS, DELETE_GROUP_CATEGORIES_ERROR,
   UPDATE_GROUP_CATEGORY_TYPE_BEGIN, UPDATE_GROUP_CATEGORY_TYPE_SUCCESS, UPDATE_GROUP_CATEGORY_TYPE_ERROR,
-  CATEGORIES_UNMOUNT
+  CATEGORIES_UNMOUNT, GET_SUBGROUP_CATEGORIES_BEGIN, GET_SUBGROUP_CATEGORIES_SUCCESS, GET_SUBGROUP_CATEGORIES_ERROR
 } from 'containers/Group/GroupCategories/constants';
 
 
@@ -167,5 +167,26 @@ export function updateGroupCategoryTypeError(error) {
 export function categoriesUnmount() {
   return {
     type: CATEGORIES_UNMOUNT,
+  };
+}
+
+export function getSubgroupCategoriesBegin(payload) {
+  return {
+    type: GET_SUBGROUP_CATEGORIES_BEGIN,
+    payload
+  };
+}
+
+export function getSubgroupCategoriesSuccess(payload) {
+  return {
+    type: GET_SUBGROUP_CATEGORIES_SUCCESS,
+    payload
+  };
+}
+
+export function getSubgroupCategoriesError(error) {
+  return {
+    type: GET_SUBGROUP_CATEGORIES_ERROR,
+    error,
   };
 }
