@@ -60,5 +60,5 @@ const selectFormGroupCategories = () => createSelector(
 export {
   selectGroupCategoriesDomain, selectPaginatedGroupCategories, selectPaginatedSelectGroupCategories,
   selectGroupCategoriesTotal, selectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsLoading,
-  selectGroupCategoriesIsCommitting, selectGroupCategoriesIsFormLoading, selectSubgroupCategories
+  selectGroupCategoriesIsCommitting, selectGroupCategoriesIsFormLoading
 };
