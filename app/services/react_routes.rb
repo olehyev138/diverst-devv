@@ -6,7 +6,7 @@ class ReactRoutes
   end
 
   def self.domain
-    ENV['REACT_DOMAIN'] || 'http://localhost:8082'
+    ENV['ENV_NAME'] ? "https://#{ENV['ENV_NAME']}" : 'http://localhost:8082'
   end
 
   def self.make_class(routes)
