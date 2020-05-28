@@ -16,6 +16,7 @@ import { eventsUnmount, getEventsBegin } from 'containers/Event/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import EventsList from 'components/Event/EventsList';
 import Conditional from 'components/Compositions/Conditional';
 
@@ -111,21 +112,26 @@ export function EventsPage(props) {
   const List = props.listComponent || EventsList;
 
   return (
-    <List
-      events={props.events}
-      eventsTotal={props.eventsTotal}
-      isLoading={props.isLoading}
-      currentTab={tab}
-      handleChangeTab={handleChangeTab}
-      handlePagination={handlePagination}
-      handleCalendarChange={handleChangeCalendar}
-      calendar={calendar}
-      calendarEvents={props.calendarEvents}
-      currentGroup={props.currentGroup}
-      links={links}
-      readonly={props.readonly}
-      onlyUpcoming={props.onlyUpcoming}
-    />
+    <React.Fragment>
+      {!props.readonly && (
+        <DiverstBreadcrumbs />
+      )}
+      <List
+        events={props.events}
+        eventsTotal={props.eventsTotal}
+        isLoading={props.isLoading}
+        currentTab={tab}
+        handleChangeTab={handleChangeTab}
+        handlePagination={handlePagination}
+        handleCalendarChange={handleChangeCalendar}
+        calendar={calendar}
+        calendarEvents={props.calendarEvents}
+        currentGroup={props.currentGroup}
+        links={links}
+        readonly={props.readonly}
+        onlyUpcoming={props.onlyUpcoming}
+      />
+    </React.Fragment>
   );
 }
 
