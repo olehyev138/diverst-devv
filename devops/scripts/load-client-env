@@ -14,6 +14,12 @@ fi
 
 # Load variables from parameter key store into environment variables
 # Create client .env file based on environment variable values
-chamber export --format dotenv "$ENVIRONMENT" > client/.env
-echo "ENVIRONMENT=development" >> client/.env
+client_config=$(chamber export --format dotenv "$ENVIRONMENT")
+
+echo 'Deploying with client configuration:'
+echo "$client_config"
+
+# DEBUG
+#echo "$client_config" > client/.env
+#echo 'ENVIRONMENT="development"' >> client/.env
 
