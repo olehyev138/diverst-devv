@@ -110,7 +110,7 @@ describe('Event selectors', () => {
           timezones: [{ label: 'A', value: 'a' }, { label: 'B', value: 'b' }],
           tz: { label: 'A', value: 'a' },
           at: '09:43',
-          at12: '9:43 PM',
+          at12: '9:43 AM',
           day: { label: 3, value: 'wednesday' }
         },
         {
