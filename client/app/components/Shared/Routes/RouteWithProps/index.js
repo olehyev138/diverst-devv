@@ -14,12 +14,12 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 export function RouteWithProps(props) {
   const {
     children,
+    fade,
     path,
     exact,
     strict,
     location,
     sensitive,
-    fade,
     ...propsToPassDown
   } = props;
 
