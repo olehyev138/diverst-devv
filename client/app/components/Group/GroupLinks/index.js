@@ -195,7 +195,6 @@ export function GroupLinks(props) {
           <Permission show={permission(props.currentGroup, 'resources_view?')}>
             <Button
               component={WrappedNavLink}
-              exact
               to={ROUTES.group.resources.index.path(params.group_id)}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
