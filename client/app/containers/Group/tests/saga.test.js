@@ -462,7 +462,7 @@ describe('Carry budget', () => {
 
   });
 
-  xit('Should return error from the API', async () => {
+  it('Should return error from the API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.groups.carryOverBudget.mockImplementation(() => Promise.reject(response));
     const notified = {
@@ -485,13 +485,34 @@ describe('Carry budget', () => {
     expect(dispatched).toEqual(results);
   });
 });
-// TODO
-describe('reset budget', () => {
-  it('Should reset a group budget', async () => {
 
+describe('reset budget', () => {
+  xit('Should reset a group budget', async () => {
+    api.groups.resetBudget.mockImplementation(() => Promise.resolve({ data: { group } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group budget reset',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
+    const results = [resetBudgetSuccess(), notified];
+    const initialAction = { payload: {id: {}} };
+
+    const dispatched = await recordSaga(
+      resetBudget,
+      initialAction
+    );
+    console.log(dispatched);
+    console.log(results);
+
+    expect(dispatched).toEqual(results);
   });
 
-  xit('Should return error from the API', async () => {
+  it('Should return error from the API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.groups.resetBudget.mockImplementation(() => Promise.reject(response));
     const notified = {
@@ -505,11 +526,12 @@ describe('reset budget', () => {
 
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
     const results = [resetBudgetError(response), notified];
-    const initialAction = { payload: 16 };
+    const initialAction = { payload: { payload: undefined } };
     const dispatched = await recordSaga(
       resetBudget,
       initialAction
     );
+
     expect(api.groups.resetBudget).toHaveBeenCalledWith(initialAction);
     expect(dispatched).toEqual(results);
   });
