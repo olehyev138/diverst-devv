@@ -171,7 +171,7 @@
                 </div>
               </div>
 
-              <% group.children.each do |child| %>
+              <% group.children.where(private: false).each do |child| %>
                 <div class="children_<%= group.id%>" style="display:none;">
                   <div class="media-object">
                     <div class="flex-row">
