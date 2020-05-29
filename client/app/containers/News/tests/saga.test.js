@@ -5,13 +5,59 @@ import {
   archiveNewsItem, approveNewsItem, pinNewsItem, unpinNewsItem
 } from 'containers/News/saga';
 import {
-  getNewsItemsBegin, getNewsItemsSuccess, getNewsItemsError,
-  getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
-  createGroupMessageBegin, createGroupMessageSuccess, createGroupMessageError,
-  updateGroupMessageBegin, updateGroupMessageSuccess, updateGroupMessageError,
-  deleteGroupMessageBegin, deleteGroupMessageSuccess, deleteGroupMessageError,
-  newsFeedUnmount
+  getNewsItemsSuccess,
+  getNewsItemsError,
+  getNewsItemBegin,
+  getNewsItemSuccess,
+  getNewsItemError,
+  updateNewsItemBegin,
+  updateNewsItemError,
+  updateNewsItemSuccess,
+  createGroupMessageSuccess,
+  createGroupMessageError,
+  createGroupMessageCommentError,
+  updateGroupMessageSuccess,
+  createGroupMessageCommentSuccess,
+  createNewsLinkBegin,
+  createNewsLinkSuccess,
+  createNewsLinkError,
+  createNewsLinkCommentError,
+  updateNewsLinkSuccess,
+  createNewsLinkCommentSuccess,
+  createSocialLinkBegin,
+  deleteGroupMessageBegin,
+  deleteGroupMessageError,
+  deleteGroupMessageSuccess,
+  createSocialLinkSuccess,
+  createSocialLinkError,
+  createSocialLinkCommentError,
+  updateSocialLinkSuccess,
+  createSocialLinkCommentSuccess,
+  deleteNewsLinkBegin,
+  deleteNewsLinkError,
+  deleteNewsLinkSuccess,
+  deleteSocialLinkBegin,
+  deleteSocialLinkError,
+  deleteSocialLinkSuccess,
+  deleteGroupMessageCommentBegin,
+  deleteGroupMessageCommentError,
+  deleteGroupMessageCommentSuccess,
+  deleteNewsLinkCommentBegin,
+  deleteNewsLinkCommentError,
+  deleteNewsLinkCommentSuccess,
+  archiveNewsItemBegin,
+  archiveNewsItemSuccess,
+  archiveNewsItemError,
+  pinNewsItemBegin,
+  pinNewsItemSuccess,
+  pinNewsItemError,
+  unpinNewsItemBegin,
+  unpinNewsItemSuccess,
+  unpinNewsItemError,
+  approveNewsItemSuccess,
+  approveNewsItemError
 } from 'containers/News/actions';
+
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
@@ -95,6 +141,92 @@ describe('Get news items Saga', () => {
     );
 
     expect(api.newsFeedLinks.all).toHaveBeenCalledWith(initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Get news item Saga', () => {
+  it('Should return a news item', async () => {
+    api.newsFeedLinks.get.mockImplementation(() => Promise.resolve({ data: { ...newsitem } }));
+    const results = [getNewsItemSuccess(newsitem)];
+    const initialAction = { payload: { id: newsitem.id } };
+
+    const dispatched = await recordSaga(
+      getNewsItem,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.get.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to get news item',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [getNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      getNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.get).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Update news item', () => {
+  it('Should update a news item', async () => {
+    api.newsFeedLinks.update.mockImplementation(() => Promise.resolve({ data: { newsitem } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'News feed link updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
+    const results = [updateNewsItemSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { newsitem } };
+    const dispatched = await recordSaga(
+      updateNewsItem,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update news feed link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5, news_link_id: 5 } };
+    const dispatched = await recordSaga(
+      updateNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_feed_link: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 });

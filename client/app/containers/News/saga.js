@@ -108,7 +108,7 @@ export function* updateNewsItem(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News feed link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateNewsItemError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update news feed link', options: { variant: 'warning' } }));
