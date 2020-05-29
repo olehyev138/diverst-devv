@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
@@ -42,6 +42,10 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
     });
   };
 
+  useEffect(() => {
+    parentSelectAction();
+  }, []);
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.folder}>
       <Card>
@@ -68,7 +72,6 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
               margin='normal'
               value={values.parent_id}
               options={props.selectFolders}
-              onMenuOpen={parentSelectAction}
               onChange={value => setFieldValue('parent_id', value)}
               onInputChange={value => parentSelectAction(value)}
               onBlur={() => setFieldTouched('parent_id', true)}
