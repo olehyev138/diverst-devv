@@ -40,7 +40,6 @@ import {
 
 export function* getEvents(action) {
   try {
-    console.log(action);
     const { annualBudgetId, ...payload } = action.payload;
     const response = yield call(api.initiatives.all.bind(api.initiatives), payload);
 
@@ -65,7 +64,6 @@ export function* getEvent(action) {
     yield put(getEventError(err));
 
     // TODO: intl message
-    yield put(getEventError(err));
     yield put(showSnackbar({
       message: 'Failed to get event',
       options: { variant: 'warning' }
