@@ -499,7 +499,7 @@ describe('reset budget', () => {
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
     const results = [resetBudgetSuccess(), notified];
-    const initialAction = { payload: {id: {}} };
+    const initialAction = { payload: { id: {} } };
 
     const dispatched = await recordSaga(
       resetBudget,

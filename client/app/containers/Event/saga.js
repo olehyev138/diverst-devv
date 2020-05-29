@@ -34,7 +34,7 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
-  exportAttendeesSuccess, exportAttendeesError, leaveEventSuccess
+  exportAttendeesSuccess, exportAttendeesError, leaveEventSuccess, leaveEventError
 } from './actions';
 
 
@@ -157,7 +157,6 @@ export function* createEventComment(action) {
   try {
     const payload = { initiative_comment: action.payload.attributes };
     const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
-
     yield put(createEventCommentSuccess());
     yield put(getEventBegin({ id: payload.initiative_comment.initiative_id }));
     yield put(showSnackbar({ message: 'Event comment created', options: { variant: 'success' } }));
@@ -220,7 +219,7 @@ export function* leaveEvent(action) {
     const response = yield call(api.initiativeUsers.leave.bind(api.initiativeUsers), payload);
     yield put(leaveEventSuccess(payload));
   } catch (err) {
-    yield put(leaveEventSuccess(err));
+    yield put(leaveEventError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));
