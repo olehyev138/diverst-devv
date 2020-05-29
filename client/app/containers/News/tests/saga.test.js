@@ -17,6 +17,7 @@ import {
   createGroupMessageError,
   createGroupMessageCommentError,
   updateGroupMessageSuccess,
+  updateGroupMessageError,
   createGroupMessageCommentSuccess,
   createNewsLinkBegin,
   createNewsLinkSuccess,
@@ -88,7 +89,7 @@ api.newsFeedLinks.pin = jest.fn();
 beforeEach(() => {
   jest.resetAllMocks();
 });
-const newsitem = {
+const newsItem = {
   id: 4,
   news_feed_id: 1,
   approved: true,
@@ -102,11 +103,21 @@ const newsitem = {
   views_count: null,
   likes_count: 1
 };
+const groupMessage = {
+  id: 2,
+  group_id: 1,
+  subject: 'test',
+  content: 'testcontent',
+  created_at: 'Tue, 14 Apr 2020 18:45:56 UTC +00:00',
+  updated_at: 'Tue, 14 Apr 2020 18:45:56 UTC +00:00',
+  owner_id: 1
+};
+
 
 describe('Get news items Saga', () => {
   it('Should return newsItems list', async () => {
-    api.newsFeedLinks.all.mockImplementation(() => Promise.resolve({ data: { page: { ...newsitem } } }));
-    const results = [getNewsItemsSuccess(newsitem)];
+    api.newsFeedLinks.all.mockImplementation(() => Promise.resolve({ data: { page: { ...newsItem } } }));
+    const results = [getNewsItemsSuccess(newsItem)];
 
     const initialAction = { payload: {
       count: 5,
@@ -147,9 +158,9 @@ describe('Get news items Saga', () => {
 
 describe('Get news item Saga', () => {
   it('Should return a news item', async () => {
-    api.newsFeedLinks.get.mockImplementation(() => Promise.resolve({ data: { ...newsitem } }));
-    const results = [getNewsItemSuccess(newsitem)];
-    const initialAction = { payload: { id: newsitem.id } };
+    api.newsFeedLinks.get.mockImplementation(() => Promise.resolve({ data: { ...newsItem } }));
+    const results = [getNewsItemSuccess(newsItem)];
+    const initialAction = { payload: { id: newsItem.id } };
 
     const dispatched = await recordSaga(
       getNewsItem,
@@ -186,7 +197,7 @@ describe('Get news item Saga', () => {
 
 describe('Update news item', () => {
   it('Should update a news item', async () => {
-    api.newsFeedLinks.update.mockImplementation(() => Promise.resolve({ data: { newsitem } }));
+    api.newsFeedLinks.update.mockImplementation(() => Promise.resolve({ data: { newsItem } }));
     const notified = {
       notification: {
         key: 1590092641484,
@@ -198,7 +209,7 @@ describe('Update news item', () => {
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
     const results = [updateNewsItemSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
-    const initialAction = { payload: { newsitem } };
+    const initialAction = { payload: { newsItem } };
     const dispatched = await recordSaga(
       updateNewsItem,
       initialAction
@@ -227,6 +238,149 @@ describe('Update news item', () => {
     );
 
     expect(api.newsFeedLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_feed_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Create group message', () => {
+  it('Should create a group message', async () => {
+    api.groupMessages.create.mockImplementation(() => Promise.resolve({ data: { groupMessage } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group message created',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createGroupMessageSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { groupMessage } };
+
+    const dispatched = await recordSaga(
+      createGroupMessage,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groupMessages.create.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to create group message',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createGroupMessageError(response), notified];
+    const initialAction = { payload: { groupMessages: undefined } };
+    const dispatched = await recordSaga(
+      createGroupMessage,
+      initialAction.payload
+    );
+    expect(api.groupMessages.create).toHaveBeenCalledWith(initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Update group message', () => {
+  it('Should update a group message', async () => {
+    api.groupMessages.update.mockImplementation(() => Promise.resolve({ data: { groupMessage } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Group Message updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
+    const results = [updateGroupMessageSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { groupMessage } };
+    const dispatched = await recordSaga(
+      updateGroupMessage,
+      initialAction
+    );
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groupMessages.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update group message',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupMessageError(response), notified];
+    const initialAction = { payload: { id: 5, group_id: 5 } };
+    const dispatched = await recordSaga(
+      updateGroupMessage,
+      initialAction
+    );
+
+    expect(api.groupMessages.update).toHaveBeenCalledWith(initialAction.payload.id, { group_message: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Delete group message', () => {
+  it('Should delete a group message', async () => {
+    api.groupMessages.destroy.mockImplementation(() => Promise.resolve({ data: { groupMessage } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group message deleted',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
+    const results = [deleteGroupMessageSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+
+    const initialAction = { payload: { groupMessage } };
+
+    const dispatched = await recordSaga(
+      deleteGroupMessage,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groupMessages.destroy.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete group message',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteGroupMessageError(response), notified];
+    const initialAction = { payload: { id: 10 } };
+    const dispatched = await recordSaga(
+      deleteGroupMessage,
+      initialAction
+    );
+    expect(api.groupMessages.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
   });
 });

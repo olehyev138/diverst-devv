@@ -36,6 +36,7 @@ import {
   createGroupMessageError,
   createGroupMessageCommentError,
   updateGroupMessageSuccess,
+  updateGroupMessageError,
   createGroupMessageCommentSuccess,
   createNewsLinkBegin,
   createNewsLinkSuccess,
@@ -140,7 +141,7 @@ export function* updateGroupMessage(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateGroupMessageError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update group message', options: { variant: 'warning' } }));
