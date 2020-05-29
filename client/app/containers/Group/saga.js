@@ -151,6 +151,7 @@ export function* updateGroupSettings(action) {
 export function* deleteGroup(action) {
   try {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
+    yield put(deleteGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
   } catch (err) {
