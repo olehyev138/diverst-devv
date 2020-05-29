@@ -40,6 +40,7 @@ import {
 
 export function* getEvents(action) {
   try {
+    console.log(action);
     const { annualBudgetId, ...payload } = action.payload;
     const response = yield call(api.initiatives.all.bind(api.initiatives), payload);
 
