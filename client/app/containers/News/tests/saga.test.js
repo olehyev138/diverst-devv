@@ -84,7 +84,7 @@ api.socialLinks.destroy = jest.fn();
 api.newsFeedLinks.achieve = jest.fn();
 api.newsFeedLinks.approve = jest.fn();
 api.newsFeedLinks.pin = jest.fn();
-api.newsFeedLinks.pin = jest.fn();
+api.newsFeedLinks.unpin = jest.fn();
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -269,7 +269,7 @@ describe('Create group message', () => {
       initialAction
     );
 
-    expect(api.groupMessages.create).toHaveBeenCalledWith({group_message: initialAction.payload});
+    expect(api.groupMessages.create).toHaveBeenCalledWith({ group_message: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
