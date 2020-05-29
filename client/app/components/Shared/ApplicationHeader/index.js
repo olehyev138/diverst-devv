@@ -176,6 +176,7 @@ export class ApplicationHeader extends React.PureComponent {
           component={WrappedNavLink}
           to={ROUTES.user.show.path(user.user_id)}
           activeClassName={classes.navLinkActive}
+          onClick={this.handleProfileMenuClose}
         >
           <ListItemIcon>
             <PermIdentityIcon />
