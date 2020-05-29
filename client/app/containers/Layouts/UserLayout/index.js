@@ -9,7 +9,6 @@ import UserLinks from 'components/User/UserLinks';
 import { withStyles } from '@material-ui/core/styles';
 
 import Scrollbar from 'components/Shared/Scrollbar';
-import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 
 import { renderChildrenWithProps } from 'utils/componentHelpers';
 import { customTexts } from 'utils/customTextHelpers';
@@ -40,11 +39,6 @@ const UserLayout = (props) => {
         <Fade in appear>
           <Container>
             <div className={classes.content}>
-              {disableBreadcrumbs !== true ? (
-                <DiverstBreadcrumbs />
-              ) : (
-                <React.Fragment />
-              )}
               {renderChildrenWithProps(children, { ...rest })}
             </div>
           </Container>
