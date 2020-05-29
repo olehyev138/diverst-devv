@@ -19,10 +19,5 @@ client_config=$(chamber export --format dotenv "$ENVIRONMENT")
 echo 'Deploying with client configuration:'
 echo "$client_config"
 
-echo '----debug----'
-cat client/.env
-
-# DEBUG
-#echo "$client_config" > client/.env
-#echo 'ENVIRONMENT="development"' >> client/.env
-
+echo "$client_config" > client/.env
+echo 'ENVIRONMENT="development"' >> client/.env

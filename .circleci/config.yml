@@ -16,12 +16,9 @@ workflows:
           requires:
             - backend-test
             - frontend-test
-            #
-            ## !!! DEBUG !!!
-            #
-#          filters:
-#            branches:
-#              only: react_update
+          filters:
+            branches:
+              only: react_update
       - deploy-analytics:
           context: aws-context
           requires:
@@ -35,7 +32,7 @@ jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
     docker:
-      - image: awsdiverst/cci-primary:0.0.1
+      - image: awsdiverst/cci-primary:0.0.2
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -89,7 +86,7 @@ jobs:
     environment:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results/rspec
     docker:
-      - image: awsdiverst/cci-primary:0.0.1
+      - image: awsdiverst/cci-primary:0.0.2
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -162,7 +159,7 @@ jobs:
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
-      - image: awsdiverst/cci-primary:0.0.1
+      - image: awsdiverst/cci-primary:0.0.2
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -209,7 +206,7 @@ jobs:
   deploy-testing:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
-      - image: awsdiverst/cci-primary:0.0.1
+      - image: awsdiverst/cci-primary:0.0.2
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -221,13 +218,10 @@ jobs:
           command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
       - run:
           name: Deploy backend
-          #
-          ## !!! DEBUG !!!
-          #
           command: |
-             # VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
-            # ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
-            # ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
+            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
       #
       ## Install node modules for frontend building
       #
@@ -251,7 +245,7 @@ jobs:
           name: Build & deploy frontend
           command: |
             ./devops/scripts/load-client-env testing
-            # ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
+            ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
 
   #
   ## Deploy Analytics service
