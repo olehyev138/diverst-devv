@@ -22,7 +22,8 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
-  exportAttendeesSuccess, exportAttendeesError, leaveEventSuccess
+  exportAttendeesSuccess, exportAttendeesError,
+  leaveEventSuccess, leaveEventError
 } from 'containers/Event/actions';
 
 import { push } from 'connected-react-router';
@@ -30,18 +31,20 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
-import {leaveEventError} from "../actions";
+
 
 api.initiatives.all = jest.fn();
 api.initiatives.get = jest.fn();
 api.initiatives.create = jest.fn();
 api.initiatives.update = jest.fn();
 api.initiatives.destroy = jest.fn();
+api.initiatives.finalizeExpenses = jest.fn();
 api.initiativeComments.destroy = jest.fn();
 api.initiativeComments.create = jest.fn();
 api.initiatives.archive = jest.fn();
 api.initiativeUsers.join = jest.fn();
 api.initiativeUsers.leave = jest.fn();
+api.initiativeUsers.csvExport = jest.fn();
 
 
 beforeEach(() => {
@@ -497,6 +500,93 @@ describe('Leave event', () => {
   });
 
   it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.initiativeUsers.leave.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete group',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [leaveEventError(response), notified];
+    const initialAction = { payload: undefined };
+    const dispatched = await recordSaga(
+      leaveEvent,
+      initialAction
+    );
+    expect(api.initiativeUsers.leave).toHaveBeenCalledWith({ initiative_user: undefined });
+    expect(dispatched).toEqual(results);
+  });
+});
+// TODO
+describe('finalize expenses', () => {
+  xit('Should finalize an expense', async () => {
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete group',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    api.initiatives.finalizeExpenses.mockImplementation(() => Promise.resolve({ data: { event } }));
+    const results = [finalizeExpensesSuccess({ event }), notified];
+
+    const initialAction = { payload: { initiative_id: 22 } };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const dispatched = await recordSaga(
+      finalizeExpenses,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
+  });
+
+  xit('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.initiativeUsers.leave.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete group',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [finalizeExpensesError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      finalizeExpenses,
+      initialAction
+    );
+    expect(api.initiatives.finalizeExpenses).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+// TODO
+describe('Export event attendees', () => {
+  xit('Should export attendees', async () => {
+    api.initiativeUsers.exportCsv.mockImplementation(() => Promise.resolve({ data: { event } }));
+    const results = [exportAttendeesSuccess()];
+
+    const initialAction = { payload: { initiative_id: 22 } };
+
+    const dispatched = await recordSaga(
+      exportAttendees,
+      initialAction
+    );
+
+    expect(dispatched).toEqual(results);
+  });
+
+  xit('Should return error from the API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.initiativeUsers.leave.mockImplementation(() => Promise.reject(response));
     const notified = {

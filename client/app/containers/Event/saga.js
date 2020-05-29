@@ -189,7 +189,6 @@ export function* archiveEvent(action) {
 export function* finalizeExpenses(action) {
   try {
     const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
-
     yield put(finalizeExpensesSuccess(response.data));
     yield put(showSnackbar({ message: 'Successfully finalized expenses', options: { variant: 'success' } }));
   } catch (err) {
