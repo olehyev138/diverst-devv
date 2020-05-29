@@ -61,7 +61,23 @@ import {
   createEventCommentBegin,
   createEventCommentSuccess,
   createEventCommentError,
+  deleteEventCommentBegin,
+  deleteEventCommentSuccess,
+  deleteEventCommentError,
+  finalizeExpensesBegin,
+  finalizeExpensesSuccess,
+  finalizeExpensesError,
+  joinEventBegin,
+  joinEventSuccess,
+  joinEventError,
+  leaveEventBegin,
+  leaveEventSuccess,
+  leaveEventError,
+  exportAttendeesBegin,
+  exportAttendeesSuccess,
+  exportAttendeesError,
 } from 'containers/Event/actions';
+
 
 describe('Event actions', () => {
   describe('Event list actions', () => {
@@ -310,6 +326,176 @@ describe('Event actions', () => {
         };
 
         expect(createEventCommentError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('deleting event comments actions', () => {
+    describe('DeleteEventCommentBegin', () => {
+      it('has a type of DELETE_EVENT_COMMENT_BEGIN', () => {
+        const expected = {
+          type: DELETE_EVENT_COMMENT_BEGIN,
+        };
+
+        expect(deleteEventCommentBegin()).toEqual(expected);
+      });
+    });
+
+    describe('DeleteEventCommentSuccess', () => {
+      it('has a type of DELETE_EVENT_COMMENT_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: DELETE_EVENT_COMMENT_SUCCESS,
+          payload: {}
+        };
+
+        expect(deleteEventCommentSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('DeleteEventCommentError', () => {
+      it('has a type of DELETE_EVENT_COMMENT_ERROR and sets a given error', () => {
+        const expected = {
+          type: DELETE_EVENT_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(deleteEventCommentError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('finalize expenses actions', () => {
+    describe('FinalizeExpensesBegin', () => {
+      it('has a type of FINALIZE_EXPENSES_BEGIN', () => {
+        const expected = {
+          type: FINALIZE_EXPENSES_BEGIN,
+        };
+
+        expect(finalizeExpensesBegin()).toEqual(expected);
+      });
+    });
+
+    describe('FinalizeExpensesSuccess', () => {
+      it('has a type of FINALIZE_EXPENSES_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: FINALIZE_EXPENSES_SUCCESS,
+          payload: {}
+        };
+
+        expect(finalizeExpensesSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('FinalizeExpensesError', () => {
+      it('has a type of FINALIZE_EXPENSES_ERROR and sets a given error', () => {
+        const expected = {
+          type: FINALIZE_EXPENSES_ERROR,
+          error: 'error'
+        };
+
+        expect(finalizeExpensesError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('join event actions', () => {
+    describe('JoinEventBegin', () => {
+      it('has a type of JOIN_EVENT_BEGIN', () => {
+        const expected = {
+          type: JOIN_EVENT_BEGIN,
+        };
+
+        expect(joinEventBegin()).toEqual(expected);
+      });
+    });
+
+    describe('joinEventSuccess', () => {
+      it('has a type of JOIN_EVENT_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: JOIN_EVENT_SUCCESS,
+          payload: {}
+        };
+
+        expect(joinEventSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('joinEventError', () => {
+      it('has a type of JOIN_EVENT_ERROR and sets a given error', () => {
+        const expected = {
+          type: JOIN_EVENT_ERROR,
+          error: 'error'
+        };
+
+        expect(joinEventError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('leave event actions', () => {
+    describe('leaveEventBegin', () => {
+      it('has a type of LEAVE_EVENT_BEGIN', () => {
+        const expected = {
+          type: LEAVE_EVENT_BEGIN,
+        };
+
+        expect(leaveEventBegin()).toEqual(expected);
+      });
+    });
+
+    describe('leaveEventSuccess', () => {
+      it('has a type of leave_EVENT_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: LEAVE_EVENT_SUCCESS,
+          payload: {}
+        };
+
+        expect(leaveEventSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('leaveEventError', () => {
+      it('has a type of leave_EVENT_ERROR and sets a given error', () => {
+        const expected = {
+          type: LEAVE_EVENT_ERROR,
+          error: 'error'
+        };
+
+        expect(leaveEventError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('export attendees actions', () => {
+    describe('exportAttendeesBegin', () => {
+      it('has a type of EXPORT_ATTENDEES_BEGIN', () => {
+        const expected = {
+          type: EXPORT_ATTENDEES_BEGIN,
+        };
+
+        expect(exportAttendeesBegin()).toEqual(expected);
+      });
+    });
+
+    describe('exportAttendeesSuccess', () => {
+      it('has a type of EXPORT_ATTENDEES_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: EXPORT_ATTENDEES_SUCCESS,
+          payload: {}
+        };
+
+        expect(exportAttendeesSuccess({})).toEqual(expected);
+      });
+    });
+
+    describe('exportAttendeesError', () => {
+      it('has a type of EXPORT_ATTENDEES_ERROR and sets a given error', () => {
+        const expected = {
+          type: EXPORT_ATTENDEES_ERROR,
+          error: 'error'
+        };
+
+        expect(exportAttendeesError('error')).toEqual(expected);
       });
     });
   });
