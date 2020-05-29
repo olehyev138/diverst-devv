@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Dynamically load a .env file for the Diverst client
+#  - Pull API key & url for .env from parameter key store
+#  - Use chamber to deal with key store & format into dotenv
+#  - Assumes executing shell is authenticated with AWS environment account
+#  - Accepts a `environment` value, this is the 'header' the values are stored under
+
 # Usage: ./load-client-env <environment>
 
 ENVIRONMENT=$1
@@ -12,8 +18,6 @@ if [ ! -d '.git' ]; then
   exit 1
 fi
 
-# Load variables from parameter key store into environment variables
-# Create client .env file based on environment variable values
 client_config=$(chamber export --format dotenv "$ENVIRONMENT")
 
 echo 'Deploying with client configuration:'
