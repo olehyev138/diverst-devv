@@ -23,6 +23,10 @@ module Folder::Actions
       folder
     end
 
+    def base_query
+      "LOWER(#{self.table_name}.name) LIKE :search"
+    end
+
     def base_preload
       [:parent]
     end

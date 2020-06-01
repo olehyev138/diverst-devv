@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
@@ -26,26 +26,26 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const getGroupId = () => {
-    if (props.type === 'group' && props.currentGroup)
-      return props.currentGroup.id;
-    return null;
-  };
+  const groupId = props.type === 'group' && props.currentGroup ? {
+    group_id: props.currentGroup.id,
+  } : {};
 
-  const getEnterpriseId = () => {
-    if (props.type === 'admin' && props.currentEnterprise)
-      return props.currentEnterprise.id;
-    return null;
-  };
+  const enterpriseId = props.type === 'admin' && props.currentEnterprise ? {
+    enterprise_id: props.currentEnterprise.id
+  } : {};
 
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      group_id: getGroupId(),
-      enterprise_id: getEnterpriseId(),
+      ...groupId,
+      ...enterpriseId,
     });
   };
+
+  useEffect(() => {
+    parentSelectAction();
+  }, []);
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
@@ -66,6 +66,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             <Field
               component={Select}
               fullWidth
+              required
               disabled={props.isCommitting}
               id='folder_id'
               name='folder_id'
@@ -73,11 +74,9 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
               margin='normal'
               value={values.folder_id}
               options={props.selectFolders}
-              onMenuOpen={parentSelectAction}
               onChange={value => setFieldValue('folder_id', value)}
               onInputChange={value => parentSelectAction(value)}
               onBlur={() => setFieldTouched('folder_id', true)}
-              isClearable
             />
             <h4>
               Resource Type:

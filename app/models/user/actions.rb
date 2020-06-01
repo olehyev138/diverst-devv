@@ -48,12 +48,11 @@ module User::Actions
     order_by = params[:order_by].to_sym rescue :created_at
 
     # get the news_feed_ids
-    news_feed_ids = NewsFeed.where(group_id: groups.ids).ids
+    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public', 'global', 'non-members'] }).ids
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
                   .preload(NewsFeedLink.base_preloads)
-                  .joins(:news_feed)
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
 
@@ -236,7 +235,7 @@ module User::Actions
        mentors: mentor_lite_includes, mentees: mentor_lite_includes]
     end
 
-    def signin(email, password)
+    def signin(email, password, request = nil)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?
 
@@ -254,6 +253,10 @@ module User::Actions
       user.last_sign_in_at = DateTime.now
       user.reset_password_token = nil
       user.reset_password_sent_at = nil
+      user.last_sign_in_ip = user.current_sign_in_ip
+      if request
+        user.current_sign_in_ip = request.remote_ip
+      end
       user.save!
 
       user

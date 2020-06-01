@@ -112,7 +112,7 @@ export function Profile(props) {
             </Grid>
           </Grid>
           <Paper>
-            {fieldData && fieldData.map((fieldDatum, i) => (
+            {fieldData && fieldData.filter(fd => !fd.field.private).map((fieldDatum, i) => (
               <div key={fieldDatum.id}>
                 <CardContent>
                   <Grid container>

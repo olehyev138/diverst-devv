@@ -11,9 +11,9 @@ RSpec.describe UserMessagePolicy, type: :policy do
 
   before {
     no_access.policy_group.manage_all = false
-    no_access.policy_group.group_messages_index = false
+    no_access.policy_group.group_posts_index = false
     no_access.policy_group.group_messages_create = false
-    no_access.policy_group.group_messages_manage = false
+    no_access.policy_group.manage_posts = false
     no_access.policy_group.save!
   }
 
@@ -25,7 +25,7 @@ RSpec.describe UserMessagePolicy, type: :policy do
     context 'group_message_index is true and current user IS NOT author' do
       before do
         group_message.author = create(:user)
-        user.policy_group.update group_messages_index: true
+        user.policy_group.update group_posts_index: true
       end
 
       it { is_expected.to permit_actions([:index, :show]) }
@@ -40,10 +40,10 @@ RSpec.describe UserMessagePolicy, type: :policy do
       it { is_expected.to permit_actions([:index, :show, :create]) }
     end
 
-    context 'group_messages_manage is true and current user IS NOT author' do
+    context 'manage_posts is true and current user IS NOT author' do
       before do
         group_message.author = create(:user)
-        user.policy_group.update group_messages_manage: true
+        user.policy_group.update manage_posts: true
       end
 
       it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
@@ -68,8 +68,8 @@ RSpec.describe UserMessagePolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and group_messages_index is true' do
-        before { user_role.policy_group_template.update group_messages_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to forbid_action :index }
       end
@@ -80,8 +80,8 @@ RSpec.describe UserMessagePolicy, type: :policy do
         it { is_expected.to forbid_action :create }
       end
 
-      context 'and group_messages_manage is true' do
-        before { user_role.policy_group_template.update group_messages_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to forbid_actions ([:index, :create, :update, :destroy]) }
       end
@@ -97,8 +97,8 @@ RSpec.describe UserMessagePolicy, type: :policy do
                               user_role_id: user_role.id)
       end
 
-      context 'and group_messages_index is true' do
-        before { user_role.policy_group_template.update group_messages_index: true }
+      context 'and group_posts_index is true' do
+        before { user_role.policy_group_template.update group_posts_index: true }
 
         it { is_expected.to permit_actions([:index, :show]) }
         it { is_expected.to forbid_actions([:create, :update, :destroy]) }
@@ -111,8 +111,8 @@ RSpec.describe UserMessagePolicy, type: :policy do
         it { is_expected.to forbid_actions([:update, :destroy]) }
       end
 
-      context 'and group_messages_manage is true' do
-        before { user_role.policy_group_template.update group_messages_manage: true }
+      context 'and manage_posts is true' do
+        before { user_role.policy_group_template.update manage_posts: true }
 
         it { is_expected.to permit_actions ([:index, :show, :create, :update, :destroy]) }
       end

@@ -6,7 +6,10 @@ class ReactRoutes
   end
 
   def self.domain
-    ENV['REACT_DOMAIN'] || 'http://localhost:8082'
+    #
+    ## TEMP: `beta` is a temporary prefix
+    #
+    ENV['ENV_NAME'] ? "https://beta-#{ENV['ENV_NAME']}.diverst.com" : 'http://localhost:8082'
   end
 
   def self.make_class(routes)
@@ -63,17 +66,14 @@ class ReactRoutes
     klass
   end
 
-  def self.routes
-    @routes_class ||= make_class routes_hash
-  end
-
   class << self
-    ActionDispatch::TestProcess.instance_methods(false).each do |m|
-      undef_method m rescue nil
+    def routes
+      @routes_class ||= make_class routes_hash
     end
 
-    delegate :inspect, to: :routes
+    delegate :inspect, :user, :group, :session, :admin, to: :routes
 
+    # catch other base routes that have not been explicitly defined above
     def method_missing(method, *args, &block)
       return super method, *args, &block unless routes.respond_to?(method)
 

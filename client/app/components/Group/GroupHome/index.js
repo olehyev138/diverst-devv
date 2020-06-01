@@ -27,6 +27,7 @@ import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 import messages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   title: {
@@ -139,20 +140,25 @@ export function GroupHome({ classes, ...props }) {
           >
             {intl.formatMessage(messages.join)}
           </Button>
+          {/* eslint-disable-next-line no-nested-ternary */}
           {props.currentGroup.parent_id === null
             ? (
-              <DiverstDialog
-                open={openSubgroup}
-                title={intl.formatMessage(messages.thanks)}
-                content={(
-                  <SubgroupJoinForm
-                    subgroupJoinAction={props.joinSubgroups}
-                    handleClose={handleClose}
-                    handleCancel={handleJoinGroup}
-                    group={props.currentGroup}
-                  />
-                )}
-              />
+              props.currentGroup.children.length > 0 ? (
+                <DiverstDialog
+                  open={openSubgroup}
+                  title={intl.formatMessage(messages.thanks)}
+                  content={(
+                    <SubgroupJoinForm
+                      subgroupJoinAction={props.joinSubgroups}
+                      handleClose={handleClose}
+                      handleCancel={handleJoinGroup}
+                      group={props.currentGroup}
+                    />
+                  )}
+                />
+              ) : (
+                openSubgroup && handleJoinGroup()
+              )
             )
             : (
               <DiverstDialog
@@ -184,13 +190,19 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const description = (
-    <Typography>{props.currentGroup.description}</Typography>
+    <DiverstHTMLEmbedder
+      html={
+        props.currentGroup
+          ? props.currentGroup.description
+          : ''
+      }
+    />
   );
 
   return (
     <DiverstCSSGrid
       columns={10}
-      rows='auto auto auto 1fr'
+      rows='auto auto auto auto 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
         'description description  description  description  description  description  description  description  description  description',

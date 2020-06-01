@@ -26,6 +26,10 @@ class PolicyGroupTemplate < ApplicationRecord
 
   # finds users/group_leaders in the enterprise
   def update_user_roles
-    PolicyGroupTemplateUpdateJob.perform_later(id)
+    if Rails.env.test?
+      PolicyGroupTemplateUpdateJob.perform_now(id)
+    else
+      PolicyGroupTemplateUpdateJob.perform_later(id)
+    end
   end
 end
