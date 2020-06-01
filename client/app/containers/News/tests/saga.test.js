@@ -83,10 +83,10 @@ api.newsLinkComments.destroy = jest.fn();
 api.socialLinks.create = jest.fn();
 api.socialLinks.update = jest.fn();
 api.socialLinks.destroy = jest.fn();
-api.newsFeedLinks.achieve = jest.fn();
+api.newsFeedLinks.archive = jest.fn();
 api.newsFeedLinks.approve = jest.fn();
 api.newsFeedLinks.pin = jest.fn();
-api.newsFeedLinks.unpin = jest.fn();
+api.newsFeedLinks.un_pin = jest.fn();
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -889,6 +889,158 @@ describe('Delete social link', () => {
     );
 
     expect(api.socialLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Archive news item', () => {
+  it('Should archive a news item', async () => {
+    api.newsFeedLinks.archive.mockImplementation(() => Promise.resolve({ data: { newsItem } }));
+    const results = [archiveNewsItemSuccess()];
+    const initialAction = { payload: { newsItem } };
+    const dispatched = await recordSaga(
+      archiveNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.archive).toHaveBeenCalledWith(initialAction.payload.id, { news_feed_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.archive.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to archive resource',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [archiveNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      archiveNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.archive).toHaveBeenCalledWith(initialAction.payload.id, { news_feed_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Approve news item', () => {
+  it('Should approve a news item', async () => {
+    api.newsFeedLinks.approve.mockImplementation(() => Promise.resolve({ data: {} }));
+    const results = [approveNewsItemSuccess({})];
+    const initialAction = { payload: { newsItem } };
+    const dispatched = await recordSaga(
+      approveNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.approve).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.approve.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to approve resource',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [approveNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      approveNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.approve).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Pin news item', () => {
+  it('Should pin a news item', async () => {
+    api.newsFeedLinks.pin.mockImplementation(() => Promise.resolve({ data: { newsItem } }));
+    const results = [pinNewsItemSuccess()];
+    const initialAction = { payload: { newsItem } };
+    const dispatched = await recordSaga(
+      pinNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.pin).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.pin.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to pin resource',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [pinNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      pinNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.pin).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Unpin news item', () => {
+  it('Should unpin a news item', async () => {
+    api.newsFeedLinks.un_pin.mockImplementation(() => Promise.resolve({ data: { newsItem } }));
+    const results = [unpinNewsItemSuccess()];
+    const initialAction = { payload: { newsItem } };
+    const dispatched = await recordSaga(
+      unpinNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.un_pin).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsFeedLinks.un_pin.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to unpin resource',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [unpinNewsItemError(response), notified];
+    const initialAction = { payload: { id: 5 } };
+    const dispatched = await recordSaga(
+      unpinNewsItem,
+      initialAction
+    );
+
+    expect(api.newsFeedLinks.un_pin).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 });
