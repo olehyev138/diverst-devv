@@ -902,7 +902,7 @@
   "diverst.containers.GlobalSettings.Configurations.from_display_name" : "Default from email display name",
   "diverst.containers.GlobalSettings.Configurations.redirect_email_contact" : "Redirect email contact",
   "diverst.containers.GlobalSettings.Configurations.switch.mentorship_module" : "Enable Mentorship Module",
-  "diverst.containers.GlobalSettings.Configurations.switch.likes" : "Disable Likes",
+  "diverst.containers.GlobalSettings.Configurations.switch.likes" : "Enable Likes",
   "diverst.containers.GlobalSettings.Configurations.switch.pending_comments" : "Enable Pending Comments",
   "diverst.containers.GlobalSettings.Configurations.switch.collaborate_module" : "Enable Innovate Module",
   "diverst.containers.GlobalSettings.Configurations.switch.scope_module" : "Enable Scope Module",
