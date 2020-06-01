@@ -37,43 +37,42 @@ const styles = theme => ({
 /* Define valid options for group settings - validated on backend */
 const SETTINGS_OPTIONS = Object.freeze({
   pendingUsers: [
-    { label: 'Enabled', value: 'enabled' },
-    { label: 'Disabled', value: 'disabled' }
+    { label: intl.formatMessage(messages.visibility.enabled), value: 'enabled' },
+    { label: intl.formatMessage(messages.visibility.disabled), value: 'disabled' }
   ],
   membersVisibility: [
-    { label: 'Public', value: 'global' },
-    { label: 'Group', value: 'group' },
-    { label: 'Leaders Only', value: 'managers_only' }
+    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
+    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
+    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
   ],
   eventAttendanceVisibility: [
-    { label: 'Public', value: 'global' },
-    { label: 'Group', value: 'group' },
-    { label: 'Leaders Only', value: 'managers_only' }
+    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
+    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
+    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
   ],
   messagesVisibility: [
-    { label: 'Public', value: 'global' },
-    { label: 'Group', value: 'group' },
-    { label: 'Leaders Only', value: 'managers_only' }
+    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
+    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
+    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
   ],
   latestNewsVisibility: [
-    { label: 'Public', value: 'public' },
-    { label: 'Group', value: 'group' },
-    { label: 'Leaders Only', value: 'leaders_only' }
+    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
+    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
+    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
   ],
   upcomingEventsVisibility: [
-    { label: 'Public', value: 'public' },
-    { label: 'Group', value: 'group' },
-    { label: 'Leaders Only', value: 'leaders_only' },
-    { label: 'Non member', value: 'non_member' }
+    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
+    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
+    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
+    { label: intl.formatMessage(messages.visibility.non_member), value: 'non_member' }
   ],
 });
 
 function setHeader(value) {
   switch (value) {
     case 'leaders_only':
-    case 'managers_only':
       return intl.formatMessage(messages.visibility.leaders);
-    case 'global':
+    case 'public':
       return intl.formatMessage(messages.visibility.public);
     case 'group':
       return intl.formatMessage(messages.visibility.group);
@@ -91,7 +90,6 @@ function setHeader(value) {
 
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const prettify = str => (str.charAt(0).toUpperCase() + str.slice(1)).replace(/_/g, ' ');
   const { intl } = props;
   return (
     <Card>
