@@ -6,7 +6,13 @@ import {
   DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS, DELETE_GROUP_MESSAGE_ERROR,
   NEWS_FEED_UNMOUNT,
   UPDATE_NEWS_ITEM_BEGIN, UPDATE_NEWS_ITEM_SUCCESS, UPDATE_NEWS_ITEM_ERROR,
-
+  CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
+  DELETE_GROUP_MESSAGE_COMMENT_BEGIN, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR,
+  CREATE_NEWSLINK_BEGIN, CREATE_NEWSLINK_SUCCESS, CREATE_NEWSLINK_ERROR,
+  UPDATE_NEWSLINK_BEGIN, UPDATE_NEWSLINK_SUCCESS, UPDATE_NEWSLINK_ERROR,
+  DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR,
+  CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR,
+  DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_SUCCESS, DELETE_NEWSLINK_COMMENT_ERROR,
 } from 'containers/News/constants';
 
 import {
@@ -17,6 +23,13 @@ import {
   deleteGroupMessageBegin, deleteGroupMessageSuccess, deleteGroupMessageError,
   newsFeedUnmount,
   updateNewsItemBegin, updateNewsItemSuccess, updateNewsItemError,
+  createGroupMessageCommentBegin, createGroupMessageCommentSuccess, createGroupMessageCommentError,
+  deleteGroupMessageCommentBegin, deleteGroupMessageCommentSuccess, deleteGroupMessageCommentError,
+  createNewsLinkBegin, createNewsLinkSuccess, createNewsLinkError,
+  updateNewsLinkBegin, updateNewsLinkSuccess, updateNewsLinkError,
+  deleteNewsLinkBegin, deleteNewsLinkSuccess, deleteNewsLinkError,
+  createNewsLinkCommentBegin, createNewsLinkCommentSuccess, createNewsLinkCommentError,
+  deleteNewsLinkCommentBegin, deleteNewsLinkCommentSuccess, deleteNewsLinkCommentError,
 } from 'containers/News/actions';
 
 describe('News actions', () => {
@@ -112,7 +125,8 @@ describe('News actions', () => {
 
         expect(updateNewsItemError('error')).toEqual(expected);
       });
-    });  });
+    });
+  });
   describe('Group Message actions', () => {
     describe('createGroupMessageBegin', () => {
       it('has a type of CREATE_GROUP_MESSAGE_BEGIN and takes a given payload', () => {
@@ -202,6 +216,218 @@ describe('News actions', () => {
         };
 
         expect(deleteGroupMessageError('error')).toEqual(expected);
+      });
+    });
+    describe('createGroupMessageCommentBegin', () => {
+      it('has a type of CREATE_GROUP_MESSAGE_COMMENT_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: CREATE_GROUP_MESSAGE_COMMENT_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(createGroupMessageCommentBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createGroupMessageCommentSuccess', () => {
+      it('has a type of CREATE_GROUP_MESSAGE_COMMENT_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: CREATE_GROUP_MESSAGE_COMMENT_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(createGroupMessageCommentSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createGroupMessageCommentError', () => {
+      it('has a type of CREATE_GROUP_MESSAGE_COMMENT_ERROR and takes a given error', () => {
+        const expected = {
+          type: CREATE_GROUP_MESSAGE_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(createGroupMessageCommentError('error')).toEqual(expected);
+      });
+    });
+    describe('deleteGroupMessageCommentBegin', () => {
+      it('has a type of DELETE_GROUP_MESSAGE_COMMENT_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(deleteGroupMessageCommentBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteGroupMessageCommentSuccess', () => {
+      it('has a type of DELETE_GROUP_MESSAGE_COMMENT_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: DELETE_GROUP_MESSAGE_COMMENT_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(deleteGroupMessageCommentSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteGroupMessageCommentError', () => {
+      it('has a type of DELETE_GROUP_MESSAGE_COMMENT_ERROR and takes a given error', () => {
+        const expected = {
+          type: DELETE_GROUP_MESSAGE_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(deleteGroupMessageCommentError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('News Link actions', () => {
+    describe('createNewsLinkBegin', () => {
+      it('has a type of CREATE_NEWSLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(createNewsLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createNewsLinkSuccess', () => {
+      it('has a type of CREATE_NEWSLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(createNewsLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createNewsLinkError', () => {
+      it('has a type of CREATE_NEWSLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(createNewsLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('updateNewsLinkBegin', () => {
+      it('has a type of UPDATE_NEWSLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: UPDATE_NEWSLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(updateNewsLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('updateNewsLinkSuccess', () => {
+      it('has a type of UPDATE_NEWSLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: UPDATE_NEWSLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(updateNewsLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('updateNewsLinkError', () => {
+      it('has a type of UPDATE_NEWSLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: UPDATE_NEWSLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(updateNewsLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkBegin', () => {
+      it('has a type of DELETE_NEWSLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(deleteNewsLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkSuccess', () => {
+      it('has a type of DELETE_NEWSLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(deleteNewsLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkError', () => {
+      it('has a type of DELETE_NEWSLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(deleteNewsLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('createNewsLinkCommentBegin', () => {
+      it('has a type of CREATE_NEWSLINK_COMMENT_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_COMMENT_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(createNewsLinkCommentBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createNewsLinkCommentSuccess', () => {
+      it('has a type of CREATE_NEWSLINK_COMMENT_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_COMMENT_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(createNewsLinkCommentSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createNewsLinkCommentError', () => {
+      it('has a type of CREATE_NEWSLINK_COMMENT_ERROR and takes a given error', () => {
+        const expected = {
+          type: CREATE_NEWSLINK_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(createNewsLinkCommentError('error')).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkCommentBegin', () => {
+      it('has a type of DELETE_NEWSLINK_COMMENT_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_COMMENT_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(deleteNewsLinkCommentBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkCommentSuccess', () => {
+      it('has a type of DELETE_NEWSLINK_COMMENT_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_COMMENT_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(deleteNewsLinkCommentSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteNewsLinkCommentError', () => {
+      it('has a type of DELETE_NEWSLINK_COMMENT_ERROR and takes a given error', () => {
+        const expected = {
+          type: DELETE_NEWSLINK_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(deleteNewsLinkCommentError('error')).toEqual(expected);
       });
     });
   });
