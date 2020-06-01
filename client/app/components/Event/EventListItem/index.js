@@ -17,6 +17,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
+import ShareIcon from '@material-ui/icons/Share';
 
 const styles = theme => ({
   arrowRight: {
@@ -34,7 +35,7 @@ const styles = theme => ({
 });
 
 export function EventListItem(props) {
-  const { classes, item } = props;
+  const { classes, item, currentGroupID } = props;
 
   return (
     <Grid container spacing={2} justify='space-between' alignItems='center'>
@@ -56,6 +57,8 @@ export function EventListItem(props) {
       <Grid item xs>
         <Typography color='primary' variant='h6' component='h2'>
           {item.name}
+          &ensp;
+          {currentGroupID && item.group_id !== currentGroupID && <ShareIcon />}
         </Typography>
         <hr className={classes.divider} />
         {item.description && (
@@ -83,6 +86,7 @@ export function EventListItem(props) {
 EventListItem.propTypes = {
   classes: PropTypes.object,
   item: PropTypes.object,
+  currentGroupID: PropTypes.number
 };
 
 export default compose(

@@ -26,6 +26,8 @@ import messages from 'containers/Group/GroupManage/messages';
 import groupmessages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { intl } from '../../../../containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -119,20 +121,16 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             label={<DiverstFormattedMessage {...groupmessages.short_description} />}
           />
           <Field
-            component={TextField}
-            onChange={handleChange}
+            component={DiverstRichTextInput}
+            required
+            onChange={value => setFieldValue('description', value)}
             fullWidth
             id='description'
             name='description'
-            multiline
-            rows={4}
-            variant='outlined'
             margin='normal'
-            disabled={props.isCommitting}
             label={<DiverstFormattedMessage {...groupmessages.description} />}
             value={values.description}
           />
-
           <Grid container spacing={3} justify='space-around'>
             <Grid item xs='auto'>
               <Field
