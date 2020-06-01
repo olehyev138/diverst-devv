@@ -13,6 +13,10 @@ import {
   DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR,
   CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR,
   DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_SUCCESS, DELETE_NEWSLINK_COMMENT_ERROR,
+  CREATE_SOCIALLINK_BEGIN, CREATE_SOCIALLINK_SUCCESS, CREATE_SOCIALLINK_ERROR,
+  UPDATE_SOCIALLINK_BEGIN, UPDATE_SOCIALLINK_SUCCESS, UPDATE_SOCIALLINK_ERROR,
+  DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
+  CREATE_SOCIALLINK_COMMENT_BEGIN, CREATE_SOCIALLINK_COMMENT_SUCCESS, CREATE_SOCIALLINK_COMMENT_ERROR,
 } from 'containers/News/constants';
 
 import {
@@ -30,6 +34,10 @@ import {
   deleteNewsLinkBegin, deleteNewsLinkSuccess, deleteNewsLinkError,
   createNewsLinkCommentBegin, createNewsLinkCommentSuccess, createNewsLinkCommentError,
   deleteNewsLinkCommentBegin, deleteNewsLinkCommentSuccess, deleteNewsLinkCommentError,
+  createSocialLinkBegin, createSocialLinkSuccess, createSocialLinkError,
+  updateSocialLinkBegin, updateSocialLinkSuccess, updateSocialLinkError,
+  deleteSocialLinkBegin, deleteSocialLinkSuccess, deleteSocialLinkError,
+  createSocialLinkCommentBegin, createSocialLinkCommentSuccess, createSocialLinkCommentError,
 } from 'containers/News/actions';
 
 describe('News actions', () => {
@@ -428,6 +436,128 @@ describe('News actions', () => {
         };
 
         expect(deleteNewsLinkCommentError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('Social Link actions', () => {
+    describe('createSocialLinkBegin', () => {
+      it('has a type of CREATE_SOCIALLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(createSocialLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createSocialLinkSuccess', () => {
+      it('has a type of CREATE_SOCIALLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(createSocialLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createSocialLinkError', () => {
+      it('has a type of CREATE_SOCIALLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(createSocialLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('updateSocialLinkBegin', () => {
+      it('has a type of UPDATE_SOCIALLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: UPDATE_SOCIALLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(updateSocialLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('updateSocialLinkSuccess', () => {
+      it('has a type of UPDATE_SOCIALLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: UPDATE_SOCIALLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(updateSocialLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('updateSocialLinkError', () => {
+      it('has a type of UPDATE_SOCIALLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: UPDATE_SOCIALLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(updateSocialLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('deleteSocialLinkBegin', () => {
+      it('has a type of DELETE_SOCIALLINK_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: DELETE_SOCIALLINK_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(deleteSocialLinkBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteSocialLinkSuccess', () => {
+      it('has a type of DELETE_SOCIALLINK_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: DELETE_SOCIALLINK_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(deleteSocialLinkSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('deleteSocialLinkError', () => {
+      it('has a type of DELETE_SOCIALLINK_ERROR and takes a given error', () => {
+        const expected = {
+          type: DELETE_SOCIALLINK_ERROR,
+          error: 'error'
+        };
+
+        expect(deleteSocialLinkError('error')).toEqual(expected);
+      });
+    });
+    describe('createSocialLinkCommentBegin', () => {
+      it('has a type of CREATE_SOCIALLINK_COMMENT_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_COMMENT_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(createSocialLinkCommentBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createSocialLinkCommentSuccess', () => {
+      it('has a type of CREATE_SOCIALLINK_COMMENT_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_COMMENT_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(createSocialLinkCommentSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('createSocialLinkCommentError', () => {
+      it('has a type of CREATE_SOCIALLINK_COMMENT_ERROR and takes a given error', () => {
+        const expected = {
+          type: CREATE_SOCIALLINK_COMMENT_ERROR,
+          error: 'error'
+        };
+
+        expect(createSocialLinkCommentError('error')).toEqual(expected);
       });
     });
   });
