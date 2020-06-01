@@ -34,6 +34,7 @@ import {
   createSocialLinkError,
   createSocialLinkCommentError,
   updateSocialLinkSuccess,
+  updateSocialLinkError,
   createSocialLinkCommentSuccess,
   deleteNewsLinkBegin,
   deleteNewsLinkError,
@@ -151,8 +152,18 @@ const newsLinkComment = {
     approved: false
   }
 };
+const socialLink = {
+  id: 2,
+  author_id: 1,
+  embed_code: 'fe',
+  created_at: 'Wed, 15 Apr 2020 13:34:00 UTC +00:00',
+  updated_at: 'Wed, 15 Apr 2020 13:34:00 UTC +00:00',
+  group_id: 1,
+  url: 'http://f',
+  small_embed_code: 'fe',
+};
 describe('Get news items Saga', () => {
-  it('Should return newsItems list', async () => {
+  it('Should return news Items list', async () => {
     api.newsFeedLinks.all.mockImplementation(() => Promise.resolve({ data: { page: { ...newsItem } } }));
     const results = [getNewsItemsSuccess(newsItem)];
     const initialAction = { payload: {
@@ -173,7 +184,7 @@ describe('Get news items Saga', () => {
     const notified = {
       notification: {
         key: 1590092641484,
-        message: 'Failed to load news',
+        message: 'Failed to load news items',
         options: { variant: 'warning' }
       },
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
@@ -550,7 +561,7 @@ describe('Create news link', () => {
       createNewsLink,
       initialAction
     );
-    expect(api.newsLinks.create).toHaveBeenCalledWith({ group_message: initialAction.payload });
+    expect(api.newsLinks.create).toHaveBeenCalledWith({ news_link: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 });
@@ -668,7 +679,7 @@ describe('Create news link comment', () => {
       initialAction
     );
 
-    expect(api.newsLinkComments.create).toHaveBeenCalledWith({ news_link__comment: initialAction.payload.attributes });
+    expect(api.newsLinkComments.create).toHaveBeenCalledWith({ news_link_comment: initialAction.payload.attributes });
     expect(dispatched).toEqual(results);
   });
 
@@ -738,6 +749,146 @@ describe('Delete news link comment', () => {
       initialAction
     );
     expect(api.newsLinkComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Create social link', () => {
+  it('Should create a social link', async () => {
+    api.socialLinks.create.mockImplementation(() => Promise.resolve({ data: { socialLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Social link created',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createSocialLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { socialLink } };
+    const dispatched = await recordSaga(
+      createSocialLink,
+      initialAction
+    );
+
+    expect(api.socialLinks.create).toHaveBeenCalledWith(initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.socialLinks.create.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to create social link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createSocialLinkError(response), notified];
+    const initialAction = { payload: undefined };
+    const dispatched = await recordSaga(
+      createSocialLink,
+      initialAction
+    );
+    expect(api.socialLinks.create).toHaveBeenCalledWith(initialAction.payload);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Update social link', () => {
+  it('Should update a social link', async () => {
+    api.socialLinks.update.mockImplementation(() => Promise.resolve({ data: { socialLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Social link updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateSocialLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { socialLink } };
+    const dispatched = await recordSaga(
+      updateSocialLink,
+      initialAction
+    );
+
+    expect(api.socialLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { social_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.socialLinks.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update social link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateSocialLinkError(response), notified];
+    const initialAction = { payload: { id: 5, group_id: 5 } };
+    const dispatched = await recordSaga(
+      updateSocialLink,
+      initialAction
+    );
+
+    expect(api.socialLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { social_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Delete social link', () => {
+  it('Should delete a social link', async () => {
+    api.socialLinks.destroy.mockImplementation(() => Promise.resolve({ data: { socialLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'social link deleted',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteSocialLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { socialLink } };
+    const dispatched = await recordSaga(
+      deleteSocialLink,
+      initialAction
+    );
+
+    expect(api.socialLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.socialLinks.destroy.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete social link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteSocialLinkError(response), notified];
+    const initialAction = { payload: { id: 10 } };
+    const dispatched = await recordSaga(
+      deleteSocialLink,
+      initialAction
+    );
+
+    expect(api.socialLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
   });
 });

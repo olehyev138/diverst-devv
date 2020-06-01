@@ -53,6 +53,7 @@ import {
   createSocialLinkError,
   createSocialLinkCommentError,
   updateSocialLinkSuccess,
+  updateSocialLinkError,
   createSocialLinkCommentSuccess,
   deleteNewsLinkBegin,
   deleteNewsLinkError,
@@ -298,7 +299,7 @@ export function* updateSocialLink(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'Social link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateSocialLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update social link', options: { variant: 'warning' } }));
@@ -308,11 +309,11 @@ export function* updateSocialLink(action) {
 export function* deleteSocialLink(action) {
   try {
     yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
-    yield put(deleteNewsLinkSuccess());
+    yield put(deleteSocialLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Social link deleted', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(deleteNewsLinkError(err));
+    yield put(deleteSocialLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to remove social link', options: { variant: 'warning' } }));
