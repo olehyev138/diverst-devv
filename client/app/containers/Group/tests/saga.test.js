@@ -104,7 +104,7 @@ describe('Get groups Saga', () => {
       getGroups,
       initialAction
     );
-
+    expect(api.groups.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
@@ -143,7 +143,7 @@ describe('Get group Saga', () => {
       getGroup,
       initialAction
     );
-
+    expect(api.groups.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
   });
 
@@ -184,6 +184,7 @@ describe('Get annual group budget', () => {
       getAnnualBudgets,
       initialAction
     );
+    expect(api.groups.annualBudgets).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
@@ -239,7 +240,7 @@ describe('Create group', () => {
       createGroup,
       initialAction
     );
-
+    expect(api.groups.create).toHaveBeenCalledWith({ group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -328,6 +329,7 @@ describe('Update group', () => {
       updateGroup,
       initialAction
     );
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -376,6 +378,7 @@ describe('Update group settings', () => {
       updateGroupSettings,
       initialAction
     );
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -428,6 +431,7 @@ describe('Delete group', () => {
       deleteGroup,
       initialAction
     );
+    expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
@@ -543,6 +547,7 @@ describe('Join group', () => {
       joinGroup,
       initialAction
     );
+    expect(api.userGroups.join).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -580,6 +585,7 @@ describe('Leave group', () => {
       leaveGroup,
       initialAction
     );
+    expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -609,14 +615,15 @@ describe('Leave group', () => {
 
 describe('Join subgroups', () => {
   it('Should let a user join some subgroups', async () => {
-    api.userGroups.join.mockImplementation(() => Promise.resolve({ data: { ...group } }));
-    const results = [joinGroupSuccess()];
+    api.userGroups.joinSubgroups.mockImplementation(() => Promise.resolve({ data: { ...group } }));
+    const results = [joinSubgroupsSuccess()];
 
     const initialAction = { payload: { group_id: 1 } };
     const dispatched = await recordSaga(
-      joinGroup,
+      joinSubgroups,
       initialAction
     );
+    expect(api.userGroups.joinSubgroups).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
