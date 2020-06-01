@@ -27,6 +27,7 @@ import {
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -110,17 +111,16 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               value={values.short_description}
               label={<DiverstFormattedMessage {...messages.short_description} />}
             />
+          </CardContent>
+          <CardContent>
             <Field
-              component={TextField}
-              onChange={handleChange}
+              component={DiverstRichTextInput}
+              required
+              onChange={value => setFieldValue('description', value)}
               fullWidth
               id='description'
               name='description'
-              multiline
-              rows={4}
-              variant='outlined'
               margin='normal'
-              disabled={props.isCommitting}
               label={<DiverstFormattedMessage {...messages.description} />}
               value={values.description}
             />

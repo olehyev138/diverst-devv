@@ -1,7 +1,7 @@
 require 'jwt'
 
 class UserTokenService < TokenService
-  def self.create_jwt(user, params = {})
+  def self.create_jwt(user, params = {}, request = nil)
     token = user.generate_authentication_token
 
     payload = {
@@ -17,7 +17,8 @@ class UserTokenService < TokenService
         device_type: params.dig(:device_type),
         device_name: params.dig(:device_name),
         device_version: params.dig(:device_version),
-        operating_system: params.dig(:operating_system)
+        operating_system: params.dig(:operating_system),
+        sign_in_ip: request&.remote_ip,
       )
 
     create_jwt_token(payload)
