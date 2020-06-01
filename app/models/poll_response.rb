@@ -14,6 +14,25 @@ class PollResponse < BaseClass
     poll&.initiative&.group
   end
 
+  def user_email
+    puts 'hello world'
+    return 'Anonymous' if anonymous
+
+    user.email
+  end
+
+  def user_name
+    return 'Anonymous' if anonymous
+
+    user.name
+  end
+
+  def user_id 
+    return 'Anonymous' if anonymous
+
+    user.id
+  end
+
   private
 
   def send_poll_response_notification

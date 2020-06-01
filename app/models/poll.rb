@@ -16,7 +16,7 @@ class Poll < BaseClass
   belongs_to :owner, class_name: 'User'
   belongs_to :initiative
 
-  after_create :create_default_graphs
+  after_commit :create_default_graphs, on: [:create, :update]
 
   after_commit :schedule_users_notification, on: [:create, :update]
 
@@ -80,9 +80,9 @@ class Poll < BaseClass
 
       responses.order(created_at: :desc).each do |response|
         if response.user.present?
-          user_id = response.user.id
-          user_email = response.user.email
-          user_name = response.user.name
+          user_id = response.user_id
+          user_email = response.user_email
+          user_name = response.user_name
         else
           user_id = ''
           user_email = ''
@@ -98,6 +98,7 @@ class Poll < BaseClass
       end
     end
   end
+
 
   protected
 

@@ -150,10 +150,10 @@ RSpec.describe Poll, type: :model do
   describe 'test callbacks' do
     let!(:poll) { build(:poll) }
 
-    context 'after_create' do
+    context 'after_commit' do
       it '#create_default_graphs should be called after create' do
         expect(poll).to receive(:create_default_graphs)
-        poll.run_callbacks(:create)
+        poll.run_callbacks(:commit)
       end
     end
 
@@ -242,8 +242,8 @@ RSpec.describe Poll, type: :model do
 
       select_field = poll.fields.last
 
-      create(:poll_response, poll: poll, user: user_1, data: "{\"#{select_field.id}\":[\"4\"]}")
-      create(:poll_response, poll: poll, user: user_2, data: "{\"#{select_field.id}\":[\"4\"]}")
+      create(:poll_response, poll: poll, user: user_1, data: "{\"#{select_field.id}\":[\"4\"]}", anonymous: false)
+      create(:poll_response, poll: poll, user: user_2, data: "{\"#{select_field.id}\":[\"4\"]}", anonymous: false)
       user_2.destroy
 
       poll.reload
