@@ -17,7 +17,10 @@ import {
   UPDATE_SOCIALLINK_BEGIN, UPDATE_SOCIALLINK_SUCCESS, UPDATE_SOCIALLINK_ERROR,
   DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
   CREATE_SOCIALLINK_COMMENT_BEGIN, CREATE_SOCIALLINK_COMMENT_SUCCESS, CREATE_SOCIALLINK_COMMENT_ERROR,
-} from 'containers/News/constants';
+  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS,
+  APPROVE_NEWS_ITEM_BEGIN, APPROVE_NEWS_ITEM_SUCCESS, APPROVE_NEWS_ITEM_ERROR,
+  PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
+  UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR, } from 'containers/News/constants';
 
 import {
   getNewsItemsBegin, getNewsItemsSuccess, getNewsItemsError,
@@ -38,6 +41,10 @@ import {
   updateSocialLinkBegin, updateSocialLinkSuccess, updateSocialLinkError,
   deleteSocialLinkBegin, deleteSocialLinkSuccess, deleteSocialLinkError,
   createSocialLinkCommentBegin, createSocialLinkCommentSuccess, createSocialLinkCommentError,
+  archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError,
+  approveNewsItemBegin, approveNewsItemSuccess, approveNewsItemError,
+  pinNewsItemBegin, pinNewsItemSuccess, pinNewsItemError,
+  unpinNewsItemBegin, unpinNewsItemSuccess, unpinNewsItemError,
 } from 'containers/News/actions';
 
 describe('News actions', () => {
@@ -558,6 +565,134 @@ describe('News actions', () => {
         };
 
         expect(createSocialLinkCommentError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('Archive news item actions', () => {
+    describe('archiveNewsItemBegin', () => {
+      it('has a type of ARCHIVE_NEWS_ITEM_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: ARCHIVE_NEWS_ITEM_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(archiveNewsItemBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('archiveNewsItemSuccess', () => {
+      it('has a type of ARCHIVE_NEWS_ITEM_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: ARCHIVE_NEWS_ITEM_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(archiveNewsItemSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('archiveNewsItemError', () => {
+      it('has a type of ARCHIVE_NEWS_ITEM_ERROR and takes a given error', () => {
+        const expected = {
+          type: ARCHIVE_NEWS_ITEM_ERROR,
+          error: 'error'
+        };
+
+        expect(archiveNewsItemError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('Approve news item actions', () => {
+    describe('approveNewsItemBegin', () => {
+      it('has a type of APPROVE_NEWS_ITEM_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: APPROVE_NEWS_ITEM_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(approveNewsItemBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('approveNewsItemSuccess', () => {
+      it('has a type of APPROVE_NEWS_ITEM_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: APPROVE_NEWS_ITEM_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(approveNewsItemSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('approveNewsItemError', () => {
+      it('has a type of APPROVE_NEWS_ITEM_ERROR and takes a given error', () => {
+        const expected = {
+          type: APPROVE_NEWS_ITEM_ERROR,
+          error: 'error'
+        };
+
+        expect(approveNewsItemError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('Pin news item actions', () => {
+    describe('pinNewsItemBegin', () => {
+      it('has a type of PIN_NEWS_ITEM_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: PIN_NEWS_ITEM_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(pinNewsItemBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('pinNewsItemSuccess', () => {
+      it('has a type of PIN_NEWS_ITEM_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: PIN_NEWS_ITEM_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(pinNewsItemSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('pinNewsItemError', () => {
+      it('has a type of PIN_NEWS_ITEM_ERROR and takes a given error', () => {
+        const expected = {
+          type: PIN_NEWS_ITEM_ERROR,
+          error: 'error'
+        };
+
+        expect(pinNewsItemError('error')).toEqual(expected);
+      });
+    });
+  });
+  describe('Unpin news item actions', () => {
+    describe('unpinNewsItemBegin', () => {
+      it('has a type of UNPIN_NEWS_ITEM_BEGIN and takes a given payload', () => {
+        const expected = {
+          type: UNPIN_NEWS_ITEM_BEGIN,
+          payload: { item: {} }
+        };
+
+        expect(unpinNewsItemBegin({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('unpinNewsItemSuccess', () => {
+      it('has a type of UNPIN_NEWS_ITEM_SUCCESS and takes a given payload', () => {
+        const expected = {
+          type: UNPIN_NEWS_ITEM_SUCCESS,
+          payload: { item: {} }
+        };
+
+        expect(unpinNewsItemSuccess({ item: {} })).toEqual(expected);
+      });
+    });
+    describe('unpinNewsItemError', () => {
+      it('has a type of UNPIN_NEWS_ITEM_ERROR and takes a given error', () => {
+        const expected = {
+          type: UNPIN_NEWS_ITEM_ERROR,
+          error: 'error'
+        };
+
+        expect(unpinNewsItemError('error')).toEqual(expected);
       });
     });
   });
