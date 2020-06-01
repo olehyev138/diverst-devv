@@ -44,7 +44,8 @@ Diverst::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
 
   #
-  ## !! TEMP - DEBUG !!
+  ## Disable because Cloudflare handles SSL for us
+  #   - we dont implement 'full' ssl, between cloudflare & our servers
   #
   config.force_ssl = false
 

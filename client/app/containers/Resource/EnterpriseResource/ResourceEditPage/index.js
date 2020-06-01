@@ -68,7 +68,7 @@ export function ResourceEditPage(props) {
       resourceAction={props.updateResourceBegin}
       buttonText={props.intl.formatMessage(messages.update)}
       currentUser={currentUser}
-      currentGroup={currentGroup}
+      currentEnterprise={currentEnterprise}
       resource={currentResource}
       currentFolder={currentFolder}
       links={links}
