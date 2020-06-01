@@ -43,6 +43,7 @@ import {
   createNewsLinkError,
   createNewsLinkCommentError,
   updateNewsLinkSuccess,
+  updateNewsLinkError,
   createNewsLinkCommentSuccess,
   createSocialLinkBegin,
   deleteGroupMessageBegin,
@@ -219,7 +220,7 @@ export function* updateNewsLink(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'News link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateNewsLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update news link', options: { variant: 'warning' } }));

@@ -24,6 +24,7 @@ import {
   createNewsLinkError,
   createNewsLinkCommentError,
   updateNewsLinkSuccess,
+  updateNewsLinkError,
   createNewsLinkCommentSuccess,
   createSocialLinkBegin,
   deleteGroupMessageBegin,
@@ -124,7 +125,32 @@ const groupMessageComment = {
     approved: false
   }
 };
-
+const newsLink = {
+  id: 2,
+  title: 'fe',
+  description: 'fe',
+  url: 'http://f',
+  group_id: 1,
+  created_at: 'Wed, 15 Apr 2020 13:34:00 UTC +00:00',
+  updated_at: 'Wed, 15 Apr 2020 13:34:00 UTC +00:00',
+  picture_file_name: null,
+  picture_content_type: null,
+  picture_file_size: null,
+  picture_updated_at: null,
+  author_id: 1
+};
+const newsLinkComment = {
+  news_link_id: 1,
+  attributes: {
+    id: 1,
+    content: 'test',
+    author_id: 1,
+    message_id: 2,
+    created_at: 'Tue, 14 Apr 2020 19:53:01 UTC +00:00',
+    updated_at: 'Tue, 14 Apr 2020 19:53:01 UTC +00:00',
+    approved: false
+  }
+};
 describe('Get news items Saga', () => {
   it('Should return newsItems list', async () => {
     api.newsFeedLinks.all.mockImplementation(() => Promise.resolve({ data: { page: { ...newsItem } } }));
@@ -479,6 +505,239 @@ describe('Delete group message comment', () => {
       initialAction
     );
     expect(api.groupMessageComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Create news link', () => {
+  it('Should create a news link', async () => {
+    api.newsLinks.create.mockImplementation(() => Promise.resolve({ data: { newsLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'News link created',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createNewsLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { newsLink } };
+    const dispatched = await recordSaga(
+      createNewsLink,
+      initialAction
+    );
+
+    expect(api.newsLinks.create).toHaveBeenCalledWith({ news_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsLinks.create.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to create news link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createNewsLinkError(response), notified];
+    const initialAction = { payload: undefined };
+    const dispatched = await recordSaga(
+      createNewsLink,
+      initialAction
+    );
+    expect(api.newsLinks.create).toHaveBeenCalledWith({ group_message: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Update news link', () => {
+  it('Should update a news link', async () => {
+    api.newsLinks.update.mockImplementation(() => Promise.resolve({ data: { newsLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'News link updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateNewsLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { newsLink } };
+    const dispatched = await recordSaga(
+      updateNewsLink,
+      initialAction
+    );
+
+    expect(api.newsLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsLinks.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update news link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateNewsLinkError(response), notified];
+    const initialAction = { payload: { id: 5, group_id: 5 } };
+    const dispatched = await recordSaga(
+      updateNewsLink,
+      initialAction
+    );
+
+    expect(api.newsLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_link: initialAction.payload });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Delete news link', () => {
+  it('Should delete a news link', async () => {
+    api.newsLinks.destroy.mockImplementation(() => Promise.resolve({ data: { newsLink } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'news link deleted',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteNewsLinkSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { newsLink } };
+    const dispatched = await recordSaga(
+      deleteNewsLink,
+      initialAction
+    );
+
+    expect(api.newsLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsLinks.destroy.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete news link',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteNewsLinkError(response), notified];
+    const initialAction = { payload: { id: 10 } };
+    const dispatched = await recordSaga(
+      deleteNewsLink,
+      initialAction
+    );
+
+    expect(api.newsLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Create news link comment', () => {
+  it('Should create a news link comment', async () => {
+    api.newsLinkComments.create.mockImplementation(() => Promise.resolve({ data: { newsLinkComment } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'news link comment created',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createNewsLinkCommentSuccess(), getNewsItemBegin({}), notified];
+    const initialAction = { payload: { newsLinkComment } };
+    const dispatched = await recordSaga(
+      createNewsLinkComment,
+      initialAction
+    );
+
+    expect(api.newsLinkComments.create).toHaveBeenCalledWith({ news_link__comment: initialAction.payload.attributes });
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsLinkComments.create.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to create news link comment',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [createNewsLinkCommentError(response), notified];
+    const initialAction = { payload: { attributes: undefined } };
+    const dispatched = await recordSaga(
+      createNewsLinkComment,
+      initialAction
+    );
+
+    expect(api.newsLinkComments.create).toHaveBeenCalledWith({ news_link_comment: initialAction.payload.attributes });
+    expect(dispatched).toEqual(results);
+  });
+});
+
+describe('Delete news link comment', () => {
+  it('Should delete a news link comment', async () => {
+    api.newsLinkComments.destroy.mockImplementation(() => Promise.resolve({ data: { newsLinkComment } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'news link comment deleted',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteNewsLinkCommentSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const initialAction = { payload: { newsLinkComment } };
+    const dispatched = await recordSaga(
+      deleteNewsLinkComment,
+      initialAction
+    );
+
+    expect(api.newsLinkComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(dispatched).toEqual(results);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.newsLinkComments.destroy.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to delete news link comment',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [deleteNewsLinkCommentError(response), notified];
+    const initialAction = { payload: { id: 100 } };
+    const dispatched = await recordSaga(
+      deleteNewsLinkComment,
+      initialAction
+    );
+    expect(api.newsLinkComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
   });
 });
