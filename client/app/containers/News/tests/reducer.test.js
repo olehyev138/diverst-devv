@@ -1,7 +1,7 @@
 import produce from 'immer/dist/immer';
 import newsReducer from 'containers/News/reducer';
 import {
-  getNewsItemsSuccess, newsFeedUnmount
+  getNewsItemsSuccess, newsFeedUnmount, getNewsItemSuccess
 } from 'containers/News/actions';
 
 /* eslint-disable default-case, no-param-reassign */
@@ -46,5 +46,21 @@ describe('newsReducer', () => {
     const expected = state;
 
     expect(newsReducer(state, newsFeedUnmount())).toEqual(expected);
+  });
+
+  it('handles the getNewsItemSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.currentNewsItem = { id: 37 };
+      draft.isFormLoading = false;
+    });
+
+    expect(
+      newsReducer(
+        state,
+        getNewsItemSuccess({
+          news_feed_link: { id: 37 },
+        })
+      )
+    ).toEqual(expected);
   });
 });
