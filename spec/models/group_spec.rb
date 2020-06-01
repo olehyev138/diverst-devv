@@ -432,9 +432,9 @@ RSpec.describe Group, type: :model do
 
     it { expect(group).to enumerize(:layout).in(:layout_0, :layout_1, :layout_2).with_default(:layout_0) }
     it { expect(group).to enumerize(:pending_users).in(:enabled, :disabled).with_default(:disabled) }
-    it { expect(group).to enumerize(:members_visibility).in(:public, :group, :leaders_only).with_default(:managers_only) }
-    it { expect(group).to enumerize(:event_attendance_visibility).in(:public, :group, :leaders_only).with_default(:managers_only) }
-    it { expect(group).to enumerize(:messages_visibility).in(:public, :group, :leaders_only).with_default(:managers_only) }
+    it { expect(group).to enumerize(:members_visibility).in(:public, :group, :leaders_only).with_default(:leaders_only) }
+    it { expect(group).to enumerize(:event_attendance_visibility).in(:public, :group, :leaders_only).with_default(:leaders_only) }
+    it { expect(group).to enumerize(:messages_visibility).in(:public, :group, :leaders_only).with_default(:leaders_only) }
     it { expect(group).to enumerize(:latest_news_visibility).in(:public, :group, :leaders_only).with_default(:leaders_only) }
     it { expect(group).to enumerize(:upcoming_events_visibility).in(:public, :group, :leaders_only, :non_member).with_default(:leaders_only) }
     it { expect(group).to enumerize(:unit_of_expiry_age).in(:weeks, :months, :years).with_default(:months) }
