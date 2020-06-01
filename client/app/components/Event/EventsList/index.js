@@ -201,7 +201,7 @@ export function EventsList(props) {
                       >
                         <CardActionArea>
                           <CardContent>
-                            <EventListItem item={item} />
+                            <EventListItem item={item} currentGroupID={props.currentGroupID} />
                           </CardContent>
                         </CardActionArea>
                       </Link>
@@ -256,6 +256,7 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  currentGroupID: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({
