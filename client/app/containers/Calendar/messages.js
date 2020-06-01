@@ -1,5 +1,5 @@
 /*
- * Poll Messages
+ * Calendar Messages
  *
  * This contains all the text for the Groups containers/components.
  */
