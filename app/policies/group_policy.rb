@@ -327,7 +327,7 @@ class GroupPolicy < ApplicationPolicy
 
     def resolve
       if manage?
-        scope.where(enterprise_id: user.enterprise_id).all
+        scope.where(enterprise_id: user.enterprise_id)
       elsif index?
         scope.joins(:user_groups)
             .where(enterprise_id: user.enterprise_id)
