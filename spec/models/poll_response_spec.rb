@@ -63,7 +63,7 @@ RSpec.describe PollResponse do
       end
     end
 
-    it 'should send email on survey response' do 
+    it 'should send email on survey response' do
       poll_response = build(:poll_response, poll_id: create(:poll).id, user_id: create(:user).id)
       expect(poll_response).to receive(:send_poll_response_notification)
       poll_response.save

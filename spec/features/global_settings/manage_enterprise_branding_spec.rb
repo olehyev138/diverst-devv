@@ -10,7 +10,7 @@ RSpec.feature 'Manage Enterprise Branding' do
     login_as(admin_user, scope: :user)
   end
 
-  context 'Branding management' do
+  xcontext 'Branding management' do
     let(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
     before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
@@ -57,7 +57,7 @@ RSpec.feature 'Manage Enterprise Branding' do
     end
   end
 
-  context 'Customize Home View' do
+  xcontext 'Customize Home View' do
     scenario 'by editing home banner and message' do
       visit user_root_path
       expect(page).to have_no_banner
@@ -92,7 +92,7 @@ RSpec.feature 'Manage Enterprise Branding' do
     end
   end
 
-  context 'Customize Program Sponsor Details' do
+  xcontext 'Customize Program Sponsor Details' do
     before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
     scenario 'by creating multiple enterprise sponsors', js: true do
