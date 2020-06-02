@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe PollResponseMailer, type: :mailer do
+  include ActionView::Helpers
+
   describe "notification" do
     let!(:user) { create(:user) }
     let!(:poll) { create :poll }
@@ -21,6 +23,18 @@ RSpec.describe PollResponseMailer, type: :mailer do
 
     it 'includes message in email body' do
       expect(mail.body.encoded).to include(user.name)
+    end
+  
+    it 'renders the subject' do
+      expect(mail.subject).to eq 'Notification'
+    end
+    
+    it 'renders the receiver email' do
+      expect(mail.to).to eq([poll_response.user.email_for_notification])
+    end
+  
+    it 'renders the sender email' do
+      expect(mail.from).to eq(['info@diverst.com'])
     end
   end
 end
