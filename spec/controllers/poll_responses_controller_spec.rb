@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PollResponsesController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let(:user) { create(:user) }
   let(:poll) { create(:poll) }
   let(:poll_response) { create :poll_response, poll: poll }
