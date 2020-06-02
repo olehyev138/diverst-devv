@@ -8,6 +8,11 @@ const changeGroupColor = group => formatColors(group.calendar_color);
 
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
+  groupsState => groupsState.groupList
+);
+
+const selectCalendarGroups = () => createSelector(
+  selectGroupsDomain,
   (groupsState) => {
     const groupsCopy = { ...groupsState.groupList };
 
@@ -111,6 +116,7 @@ export {
   selectGroupsDomain,
   selectPaginatedSelectGroups,
   selectPaginatedGroups,
+  selectCalendarGroups,
   selectGroupTotal,
   selectGroup,
   selectFormGroup,

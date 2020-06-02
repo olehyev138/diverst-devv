@@ -29,9 +29,9 @@ export const mapFieldNames = (item, nameChanges = {}, base = {}) => {
     if (typeof nameChanges[n] === 'string') {
       const parts = nameChanges[n].split('.');
       sum[n] = dig(...[item, ...parts]);
-    } else if (typeof nameChanges[n] === 'function') {
+    } else if (typeof nameChanges[n] === 'function')
       sum[n] = nameChanges[n](item);
-    }
+    
     return sum;
   }, base);
 };
