@@ -1,16 +1,16 @@
 /*
- * HomePage Messages
+ * Password Reset Messages
  *
  * This contains all the text for the HomePage container.
  */
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.ForgotPassword';
+export const scope = 'diverst.containers.PasswordReset';
 
 export default defineMessages({
-  activate: {
-    id: `${scope}.activate`
+  changePassword: {
+    id: `${scope}.changePassword`
   },
   password: {
     id: `${scope}.password`
