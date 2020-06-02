@@ -48,7 +48,10 @@ class Api::V1::EnterprisesController < DiverstController
     end
 
     [:banner, :cdo_picture, :xml_sso_config, :sponsor_media, :onboarding_sponsor_media].each do |attachment|
-      enterprise.send(attachment).purge_later if params[attachment].blank? && enterprise.send(attachment).attached?
+      if params[:enterprise][attachment].blank? && enterprise.send(attachment).attached?
+        enterprise.send(attachment).purge_later
+        params[:enterprise] = params[:enterprise].except(attachment)
+      end
     end
 
     enterprise.update(params[:enterprise])
