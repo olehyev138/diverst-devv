@@ -27,7 +27,7 @@ class PollResponse < BaseClass
     user.name
   end
 
-  def user_id 
+  def user_id
     return 'Anonymous' if anonymous
 
     user.id
