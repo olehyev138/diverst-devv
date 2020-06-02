@@ -20,42 +20,46 @@ import {
 
 export function* requestPasswordReset(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.users.requestPasswordReset.bind(api.users), action.payload);
 
     yield put(requestPasswordResetSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully requested password reset', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Password Reset Email Sent', options: { variant: 'success' } }));
   } catch (err) {
     yield put(requestPasswordResetError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to request password reset', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
   }
 }
 
 export function* getUserByToken(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.users.getPasswordToken.bind(api.users), action.payload);
 
     yield put(getUserByTokenSuccess(response.data));
   } catch (err) {
     yield put(getUserByTokenError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get user by token', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
+    yield put(push(ROUTES.session.login.path()));
   }
 }
 
 export function* submitPassword(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.users.passwordReset.bind(api.users), action.payload);
 
     yield put(submitPasswordSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully submitted password', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully changed password', options: { variant: 'success' } }));
+    put(push(ROUTES.session.login.path()));
   } catch (err) {
     yield put(submitPasswordError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to submit password', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
+    if (err.response.status === 400)
+      yield put(push(ROUTES.session.login.path()));
   }
 }
 
