@@ -5,12 +5,12 @@ class PasswordResetTokenService < TokenService
   FORM_EXPIRATION = 15.hours
 
   def self.first_jwt(user, params = {})
-    token = user.generate_invitation_token
+    token = user.reset_password_token
 
     payload = {
-        password_reset_token: token,
+        reset_password_token: token,
         user_id: user.id,
-        type: 'password_reset',
+        type: 'reset_password',
         created: Time.now,
     }
 
@@ -18,13 +18,13 @@ class PasswordResetTokenService < TokenService
   end
 
   def self.second_jwt(token)
-    user = verify_jwt_token(token, 'password_reset')
+    user = verify_jwt_token(token, 'reset_password')
 
     [
         create_jwt_token({
                              type: 'set_new_password',
                              user_id: user.id,
-                             password_reset_token: user.password_reset_token,
+                             reset_password_token: user.reset_password_token,
                              created: Time.now,
                          }),
         user
@@ -37,7 +37,7 @@ class PasswordResetTokenService < TokenService
     user_token_error('Invalid Password Reset Link') if user.blank? || payload['user_id'] != user.id
     user_token_error('Invalid Token') if payload['type'] != type
     user_token_error('Token Expired') if case type
-                                         when 'password_reset' then user.invitation_created_at < TOKEN_EXPIRATION.ago
+                                         when 'reset_password' then payload['created'] < TOKEN_EXPIRATION.ago
                                          when 'set_new_password' then payload['created'] < FORM_EXPIRATION.ago
                                          else true
                                          end

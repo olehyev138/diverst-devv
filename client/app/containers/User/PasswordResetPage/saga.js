@@ -48,14 +48,16 @@ export function* getUserByToken(action) {
 
 export function* submitPassword(action) {
   try {
-    const response = yield call(api.users.passwordReset.bind(api.users), action.payload);
+    const { token, ...rest } = action.payload;
+    const payload = { token, user: rest };
+
+    const response = yield call(api.users.passwordReset.bind(api.users), payload);
 
     yield put(submitPasswordSuccess({}));
     yield put(showSnackbar({ message: 'Successfully changed password', options: { variant: 'success' } }));
-    put(push(ROUTES.session.login.path()));
+    yield put(push(ROUTES.session.login.path()));
   } catch (err) {
     yield put(submitPasswordError(err));
-
     // TODO: intl message
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
     if (err.response.status === 400)

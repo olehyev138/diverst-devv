@@ -13,6 +13,9 @@ const ROUTES = {
     forgotPassword: {
       path: () => '/forgot',
     },
+    passwordReset: {
+      path: (token = ':token') => `/password_reset/${token}`,
+    },
   },
 
   // User

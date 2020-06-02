@@ -182,7 +182,7 @@ class Api::V1::UsersController < DiverstController
   def password_reset
     user = PasswordResetTokenService.verify_jwt_token(params[:token], 'set_new_password')
 
-    render status: 200, json: user.update(new_password_payload)
+    render status: 200, json: user.reset_password(sign_up_payload)
   rescue => e
     case e
     when InvalidInputException

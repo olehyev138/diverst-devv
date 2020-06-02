@@ -4,6 +4,7 @@ import { Switch } from 'react-router';
 // Pages
 import {
   SignUpPage,
+  PasswordResetPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -162,6 +163,7 @@ export default function Routes(props) {
     <Switch>
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.passwordReset)} component={PasswordResetPage} />
       <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
       <SessionLayout {...expandRoute(ROUTES.session.sign_up)} component={SignUpPage} />
 

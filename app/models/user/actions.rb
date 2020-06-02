@@ -41,6 +41,15 @@ module User::Actions
     end
   end
 
+  def reset_password(params)
+    if update_attributes(params)
+      update(reset_password_token: nil)
+      self
+    else
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
+    end
+  end
+
   def posts(params)
     count = (params[:count] || 5).to_i
     page = (params[:page] || 0).to_i

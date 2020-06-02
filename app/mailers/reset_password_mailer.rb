@@ -1,7 +1,7 @@
 class ResetPasswordMailer < ApplicationMailer
   include MailHelper
 
-  def reset_password_instructions(record, token, opts = {})
+  def reset_password_instructions(user, token)
     @user = user
     @token = PasswordResetTokenService.first_jwt(user)
     @enterprise = @user.enterprise
@@ -31,7 +31,7 @@ class ResetPasswordMailer < ApplicationMailer
       user: @user,
       enterprise: @enterprise,
       custom_text: @enterprise.custom_text,
-      click_here: "<a href=\"#{ReactRoutes.user.home}\" target=\"_blank\">TEMP</a>",
+      click_here: "<a href=\"#{ReactRoutes.session.passwordReset(@token)}\" target=\"_blank\">Click Here</a>",
     }
   end
 

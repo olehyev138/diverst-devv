@@ -2,7 +2,8 @@
   "session": {
     "sign_up": "/sign_up/:token",
     "login": "/login",
-    "forgotPassword": "/forgot"
+    "forgotPassword": "/forgot",
+    "passwordReset": "/password_reset/:token"
   },
   "user": {
     "root": "/",
