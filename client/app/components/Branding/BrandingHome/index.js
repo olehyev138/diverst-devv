@@ -25,6 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -74,6 +75,24 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
           </Grid>
         </CardContent>
         <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
+              <Field
+                component={DiverstFileInput}
+                id='banner'
+                name='banner'
+                margin='normal'
+                fileName={props.banner_file_name}
+                fullWidth
+                label={intl.formatMessage(messages.Home.banner)}
+                disabled={props.isCommitting}
+                value={values.banner}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -92,6 +111,7 @@ export function BrandingHome(props) {
     id: { default: '' },
     home_message: { default: '' },
     privacy_statement: { default: '' },
+    banner: {default: null},
   });
 
   const [open, setOpen] = React.useState(false);

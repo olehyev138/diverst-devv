@@ -56,6 +56,9 @@ export default defineMessages({
     privacy: {
       id: `${scope}.Home.input.privacy`,
     },
+    banner: {
+      id: `${scope}.Home.input.banner`,
+    },
   },
   Sponsors: {
     name: {
