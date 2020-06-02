@@ -276,7 +276,6 @@ RSpec.describe Poll, type: :model do
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       poll = create(:poll)
-      field = create(:field, poll: poll)
       response = create(:poll_response, poll: poll)
       graph = create(:graph, poll: poll)
       polls_segment = create(:polls_segment, poll: poll)

@@ -15,10 +15,9 @@ class PollResponse < BaseClass
   end
 
   def user_email
-    puts 'hello world'
     return 'Anonymous' if anonymous
 
-    user.notifications_email
+    user.email_for_notification
   end
 
   def user_name

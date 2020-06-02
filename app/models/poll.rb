@@ -105,7 +105,7 @@ class Poll < BaseClass
   # Creates one graph per field when the poll is created
   def create_default_graphs
     fields.each do |field|
-      graphs.create(field: field) if field.graphable?
+      field.create_graph(field_id: field.id) if field.graph && field.graphable?
     end
   end
 
