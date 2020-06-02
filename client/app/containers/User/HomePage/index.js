@@ -29,6 +29,7 @@ import NewsFeed from 'components/News/HomeNewsList';
 import { injectIntl, intlShape } from 'react-intl';
 import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   title: {
@@ -138,8 +139,22 @@ handleClickOpen = () => {
       />
     );
 
+    const enterpriseImage = this.props.enterprise.banner_data && (
+      <DiverstImg
+        data={this.props.enterprise.banner_data}
+        alt=''
+        maxWidth='100%'
+        minWidth='100%'
+      />
+    );
+
     return (
       <React.Fragment>
+        <Grid container spacing={3}>
+          <Grid item xs='12'>
+            {enterpriseImage}
+          </Grid>
+        </Grid>
         <Grid container spacing={3} direction='column'>
           <Grid item>
             {enterpriseMessage}

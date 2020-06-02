@@ -83,7 +83,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 id='banner'
                 name='banner'
                 margin='normal'
-                fileName={props.banner_file_name}
+                fileName={props.enterprise.banner_file_name}
                 fullWidth
                 label={intl.formatMessage(messages.Home.banner)}
                 disabled={props.isCommitting}
@@ -111,7 +111,7 @@ export function BrandingHome(props) {
     id: { default: '' },
     home_message: { default: '' },
     privacy_statement: { default: '' },
-    banner: {default: null},
+    banner: { default: null },
   });
 
   const [open, setOpen] = React.useState(false);
@@ -161,6 +161,7 @@ BrandingHomeInner.propTypes = {
   setFieldTouched: PropTypes.func,
   intl: intlShape,
   isCommitting: PropTypes.bool,
+  enterprise: PropTypes.object,
 };
 
 export default compose(
