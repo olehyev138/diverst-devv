@@ -236,6 +236,9 @@ class Group < ApplicationRecord
   validate :ensure_not_own_parent
   validate :ensure_not_own_child
 
+  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
+  before_validation -> (group) { group.calendar_color = group.calendar_color.gsub('#', '') }
+
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_validation :smart_add_url_protocol

@@ -73,14 +73,13 @@ class Api::V1::GroupsController < DiverstController
     end
   end
 
-  def colors
+  def calendar_colors
     base_authorize(klass)
 
     render status: 200, json: {
         items: GroupPolicy::Scope.new(current_user, Group).resolve
                    .select(:id, :name, :calendar_color, :enterprise_id)
                    .preload(:enterprise, enterprise: [:theme])
-                   .where(enterprise_id: current_user.enterprise_id)
                    .distinct
                    .map do |g|
                  {
