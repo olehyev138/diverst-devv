@@ -111,7 +111,7 @@ class Api::V1::EnterprisesController < DiverstController
       :onboarding_sponsor_media_updated_at,
       :enable_pending_comments,
       :mentorship_module_enabled,
-      :disable_likes,
+      :enable_likes,
       :default_from_email_address,
       :default_from_email_display_name,
       :enable_social_media,
