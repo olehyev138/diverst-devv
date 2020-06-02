@@ -18,6 +18,15 @@ jobs:
             - v1-dep-{{ .Branch }}-
             - v1-dep-staging-
             - v1-dep-
+      - run: sudo apt-get update
+      - run: cmake --version
+      - run: sudo apt-get purge cmake
+      - run: wget https://github.com/Kitware/CMake/releases/download/v3.16.8/cmake-3.16.8.tar.gz
+      - run: tar -xzvf cmake-3.16.8.tar.gz
+      - run: 
+          command: cd cmake-3.16.8 && ./configure && make && sudo make install
+      - run: cmake --version
+      - run: sudo apt-get update
       - run: gem update --system
       - run: gem install bundler --version '1.17.3'
       - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
