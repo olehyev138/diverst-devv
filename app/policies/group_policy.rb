@@ -16,7 +16,7 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
-  alias_method :colors?, :index?
+  alias_method :calendar_colors?, :index?
 
   def current_annual_budgets?
     index?

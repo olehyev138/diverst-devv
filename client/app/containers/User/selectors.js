@@ -6,7 +6,7 @@ import dig from 'object-dig';
 import { initialState } from 'containers/User/reducer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { mapFieldData, mapFieldNames, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
+import { mapFieldData, mapFieldNames, mapSelectField, timezoneMap, formatColors } from 'utils/selectorHelpers';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -79,8 +79,8 @@ const selectCalendarEvents = () => createSelector(
     {
       groupId: 'group.id',
       title: 'name',
-      backgroundColor: 'group.calendar_color',
-      borderColor: 'group.calendar_color',
+      backgroundColor: event => formatColors(event.group.calendar_color),
+      borderColor: event => formatColors(event.group.calendar_color),
     }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 

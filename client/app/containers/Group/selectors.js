@@ -1,11 +1,25 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
+import { formatColors, mapFieldNames } from 'utils/selectorHelpers';
 
 const selectGroupsDomain = state => state.groups || initialState;
 
+const changeGroupColor = group => formatColors(group.calendar_color);
+
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groupList
+  (groupsState) => {
+    const groupsCopy = { ...groupsState.groupList };
+
+    Object.keys(groupsCopy).forEach((id) => {
+      const group = groupsCopy[id];
+      groupsCopy[id] = mapFieldNames(group,
+        {
+          calendar_color: g => formatColors(group.calendar_color),
+        }, { ...group });
+    });
+    return groupsCopy;
+  }
 );
 
 /* Select group list & format it for a select

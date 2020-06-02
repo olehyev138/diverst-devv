@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer/dist/immer';
-import { mapFieldNames } from 'utils/selectorHelpers';
+import { mapFieldNames, formatColors } from 'utils/selectorHelpers';
 
 const selectEventsDomain = state => state.events || initialState;
 
@@ -16,8 +16,8 @@ const selectCalendarEvents = () => createSelector(
     {
       groupId: 'group.id',
       title: 'name',
-      backgroundColor: 'group.calendar_color',
-      borderColor: 'group.calendar_color',
+      backgroundColor: event => formatColors(event.group.calendar_color),
+      borderColor: event => formatColors(event.group.calendar_color),
     }, { ...event, textColor: event.is_attending ? 'black' : 'white' }))
 );
 
