@@ -52,3 +52,6 @@ cookbooks/
 
 #RubyMine files
 /.idea
+
+#ENV VARIABLES
+/.env.yml
