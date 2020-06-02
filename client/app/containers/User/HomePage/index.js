@@ -107,7 +107,15 @@ handleClickOpen = () => {
           open={this.state.open}
           handleNo={this.handleClose}
           textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
-          content={this.props.privacyMessage}
+          content={(
+            <DiverstHTMLEmbedder
+              html={
+                this.props.enterprise
+                  ? this.props.enterprise.privacy_statement
+                  : ''
+              }
+            />
+          )}
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
