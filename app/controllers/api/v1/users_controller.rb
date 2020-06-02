@@ -1,5 +1,12 @@
 class Api::V1::UsersController < DiverstController
-  skip_before_action :verify_jwt_token, only: [:find_user_enterprise_by_email, :sign_up_token, :sign_up]
+  skip_before_action :verify_jwt_token, only: [
+      :find_user_enterprise_by_email,
+      :sign_up_token,
+      :sign_up,
+      :reset_password_request,
+      :reset_password_token,
+      :password_reset,
+  ]
 
   def find_user_enterprise_by_email
     render json: User.find_user_by_email(self.diverst_request.user, params).enterprise
@@ -105,8 +112,12 @@ class Api::V1::UsersController < DiverstController
     end
   end
 
-  def sign_up_token
-    token, user = InviteTokenService.second_jwt(params[:token])
+  # ===============================================
+  # TOKEN CODE
+  # ===============================================
+
+  private def token(token_service)
+    token, user = token_service.second_jwt(params[:token])
 
     render status: 200, json: {
         token: token,
@@ -114,6 +125,14 @@ class Api::V1::UsersController < DiverstController
     }
   rescue => e
     raise BadRequestException.new(e.message)
+  end
+
+  # ================================================
+  # SIGN IN CODE
+  # ================================================
+
+  def sign_up_token
+    token(InviteTokenService)
   end
 
   def sign_up
@@ -142,6 +161,43 @@ class Api::V1::UsersController < DiverstController
             field_data_attributes: [
                 :data
             ]
+          )
+  end
+
+  # ================================================
+  # PASSWORD RESET CODE
+  # ================================================
+
+  def reset_password_request
+    user = User.find_user_by_email(self.diverst_request.user, params)
+    user.request_password!
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def reset_password_token
+    token(PasswordResetTokenService)
+  end
+
+  def password_reset
+    user = PasswordResetTokenService.verify_jwt_token(params[:token], 'set_new_password')
+
+    render status: 200, json: user.update(new_password_payload)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
+  def new_password_payload
+    params
+        .require(:user)
+        .permit(
+            :password,
+            :password_confirmation,
           )
   end
 

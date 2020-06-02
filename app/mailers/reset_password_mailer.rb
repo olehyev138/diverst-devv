@@ -1,11 +1,15 @@
-class DiverstMailer < ApplicationMailer
+class ResetPasswordMailer < ApplicationMailer
   include MailHelper
 
   def reset_password_instructions(record, token, opts = {})
-    return if record.enterprise.disable_emails?
+    @user = user
+    @token = PasswordResetTokenService.first_jwt(user)
+    @enterprise = @user.enterprise
+    return if @enterprise.disable_emails?
 
-    set_defaults(record.enterprise, method_name)
-    super
+    set_defaults(@enterprise, method_name)
+
+    mail(from: @from_address, to: @user.email, subject: @subject)
   end
 
   # def headers_for(action, opts)

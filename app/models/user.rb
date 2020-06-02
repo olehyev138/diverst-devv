@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_secure_password validations: false
   has_secure_token :invitation_token
+  has_secure_token :reset_password_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -212,6 +213,12 @@ class User < ApplicationRecord
     regenerate_invitation_token
 
     DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
+  end
+
+  def request_password!(manager = nil, skip: false)
+    regenerate_reset_password_token
+
+    ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
   end
 
   def valid_password?(password)
