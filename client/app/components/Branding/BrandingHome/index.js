@@ -39,8 +39,8 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
     <Card>
       <Form>
         <CardContent>
-          <Grid container>
-            <Grid item xs={12} className={classes.noBottomPadding}>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
               <Field
                 component={DiverstRichTextInput}
                 required
@@ -51,6 +51,24 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 margin='normal'
                 label={intl.formatMessage(messages.Home.message)}
                 value={values.home_message}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
+              <Field
+                component={DiverstRichTextInput}
+                required
+                onChange={value => setFieldValue('privacy_statement', value)}
+                fullWidth
+                id='privacy_statement'
+                name='privacy_statement'
+                margin='normal'
+                label={intl.formatMessage(messages.Home.privacy)}
+                value={values.privacy_statement}
               />
             </Grid>
           </Grid>
@@ -73,6 +91,7 @@ export function BrandingHome(props) {
   const initialValues = buildValues(props.enterprise, {
     id: { default: '' },
     home_message: { default: '' },
+    privacy_statement: { default: '' },
   });
 
   const [open, setOpen] = React.useState(false);

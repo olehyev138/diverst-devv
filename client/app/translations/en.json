@@ -434,6 +434,7 @@
   "diverst.containers.Branding.tab.home": "Home",
   "diverst.containers.Branding.tab.sponsors": "Sponsors",
   "diverst.containers.Branding.Home.input.message": "Home Message",
+  "diverst.containers.Branding.Home.input.privacy": "Privacy Statement",
   "diverst.containers.Branding.Theme.input.colorswitch": "Use different color for graphs?",
   "diverst.containers.Branding.Theme.input.primarycolor": "Primary Color",
   "diverst.containers.Branding.Theme.input.graphcolor": "Graphs Color",

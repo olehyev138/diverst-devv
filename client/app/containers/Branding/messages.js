@@ -53,6 +53,9 @@ export default defineMessages({
     message: {
       id: `${scope}.Home.input.message`,
     },
+    privacy: {
+      id: `${scope}.Home.input.privacy`,
+    },
   },
   Sponsors: {
     name: {
