@@ -91,4 +91,24 @@ export default defineMessages({
     },
 
   },
+  visibility: {
+    public: {
+      id: `${scope}.settings.visibility.public`,
+    },
+    group: {
+      id: `${scope}.settings.visibility.group`,
+    },
+    leaders: {
+      id: `${scope}.settings.visibility.managers`,
+    },
+    non_member: {
+      id: `${scope}.settings.visibility.non_member`,
+    },
+    enabled: {
+      id: `${scope}.settings.visibility.enabled`,
+    },
+    disabled: {
+      id: `${scope}.settings.visibility.disabled`,
+    },
+  },
 });
