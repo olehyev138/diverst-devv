@@ -85,7 +85,7 @@ class Api::V1::GroupsController < DiverstController
                  {
                      id: g.id,
                      name: g.name,
-                     calendar_color: g.color_hash,
+                     calendar_color: g.get_calendar_color,
                  }
                end
     }
