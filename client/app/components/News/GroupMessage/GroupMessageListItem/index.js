@@ -97,13 +97,15 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                {props.enableLikes && <DiverstLike
-                  isLiked={newsItem.current_user_likes}
-                  newsFeedLinkId={newsItem.id}
-                  totalLikes={newsItem.total_likes}
-                  likeNewsItemBegin={props.likeNewsItemBegin}
-                  unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-                />}
+                {props.enableLikes && (
+                  <DiverstLike
+                    isLiked={newsItem.current_user_likes}
+                    newsFeedLinkId={newsItem.id}
+                    totalLikes={newsItem.total_likes}
+                    likeNewsItemBegin={props.likeNewsItemBegin}
+                    unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                  />
+                )}
                 {props.pinNewsItemBegin && (
                   <Permission show={permission(props.currentGroup, 'news_manage?')}>
                     <IconButton
