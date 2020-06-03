@@ -33,7 +33,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                  end
   end
 
-  def self.with_permission(*attribute_names, **options)
+  def self.attributes_with_permission(*attribute_names, **options)
     raise RuntimeError.new('No Attributes') if attribute_names.blank?
 
     attribute_names.each do |attr|

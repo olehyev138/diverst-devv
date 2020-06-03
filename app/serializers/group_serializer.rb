@@ -1,9 +1,9 @@
 class GroupSerializer < ApplicationRecordSerializer
   attributes :id
 
-  with_permission :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data, if: :family?
+  attributes_with_permission :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data, if: :family?
 
-  with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
+  attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                   :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
                   :annual_budget, :annual_budget_leftover, :active,
                   :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
