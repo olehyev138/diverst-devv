@@ -1,5 +1,4 @@
 class PollResponseMailer < ApplicationMailer
-
   def notification(response_id, user_id)
     @user = User.find_by(id: user_id)
     @response = PollResponse.find_by(id: response_id)
