@@ -38,6 +38,7 @@ export function EventCreatePage(props) {
     eventsIndex: ROUTES.group.events.index.path(groupId),
   };
   const { intl } = props;
+  const pillar = props.location.state ? props.location.state.pillar : null;
 
   return (
     <React.Fragment>
@@ -49,6 +50,7 @@ export function EventCreatePage(props) {
         currentUser={currentUser}
         currentGroup={currentGroup}
         links={links}
+        pillar={pillar}
       />
     </React.Fragment>
   );
@@ -61,6 +63,7 @@ EventCreatePage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
+  location: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
