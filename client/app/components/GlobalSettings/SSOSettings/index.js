@@ -87,6 +87,18 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
                   value={values.idp_cert}
                 />
               </Grid>
+              <Grid item xs={12} className={classes.noBottomPadding}>
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  id='sp_entity_id'
+                  name='sp_entity_id'
+                  margin='normal'
+                  label={<DiverstFormattedMessage {...messages.sp_url} />}
+                  value={values.sp_entity_id}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </CardContent>
@@ -111,6 +123,7 @@ export function SSOSettings(props) {
     idp_sso_target_url: { default: '' },
     idp_slo_target_url: { default: '' },
     idp_cert: { default: '' },
+    sp_entity_id: { default: '' },
   });
 
   const [open, setOpen] = React.useState(false);
