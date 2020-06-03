@@ -30,6 +30,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 
 const styles = theme => ({
   title: {
@@ -139,44 +140,38 @@ handleClickOpen = () => {
       />
     );
 
-    const enterpriseImage = this.props.enterprise.banner_data && (
+    const enterpriseImage = this.props.enterprise ? this.props.enterprise.banner_data && (
       <DiverstImg
         data={this.props.enterprise.banner_data}
         alt=''
         maxWidth='100%'
         minWidth='100%'
       />
-    );
+    ) : null;
 
     return (
-      <React.Fragment>
-        <Grid container spacing={3}>
-          <Grid item xs='12'>
-            {enterpriseImage}
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} direction='column'>
-          <Grid item>
-            {enterpriseMessage}
-          </Grid>
-          <Grid item>
-            <Grid container spacing={3}>
-              <Grid item xs>
-                {events}
-              </Grid>
-              <Grid item xs>
-                {news}
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs>
-            {sponsor}
-          </Grid>
-          <Grid item xs>
-            {privacyMessage}
-          </Grid>
-        </Grid>
-      </React.Fragment>
+      <DiverstCSSGrid
+        columns={10}
+        rows='auto auto auto auto 1fr'
+        areas={[
+          'header header  header  header  header  header  header  header  header  header',
+          'message message  message  message  message  message  message  message  message  message',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+        ]}
+        rowGap='16px'
+        columnGap='24px'
+      >
+        <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
+        <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
+        <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
+        <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
+        <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
+        <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
+        <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
+      </DiverstCSSGrid>
     );
   }
 }
