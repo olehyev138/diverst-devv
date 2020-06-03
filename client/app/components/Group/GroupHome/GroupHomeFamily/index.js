@@ -56,13 +56,12 @@ export function GroupHomeFamily({ classes, ...props }) {
     </Grid>
   );
 
-  const groupByCategory = array => array.reduce((newArray, item) => {
+  // subgroups grouped by categories when subgroup is categorized for showing in group family card
+  const categorizedSubGroups = props.currentGroup.children.reduce((newArray, item) => {
     if (item.group_category != null)
       (newArray[item.group_category.name] = newArray[item.group_category.name] || []).push(item);
     return newArray;
   }, {});
-
-  const subGroups = groupByCategory(props.currentGroup.children);
 
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
@@ -88,7 +87,7 @@ export function GroupHomeFamily({ classes, ...props }) {
               {props.currentGroup.children.length}
               )
             </Typography>
-            {Object.keys(subGroups).map(category => (
+            {Object.keys(categorizedSubGroups).map(category => (
               <React.Fragment key={category}>
                 <Box mb={1} />
                 <Divider />
@@ -96,11 +95,14 @@ export function GroupHomeFamily({ classes, ...props }) {
                 <Typography variant='h6' className={classes.groupName}>
                   {category}
                   (
-                  {subGroups[`${category}`].length}
+                  {categorizedSubGroups[`${category}`].length}
                   )
                 </Typography>
-                {subGroups[`${category}`].map(subgroup => (
-                  renderGroup(subgroup)))}
+                {categorizedSubGroups[`${category}`].map(subgroup => (
+                  <React.Fragment key={`subgroup:${subgroup.id}`}>
+                    {renderGroup(subgroup)}
+                  </React.Fragment>
+                ))}
               </React.Fragment>
             ))
             }
