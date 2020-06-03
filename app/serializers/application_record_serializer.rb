@@ -21,157 +21,36 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
-  ActiveModel::Serializer.class_eval do
-    attr_writer :_instance_reflections, :_instance_attributes_data
-
-    def _instance_reflections
-      @_instance_reflections ||= {}
-    end
-
-    def _instance_attributes_data
-      @_instance_attributes_data ||= {}
-    end
-
-    def initialize(object, options = {})
-      self.object = object
-      self.instance_options = options
-      self.root = instance_options[:root]
-      self.scope = instance_options[:scope]
-
-      return if !(scope_name = instance_options[:scope_name]) || respond_to?(scope_name)
-
-      define_singleton_method scope_name, -> { scope }
-    end
-
-    # @example
-    #   class AdminAuthorSerializer < ActiveModel::Serializer
-    #     attributes :id, :name, :recent_edits
-    def instance_attributes(*attrs)
-      attrs = attrs.first if attrs.first.class == Array
-
-      attrs.each do |attr|
-        instance_attribute(attr)
-      end
-    end
-
-    # @example
-    #   class AdminAuthorSerializer < ActiveModel::Serializer
-    #     attributes :id, :recent_edits
-    #     attribute :name, key: :title
-    #
-    #     attribute :full_name do
-    #       "#{object.first_name} #{object.last_name}"
-    #     end
-    #
-    #     def recent_edits
-    #       object.edits.last(5)
-    #     end
-    def instance_attribute(attr, options = {}, &block)
-      key = options.fetch(:key, attr)
-      self._instance_attributes_data[key] = Attribute.new(attr, options, block)
-    end
-
-    # @param [Symbol] name of the association
-    # @param [Hash<Symbol => any>] options for the reflection
-    # @return [void]
-    #
-    # @example
-    #  has_many :comments, serializer: CommentSummarySerializer
-    #
-    def instance_has_many(name, options = {}, &block) # rubocop:disable Style/PredicateName
-      instance_associate(HasManyReflection.new(name, options, block))
-    end
-
-    # @param [Symbol] name of the association
-    # @param [Hash<Symbol => any>] options for the reflection
-    # @return [void]
-    #
-    # @example
-    #  belongs_to :author, serializer: AuthorSerializer
-    #
-    def instance_belongs_to(name, options = {}, &block)
-      instance_associate(BelongsToReflection.new(name, options, block))
-    end
-
-    # @param [Symbol] name of the association
-    # @param [Hash<Symbol => any>] options for the reflection
-    # @return [void]
-    #
-    # @example
-    #  has_one :author, serializer: AuthorSerializer
-    #
-    def instance_has_one(name, options = {}, &block) # rubocop:disable Style/PredicateName
-      instance_associate(HasOneReflection.new(name, options, block))
-    end
-
-    # Add reflection and define {name} accessor.
-    # @param [ActiveModel::Serializer::Reflection] reflection
-    # @return [void]
-    #
-    # @api private
-    private def instance_associate(reflection)
-      key = reflection.options[:key] || reflection.name
-      self._instance_reflections[key] = reflection
-    end
-
-    private def merged_attr_data
-      self._instance_attributes_data.merge(self.class._attributes_data)
-    end
-
-    private def merged_reflections
-      self._instance_reflections.merge(self.class._reflections)
-    end
-
-    def attributes(requested_attrs = nil, reload = false)
-      @attributes = nil if reload
-      @attributes ||= merged_attr_data.each_with_object({}) do |(key, attr), hash|
-        next if attr.excluded?(self)
-        next unless requested_attrs.nil? || requested_attrs.include?(key)
-
-        hash[key] = attr.value(self)
-      end
-    end
-
-    def associations(include_directive = ActiveModelSerializers.default_include_directive, include_slice = nil)
-      include_slice ||= include_directive
-      return Enumerator.new { } unless object
-
-      Enumerator.new do |y|
-        (self.instance_reflections ||= merged_reflections.deep_dup).each do |key, reflection|
-          next if reflection.excluded?(self)
-          next unless include_directive.key?(key)
-
-          association = reflection.build_association(self, instance_options, include_slice)
-          y.yield association
-        end
-      end
-    end
-  end
-
   def self.permission_module
-    @@module ||= nil
-    unless @@module
-      @@module ||= Module.new do
-      end
-      self.prepend(@@module)
-    end
-    @@module
+    @@module ||= begin
+                   temp = Module.new do
+                     def self.attr_conditions
+                       @@attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+                     end
+                   end
+                   self.prepend(temp)
+                   temp
+                 end
   end
 
-  def self.with_permission(*attributes, **options)
-    raise RuntimeError.new('No Attributes') if attributes.blank?
+  def self.with_permission(*attribute_names, **options)
+    raise RuntimeError.new('No Attributes') if attribute_names.blank?
 
-    attributes.each do |attr|
-      attributes attr
-      permission_module.define_method(attr) do
-        if send(options[:if])
-          if defined?(super)
-            super()
+    attribute_names.each do |attr|
+      self.attributes attr unless _attributes.include? attr
+      ifs = permission_module.attr_conditions[attr] << options[:if]
+
+      unless permission_module.instance_methods(false).include? attr
+        permission_module.define_method(attr) do
+          if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+            if defined?(super)
+              super() rescue nil
+            else
+              object&.send(attr) rescue nil
+            end
           else
-            object.send(attr)
+            nil
           end
-        else
-          nil
         end
       end
     end
@@ -182,7 +61,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   def initialize(object, options = {})
     unless self.class == ApplicationRecordSerializer
       if serialize_all_fields
-        self.instance_attributes(object.attributes.keys.map(&:to_sym).reject { |attr| excluded_keys.map(&:to_sym).include?(attr) })
+        self.class.attributes(object.attributes.keys.map(&:to_sym).reject { |attr| excluded_keys.map(&:to_sym).include?(attr) })
       end
     end
 
