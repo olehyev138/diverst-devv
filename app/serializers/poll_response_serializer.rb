@@ -1,9 +1,9 @@
 class PollResponseSerializer < ApplicationRecordSerializer
   has_many :field_data
+  with_permission :user, if: :not_anonymous?
 
-  def initialize(object, options = {})
-    instance_attributes :user unless object.anonymous
-    super
+  def not_anonymous?
+    !object&.anonymous
   end
 
   def serialize_all_fields

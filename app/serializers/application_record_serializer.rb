@@ -148,6 +148,35 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
   end
 
+  def self.permission_module
+    @@module ||= nil
+    unless @@module
+      @@module ||= Module.new do
+      end
+      self.prepend(@@module)
+    end
+    @@module
+  end
+
+  def self.with_permission(*attributes, **options)
+    raise RuntimeError.new('No Attributes') if attributes.blank?
+
+    attributes.each do |attr|
+      attributes attr
+      permission_module.define_method(attr) do
+        if send(options[:if])
+          if defined?(super)
+            super()
+          else
+            object.send(attr)
+          end
+        else
+          nil
+        end
+      end
+    end
+  end
+
   # If the serialier hasn't specifically set any attributes to use (or enables serialization of all fields)
   # it will use all model attributes, excluding any fields listed in an implementation of the `excluded_keys` method.
   def initialize(object, options = {})
