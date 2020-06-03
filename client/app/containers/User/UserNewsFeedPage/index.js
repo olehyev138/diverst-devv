@@ -23,6 +23,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
@@ -69,6 +70,7 @@ export function NewsFeedPage(props, context) {
         readonly
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        enableLikes={props.currentEnterprise.enable_likes}
       />
     </React.Fragment>
   );
@@ -89,6 +91,7 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
+  currentEnterprise: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -97,6 +100,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   isLoading: selectIsLoadingPosts(),
   permissions: selectPermissions(),
+  currentEnterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {
