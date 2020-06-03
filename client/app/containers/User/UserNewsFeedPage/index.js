@@ -14,7 +14,7 @@ import likeSaga from 'containers/Shared/Like/saga';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -23,7 +23,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
