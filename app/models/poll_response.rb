@@ -1,4 +1,5 @@
 class PollResponse < BaseClass
+  include PublicActivity::Common
   include ContainsFields
 
   belongs_to :poll

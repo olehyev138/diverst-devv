@@ -1,0 +1,11 @@
+<div class="card__section">
+  <% response = activity.trackable %>
+  <%= response.user_email %>
+  responded to a survey
+  <% if activity.trackable %>
+    <%= link_to activity.trackable.poll.title, polls_path(activity.trackable.poll) %>
+  <% else %>
+    which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>
