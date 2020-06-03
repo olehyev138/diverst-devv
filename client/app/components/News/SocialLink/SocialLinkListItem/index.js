@@ -91,13 +91,13 @@ export function SocialLinkListItem(props) {
 
   const pinButtons = (
     <Grid item>
-      <DiverstLike
+      {props.enableLikes && <DiverstLike
         isLiked={newsItem.current_user_likes}
         newsFeedLinkId={newsItem.id}
         totalLikes={newsItem.total_likes}
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-      />
+      />}
       {props.pinNewsItemBegin && (
         <Permission show={permission(props.currentGroup, 'events_manage?')}>
           <IconButton
@@ -217,6 +217,7 @@ SocialLinkListItem.propTypes = {
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(
