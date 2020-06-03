@@ -49,6 +49,10 @@ RSpec.describe PollResponsesController, type: :controller do
           post :create, poll_id: poll.id, poll_response: poll_response
           expect(flash[:alert]).to eq('You have already submitted a response')
         end
+
+        it 'does not create another response' do
+          expect{ post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse, :count).by(0) 
+        end
       end
 
       context 'with valid params' do
