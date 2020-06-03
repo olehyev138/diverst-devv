@@ -638,7 +638,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
 
-    describe 'POST #register_room_in_database' do
+    describe 'POST #register_room_in_db' do
       # let!(:enterprise1) { create(:enterprise) }
       # let!(:group1) { create(:group, enterprise_id: enterprise1.id) }
 
@@ -647,9 +647,8 @@ RSpec.describe InitiativesController, type: :controller do
       before { initiative.save }
 
       def register_room(sid, name, status)
-        xhr :post, :register_room_in_database, group_id: group.id, id: initiative.id, sid: sid,
-                                                         name: name,
-                                                         status: status, format: :js
+        xhr :post, :register_room_in_db, group_id: group.id, id: initiative.id, sid: sid,
+                                         name: name, status: status, format: :js
       end
 
       context 'successfully' do
@@ -687,6 +686,6 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
 
-    describe 'PATCH #update_registered_room_in_database'
+    describe 'PATCH #update_registered_room_in_db'
   end
 end

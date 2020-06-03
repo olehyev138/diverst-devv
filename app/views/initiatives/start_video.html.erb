@@ -278,7 +278,7 @@
       console.log(room.sid);
       var room = room; 
       $.ajax({
-        url: '<%= register_room_in_database_group_initiative_path(@group, @initiative) %>',
+        url: '<%= register_room_in_db_group_initiative_path(@group, @initiative) %>',
         type: 'POST',
         data: {
           sid: room.sid,
@@ -291,7 +291,7 @@
     function updateRegisteredRoomInDatabase(room) {
       var room = room;
       $.ajax({
-        url: '<%= update_registered_room_in_database_group_initiative_path(@group, @initiative) %>',
+        url: '<%= update_registered_room_in_db_group_initiative_path(@group, @initiative) %>',
         type: 'PATCH',
         data: {
           sid: room.sid,

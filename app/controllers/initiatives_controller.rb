@@ -1,7 +1,9 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video, :leave_video, :register_room_in_database, :update_registered_room_in_database]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses,
+                                        :export_attendees_csv, :archive, :start_video, :join_video,
+                                        :leave_video, :register_room_in_db, :update_registered_room_in_db]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -172,7 +174,7 @@ class InitiativesController < ApplicationController
     render nothing: true
   end
 
-  def register_room_in_database
+  def register_room_in_db
     # need to skip authorization here because it is redundant? you are already in the room and data
     # needs to be collected.
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
@@ -198,7 +200,7 @@ class InitiativesController < ApplicationController
     end
   end
 
-  def update_registered_room_in_database
+  def update_registered_room_in_db
     require 'twilio-ruby'
 
     raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?

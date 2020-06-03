@@ -1,5 +1,4 @@
 class TwilioUsageDatatable < AjaxDatatablesRails::Base
-
   def initialize(view_context, rooms)
     super(view_context)
     @rooms = rooms

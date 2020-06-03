@@ -329,8 +329,8 @@ Rails.application.routes.draw do
         get 'start_video'
         get 'join_video'
         patch 'leave_video'
-        post 'register_room_in_database'
-        patch 'update_registered_room_in_database'
+        post 'register_room_in_db'
+        patch 'update_registered_room_in_db'
       end
 
       scope module: 'initiatives' do
