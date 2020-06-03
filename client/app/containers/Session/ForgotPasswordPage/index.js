@@ -13,30 +13,37 @@ import dig from 'object-dig';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from './reducer';
 
 import ForgotPasswordForm from 'components/Session/ForgotPasswordForm';
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from 'containers/User/PasswordResetPage/saga';
+import reducer from 'containers/User/PasswordResetPage/reducer';
+import { requestPasswordResetBegin } from 'containers/User/PasswordResetPage/actions';
 
 export function ForgotPasswordPage(props) {
-  useInjectReducer({ key: 'forgotPasswordPage', reducer });
+  useInjectReducer({ key: 'forgotPassword', reducer });
+  useInjectSaga({ key: 'forgotPassword', saga });
 
   const [email, setEmail] = useState(dig(props.location, 'state', 'email') || '');
 
   return (
     <ForgotPasswordForm
       email={email}
+      forgotPasswordBegin={props.requestPasswordResetBegin}
     />
   );
 }
 
 ForgotPasswordPage.propTypes = {
   location: PropTypes.object,
+  requestPasswordResetBegin: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
+  requestPasswordResetBegin,
 };
 
 const withConnect = connect(

@@ -170,6 +170,8 @@ class Api::V1::UsersController < DiverstController
 
   def reset_password_request
     user = User.find_user_by_email(self.diverst_request.user, params)
+    raise RuntimeException.new('User not initialized') unless user&.invitation_accepted_at
+
     user.request_password!
   rescue => e
     raise BadRequestException.new(e.message)
