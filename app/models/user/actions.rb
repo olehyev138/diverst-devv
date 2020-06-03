@@ -244,7 +244,7 @@ module User::Actions
        mentors: mentor_lite_includes, mentees: mentor_lite_includes]
     end
 
-    def signin(email, password)
+    def signin(email, password, request = nil)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?
 
@@ -262,6 +262,10 @@ module User::Actions
       user.last_sign_in_at = DateTime.now
       user.reset_password_token = nil
       user.reset_password_sent_at = nil
+      user.last_sign_in_ip = user.current_sign_in_ip
+      if request
+        user.current_sign_in_ip = request.remote_ip
+      end
       user.save!
 
       user

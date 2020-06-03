@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_05_29_161045) do
-
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -392,7 +391,7 @@ ActiveRecord::Schema.define(version: 2020_05_29_161045) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean "enable_pending_comments", default: false
     t.boolean "mentorship_module_enabled", default: false
-    t.boolean "disable_likes", default: false
+    t.boolean "enable_likes", default: true
     t.string "default_from_email_address"
     t.string "default_from_email_display_name"
     t.boolean "enable_social_media", default: false
@@ -1021,6 +1020,10 @@ ActiveRecord::Schema.define(version: 2020_05_29_161045) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
+    t.bigint "author_id_id"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
+    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1292,6 +1295,7 @@ ActiveRecord::Schema.define(version: 2020_05_29_161045) do
     t.integer "status", default: 0, null: false
     t.boolean "email_sent", default: false, null: false
     t.bigint "initiative_id"
+    t.integer "responses_count", default: 0
     t.index ["enterprise_id"], name: "index_polls_on_enterprise_id"
     t.index ["initiative_id"], name: "index_polls_on_initiative_id"
     t.index ["owner_id"], name: "index_polls_on_owner_id"
@@ -1437,6 +1441,7 @@ ActiveRecord::Schema.define(version: 2020_05_29_161045) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sign_in_ip"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
