@@ -182,7 +182,7 @@ export function EventsList(props, context) {
                       >
                         <CardActionArea>
                           <CardContent>
-                            <EventListItem item={item} currentGroupID={props.currentGroupID} />
+                            <EventListItem item={item} currentGroupID={props.currentGroup ? props.currentGroup.id : null} />
                           </CardContent>
                         </CardActionArea>
                       </Link>
