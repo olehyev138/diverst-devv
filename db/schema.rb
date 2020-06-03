@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 2020_05_28_165620) do
+
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1292,6 +1292,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_165620) do
     t.integer "status", default: 0, null: false
     t.boolean "email_sent", default: false, null: false
     t.bigint "initiative_id"
+    t.integer "responses_count", default: 0
     t.index ["enterprise_id"], name: "index_polls_on_enterprise_id"
     t.index ["initiative_id"], name: "index_polls_on_initiative_id"
     t.index ["owner_id"], name: "index_polls_on_owner_id"
