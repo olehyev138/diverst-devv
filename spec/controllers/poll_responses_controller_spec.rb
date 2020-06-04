@@ -39,6 +39,24 @@ RSpec.describe PollResponsesController, type: :controller do
     describe 'with logged user' do
       login_user_from_let
 
+      context 'when response for survey already exists' do
+        let!(:response) { create(:poll_response, poll_id: poll.id, user_id: user.id) }
+
+        it 'expect a redirect to polls index' do
+          post :create, poll_id: poll.id, poll_response: poll_response
+          expect(response).to redirect_to user_root_path
+        end
+
+        it 'renders flash alert message' do
+          post :create, poll_id: poll.id, poll_response: poll_response
+          expect(flash[:alert]).to eq('You have already submitted a response')
+        end
+
+        it 'does not create another response' do
+          expect{ post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse, :count).by(0) 
+        end
+      end
+
       context 'with valid params' do
         it 'creates a new poll_response' do
           expect { post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse.where(poll: poll, user: user), :count).by(1)
