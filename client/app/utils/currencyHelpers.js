@@ -2,26 +2,23 @@ import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
 import { floatRound } from 'utils/floatRound';
 
+// List of Currency value label pairs for select fields
 export const currencyOptions = Object.freeze([
   { value: 'USD', label: '$ (USD)' },
   { value: 'GBP', label: '£ (GBP)' },
 ]);
 
+// Used to cache the props used by react-number-format
 export const currencyLocaleProps = {};
 
-export const getCurrency = code => currencyOptions.find(curr => curr.value === code);
+// Used to get the Select Field format from a currency code
+export const getCurrency = code => currencyOptions.find(curr => curr.value === code) || { value: code, label: code };
 
-export const moneyToString = (amount, decimalDelim = '.', thousandDelim = ',') => {
-  if (typeof amount === 'string')
-    return amount;
-  const main = Math.floor(amount);
-  const decimal = amount % main;
-
-  return `${main.toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousandDelim)}${decimalDelim}${decimal}`;
-};
-
+// Used to calculate the keys for the Locale Props
 const currPropsKey = (locale, currency) => `${locale}::${currency}`;
 
+// get the Props used for react-number-format, by either reading from the cache hash
+// or determines the props based on testing `intl`'s numberFormat method to determine the relevant settings
 export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   // THIS IS A HACKY SOLUTION, BUT IT'S THE BEST I GOT SO FAR
 
@@ -69,6 +66,7 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   return numberProps;
 };
 
+// simple wrapper for `intl`'s getNumberFormat method used to format currency values
 export const toCurrencyString = (intl, amount, currency = 'USD', localeOverride = null) => intl
   ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
   : `$ ${floatRound(amount, 2)}`;
