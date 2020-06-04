@@ -87,7 +87,7 @@ class PollResponsesController < ApplicationController
 
   def check_existence_of_survey_response
     if @poll.responses.where(user_id: current_user.id).any?
-      redirect_to polls_path, alert: 'You have already submitted a response'
+      redirect_to user_root_path, alert: 'You have already submitted a response'
     end
   end
 end
