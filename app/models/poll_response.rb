@@ -1,4 +1,5 @@
 class PollResponse < BaseClass
+  include PublicActivity::Common
   include ContainsFields
 
   belongs_to :poll
@@ -12,6 +13,24 @@ class PollResponse < BaseClass
 
   def group
     poll&.initiative&.group
+  end
+
+  def user_email
+    return 'Anonymous' if anonymous
+
+    user.email_for_notification
+  end
+
+  def user_name
+    return 'Anonymous' if anonymous
+
+    user.name
+  end
+
+  def user_id
+    return 'Anonymous' if anonymous
+
+    user.id
   end
 
   private
