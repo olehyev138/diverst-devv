@@ -27,8 +27,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
-const changePage = id => push(ROUTES.admin.manage.groups.categorize.path(id));
-
 export function GroupCategorizePage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
   useInjectSaga({ key: 'groupCategories', saga });
@@ -51,7 +49,6 @@ export function GroupCategorizePage(props) {
       groupAction={props.groupCategorizeBegin}
       categories={props.categories}
       isCommitting={props.isCommitting}
-      changePage={props.changePage}
     />
   );
 }
@@ -61,7 +58,6 @@ GroupCategorizePage.propTypes = {
   groupCategorizeBegin: PropTypes.func,
   groupCategorizeUnmount: PropTypes.func,
   getGroupCategoriesBegin: PropTypes.func,
-  changePage: PropTypes.func,
   group: PropTypes.object,
   groups: PropTypes.array,
   categories: PropTypes.array,
@@ -82,7 +78,6 @@ const mapDispatchToProps = {
   groupCategorizeBegin,
   getGroupCategoriesBegin,
   groupCategorizeUnmount,
-  changePage,
 };
 
 const withConnect = connect(

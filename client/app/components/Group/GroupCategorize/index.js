@@ -137,7 +137,6 @@ GroupCategorizeFormInner.propTypes = {
   categories: PropTypes.array,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  changePage: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 };
