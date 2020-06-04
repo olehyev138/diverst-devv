@@ -6,7 +6,7 @@ import dig from 'object-dig';
 import Select from 'react-select';
 
 import { Grid, FormHelperText, FormLabel, Input, InputAdornment, InputLabel } from '@material-ui/core';
-import { currencyOptions, getCurrencyProps, moneyToString } from 'utils/currencyHelpers';
+import { currencyOptions, getCurrencyProps } from 'utils/currencyHelpers';
 import DiverstSelect from 'components/Shared/DiverstSelect';
 import DiverstCurrencyTextField from 'components/Shared/DiverstCurrencyTextField';
 import { injectIntl, intlShape } from 'react-intl';
