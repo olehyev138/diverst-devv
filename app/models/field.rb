@@ -3,6 +3,7 @@ class Field < BaseClass
   belongs_to :group
   belongs_to :poll
   belongs_to :initiative
+  has_one :graph, dependent: :destroy
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
