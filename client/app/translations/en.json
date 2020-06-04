@@ -855,7 +855,7 @@
   "diverst.containers.MetricsDashboard.table.tooltip.delete": "Delete Member",
   "diverst.containers.MetricsDashboard.table.tooltip.delete_confirm": "Delete member?",
   "diverst.containers.GlobalSettings.Links.tab.fields" : "Fields",
-  "diverst.containers.GlobalSettings.Links.tab.customTexts" : "Custom Texts",
+  "diverst.containers.GlobalSettings.Links.tab.customTexts" : "Custom Labels",
   "diverst.containers.GlobalSettings.Links.tab.configuration" : "Configurations",
   "diverst.containers.GlobalSettings.Links.tab.sso" : "SSO",
   "diverst.containers.GlobalSettings.Links.tab.emails" : "Emails",
