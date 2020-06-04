@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/GlobalSettings/Email/Email/reducer';
 import saga from 'containers/GlobalSettings/Email/Email/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -26,21 +24,19 @@ import {
 
 import EmailForm from 'components/GlobalSettings/Email/EmailForm';
 import Conditional from 'components/Compositions/Conditional';
-import { SSOSettingsPage } from 'containers/GlobalSettings/SSOSettingsPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EmailEditPage(props) {
   useInjectReducer({ key: 'emails', reducer });
   useInjectSaga({ key: 'emails', saga });
 
-  const rs = new RouteService(useContext);
+  const { email_id: emailId } = useParams();
   const links = {
     emailsIndex: ROUTES.admin.system.globalSettings.emails.index.path(),
-    emailEdit: ROUTES.admin.system.globalSettings.emails.edit.path(rs.params('email_id')),
+    emailEdit: ROUTES.admin.system.globalSettings.emails.edit.path(emailId),
   };
 
   useEffect(() => {
-    const emailId = rs.params('email_id');
     props.getEmailBegin({ id: emailId });
 
     return () => props.emailsUnmount();
@@ -99,6 +95,6 @@ export default compose(
 )(Conditional(
   EmailEditPage,
   ['permissions.emails_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.email.email.editPage
 ));

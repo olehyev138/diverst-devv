@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -12,7 +10,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/GlobalSettings/Email/Email/saga';
 import reducer from 'containers/GlobalSettings/Email/Email/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -27,9 +24,7 @@ import {
 } from 'containers/GlobalSettings/Email/Email/actions';
 
 import EmailsList from 'components/GlobalSettings/Email/EmailsList';
-import dig from 'object-dig';
 import Conditional from 'components/Compositions/Conditional';
-import { EmailEditPage } from 'containers/GlobalSettings/Email/Email/EmailEditPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
@@ -43,7 +38,6 @@ export function EmailsPage(props) {
   useInjectReducer({ key: 'emails', reducer });
   useInjectSaga({ key: 'emails', saga });
 
-  const rs = new RouteService(useContext);
   const links = {
     emailEdit: id => ROUTES.admin.system.globalSettings.emails.edit.path(id),
   };
@@ -120,6 +114,6 @@ export default compose(
 )(Conditional(
   EmailsPage,
   ['permissions.emails_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.email.email.indexPage
 ));
