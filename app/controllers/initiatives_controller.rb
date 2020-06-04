@@ -1,7 +1,9 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive, :start_video, :join_video, :leave_video]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses,
+                                        :export_attendees_csv, :archive, :start_video, :join_video,
+                                        :leave_video, :register_room_in_db, :update_registered_room_in_db]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -132,7 +134,7 @@ class InitiativesController < ApplicationController
 
   def start_video
     # Only user with permission to update group should be able to start a call
-    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+    authorize [@group, @initiative], :start_video?, policy_class: GroupEventsPolicy
 
     # check if user can start the session
     require 'twilio-ruby'
@@ -172,10 +174,55 @@ class InitiativesController < ApplicationController
     render nothing: true
   end
 
-  def enable_virtual_meet
+  def register_room_in_db
+    # need to skip authorization here because it is redundant? you are already in the room and data
+    # needs to be collected.
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
-    @initiative.virtual_toggle
-    render nothing: true
+
+    sid = params[:sid]
+    name = params[:name]
+    status = params[:status]
+    group = Group.find(params[:group_id])
+    enterprise_id = group.enterprise_id
+
+    room = VideoRoom.new(
+      sid: sid,
+      name: name,
+      status: status,
+      enterprise_id: enterprise_id,
+      initiative_id: @initiative.id
+    )
+
+    if room.save
+      render nothing: true, status: :ok
+    else
+      render nothing: true, status: :unprocessable_entity
+    end
+  end
+
+  def update_registered_room_in_db
+    require 'twilio-ruby'
+
+    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
+    raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
+
+    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+    sid = params[:sid]
+    room_context = client.video.rooms(sid)
+    room = client.video.rooms(sid).fetch
+    video_room = VideoRoom.find_by(sid: sid)
+
+    if video_room && video_room.update(
+      status: room.status,
+      duration: room.duration,
+      participants: room_context.participants.list.count,
+      start_date: room.date_created,
+      end_date: room.end_time
+    )
+      render noting: true, status: :ok
+    else
+      render nothing: true, status: :unprocessable_entity
+    end
   end
 
 

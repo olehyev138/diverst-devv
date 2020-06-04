@@ -129,9 +129,21 @@
   
   <% end %>
   
-  
-  <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if LogPolicy.new(current_user, nil).index? %>
-  
+
+  <%= active_link_to 'Logs&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Logs", "aria-control": "navigation", "data-jq-dropdown": "#logs", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  <nav id="logs" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).diversity_manage? %>
+      <li>
+        <%= active_link_to "General Logs", logs_path if LogPolicy.new(current_user, nil).index? %>
+      </li>
+      <li>
+        <%= active_link_to 'Twilio Dashboard', twilio_dashboard_index_path %>
+      </li>
+      <% end %>
+    </ul>
+  </nav>
+
   <% if show_diversity_link? %>
   <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
   <nav id="diversity" class="jq-dropdown jq-dropdown-tip">

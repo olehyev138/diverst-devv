@@ -1,0 +1,24 @@
+<h1>Twilio Dashboard</h1>
+
+<div class="card">
+    <div class="card__section">
+      <h2>Virtual Events Stats</h2>
+
+      <table 
+        id="twilio-usage-datatable"
+        data-no-sortable='3'
+        class="table--has-border data-table" 
+        data-source="<%= twilio_dashboard_index_path(format: :json) %>">
+        <thead>
+        <th>Room/Event Name</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Duration</th>
+        <th>Number of Participants</th>
+        <th>Billing</th>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>

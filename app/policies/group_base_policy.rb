@@ -119,6 +119,12 @@ class GroupBasePolicy < Struct.new(:user, :context)
     manage_group_resource(base_manage_permission)
   end
 
+  def start_video?
+    return false unless user.enterprise.virtual_events_enabled?
+
+    manage_group_resource(base_manage_permission)
+  end
+
   def export_group_members_list_csv?
     user.is_group_leader_of?(group) || update?
   end
