@@ -2,12 +2,12 @@ class Api::V1::SessionsController < DiverstController
   skip_before_action :verify_jwt_token, only: [:create, :logout]
 
   def create
-    user = User.signin(params[:email], params[:password])
+    user = User.signin(params[:email], params[:password], request)
 
-    track_activity(user, { ip: user.current_sign_in_ip }, user: user) if user.present?
+    track_activity(user, { ip: request.remote_ip }, user: user) if user.present?
 
     render status: 200, json: {
-      token: UserTokenService.create_jwt(user, params),
+      token: UserTokenService.create_jwt(user, params, request),
     }
   rescue => e
     raise BadRequestException.new(e.message)
