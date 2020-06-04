@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
       @users = users_leaders.union(users_users).union(users_super).limit(params[:limit] || 25)
     else
-      @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
+      @users = current_user.enterprise.users.active.includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
     end
 
     if extra_params[:not_current_user]
