@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useContext, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -21,21 +19,17 @@ import {
   selectIsFetchingCampaigns, selectFormCampaign,
 } from 'containers/Innovate/Campaign/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CampaignList from 'components/Innovate/Campaign/CampaignList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
-import { CampaignEditPage } from 'containers/Innovate/Campaign/CampaignEditPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignListPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
   useInjectSaga({ key: 'campaigns', saga });
-
-  const rs = new RouteService(useContext);
 
   const [params, setParams] = useState({
     count: 10, page: 0, orderBy: '', order: 'asc'
@@ -46,8 +40,6 @@ export function CampaignListPage(props) {
     campaignEdit: id => ROUTES.admin.campaigns.edit.path(id),
     // campaignsNew: ROUTES.group.members.new.path(groupId),
   };
-
-  const campaignId = rs.params('campaign_id');
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -129,6 +121,6 @@ export default compose(
 )(Conditional(
   CampaignListPage,
   ['permissions.campaigns_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.innovate.campaign.listPage
 ));
