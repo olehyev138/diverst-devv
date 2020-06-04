@@ -100,7 +100,7 @@ handleClickOpen = () => {
       </Paper>
     );
 
-    const privacyMessage = (
+    const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
       <React.Fragment>
         <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary' display='inline'>
           <DiverstFormattedMessage {...messages.privacy} />
@@ -121,7 +121,7 @@ handleClickOpen = () => {
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
-    );
+    ) : null;
 
     const sponsor = (
       <SponsorCard
