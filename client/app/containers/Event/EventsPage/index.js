@@ -130,7 +130,6 @@ export function EventsPage(props) {
         links={links}
         readonly={props.readonly}
         onlyUpcoming={props.onlyUpcoming}
-        currentGroupID={props.currentGroup.id}
       />
     </React.Fragment>
   );
