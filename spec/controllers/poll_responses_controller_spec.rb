@@ -44,7 +44,7 @@ RSpec.describe PollResponsesController, type: :controller do
 
         it 'expect a redirect to polls index' do
           post :create, poll_id: poll.id, poll_response: poll_response
-          expect(response).to redirect_to polls_path
+          expect(response).to redirect_to user_root_path
         end
 
         it 'renders flash alert message' do
