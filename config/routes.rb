@@ -81,6 +81,7 @@ Rails.application.routes.draw do
   end
 
   resources :logs, only: [:index]
+  resources :twilio_dashboard, only: [:index]
 
   get 'integrations', to: 'integrations#index'
   get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
@@ -328,6 +329,8 @@ Rails.application.routes.draw do
         get 'start_video'
         get 'join_video'
         patch 'leave_video'
+        post 'register_room_in_db'
+        patch 'update_registered_room_in_db'
       end
 
       scope module: 'initiatives' do

@@ -219,6 +219,7 @@ class EnterprisesController < ApplicationController
         :unit_of_expiry_age,
         :onboarding_consent_enabled,
         :onboarding_pop_up_content,
+        :virtual_events_enabled,
         theme: [
           :id,
           :primary_color,
