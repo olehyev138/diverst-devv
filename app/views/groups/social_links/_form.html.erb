@@ -93,7 +93,9 @@
           <%= nfl.hidden_field :id, :value => nfl.object.id %>
           <%= nfl.hidden_field :news_feed_id, :value => @group.news_feed.id %>
           <%= nfl.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2-field-segments" } %>
-          <%= nfl.association :shared_news_feeds, label: 'Share with other ' + "#{c_t(:erg).pluralize}", label_method: lambda { |n| "#{n.group.name}" }, collection: NewsFeed.where(:group_id => @group.enterprise.groups.ids).where.not(:group_id => @group.id), input_html: { class: "select2" } %>
+          <% unless @social_link.news_feed_link.pending? %>
+            <%= nfl.association :shared_news_feeds, label: 'Share with other ' + "#{c_t(:erg).pluralize}", label_method: lambda { |n| "#{n.group.name}" }, collection: NewsFeed.where(:group_id => @group.enterprise.groups.ids).where.not(:group_id => @group.id), input_html: { class: "select2" } %>
+          <% end %>  
         <% end %>
         <%= f.button :submit, data: {:disable_with => 'Please Wait...'} %>
       <% end %>
