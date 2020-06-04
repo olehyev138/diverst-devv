@@ -12,7 +12,7 @@ import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
 
 import { getGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
-import { getGroupsBegin, groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
+import { groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
 import {
   selectPaginatedSelectGroups,
   selectCategorizeGroup,
@@ -39,7 +39,6 @@ export function GroupCategorizePage(props) {
 
   useEffect(() => {
     props.getGroupBegin({ id: rs.params('group_id') });
-    props.getGroupsBegin();
     props.getGroupCategoriesBegin();
     return () => {
       props.groupCategorizeUnmount();
@@ -49,7 +48,6 @@ export function GroupCategorizePage(props) {
   return (
     <GroupCategorizeForm
       group={props.group}
-      selectGroups={props.groups}
       groupAction={props.groupCategorizeBegin}
       categories={props.categories}
       isCommitting={props.isCommitting}
@@ -60,7 +58,6 @@ export function GroupCategorizePage(props) {
 
 GroupCategorizePage.propTypes = {
   getGroupBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
   groupCategorizeBegin: PropTypes.func,
   groupCategorizeUnmount: PropTypes.func,
   getGroupCategoriesBegin: PropTypes.func,
@@ -73,7 +70,6 @@ GroupCategorizePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   group: selectCategorizeGroup(),
-  groups: selectPaginatedSelectGroups(),
   currentUser: selectUser(),
   categories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
@@ -83,7 +79,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getGroupBegin,
-  getGroupsBegin,
   groupCategorizeBegin,
   getGroupCategoriesBegin,
   groupCategorizeUnmount,
