@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,8 +12,6 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
@@ -49,8 +46,8 @@ export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
-  const { location } = rs;
+  const location = useLocation();
+  const { group_id: groupId, item_id: folderId } = useParams();
 
   const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
@@ -61,11 +58,9 @@ export function FolderEditPage(props) {
   };
 
   useEffect(() => {
-    const folderId = rs.params('item_id');
-    const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
     if (type === 'group')
-      props.getFoldersBegin({ group_id: groupId[0] });
+      props.getFoldersBegin({ group_id: groupId });
     else if (type === 'admin')
       props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
 
@@ -81,7 +76,6 @@ export function FolderEditPage(props) {
           }}
           enableReinitialize
           onSubmit={(values, actions) => {
-            const folderId = rs.params('item_id');
             props.validateFolderPasswordBegin({
               id: folderId[0],
               password: values.password
@@ -193,8 +187,8 @@ export default compose(
 )(Conditional(
   FolderEditPage,
   ['currentFolder.permissions.update?', 'isFormLoading'],
-  (props, rs) => rs.location.fromFolder
-    ? getFolderShowPath(rs.location.fromFolder.folder)
-    : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  (props, params, location) => location.fromFolder
+    ? getFolderShowPath(location.fromFolder.folder)
+    : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', params.group_id),
   'resource.groupFolder.folderEditPage'
 ));
