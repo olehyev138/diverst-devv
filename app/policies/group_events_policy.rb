@@ -94,6 +94,10 @@ class GroupEventsPolicy < GroupBasePolicy
       return false
     end
   end
+
+  def start_video?
+    able_to_join_events?
+  end
 end
 
 # values for group.upcoming_events visibility--> public(- View Only (non group members cannot join events), non_member- Allow Non Members to Join (non group members can join events)
