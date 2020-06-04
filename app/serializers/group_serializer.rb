@@ -4,12 +4,12 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes_with_permission :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data, if: :family?
 
   attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
-                  :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
-                  :annual_budget, :annual_budget_leftover, :active,
-                  :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
-                  :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
-                  :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
-                  :logo, :logo_file_name, :logo_data, :children, :parent, :annual_budget_currency, if: :show?
+                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
+                             :annual_budget, :annual_budget_leftover, :active,
+                             :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
+                             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
+                             :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
+                             :logo, :logo_file_name, :logo_data, :children, :parent, :annual_budget_currency, if: :show?
 
   def family?
     instance_options[:family]
