@@ -16,7 +16,7 @@ fi
 
 cd client/
 
-# Build frontend
+# Build frontend (npm install is handled separately)
 npm run build
 
 aws s3 sync --cache-control 'max-age=604800' --exclude index.html build/ "s3://$FRONTEND_BUCKET"
