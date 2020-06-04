@@ -4,9 +4,7 @@
  *
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +16,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Segment/saga';
 import reducer from 'containers/Segment/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
@@ -36,7 +33,6 @@ export function SegmentListPage(props) {
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
-  const rs = new RouteService(useContext);
   const links = {
     segmentNew: ROUTES.admin.manage.segments.new.path(),
     segmentPage: id => ROUTES.admin.manage.segments.show.path(id)
@@ -102,13 +98,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
 });
-/*
-const mapDispatchToProps = {
-  getSegmentsBegin,
-  segmentUnmount,
-  deleteSegmentBegin,
-};
-*/
+
 const mapDispatchToProps = dispatch => ({
   getSegmentsBegin: payload => dispatch(getSegmentsBegin(payload)),
   deleteSegmentBegin: payload => dispatch(deleteSegmentBegin(payload)),
@@ -127,6 +117,6 @@ export default compose(
 )(Conditional(
   SegmentListPage,
   ['permissions.segments_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.segment.listPage
 ));
