@@ -914,6 +914,7 @@
   "diverst.containers.GlobalSettings.Configurations.switch.social_media" : "Enable social media",
   "diverst.containers.GlobalSettings.Configurations.switch.plan_module" : "Enable plan module",
   "diverst.containers.GlobalSettings.Configurations.idp_url" : "IdP Metadata URL",
+  "diverst.containers.GlobalSettings.Configurations.sp_url" : "SP Metadata URL",
   "diverst.containers.GlobalSettings.Configurations.login_url" : "Login URL",
   "diverst.containers.GlobalSettings.Configurations.logout_url" : "Logout URL",
   "diverst.containers.GlobalSettings.Configurations.certificate" : "Certificate",
