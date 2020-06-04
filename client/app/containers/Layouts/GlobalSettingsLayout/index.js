@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { push } from 'connected-react-router';
-import RouteService from 'utils/routeHelpers';
 import { permission } from 'utils/permissionsHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -39,8 +38,6 @@ const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     if (!Component) {
-      const rs = new RouteService({ computedMatch, location });
-
       if (permission(rest, 'enterprise_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path());
       else if (permission(rest, 'fields_manage'))
