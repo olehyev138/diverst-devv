@@ -1,20 +1,26 @@
 <div class="block block-section <%= "flippable" if event.picture.present? %>" style="margin-bottom: 20px;">
-    <div class="front">
-      <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'live__streaming') if event.ongoing? && event.ongoing? %>
-      <%= image_tag("Remote meeting icon.png", size: "20x20") if event.virtual? %>
-      <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
-      <p>
-        <%= inline_svg('icons/brand.svg', size: '20px*20px', class: 'play__back') if event.virtual? && event.past? %>
-        <%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %>
-      </p>
+  <div class="front">
+    <% if event.virtual? %>
+      <% if event.ongoing? %>
+        <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'live__streaming') %>
+      <% elsif event.upcoming? %>
+        <%= inline_svg('icons/live-streaming.svg', size: '20px*20px', class: 'scheduled__streaming') %>
+      <% end %>
+      <%= image_tag("Remote meeting icon.png", size: "20x20") %>
+    <% end %>
+    <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
+    <p>
+      <%= inline_svg('icons/brand.svg', size: '20px*20px', class: 'play__back') if event.virtual? && event.past? %>
+      <%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %>
+    </p>
+  </div>
+  <div class="back">
+    <span class="highlight"><%= link_to truncate(event.title, length: 75), group_event_path(event.group, event) %></span><br>
+    <small style="padding-left: 12px;"><%= sanitize HtmlHelper.strip_truncate(event.description, 90) %></small><br>
+    <small class="muted"><%= event.start.to_s :slashes %></small>
+    <div class="flex-row__cell">
+      <span class="icon icon--chevron-right"></span>
     </div>
-    <div class="back">
-      <span class="highlight"><%= link_to truncate(event.title, length: 75), group_event_path(event.group, event) %></span><br>
-      <small style="padding-left: 12px;"><%= sanitize HtmlHelper.strip_truncate(event.description, 90) %></small><br>
-      <small class="muted"><%= event.start.to_s :slashes %></small>
-      <div class="flex-row__cell">
-        <span class="icon icon--chevron-right"></span>
-      </div>
-    </div>
+  </div>
 </div>
 <br>

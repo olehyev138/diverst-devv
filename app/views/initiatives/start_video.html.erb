@@ -47,8 +47,8 @@
         border-radius: 100%;
       }
 
-      #mute-video {
-        margin-right: 50px;
+      #screen-share {
+        fill: white;
       }
     </style>
   </head>
@@ -156,9 +156,10 @@
         track.addEventListener('click', enlargeParticipantVideoTrack);
     }
 
-    function muteAudioOfLocalParticipant() {
+    function toggleAudioOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
       var svgElement = document.getElementById('mute-mic');
+      var svgElement1 = document.getElementById('turn-on-mic');
       localParticipant.audioTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
@@ -172,14 +173,16 @@
       });
     }
 
-    function muteVideoOfLocalParticipant() {
+    function toggleVideoOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      var svgElement = document.getElementById('mute-video');
+      var mute_video = document.getElementById('mute-video');
+      var turn_on_video = document.getElementById('turn-on-video'); 
       localParticipant.videoTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
           track.mediaStreamTrack.muted = true;
-          svgElement.style.fill = 'red';
+          mute_video.setAttribute('class', 'hidden');
+          turn_on_video.removeAttribute('class');          
         }else{
           track.enable();
           track.mediaStreamTrack.muted = false;
@@ -214,11 +217,19 @@
     }
 
     $('#mute-mic').on('click', function(){
-      muteAudioOfLocalParticipant();
+      toggleAudioOfLocalParticipant();
+    });
+
+    $('#turn-on-mic').on('click', function(){
+      toggleAudioOfLocalParticipant();
     });
 
     $('#mute-video').on('click', function(){
-      muteVideoOfLocalParticipant();
+      toggleVideoOfLocalParticipant();
+    });
+
+    $('#turn-on-video').on('click', function(){
+      toggleVideoOfLocalParticipant();
     });
 
     $('#leave-call').on('click', function(){
