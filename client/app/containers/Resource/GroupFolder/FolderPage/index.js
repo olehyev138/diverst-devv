@@ -180,7 +180,7 @@ export function FolderPage(props) {
           onSubmit={(values, actions) => {
             const folderId = rs.params('item_id');
             props.validateFolderPasswordBegin({
-              id: folderId[0],
+              id: folderId,
               password: values.password
             });
           }}
