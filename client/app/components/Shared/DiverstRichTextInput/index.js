@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Typography, TextField } from '@material-ui/core';
+import { Card, Typography, TextField, FormLabel } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -24,8 +24,21 @@ export function DiverstRichTextInput(props) {
       )
     )
   );
+  const [initialValue, setInitialValue] = useState(true);
+
+  useEffect(() => {
+    if (value !== '' && initialValue) {
+      setEditorState(EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          htmlToDraft(value)
+        )
+      ));
+      setInitialValue(false);
+    }
+  }, [value]);
 
   const onEditorStateChange = (newEditorState) => {
+    setInitialValue(false);
     setEditorState(newEditorState);
     if (props.onChange)
       props.onChange(
@@ -35,9 +48,9 @@ export function DiverstRichTextInput(props) {
 
   return (
     <React.Fragment>
-      <Typography variant='h6' color='primary'>
+      <FormLabel>
         {label}
-      </Typography>
+      </FormLabel>
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
