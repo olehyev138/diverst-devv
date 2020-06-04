@@ -19,7 +19,7 @@ import messages from 'containers/Group/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Divider, Box, Typography, TextField
+  Button, Card, CardActions, CardContent, Grid, Divider, Box, Typography
 } from '@material-ui/core';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
