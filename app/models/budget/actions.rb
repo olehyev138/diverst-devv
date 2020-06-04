@@ -4,7 +4,6 @@ module Budget::Actions
   end
 
   def approve(approver)
-    byebug
     blocker = approval_blocker
     raise InvalidInputException.new({ message: blocker, attribute: :annual_budget }) if blocker
     raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first }) unless update(approver: approver, is_approved: true)
