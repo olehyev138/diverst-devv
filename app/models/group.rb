@@ -21,22 +21,22 @@ class Group < ApplicationRecord
     :enabled
   ]
 
-  enumerize :members_visibility, default: :managers_only, in: [
-    :global,
+  enumerize :members_visibility, default: :leaders_only, in: [
+    :public,
     :group,
-    :managers_only
+    :leaders_only
   ]
 
-  enumerize :event_attendance_visibility, default: :managers_only, in: [
-    :global,
+  enumerize :event_attendance_visibility, default: :leaders_only, in: [
+    :public,
     :group,
-    :managers_only
+    :leaders_only
   ]
 
-  enumerize :messages_visibility, default: :managers_only, in: [
-    :global,
+  enumerize :messages_visibility, default: :leaders_only, in: [
+    :public,
     :group,
-    :managers_only
+    :leaders_only
   ]
 
   enumerize :latest_news_visibility, default: :leaders_only, in: [

@@ -269,7 +269,7 @@ export function EventForm(props) {
     estimated_funding: { default: '' },
     currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
-    pillar: { default: '', customKey: 'pillar_id' },
+    pillar: { default: props.pillar, customKey: 'pillar_id' },
     owner_id: { default: '' },
     owner_group_id: { default: props.currentGroup.id }
   });
@@ -294,6 +294,7 @@ EventForm.propTypes = {
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  pillar: PropTypes.object,
 };
 
 EventFormInner.propTypes = {
