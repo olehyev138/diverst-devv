@@ -102,7 +102,7 @@ handleClickOpen = () => {
 
     const privacyMessage = (
       <React.Fragment>
-        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary'>
+        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary' display='inline'>
           <DiverstFormattedMessage {...messages.privacy} />
         </Typography>
         <DiverstDialog
