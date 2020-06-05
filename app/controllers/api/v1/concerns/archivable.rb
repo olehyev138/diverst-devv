@@ -7,7 +7,7 @@ module Api::V1::Concerns::Archivable
     base_authorize(item)
 
     klass.update(self.diverst_request, params)
-    track_activity(item)
+    track_activities(item)
     render status: 200, json: item
   rescue => e
     case e
@@ -32,7 +32,7 @@ module Api::V1::Concerns::Archivable
     base_authorize(item)
 
     klass.update(self.diverst_request, params)
-    track_activity(item)
+    track_activities(item)
     render status: 200, json: item
   rescue => e
     case e
