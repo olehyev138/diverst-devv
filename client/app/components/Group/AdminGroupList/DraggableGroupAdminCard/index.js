@@ -46,7 +46,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
 
   const importDialog = (
     <Dialog
-      open={importGroup}
+      open={importGroup !== 0}
       onClose={handleDialogClose}
       aria-labelledby='alert-dialog-slide-title'
       aria-describedby='alert-dialog-slide-description'
@@ -254,18 +254,21 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   <DiverstFormattedMessage {...messages.delete} />
                 </Button>
               </Permission>
-              <Button
-                size='small'
-                onClick={() => {
-                  setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                }}
-              >
-                {expandedGroups[group.id] ? (
-                  <DiverstFormattedMessage {...messages.children_collapse} />
-                ) : (
-                  <DiverstFormattedMessage {...messages.children_expand} />
-                )}
-              </Button>
+              {group.children.length > 0 && (
+                <Button
+                  size='small'
+                  onClick={() => {
+                    setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+                  }}
+                >
+                  {expandedGroups[group.id] ? (
+                    <DiverstFormattedMessage {...messages.children_collapse} />
+                  ) : (
+                    <DiverstFormattedMessage {...messages.children_expand} />
+                  )}
+
+                </Button>
+              )}
               <Button
                 size='small'
                 color='primary'
