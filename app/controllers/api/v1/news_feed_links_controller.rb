@@ -20,7 +20,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
     params[klass.symbol][:is_pinned] = true
     item = klass.find(params[:id])
     base_authorize(item)
-    raise BadRequestException.new('Already Approved') if item.approved?
+    raise BadRequestException.new('Already pinned') if item.is_pinned?
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
