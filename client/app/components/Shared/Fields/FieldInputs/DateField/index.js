@@ -20,17 +20,19 @@ const CustomDateField = (props) => {
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
-    <TextField
-      name={dataLocation}
-      id={dataLocation}
-      type='date'
-      margin='normal'
-      required={fieldDatum.field.required}
-      label={fieldDatum.field.title}
-      value={getIn(formik.values, dataLocation)}
-      onChange={formik.handleChange}
-      {...rest}
-    />
+    <React.Fragment>
+      <TextField
+        name={dataLocation}
+        id={dataLocation}
+        type='date'
+        margin='normal'
+        required={fieldDatum.field.required}
+        label={fieldDatum.field.title}
+        value={getIn(formik.values, dataLocation)}
+        onChange={formik.handleChange}
+        {...rest}
+      />
+    </React.Fragment>
   );
 };
 
