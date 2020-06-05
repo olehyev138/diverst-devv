@@ -46,8 +46,9 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
-} from 'containers/Group/constants';
+  JOIN_SUBGROUPS_ERROR,
+  UPDATE_GROUP_POSITION_BEGIN, UPDATE_GROUP_POSITION_ERROR, UPDATE_GROUP_POSITION_SUCCESS } from 'containers/Group/constants';
+
 
 /* Group listing */
 export function getGroupsBegin(payload) {
@@ -151,6 +152,27 @@ export function updateGroupSuccess(payload) {
 export function updateGroupError(error) {
   return {
     type: UPDATE_GROUP_ERROR,
+    error,
+  };
+}
+
+export function updateGroupPositionBegin(payload) {
+  return {
+    type: UPDATE_GROUP_POSITION_BEGIN,
+    payload,
+  };
+}
+
+export function updateGroupPositionSuccess(payload) {
+  return {
+    type: UPDATE_GROUP_POSITION_SUCCESS,
+    payload,
+  };
+}
+
+export function updateGroupPositionError(error) {
+  return {
+    type: UPDATE_GROUP_POSITION_ERROR,
     error,
   };
 }
