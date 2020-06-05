@@ -1,13 +1,24 @@
 class VideoRoom < ActiveRecord::Base
+  require 'twilio-ruby'
+
   belongs_to :enterprise
   validates :sid, uniqueness: { scope: :enterprise_id }
 
   def billing
     if number_of_participants <= 4
-      (0.008 * number_of_participants * duration_per_minute).round(4)
+      (0.01 * cumulative_participant_minutes).round(4)
     else
-      (0.02 * number_of_participants * duration_per_minute).round(4)
+      (0.02 * cumulative_participant_minutes).round(4)
     end
+  end
+
+  def cumulative_participant_minutes
+    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
+    raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
+
+    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+
+    client.video.rooms(sid).participants.list.map(&:duration).inject(0) { |x, y| x + y }
   end
 
   def duration_per_minute

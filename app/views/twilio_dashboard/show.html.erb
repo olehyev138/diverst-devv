@@ -1,0 +1,22 @@
+<h1>Participation Breakdown</h1>
+
+<div class="card">
+    <div class="card__section">
+      <table>
+        <thead>
+        <th>Timestamp</th>
+        <th>Id</th>
+        <th>Duration</th>
+        </thead>
+        <tbody>
+          <% @participants.each do |participant| %>
+          <tr>
+            <td><%= participant.start_time %></td>
+            <td><%= participant.identity %></td>
+            <td><%= participant.duration/60 %> min</td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
