@@ -134,11 +134,11 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       component={Switch}
                       onChange={handleChange}
                       color='primary'
-                      id='disable_likes'
-                      name='disable_likes'
+                      id='enable_likes'
+                      name='enable_likes'
                       margin='normal'
-                      checked={values.disable_likes}
-                      value={values.disable_likes}
+                      checked={values.enable_likes}
+                      value={values.enable_likes}
                     />
                   )}
                 />
@@ -328,7 +328,7 @@ export function EnterpriseConfiguration(props) {
     default_from_email_display_name: { default: '' },
     redirect_email_contact: { default: '' },
     mentorship_module_enabled: { default: false },
-    disable_likes: { default: false },
+    enable_likes: { default: false },
     enable_pending_comments: { default: false },
     collaborate_module_enabled: { default: false },
     scope_module_enabled: { default: false },

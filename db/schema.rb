@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_165620) do
 
+ActiveRecord::Schema.define(version: 2020_05_28_165620) do
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -392,7 +392,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_165620) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean "enable_pending_comments", default: false
     t.boolean "mentorship_module_enabled", default: false
-    t.boolean "disable_likes", default: false
+    t.boolean "enable_likes", default: true
     t.string "default_from_email_address"
     t.string "default_from_email_display_name"
     t.boolean "enable_social_media", default: false

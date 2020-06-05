@@ -1,6 +1,6 @@
 /*
  * Draggable Card component
- * A card that can be dragged around and can also be dropped on
+ * A draggable group admin card that can be dragged around and can also be dropped on
  */
 
 import React, { useEffect, useRef, useState } from 'react';

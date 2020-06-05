@@ -117,6 +117,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(
