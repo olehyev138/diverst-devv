@@ -20,7 +20,7 @@ class VideoRoom < ActiveRecord::Base
   end
 
   def number_of_participants
-    participants || 0
+    video_participants.pluck(:identity).uniq.count
   end
 
   def event_name
