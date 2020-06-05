@@ -26,7 +26,7 @@ class TwilioDashboardController < ApplicationController
 
     client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
 
-    @participants = client.video.rooms(@video_room.sid).participants.list
+    @participants = @video_room.video_participants
   end
 
   private

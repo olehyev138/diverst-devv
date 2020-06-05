@@ -211,6 +211,13 @@ class InitiativesController < ApplicationController
     room_context = client.video.rooms(sid)
     room = client.video.rooms(sid).fetch
     video_room = VideoRoom.find_by(sid: sid)
+    video_participant_attributes = client.video.rooms(sid).participants.list
+                                   .map { |participant| { timestamp: participant.start_time,
+                                                          identity: participant.identity,
+                                                          duration: participant.duration }
+    }
+
+    video_room.video_participants.create(video_participant_attributes)
 
     if video_room && video_room.update(
       status: room.status,

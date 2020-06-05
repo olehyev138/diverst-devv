@@ -1,7 +1,6 @@
 class VideoRoom < ActiveRecord::Base
-  require 'twilio-ruby'
-
   belongs_to :enterprise
+  has_many :video_participants, dependent: :destroy
   validates :sid, uniqueness: { scope: :enterprise_id }
 
   def billing
@@ -13,12 +12,7 @@ class VideoRoom < ActiveRecord::Base
   end
 
   def cumulative_participant_minutes
-    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
-    raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
-
-    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
-
-    client.video.rooms(sid).participants.list.map(&:duration).inject(0) { |x, y| x + y }
+    video_participants.sum(:duration)
   end
 
   def duration_per_minute

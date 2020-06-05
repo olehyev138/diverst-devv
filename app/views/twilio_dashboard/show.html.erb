@@ -3,17 +3,23 @@
 <div class="card">
     <div class="card__section">
       <table>
+        <p>Room Name: <span style="font-weight: bold;"><%= @video_room.name %></span></p>
+        <p>Status: <span style="font-weight: bold;"><%= @video_room.status %></span></p>
+        <p>Number of Participants: <span style="font-weight: bold;"><%= @video_room.participants %></span></p>
+        <p>Duration: <span style="font-weight: bold;"><%= @video_room.duration_per_minute.round(2) %> min</span></p>
+        <p>Date Created: <span style="font-weight: bold;"><%= @video_room.start_date %></span></p>
+        <p>Date Completed: <span style="font-weight: bold;"><%= @video_room.end_date %></span></p>
         <thead>
-        <th>Timestamp</th>
-        <th>Id</th>
-        <th>Duration</th>
+          <th>Timestamp</th>
+          <th>Id</th>
+          <th>Duration</th>
         </thead>
         <tbody>
           <% @participants.each do |participant| %>
           <tr>
-            <td><%= participant.start_time %></td>
+            <td><%= participant.timestamp %></td>
             <td><%= participant.identity %></td>
-            <td><%= participant.duration/60 %> min</td>
+            <td><%= (participant.duration/60.0).round(2) %> min</td>
           </tr>
           <% end %>
         </tbody>
