@@ -17,12 +17,12 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'c
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
-
+import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { MetricsDashboardCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage';
+import { injectIntl, intlShape } from 'react-intl';
+
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
@@ -35,7 +35,9 @@ export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'csv_files', reducer: csvReducer });
   useInjectSaga({ key: 'csv_files', saga: csvSaga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', query_scopes: ['all_parents'] });
+  const { intl } = props;
+
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -58,8 +60,10 @@ export function AdminGroupListPage(props) {
         groupTotal={props.groupTotal}
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
+        updateGroupPositionBegin={props.updateGroupPositionBegin}
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
+        intl={intl}
       />
     </React.Fragment>
   );
@@ -69,10 +73,12 @@ AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  groups: PropTypes.object,
+  groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
+  updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
+  intl: intlShape,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -87,6 +93,7 @@ const mapDispatchToProps = {
   groupListUnmount,
   deleteGroupBegin,
   createCsvFileBegin,
+  updateGroupPositionBegin
 };
 
 const withConnect = connect(
@@ -95,6 +102,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(Conditional(
