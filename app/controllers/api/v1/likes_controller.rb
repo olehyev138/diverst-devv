@@ -1,5 +1,12 @@
 class Api::V1::LikesController < DiverstController
+  before_action :is_enabled
   before_action :is_liked
+
+  def is_enabled
+    unless current_user.enterprise.enable_likes
+      raise BadRequestException.new('Likes is disabled')
+    end
+  end
 
   def is_liked
     if payload[:news_feed_link_id].present?
