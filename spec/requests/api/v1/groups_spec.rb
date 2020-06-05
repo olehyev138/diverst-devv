@@ -13,7 +13,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:field) { create(:field, type: 'NumericField') }
   let(:update) { create(:update) }
   let(:group_leader) { create(:group_leader) }
-  let(:group) { create(:group, :with_annual_budget ) }
+  let(:group) { create(:group, :with_annual_budget) }
 
   describe '#index' do
     it 'gets all items' do
@@ -143,7 +143,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'captures the error' do
       allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      post "/api/v1/#{route}/#{item.id}/create_update",params: {}, headers: headers
+      post "/api/v1/#{route}/#{item.id}/create_update", params: {}, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end
@@ -157,7 +157,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'captures the error' do
       allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      put "/api/v1/#{route}/#{item.id}/assign_leaders",params: { 'group_leader': group_leader.attributes }, headers: headers
+      put "/api/v1/#{route}/#{item.id}/assign_leaders", params: { 'group_leader': group_leader.attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end
