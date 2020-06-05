@@ -1,6 +1,6 @@
 /*
  * Droppable List
- * A list of draggable cards
+ * Renders Draggable group admin cards
  *
  */
 
