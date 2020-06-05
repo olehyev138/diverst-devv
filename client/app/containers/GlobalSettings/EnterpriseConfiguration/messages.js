@@ -66,6 +66,9 @@ export default defineMessages({
   idp_url: {
     id: `${scope}.idp_url`,
   },
+  sp_url: {
+    id: `${scope}.sp_url`,
+  },
   login_url: {
     id: `${scope}.login_url`,
   },

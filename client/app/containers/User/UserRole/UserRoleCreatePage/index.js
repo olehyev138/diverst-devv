@@ -26,6 +26,7 @@ import messages from 'containers/User/UserRole/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { UserRoleListPage } from 'containers/User/UserRole/UserRoleListPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -62,6 +63,7 @@ UserRoleCreatePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -80,7 +82,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  UserRoleListPage,
+  UserRoleCreatePage,
   ['permissions.policy_templates_create'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.userRole.createPage
