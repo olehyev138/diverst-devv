@@ -1,6 +1,5 @@
 class TwilioUsageDatatable < AjaxDatatablesRails::Base
   include ERB::Util
-  
 
   def_delegator :@view, :link_to
   def_delegator :@view, :twilio_dashboard_path
