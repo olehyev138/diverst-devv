@@ -8,4 +8,5 @@
       <h2>Thank you for your response</h2>
     </div>
   </div>
+    <%= link_to 'Home', group_path(@poll&.initiative&.group), class: 'btn btn--secondary' if @poll&.initiative&.group %>
 </div>
