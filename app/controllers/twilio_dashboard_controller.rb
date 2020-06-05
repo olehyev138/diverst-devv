@@ -3,7 +3,6 @@ class TwilioDashboardController < ApplicationController
   after_action :verify_authorized
   before_action :set_enterprise
   before_action :set_video_room, only: [:show]
-  require 'twilio-ruby'
 
   layout 'global_settings'
 
@@ -20,11 +19,6 @@ class TwilioDashboardController < ApplicationController
 
   def show
     authorize User
-
-    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
-    raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
-
-    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
 
     @participants = @video_room.video_participants
   end
