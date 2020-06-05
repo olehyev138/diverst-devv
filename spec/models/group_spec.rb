@@ -62,7 +62,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:views).dependent(:destroy) }
     it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
     it { expect(group).to have_many(:sponsors).dependent(:destroy) }
-    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:nullify) }
+    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy) }
     it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id) }
     it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
 
