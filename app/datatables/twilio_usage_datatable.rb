@@ -29,7 +29,7 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
         record.status,
         record.start_date&.strftime('%a, %d %b %Y %H:%M %p'),
         record.end_date&.strftime('%a, %d %b %Y %H:%M %p'),
-        "#{record.duration_per_minute.round(2)}min",
+        "#{record.duration_per_minute}",
         record.number_of_participants,
         "$#{record.billing}"
       ]
