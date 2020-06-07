@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe GroupMessageComment, type: :model do
   describe 'when validating' do
-    let(:group_message_comment) { build_stubbed(:group_message_comment) }
+    let(:group_message_comment) { build(:group_message_comment) }
 
     it { expect(group_message_comment).to belong_to(:author).class_name('User') }
     it { expect(group_message_comment).to belong_to(:message).class_name('GroupMessage') }

@@ -1,7 +1,7 @@
 class GroupMessageComment < ApplicationRecord
   include GroupMessageComment::Actions
 
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', counter_cache: :message_comments_count
   belongs_to :message, class_name: 'GroupMessage'
   has_one :news_feed_link, through: :message
 
