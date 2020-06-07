@@ -40,7 +40,7 @@
         margin-left: 70px;
       }
 
-      #mute-mic, #mute-video, #screen-share, #leave-call {
+      #mute-mic, #mute-video, #screen-share, #leave-call, #end-virtual-event {
         height: 33px;
         width: 36px;
         background: #fff;
@@ -67,7 +67,7 @@
               <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
               <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
               <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
-              <%= inline_svg('icons/phone0.svg', id: 'leave-call', title: 'end video call', class: 'svg-color') %>
+              <%= inline_svg('icons/phone0.svg', id: "#{@initiative.owner_id == current_user.id ? 'end-virtual-event' : 'leave-call'}", title: "#{@initiative.owner_id == current_user.id ? 'end virtual event' : 'end video call'}", class: 'svg-color') %>
             </span>
           </div>
         </div>
@@ -224,11 +224,20 @@
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
       $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
-      window.location.href = "<%= group_event_path(@group, @initiative) %>";
     });
 
     $('#screen-share').on('click', function(){
       screenShareOFLocalParticipant();
+    });
+
+    $('#end-virtual-event').on('click', function(){
+      $.ajax({
+        url: '<%= end_virtual_meeting_group_initiative_path(@group, @initiative) %>',
+        type: 'PATCH',
+        data: {
+          sid: room.sid
+        }
+      });
     });
 
 
@@ -377,6 +386,7 @@
       // of all Participants, including that of the LocalParticipant.
       room.on('disconnected', function() {
         log('Left');
+        window.location.href = "<%= group_event_path(@group, @initiative) %>";
         if (previewTracks) {
           previewTracks.forEach(function(track) {
             track.stop();

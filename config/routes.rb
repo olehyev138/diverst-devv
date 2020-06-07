@@ -331,6 +331,7 @@ Rails.application.routes.draw do
         patch 'leave_video'
         post 'register_room_in_db'
         patch 'update_registered_room_in_db'
+        patch 'end_virtual_meeting'
       end
 
       scope module: 'initiatives' do
