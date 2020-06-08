@@ -75,4 +75,42 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#join' do
+    it 'join a group' do
+      post "/api/v1/#{route}/join", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      post "/api/v1/#{route}/join", params: {}, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'captures the InvalidInputException' do
+      allow(model.constantize).to receive(:find).and_raise(InvalidInputException)
+      post "/api/v1/#{route}/join", params: {}, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#leave' do
+    it 'leave a group' do
+      post "/api/v1/#{route}/leave", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      post "/api/v1/#{route}/leave", params: {}, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'captures the InvalidInputException' do
+      allow(model.constantize).to receive(:find).and_raise(InvalidInputException)
+      post "/api/v1/#{route}/leave", params: {}, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end
