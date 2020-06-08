@@ -24,6 +24,12 @@ export default defineMessages({
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
   },
+  change_order: {
+    id: `${scope}.index.button.change_order`,
+  },
+  set_order: {
+    id: `${scope}.index.button.set_order`,
+  },
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },

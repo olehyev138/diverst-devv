@@ -43,8 +43,11 @@ import {
   GROUP_CATEGORIZE_BEGIN,
   GROUP_CATEGORIZE_SUCCESS,
   GROUP_CATEGORIZE_ERROR,
-  JOIN_SUBGROUPS_BEGIN,
+  UPDATE_GROUP_POSITION_BEGIN,
+  UPDATE_GROUP_POSITION_SUCCESS,
+  UPDATE_GROUP_POSITION_ERROR,
   JOIN_SUBGROUPS_SUCCESS,
+  JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_ERROR,
   GET_COLORS_BEGIN,
   GET_COLORS_SUCCESS,
@@ -56,7 +59,7 @@ export const initialState = {
   isLoading: true,
   isFormLoading: true,
   isCommitting: false,
-  groupList: {},
+  groupList: [],
   groupTotal: null,
   currentGroup: null,
   hasChanged: false,
@@ -88,13 +91,13 @@ function groupsReducer(state = initialState, action) {
 
       case GET_GROUPS_SUCCESS:
       case GET_COLORS_SUCCESS:
-        draft.groupList = formatGroups(action.payload.items);
+        draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
 
       case GET_ANNUAL_BUDGETS_SUCCESS:
-        draft.groupList = formatGroups(flattenChildrenGroups(action.payload.items));
+        draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -107,11 +110,14 @@ function groupsReducer(state = initialState, action) {
 
       case CREATE_GROUP_BEGIN:
       case UPDATE_GROUP_BEGIN:
+      case UPDATE_GROUP_POSITION_BEGIN:
       case GROUP_CATEGORIZE_BEGIN:
       case UPDATE_GROUP_SETTINGS_BEGIN:
       case DELETE_GROUP_BEGIN:
       case CARRY_BUDGET_BEGIN:
       case RESET_BUDGET_BEGIN:
+      case JOIN_GROUP_BEGIN:
+      case LEAVE_GROUP_BEGIN:
       case JOIN_SUBGROUPS_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
@@ -130,6 +136,7 @@ function groupsReducer(state = initialState, action) {
       case RESET_BUDGET_SUCCESS:
       case GROUP_CATEGORIZE_SUCCESS:
       case JOIN_SUBGROUPS_SUCCESS:
+      case UPDATE_GROUP_POSITION_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
@@ -138,6 +145,7 @@ function groupsReducer(state = initialState, action) {
       case UPDATE_GROUP_ERROR:
       case GROUP_CATEGORIZE_ERROR:
       case UPDATE_GROUP_SETTINGS_ERROR:
+      case UPDATE_GROUP_POSITION_ERROR:
       case DELETE_GROUP_ERROR:
       case JOIN_SUBGROUPS_ERROR:
         draft.isCommitting = false;
@@ -159,6 +167,7 @@ function formatGroups(groups) {
   /* Format groups to hash by id:
    *   { <id>: { name: group_01, ... } }
    */
+
   return groups.reduce((map, group) => {
     map[group.id] = group;
     return map;

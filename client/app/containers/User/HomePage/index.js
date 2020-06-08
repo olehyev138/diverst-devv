@@ -27,8 +27,10 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import DiverstImg from 'components/Shared/DiverstImg';
+import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 
 const styles = theme => ({
   title: {
@@ -98,20 +100,28 @@ handleClickOpen = () => {
       </Paper>
     );
 
-    const privacyMessage = (
+    const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
       <React.Fragment>
-        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary'>
+        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary' display='inline'>
           <DiverstFormattedMessage {...messages.privacy} />
         </Typography>
         <DiverstDialog
           open={this.state.open}
           handleNo={this.handleClose}
           textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
-          content={this.props.privacyMessage}
+          content={(
+            <DiverstHTMLEmbedder
+              html={
+                this.props.enterprise
+                  ? this.props.enterprise.privacy_statement
+                  : ''
+              }
+            />
+          )}
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
-    );
+    ) : null;
 
     const sponsor = (
       <SponsorCard
@@ -130,30 +140,38 @@ handleClickOpen = () => {
       />
     );
 
+    const enterpriseImage = this.props.enterprise ? this.props.enterprise.banner_data && (
+      <DiverstImg
+        data={this.props.enterprise.banner_data}
+        alt=''
+        maxWidth='100%'
+        minWidth='100%'
+      />
+    ) : null;
+
     return (
-      <React.Fragment>
-        <Grid container spacing={3} direction='column'>
-          <Grid item>
-            {enterpriseMessage}
-          </Grid>
-          <Grid item>
-            <Grid container spacing={3}>
-              <Grid item xs>
-                {events}
-              </Grid>
-              <Grid item xs>
-                {news}
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs>
-            {sponsor}
-          </Grid>
-          <Grid item xs>
-            {privacyMessage}
-          </Grid>
-        </Grid>
-      </React.Fragment>
+      <DiverstCSSGrid
+        columns={10}
+        rows='auto auto auto auto 1fr'
+        areas={[
+          'header header  header  header  header  header  header  header  header  header',
+          'message message  message  message  message  message  message  message  message  message',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+        ]}
+        rowGap='16px'
+        columnGap='24px'
+      >
+        <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
+        <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
+        <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
+        <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
+        <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
+        <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
+        <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
+      </DiverstCSSGrid>
     );
   }
 }
@@ -162,7 +180,6 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  privacyMessage: selectEnterprisePrivacyMessage(),
   enterprise: selectEnterprise()
 });
 
@@ -173,7 +190,6 @@ const withConnect = connect(
 
 HomePage.propTypes = {
   classes: PropTypes.object,
-  privacyMessage: PropTypes.string,
   enterprise: PropTypes.object,
   intl: intlShape,
 };
