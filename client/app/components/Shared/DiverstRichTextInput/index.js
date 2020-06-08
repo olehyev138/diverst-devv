@@ -40,10 +40,15 @@ export function DiverstRichTextInput(props) {
   const onEditorStateChange = (newEditorState) => {
     setInitialValue(false);
     setEditorState(newEditorState);
+
     if (props.onChange)
-      props.onChange(
-        draftToHtml(convertToRaw(editorState.getCurrentContent()))
-      );
+      if (editorState.getCurrentContent().getPlainText().trim() !== '') {
+        props.onChange(
+          draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        );
+      } else {
+        props.onChange('');
+      }
   };
 
   return (

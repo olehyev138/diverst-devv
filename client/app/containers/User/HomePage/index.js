@@ -27,7 +27,7 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprisePrivacyMessage, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
@@ -100,9 +100,9 @@ handleClickOpen = () => {
       </Paper>
     );
 
-    const privacyMessage = (
+    const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
       <React.Fragment>
-        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary'>
+        <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary' display='inline'>
           <DiverstFormattedMessage {...messages.privacy} />
         </Typography>
         <DiverstDialog
@@ -121,7 +121,7 @@ handleClickOpen = () => {
           title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
         />
       </React.Fragment>
-    );
+    ) : null;
 
     const sponsor = (
       <SponsorCard
@@ -180,7 +180,6 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  privacyMessage: selectEnterprisePrivacyMessage(),
   enterprise: selectEnterprise()
 });
 
@@ -191,7 +190,6 @@ const withConnect = connect(
 
 HomePage.propTypes = {
   classes: PropTypes.object,
-  privacyMessage: PropTypes.string,
   enterprise: PropTypes.object,
   intl: intlShape,
 };
