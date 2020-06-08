@@ -27,15 +27,12 @@ import { intlShape } from 'react-intl';
 import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
 
 
-export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable }, props) {
-  const { intl } = props;
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
-
   const ref = useRef(null);
   const ItemTypes = {
     CARD: 'card',
   };
-
   const drop = getListDrop(index, moveCard, ref);
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
@@ -143,7 +140,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
                     if (confirm(intl.formatMessage(messages.delete_confirm)))
-                      props.deleteGroupBegin(group.id);
+                      deleteGroupBegin(group.id);
                   }}
                 >
                   <DiverstFormattedMessage {...messages.delete} />
@@ -248,7 +245,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
                     if (confirm(intl.formatMessage(messages.delete_confirm)))
-                      props.deleteGroupBegin(group.id);
+                      deleteGroupBegin(group.id);
                   }}
                 >
                   <DiverstFormattedMessage {...messages.delete} />
@@ -360,7 +357,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
                       if (confirm('Delete group?'))
-                        props.deleteGroupBegin(childGroup.id);
+                        deleteGroupBegin(childGroup.id);
                     }}
                   >
                     <DiverstFormattedMessage {...messages.delete} />
