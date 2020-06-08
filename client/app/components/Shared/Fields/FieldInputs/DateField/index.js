@@ -13,6 +13,7 @@ import { connect, Field, getIn } from 'formik';
 import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
+import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 
 const CustomDateField = (props) => {
   const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
@@ -21,6 +22,19 @@ const CustomDateField = (props) => {
 
   return (
     <React.Fragment>
+      <Field
+        component={DiverstDatePicker}
+        keyboardMode
+        fullWidth
+        name={dataLocation}
+        id={dataLocation}
+        margin='normal'
+        required={fieldDatum.field.required}
+        label={fieldDatum.field.title}
+        value={getIn(formik.values, dataLocation)}
+        onChange={formik.handleChange}
+        {...rest}
+      />
       <TextField
         name={dataLocation}
         id={dataLocation}
