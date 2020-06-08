@@ -140,7 +140,7 @@ export function AnnualBudgetList(props, context) {
 AnnualBudgetList.propTypes = {
   intl: intlShape.isRequired,
   classes: PropTypes.object,
-  annualBudgets: PropTypes.object,
+  annualBudgets: PropTypes.array,
   annualBudgetTotal: PropTypes.number,
   isFetchingAnnualBudgets: PropTypes.bool,
   deleteAnnualBudgetBegin: PropTypes.func,

@@ -223,6 +223,7 @@ NewsFeed.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(
