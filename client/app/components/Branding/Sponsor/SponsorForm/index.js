@@ -25,7 +25,6 @@ import {
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
-import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
