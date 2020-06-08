@@ -28,7 +28,7 @@ export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -61,7 +61,7 @@ UserGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  groups: PropTypes.object,
+  groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
 };

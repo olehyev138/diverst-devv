@@ -13,7 +13,7 @@ import likeSaga from 'containers/Shared/Like/saga';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -66,6 +66,7 @@ export function NewsFeedPage(props, context) {
         readonly
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        enableLikes={props.currentEnterprise.enable_likes}
       />
     </React.Fragment>
   );
@@ -86,6 +87,7 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
+  currentEnterprise: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -94,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   isLoading: selectIsLoadingPosts(),
   permissions: selectPermissions(),
+  currentEnterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {

@@ -25,6 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/Branding/messages';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -39,8 +40,8 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
     <Card>
       <Form>
         <CardContent>
-          <Grid container>
-            <Grid item xs={12} className={classes.noBottomPadding}>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
               <Field
                 component={DiverstRichTextInput}
                 required
@@ -51,6 +52,42 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 margin='normal'
                 label={intl.formatMessage(messages.Home.message)}
                 value={values.home_message}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
+              <Field
+                component={DiverstRichTextInput}
+                required
+                onChange={value => setFieldValue('privacy_statement', value)}
+                fullWidth
+                id='privacy_statement'
+                name='privacy_statement'
+                margin='normal'
+                label={intl.formatMessage(messages.Home.privacy)}
+                value={values.privacy_statement}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
+              <Field
+                component={DiverstFileInput}
+                id='banner'
+                name='banner'
+                margin='normal'
+                fileName={props.enterprise.banner_file_name}
+                fullWidth
+                label={intl.formatMessage(messages.Home.banner)}
+                disabled={props.isCommitting}
+                value={values.banner}
               />
             </Grid>
           </Grid>
@@ -73,6 +110,8 @@ export function BrandingHome(props) {
   const initialValues = buildValues(props.enterprise, {
     id: { default: '' },
     home_message: { default: '' },
+    privacy_statement: { default: '' },
+    banner: { default: null },
   });
 
   const [open, setOpen] = React.useState(false);
@@ -122,6 +161,7 @@ BrandingHomeInner.propTypes = {
   setFieldTouched: PropTypes.func,
   intl: intlShape,
   isCommitting: PropTypes.bool,
+  enterprise: PropTypes.object,
 };
 
 export default compose(

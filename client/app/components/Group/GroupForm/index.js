@@ -197,6 +197,8 @@ export function GroupForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        if (values.child_ids == null)
+          values.child_ids = [];
         props.groupAction(mapFields(values, ['child_ids', 'parent_id']));
       }}
     >
