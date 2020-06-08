@@ -220,7 +220,7 @@ export function ExpenseList(props, context) {
 }
 
 ExpenseList.propTypes = {
-  intl: intlShape.isRequired,
+  intl: intlShape,
   classes: PropTypes.object,
   initiative: PropTypes.object,
   currentGroup: PropTypes.object,

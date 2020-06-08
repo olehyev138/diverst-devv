@@ -1,19 +1,21 @@
 /**
  *
- * Tests for Event
+ * Tests for Metrics
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
-import { Event } from '../index';
+import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { Metrics } from '../index';
 
-describe('<Event />', () => {
+loadTranslation('./app/translations/en.json');
+
+describe('<Metrics />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<Event classes={{}} />);
+    const wrapper = shallowWithIntl(<Metrics />);
 
     expect(spy).not.toHaveBeenCalled();
   });
