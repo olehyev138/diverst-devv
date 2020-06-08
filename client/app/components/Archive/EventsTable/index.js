@@ -3,12 +3,27 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
 
+const styles = theme => ({
+  link: {
+    textDecoration: 'none !important',
+  },
+  arrowRight: {
+    color: theme.custom.colors.grey,
+    marginRight: 8,
+  },
+  deleteButton: {
+    color: theme.palette.error.main,
+  },
+});
+
+export function EventsTable(props) {
+const { intl } = props;
 const columns = [
   {
     title: intl.formatMessage(messages.event),
@@ -28,20 +43,6 @@ const columns = [
   },
 ];
 
-const styles = theme => ({
-  link: {
-    textDecoration: 'none !important',
-  },
-  arrowRight: {
-    color: theme.custom.colors.grey,
-    marginRight: 8,
-  },
-  deleteButton: {
-    color: theme.palette.error.main,
-  },
-});
-
-export function EventsTable(props) {
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
       orderBy: (columnId === -1) ? 'initiatives.id' : `${columns[columnId].query_field}`,
@@ -74,7 +75,7 @@ EventsTable.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: intlShape,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
