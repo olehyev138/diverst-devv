@@ -3,7 +3,7 @@
 exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
 <Fragment>
   <WithStyles(ForwardRef(AppBar))
-    position="position"
+    position="relative"
   >
     <WithStyles(ForwardRef(Toolbar))>
       <WithStyles(ForwardRef(IconButton))
@@ -116,6 +116,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
           "render": [Function],
         }
       }
+      onClick={[Function]}
       to="/user/:user_id"
     >
       <WithStyles(ForwardRef(ListItemIcon))>

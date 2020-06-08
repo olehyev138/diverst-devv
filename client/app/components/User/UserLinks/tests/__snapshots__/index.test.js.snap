@@ -288,9 +288,7 @@ exports[`<UserLinks /> Should render and match the snapshot 1`] = `
         <ArrowDropDownIcon
           className=""
         />
-        <Memo(Connect(DiverstFormattedMessage))
-          id="diverst.containers.Routes.user.home"
-        />
+        <Component />
       </WithStyles(ForwardRef(Button))>
     </WithStyles(ForwardRef(Toolbar))>
     <MobileNavMenu
