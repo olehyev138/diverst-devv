@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-model = 'Resource'
-RSpec.describe 'Resources', type: :request do
+model = 'NewsFeed'
+RSpec.describe 'NewsFeeds', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
@@ -74,44 +74,6 @@ RSpec.describe 'Resources', type: :request do
     it 'captures the error' do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:bad_request)
-    end
-  end
-
-  describe '#archive' do
-    it 'archives an item' do
-      post "/api/v1/#{route}/#{item.id}/archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:ok)
-    end
-
-    it 'captures the error' do
-      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      post "/api/v1/#{route}/#{item.id}/archive", params: {}, headers: headers
-      expect(response).to have_http_status(:bad_request)
-    end
-
-    it 'captures the InvalidInputException' do
-      allow(model.constantize).to receive(:find).and_raise(InvalidInputException)
-      post "/api/v1/#{route}/#{item.id}/archive", params: {}, headers: headers
-      expect(response).to have_http_status(:bad_request)
-    end
-  end
-
-  describe '#un_archive' do
-    it 'unarchives an item' do
-      put "/api/v1/#{route}/#{item.id}/un_archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:ok)
-    end
-
-    it 'captures the error' do
-      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      put "/api/v1/#{route}/#{item.id}/un_archive", params: {}, headers: headers
-      expect(response).to have_http_status(:bad_request)
-    end
-
-    it 'captures the InvalidInputException' do
-      allow(model.constantize).to receive(:find).and_raise(InvalidInputException)
-      put "/api/v1/#{route}/#{item.id}/un_archive", params: {}, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end

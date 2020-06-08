@@ -5,8 +5,8 @@ module Api::V1::Concerns::Archivable
     params[klass.symbol] = archive_payload
     params[klass.symbol][:archived_at] = Time.now
     params[klass.symbol][:id] = item.id
-
     base_authorize(item)
+
     track_activity(item)
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e

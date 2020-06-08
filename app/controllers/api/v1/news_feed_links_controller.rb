@@ -6,6 +6,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
     raise BadRequestException.new('Already Approved') if item.approved?
+
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
