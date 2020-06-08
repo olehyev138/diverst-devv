@@ -11,22 +11,6 @@ const selectPaginatedGroups = () => createSelector(
   groupsState => groupsState.groupList
 );
 
-const selectCalendarGroups = () => createSelector(
-  selectGroupsDomain,
-  (groupsState) => {
-    const groupsCopy = { ...groupsState.groupList };
-
-    Object.keys(groupsCopy).forEach((id) => {
-      const group = groupsCopy[id];
-      groupsCopy[id] = mapFieldNames(group,
-        {
-          calendar_color: g => formatColors(group.calendar_color),
-        }, { ...group });
-    });
-    return groupsCopy;
-  }
-);
-
 /* Select group list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
@@ -116,7 +100,6 @@ export {
   selectGroupsDomain,
   selectPaginatedSelectGroups,
   selectPaginatedGroups,
-  selectCalendarGroups,
   selectGroupTotal,
   selectGroup,
   selectFormGroup,
