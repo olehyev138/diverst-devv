@@ -31,7 +31,7 @@ export const mapFieldNames = (item, nameChanges = {}, base = {}) => {
       sum[n] = dig(...[item, ...parts]);
     } else if (typeof nameChanges[n] === 'function')
       sum[n] = nameChanges[n](item);
-    
+
     return sum;
   }, base);
 };
@@ -44,7 +44,7 @@ export const mapSelectField = (item, label = 'name', additionalFields = []) => i
   : null;
 
 export const formatColors = (color) => {
-  if (color != null && color !== '#')
+  if (color != null && color[0] !== '#')
     return `#${color}`;
   return color;
 };
