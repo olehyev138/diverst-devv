@@ -65,7 +65,7 @@ export function AnnualBudgetFormInner(
               currency={getCurrency(values.currency)}
               currency_name='currency'
               currency_id='currency'
-              onCurrencyChange={value => setFieldValue('currency', value)}
+              onCurrencyChange={value => setFieldValue('currency', value.value)}
             />
           </CardContent>
           { annualBudget && (
@@ -130,7 +130,7 @@ export function AnnualBudgetForm(props) {
   const initialValues = buildValues(props.annualBudget, {
     id: { default: '' },
     amount: { default: '' },
-    currency: { default: getCurrency('USD') }
+    currency: { default: 'USD' },
   });
 
   return (
