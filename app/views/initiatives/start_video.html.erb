@@ -243,6 +243,7 @@
 
 
     // Attach the Tracks to the DOM.
+    // Attach participant details such as name, network connectivity here.
     function attachTracks(tracks, container) {
       tracks.forEach(function(track) {
           if (track.kind === 'audio' || track.kind === 'video') {
@@ -284,7 +285,6 @@
     }
 
     function registerRoomInDatabase(room) {
-      console.log(room.sid);
       var room = room; 
       $.ajax({
         url: '<%= register_room_in_db_group_initiative_path(@group, @initiative) %>',
@@ -309,6 +309,24 @@
       });
     }
 
+    //network connectivity stats
+    function printNetworkQualityStats(networkQualityLevel, networkQualityStats) {
+    // Print in console the networkQualityLevel using bars
+      console.log({
+        1: '▃',
+        2: '▃▄',
+        3: '▃▄▅',
+        4: '▃▄▅▆',
+        5: '▃▄▅▆▇'
+      }[networkQualityLevel] || '');
+
+      if (networkQualityStats) {
+        // Print in console the networkQualityStats, which is non-null only if Network Quality
+        // verbosity is 2 (moderate) or greater
+        console.log('Network Quality statistics:', networkQualityStats);
+      }
+   }
+
     // When we are about to transition away from this page, disconnect
     // from the room, if joined.
     window.addEventListener('beforeunload', leaveRoomIfJoined);
@@ -320,7 +338,11 @@
       localTracks.push(dataTrack)
         return twilio.connect(token, {
           name: '<% @video_room_name %>',
-          tracks: localTracks
+          tracks: localTracks,
+          networkQuality: {
+            local: 1,
+            remote: 2
+          }
       });
       }).then(roomJoined, function(error) {
           console.error('Unable to connect to Room: ' +  error.message);
@@ -362,6 +384,8 @@
         //log(participant.identity + " added track: " + track.kind);
         var previewContainer = document.getElementById('video-grid');
         var screenShareArea = document.getElementById('screen-share-area');
+        
+        participant.on('networkQualityLevelChanged', printNetworkQualityStats);
 
         if (track.name == 'screen-share') {
           attachTracks([track], screenShareArea);

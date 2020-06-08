@@ -191,6 +191,7 @@ class InitiativesController < ApplicationController
       sid: sid,
       name: name,
       status: status,
+      duration: 0,
       enterprise_id: enterprise_id,
       initiative_id: @initiative.id
     )
