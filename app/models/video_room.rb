@@ -16,7 +16,7 @@ class VideoRoom < ActiveRecord::Base
   end
 
   def duration_per_minute
-    m, s = [duration/60, duration%60]
+    m, s = [duration / 60, duration % 60]
     "#{m} min #{s} sec"
   end
 

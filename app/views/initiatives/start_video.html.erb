@@ -67,7 +67,13 @@
               <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
               <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
               <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
-              <%= inline_svg('icons/phone0.svg', id: "#{@initiative.owner_id == current_user.id ? 'end-virtual-event' : 'leave-call'}", title: "#{@initiative.owner_id == current_user.id ? 'end virtual event' : 'end video call'}", class: 'svg-color') %>
+              
+              <% if @initiative.owner_id == current_user.id %>
+                <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
+              <% else %>  
+                <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
+              <% end %>
+
             </span>
           </div>
         </div>
@@ -114,6 +120,27 @@
         </div>
       </div>
     </div>
+
+
+      <!-- Modal -->
+  <div class="modal fade" id="virtualEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to end this virtual meeting for all participants?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" id="end-virtual-meeting" class="btn btn-primary">End Virtual Meeting</button>
+        </div>
+      </div>
+    </div>
+  </div>
   </body>
   <script>
   $(document).ready(function(){
@@ -230,7 +257,7 @@
       screenShareOFLocalParticipant();
     });
 
-    $('#end-virtual-event').on('click', function(){
+    $('#end-virtual-meeting').on('click', function(){
       $.ajax({
         url: '<%= end_virtual_meeting_group_initiative_path(@group, @initiative) %>',
         type: 'PATCH',
