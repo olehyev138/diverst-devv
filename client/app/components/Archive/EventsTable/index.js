@@ -23,25 +23,25 @@ const styles = theme => ({
 });
 
 export function EventsTable(props) {
-const { intl } = props;
-const columns = [
-  {
-    title: intl.formatMessage(messages.event),
-    field: 'name',
-    query_field: 'name'
-  },
-  {
-    title: intl.formatMessage(messages.group),
-    field: 'group_name',
-    query_field: 'groups.name'
-  },
-  {
-    title: intl.formatMessage(messages.creation),
-    field: 'created_at',
-    query_field: 'created_at',
-    render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
-  },
-];
+  const { intl } = props;
+  const columns = [
+    {
+      title: intl.formatMessage(messages.event),
+      field: 'name',
+      query_field: 'name'
+    },
+    {
+      title: intl.formatMessage(messages.group),
+      field: 'group_name',
+      query_field: 'groups.name'
+    },
+    {
+      title: intl.formatMessage(messages.creation),
+      field: 'created_at',
+      query_field: 'created_at',
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
+    },
+  ];
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({

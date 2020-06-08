@@ -37,6 +37,7 @@ const ArchiveTypes = Object.freeze({
 });
 
 export function ArchiveList(props) {
+  const { intl } = props;
   return (
     <React.Fragment>
       <Paper>
@@ -128,7 +129,7 @@ ArchiveList.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: intlShape,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
