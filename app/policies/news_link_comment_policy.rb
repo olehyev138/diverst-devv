@@ -1,7 +1,7 @@
 class NewsLinkCommentPolicy < GroupBasePolicy
   def index?
     case record
-    when NewsLinkComment then true
+    when NewsLinkComment then NewsFeedLinkPolicy.new(user, record.news_feed_link, params).show?
     else NewsFeedLinkPolicy.new(user, NewsFeedLink, params).show?
     end
   end

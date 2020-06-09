@@ -2,6 +2,7 @@ class NewsLinkComment < ApplicationRecord
   belongs_to :author, class_name: 'User', counter_cache: :news_link_comments_count
   belongs_to :news_link
 
+  has_one :news_feed_link, through: :news_link
   has_many :user_reward_actions
 
   validates_length_of :content, maximum: 65535
