@@ -47,7 +47,7 @@ function serializeDatum(fieldDatum) {
 
   switch (type) {
     case 'CheckboxField':
-      if (datum.lenght === 0)
+      if (datum.length === 0)
         return '[]';
       if (typeof datum[0] === 'object')
         return JSON.stringify(datum.map(i => i.value));
@@ -60,6 +60,8 @@ function serializeDatum(fieldDatum) {
       return datum;
   }
 }
+
+const dateMap = {};
 
 function deserializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
@@ -74,7 +76,11 @@ function deserializeDatum(fieldDatum) {
       return { label: (parsed || [])[0], value: (parsed || [])[0] };
     case 'DateField':
       /* TODO: change this to use Moment.js */
-      return new Date(parsed * 1000).toISOString().split('T')[0];
+      if (!dateMap[parsed])
+        // eslint-disable-next-line prefer-destructuring
+        dateMap[parsed] = new Date(parsed * 1000).toISOString().split('T')[0];
+
+      return dateMap[parsed];
     default:
       return datum;
   }

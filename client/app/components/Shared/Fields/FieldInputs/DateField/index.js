@@ -19,6 +19,8 @@ const CustomDateField = (props) => {
   const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
+  console.log('Hello');
+
   return (
     <React.Fragment>
       <Field
@@ -31,7 +33,6 @@ const CustomDateField = (props) => {
         required={fieldDatum.field.required}
         label={fieldDatum.field.title}
         value={getIn(formik.values, dataLocation)}
-        onChange={formik.handleChange}
         {...rest}
       />
       <TextField
