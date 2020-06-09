@@ -24,7 +24,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Button, Tab, Card, Box } from '@material-ui/core';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import switchExpression from 'utils/caseHelper';
 import PollResponses from 'components/Poll/PollResponses';
 import PollGraphs from 'components/Poll/PollGraphs';
 import dig from 'object-dig';
@@ -110,6 +109,30 @@ export function PollCreatePage(props) {
     poll, responses, isFormLoading, responsesLoading, responsesTotal, links
   };
 
+  const subPage = (tab) => {
+    if (tab === 'responses')
+      return (
+        <PollResponses
+          {...componentProps}
+          handlePagination={handlePagination(responseParams, setResponseParams)}
+          handleOrdering={handleOrdering(responseParams, setResponseParams)}
+        />
+      );
+    if (tab === 'graphs')
+      return <PollGraphs {...componentProps} />;
+    if (tab === 'text')
+      return (
+        <PollTestAnswers
+          {...componentProps}
+          field={textField}
+          setField={setTextField}
+          handlePagination={handlePagination(responseParams, setResponseParams)}
+          handleOrdering={handleOrdering(responseParams, setResponseParams)}
+        />
+      );
+    return <React.Fragment />;
+  };
+
   return (
     poll && (
       <React.Fragment>
@@ -144,23 +167,7 @@ export function PollCreatePage(props) {
           </ResponsiveTabs>
         </Card>
         <Box mb={2} />
-        {switchExpression(tab,
-          ['responses', (
-            <PollResponses
-              {...componentProps}
-              handlePagination={handlePagination(responseParams, setResponseParams)}
-              handleOrdering={handleOrdering(responseParams, setResponseParams)}
-            />
-          )],
-          ['graphs', (<PollGraphs {...componentProps} />)],
-          ['texts', (<PollTestAnswers
-            {...componentProps}
-            field={textField}
-            setField={setTextField}
-            handlePagination={handlePagination(responseParams, setResponseParams)}
-            handleOrdering={handleOrdering(responseParams, setResponseParams)}
-          />)],
-          [null, (<React.Fragment />)])}
+        {subPage(tab)}
       </React.Fragment>
     )
   );
