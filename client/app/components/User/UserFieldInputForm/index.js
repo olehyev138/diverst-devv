@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 

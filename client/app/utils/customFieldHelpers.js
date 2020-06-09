@@ -76,11 +76,7 @@ function deserializeDatum(fieldDatum) {
       return { label: (parsed || [])[0], value: (parsed || [])[0] };
     case 'DateField':
       /* TODO: change this to use Moment.js */
-      if (!dateMap[parsed])
-        // eslint-disable-next-line prefer-destructuring
-        dateMap[parsed] = new Date(parsed * 1000).toISOString().split('T')[0];
-
-      return dateMap[parsed];
+      return new Date(parsed).toISOString().split('T')[0];
     default:
       return datum;
   }
