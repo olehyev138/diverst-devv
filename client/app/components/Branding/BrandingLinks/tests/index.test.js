@@ -1,6 +1,6 @@
 /**
  *
- * Tests for UserDashboard
+ * Tests for BrandingLinks
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
