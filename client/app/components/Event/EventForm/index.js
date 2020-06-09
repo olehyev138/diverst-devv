@@ -39,7 +39,7 @@ import pillarSaga from 'containers/Group/Pillar/saga';
 import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
-import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
