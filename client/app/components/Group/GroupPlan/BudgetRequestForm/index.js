@@ -236,6 +236,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
               onChange={value => setFieldValue('approver_id', value)}
               onInputChange={value => approverSelectAction(value)}
               onBlur={() => setFieldTouched('approver_id', true)}
+              isClearable
             />
           </CardContent>
         </Paper>
