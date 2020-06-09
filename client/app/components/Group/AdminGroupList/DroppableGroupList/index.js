@@ -57,5 +57,5 @@ DroppableGroupList.propTypes = {
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   draggable: PropTypes.bool,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };

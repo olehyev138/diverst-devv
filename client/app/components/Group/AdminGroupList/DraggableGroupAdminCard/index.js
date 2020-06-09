@@ -385,5 +385,5 @@ DraggableGroupAdminCard.propTypes = {
   classes: PropTypes.object,
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };

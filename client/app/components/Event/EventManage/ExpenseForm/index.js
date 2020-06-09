@@ -113,7 +113,7 @@ export function ExpenseForm(props) {
 }
 
 ExpenseForm.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   expenseAction: PropTypes.func.isRequired,
   initiativeId: PropTypes.number,
   isCommitting: PropTypes.bool,
@@ -125,7 +125,7 @@ ExpenseForm.propTypes = {
 };
 
 ExpenseFormInner.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   expense: PropTypes.object,
   approvers: PropTypes.array,
   currentGroup: PropTypes.object,

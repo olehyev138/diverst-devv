@@ -85,7 +85,7 @@ export function EventComment(props) {
 }
 
 EventComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
