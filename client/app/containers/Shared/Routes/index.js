@@ -196,9 +196,6 @@ const oldRoutes = () => (
     <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
     <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
     <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
-
-    { /* Admin - System - Logs */ }
-    <AdminLayout exact {...expandRoute(ROUTES.admin.system.logs.index)} component={LogListPage} />
   </Switch>
 );
 
@@ -538,6 +535,9 @@ export default function Routes(props) {
 
                     { /* Innovate - Financials */ }
                     <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
+
+                    { /* System - Logs */ }
+                    <RouteWithProps exact path={ROUTES.admin.system.logs.index.path()}><LogListPage /></RouteWithProps>
                   </SwitchWithProps>
                 </AdminLayout>
               </Route>
