@@ -1,3 +1,7 @@
+// ==========================================================================
+// DEPRECATED
+// ==========================================================================
+
 /*
 Used to functionally have an if/else chain but as an expression as oppose to purely a control flow statement
 Example use:
