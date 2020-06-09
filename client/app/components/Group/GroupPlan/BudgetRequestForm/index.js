@@ -42,7 +42,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import AddIcon from '@material-ui/icons/Add';
-import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import { getCurrency } from 'utils/currencyHelpers';
 
 const { form: formMessage } = messages;
