@@ -11,12 +11,15 @@ const selectPaginatedGroups = () => createSelector(
 /* Select group list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
+
+const groupMapper = group => ({ value: group.id, label: group.name, children: (group.children || []).map(groupMapper) });
+
 const selectPaginatedSelectGroups = () => createSelector(
   selectGroupsDomain,
   groupsState => (
     Object
       .values(groupsState.groupList)
-      .map(group => ({ value: group.id, label: group.name }))
+      .map(groupMapper)
   )
 );
 
