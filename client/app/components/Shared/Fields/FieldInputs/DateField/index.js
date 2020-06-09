@@ -17,7 +17,6 @@ import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 
 const CustomDateField = (props) => {
   const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
