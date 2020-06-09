@@ -7,7 +7,7 @@ import dig from 'object-dig';
 import { Box, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
+import NewsComment from 'components/News/NewsComment';
 import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 
@@ -41,12 +41,11 @@ export function GroupMessage(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
             return (
-              <GroupMessageComment
+              <NewsComment
                 key={comment.id}
                 comment={comment}
-                deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
+                deleteCommentAction={props.deleteGroupMessageCommentBegin}
                 newsItem={props.newsItem}
-                groupMessage={props.groupMessage}
               />
             );
           })}

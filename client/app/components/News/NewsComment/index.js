@@ -1,13 +1,20 @@
-import React, { memo } from 'react';
+/**
+ * Shared component to display comments for news items
+ */
+
+import React, {memo, useContext} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Avatar, Button, Card, CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-import { injectIntl, intlShape } from 'react-intl';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
+
 
 const styles = theme => ({
   cardHeader: {
@@ -19,10 +26,9 @@ const styles = theme => ({
   }
 });
 
-export function NewsLinkComment(props) {
-  /* Render a single group message comment */
-
+export function NewsComment(props) {
   const { classes, comment, newsItem, intl } = props;
+
   return (
     <Card className={classes.margin}>
       <CardHeader
@@ -44,27 +50,29 @@ export function NewsLinkComment(props) {
       <CardContent>
         <Typography variant='body1'>{comment.content}</Typography>
       </CardContent>
-      <Button
-        size='small'
-        onClick={() => {
-          /* eslint-disable-next-line no-alert, no-restricted-globals */
-          if (confirm(intl.formatMessage(messages.news_delete_confirm)))
-            props.deleteNewsLinkCommentBegin({
-              group_id: newsItem.news_link.group_id,
-              id: comment.id });
-        }}
-      >
-        <DiverstFormattedMessage {...messages.delete} />
-      </Button>
+      <Permission show={permission(comment, 'destroy?')}>
+        <CardActions>
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                props.deleteCommentAction({ group_id: newsItem.group_message.group_id, id: comment.id });
+            }}
+          >
+            {<DiverstFormattedMessage {...messages.delete} />}
+          </Button>
+        </CardActions>
+      </Permission>
     </Card>
   );
 }
 
-NewsLinkComment.propTypes = {
+NewsComment.propTypes = {
   intl: intlShape,
   classes: PropTypes.object,
   comment: PropTypes.object,
-  deleteNewsLinkCommentBegin: PropTypes.func,
+  deleteCommentAction: PropTypes.func,
   newsItem: PropTypes.object,
 };
 
@@ -72,4 +80,4 @@ export default compose(
   injectIntl,
   memo,
   withStyles(styles)
-)(NewsLinkComment);
+)(NewsComment);
