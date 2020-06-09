@@ -200,7 +200,7 @@ export function GroupMessageListItem(props) {
 
 GroupMessageListItem.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   newsItem: PropTypes.object,
   currentGroup: PropTypes.object,
   readonly: PropTypes.bool,

@@ -61,7 +61,7 @@ export function NewsLinkComment(props) {
 }
 
 NewsLinkComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteNewsLinkCommentBegin: PropTypes.func,
