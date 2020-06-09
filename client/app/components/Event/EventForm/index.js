@@ -39,7 +39,7 @@ import pillarSaga from 'containers/Group/Pillar/saga';
 import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
-import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
@@ -269,7 +269,7 @@ export function EventForm(props) {
     estimated_funding: { default: '' },
     currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
-    pillar: { default: '', customKey: 'pillar_id' },
+    pillar: { default: props.pillar, customKey: 'pillar_id' },
     owner_id: { default: '' },
     owner_group_id: { default: props.currentGroup.id }
   });
@@ -294,6 +294,7 @@ EventForm.propTypes = {
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  pillar: PropTypes.object,
 };
 
 EventFormInner.propTypes = {

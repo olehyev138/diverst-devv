@@ -126,6 +126,13 @@ class Enterprise < ApplicationRecord
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
+  def banner_location
+    return nil unless banner.attached?
+
+    # banner.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(banner)
+  end
+
   def resolve_auto_archive_state
     update(auto_archive: false)
   end

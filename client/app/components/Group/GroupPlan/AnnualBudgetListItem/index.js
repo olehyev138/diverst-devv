@@ -22,6 +22,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const { events: eventMessages } = messages;
 const { item: itemMessages } = messages;
@@ -61,19 +62,19 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       title: intl.formatMessage(eventMessages.columns.funding),
       field: 'estimated_funding',
       query_field: 'estimated_funding',
-      render: rowData => rowData.estimated_funding ? `$${floatRound(rowData.estimated_funding, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(intl, rowData.estimated_funding || 0),
     },
     {
       title: intl.formatMessage(eventMessages.columns.spent),
       field: 'current_expenses_sum',
       sorting: false,
-      render: rowData => rowData.current_expenses_sum ? `$${floatRound(rowData.current_expenses_sum, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(intl, rowData.current_expenses_sum || 0),
     },
     {
       title: intl.formatMessage(eventMessages.columns.unspent),
       field: 'leftover',
       sorting: false,
-      render: rowData => rowData.leftover ? `$${floatRound(rowData.leftover, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(intl, rowData.leftover || 0),
     },
     {
       title: intl.formatMessage(eventMessages.columns.status),
@@ -112,7 +113,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 
 export function AnnualBudgetListItem(props) {
   const { classes, links, item, intl } = props;
-  const { expenses, amount, available, approved, remaining, estimated, unspent } = item;
+  const { expenses, amount, available, approved, remaining, estimated, unspent, currency } = item;
 
   const [initList, setInitList] = useState(false);
 
@@ -194,7 +195,7 @@ export function AnnualBudgetListItem(props) {
               <DiverstFormattedMessage {...itemMessages.expenses} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2'>
-              {`$${floatRound(expenses, 2)}`}
+              {toCurrencyString(props.intl, expenses || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={8} md={10}>
@@ -210,7 +211,7 @@ export function AnnualBudgetListItem(props) {
               <DiverstFormattedMessage {...itemMessages.annualBudget} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2' align='right'>
-              {`$${floatRound(amount, 2)}`}
+              {toCurrencyString(props.intl, amount || 0, currency)}
             </Typography>
           </Grid>
         </Grid>
@@ -236,17 +237,17 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={4}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(amount, 2)}`}
+              {toCurrencyString(props.intl, amount || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(approved, 2)}`}
+              {toCurrencyString(props.intl, approved || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(available, 2)}`}
+              {toCurrencyString(props.intl, available || 0, currency)}
             </Typography>
           </Grid>
         </Grid>
@@ -267,12 +268,12 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={6}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(estimated, 2)}`}
+              {toCurrencyString(props.intl, estimated || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(unspent, 2)}`}
+              {toCurrencyString(props.intl, unspent || 0, currency)}
             </Typography>
           </Grid>
         </Grid>

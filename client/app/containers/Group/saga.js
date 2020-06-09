@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -16,7 +16,7 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN,
+  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN,
   JOIN_SUBGROUPS_BEGIN
 } from './constants';
 
@@ -32,6 +32,7 @@ import {
   resetBudgetSuccess, resetBudgetError,
   leaveGroupSuccess, leaveGroupError,
   joinGroupSuccess, joinGroupError,
+  updateGroupPositionSuccess, updateGroupPositionError,
   groupCategorizeSuccess, groupCategorizeError,
   joinSubgroupsSuccess, joinSubgroupsError,
 } from 'containers/Group/actions';
@@ -42,7 +43,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getGroups(action) {
   try {
     const response = yield call(api.groups.all.bind(api.groups), action.payload);
-
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
@@ -126,9 +126,25 @@ export function* updateGroup(action) {
   }
 }
 
+export function* updateGroupPosition(action) {
+  try {
+    const payload = { group: action.payload };
+    yield call(api.groups.update.bind(api.groups), payload.group.id, payload.group);
+
+    yield put(updateGroupPositionSuccess());
+    yield put(showSnackbar({ message: 'Group order updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updateGroupPositionError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update group order', options: { variant: 'warning' } }));
+  }
+}
+
 export function* updateGroupSettings(action) {
   try {
     const payload = { group: action.payload };
+
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
     yield put(updateGroupSettingsSuccess({ group: response.data.group }));
@@ -237,6 +253,7 @@ export default function* groupsSaga() {
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
+  yield takeEvery(UPDATE_GROUP_POSITION_BEGIN, updateGroupPosition);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);
