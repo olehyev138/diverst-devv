@@ -23,7 +23,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
 import { getCurrency } from 'utils/currencyHelpers';
-import { DiverstMoneyField } from 'components/Shared/DiverstMoneyField';
+import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
