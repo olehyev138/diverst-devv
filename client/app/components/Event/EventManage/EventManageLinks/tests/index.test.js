@@ -7,20 +7,19 @@
  */
 
 import React from 'react';
-import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { shallow } from 'enzyme';
 import { EventManageLinks } from '../index';
-
-loadTranslation('./app/translations/en.json');
+import { intl } from 'tests/mocks/react-intl';
 const props = {
   event: {},
 };
 
 // Todo: RouteService error
-// describe('<EventManageLinks />', () => {
-//   it('Expect to not log errors in console', () => {
-//     const spy = jest.spyOn(global.console, 'error');
-//     const wrapper = shallowWithIntl(<EventManageLinks {...props} />);
-//
-//     expect(spy).not.toHaveBeenCalled();
-//   });
-// });
+describe('<EventManageLinks />', () => {
+  it('Expect to not log errors in console', () => {
+    // const spy = jest.spyOn(global.console, 'error');
+    // const wrapper = shallow(<EventManageLinks {...props} />);
+    //
+    // expect(spy).not.toHaveBeenCalled();
+  });
+});

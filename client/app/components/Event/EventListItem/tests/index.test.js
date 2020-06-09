@@ -7,10 +7,9 @@
  */
 
 import React from 'react';
-import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { shallow } from 'enzyme';
 import { EventListItem } from '../index';
 
-loadTranslation('./app/translations/en.json');
 const props = {
   item: {},
 };
@@ -18,7 +17,7 @@ const props = {
 describe('<EventListItem />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<EventListItem classes={{}} {...props} />);
+    const wrapper = shallow(<EventListItem classes={{}} {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

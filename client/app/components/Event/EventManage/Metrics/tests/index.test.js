@@ -7,15 +7,14 @@
  */
 
 import React from 'react';
-import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { shallow } from 'enzyme';
 import { Metrics } from '../index';
-
-loadTranslation('./app/translations/en.json');
+import { intl } from 'tests/mocks/react-intl';
 
 describe('<Metrics />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<Metrics />);
+    const wrapper = shallow(<Metrics />);
 
     expect(spy).not.toHaveBeenCalled();
   });
