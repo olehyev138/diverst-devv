@@ -1,4 +1,3 @@
-import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
 import { floatRound } from 'utils/floatRound';
 
