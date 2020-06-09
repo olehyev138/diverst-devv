@@ -43,8 +43,8 @@ export const mapSelectField = (item, label = 'name', additionalFields = []) => i
   }, {}) }
   : null;
 
-export const formatColors = (color) => {
-  if (color != null && color[0] !== '#')
+export const formatColor = (color) => {
+  if (typeof color === 'string' && color[0] !== '#')
     return `#${color}`;
   return color;
 };

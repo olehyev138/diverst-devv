@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
-import { formatColors, mapFieldNames } from 'utils/selectorHelpers';
+import { formatColor, mapFieldNames } from 'utils/selectorHelpers';
 
 const selectGroupsDomain = state => state.groups || initialState;
 
-const changeGroupColor = group => formatColors(group.calendar_color);
+const changeGroupColor = group => formatColor(group.calendar_color);
 
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
