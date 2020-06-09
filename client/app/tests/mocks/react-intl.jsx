@@ -1,5 +1,4 @@
-// place this file here: <rootDir>/__mocks__/react-intl.js
-// this makes it apply globally as needed
+// mock intl
 
 const Intl = require.requireActual('react-intl');
 
