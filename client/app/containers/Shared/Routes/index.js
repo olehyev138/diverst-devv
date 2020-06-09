@@ -165,62 +165,6 @@ const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
 const oldRoutes = () => (
   <Switch>
-    { /* Admin */ }
-    { /* Admin - Analyze */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={UserDashboardPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupDashboardPage} />
-    <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
-
-    { /* Admin - Analyze - Custom */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.edit)} component={MetricsDashboardEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.new)} component={MetricsDashboardCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.graphs.new)} component={CustomGraphCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.graphs.edit)} component={CustomGraphEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.show)} component={MetricsDashboardPage} />
-    <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.custom.index)} component={MetricsDashboardListPage} />
-
-    { /* Admin - Manage */ }
-    { /* Admin - Manage - Groups */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categorize)} component={GroupCategorizePage} />
-    <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
-    <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.categories.index)} component={GroupCategoriesPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.new)} component={GroupCategoriesCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.edit)} component={GroupCategoriesEditPage} />
-
-    { /* Admin - Manage - Segments */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} edit />
-    <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
-
-    { /* Admin - Manage - Resources */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={EResourceCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={EResourceEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={EFolderEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={EFolderCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={EFolderPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={EFoldersPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
-
-    { /* Admin - Plan - Budget */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />
-
-    { /* Admin - Include - Poll */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.include.polls.new)} component={PollCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.include.polls.edit)} component={PollEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.include.polls.index)} component={PollsList} />
-
-    { /* Admin - Innovate */ }
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.edit)} component={CampaignQuestionEditPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.show)} component={CampaignQuestionShowPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
-    <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
-
     { /* Admin - System - GlobalSettings */ }
     <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
     <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
@@ -509,7 +453,91 @@ export default function Routes(props) {
               <Route path={ROUTES.admin.pathPrefix}>
                 <AdminLayout>
                   <SwitchWithProps>
+                    { /* Analyze - Overview */ }
+                    <RouteWithProps exact path={ROUTES.admin.analyze.overview.path()}><PlaceholderPage /></RouteWithProps>
+                    { /* Analyze - Users */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.users.path()}><UserDashboardPage /></RouteWithProps>
+                    { /* Analyze - Groups */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.groups.path()}><GroupDashboardPage /></RouteWithProps>
 
+                    { /* Analyze - Custom */ }
+                    <RouteWithProps exact path={ROUTES.admin.analyze.custom.index.path()}><MetricsDashboardListPage /></RouteWithProps>
+                    { /* Analyze - Custom Edit */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.edit.path()}><MetricsDashboardEditPage /></RouteWithProps>
+                    { /* Analyze - Custom Create */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.new.path()}><MetricsDashboardCreatePage /></RouteWithProps>
+                    { /* Analyze - Custom Show */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.show.path()}><MetricsDashboardPage /></RouteWithProps>
+                    { /* Analyze - Custom - Graphs - New */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.new.path()}><CustomGraphCreatePage /></RouteWithProps>
+                    { /* Analyze - Custom - Graphs - Edit */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.edit.path()}><CustomGraphEditPage /></RouteWithProps>
+
+                    { /* Manage - Groups */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.index.path()}><AdminGroupListPage /></RouteWithProps>
+                    { /* Manage - Group Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.new.path()}><GroupCreatePage /></RouteWithProps>
+                    { /* Manage - Group Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.edit.path()}><GroupEditPage /></RouteWithProps>
+
+                    { /* Manage - Group Categories */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.categories.index.path()}><GroupCategoriesPage /></RouteWithProps>
+                    { /* Manage - Group Category Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categories.new.path()}><GroupCategoriesCreatePage /></RouteWithProps>
+                    { /* Manage - Group Category Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categories.edit.path()}><GroupCategoriesEditPage /></RouteWithProps>
+                    { /* Manage - Group Categorize */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categorize.path()}><GroupCategorizePage /></RouteWithProps>
+
+                    { /* Manage - Segments */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.segments.index.path()}><SegmentListPage /></RouteWithProps>
+                    { /* Manage - Segment Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.segments.new.path()}><SegmentPage /></RouteWithProps>
+                    { /* Manage - Segment Show */ }
+                    <RouteWithProps path={ROUTES.admin.manage.segments.show.path()}><SegmentPage /></RouteWithProps>
+
+                    { /* Manage - Resources */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.resources.index.path()}><EFoldersPage /></RouteWithProps>
+                    { /* Manage - Resources (Archived) */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.archived.index.path()}><ArchivesPage /></RouteWithProps>
+                    { /* Manage - Resource Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.new.path()}><EResourceCreatePage /></RouteWithProps>
+                    { /* Manage - Resource Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.edit.path()}><EResourceEditPage /></RouteWithProps>
+                    { /* Manage - Folder Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.new.path()}><EFolderCreatePage /></RouteWithProps>
+                    { /* Manage - Folder Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.edit.path()}><EFolderEditPage /></RouteWithProps>
+                    { /* Manage - Folder Show */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.show.path()}><EFolderPage /></RouteWithProps>
+
+                    { /* Plan - Budget */ }
+                    <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>
+
+                    { /* Polls */ }
+                    <RouteWithProps exact path={ROUTES.admin.include.polls.index.path()}><PollsList /></RouteWithProps>
+                    { /* Poll Create */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.new.path()}><PollCreatePage /></RouteWithProps>
+                    { /* Poll Edit */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.edit.path()}><PollEditPage /></RouteWithProps>
+
+                    { /* Innovate - Campaigns */ }
+                    <RouteWithProps exact path={ROUTES.admin.innovate.campaigns.index.path()}><CampaignListPage /></RouteWithProps>
+                    { /* Innovate - Campaign Create */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.new.path()}><CampaignCreatePage /></RouteWithProps>
+                    { /* Innovate - Campaign Edit */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.edit.path()}><CampaignEditPage /></RouteWithProps>
+                    { /* Innovate - Campaign Show */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.show.path()}><CampaignShowPage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Create */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.new.path()}><CampaignQuestionCreatePage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Edit */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.edit.path()}><CampaignQuestionEditPage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Show */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.show.path()}><CampaignQuestionShowPage /></RouteWithProps>
+
+                    { /* Innovate - Financials */ }
+                    <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
                   </SwitchWithProps>
                 </AdminLayout>
               </Route>
