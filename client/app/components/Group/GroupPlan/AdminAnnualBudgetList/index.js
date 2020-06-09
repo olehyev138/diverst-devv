@@ -24,6 +24,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const { adminList: listMessages } = messages;
 
@@ -59,19 +60,19 @@ export function AnnualBudgetList(props, context) {
       title: intl.formatMessage(listMessages.columns.budget),
       field: 'annual_budget',
       sorting: false,
-      render: rowData => rowData.annual_budget || intl.formatMessage(listMessages.notSet),
+      render: rowData => rowData.leftover ? toCurrencyString(props.intl, rowData.leftover) : intl.formatMessage(listMessages.notSet),
     },
     {
       title: intl.formatMessage(listMessages.columns.leftover),
       field: 'annual_budget_leftover',
       sorting: false,
-      render: rowData => rowData.annual_budget_leftover || '$0.00'
+      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency)
     },
     {
       title: intl.formatMessage(listMessages.columns.approved),
       field: 'annual_budget_approved',
       sorting: false,
-      render: rowData => rowData.annual_budget_approved || '$0.00'
+      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency)
     },
   ];
 
