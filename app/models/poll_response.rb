@@ -1,7 +1,7 @@
 class PollResponse < ApplicationRecord
   FIELD_DEFINER_NAME = :poll
   FIELD_ASSOCIATION_NAME = :fields
-  belongs_to :poll
+  belongs_to :poll, counter_cache: :responses_count
 
   include PollResponse::Actions
   include ContainsFieldData

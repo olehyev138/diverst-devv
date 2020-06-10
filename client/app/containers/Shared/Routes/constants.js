@@ -762,6 +762,12 @@ const ROUTES = {
             titleMessage: messages.admin.include.polls.edit,
           }
         },
+        show: {
+          path: (pollId = ':poll_id') => `/admin/polls/${pollId}`,
+          data: {
+            titleMessage: messages.admin.include.polls.show,
+          }
+        },
       },
     },
     mentorship: {

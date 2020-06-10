@@ -73,7 +73,7 @@ export default compose(
   memo,
 )(Conditional(
   PollCreatePage,
-  ['currentGroup.permissions.polls_create?'],
+  ['currentGroup.permissions.polls_create'],
   (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.createPage
 ));

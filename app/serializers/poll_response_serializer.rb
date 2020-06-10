@@ -1,21 +1,16 @@
 class PollResponseSerializer < ApplicationRecordSerializer
-  attributes :poll, :user, :fields
+  has_many :field_data
+  attributes_with_permission :user, if: :not_anonymous?
 
-  def fields
-    fields = object.poll.fields
-    fields_hash = []
-
-    fields.each do |field|
-      fields_hash << {
-        title: field.title,
-        value: field.string_value(object[field])
-      }
-    end
-
-    fields_hash
+  def not_anonymous?
+    !object&.anonymous
   end
 
   def serialize_all_fields
     true
+  end
+
+  def excluded_keys
+    [:user_id]
   end
 end

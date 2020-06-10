@@ -112,6 +112,7 @@ import {
   PollsList,
   PollCreatePage,
   PollEditPage,
+  PollShowPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -506,6 +507,8 @@ export default function Routes(props) {
                     <RouteWithProps path={ROUTES.admin.include.polls.new.path()}><PollCreatePage /></RouteWithProps>
                     { /* Poll Edit */ }
                     <RouteWithProps path={ROUTES.admin.include.polls.edit.path()}><PollEditPage /></RouteWithProps>
+                    { /* Poll Show */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.show.path()}><PollShowPage /></RouteWithProps>
 
                     { /* Innovate - Campaigns */ }
                     <RouteWithProps exact path={ROUTES.admin.innovate.campaigns.index.path()}><CampaignListPage /></RouteWithProps>
