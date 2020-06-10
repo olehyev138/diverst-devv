@@ -49,8 +49,8 @@ const GroupManagePaths = Object.freeze([
 ]);
 
 const RootManagePaths = Object.freeze([
-  'metrics_overview',
   ...GroupManagePaths,
+  'metrics_overview',
   ...GroupBudgetManagePaths,
   'campaigns_create',
   'polls_create',
