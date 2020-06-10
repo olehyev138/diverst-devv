@@ -121,30 +121,28 @@ export function AdminLinks(props) {
   });
 
   const handleDrawerToggle = () => {
-    setState(
-      state => ({ drawerOpen: !state.drawerOpen }),
-      () => (props.drawerToggleCallback(state.drawerOpen))
-    );
+    props.drawerToggleCallback(!state.drawerOpen);
+    setState({ ...state, drawerOpen: !state.drawerOpen });
   };
 
   const handleAnalyzeClick = () => {
-    setState(state => ({ analyze: { open: !state.analyze.open } }));
+    setState({ ...state, analyze: { open: !state.analyze.open } });
   };
 
   const handleManageClick = () => {
-    setState(state => ({ manage: { open: !state.manage.open } }));
+    setState({ ...state, manage: { open: !state.manage.open } });
   };
 
   const handlePlanClick = () => {
-    setState(state => ({ plan: { open: !state.plan.open } }));
+    setState({ ...state, plan: { open: !state.plan.open } });
   };
 
   const handleInnovateClick = () => {
-    setState(state => ({ innovate: { open: !state.innovate.open } }));
+    setState({ ...state, innovate: { open: !state.innovate.open } });
   };
 
   const handleSystemClick = () => {
-    setState(state => ({ system: { open: !state.system.open } }));
+    setState({ ...state, system: { open: !state.system.open } });
   };
 
   const drawer = classes => (
