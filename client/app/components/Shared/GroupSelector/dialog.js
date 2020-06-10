@@ -36,8 +36,6 @@ const GroupListSelector = (props) => {
             setExpandedGroups={setExpandedGroups}
             {...props}
           />
-          <Box mb={1} />
-          <Divider />
         </React.Fragment>
       ))}
       <DiverstPagination

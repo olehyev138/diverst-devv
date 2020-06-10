@@ -12,7 +12,7 @@ const selectPaginatedGroups = () => createSelector(
  *  looks like: [ { value: <>, label: <> } ... ]
  */
 
-const groupMapper = group => ({ value: group.id, label: group.name, children: (group.children || []).map(groupMapper) });
+const groupMapper = group => ({ value: group.id, label: group.name, logo_data: group.logo_data, children: (group.children || []).map(groupMapper) });
 
 const selectPaginatedSelectGroups = () => createSelector(
   selectGroupsDomain,
