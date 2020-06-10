@@ -112,7 +112,7 @@ Run the script `boostrap-backend` as follows.
 
 Record the name of the state bucket the script outputs. This is our _master bucket_ for the environment account and is where Terraform will store its state and we will store backend app version bundles.
 
-This will create a bucket to store Terraform state & a dynamo table for state locking. The values outputted by the script will be what you will fill in, in the Terraform configuration, defined in the following step.
+This will create a bucket to store Terraform state, a dynamo table for state locking & a KMS key for secrets management. The values outputted by the script will be what you will fill in, in the Terraform configuration, defined in the following step.
 
 The other resource that must exist before running Terraform is a SSH key pair. To create a SSH key pair run
 
@@ -121,6 +121,8 @@ The other resource that must exist before running Terraform is a SSH key pair. T
 Terraform will import this key pair into AWS & use it to allow authentication with the bastion & EB servers.
 
 Upload both the public & private key files as attachments to the secure note.
+
+Lastly, before proceeding, refer to the `secrets` document to write out the secrets to the parameter key store. These secrets will be passed to Terraform via environment variables. This will consist of passwords & API keys. The passwords should be auto generated and the API keys will be found in the password manager. Ensure secrets are written in proper format as described in `secrets`, otherwise Terraform will not find them.
 
 #### D) Creating a new Terraform environment module
 
@@ -137,8 +139,6 @@ Fill out the properties in `<env-name>.tfvars` & `main.tf` with the values from 
 In `<env-name>.tfvars`, fill in the variables. In `main.tf`, fill in the name of the state bucket from the last step. Set the dynamo lock table name & fill in the path of the ssh key created in the last step. Make sure you use the public file, ie `testing.pub`.
 
 Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION` & the secure note.
-
-Write secrets to the _parameter key store_ with `chamber`. Consult the _secrets_ document for details. All secrets listed `secrets.md` must be written in the proper format via chamber. 
 
 #### E) Run Terraform
 

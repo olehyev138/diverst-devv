@@ -119,10 +119,6 @@ module "analytics" {
   db_password = var.db_password
 }
 
-module "secrets_key" {
-  source  = "../../../modules/services/secrets_key"
-}
-
 data "aws_instance" "bastion" {
   depends_on = [module.bastion]
 
