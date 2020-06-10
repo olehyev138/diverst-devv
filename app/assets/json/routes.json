@@ -134,7 +134,7 @@
     }
   },
   "admin": {
-    "root": "/admin/analyze",
+    "root": "/admin/manage/groups",
     "analyze": {
       "overview": "/admin/analyze",
       "users": "/admin/analyze/users",
