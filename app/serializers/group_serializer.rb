@@ -30,6 +30,7 @@ class GroupSerializer < ApplicationRecordSerializer
   def policies
     [
         :show?,
+        :destroy?,
         :update?,
         :events_view?,
         :members_view?,
