@@ -10,7 +10,7 @@ class PollMailer < ApplicationMailer
 
     set_defaults(@enterprise, method_name)
 
-    mail(from: @from_address, to: @email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject) if @email == 'tech@diverst.com' || !Rails.env.development?
   end
 
   def variables
@@ -24,6 +24,6 @@ class PollMailer < ApplicationMailer
   end
 
   def url
-    new_poll_poll_response_url(@poll)
+    ReactRoutes.user.home
   end
 end
