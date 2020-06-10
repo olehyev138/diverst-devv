@@ -17,7 +17,6 @@ const styles = theme => ({});
 
 export function NewsLink(props) {
   /* Render a NewsLink, its comments & a comment form */
-
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const newsLink = dig(newsItem, 'news_link');

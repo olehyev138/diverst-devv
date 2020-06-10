@@ -2,11 +2,11 @@
  * Shared component to display comments for news items
  */
 
-import React, {memo, useContext} from 'react';
+import React, { memo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -15,6 +15,7 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
   cardHeader: {
@@ -23,12 +24,14 @@ const styles = theme => ({
   margin: {
     marginTop: 16,
     marginBottom: 16,
-  }
+  },
+  centerVertically: {
+    padding: 3,
+  },
 });
 
 export function NewsComment(props) {
   const { classes, comment, newsItem, intl } = props;
-
   return (
     <Card className={classes.margin}>
       <CardHeader
@@ -49,6 +52,13 @@ export function NewsComment(props) {
       />
       <CardContent>
         <Typography variant='body1'>{comment.content}</Typography>
+        <Grid container justify='space-between'>
+          <Grid item>
+          </Grid>
+          <Grid item>
+            <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>{formatDateTimeString(comment.created_at)}</Typography>
+          </Grid>
+        </Grid>
       </CardContent>
       <Permission show={permission(comment, 'destroy?')}>
         <CardActions>
