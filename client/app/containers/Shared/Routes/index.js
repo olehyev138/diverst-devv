@@ -162,20 +162,6 @@ import SwitchWithProps from 'components/Shared/Routes/SwitchWithProps';
 
 import { expandRouteIntoPathArray } from 'utils/routeHelpers';
 
-const expandRoute = route => ({ path: route.path(), data: route.data || {} });
-
-const oldRoutes = () => (
-  <Switch>
-    { /* Admin - System - Branding */ }
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.index)} component={BrandingThemePage} />
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
-    <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
-  </Switch>
-);
-
 export default function Routes(props) {
   return (
     <ApplicationLayout>
@@ -574,6 +560,25 @@ export default function Routes(props) {
                           </RouteWithProps>
                         </Switch>
                       </GlobalSettingsLayout>
+                    </RouteWithProps>
+
+                    { /* System - Branding */ }
+                    <RouteWithProps path={ROUTES.admin.system.branding.pathPrefix}>
+                      <BrandingLayout>
+                        <Switch>
+                          { /* Theme */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.theme.path()}><BrandingThemePage /></RouteWithProps>
+                          { /* Home */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.home.path()}><BrandingHomePage /></RouteWithProps>
+
+                          { /* Sponsors */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.branding.sponsors.index.path()}><SponsorListPage /></RouteWithProps>
+                          { /* Sponsor Create */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.sponsors.new.path()}><SponsorCreatePage /></RouteWithProps>
+                          { /* Sponsor Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.sponsors.edit.path()}><SponsorEditPage /></RouteWithProps>
+                        </Switch>
+                      </BrandingLayout>
                     </RouteWithProps>
 
                     { /* System - Logs */ }
