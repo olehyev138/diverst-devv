@@ -94,7 +94,7 @@ export default compose(
   memo,
 )(Conditional(
   PollCreatePage,
-  ['currentGroup.permissions.polls_create?'],
+  ['poll.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.include.polls.index.path(),
-  permissionMessages.poll.createPage
+  permissionMessages.poll.editPage
 ));
