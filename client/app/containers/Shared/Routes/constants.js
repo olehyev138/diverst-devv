@@ -912,6 +912,7 @@ const ROUTES = {
         },
       },
       branding: {
+        pathPrefix: '/admin/system/branding',
         index: {
           path: () => '/admin/system/branding',
           data: {
