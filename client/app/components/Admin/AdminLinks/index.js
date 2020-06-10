@@ -512,6 +512,7 @@ export function AdminLinks(props) {
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time
                 show={
                   permission(props, 'integrations_manage')
                   || permission(props, 'rewards_manage')
