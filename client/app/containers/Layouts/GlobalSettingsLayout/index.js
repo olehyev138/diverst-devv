@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -34,25 +34,28 @@ const GlobalSettingsLayout = (props) => {
   const { classes, children, permissions, redirectAction, showSnackbar, ...rest } = props;
 
   const location = useLocation();
+  const isRoot = !!useRouteMatch({ path: ROUTES.admin.system.globalSettings.pathPrefix, exact: true });
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
   const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
   const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (permission(rest, 'enterprise_manage'))
-      redirectAction(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path());
-    else if (permission(rest, 'fields_manage'))
-      redirectAction(ROUTES.admin.system.globalSettings.fields.index.path());
-    else if (permission(rest, 'custom_text_manage'))
-      redirectAction(ROUTES.admin.system.globalSettings.customText.index.path());
-    else if (permission(rest, 'sso_authentication'))
-      redirectAction(ROUTES.admin.system.globalSettings.ssoSettings.index.path());
-    else if (permission(rest, 'emails_manage'))
-      redirectAction(ROUTES.admin.system.globalSettings.emails.index.path());
-    else if (permissions) {
-      showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
-      redirectAction(permission(rest, 'adminPath') || ROUTES.user.home.path());
+    if (isRoot) {
+      if (permission(props, 'enterprise_manage'))
+        redirectAction(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path());
+      else if (permission(props, 'fields_manage'))
+        redirectAction(ROUTES.admin.system.globalSettings.fields.index.path());
+      else if (permission(props, 'custom_text_manage'))
+        redirectAction(ROUTES.admin.system.globalSettings.customText.index.path());
+      else if (permission(props, 'sso_authentication'))
+        redirectAction(ROUTES.admin.system.globalSettings.ssoSettings.index.path());
+      else if (permission(props, 'emails_manage'))
+        redirectAction(ROUTES.admin.system.globalSettings.emails.index.path());
+      else if (permissions) {
+        showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
+        redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
+      }
     }
 
     if (tab !== currentPage)
