@@ -90,4 +90,32 @@ export default defineMessages({
       id: `${scope}.list.tooltip.delete`,
     },
   },
+  responses: {
+    respondent: {
+      id: `${scope}.responses.table.respondent`,
+    },
+    date: {
+      id: `${scope}.responses.table.date`,
+    },
+    show: {
+      id: `${scope}.responses.tooltip.show`,
+    },
+    title: {
+      id: `${scope}.responses.title`,
+    },
+  },
+  textual: {
+    answer: {
+      id: `${scope}.textual.table.answer`,
+    },
+    respondent: {
+      id: `${scope}.textual.table.respondent`,
+    },
+    date: {
+      id: `${scope}.textual.table.date`,
+    },
+    question: {
+      id: `${scope}.textual.question`,
+    },
+  },
 });
