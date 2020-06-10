@@ -425,6 +425,12 @@ export default defineMessages({
     },
     createPage: {
       id: `${scope}.poll.pollCreatePage`
-    }
+    },
+    editPage: {
+      id: `${scope}.poll.pollEditPage`
+    },
+    showPage: {
+      id: `${scope}.poll.pollShowPage`
+    },
   }
 });

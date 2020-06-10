@@ -4,8 +4,8 @@ module Poll::Actions
   end
 
   module ClassMethods
-    def base_includes
-      [:fields, :responses]
+    def base_preloads
+      [:fields, :groups, :segments, :enterprise]
     end
   end
 end
