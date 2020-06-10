@@ -887,6 +887,7 @@ const ROUTES = {
           },
         },
         emails: {
+          pathPrefix: '/admin/system/settings/emailLayouts',
           index: {
             path: () => '/admin/system/settings/emailLayouts'
           },
