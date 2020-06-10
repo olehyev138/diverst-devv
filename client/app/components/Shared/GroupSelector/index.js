@@ -51,7 +51,7 @@ const GroupSelector = ({ handleChange, values, groupField, setFieldValue, label,
       fullWidth
       options={rest.groups}
       value={values[groupField]}
-      onChange={value => setFieldValue(groupField, value)}
+      onChange={value => setFieldValue(groupField, value || (selectProps.isMulti ? [] : null))}
       onInputChange={groupSelectAction}
       hideHelperText
       {...selectProps}

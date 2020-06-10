@@ -18,7 +18,10 @@ const selectPollsTotal = () => createSelector(
 
 const selectPoll = () => createSelector(
   selectPollDomain,
-  pollState => pollState.currentPoll
+  pollState => produce(pollState.currentPoll, (draft) => {
+    if (pollState.currentPoll)
+      draft.fields = dig(pollState, 'currentPoll', 'fields', val => val.map(field => mapSelectField(field, 'title', 'type')));
+  })
 );
 
 const selectFormPoll = () => createSelector(

@@ -29,6 +29,7 @@ import updates from 'api/updates/updates';
 import outcomes from 'api/outcomes/outcomes';
 import pillars from 'api/pillars/pillars';
 import polls from 'api/polls/polls';
+import pollResponses from 'api/poll_responses/poll_responses';
 import customText from 'api/custom_text/custom_text';
 import user from 'api/user/user';
 import folders from 'api/folders/folders';
@@ -93,6 +94,7 @@ const Api = {
   outcomes,
   pillars,
   polls,
+  pollResponses,
   customText,
   folders,
   resources,

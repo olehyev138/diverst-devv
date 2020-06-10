@@ -1,7 +1,7 @@
 class ApplicationPolicy
   attr_reader :user, :policy_group, :params, :record, :group_leader_role_id
 
-  def initialize(user, record, params = nil)
+  def initialize(user, record, params = {})
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
