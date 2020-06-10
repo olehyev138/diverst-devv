@@ -165,17 +165,6 @@ const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
 const oldRoutes = () => (
   <Switch>
-    { /* Admin - System - GlobalSettings */ }
-    <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
-    <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
-    <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
-    <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
-    <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
-    <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
-    <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
-    <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={EmailEventsPage} />
-    <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
-
     { /* Admin - System - Users */ }
     <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
     <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.import)} component={UsersImportPage} />
@@ -535,6 +524,39 @@ export default function Routes(props) {
 
                     { /* Innovate - Financials */ }
                     <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
+
+                    { /* System - Global Settings */ }
+                    <RouteWithProps path={ROUTES.admin.system.globalSettings.pathPrefix}>
+                      <GlobalSettingsLayout>
+                        <Switch>
+                          { /* Fields */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.fields.index.path()}><FieldsPage /></RouteWithProps>
+                          { /* Custom Text Edit */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.customText.edit.path()}><CustomTextEditPage /></RouteWithProps>
+                          { /* Enterprise Configuration */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}><EnterpriseConfigurationPage /></RouteWithProps>
+                          { /* SSO Settings */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.ssoSettings.edit.path()}><SSOSettingsPage /></RouteWithProps>
+
+                          { /* Emails */}
+                          <RouteWithProps path={ROUTES.admin.system.globalSettings.emails.pathPrefix}>
+                            <EmailLayout>
+                              <Switch>
+                                { /* Emails */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.index.path()}><EmailsPage /></RouteWithProps>
+                                { /* Email Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.edit.path()}><EmailEditPage /></RouteWithProps>
+
+                                { /* Email Events */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.mailEvents.index.path()}><EmailEventsPage /></RouteWithProps>
+                                { /* Email Event Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.mailEvents.edit.path()}><EmailEventEditPage /></RouteWithProps>
+                              </Switch>
+                            </EmailLayout>
+                          </RouteWithProps>
+                        </Switch>
+                      </GlobalSettingsLayout>
+                    </RouteWithProps>
 
                     { /* System - Logs */ }
                     <RouteWithProps exact path={ROUTES.admin.system.logs.index.path()}><LogListPage /></RouteWithProps>
