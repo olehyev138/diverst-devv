@@ -1,4 +1,3 @@
-import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
 import { floatRound } from 'utils/floatRound';
 
@@ -40,22 +39,20 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   const decimalScale = lastDigits.length + 2;
 
   // groupingStyle
-  const lahkCounting = prototype.match(/1(.*)2/)[1].length > 0;
-  const wanCounting = prototype.match(/2(.*)3/)[1].length > 0;
-  const thousandCounting = prototype.match(/123/) != null;
-  const thousandsGroupStyle = caseHelper(
-    true,
-    [lahkCounting, 'lahk'],
-    [wanCounting, 'wan'],
-    [thousandCounting, 'thousand'],
-  );
+  function thousandsPicker() {
+    // 1,23,456
+    if (prototype.match(/1(.*)2/)[1].length > 0)
+      return ['lahk', dig(prototype.match(/3(.+)4/), 1)];
+    // 12,3456
+    if (prototype.match(/2(.*)3/)[1].length > 0)
+      return ['wan', dig(prototype.match(/2(.+)3/), 1)];
+    // 123,456
+    if (prototype.match(/123/) != null)
+      return ['thousand', dig(prototype.match(/3(.+)4/), 1)];
+    return '';
+  }
 
-  // group seperator
-  const thousandSeparator = caseHelper(
-    thousandsGroupStyle,
-    [['lahk', 'thousand'], () => dig(prototype.match(/3(.+)4/), 1)],
-    ['wan', () => dig(prototype.match(/2(.+)3/), 1)],
-  );
+  const [thousandsGroupStyle, thousandSeparator] = thousandsPicker();
 
   // prefix/suffix
   const prefix = prototype.match(/^([^\d]*)[\d]/)[1];

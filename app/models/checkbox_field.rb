@@ -18,7 +18,11 @@ class CheckboxField < Field
   end
 
   def deserialize_value(value)
-    JSON.parse(value || '[]')
+    val = JSON.parse(value || '[]')
+    case val
+    when Array then val
+    else [val]
+    end
   end
 
   def popularity_for_no_option(users)
