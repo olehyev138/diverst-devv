@@ -166,19 +166,6 @@ const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
 const oldRoutes = () => (
   <Switch>
-    { /* Admin - System - Users */ }
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.import)} component={UsersImportPage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
-
-    { /* Admin - System - User Roles */ }
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.index)} component={PolicyTemplatesPage} />
-    <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.edit)} component={PolicyTemplateEditPage} />
-
     { /* Admin - System - Branding */ }
     <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.index)} component={BrandingThemePage} />
     <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
@@ -527,6 +514,34 @@ export default function Routes(props) {
 
                     { /* Innovate - Financials */ }
                     <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
+
+                    { /* System - Users */ }
+                    <RouteWithProps path={ROUTES.admin.system.users.pathPrefix}>
+                      <SystemUserLayout>
+                        <Switch>
+                          { /* Users */}
+                          <RouteWithProps exact path={ROUTES.admin.system.users.index.path()}><UsersPage /></RouteWithProps>
+                          { /* Users Import */}
+                          <RouteWithProps path={ROUTES.admin.system.users.import.path()}><UsersImportPage /></RouteWithProps>
+                          { /* User Create */}
+                          <RouteWithProps path={ROUTES.admin.system.users.new.path()}><UserCreatePage /></RouteWithProps>
+                          { /* User Edit */}
+                          <RouteWithProps path={ROUTES.admin.system.users.edit.path()}><UserEditPage /></RouteWithProps>
+
+                          { /* User Roles */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.users.roles.index.path()}><UserRolesListPage /></RouteWithProps>
+                          { /* User Role Create */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.roles.new.path()}><UserRoleCreatePage /></RouteWithProps>
+                          { /* User Role Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.roles.edit.path()}><UserRoleEditPage /></RouteWithProps>
+
+                          { /* Policy Templates */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.users.policy_templates.index.path()}><PolicyTemplatesPage /></RouteWithProps>
+                          { /* Policy Template Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.policy_templates.edit.path()}><PolicyTemplateEditPage /></RouteWithProps>
+                        </Switch>
+                      </SystemUserLayout>
+                    </RouteWithProps>
 
                     { /* System - Global Settings */ }
                     <RouteWithProps path={ROUTES.admin.system.globalSettings.pathPrefix}>
