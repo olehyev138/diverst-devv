@@ -11,7 +11,7 @@ import {
 } from '../selectors';
 
 import { initialState } from '../reducer';
-import {selectIsLoggingIn} from "../../Session/LoginPage/selectors";
+import { selectIsLoggingIn } from '../../Session/LoginPage/selectors';
 
 describe('Poll selectors', () => {
   describe('selectPollDomain', () => {
