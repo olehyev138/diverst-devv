@@ -829,6 +829,7 @@ const ROUTES = {
         }
       },
       users: {
+        pathPrefix: '/admin/system/users',
         index: {
           path: () => '/admin/system/users',
           data: {
