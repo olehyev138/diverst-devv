@@ -194,7 +194,8 @@
       "polls": {
         "index": "/admin/polls",
         "new": "/admin/polls/new",
-        "edit": "/admin/polls/:poll_id/edit"
+        "edit": "/admin/polls/:poll_id/edit",
+        "show": "/admin/polls/:poll_id"
       }
     },
     "innovate": {

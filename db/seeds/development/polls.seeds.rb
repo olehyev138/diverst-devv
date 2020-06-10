@@ -82,7 +82,7 @@ Hot Dog"
 
         r[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count - 1)]
         r[p.fields[1]] = p.fields[1].options[rand(0..p.fields[1].options.count - 1)]
-        r[p.fields[2]] = p.fields[2].options[rand(0..p.fields[2].options.count - 1)]
+        r[p.fields[2]] = [p.fields[2].options[rand(0..p.fields[2].options.count - 1)]]
         r[p.fields[3]] = Faker::Lorem.paragraph
 
         r.save
