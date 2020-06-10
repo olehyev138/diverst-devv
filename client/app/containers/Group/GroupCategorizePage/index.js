@@ -13,7 +13,7 @@ import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
 
 import { getGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
-import { getGroupsBegin, groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
+import { groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
 import {
   selectPaginatedSelectGroups,
   selectCategorizeGroup,
@@ -22,12 +22,9 @@ import {
 import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
-import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-
-const changePage = id => push(ROUTES.admin.manage.groups.categorize.path(id));
 
 export function GroupCategorizePage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
@@ -39,7 +36,6 @@ export function GroupCategorizePage(props) {
 
   useEffect(() => {
     props.getGroupBegin({ id: groupId });
-    props.getGroupsBegin();
     props.getGroupCategoriesBegin();
     return () => {
       props.groupCategorizeUnmount();
@@ -49,22 +45,18 @@ export function GroupCategorizePage(props) {
   return (
     <GroupCategorizeForm
       group={props.group}
-      selectGroups={props.groups}
       groupAction={props.groupCategorizeBegin}
       categories={props.categories}
       isCommitting={props.isCommitting}
-      changePage={props.changePage}
     />
   );
 }
 
 GroupCategorizePage.propTypes = {
   getGroupBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
   groupCategorizeBegin: PropTypes.func,
   groupCategorizeUnmount: PropTypes.func,
   getGroupCategoriesBegin: PropTypes.func,
-  changePage: PropTypes.func,
   group: PropTypes.object,
   groups: PropTypes.array,
   categories: PropTypes.array,
@@ -73,7 +65,6 @@ GroupCategorizePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   group: selectCategorizeGroup(),
-  groups: selectPaginatedSelectGroups(),
   currentUser: selectUser(),
   categories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
@@ -83,11 +74,9 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getGroupBegin,
-  getGroupsBegin,
   groupCategorizeBegin,
   getGroupCategoriesBegin,
   groupCategorizeUnmount,
-  changePage,
 };
 
 const withConnect = connect(
