@@ -6,9 +6,24 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core';
 
-export default function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content } = props;
+const styles = {
+  dialog: {
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    display: 'flex'
+  },
+  paper: {
+    overflow: 'hidden',
+    margin: 'auto',
+    maxHeight: 'none'
+  },
+};
+
+
+export function DiverstDialog(props) {
+  const { title, open, handleYes, textYes, handleNo, textNo, content, classes } = props;
 
   return (
     <Dialog
@@ -47,4 +62,7 @@ DiverstDialog.propTypes = {
   handleNo: PropTypes.func,
   textNo: PropTypes.string,
   content: PropTypes.any,
+  classes: PropTypes.object.isRequired,
 };
+
+export default withStyles(styles)(DiverstDialog);

@@ -8,19 +8,29 @@ import { CircularProgress, Grid, Slide } from '@material-ui/core';
 const styles = theme => ({
   progress: {
     margin: theme.spacing(8),
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 });
 
 function DiverstLoader(props) {
   const { classes, isLoading, transitionProps, children } = props;
-
   return (
     <React.Fragment>
-      <Slide direction='left' in={!isLoading} mountOnEnter unmountOnExit {...transitionProps}>
+      {props.noTransition ? (
         <div>
           {props.children}
         </div>
-      </Slide>
+      ) : (
+        <Slide direction='left' in={!isLoading} mountOnEnter unmountOnExit {...transitionProps}>
+          <div>
+            {props.children}
+          </div>
+        </Slide>
+      )}
 
       {isLoading ? (
         <Grid container justify='center'>
@@ -42,6 +52,7 @@ DiverstLoader.propTypes = {
   isLoading: PropTypes.bool,
   transitionProps: PropTypes.object,
   children: PropTypes.node.isRequired,
+  noTransition: PropTypes.bool,
 };
 
 export default compose(

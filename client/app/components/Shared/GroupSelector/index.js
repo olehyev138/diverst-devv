@@ -96,7 +96,14 @@ const GroupSelector = (props) => {
         title='THIS IS A GENERIC TITLE'
         handleNo={() => setDialogSearch(false)}
         content={(
-          <GroupListSelector {...props} />
+          <GroupListSelector
+            groups={groups}
+            groupTotal={rest.groupTotal}
+            isLoading={rest.isLoading}
+            inputCallback={props.inputCallback}
+            getGroupsBegin={props.getGroupsBegin}
+            open={dialogSearch}
+          />
         )}
       />
     </Grid>
