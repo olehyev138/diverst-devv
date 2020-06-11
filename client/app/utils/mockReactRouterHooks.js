@@ -9,5 +9,9 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({
     pathname: '/',
     key: 'testKey',
-  })
+  }),
+  useRouteMatch: () => ({
+    pathname: '/',
+    key: 'testKey',
+  }),
 }));
