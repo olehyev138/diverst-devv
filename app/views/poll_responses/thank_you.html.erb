@@ -9,8 +9,8 @@
     </div>
   </div>
     <% if @poll&.initiative&.group %>
-      <%= link_to 'Go Back Home', group_path(@poll&.initiative&.group), class: 'btn btn--secondary'
+      <%= link_to 'Go Back Home', group_path(@poll&.initiative&.group), class: 'btn btn--secondary' %>
     <% else %>
-      <%= link_to 'Go Back Home', user_root_path, class: 'btn btn--secondary'   
+      <%= link_to 'Go Back Home', user_root_path, class: 'btn btn--secondary' %>   
     <% end %>
 </div>
