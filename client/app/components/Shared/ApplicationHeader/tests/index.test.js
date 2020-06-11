@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
+import 'utils/mockReactRouterHooks';
 
 import { StyledApplicationHeader } from 'components/Shared/ApplicationHeader/index';
 const ApplicationHeaderNaked = unwrap(StyledApplicationHeader);
