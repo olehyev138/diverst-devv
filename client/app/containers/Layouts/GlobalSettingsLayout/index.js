@@ -41,7 +41,7 @@ const GlobalSettingsLayout = (props) => {
   const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (isRoot) {
+    if (isRoot)
       if (permission(props, 'enterprise_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path());
       else if (permission(props, 'fields_manage'))
@@ -56,7 +56,6 @@ const GlobalSettingsLayout = (props) => {
         showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
       }
-    }
 
     if (tab !== currentPage)
       setTab(currentPage);
