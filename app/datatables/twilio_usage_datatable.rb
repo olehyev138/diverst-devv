@@ -24,7 +24,7 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
   private
 
   def data
-    records.sort.map do |record|
+    records.order(id: :desc).map do |record|
       [
         "#{link_to(record.event_name, twilio_dashboard_path(record), class: "#{record.status == 'completed' ? 'positive' : 'error'}")}",
         record.start_time,
