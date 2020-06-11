@@ -1,5 +1,7 @@
 class AddVirtualAttributeToInitiatives < ActiveRecord::Migration[5.2]
   def change
-    add_column :initiatives, :virtual, :boolean, default: false
+    unless column_exists? :initiatives, :virtual
+      add_column :initiatives, :virtual, :boolean, default: false
+    end
   end
 end
