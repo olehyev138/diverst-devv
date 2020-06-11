@@ -110,21 +110,19 @@ const GroupSelectorItem = (props) => {
         <Grid item xs>
           <CardContent className={classes.groupCardContent}>
             <Grid container spacing={2} alignItems='center'>
-              {group.logo_data && (
-                <React.Fragment>
-                  <Hidden xsDown>
-                    <Grid item xs='auto'>
-                      <DiverstImg
-                        data={group.logo_data}
-                        maxWidth='70px'
-                        maxHeight='70px'
-                        minWidth='70px'
-                        minHeight='70px'
-                      />
-                    </Grid>
-                  </Hidden>
-                </React.Fragment>
-              )}
+              <React.Fragment>
+                <Hidden xsDown>
+                  <Grid item xs='auto'>
+                    <DiverstImg
+                      data={group.logo_data}
+                      maxWidth='50px'
+                      maxHeight='50px'
+                      minWidth='50px'
+                      minHeight='50px'
+                    />
+                  </Grid>
+                </Hidden>
+              </React.Fragment>
               <Grid item xs>
                 <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
                   {group.label}
