@@ -9,17 +9,17 @@ class Initiatives::ExpensesController < ApplicationController
   layout 'erg'
 
   def index
-    authorize InitiativeExpense
+    authorize InitiativeExpense.new(initiative: @initiative)
     @expenses = @initiative.expenses
   end
 
   def new
-    authorize InitiativeExpense
+    authorize InitiativeExpense.new(initiative: @initiative)
     @expense = @initiative.expenses.new
   end
 
   def create
-    authorize InitiativeExpense
+    authorize InitiativeExpense.new(initiative: @initiative)
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
 
@@ -36,7 +36,7 @@ class Initiatives::ExpensesController < ApplicationController
   end
 
   def time_series
-    authorize InitiativeExpense, :index?
+    authorize InitiativeExpense.new(initiative: @initiative), :index?
 
     respond_to do |format|
       format.json {

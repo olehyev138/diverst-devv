@@ -13,7 +13,7 @@
     </div>
   <% else %>
     <div class="flex-row__cell">
-      <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if InitiativeExpensePolicy.new(current_user, InitiativeExpense).new? %>
+      <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if InitiativeExpensePolicy.new(current_user, InitiativeExpense.new(initiative: @initiative)).new? %>
     </div>
     <% unless @initiative.expenses.empty? %>
       <% if @initiative.ended? %>
