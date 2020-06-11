@@ -1,19 +1,19 @@
 {
   "session": {
-    "sign_up": "/sign_up/:token",
+    "signUp": "/sign_up/:token",
     "login": "/login",
     "forgotPassword": "/forgot"
   },
   "user": {
     "root": "/",
-    "show": "/user/:user_id",
-    "edit": "/user/:user_id/edit",
     "home": "/",
     "innovate": "/campaigns",
     "news": "/news",
     "events": "/events",
     "groups": "/groups",
     "downloads": "/downloads",
+    "show": "/user/:user_id",
+    "edit": "/user/:user_id/edit",
     "mentorship": {
       "home": "/mentorship",
       "show": "/mentorship/:user_id",
