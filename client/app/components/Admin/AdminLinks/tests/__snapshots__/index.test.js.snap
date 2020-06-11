@@ -459,6 +459,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                isActive={[Function]}
                 to="#"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -928,6 +929,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                isActive={[Function]}
                 to="#"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
