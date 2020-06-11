@@ -158,7 +158,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export default function Routes(props) {
   const expandRoute = route => ({ path: route.path(), data: route.data || {} });
 
-
   return (
     <Switch>
       { /* Session */ }
@@ -238,6 +237,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.include.polls.index)} component={PollsList} />
 
       { /* Admin - Innovate */ }
+      {/*
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
@@ -246,6 +246,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
+      */}
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
