@@ -7,8 +7,8 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 // Returns [title, isPathPrefix]
 // title is null when not found
 // isPathPrefix is true when the title that was found only has a pathPrefix and not a path
-export const findTitleForPath = ({ path, object = ROUTES, params = [], textArguments = {} }) => {
-  if (!object || typeof object !== 'object')
+export const findTitleForPath = ({ path, object = ROUTES, params = [], textArguments = {}, intlObject = intl }) => {
+  if (!object || typeof object !== 'object' || !intlObject)
     return [null, null];
 
   if (Object.hasOwnProperty.call(object, 'data')) {
