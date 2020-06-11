@@ -35,6 +35,30 @@ const GroupSelector = (props) => {
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 
+  const [addGroup, removeGroup, onChange] = (() => {
+    if (selectProps.isMulti)
+      return [
+        // MULTI ADD GROUP
+        (group) => {
+          const index = values[groupField].indexOf(x => x.value === group.value);
+          if (index === -1)
+            setFieldValue(groupField, [...(values[groupField]), group]);
+        },
+        // MULTI REMOVE GROUP
+        group => setFieldValue(groupField, values[groupField].filter(x => x.value !== group.value)),
+        // MULTI ON CHANGE
+        value => setFieldValue(groupField, value || [])
+      ];
+    return [
+      // SINGLE ADD GROUP
+      group => setFieldValue(groupField, group),
+      // SINGLE REMOVE GROUP
+      group => values[groupField].value === group.value ? setFieldValue(groupField, '') : null,
+      // SINGLE ON CHANGE
+      value => setFieldValue(groupField, value || '')
+    ];
+  })();
+
   const groupSelectAction = (searchKey = '') => props.inputCallback(props, searchKey);
 
   useEffect(() => {
@@ -45,22 +69,22 @@ const GroupSelector = (props) => {
 
   return (
     <Grid container>
-      <Grid item xs='auto'>
+      <Grid item xs={12}>
         <DiverstSelect
           name={groupField}
           id={groupField}
           margin='normal'
           label={label}
           fullWidth
-          options={rest.groups}
+          options={groups}
           value={values[groupField]}
-          onChange={value => setFieldValue(groupField, value || (selectProps.isMulti ? [] : ''))}
+          onChange={onChange}
           onInputChange={groupSelectAction}
           hideHelperText
           {...selectProps}
         />
       </Grid>
-      <Grid item xs='auto'>
+      <Grid item xs={12}>
         <Button
           onClick={() => setDialogSearch(true)}
         >
