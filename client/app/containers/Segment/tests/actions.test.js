@@ -10,11 +10,12 @@ import {
 
 import {
   getSegmentsBegin, getSegmentsSuccess, getSegmentsError,
-  createSegmentSuccess, createSegmentError,
   getSegmentBegin, getSegmentSuccess, getSegmentError,
-  updateSegmentSuccess, updateSegmentError,
-  getSegmentMembersSuccess, getSegmentMembersError,
-  deleteSegmentError, deleteSegmentSuccess,
+  createSegmentBegin, createSegmentSuccess, createSegmentError,
+  updateSegmentBegin, updateSegmentSuccess, updateSegmentError,
+  getSegmentMembersBegin, getSegmentMembersSuccess, getSegmentMembersError,
+  deleteSegmentBegin, deleteSegmentError, deleteSegmentSuccess,
+  segmentUnmount
 } from 'containers/Segment/actions';
 
 describe('segment actions', () => {
@@ -65,7 +66,7 @@ describe('segment actions', () => {
   describe('getSegmentsSuccess', () => {
     it('has a type of GET_SEGMENT_SUCCESS and sets a given payload', () => {
       const expected = {
-        type: GET_SEGMENT_SUCCESS,
+        type: GET_SEGMENTS_SUCCESS,
         payload: { value: 118 }
       };
 
@@ -81,6 +82,148 @@ describe('segment actions', () => {
       };
 
       expect(getSegmentsError({ value: 709 })).toEqual(expected);
+    });
+  });
+
+  describe('createSegmentBegin', () => {
+    it('has a type of CREATE_SEGMENT_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: CREATE_SEGMENT_BEGIN,
+        payload: { value: 118 }
+      };
+
+      expect(createSegmentBegin({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('createSegmentSuccess', () => {
+    it('has a type of CREATE_SEGMENT_SUCCESS and sets a given payload', () => {
+      const expected = {
+        type: CREATE_SEGMENT_SUCCESS,
+        payload: { value: 865 }
+      };
+
+      expect(createSegmentSuccess({ value: 865 })).toEqual(expected);
+    });
+  });
+
+  describe('createSegmentError', () => {
+    it('has a type of CREATE_SEGMENT_ERROR and sets a given error', () => {
+      const expected = {
+        type: CREATE_SEGMENT_ERROR,
+        error: { value: 709 }
+      };
+
+      expect(createSegmentError({ value: 709 })).toEqual(expected);
+    });
+  });
+
+  describe('updateSegmentBegin', () => {
+    it('has a type of UPDATE_SEGMENT_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: UPDATE_SEGMENT_BEGIN,
+        payload: { value: 118 }
+      };
+
+      expect(updateSegmentBegin({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('updateSegmentSuccess', () => {
+    it('has a type of UPDATE_SEGMENT_SUCCESS and sets a given payload', () => {
+      const expected = {
+        type: UPDATE_SEGMENT_SUCCESS,
+        payload: { value: 118 }
+      };
+
+      expect(updateSegmentSuccess({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('updateSegmentError', () => {
+    it('has a type of UPDATE_SEGMENT_ERROR and sets a given error', () => {
+      const expected = {
+        type: UPDATE_SEGMENT_ERROR,
+        error: { value: 709 }
+      };
+
+      expect(updateSegmentError({ value: 709 })).toEqual(expected);
+    });
+  });
+
+  describe('deleteSegmentBegin', () => {
+    it('has a type of DELETE_SEGMENT_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: DELETE_SEGMENT_BEGIN,
+        payload: { value: 118 }
+      };
+
+      expect(deleteSegmentBegin({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('deleteSegmentSuccess', () => {
+    it('has a type of DELETE_SEGMENT_SUCCESS and sets a given payload', () => {
+      const expected = {
+        type: DELETE_SEGMENT_SUCCESS,
+        payload: { value: 118 }
+      };
+
+      expect(deleteSegmentSuccess({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('deleteSegmentError', () => {
+    it('has a type of DELETE_SEGMENT_ERROR and sets a given error', () => {
+      const expected = {
+        type: DELETE_SEGMENT_ERROR,
+        error: { value: 709 }
+      };
+
+      expect(deleteSegmentError({ value: 709 })).toEqual(expected);
+    });
+  });
+
+  describe('getSegmentMembersBegin', () => {
+    it('has a type of GET_SEGMENT_MEMBERS_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: GET_SEGMENT_MEMBERS_BEGIN,
+        payload: { value: 118 }
+      };
+
+      expect(getSegmentMembersBegin({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('getSegmentMembersSuccess', () => {
+    it('has a type of GET_SEGMENT_MEMBERS_SUCCESS and sets a given payload', () => {
+      const expected = {
+        type: GET_SEGMENT_MEMBERS_SUCCESS,
+        payload: { value: 118 }
+      };
+
+      expect(getSegmentMembersSuccess({ value: 118 })).toEqual(expected);
+    });
+  });
+
+  describe('getSegmentMembersError', () => {
+    it('has a type of GET_SEGMENT_MEMBERS_ERROR and sets a given error', () => {
+      const expected = {
+        type: GET_SEGMENT_MEMBERS_ERROR,
+        error: { value: 709 }
+      };
+
+      expect(getSegmentMembersError({ value: 709 })).toEqual(expected);
+    });
+  });
+
+  describe('segmentUnmount', () => {
+    it('has a type of SEGMENT_UNMOUNT', () => {
+      const expected = {
+        type: SEGMENT_UNMOUNT,
+      };
+
+      expect(segmentUnmount()).toEqual(expected);
     });
   });
 });
