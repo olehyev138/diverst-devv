@@ -14,7 +14,7 @@ class VideoRoom < ActiveRecord::Base
   end
 
   def cumulative_participant_minutes
-    video_participants.sum(:duration)
+    video_participants.map { |participant| participant.duration / 60 }.sum
   end
 
   def duration_per_minute
