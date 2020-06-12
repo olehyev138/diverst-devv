@@ -157,7 +157,7 @@ export function* updateFieldData(action) {
     yield put(updateFieldDataSuccess());
     yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(updateUserError(err));
+    yield put(updateFieldDataError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
@@ -192,7 +192,7 @@ export function* getUserDownloadData(action) {
   }
 }
 
-export function* getUserPrototype(action, updatableKey) {
+export function* getUserPrototype(action) {
   try {
     const response = yield call(api.users.prototype.bind(api.users), action.payload);
 
