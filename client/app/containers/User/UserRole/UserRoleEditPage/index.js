@@ -60,7 +60,7 @@ export function UserRoleEditPage(props) {
 }
 
 UserRoleEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   path: PropTypes.string,
   userRole: PropTypes.object,
   getUserRoleBegin: PropTypes.func,

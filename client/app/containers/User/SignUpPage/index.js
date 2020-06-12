@@ -28,7 +28,6 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 
-import { injectIntl, intlShape } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -106,7 +105,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(SignUpPage);

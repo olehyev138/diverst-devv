@@ -54,7 +54,7 @@ export function UserProfilePage(props) {
 }
 
 UserProfilePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,

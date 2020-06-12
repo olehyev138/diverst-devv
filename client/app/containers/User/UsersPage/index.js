@@ -41,7 +41,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
 import Conditional from 'components/Compositions/Conditional';
-import { UserEditPage } from 'containers/User/UserEditPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 

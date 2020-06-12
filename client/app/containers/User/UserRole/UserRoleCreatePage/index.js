@@ -53,7 +53,7 @@ export function UserRoleCreatePage(props) {
 }
 
 UserRoleCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createUserRoleBegin: PropTypes.func,
   getUserRolesBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func,

@@ -69,7 +69,7 @@ export function UserEditPage(props) {
 }
 
 UserEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,

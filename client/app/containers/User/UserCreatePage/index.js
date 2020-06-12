@@ -20,8 +20,6 @@ import {
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import UserForm from 'components/User/UserForm';
-
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
@@ -63,7 +61,7 @@ export function UserCreatePage(props) {
 }
 
 UserCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
