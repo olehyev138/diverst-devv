@@ -1292,6 +1292,7 @@ ActiveRecord::Schema.define(version: 2020_06_02_210814) do
     t.integer "status", default: 0, null: false
     t.boolean "email_sent", default: false, null: false
     t.bigint "initiative_id"
+    t.integer "responses_count", default: 0
     t.index ["enterprise_id"], name: "index_polls_on_enterprise_id"
     t.index ["initiative_id"], name: "index_polls_on_initiative_id"
     t.index ["owner_id"], name: "index_polls_on_owner_id"
