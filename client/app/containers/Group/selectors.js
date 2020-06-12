@@ -39,14 +39,7 @@ const selectCategorizeGroup = () => createSelector(
     const { currentGroup } = groupsState;
     if (!currentGroup) return null;
 
-    const selectGroup = {
-      ...groupsState.currentGroup, ...{
-        name: {
-          label: groupsState.currentGroup.name,
-          value: groupsState.currentGroup.id
-        }
-      }
-    };
+    const selectGroup = currentGroup;
 
     selectGroup.children = selectGroup.children.map(child => ({
       id: child.id,

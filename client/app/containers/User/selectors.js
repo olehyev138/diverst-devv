@@ -50,7 +50,7 @@ const selectFormUser = () => createSelector(
         draft.field_data = mapFieldData(user.field_data);
         draft.user_role_id = mapSelectField(user.user_role, 'role_name');
         draft.available_roles = user.available_roles
-          && user.available_roles.map(item => mapSelectField(item, 'role_name', ['default']));
+          && user.available_roles.map(item => mapSelectField(item, 'role_name', 'default'));
       });
     }
     return null;
