@@ -53,7 +53,7 @@ export function PollCreatePage(props) {
 }
 
 PollCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createPollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,

@@ -24,7 +24,7 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Button } from '@material-ui/core';
 
-export function PollCreatePage(props) {
+export function PollEditPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
 
@@ -61,8 +61,8 @@ export function PollCreatePage(props) {
   );
 }
 
-PollCreatePage.propTypes = {
-  intl: intlShape,
+PollEditPage.propTypes = {
+  intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   getPollBegin: PropTypes.func,
@@ -93,7 +93,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  PollCreatePage,
+  PollEditPage,
   ['poll.permissions.update?', 'isFormLoading'],
   (props, rs) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.editPage
