@@ -48,7 +48,7 @@ export function SocialLinkCreatePage(props) {
 }
 
 SocialLinkCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createSocialLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,

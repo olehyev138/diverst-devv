@@ -54,7 +54,7 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,

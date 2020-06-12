@@ -63,7 +63,7 @@ export function NewsLinkEditPage(props) {
 }
 
 NewsLinkEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getNewsItemBegin: PropTypes.func,
   updateNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,

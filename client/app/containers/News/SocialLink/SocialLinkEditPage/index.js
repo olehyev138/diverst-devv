@@ -63,7 +63,7 @@ export function SocialLinkEditPage(props) {
 }
 
 SocialLinkEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getNewsItemBegin: PropTypes.func,
   updateSocialLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
