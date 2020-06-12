@@ -16,7 +16,7 @@ import {
   submitPasswordSuccess,
   submitPasswordError,
   signUpUnmount
-} from "../actions";
+} from '../actions';
 
 describe('signUp actions', () => {
   describe('getUserByTokenBegin', () => {
