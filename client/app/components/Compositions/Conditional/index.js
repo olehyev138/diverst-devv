@@ -46,7 +46,7 @@ function valid(props, conditions, reducer) {
   return false;
 }
 
-export function Conditional(
+export default function Conditional(
   Component,
   conditions,
   redirect = null,
@@ -109,4 +109,3 @@ export function Conditional(
     injectIntl,
   )(WrappedComponent);
 }
-export default Conditional;
