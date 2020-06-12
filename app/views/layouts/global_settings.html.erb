@@ -137,9 +137,11 @@
       <li>
         <%= active_link_to "General Logs", logs_path if LogPolicy.new(current_user, nil).index? %>
       </li>
-      <li>
-        <%= active_link_to 'Twilio Dashboard', twilio_dashboard_index_path %>
-      </li>
+      <% if current_user.enterprise.virtual_events_enabled? %>
+        <li>
+          <%= active_link_to 'Twilio Dashboard', twilio_dashboard_index_path %>
+        </li>
+      <% end %>  
       <% end %>
     </ul>
   </nav>
