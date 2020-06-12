@@ -46,7 +46,6 @@ const GroupListSelector = (props) => {
         ))}
       </DiverstLoader>
       <DiverstPagination
-        isLoading={props.isLoading}
         rowsPerPage={params.count}
         count={props.groupTotal}
         handlePagination={(payload) => {
@@ -72,6 +71,12 @@ GroupListSelector.propTypes = {
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
+  addGroup: PropTypes.func,
+  removeGroup: PropTypes.func,
+  selected: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.object),
+    PropTypes.object
+  ]),
 };
 
 export default compose(

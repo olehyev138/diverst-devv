@@ -22,7 +22,8 @@ import {
   Grid,
   Hidden,
   Link,
-  Typography
+  Typography,
+  ButtonBase
 } from '@material-ui/core';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -47,9 +48,11 @@ const styles = theme => ({
   groupCardContent: {
     paddingTop: 20,
     paddingBottom: 20,
+    width: '100%',
   },
   groupCardTitle: {
     verticalAlign: 'middle',
+    width: '100%'
   },
   groupCardIcon: {
     verticalAlign: 'middle',
@@ -81,11 +84,14 @@ const styles = theme => ({
   expandIcon: {
     fontSize: 34,
   },
+  buttonBase: {
+    width: '100%'
+  }
 });
 
 const GroupSelectorItem = (props) => {
-  const { handleChange, values, groupField, setFieldValue, label, queryScopes, group, classes, ...rest } = props;
-  const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups, ...selectProps } = rest;
+  const { group, classes, ...rest } = props;
+  const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups } = rest;
 
   /*
       <DiverstSelect
@@ -108,9 +114,12 @@ const GroupSelectorItem = (props) => {
       <Divider />
       <Grid container>
         <Grid item xs>
-          <CardContent className={classes.groupCardContent}>
-            <Grid container spacing={2} alignItems='center'>
-              <React.Fragment>
+          <ButtonBase
+            onClick={() => console.log('clicked')}
+            className={classes.buttonBase}
+          >
+            <CardContent className={classes.groupCardContent}>
+              <Grid container spacing={2} alignItems='center' alignContent='flex-start'>
                 <Hidden xsDown>
                   <Grid item xs='auto'>
                     <DiverstImg
@@ -122,14 +131,17 @@ const GroupSelectorItem = (props) => {
                     />
                   </Grid>
                 </Hidden>
-              </React.Fragment>
-              <Grid item xs>
-                <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
-                  {group.label}
-                </Typography>
+                <Grid item xs='auto'>
+
+                </Grid>
+                <Grid item xs>
+                  <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
+                    {group.label}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
+            </CardContent>
+          </ButtonBase>
         </Grid>
         {group.children && group.children.length > 0 && (
           <Grid item className={classes.expandActionAreaContainer}>
@@ -166,19 +178,6 @@ const GroupSelectorItem = (props) => {
 
 GroupSelectorItem.propTypes = {
   classes: PropTypes.object,
-  groupField: PropTypes.string.isRequired,
-  label: PropTypes.node.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired,
-  values: PropTypes.object.isRequired,
-  queryScopes: PropTypes.arrayOf(PropTypes.string),
-  isLoading: PropTypes.bool,
-
-  expandedGroups: PropTypes.object,
-  setExpandedGroups: PropTypes.func,
-
-  getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
   group: PropTypes.shape({
     value: PropTypes.number,
     label: PropTypes.string,
@@ -186,6 +185,12 @@ GroupSelectorItem.propTypes = {
   }).isRequired,
 
   inputCallback: PropTypes.func,
+  addGroup: PropTypes.func,
+  removeGroup: PropTypes.func,
+  selected: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.object),
+    PropTypes.object
+  ]),
 };
 
 const mapStateToProps = createStructuredSelector({

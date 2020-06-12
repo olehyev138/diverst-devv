@@ -35,7 +35,7 @@ export function DiverstImg(props) {
 
 DiverstImg.propTypes = {
   className: PropTypes.string,
-  data: PropTypes.string.isRequired,
+  data: PropTypes.string,
   maxWidth: PropTypes.string,
   maxHeight: PropTypes.string,
   minWidth: PropTypes.string,

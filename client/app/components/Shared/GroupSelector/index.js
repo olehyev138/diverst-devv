@@ -103,6 +103,9 @@ const GroupSelector = (props) => {
             inputCallback={props.inputCallback}
             getGroupsBegin={props.getGroupsBegin}
             open={dialogSearch}
+            addGroup={addGroup}
+            removeGroup={removeGroup}
+            selected={values[groupField]}
           />
         )}
       />
