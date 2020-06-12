@@ -14,6 +14,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
+import { formatColor } from 'utils/selectorHelpers';
 
 const styles = theme => ({
   wrapper: {
@@ -45,7 +46,7 @@ export function DiverstGroupLegend({ groups, isLoading, classes, ...rest }) {
           <Grid container spacing={2}>
             {Object.values(groups).map(group => (
               <Grid item xs='auto' key={group.id}>
-                <Typography style={{ color: `#${group.calendar_color}` }}>
+                <Typography style={{ color: formatColor(group.calendar_color) }}>
                   {group.name}
                 </Typography>
               </Grid>
