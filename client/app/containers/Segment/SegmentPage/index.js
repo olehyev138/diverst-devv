@@ -93,7 +93,7 @@ export function SegmentPage(props) {
 }
 
 SegmentPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   segment: PropTypes.object,
   rules: PropTypes.object,
