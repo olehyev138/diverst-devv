@@ -8,9 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-// import { DiverstRichTextInput } from '../index';
-const { DiverstRichTextInput } = require.requireMock('../index.js');
+import { DiverstRichTextInput } from '../index';
 
+// Todo: TypeError: Cannot read property 'trim' of undefined
 describe('<DiverstRichTextInput />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');

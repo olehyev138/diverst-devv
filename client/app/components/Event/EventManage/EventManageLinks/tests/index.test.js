@@ -8,9 +8,10 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-// import { EventManageLinks } from '../index';
+import { EventManageLinks } from '../index';
 
-const { EventManageLinks } = require.requireMock('../index.js');
+jest.mock('utils/routeHelpers');
+const RouteService = require.requireMock('utils/routeHelpers');
 const props = {
   event: {},
 };

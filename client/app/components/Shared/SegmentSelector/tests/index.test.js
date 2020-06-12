@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockSegmentSelector from './index';
+import MockSegmentSelector from './mock';
 
 const props = {
   segmentField: '',

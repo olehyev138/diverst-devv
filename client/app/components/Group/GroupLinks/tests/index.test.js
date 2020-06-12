@@ -8,8 +8,10 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-// import { GroupLinks } from '../index';
-const { GroupLinks } = require.requireMock('../index.js');
+import { GroupLinks } from '../index';
+
+jest.mock('utils/routeHelpers');
+const RouteService = require.requireMock('utils/routeHelpers');
 
 describe('<GroupLinks />', () => {
   it('Expect to not log errors in console', () => {

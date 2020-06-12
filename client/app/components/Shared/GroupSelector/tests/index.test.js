@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockGroupSelector from './index';
+import MockGroupSelector from './mock';
 
 const props = {
   groupField: '',

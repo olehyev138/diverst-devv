@@ -7,14 +7,18 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
-// import { DiverstFormattedMessage } from '../index';
-const { DiverstFormattedMessage } = require.requireMock('../index.js');
+import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { intl } from 'tests/mocks/react-intl';
+
+import { DiverstFormattedMessage } from '../index';
+
+jest.mock('utils/customTextHelpers');
+const customTexts = require.requireMock('utils/customTextHelpers');
 
 describe('<DiverstFormattedMessage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<DiverstFormattedMessage classes={{}} />);
+    const wrapper = shallowWithIntl(<DiverstFormattedMessage classes={{}} intl={intl} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

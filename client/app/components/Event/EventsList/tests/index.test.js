@@ -5,13 +5,13 @@
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
  */
-
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-// import { EventsList } from '../index';
+import { EventsList } from '../index';
 import { intl } from 'tests/mocks/react-intl';
-const { EventsList } = require.requireMock('../index.js');
 
+jest.mock('utils/customTextHelpers');
+const customTexts = require.requireMock('utils/customTextHelpers');
 loadTranslation('./app/translations/en.json');
 const props = {
   events: [],
