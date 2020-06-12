@@ -3,25 +3,24 @@
  */
 
 import {
-  getPolls,
-  getPoll,
-  createPoll,
-  updatePoll,
-  deletePoll
-} from 'containers/Poll/saga';
+  getUserRoles,
+  getUserRole,
+  createUserRole,
+  updateUserRole,
+  deleteUserRole
+} from 'containers/User/UserRole/saga';
 
 import {
-  getPollError,
-  getPollSuccess,
-  getPollsError,
-  getPollsSuccess,
-  createPollError,
-  createPollSuccess,
-  updatePollError,
-  updatePollSuccess,
-  deletePollError,
-  deletePollSuccess,
-  pollsUnmount
+  getUserRoleError,
+  getUserRoleSuccess,
+  getUserRolesError,
+  getUserRolesSuccess,
+  createUserRoleError,
+  createUserRoleSuccess,
+  updateUserRoleError,
+  updateUserRoleSuccess,
+  deleteUserRoleError,
+  deleteUserRoleSuccess,
 } from '../actions';
 
 import { push } from 'connected-react-router';
@@ -31,175 +30,180 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
-api.polls.all = jest.fn();
-api.polls.create = jest.fn();
-api.polls.update = jest.fn();
-api.polls.destroy = jest.fn();
-api.polls.get = jest.fn();
+api.userRoles.all = jest.fn();
+api.userRoles.create = jest.fn();
+api.userRoles.update = jest.fn();
+api.userRoles.destroy = jest.fn();
+api.userRoles.get = jest.fn();
 
-const poll = {
+// eslint-disable-next-line camelcase
+const user_role = {
   id: 1,
-  title: 'abc'
+  role_name: 'abc'
 };
 
-describe('Tests for polls saga', () => {
-  describe('Get polls Saga', () => {
-    it('Should return pollList', async () => {
-      api.polls.all.mockImplementation(() => Promise.resolve({ data: { page: { ...poll } } }));
-      const results = [getPollsSuccess(poll)];
+describe('tests for userRole saga', () => {
+  describe('Get userRoles Saga', () => {
+    it('Should return userRoleList', async () => {
+      // eslint-disable-next-line camelcase
+      api.userRoles.all.mockImplementation(() => Promise.resolve({ data: { page: { ...user_role } } }));
+      const results = [getUserRolesSuccess(user_role)];
 
       const initialAction = { payload: {
         count: 5,
       } };
 
       const dispatched = await recordSaga(
-        getPolls,
+        getUserRoles,
         initialAction
       );
-      expect(api.polls.all).toHaveBeenCalledWith(initialAction.payload);
+      expect(api.userRoles.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
     });
 
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
-      api.polls.all.mockImplementation(() => Promise.reject(response));
+      api.userRoles.all.mockImplementation(() => Promise.reject(response));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'Failed to load polls',
+          message: 'Failed to load userRoles',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [getPollsError(response), notified];
+      const results = [getUserRolesError(response), notified];
       const initialAction = { payload: undefined };
       const dispatched = await recordSaga(
-        getPolls,
+        getUserRoles,
         initialAction
       );
 
-      expect(api.polls.all).toHaveBeenCalledWith(initialAction.payload);
+      expect(api.userRoles.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
     });
   });
 
-  describe('Get poll Saga', () => {
+  describe('Get userRole Saga', () => {
     it('Should return a group', async () => {
-      api.polls.get.mockImplementation(() => Promise.resolve({ data: { ...poll } }));
-      const results = [getPollSuccess(poll)];
-      const initialAction = { payload: { id: poll.id } };
+      // eslint-disable-next-line camelcase
+      api.userRoles.get.mockImplementation(() => Promise.resolve({ data: { ...user_role } }));
+      const results = [getUserRoleSuccess(user_role)];
+      const initialAction = { payload: { id: user_role.id } };
 
       const dispatched = await recordSaga(
-        getPoll,
+        getUserRole,
         initialAction
       );
-      expect(api.polls.get).toHaveBeenCalledWith(initialAction.payload.id);
+      expect(api.userRoles.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
     });
 
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
-      api.polls.get.mockImplementation(() => Promise.reject(response));
+      api.userRoles.get.mockImplementation(() => Promise.reject(response));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'Failed to get poll',
+          message: 'Failed to get userRole',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [getPollError(response), notified];
+      const results = [getUserRoleError(response), notified];
       const initialAction = { payload: { id: 5 } };
       const dispatched = await recordSaga(
-        getPoll,
+        getUserRole,
         initialAction
       );
 
-      expect(api.polls.get).toHaveBeenCalledWith(initialAction.payload.id);
+      expect(api.userRoles.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
     });
   });
 
 
-  describe('Create poll', () => {
-    it('Should create a poll', async () => {
-      api.polls.create.mockImplementation(() => Promise.resolve({ data: { poll } }));
+  describe('Create userRole', () => {
+    it('Should create a userRole', async () => {
+      api.userRoles.create.mockImplementation(() => Promise.resolve({ data: { userRole: user_role } }));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'poll created',
+          message: 'userRole created',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [createPollSuccess(), push(ROUTES.admin.include.polls.index.path()), notified];
+      const results = [createUserRoleSuccess(), push(ROUTES.admin.system.users.roles.index.path()), notified];
       const initialAction = { payload: {
         id: '',
       } };
 
       const dispatched = await recordSaga(
-        createPoll,
+        createUserRole,
         initialAction
       );
-      expect(api.polls.create).toHaveBeenCalledWith({ poll: initialAction.payload });
+      expect(api.userRoles.create).toHaveBeenCalledWith({ user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
     });
 
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
-      api.polls.create.mockImplementation(() => Promise.reject(response));
+      api.userRoles.create.mockImplementation(() => Promise.reject(response));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'Failed to create poll',
+          message: 'Failed to create userRole',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [createPollError(response), notified];
-      const initialAction = { payload: { poll: undefined } };
+      const results = [createUserRoleError(response), notified];
+      const initialAction = { payload: { user_role: undefined } };
       const dispatched = await recordSaga(
-        createPoll,
+        createUserRole,
         initialAction.payload
       );
-      expect(api.polls.create).toHaveBeenCalledWith(initialAction.payload);
+      expect(api.userRoles.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
     });
+  });
 
-    it('Should update a poll', async () => {
-      api.polls.update.mockImplementation(() => Promise.resolve({ data: { poll } }));
+  describe('update userRole', () => {
+    it('Should update a userRole', async () => {
+      api.userRoles.update.mockImplementation(() => Promise.resolve({ data: { userRole: user_role } }));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'poll updated',
+          message: 'userRole updated',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [updatePollSuccess(), push(ROUTES.admin.include.polls.index.path()), notified];
+      const results = [updateUserRoleSuccess(), push(ROUTES.admin.system.users.roles.index.path()), notified];
       const initialAction = { payload: {
         id: 1,
       } };
       const dispatched = await recordSaga(
-        updatePoll,
+        updateUserRole,
         initialAction
       );
-      expect(api.polls.update).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
+      expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
     });
 
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
-      api.polls.update.mockImplementation(() => Promise.reject(response));
+      api.userRoles.update.mockImplementation(() => Promise.reject(response));
       const notified = {
         notification: {
           key: 1590092641484,
@@ -210,66 +214,66 @@ describe('Tests for polls saga', () => {
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [updatePollError(response), notified];
+      const results = [updateUserRoleError(response), notified];
       const initialAction = { payload: { id: 5, name: 'dragon' } };
       const dispatched = await recordSaga(
-        updatePoll,
+        updateUserRole,
         initialAction
       );
 
-      expect(api.polls.update).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
+      expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
     });
   });
 
 
-  describe('Delete poll', () => {
-    it('Should delete a poll', async () => {
-      api.polls.destroy.mockImplementation(() => Promise.resolve({ data: { poll } }));
+  describe('Delete userRole', () => {
+    it('Should delete a userRole', async () => {
+      api.userRoles.destroy.mockImplementation(() => Promise.resolve({ data: { userRole: user_role } }));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'poll deleted',
+          message: 'userRole deleted',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [deletePollSuccess(), notified];
+      const results = [deleteUserRoleSuccess(), push(ROUTES.admin.system.users.roles.index.path()), notified];
 
       const initialAction = { payload: {
         id: 1,
       } };
 
       const dispatched = await recordSaga(
-        deletePoll,
+        deleteUserRole,
         initialAction
       );
-      expect(api.polls.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+      expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
     });
 
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
-      api.polls.destroy.mockImplementation(() => Promise.reject(response));
+      api.userRoles.destroy.mockImplementation(() => Promise.reject(response));
       const notified = {
         notification: {
           key: 1590092641484,
-          message: 'Failed to delete poll',
+          message: 'Failed to delete userRole',
           options: { variant: 'warning' }
         },
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [deletePollError(response), notified];
-      const initialAction = { payload: { poll: undefined } };
+      const results = [deleteUserRoleError(response), notified];
+      const initialAction = { payload: { userRole: undefined } };
       const dispatched = await recordSaga(
-        deletePoll,
+        deleteUserRole,
         initialAction
       );
-      expect(api.polls.destroy).toHaveBeenCalledWith(initialAction.payload.id);
+      expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
     });
   });
