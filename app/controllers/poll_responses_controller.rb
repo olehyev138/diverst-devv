@@ -4,6 +4,7 @@ class PollResponsesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :thank_you]
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
+  before_action :check_existence_of_survey_response, only: [:create]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :visit_page, only: [:index, :new]
 
@@ -29,6 +30,7 @@ class PollResponsesController < ApplicationController
     @response.user = current_user
 
     if @response.save
+      track_activity(@response, :create)
       user_rewarder('survey_response').add_points(@response)
       flash_reward "Now you have #{ current_user.credits } points"
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
@@ -82,5 +84,11 @@ class PollResponsesController < ApplicationController
     end
   rescue
     "#{controller_path}##{action_name}"
+  end
+
+  def check_existence_of_survey_response
+    if @poll.responses.where(user_id: current_user.id).any?
+      redirect_to user_root_path, alert: 'You have already submitted a response'
+    end
   end
 end

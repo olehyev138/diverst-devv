@@ -1,0 +1,29 @@
+<h1>Participation Breakdown</h1>
+
+<div class="card">
+    <div class="card__section">
+      <table>
+        <p>Room Name: <span style="font-weight: bold;"><%= @video_room.name %></span></p>
+        <p>Status: <span style="font-weight: bold;"><%= @video_room.status %></span></p>
+        <p>Number of Participants: <span style="font-weight: bold;"><%= @video_room.video_participants.pluck(:identity).uniq.count %></span></p>
+        <p>Duration: <span style="font-weight: bold;"><%= @video_room.duration_per_minute %></span></p>
+        <p>Date Created: <span style="font-weight: bold;"><%= @video_room.start_date %></span></p>
+        <p>Date Completed: <span style="font-weight: bold;"><%= @video_room.end_date %></span></p>
+        <p>Billing: <span style="font-weight: bold;">$<%= @video_room.billing %></span></p>
+        <thead>
+          <th>Timestamp</th>
+          <th>Id</th>
+          <th>Duration</th>
+        </thead>
+        <tbody>
+          <% @participants.each do |participant| %>
+          <tr>
+            <td><%= participant.timestamp %></td>
+            <td><%= participant.identity %></td>
+            <td><%= participant.duration_per_minute %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>

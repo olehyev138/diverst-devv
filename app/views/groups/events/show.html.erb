@@ -1,10 +1,15 @@
 <div class="content__header">
   <h1>
-    <%= link_to "Events", group_events_path(@group) %> /
+    <%= inline_svg('icons/brand.svg', size: '25px*25px', class: 'play__back') if @event.virtual? && @event.past? %><%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
   </h1>
   <% unless @event.archived? %>
     <div class="flex-row hidden-xs">
+      <div class="flex-row__cell">
+      <% if current_user.enterprise.virtual_events_enabled? %>
+        <%= link_to "Join virtual event", start_video_group_initiative_path(@group, @event), class: "btn btn--secondary", id: 'virtual-event' if @event.virtual? && @event.ongoing? %>
+      <% end %>
+      </div>
       <div class="flex-row__cell">
         <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
       </div>
@@ -24,28 +29,30 @@
               class="btn btn--primary js-join-event"
               data-joined="<%= @participation.present? %>"
             >
-              <%= @participation.present? ? "Leave event" : "Join event" %>
-            </a>
-          </div>
+            <%= @participation.present? ? "Leave event" : "Join event" %>
+          </a>
+        </div>
         <% end %>
-      <% end %>
-    </div>
-    <div class="container-fluid visible-xs">
-      <div class="row">
-        <div class="col-xs-12 text-center">
-          <div class="btn-group">
-            <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
-            <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
-            <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+        <% end %>
+      </div>
+      <div class="container-fluid visible-xs">
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <div class="btn-group">
+              <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
+              <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
+              <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
               <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave" : "Join" %></a>
-          <% end %>
+              <% end %>
             </div>
+          </div>
         </div>
       </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
-
+    <%= inline_svg('icons/live-streaming.svg', size: '100px*70px', class: 'live__streaming')if @event.virtual? && @event.ongoing? %>
+    <%= image_tag("Remote meeting icon.png", size: "100x70") if @event.virtual? %>
+    <br>
 <div class="content__main">
   <div class="card">
     <div class="card__section">
@@ -155,6 +162,7 @@
 
 <script>
   $('.js-join-event').click(function () {
+    var virtual_button = document.getElementById('virtual-event');
     if ($(this).data('joined')) {
       $.ajax({url: '<%= group_event_attendance_path(@group, @event) %>', type: 'DELETE'});
       $(this).data('joined', false)
@@ -167,6 +175,13 @@
         "href": "#",
         "data-confirm": "Please join this event before adding it to you calendar."
       });
+
+      if(<%= current_user.enterprise.virtual_events_enabled? %>) {
+        if (<%= @event.virtual && @event.ongoing? %>) {
+          virtual_button.remove();
+        }
+      }
+
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count - 1;
     } else {
@@ -178,6 +193,22 @@
         "target": "_blank"
       }).removeAttr("data-confirm");
       $('#calendar_link2').attr({"href": "<%= export_ics_group_event_path(@group, @event) %>"}).removeAttr("data-confirm");
+      
+      if(<%= current_user.enterprise.virtual_events_enabled? %>) {
+        if (<%= @event.virtual && @event.ongoing? %>) {
+          var anchor_tag = document.createElement('a');
+          var firstElement = document.getElementsByClassName('flex-row')[0].firstElementChild;
+          Object.assign(anchor_tag, {
+            'className': 'btn btn--secondary',
+            'href': '<%= start_video_group_initiative_path(@group, @event) %>', 
+            'id': 'virtual-event'
+
+          });
+          anchor_tag.innerHTML = 'Join Virtual Event';
+          firstElement.appendChild(anchor_tag);
+        }
+      }
+
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count + 1;
     }

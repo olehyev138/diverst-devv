@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PollResponsesController, type: :controller do
+  include ActiveJob::TestHelper
+
   let(:user) { create(:user) }
   let(:poll) { create(:poll) }
   let(:poll_response) { create :poll_response, poll: poll }
@@ -37,6 +39,24 @@ RSpec.describe PollResponsesController, type: :controller do
     describe 'with logged user' do
       login_user_from_let
 
+      context 'when response for survey already exists' do
+        let!(:response) { create(:poll_response, poll_id: poll.id, user_id: user.id) }
+
+        it 'expect a redirect to polls index' do
+          post :create, poll_id: poll.id, poll_response: poll_response
+          expect(response).to redirect_to user_root_path
+        end
+
+        it 'renders flash alert message' do
+          post :create, poll_id: poll.id, poll_response: poll_response
+          expect(flash[:alert]).to eq('You have already submitted a response')
+        end
+
+        it 'does not create another response' do
+          expect { post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse, :count).by(0)
+        end
+      end
+
       context 'with valid params' do
         it 'creates a new poll_response' do
           expect { post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse.where(poll: poll, user: user), :count).by(1)
@@ -61,6 +81,32 @@ RSpec.describe PollResponsesController, type: :controller do
         it 'redirects to new action' do
           post :create, poll_id: poll.id, poll_response: poll_response
           expect(response).to redirect_to action: :thank_you, id: PollResponse.last
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect {
+                post :create, poll_id: poll.id, poll_response: poll_response
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { PollResponse.last }
+            let(:owner) { user }
+            let(:key) { 'poll_response.create' }
+
+            before {
+              perform_enqueued_jobs do
+                post :create, poll_id: poll.id, poll_response: poll_response
+              end
+            }
+
+            include_examples 'correct public activity'
+          end
         end
       end
 

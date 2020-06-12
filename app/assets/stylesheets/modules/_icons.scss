@@ -11,6 +11,10 @@
   background-size: $background-width $background-height;
 }
 
+@mixin fill-in-svg($fill-color: $primary-color) {
+  fill: $fill-color;
+}
+
 .icon {
   display: inline-block;
   vertical-align: middle;
@@ -146,4 +150,10 @@ h4 .icon {
 .icon--calendar {
   @include icon(calendar);
   background-size: 100%;
+}
+
+// svg icons
+
+.svg-color {
+  @include fill-in-svg($primary-color);
 }

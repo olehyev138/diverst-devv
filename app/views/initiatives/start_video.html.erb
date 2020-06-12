@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diverst</title>
+    <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <%= javascript_include_tag 'twilio_video' %>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+      video {
+        width: 100%;
+        position: relative;
+        top: 75px;
+        display: inline-block;
+      }
+
+      #video-grid {
+        display: grid;
+        grid-template-columns: 35% 35% 35%;
+        grid-template-rows: auto auto auto;
+        max-height: 300px;
+        margin: auto;
+      }
+
+      .content__inner { 
+        padding: 0px;
+        margin-left: 0px;
+        max-width: initial;
+      }
+
+      #main-participant {
+        position: absolute;
+        z-index: 999;
+        max-height: 100%;
+        min-width: 100%;
+      }
+
+      #control-panel {
+        margin-left: 70px;
+      }
+
+      #mute-mic, #mute-video, #screen-share, #leave-call, #end-virtual-event {
+        height: 33px;
+        width: 36px;
+        background: #fff;
+        border-radius: 100%;
+      }
+
+      #mute-video {
+        margin-right: 50px;
+      }
+    </style>
+  </head>
+  <body onload="init()" data-env="<%= Rails.env %>">
+    <%= render 'partials/js_branding_color_variables' %>
+
+    <header class="primary-header" style="height: 40px; position: fixed; top: 130px;">
+      <span style="font-size: 25px; margin-left: 8%;">Documents</span>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12" style="padding-top:2%;">
+            <span id="control-panel">
+            <span style="font-size: 25px; float: left; margin-top: -1%;">
+              <%= @initiative.name.truncate(29) %>
+            </span>
+              <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
+              <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
+              <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
+              
+              <% if @initiative.owner_id == current_user.id %>
+                <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
+              <% else %>  
+                <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
+              <% end %>
+
+            </span>
+          </div>
+        </div>
+      </div>
+      <span style="font-size: 25px; margin-right: 12%;">Chat</span>
+    </header>
+    
+    <div class="row" style="overflow-x: scroll; margin-top: -35px;">
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 0px;">
+        <div id="screen-share-area"></div>
+      </div>
+      <div class="col-xs-6" style="padding-left: auto;">
+        <div class="row">
+          <div class="col-xs-12" style="padding: 0px;">
+            <div id="main-participant"></div>
+            <div id="video-grid"></div>
+          </div>
+        </div>
+        <div class="row" style="position: relative; top: 75px;">
+          <div class="col-xs-12">
+            <div id="firepad"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
+        <div class="row">
+          <div class="col-xs-12">
+          </div>
+        </div>
+        <div class="row" style="height: 475px;">
+          <div class="col-xs-12" id="chat" style="overflow: scroll; height: inherit;">
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Send a message..." id="message">
+                <span class="input-group-btn">
+                  <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
+                </span>
+              </div><!-- /input-group -->
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+      <!-- Modal -->
+  <div class="modal fade" id="virtualEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to end this virtual meeting for all participants?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" id="end-virtual-meeting" class="btn btn-primary">End Virtual Meeting</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+  <script>
+  $(document).ready(function(){
+    var token= '<%= @token %>';
+    var twilio = Twilio.Video;
+    var dataTrack = new twilio.LocalDataTrack();
+    var chatElement = document.getElementById('chat');
+    var color = getRandomColor();
+    var localParticipant;
+    var activeRoom;
+    var previewTracks;
+    var identity = '<%= current_user.email %>';
+    var primaryColor = '<%= current_user.enterprise.theme&.primary_color %>';
+
+    // enlarge video trackmain participant
+    function enlargeParticipantVideoTrack() {
+      var x = document.getElementById('main-participant');
+      var y = document.getElementById('video-grid');
+      var z = document.getElementById('screen-share-area');
+
+      if (this.id == 'screen-share-video') {
+        if (this.parentElement.id == 'screen-share-area') {
+          x.appendChild(this);
+        }else if (this.parentElement.id == 'main-participant') {
+          z.appendChild(this);
+        }
+      }else{
+        if (x.childElementCount==0) {
+          x.appendChild(this);
+        }else if (x.childElementCount == 1) {
+          var oldChildElement = x.firstElementChild;
+  
+          x.replaceChild(this, oldChildElement);
+          y.appendChild(oldChildElement);
+        }
+      }
+    }
+
+    function attachEventListenersToTracks(track) {    
+        track.addEventListener('click', enlargeParticipantVideoTrack);
+    }
+
+    function muteAudioOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-mic');
+      localParticipant.audioTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;          
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = primaryColor;
+        }
+      });
+    }
+
+    function muteVideoOfLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('mute-video');
+      localParticipant.videoTracks.forEach(function(track){
+        if (track.mediaStreamTrack.enabled==true){
+          track.disable();
+          track.mediaStreamTrack.muted = true;
+          svgElement.style.fill = 'red';
+        }else{
+          track.enable();
+          track.mediaStreamTrack.muted = false;
+          svgElement.style.fill = primaryColor;
+        }
+      });
+    }
+
+    async function screenShareOFLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      const stream = await navigator.mediaDevices.getDisplayMedia();
+      const screenTrack = new twilio.LocalVideoTrack(stream.getTracks()[0], { name: 'screen-share' });
+      window.room.localParticipant.publishTrack(screenTrack);
+      attachTracks([screenTrack], document.getElementById('screen-share-area'));
+
+      screenTrack.once('stopped', () => {
+        detachTracks([screenTrack]);
+        localParticipant.removeTrack(screenTrack);
+      });    
+    }
+
+
+    function disconnectLocalParticipant() {
+      var localParticipant = window.room.localParticipant;
+      var svgElement = document.getElementById('leave-call');
+      localParticipant.tracks.forEach(function(publication){
+        const attachedElements = publication.track.detach();
+        attachedElements.forEach(function(element) {
+          element.remove();
+        })
+      })
+    }
+
+    $('#mute-mic').on('click', function(){
+      muteAudioOfLocalParticipant();
+    });
+
+    $('#mute-video').on('click', function(){
+      muteVideoOfLocalParticipant();
+    });
+
+    $('#leave-call').on('click', function(){
+      leaveRoomIfJoined();
+      $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
+    });
+
+    $('#screen-share').on('click', function(){
+      screenShareOFLocalParticipant();
+    });
+
+    $('#end-virtual-meeting').on('click', function(){
+      $.ajax({
+        url: '<%= end_virtual_meeting_group_initiative_path(@group, @initiative) %>',
+        type: 'PATCH',
+        data: {
+          sid: room.sid
+        }
+      });
+    });
+
+
+
+    // Attach the Tracks to the DOM.
+    // Attach participant details such as name, network connectivity here.
+    function attachTracks(tracks, container) {
+      tracks.forEach(function(track) {
+          if (track.kind === 'audio' || track.kind === 'video') {
+            var video_element = track.attach();
+            if (container.id == 'screen-share-area'){
+              video_element.setAttribute('id', 'screen-share-video')
+            }
+            attachEventListenersToTracks(container.appendChild(video_element));
+          }else if (track.kind === 'data') {
+            track.on('message', function(data) {
+                var response = JSON.parse(data);
+                chat(response.message, response.user, response.chatColor);
+              });
+          }
+      });
+    }
+
+    // Attach the Participant's Tracks to the DOM.
+    function attachParticipantTracks(participant, container) {
+      var tracks = Array.from(participant.tracks.values());
+      attachTracks(tracks, container);
+    }
+
+    // Detach the Tracks from the DOM.
+    function detachTracks(tracks) {
+      tracks.forEach(function(track) {
+          if (track.kind === 'audio' || track.kind === 'video') {
+            track.detach().forEach(function(detachedElement) {
+              detachedElement.remove();
+            });
+          }
+      });
+    }
+
+    // Detach the Participant's Tracks from the DOM.
+    function detachParticipantTracks(participant) {
+      var tracks = Array.from(participant.tracks.values());
+      detachTracks(tracks);
+    }
+
+    function registerRoomInDatabase(room) {
+      var room = room; 
+      $.ajax({
+        url: '<%= register_room_in_db_group_initiative_path(@group, @initiative) %>',
+        type: 'POST',
+        data: {
+          sid: room.sid,
+          name: room.name,
+          status: room.state
+        }
+      });
+    }
+
+    function updateRegisteredRoomInDatabase(room) {
+      var room = room;
+      $.ajax({
+        url: '<%= update_registered_room_in_db_group_initiative_path(@group, @initiative) %>',
+        type: 'PATCH',
+        data: {
+          sid: room.sid,
+          status: room.state
+        }
+      });
+    }
+
+    //network connectivity stats
+    function printNetworkQualityStats(networkQualityLevel, networkQualityStats) {
+    // Print in console the networkQualityLevel using bars
+      console.log({
+        1: '▃',
+        2: '▃▄',
+        3: '▃▄▅',
+        4: '▃▄▅▆',
+        5: '▃▄▅▆▇'
+      }[networkQualityLevel] || '');
+
+      if (networkQualityStats) {
+        // Print in console the networkQualityStats, which is non-null only if Network Quality
+        // verbosity is 2 (moderate) or greater
+        console.log('Network Quality statistics:', networkQualityStats);
+      }
+   }
+
+    // When we are about to transition away from this page, disconnect
+    // from the room, if joined.
+    window.addEventListener('beforeunload', leaveRoomIfJoined);
+
+    twilio.createLocalTracks({
+      audio: true,
+      video: { width: 640, height: 480 }
+      }).then(localTracks => {
+      localTracks.push(dataTrack)
+        return twilio.connect(token, {
+          name: '<% @video_room_name %>',
+          tracks: localTracks,
+          networkQuality: {
+            local: 1,
+            remote: 2
+          }
+      });
+      }).then(roomJoined, function(error) {
+          console.error('Unable to connect to Room: ' +  error.message);
+      });
+
+    // Successfully connected!
+    function roomJoined(room) {
+      window.room = activeRoom = room;
+
+      localParticipant = room.localParticipant;
+
+      log("Joined as '" + identity + "'");
+
+      registerRoomInDatabase(room);
+      // Attach LocalParticipant's Tracks, if not already attached.
+      var previewContainer = document.getElementById('video-grid');
+      if (!previewContainer.querySelector('video')) {
+        attachParticipantTracks(room.localParticipant, previewContainer);
+      }
+
+      // Attach the Tracks of the Room's Participants.
+      room.participants.forEach(function(participant) {
+        log("Already in Room: '" + participant.identity + "'");
+        var previewContainer = document.getElementById('video-grid');
+        attachParticipantTracks(participant, previewContainer);
+      });
+
+      // When a Participant joins the Room, log the event.
+      room.on('participantConnected', function(participant) {
+        log("Joining: '" + participant.identity + "'");
+        // console.log(room.participants.size, room.sid);
+
+        var previewContainer = document.getElementById('video-grid');
+        attachParticipantTracks(participant, previewContainer);
+      });
+
+      // When a Participant adds a Track, attach it to the DOM.
+      room.on('trackSubscribed', function(track, participant) {
+        //log(participant.identity + " added track: " + track.kind);
+        var previewContainer = document.getElementById('video-grid');
+        var screenShareArea = document.getElementById('screen-share-area');
+        
+        participant.on('networkQualityLevelChanged', printNetworkQualityStats);
+
+        if (track.name == 'screen-share') {
+          attachTracks([track], screenShareArea);
+        }else{
+          attachTracks([track], previewContainer);
+        }
+      });
+
+      // When a Participant removes a Track, detach it from the DOM.
+      room.on('trackUnsubscribed', function(track, participant) {
+        log(participant.identity + " removed track: " + track.kind);
+        detachTracks([track]);
+      });
+
+      // When a Participant leaves the Room, detach its Tracks.
+      room.on('participantDisconnected', function(participant) {
+        log("Participant '" + participant.identity + "' left the room");
+        detachParticipantTracks(participant);
+      });
+
+      // Once the LocalParticipant leaves the room, detach the Tracks
+      // of all Participants, including that of the LocalParticipant.
+      room.on('disconnected', function() {
+        log('Left');
+        window.location.href = "<%= group_event_path(@group, @initiative) %>";
+        if (previewTracks) {
+          previewTracks.forEach(function(track) {
+            track.stop();
+          });
+        }
+
+        if (room.participants.size == 0){
+          updateRegisteredRoomInDatabase(room);
+        }
+        detachParticipantTracks(room.localParticipant);
+        room.participants.forEach(detachParticipantTracks);
+        activeRoom = null;
+      });
+    }
+
+    // Activity log.
+    function log(message) {
+      chatElement.innerHTML += '<p style="text-transform: uppercase;"><strong>' + message + '</strong></p>';
+    }
+
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function chat(message, email, chatColor){
+        chatElement.innerHTML += "<p>" + "<span style='color:" + chatColor + ";'>" + email + "</span>" + "<br>" + message + "</p>";
+    }
+
+    // Leave Room.
+    function leaveRoomIfJoined() {
+      if (activeRoom) {
+        activeRoom.disconnect();
+      }
+    }
+
+    function sendMessage(eventObj) {
+        // get the chat message value
+        var message = document.getElementById('message').value
+        // send the message to other users
+        var object = JSON.stringify({message: message, user: "<%= current_user.email %>", chatColor: color});
+
+        dataTrack.send(object);
+        // display the message for the current user
+        chat(message, "<%= current_user.email %>", color)
+
+        // remove the message from the input
+        document.getElementById("message").value = "";
+    }
+
+    var chatInput = document.getElementById('send');
+    chatInput.addEventListener('click', sendMessage);
+
+    $('input').on('keydown', function(e){
+      if(e.keyCode===13) {
+        sendMessage();
+      }
+    });
+
+
+    function init() {
+      // Initialize Firebase.
+      var firebase_key = "<%= ENV["FIREBASE_API_KEY"] %>";
+      var auth_domain = "<%= ENV["FIREBASE_AUTH_DOMAIN"] %>";
+      var domain_url = "<%= ENV["FIREBASE_DATABASE_URL"] %>";
+      var firebase_project_id = "<%= ENV["FIREBASE_PROJECT_ID"] %>";
+      var firebase_storage_bucket = "<%= ENV["FIREBASE_STORAGE_BUCKET"] %>";
+      var firebase_sender_id = "<%= ENV["FIREBASE_SENDER_ID"] %>";
+
+      var config = {
+        apiKey: firebase_key,
+        authDomain: auth_domain,
+        databaseURL: domain_url,
+        projectId: firebase_project_id,
+        storageBucket: firebase_storage_bucket,
+        messagingSenderId: firebase_sender_id
+      };
+      firebase.initializeApp(config);
+
+      // Get Firebase Database reference - set reference to an ID pointing to the session
+      var path = '<%= @enterprise.name %>/initiatives/<%= Time.now.to_i %>/<%= @initiative.id %>';
+      var firepadRef = firebase.database().ref(path);
+
+      // Create CodeMirror (with lineWrapping on).
+      var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
+
+      // Create Firepad (with rich text toolbar and shortcuts enabled).
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        richTextShortcuts: true,
+        richTextToolbar: true,
+        defaultText: 'Hello, World!',
+        userId: '<%= current_user.id%>'
+      });
+    }
+  });
+    </script>
+</html>
