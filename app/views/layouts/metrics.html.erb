@@ -50,7 +50,7 @@
     <%= active_link_to 'Innovation', metrics_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <% if PollPolicy.new(current_user, Poll).create? %>
-    <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to 'Surveys', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
     <%= active_link_to 'Mentorship', metrics_mentorships_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
