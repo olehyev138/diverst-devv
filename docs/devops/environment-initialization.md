@@ -6,7 +6,7 @@ Here we will describe the process for initializing a new environment, from nothi
 
 Because Diverst is a _single tenant_ application, initialization of new environments is something that will be done semi frequently and thus is a process that needs to be robust, well defined & well documented.
 
-The goal of this document is _not_ to outline, explain the existing infrastructure setup. But how to make use of it to initialize a new environment account.
+The goal of this document is _not_ to outline, explain the existing infrastructure setup, but to explain how to make use of it to initialize a new environment account.
 
 Setting up a new environment involves two general steps, as well as DNS setup:
 
@@ -24,7 +24,7 @@ Before starting, create a new _secure note_ inside our password manager under th
 
 Our infrastructure is mostly defined as IAC with Terraform. Each environment account is a module, based off of the `base_prod` module. The terraform code that needs to be written for a new environment account is the configuration properties specific to the environment, filling in details for remote state configuration and details for authenticating with AWS.
 
-In addition to IAC, we have a few key resources that need to be created manually/through scripts. This includes only at the moment - a S3 bucket & dynamo table needed for Terraform remote state.
+In addition to IAC, we have a few key resources that need to be created manually/through scripts. This includes only at the moment - a S3 bucket, a dynamo table needed for Terraform remote state, a KMS key for secrets management & Parameter Key Store entries. 
 
 _Note_: As we develop on our devops, the goal will be 1) to automate more, as well as manage as much as we can with IAC. 
 
@@ -104,9 +104,13 @@ Ensure all of the following commands are run in the same terminal to make use of
 
 #### C) Bootstrapping backend for Terraform
 
-Terraform requires a few pieces of infrastructure to already exist in order to function. We create these manually with the script `bootstrap-backend`
+Terraform requires a few pieces of infrastructure to already exist in order to function. We create these manually with the script `bootstrap-backend`. It is important to note that these resources are created manually via the aws cli tool and therefore not managed by Terraform. These resources are necessary for Terraform to function, therefore they must exist _before_ Terraform is run. To be specific, the _bootstrapped_ resources are the following:
 
-Run the script `boostrap-backend` as follows.
+- A _master S3 bucket_ - this is where the Terraform state lives, as well as our backend deployment bundles. 
+- A _dynamodb table_ - Terraform uses this to perform locking on the state file
+- A _kms key_ & entries in the _parameter key store_ - used for secrets management. These secrets are loaded into Terraform upon run, therefore they must exist beforehand. Consult the secrets management document for more information.
+
+To create these resources, run the script `boostrap-backend` as follows.
 
 `./bootstrap-backend <env-name>`
 

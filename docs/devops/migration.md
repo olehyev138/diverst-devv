@@ -79,8 +79,6 @@ Because we are migrating to a new AWS account & migrating from paperclip to acti
 
 2) In the new AWS account, create an IAM user `s3-migration-user`. Create this user with cli access only and no permissions, download the CSV file. Attach an inline policy to this user: 
 
-_TODO: devops s3-migration-user currently also has S3FullAccess?_
-
 ````
 {
     "Version": "2012-10-17",
@@ -117,7 +115,7 @@ _TODO: devops s3-migration-user currently also has S3FullAccess?_
 ```
 aws s3 sync s3://<source-bucket> s3://<destination-bucket>
 ```
-
+envi
 4) Now clean up and delete the bucket policy in the legacy bucket and the s3 migration IAM user in the new account. 
 
 #### Deploy
