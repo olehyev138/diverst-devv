@@ -14,4 +14,7 @@ jest.mock('react-router-dom', () => ({
     pathname: '/',
     key: 'testKey',
   }),
+  useParams: () => ({
+    item_id: 1,
+  }),
 }));
