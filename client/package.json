@@ -128,6 +128,7 @@
     "sanitize.css": "8.0.0",
     "styled-components": "4.2.0",
     "styled-css-grid": "1.2.1",
+    "tests": "^0.4.2",
     "vega": "^5.10.1",
     "vega-lite": "^4.9.0",
     "warning": "^4.0.3",

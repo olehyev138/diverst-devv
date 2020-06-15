@@ -50,7 +50,7 @@ export function PollGraphs(props, context) {
   );
 }
 PollGraphs.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   polls: PropTypes.array,
   pollTotal: PropTypes.number,
