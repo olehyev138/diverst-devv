@@ -63,7 +63,18 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     remove_foreign_key "views", "folders" if foreign_key_exists?("views", "folders")
     remove_foreign_key "views", "resources" if foreign_key_exists?("views", "resources")
 
+    # New table - check exists first, will exist for legacy db's
+    if table_exists? :video_rooms
+      remove_foreign_key "video_rooms", "enterprises" if foreign_key_exists?("video_rooms", "enterprises")
+      remove_foreign_key "video_rooms", "initiatives" if foreign_key_exists?("video_rooms", "initiatives")
+    end
+
     ### Primary keys
+
+    if table_exists? :video_rooms
+      change_column :video_rooms, :id, :bigint, auto_increment: true
+    end
+
     change_column :activities, :id, :bigint, auto_increment: true
     change_column :answer_comments, :id, :bigint, auto_increment: true
     change_column :answer_expenses, :id, :bigint, auto_increment: true
@@ -180,7 +191,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     change_column :users_segments, :id, :bigint, auto_increment: true
     change_column :views, :id, :bigint, auto_increment: true
     change_column :yammer_field_mappings, :id, :bigint, auto_increment: true
-
 
     ### Foreign Keys
 
@@ -315,6 +325,10 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     change_column :views, :folder_id, :bigint
     change_column :views, :resource_id, :bigint
 
+    if table_exists? :video_rooms
+      change_column :video_rooms, :enterprise_id, :bigint
+      change_column :video_rooms, :initiative_id, :bigint
+    end
 
     add_foreign_key "answers", "groups", column: "contributing_group_id"
     add_foreign_key "badges", "enterprises"
@@ -372,6 +386,12 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     add_foreign_key "views", "groups"
     add_foreign_key "views", "folders"
     add_foreign_key "views", "resources"
+
+    if table_exists? :video_rooms
+      add_foreign_key "video_rooms", "enterprises"
+      add_foreign_key "video_rooms", "initiatives"
+    end
+
 
     # Re-enable foreign key checks
     # execute 'SET FOREIGN_KEY_CHECKS = 1'
