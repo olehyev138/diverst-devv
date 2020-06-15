@@ -149,7 +149,7 @@ export function AdminGroupList(props, context) {
 }
 
 AdminGroupList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
   isLoading: PropTypes.bool,

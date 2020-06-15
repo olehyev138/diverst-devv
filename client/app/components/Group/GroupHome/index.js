@@ -231,7 +231,7 @@ GroupHome.propTypes = {
   joinGroup: PropTypes.func,
   leaveGroup: PropTypes.func,
   joinSubgroups: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
