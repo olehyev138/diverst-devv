@@ -202,7 +202,7 @@ export function SocialLinkListItem(props) {
 
 SocialLinkListItem.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   socialLink: PropTypes.object,
   currentGroup: PropTypes.object,
   links: PropTypes.shape({

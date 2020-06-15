@@ -189,7 +189,7 @@ export function UserList(props, context) {
 }
 
 UserList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   users: PropTypes.object,
   userTotal: PropTypes.number,
