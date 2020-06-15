@@ -170,6 +170,10 @@ DiverstCalendar.propTypes = {
   calendarDateCallback: PropTypes.func,
 };
 
+DiverstCalendar.defaultProps = {
+  events: []
+}
+
 export default compose(
   memo,
   withStyles(styles),
