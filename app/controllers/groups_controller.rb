@@ -14,7 +14,7 @@ class GroupsController < ApplicationController
   def index
     authorize Group
 
-    @groups = @groups.includes(:children)
+    @groups = @groups.includes(:children, :active_group_members)
 
     respond_to do |format|
       format.html
