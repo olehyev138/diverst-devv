@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
@@ -23,26 +22,26 @@ const styles = theme => ({
   },
 });
 
-const columns = [
-  {
-    title: intl.formatMessage(messages.title),
-    field: 'title',
-    query_field: 'title'
-  },
-  {
-    title: intl.formatMessage(messages.url),
-    field: 'url',
-    query_field: 'url',
-  },
-  {
-    title: intl.formatMessage(messages.creation),
-    field: 'created_at',
-    query_field: 'created_at',
-    render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
-  },
-];
-
 export function ResourcesTable(props) {
+  const { intl } = props;
+  const columns = [
+    {
+      title: intl.formatMessage(messages.title),
+      field: 'title',
+      query_field: 'title'
+    },
+    {
+      title: intl.formatMessage(messages.url),
+      field: 'url',
+      query_field: 'url',
+    },
+    {
+      title: intl.formatMessage(messages.creation),
+      field: 'created_at',
+      query_field: 'created_at',
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
+    },
+  ];
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
       orderBy: (columnId === -1) ? 'resources.id' : `${columns[columnId].query_field}`,

@@ -81,7 +81,7 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
   <DiverstCSSCell
     area="sponsor"
   >
-    <Memo(Connect(InjectIntl(SponsorCard)))
+    <Memo(Connect(SponsorCard))
       currentGroup={null}
       type="enterprise"
     />

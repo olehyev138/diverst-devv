@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-export default function DiverstDialog(props) {
+export function DiverstDialog(props) {
   const { title, open, handleYes, textYes, handleNo, textNo, content } = props;
 
   return (
@@ -48,3 +48,5 @@ DiverstDialog.propTypes = {
   textNo: PropTypes.string,
   content: PropTypes.any,
 };
+
+export default DiverstDialog;

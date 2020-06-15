@@ -87,7 +87,7 @@ export default function Conditional(
   };
 
   WrappedComponent.propTypes = {
-    intl: intlShape,
+    intl: intlShape.isRequired,
     showSnackbar: PropTypes.func,
     redirectAction: PropTypes.func,
     computedMatch: PropTypes.object,

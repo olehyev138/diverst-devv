@@ -79,7 +79,7 @@ export function SegmentMemberList(props) {
 }
 
 SegmentMemberList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   links: PropTypes.shape({
     segmentMembersNew: PropTypes.string,
