@@ -42,8 +42,8 @@ export function EventsPage(props) {
   useInjectSaga({ key: 'mailEvents', saga });
 
   const links = {
-    eventsIndex: ROUTES.admin.system.globalSettings.mailEvents.index.path(),
-    eventEdit: id => ROUTES.admin.system.globalSettings.mailEvents.edit.path(id),
+    eventsIndex: ROUTES.admin.system.globalSettings.emails.events.index.path(),
+    eventEdit: id => ROUTES.admin.system.globalSettings.emails.events.edit.path(id),
   };
 
   const { currentUser, events, isFetching, intl } = props;

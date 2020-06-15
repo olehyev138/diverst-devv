@@ -51,7 +51,7 @@ const GlobalSettingsLayout = (props) => {
       else if (permission(props, 'sso_authentication'))
         redirectAction(ROUTES.admin.system.globalSettings.ssoSettings.index.path());
       else if (permission(props, 'emails_manage'))
-        redirectAction(ROUTES.admin.system.globalSettings.emails.index.path());
+        redirectAction(ROUTES.admin.system.globalSettings.emails.layouts.index.path());
       else if (permissions) {
         showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());

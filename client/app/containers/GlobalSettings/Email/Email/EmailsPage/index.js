@@ -39,7 +39,7 @@ export function EmailsPage(props) {
   useInjectSaga({ key: 'emails', saga });
 
   const links = {
-    emailEdit: id => ROUTES.admin.system.globalSettings.emails.edit.path(id),
+    emailEdit: id => ROUTES.admin.system.globalSettings.emails.layouts.edit.path(id),
   };
 
   const { currentUser, emails, isFetching } = props;

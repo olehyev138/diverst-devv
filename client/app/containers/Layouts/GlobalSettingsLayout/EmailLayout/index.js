@@ -12,10 +12,10 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({});
 
-const EmailPages = Object.freeze({
-  emailLayouts: 0,
-  emailEvents: 1
-});
+const EmailPages = Object.freeze([
+  'layouts',
+  'events',
+]);
 
 const EmailLayout = (props) => {
   const { classes, children, ...rest } = props;
@@ -23,12 +23,12 @@ const EmailLayout = (props) => {
   const location = useLocation();
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
-  const currentPage = Object.keys(EmailPages).find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(EmailPages[currentPage]);
+  const currentPage = EmailPages.find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(currentPage || EmailPages[0]);
 
   useEffect(() => {
-    if (tab !== EmailPages[currentPage])
-      setTab(EmailPages[currentPage]);
+    if (tab !== currentPage && currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (

@@ -894,20 +894,22 @@ const ROUTES = {
           },
         },
         emails: {
-          pathPrefix: '/admin/system/settings/emailLayouts',
-          index: {
-            path: () => '/admin/system/settings/emailLayouts'
+          pathPrefix: '/admin/system/settings/emails',
+          layouts: {
+            index: {
+              path: () => '/admin/system/settings/emails/layouts'
+            },
+            edit: {
+              path: (emailId = ':email_id') => `/admin/system/settings/emails/layouts/${emailId}/edit`
+            },
           },
-          edit: {
-            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
-          },
-        },
-        mailEvents: {
-          index: {
-            path: () => '/admin/system/settings/emailEvents'
-          },
-          edit: {
-            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
+          events: {
+            index: {
+              path: () => '/admin/system/settings/emails/events'
+            },
+            edit: {
+              path: (eventId = ':event_id') => `/admin/system/settings/emails/events/${eventId}/edit`
+            },
           },
         },
       },

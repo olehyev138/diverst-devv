@@ -32,8 +32,8 @@ export function EmailEditPage(props) {
 
   const { email_id: emailId } = useParams();
   const links = {
-    emailsIndex: ROUTES.admin.system.globalSettings.emails.index.path(),
-    emailEdit: ROUTES.admin.system.globalSettings.emails.edit.path(emailId),
+    emailsIndex: ROUTES.admin.system.globalSettings.emails.layouts.index.path(),
+    emailEdit: ROUTES.admin.system.globalSettings.emails.layouts.edit.path(emailId),
   };
 
   useEffect(() => {

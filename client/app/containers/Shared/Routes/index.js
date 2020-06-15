@@ -546,15 +546,15 @@ export default function Routes(props) {
                           <RouteWithProps path={ROUTES.admin.system.globalSettings.emails.pathPrefix}>
                             <EmailLayout>
                               <Switch>
-                                { /* Emails */}
-                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.index.path()}><EmailsPage /></RouteWithProps>
-                                { /* Email Edit */}
-                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.edit.path()}><EmailEditPage /></RouteWithProps>
+                                { /* Layouts */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.layouts.index.path()}><EmailsPage /></RouteWithProps>
+                                { /* Layout Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.layouts.edit.path()}><EmailEditPage /></RouteWithProps>
 
-                                { /* Email Events */}
-                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.mailEvents.index.path()}><EmailEventsPage /></RouteWithProps>
-                                { /* Email Event Edit */}
-                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.mailEvents.edit.path()}><EmailEventEditPage /></RouteWithProps>
+                                { /* Events */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.events.index.path()}><EmailEventsPage /></RouteWithProps>
+                                { /* Event Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.events.edit.path()}><EmailEventEditPage /></RouteWithProps>
                               </Switch>
                             </EmailLayout>
                           </RouteWithProps>
