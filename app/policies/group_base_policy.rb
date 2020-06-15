@@ -70,10 +70,10 @@ class GroupBasePolicy < ApplicationPolicy
 
   def visibility
     case group[group_visibility_setting]
-    when 'public', 'global', 'non-members', nil then 'public'
+    when 'public', 'global', 'non_member', nil then 'public'
     when 'group' then 'group'
     when 'leaders_only', 'managers_only' then 'leader'
-    else raise StandardError.new('Invalid Visibility Setting')
+    else raise StandardError.new("Invalid Visibility Setting - #{group[group_visibility_setting]}")
     end
   end
 
