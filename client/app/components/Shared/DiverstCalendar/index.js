@@ -172,7 +172,7 @@ DiverstCalendar.propTypes = {
 
 DiverstCalendar.defaultProps = {
   events: []
-}
+};
 
 export default compose(
   memo,
