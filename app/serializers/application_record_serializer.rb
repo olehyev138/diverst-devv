@@ -21,16 +21,20 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
-  def self.permission_module
-    @@module ||= begin
-                   temp = Module.new do
-                     def self.attr_conditions
-                       @@attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+  def self.inherited(subclass)
+    class << subclass
+      def permission_module
+        @module ||= begin
+                       temp = Module.new do
+                         def self.attr_conditions
+                           @attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+                         end
+                       end
+                       self.prepend(temp)
+                       temp
                      end
-                   end
-                   self.prepend(temp)
-                   temp
-                 end
+      end
+    end
   end
 
   def self.attributes_with_permission(*attribute_names, **options)
