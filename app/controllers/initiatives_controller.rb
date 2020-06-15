@@ -3,7 +3,9 @@ class InitiativesController < ApplicationController
   before_action :set_group
   before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses,
                                         :export_attendees_csv, :archive, :start_video, :join_video,
-                                        :leave_video, :register_room_in_db, :update_registered_room_in_db]
+                                        :leave_video, :register_room_in_db, :update_registered_room_in_db,
+                                        :end_video_meeting
+                                       ]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
@@ -189,6 +191,7 @@ class InitiativesController < ApplicationController
       sid: sid,
       name: name,
       status: status,
+      duration: 0,
       enterprise_id: enterprise_id,
       initiative_id: @initiative.id
     )
@@ -207,10 +210,18 @@ class InitiativesController < ApplicationController
     raise BadRequestException.new 'TWILIO_AUTH_TOKEN Required' if ENV['TWILIO_AUTH_TOKEN'].blank?
 
     client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+
     sid = params[:sid]
     room_context = client.video.rooms(sid)
     room = client.video.rooms(sid).fetch
     video_room = VideoRoom.find_by(sid: sid)
+    video_participant_attributes = client.video.rooms(sid).participants.list
+                                   .map { |participant| { timestamp: participant.start_time,
+                                                          identity: participant.identity,
+                                                          duration: participant.duration }
+    }
+
+    video_room.video_participants.create(video_participant_attributes)
 
     if video_room && video_room.update(
       status: room.status,
@@ -219,10 +230,30 @@ class InitiativesController < ApplicationController
       start_date: room.date_created,
       end_date: room.end_time
     )
-      render noting: true, status: :ok
+      render nothing: true, status: :ok
     else
       render nothing: true, status: :unprocessable_entity
     end
+  end
+
+  def end_virtual_meeting
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
+
+    require 'twilio-ruby'
+
+    raise BadRequestException.new 'TWILIO_ACCOUNT_SID Required' if ENV['TWILIO_ACCOUNT_SID'].blank?
+    raise BadRequestException.new 'TWILIO_API_KEY Required' if ENV['TWILIO_API_KEY'].blank?
+    raise BadRequestException.new 'TWILIO_SECRET Required' if ENV['TWILIO_SECRET'].blank?
+
+    client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+
+    sid = params[:sid]
+    room = client.video.rooms(sid).fetch
+    room.participants.list(status: 'connected').each do |participant|
+      participant.update(status: 'disconnected')
+    end
+
+    render nothing: true, status: :ok
   end
 
 

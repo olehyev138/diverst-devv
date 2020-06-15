@@ -15,7 +15,7 @@ class InitiativeExpensePolicy < ApplicationPolicy
     return true if basic_group_leader_permission?('initiatives_manage')
     return true if @policy_group.initiatives_manage?
 
-    @record.owner == @user
+    @record.initiative&.owner == @user
   end
 
   def destroy?

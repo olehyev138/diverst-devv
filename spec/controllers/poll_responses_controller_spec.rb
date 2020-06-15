@@ -53,7 +53,7 @@ RSpec.describe PollResponsesController, type: :controller do
         end
 
         it 'does not create another response' do
-          expect{ post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse, :count).by(0) 
+          expect { post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse, :count).by(0)
         end
       end
 

@@ -40,7 +40,7 @@
         margin-left: 70px;
       }
 
-      #mute-mic, #mute-video, #screen-share, #leave-call {
+      #mute-mic, #mute-video, #screen-share, #leave-call, #end-virtual-event {
         height: 33px;
         width: 36px;
         background: #fff;
@@ -67,7 +67,13 @@
               <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
               <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
               <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
-              <%= inline_svg('icons/phone0.svg', id: 'leave-call', title: 'end video call', class: 'svg-color') %>
+              
+              <% if @initiative.owner_id == current_user.id %>
+                <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
+              <% else %>  
+                <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
+              <% end %>
+
             </span>
           </div>
         </div>
@@ -114,6 +120,27 @@
         </div>
       </div>
     </div>
+
+
+      <!-- Modal -->
+  <div class="modal fade" id="virtualEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to end this virtual meeting for all participants?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" id="end-virtual-meeting" class="btn btn-primary">End Virtual Meeting</button>
+        </div>
+      </div>
+    </div>
+  </div>
   </body>
   <script>
   $(document).ready(function(){
@@ -224,16 +251,26 @@
     $('#leave-call').on('click', function(){
       leaveRoomIfJoined();
       $.ajax({url: '<%= leave_video_group_initiative_path(@group, @initiative) %>', type: 'PATCH'})
-      window.location.href = "<%= group_event_path(@group, @initiative) %>";
     });
 
     $('#screen-share').on('click', function(){
       screenShareOFLocalParticipant();
     });
 
+    $('#end-virtual-meeting').on('click', function(){
+      $.ajax({
+        url: '<%= end_virtual_meeting_group_initiative_path(@group, @initiative) %>',
+        type: 'PATCH',
+        data: {
+          sid: room.sid
+        }
+      });
+    });
+
 
 
     // Attach the Tracks to the DOM.
+    // Attach participant details such as name, network connectivity here.
     function attachTracks(tracks, container) {
       tracks.forEach(function(track) {
           if (track.kind === 'audio' || track.kind === 'video') {
@@ -275,7 +312,6 @@
     }
 
     function registerRoomInDatabase(room) {
-      console.log(room.sid);
       var room = room; 
       $.ajax({
         url: '<%= register_room_in_db_group_initiative_path(@group, @initiative) %>',
@@ -300,6 +336,24 @@
       });
     }
 
+    //network connectivity stats
+    function printNetworkQualityStats(networkQualityLevel, networkQualityStats) {
+    // Print in console the networkQualityLevel using bars
+      console.log({
+        1: '▃',
+        2: '▃▄',
+        3: '▃▄▅',
+        4: '▃▄▅▆',
+        5: '▃▄▅▆▇'
+      }[networkQualityLevel] || '');
+
+      if (networkQualityStats) {
+        // Print in console the networkQualityStats, which is non-null only if Network Quality
+        // verbosity is 2 (moderate) or greater
+        console.log('Network Quality statistics:', networkQualityStats);
+      }
+   }
+
     // When we are about to transition away from this page, disconnect
     // from the room, if joined.
     window.addEventListener('beforeunload', leaveRoomIfJoined);
@@ -311,7 +365,11 @@
       localTracks.push(dataTrack)
         return twilio.connect(token, {
           name: '<% @video_room_name %>',
-          tracks: localTracks
+          tracks: localTracks,
+          networkQuality: {
+            local: 1,
+            remote: 2
+          }
       });
       }).then(roomJoined, function(error) {
           console.error('Unable to connect to Room: ' +  error.message);
@@ -353,6 +411,8 @@
         //log(participant.identity + " added track: " + track.kind);
         var previewContainer = document.getElementById('video-grid');
         var screenShareArea = document.getElementById('screen-share-area');
+        
+        participant.on('networkQualityLevelChanged', printNetworkQualityStats);
 
         if (track.name == 'screen-share') {
           attachTracks([track], screenShareArea);
@@ -377,6 +437,7 @@
       // of all Participants, including that of the LocalParticipant.
       room.on('disconnected', function() {
         log('Left');
+        window.location.href = "<%= group_event_path(@group, @initiative) %>";
         if (previewTracks) {
           previewTracks.forEach(function(track) {
             track.stop();
