@@ -65,7 +65,9 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
 
         if Field.find(field.id).field_definer == nil
           remove_poly
-          abort('WHY')
+          say field.id
+          say field.errors.full_messages
+          abort('Failed to update field')
         end
       end
 

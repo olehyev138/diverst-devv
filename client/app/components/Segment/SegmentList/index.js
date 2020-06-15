@@ -126,7 +126,7 @@ export function SegmentList(props, context) {
   );
 }
 SegmentList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   segments: PropTypes.object,
   segmentTotal: PropTypes.number,

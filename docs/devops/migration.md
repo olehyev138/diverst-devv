@@ -24,17 +24,17 @@ Migrating a legacy database involves:
  - Moving the database to the new AWS account
  - Import database into IAC control (Terraform)
 
-1) Moving database to new AWS account
+##### 1) Moving database to new AWS account
 
 - Inside the RDS console in the legacy account, select the legacy database & create a snapshot: `beta-migration-<db-name>-snapshot`
 
 - Share the snapshot, adding the account id of the new AWS _environment account_, created in the previous step
 
-- Inside the RDS console of the new AWS environment account, navigate to shared snapshots & restore the database. Ensure to set the database identifier in accordance with Terraform configuration: `<env-name>-db`. Specifically, `<env-name>` must match the value in <env>.tfvars under the same name. If the database is set differently, Terraform will _replace_ the database instead of updating it.
+- Inside the RDS console of the new AWS environment account, navigate to shared snapshots & restore the database. Ensure to set the _DB Instance Identifier_ in accordance with Terraform configuration: `<env-name>-db`. `<env-name>` must match the value in <env>.tfvars under the same name. *If the database is set differently, Terraform will _replace_ the database instead of updating it*. *TODO: describe config options*
 
-2) Import database into IAC control
+##### 2) Import database into IAC control
 
-We need this new database to be completely managed by Terraform & comply to Terraform configuration. We do need to keep the data of course, so the critical step here is to ensure that Terraform can update the database and not replace it.
+We need this new database to be completely managed by Terraform & comply to Terraform configuration. We do need to keep the data of course, so the critical step here is to ensure that Terraform updates the database configuration and *does not replace it*.
 
 - Once the database is available, in your Terraform folder, run the following to import the database into Terraform control. 
 
@@ -44,7 +44,7 @@ We need this new database to be completely managed by Terraform & comply to Terr
 
 Return to the environment initialization document & continue to the next step, running the _Run Terraform_ step.
 
-Inspect the generated plan closely & ensure that Terraform is updating the database & not replacing it. 
+Inspect the generated plan closely & ensure that Terraform is *updating the database & not replacing it*. 
 
 Do not run the database initialization step & continue to _File Storage Migration_
 
@@ -110,13 +110,13 @@ Because we are migrating to a new AWS account & migrating from paperclip to acti
 }
 ````
 
-3) In a new terminal, authenticate with the new IAM user by exporting the keys in the CSV file previously exported. Run the following command to sync the legacy S3 bucket with the new S3 bucket
+3) In a new terminal, authenticate with the *new* IAM user (s3-migration-user) by exporting the keys in the CSV file previously exported. Run the following command to sync the legacy S3 bucket with the new S3 bucket
 
 ```
 aws s3 sync s3://<source-bucket> s3://<destination-bucket>
 ```
-
-4) Now clean up and delete the bucket policy in the legacy bucket and the s3 migration IAM user. 
+envi
+4) Now clean up and delete the bucket policy in the legacy bucket and the s3 migration IAM user in the new account. 
 
 #### Deploy
 
@@ -129,6 +129,18 @@ SSH into a ec2 instance in the new environment, change directories into the app 
 ```
 rails db:migrate
 ```
+
+_Notes & Known Issues_:
+   - Will take a while, ensure network connection is stable
+   - Specifically `MakeFieldPolymorphic` & `MakeFieldDataPolymorphic` can take a very long time
+   - State of fields in legacy databases is dubious, there uniqueness validations dont work properly and it is possible there will be field data (`info`) referencing field records that do not exist. Thus it is possible `MakeFieldPolymorphic` & `MakeFieldDataPolymorphic` will break because of these things. Manual intervention with the rails console will be needed to fix duplicate fields. When non existent fields are referenced, they are skipped by the migration, effectively deleting it.
+   - If there are new tables or foreign keys, `ConvertKeysToBigInt` might break because the id types are mismatched (beta uses bigint). The `ConvertKeysTOBigInt` Migration needs to be updated to remove the foreign keys, change the primary & foreign key types, or the new migration may be updated as well. Changing of foreign key types should be on the new table first, ie `video_rooms` references `initiatives`, so`video_rooms` should be updated before `initiatives`. 
+   - `AddPreviousAndNextToUpdates` references a job and sometimes fails on the first run - _TODO: more info_
+   - Duplicate column issues from rerunning migrations - if new migrations have been added _from_ legacy, the legacy database will re run the migration and fail with duplicate column issues. Legacy migrations therefore need to be added with checks for column & table existence. 
+   
+#### Api Key & Authentication
+
+_TODO_
 
 #### DNS
 
