@@ -38,10 +38,10 @@ const GroupListSelector = (props) => {
       <DiverstLoader isLoading={props.isLoading} noTransition>
         {(groups || []).map(group => (
           <GroupSelectorItem
+            {...rest}
             group={group}
             expandedGroups={expandedGroups}
             setExpandedGroups={setExpandedGroups}
-            {...props}
           />
         ))}
       </DiverstLoader>
@@ -73,6 +73,7 @@ GroupListSelector.propTypes = {
   open: PropTypes.bool,
   addGroup: PropTypes.func,
   removeGroup: PropTypes.func,
+  isSelected: PropTypes.func,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object

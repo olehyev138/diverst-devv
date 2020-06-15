@@ -31,7 +31,10 @@ import DiverstImg from 'components/Shared/DiverstImg';
 import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
+import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
+import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles } from '@material-ui/core/styles';
+import useClickPreventionOnDoubleClick from 'utils/doubleClickHelper';
 
 const styles = theme => ({
   errorButton: {
@@ -93,21 +96,20 @@ const GroupSelectorItem = (props) => {
   const { group, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups } = rest;
 
-  /*
-      <DiverstSelect
-        label={groupField}
-        value={groupField}
-        margin='normal'
-        label={label}
-        fullWidth
-        options={rest.groups}
-        value={values[groupField]}
-        onChange={value => setFieldValue(groupField, value || (selectProps.isMulti ? [] : ''))}
-        onInputChange={groupSelectAction}
-        hideHelperText
-        {...selectProps}
-      />
-   */
+  const [handleClick, handleDoubleClick] = useClickPreventionOnDoubleClick(
+    () => {
+      if (props.isSelected(props.group))
+        props.removeGroup(props.group);
+      else
+        props.addGroup(props.group);
+    },
+    () => {
+      if (props.isSelected(props.group))
+        props.removeGroup(...[props.group, ...props.group.children]);
+      else
+        props.addGroup(...[props.group, ...props.group.children]);
+    },
+  );
 
   return (
     <React.Fragment>
@@ -115,7 +117,8 @@ const GroupSelectorItem = (props) => {
       <Grid container>
         <Grid item xs>
           <ButtonBase
-            onClick={() => console.log('clicked')}
+            onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
             className={classes.buttonBase}
           >
             <CardContent className={classes.groupCardContent}>
@@ -132,7 +135,7 @@ const GroupSelectorItem = (props) => {
                   </Grid>
                 </Hidden>
                 <Grid item xs='auto'>
-
+                  {props.isSelected(props.group) ? <CheckBoxRoundedIcon /> : <CheckBoxOutlineBlankRoundedIcon />}
                 </Grid>
                 <Grid item xs>
                   <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
@@ -187,6 +190,7 @@ GroupSelectorItem.propTypes = {
   inputCallback: PropTypes.func,
   addGroup: PropTypes.func,
   removeGroup: PropTypes.func,
+  isSelected: PropTypes.func,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object

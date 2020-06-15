@@ -18,6 +18,7 @@ import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups, selectGroupIsLoading, selectGroupTotal } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
+import { union, difference, intersection } from 'utils/arrayHelpers';
 import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
@@ -35,19 +36,20 @@ const GroupSelector = (props) => {
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 
-  const [addGroup, removeGroup, onChange] = (() => {
+  function groupCompare(g1, g2){
+    return g1.value === g2.value;
+  }
+
+  const [addGroup, removeGroup, onChange, isSelected] = (() => {
     if (selectProps.isMulti)
       return [
         // MULTI ADD GROUP
-        (group) => {
-          const index = values[groupField].indexOf(x => x.value === group.value);
-          if (index === -1)
-            setFieldValue(groupField, [...(values[groupField]), group]);
-        },
+        (...groups) => setFieldValue(groupField, union(values[groupField], groups), groupCompare),
         // MULTI REMOVE GROUP
-        group => setFieldValue(groupField, values[groupField].filter(x => x.value !== group.value)),
+        (...groups) => setFieldValue(groupField, difference(values[groupField], groups), groupCompare),
         // MULTI ON CHANGE
-        value => setFieldValue(groupField, value || [])
+        value => setFieldValue(groupField, value || []),
+        group => !!(values[groupField].find(x => x.value === group.value))
       ];
     return [
       // SINGLE ADD GROUP
@@ -55,7 +57,8 @@ const GroupSelector = (props) => {
       // SINGLE REMOVE GROUP
       group => values[groupField].value === group.value ? setFieldValue(groupField, '') : null,
       // SINGLE ON CHANGE
-      value => setFieldValue(groupField, value || '')
+      value => setFieldValue(groupField, value || ''),
+      group => values[groupField].value === group.value
     ];
   })();
 
@@ -105,6 +108,7 @@ const GroupSelector = (props) => {
             open={dialogSearch}
             addGroup={addGroup}
             removeGroup={removeGroup}
+            isSelected={isSelected}
             selected={values[groupField]}
           />
         )}
