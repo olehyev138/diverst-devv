@@ -13,7 +13,7 @@ import { intl } from 'tests/mocks/react-intl';
 import { DiverstFormattedMessage } from '../index';
 
 jest.mock('utils/customTextHelpers');
-const customTexts = require.requireMock('utils/customTextHelpers');
+const customTexts = jest.requireMock('utils/customTextHelpers');
 
 describe('<DiverstFormattedMessage />', () => {
   it('Expect to not log errors in console', () => {
