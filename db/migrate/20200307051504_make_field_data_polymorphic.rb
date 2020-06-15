@@ -26,7 +26,14 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
           info.keys.each do |field_id|
             # - Find field object & extract data from hash (can only be done through field object)
             # - Serialize field data as json string
-            field = Field.find(field_id)
+            # - Use find_by so exceptions arnt thrown
+            field = Field.find_by(id: field_id)
+
+            unless field.present?
+              say "Skipping - field #{field_id} doesnt exist from #{model} with id #{item.id}"
+              next
+            end
+
             data_str = info[field].to_json
 
             # Create new FieldData object associated to current user & current field

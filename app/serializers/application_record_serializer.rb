@@ -46,7 +46,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             if defined?(super)
               super() rescue nil
             else
-              object&.send(attr) rescue nil
+              object&.send(attr)
             end
           else
             nil
