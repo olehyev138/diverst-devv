@@ -23,7 +23,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
 
-export function GroupSponsorCreatePage(props) {
+export function GroupSponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
@@ -55,8 +55,8 @@ export function GroupSponsorCreatePage(props) {
   );
 }
 
-GroupSponsorCreatePage.propTypes = {
-  intl: intlShape,
+GroupSponsorEditPage.propTypes = {
+  intl: intlShape.isRequired,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
   updateSponsorBegin: PropTypes.func,
@@ -82,4 +82,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupSponsorCreatePage);
+)(GroupSponsorEditPage);

@@ -26,7 +26,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupLeadersList from 'components/Group/GroupManage/GroupLeaders/GroupLeadersList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
-import { GroupSettingsPage } from 'containers/Group/GroupManage/GroupSettingsPage';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupLeadersListPage(props) {

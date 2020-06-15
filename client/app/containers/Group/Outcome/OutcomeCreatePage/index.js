@@ -50,7 +50,7 @@ export function OutcomeCreatePage(props) {
 }
 
 OutcomeCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createOutcomeBegin: PropTypes.func,
   outcomesUnmount: PropTypes.func,
   currentUser: PropTypes.object,

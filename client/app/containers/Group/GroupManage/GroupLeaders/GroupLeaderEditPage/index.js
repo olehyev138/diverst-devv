@@ -85,7 +85,7 @@ export function GroupLeaderEditPage(props) {
 }
 
 GroupLeaderEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getGroupLeaderBegin: PropTypes.func,
   getGroupMembersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,

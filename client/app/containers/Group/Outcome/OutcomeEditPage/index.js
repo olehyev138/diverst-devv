@@ -66,7 +66,7 @@ export function OutcomeEditPage(props) {
 }
 
 OutcomeEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getOutcomeBegin: PropTypes.func,
   updateOutcomeBegin: PropTypes.func,
   outcomesUnmount: PropTypes.func,

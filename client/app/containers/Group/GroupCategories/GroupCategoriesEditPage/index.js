@@ -53,7 +53,7 @@ GroupCategoriesEditPage.propTypes = {
   groupCategory: PropTypes.object,
   groupCategories: PropTypes.array,
   isFormLoading: PropTypes.bool,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   updateGroupCategoriesBegin: PropTypes.func,
   getGroupCategoryBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,

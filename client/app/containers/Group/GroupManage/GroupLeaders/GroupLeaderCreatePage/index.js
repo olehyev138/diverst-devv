@@ -85,7 +85,7 @@ export function GroupLeaderCreatePage(props) {
 }
 
 GroupLeaderCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
