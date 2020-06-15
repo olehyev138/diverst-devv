@@ -36,7 +36,7 @@ const GroupSelector = (props) => {
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 
-  function groupCompare(g1, g2){
+  function groupCompare(g1, g2) {
     return g1.value === g2.value;
   }
 
