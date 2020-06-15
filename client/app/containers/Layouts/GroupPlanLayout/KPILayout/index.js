@@ -23,10 +23,10 @@ const KPILayout = (props) => {
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/kpis/1/edit/ -> kpis */
   const currentPage = KPIPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || KPIPages[0]);
 
   useEffect(() => {
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage]);
 

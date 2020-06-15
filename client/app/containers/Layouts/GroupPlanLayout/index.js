@@ -25,16 +25,8 @@ const styles = theme => ({
 const PlanPages = Object.freeze([
   'events',
   'kpi',
-  'updates',
   'budgeting',
 ]);
-
-const getPageTab = (currentPagePath) => {
-  if (PlanPages[currentPagePath] !== undefined)
-    return PlanPages[currentPagePath];
-
-  return false;
-};
 
 const redirectAction = path => push(path);
 
@@ -49,7 +41,7 @@ const GroupPlanLayout = (props) => {
   if (!currentPage && location.pathname.includes('outcomes'))
     currentPage = 'events';
 
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || PlanPages[0]);
 
   useEffect(() => {
     if (rest.currentGroup && matchPath(location.pathname, { path: ROUTES.group.plan.index.path(), exact: true }))
@@ -66,7 +58,7 @@ const GroupPlanLayout = (props) => {
         redirectAction(ROUTES.group.home.path(groupId));
       }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage]);
 
