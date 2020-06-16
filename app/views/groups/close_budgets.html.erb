@@ -29,7 +29,7 @@
           <% @groups.each do |group| %>
             <tr>
                 <td>
-                  <% if group.children.count > 0 %>
+                  <% if group.children.size > 0 %>
                     <a href="#" class="nested_plus" id="<%= group.id%>">
                       <%= inline_svg('icons/plus.svg', size: '25px*25px') %>
                     </a>

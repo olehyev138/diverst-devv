@@ -14,10 +14,10 @@
           <div class="flex-row__cell" id="handle">
             <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
           </div>
-          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.active_members.count, "member" %></div>
+          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.accepted_members.size, "member" %></div>
           <div class="flex-row__cell link-group">
 
-            <% if group.children.count > 0 %>
+            <% if group.children.size > 0 %>
               <%= link_to "Show #{ c_t(:sub_erg).pluralize }", "#", class: "nested_show", id: group.id%>
               <%= link_to "Hide #{ c_t(:sub_erg).pluralize }", "#", class: "nested_hide hidden-xs", id: group.id, style: "display:none;" %>
 
@@ -46,7 +46,7 @@
               <%= link_to group_path(child) do %><%= image_tag child.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
             </div>
             <div class="flex-row__cell flex-row__cell--grow">
-              <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></span>
+              <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.accepted_members.size, "member" %></span>
               </div>
             <div class="flex-row__cell link-group">
               <%= link_to "Export", export_csv_group_path(child), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if GroupPolicy.new(current_user, child).edit? %>

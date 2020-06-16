@@ -5,7 +5,7 @@ class User::GroupsController < ApplicationController
   layout 'user'
 
   def index
-    @groups = current_user.enterprise.groups.order(:position).all_parents
+    @groups = current_user.enterprise.groups.includes(:children).order(:position).all_parents
   end
 
   def join
