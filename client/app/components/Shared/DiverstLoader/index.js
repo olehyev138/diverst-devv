@@ -17,19 +17,19 @@ const styles = theme => ({
 });
 
 function DiverstLoader(props) {
-  const { classes, isLoading, transitionProps, children } = props;
+  const { classes, isLoading, transitionProps, children, noTransition, transition: Transition } = props;
   return (
     <React.Fragment>
-      {props.noTransition ? (
+      {noTransition ? (
         <div>
-          {props.children}
+          {children}
         </div>
       ) : (
-        <Slide direction='left' in={!isLoading} mountOnEnter unmountOnExit {...transitionProps}>
+        <Transition direction='left' in={!isLoading} mountOnEnter unmountOnExit {...transitionProps}>
           <div>
-            {props.children}
+            {children}
           </div>
-        </Slide>
+        </Transition>
       )}
 
       {isLoading ? (
@@ -53,6 +53,11 @@ DiverstLoader.propTypes = {
   transitionProps: PropTypes.object,
   children: PropTypes.node.isRequired,
   noTransition: PropTypes.bool,
+  transition: PropTypes.elementType,
+};
+
+DiverstLoader.defaultProps = {
+  transition: Slide,
 };
 
 export default compose(

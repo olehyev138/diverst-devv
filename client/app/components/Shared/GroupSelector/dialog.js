@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import { Divider, Box } from '@material-ui/core';
+import { Divider, Box, Fade } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const GroupListSelector = (props) => {
@@ -35,7 +35,7 @@ const GroupListSelector = (props) => {
 
   return (
     <React.Fragment>
-      <DiverstLoader isLoading={props.isLoading} noTransition>
+      <DiverstLoader isLoading={props.isLoading} transition={Fade}>
         {(groups || []).map(group => (
           <GroupSelectorItem
             {...rest}
@@ -60,20 +60,17 @@ const GroupListSelector = (props) => {
 };
 
 GroupListSelector.propTypes = {
-  values: PropTypes.object.isRequired,
   isLoading: PropTypes.bool,
 
-  getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
 
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
-  addGroup: PropTypes.func,
-  removeGroup: PropTypes.func,
-  isSelected: PropTypes.func,
+  addGroup: PropTypes.func.isRequired,
+  removeGroup: PropTypes.func.isRequired,
+  isSelected: PropTypes.func.isRequired,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
