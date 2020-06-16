@@ -12,12 +12,18 @@ const styles = {
   dialog: {
     overflowY: 'scroll',
     overflowX: 'hidden',
-    display: 'flex'
   },
   paper: {
     overflow: 'hidden',
     margin: 'auto',
-    maxHeight: 'none'
+    maxHeight: '85%',
+    minHeight: '85%',
+    minWidth: '40%',
+  },
+  content: {
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column',
   },
 };
 
@@ -31,13 +37,23 @@ export function DiverstDialog(props) {
       onClose={handleNo}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
+      PaperProps={{
+        className: classes.paper
+      }}
+      className={classes.dialog}
     >
-      <DialogContent>
+      <DialogContent className={classes.content}>
         {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
         {subTitle && <DialogContentText id='alert-dialog-title'>{ subTitle }</DialogContentText>}
-        <DialogContentText id='alert-dialog-description'>
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexFlow: 'column'
+          }}
+        >
           {content}
-        </DialogContentText>
+        </div>
       </DialogContent>
       <DialogActions>
         {handleYes && (
@@ -56,13 +72,13 @@ export function DiverstDialog(props) {
 }
 
 DiverstDialog.propTypes = {
-  title: PropTypes.string,
-  subTitle: PropTypes.string,
+  title: PropTypes.node,
+  subTitle: PropTypes.node,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
-  textYes: PropTypes.string,
+  textYes: PropTypes.node,
   handleNo: PropTypes.func,
-  textNo: PropTypes.string,
+  textNo: PropTypes.node,
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
 };

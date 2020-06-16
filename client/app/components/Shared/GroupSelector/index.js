@@ -101,6 +101,7 @@ const GroupSelector = (props) => {
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
         subTitle={<DiverstFormattedMessage {...messages.selectorDialog.subTitle} />}
         handleNo={() => setDialogSearch(false)}
+        textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
         content={(
           <GroupListSelector
             groups={groups}

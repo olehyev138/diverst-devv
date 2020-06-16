@@ -4,9 +4,24 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import { Divider, Box, Fade } from '@material-ui/core';
+import { Divider, Box, Fade, Grid } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import messages from 'containers/Group/messages';
+import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid';
+
+const styles = {
+  bottom: {
+    minHeight: '100%',
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  list: {
+    flex: 1,
+    overflow: 'auto',
+  }
+};
 
 const GroupListSelector = (props) => {
   const { groups, ...rest } = props;
@@ -34,29 +49,58 @@ const GroupListSelector = (props) => {
     return () => null;
   }, [props.open]);
 
+  const list = (
+    <DiverstLoader isLoading={props.isLoading} transition={Fade}>
+      {(groups || []).map(group => (
+        <GroupSelectorItem
+          key={group.value}
+          {...rest}
+          group={group}
+          expandedGroups={expandedGroups}
+          setExpandedGroups={setExpandedGroups}
+        />
+      ))}
+    </DiverstLoader>
+  );
+
+  const paginator = (
+    <DiverstPagination
+      rowsPerPage={params.count}
+      rowsPerPageOptions={[10]}
+      count={props.groupTotal}
+      handlePagination={(payload) => {
+        const newParams = { ...params, count: payload.count, page: payload.page };
+
+        groupSearchAction(searchKey, newParams);
+        setParams(newParams);
+      }}
+    />
+  );
+
+  const toReturn = (
+    <DiverstCSSGrid
+      columns={1}
+      rows='1fr auto'
+      areas={[
+        'list',
+        'paginator',
+      ]}
+      rowGap='16px'
+      columnGap='24px'
+    >
+      <DiverstCSSCell area='list'>{list}</DiverstCSSCell>
+      <DiverstCSSCell area='paginator'>{paginator}</DiverstCSSCell>
+    </DiverstCSSGrid>
+  );
+
   return (
     <React.Fragment>
-      <DiverstLoader isLoading={props.isLoading} transition={Fade}>
-        {(groups || []).map(group => (
-          <GroupSelectorItem
-            {...rest}
-            group={group}
-            expandedGroups={expandedGroups}
-            setExpandedGroups={setExpandedGroups}
-          />
-        ))}
-      </DiverstLoader>
-      <DiverstPagination
-        rowsPerPage={params.count}
-        rowsPerPageOptions={[10]}
-        count={props.groupTotal}
-        handlePagination={(payload) => {
-          const newParams = { ...params, count: payload.count, page: payload.page };
-
-          groupSearchAction(searchKey, newParams);
-          setParams(newParams);
-        }}
-      />
+      <div style={styles.list}>
+        {list}
+      </div>
+      <div style={styles.bottom}>
+        {paginator}
+      </div>
     </React.Fragment>
   );
 };

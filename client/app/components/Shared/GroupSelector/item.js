@@ -171,7 +171,7 @@ const GroupSelectorItem = (props) => {
         <Box mt={1} />
         <Grid container spacing={2} justify='flex-end'>
           {group.children && group.children.map((childGroup, i) => (
-            <GroupSelectorItem {...props} group={childGroup} />
+            <GroupSelectorItem {...props} group={childGroup} key={childGroup.value} />
           ))}
         </Grid>
       </Collapse>
