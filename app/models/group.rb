@@ -63,7 +63,7 @@ class Group < BaseClass
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
-  has_many :active_group_members, -> { where(accepted_member: true) }, class_name: 'UserGroup'
+  has_many :active_group_members, -> { where(accepted_member: true).active }, class_name: 'UserGroup'
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
