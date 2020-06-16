@@ -1,16 +1,16 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { useLocation, matchPath } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
-import { matchPath } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import BrandingLinks from 'components/Branding/BrandingLinks';
-import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({
   content: {
@@ -18,32 +18,29 @@ const styles = theme => ({
   },
 });
 
-const BrandingPages = Object.freeze({
-  theme: 0,
-  home: 1,
-  sponsors: 2
-});
+const BrandingPages = Object.freeze([
+  'theme',
+  'home',
+  'sponsors',
+]);
+
+const redirectAction = path => push(path);
 
 const BrandingLayout = (props) => {
-  const { classes, children, currentGroup, ...rest } = props;
+  const { classes, children, redirectAction, ...rest } = props;
 
   const location = useLocation();
 
-  let currentPage;
-  if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.theme.path() }))
-    currentPage = 'theme';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.home.path() }))
-    currentPage = 'home';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.sponsors.index.path() }))
-    currentPage = 'sponsors';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.index.path() }))
-    currentPage = 'theme';
+  const currentPage = BrandingPages.find(page => location.pathname.includes(page));
 
-  const [tab, setTab] = useState(BrandingPages[currentPage]);
+  const [tab, setTab] = useState(currentPage || BrandingPages[0]);
 
   useEffect(() => {
-    if (tab !== BrandingPages[currentPage])
-      setTab(BrandingPages[currentPage]);
+    if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.index.path(), exact: true }))
+      redirectAction(ROUTES.admin.system.branding.theme.path());
+
+    if (tab !== currentPage && currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (
@@ -54,7 +51,7 @@ const BrandingLayout = (props) => {
       />
       <Fade in appear>
         <div className={classes.content}>
-          {renderChildrenWithProps(children, { ...rest })}
+          {children}
         </div>
       </Fade>
     </React.Fragment>
@@ -64,11 +61,21 @@ const BrandingLayout = (props) => {
 BrandingLayout.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
-  currentGroup: PropTypes.object,
   pageTitle: PropTypes.object,
+  redirectAction: PropTypes.func,
 };
 
+const mapDispatchToProps = {
+  redirectAction,
+};
+
+const withConnect = connect(
+  undefined,
+  mapDispatchToProps,
+);
+
 export default compose(
+  withConnect,
   memo,
   withStyles(styles),
 )(BrandingLayout);
