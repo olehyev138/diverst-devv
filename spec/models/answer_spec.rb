@@ -13,12 +13,16 @@ RSpec.describe Answer, type: :model do
       it { expect(answer).to have_many(:comments).class_name('AnswerComment') }
       it { expect(answer).to have_many(:expenses).class_name('AnswerExpense') }
       it { expect(answer).to accept_nested_attributes_for(:expenses).allow_destroy(true) }
+      it { expect(answer).to have_many(:user_reward_actions) }
+      it { expect(answer).to have_many(:likes) }
 
       # it { expect(answer).to have_attached_file(:supporting_document) }
       it { expect(answer).to validate_presence_of(:question) }
       it { expect(answer).to validate_presence_of(:author) }
       it { expect(answer).to validate_presence_of(:content) }
       it { expect(answer).to validate_presence_of(:contributing_group) }
+      it { expect(answer).to validate_length_of(:outcome).is_at_most(65535) }
+      it { expect(answer).to validate_length_of(:content).is_at_most(65535) }
     end
   end
 
