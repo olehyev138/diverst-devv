@@ -47,7 +47,7 @@ class ApplicationPolicy
     elsif record&.respond_to?(:group_id) # find the group of the record, eg. social link and check if user is group leader of group
       group_id = record.group_id
     elsif record&.respond_to?(:initiative_id)
-      group_id = record.initiative.owner_group_id
+      group_id = record.initiative&.owner_group_id
     end
 
     @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: group_id)&.user_role_id
