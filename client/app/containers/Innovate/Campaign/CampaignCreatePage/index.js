@@ -56,7 +56,7 @@ export function CampaignCreatePage(props) {
 }
 
 CampaignCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createCampaignBegin: PropTypes.func,
   campaignsUnmount: PropTypes.func,
   getGroupsBegin: PropTypes.func,

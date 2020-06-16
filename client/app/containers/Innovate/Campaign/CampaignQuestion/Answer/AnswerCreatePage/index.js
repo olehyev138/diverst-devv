@@ -56,7 +56,7 @@ export function AnswerCreatePage(props) {
 }
 
 AnswerCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createAnswerBegin: PropTypes.func,
   questionAnswersUnmount: PropTypes.func,
   getAnswerBegin: PropTypes.func,

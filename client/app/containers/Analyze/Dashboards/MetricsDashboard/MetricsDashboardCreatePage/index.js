@@ -70,7 +70,7 @@ export function MetricsDashboardCreatePage(props) {
 }
 
 MetricsDashboardCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createMetricsDashboardBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,

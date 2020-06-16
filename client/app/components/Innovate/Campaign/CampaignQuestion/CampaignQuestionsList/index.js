@@ -112,7 +112,7 @@ export function CampaignQuestionsList(props) {
 }
 
 CampaignQuestionsList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   deleteQuestionBegin: PropTypes.func,
   links: PropTypes.shape({
