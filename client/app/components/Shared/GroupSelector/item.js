@@ -49,8 +49,8 @@ const styles = theme => ({
     borderBottomLeftRadius: 4,
   },
   groupCardContent: {
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
     width: '100%',
   },
   groupCardTitle: {
@@ -127,10 +127,10 @@ const GroupSelectorItem = (props) => {
                   <Grid item xs='auto'>
                     <DiverstImg
                       data={group.logo_data}
-                      maxWidth='50px'
-                      maxHeight='50px'
-                      minWidth='50px'
-                      minHeight='50px'
+                      maxWidth='30px'
+                      maxHeight='30px'
+                      minWidth='30px'
+                      minHeight='30px'
                     />
                   </Grid>
                 </Hidden>

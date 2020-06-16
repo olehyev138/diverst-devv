@@ -119,6 +119,18 @@ export default defineMessages({
   joinSubgroups: {
     id: `${scope}.index.message.joinSubgroups`,
   },
-
-
+  selectorDialog: {
+    title: {
+      id: `${scope}.selectorDialog.title`,
+    },
+    subTitle: {
+      id: `${scope}.selectorDialog.subTitle`,
+    },
+    search: {
+      id: `${scope}.selectorDialog.search`,
+    },
+    close: {
+      id: `${scope}.selectorDialog.close`,
+    },
+  }
 });

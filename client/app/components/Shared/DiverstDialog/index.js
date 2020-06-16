@@ -23,7 +23,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, classes } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content, subTitle, classes } = props;
 
   return (
     <Dialog
@@ -34,6 +34,7 @@ export function DiverstDialog(props) {
     >
       <DialogContent>
         {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
+        {subTitle && <DialogContentText id='alert-dialog-title'>{ subTitle }</DialogContentText>}
         <DialogContentText id='alert-dialog-description'>
           {content}
         </DialogContentText>
@@ -56,6 +57,7 @@ export function DiverstDialog(props) {
 
 DiverstDialog.propTypes = {
   title: PropTypes.string,
+  subTitle: PropTypes.string,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
   textYes: PropTypes.string,

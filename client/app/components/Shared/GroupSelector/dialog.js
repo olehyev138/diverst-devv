@@ -6,12 +6,13 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
 import { Divider, Box, Fade } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import messages from 'containers/Group/messages';
 
 const GroupListSelector = (props) => {
   const { groups, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
-  const [params, setParams] = useState({ count: 5, page: 0, query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
 
@@ -47,6 +48,7 @@ const GroupListSelector = (props) => {
       </DiverstLoader>
       <DiverstPagination
         rowsPerPage={params.count}
+        rowsPerPageOptions={[10]}
         count={props.groupTotal}
         handlePagination={(payload) => {
           const newParams = { ...params, count: payload.count, page: payload.page };

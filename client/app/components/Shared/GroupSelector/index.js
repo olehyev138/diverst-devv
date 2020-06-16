@@ -27,6 +27,8 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
+import messages from 'containers/Group/messages';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
   const { handleChange, values, groupField, setFieldValue, groups, label, queryScopes, ...rest } = props;
@@ -96,7 +98,8 @@ const GroupSelector = (props) => {
       </Grid>
       <DiverstDialog
         open={dialogSearch}
-        title='THIS IS A GENERIC TITLE'
+        title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
+        subTitle={<DiverstFormattedMessage {...messages.selectorDialog.subTitle} />}
         handleNo={() => setDialogSearch(false)}
         content={(
           <GroupListSelector
