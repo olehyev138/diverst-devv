@@ -54,7 +54,7 @@ export function CustomTextEditPage(props) {
 }
 
 CustomTextEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getCustomTextBegin: PropTypes.func,
   updateCustomTextBegin: PropTypes.func,
   currentUser: PropTypes.object,
