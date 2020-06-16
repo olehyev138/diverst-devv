@@ -61,7 +61,7 @@ export function EventEditPage(props) {
 }
 
 EventEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getEventBegin: PropTypes.func,
   updateEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,

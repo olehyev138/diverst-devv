@@ -55,7 +55,7 @@ export function EventCreatePage(props) {
 }
 
 EventCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,

@@ -42,7 +42,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/EventManage/Expense/messages';
 const { form: formMessages } = messages;
 
-export function ExpenseCreatePage({ intl, ...props }) {
+export function ExpenseEditPage({ intl, ...props }) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
 
@@ -84,7 +84,7 @@ export function ExpenseCreatePage({ intl, ...props }) {
   );
 }
 
-ExpenseCreatePage.propTypes = {
+ExpenseEditPage.propTypes = {
   intl: intlShape.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
   getExpenseBegin: PropTypes.func.isRequired,
@@ -125,4 +125,4 @@ export default compose(
   withConnect,
   memo,
   injectIntl,
-)(ExpenseCreatePage);
+)(ExpenseEditPage);
