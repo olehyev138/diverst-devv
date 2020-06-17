@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import { Divider, Box, Fade, Grid, TextField, Button, IconButton } from '@material-ui/core';
+import { Typography, Box, Fade, Grid, TextField, Button, IconButton } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import messages from 'containers/Group/messages';
 import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid';
@@ -53,6 +53,12 @@ const GroupListSelector = (props) => {
       groupSearchAction(searchKey, params);
     return () => null;
   }, [props.open]);
+
+  const header = (
+    <Typography color='secondary' variant='body1'>
+      <DiverstFormattedMessage {...messages.selectorDialog.subTitle} />
+    </Typography>
+  );
 
   const searchBar = (
     <Grid container justify='space-between' alignContent='center' alignItems='center'>
@@ -132,6 +138,7 @@ const GroupListSelector = (props) => {
 
   return (
     <React.Fragment>
+      {header}
       <div style={styles.search}>
         {searchBar}
       </div>

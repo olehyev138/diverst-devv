@@ -40,9 +40,8 @@ export function DiverstDialog(props) {
       }}
       className={classes.dialog}
     >
+      {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
       <DialogContent className={classes.content}>
-        {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
-        {subTitle && <DialogContentText id='alert-dialog-title'>{ subTitle }</DialogContentText>}
         <div
           style={{
             flex: 1,
