@@ -29,7 +29,7 @@ import messages from 'containers/Group/messages';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
-  const { handleChange, values, groupField, setFieldValue, groups, label, queryScopes, ...rest } = props;
+  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, ...rest } = props;
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
@@ -92,16 +92,18 @@ const GroupSelector = (props) => {
           {...selectProps}
         />
       </Grid>
-      <Grid item>
-        <Button
-          onClick={() => {
-            setDialogSelectedGroups(values[groupField]);
-            setDialogSearch(true);
-          }}
-        >
-          <DiverstFormattedMessage {...messages.selectorDialog.select} />
-        </Button>
-      </Grid>
+      {dialogSelector && (
+        <Grid item>
+          <Button
+            onClick={() => {
+              setDialogSelectedGroups(values[groupField]);
+              setDialogSearch(true);
+            }}
+          >
+            <DiverstFormattedMessage {...messages.selectorDialog.select} />
+          </Button>
+        </Grid>
+      )}
       <DiverstDialog
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
@@ -148,6 +150,7 @@ const GroupSelector = (props) => {
 };
 
 GroupSelector.propTypes = {
+  dialogSelector: PropTypes.bool,
   groupField: PropTypes.string.isRequired,
   label: PropTypes.node.isRequired,
   handleChange: PropTypes.func.isRequired,
