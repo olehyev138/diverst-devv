@@ -106,8 +106,8 @@ const GroupSelector = (props) => {
         textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
         paperProps={{
           style: {
-            maxHeight: '85%',
-            minHeight: '85%',
+            maxHeight: '90%',
+            minHeight: '90%',
             minWidth: '40%',
           }
         }}

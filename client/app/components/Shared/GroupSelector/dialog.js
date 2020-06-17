@@ -4,14 +4,19 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import { Divider, Box, Fade, Grid } from '@material-ui/core';
+import { Divider, Box, Fade, Grid, TextField, Button, IconButton } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import messages from 'containers/Group/messages';
 import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const styles = {
   bottom: {
     minHeight: '100%',
+  },
+  search: {
+    marginBottom: 15,
   },
   container: {
     flex: 1,
@@ -48,6 +53,38 @@ const GroupListSelector = (props) => {
       groupSearchAction(searchKey, params);
     return () => null;
   }, [props.open]);
+
+  const searchBar = (
+    <Grid container justify='space-between' alignContent='center' alignItems='center'>
+      <Grid item style={{ flex: 1 }}>
+        <TextField
+          margin='dense'
+          id='search key'
+          fullWidth
+          type='text'
+          onChange={e => setSearchKey(e.target.value)}
+          value={searchKey}
+        />
+      </Grid>
+      <Grid item>
+        <Button
+          onClick={() => groupSearchAction(searchKey, params)}
+        >
+          <DiverstFormattedMessage {...messages.selectorDialog.search} />
+        </Button>
+      </Grid>
+      <Grid item>
+        <IconButton
+          onClick={() => {
+            setSearchKey('');
+            groupSearchAction('', params);
+          }}
+        >
+          <ClearIcon />
+        </IconButton>
+      </Grid>
+    </Grid>
+  );
 
   const list = (
     <DiverstLoader isLoading={props.isLoading} transition={Fade}>
@@ -95,6 +132,9 @@ const GroupListSelector = (props) => {
 
   return (
     <React.Fragment>
+      <div style={styles.search}>
+        {searchBar}
+      </div>
       <div style={styles.list}>
         {list}
       </div>
