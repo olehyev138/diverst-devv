@@ -51,6 +51,7 @@ const GroupSelector = (props) => {
         (...groups) => setFieldValue(groupField, difference(values[groupField], groups, groupCompare)),
         // MULTI ON CHANGE
         value => setFieldValue(groupField, value || []),
+        // MULTI IS SELECTED
         group => !!(values[groupField].find(x => x.value === group.value))
       ];
     return [
@@ -60,6 +61,7 @@ const GroupSelector = (props) => {
       group => values[groupField].value === group.value ? setFieldValue(groupField, '') : null,
       // SINGLE ON CHANGE
       value => setFieldValue(groupField, value || ''),
+      // SINGLE IS SELECTED
       group => values[groupField].value === group.value
     ];
   })();
