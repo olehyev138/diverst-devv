@@ -27,12 +27,12 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, onClose, classes, paperProps, extraActions } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, extraActions } = props;
 
   return (
     <Dialog
       open={open}
-      onClose={onClose || handleNo}
+      onClose={handleNo}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
       PaperProps={{
@@ -90,6 +90,6 @@ DiverstDialog.propTypes = {
 
 DiverstDialog.defaultProps = {
   extraActions: []
-}
+};
 
 export default withStyles(styles)(DiverstDialog);
