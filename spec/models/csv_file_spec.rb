@@ -1,6 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe CsvFile, type: :model do
+  let(:csv_file) { build(:csv_file) }
+
+  describe 'test associations and validations' do
+    it { expect(csv_file).to belong_to(:user) }
+    it { expect(csv_file).to belong_to(:group) }
+
+    # ActiveStorage
+    it { expect(csv_file).to have_attached_file(:import_file) }
+    it { expect(csv_file).to validate_attachment_presence(:import_file) }
+    it { expect(csv_file).to validate_attachment_content_type(:import_file, ['text/csv']) }
+    it { expect(csv_file).to have_attached_file(:download_file) }
+    # it { expect(csv_file).to validate_attachment_presence(:download_file) }
+    # it { expect(csv_file).to validate_attachment_content_type(:download_file, ['text/csv']) }
+  end
+
+  describe 'test scopes' do
+    context 'csv_file::approved' do
+      let!(:download_files) { create(:csv_file, download_file_name: 'name') }
+
+      it 'returns download files' do
+        expect(CsvFile.download_files).to eq([download_files])
+      end
+    end
+  end
+
   #  describe 'when validating' do
   #    let(:file) { build(:csv_file) }
   #
