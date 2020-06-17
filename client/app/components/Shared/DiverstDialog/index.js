@@ -20,6 +20,7 @@ const styles = {
   content: {
     height: '100%',
     display: 'flex',
+    flex: 1,
     flexFlow: 'column',
   },
 };
@@ -42,15 +43,7 @@ export function DiverstDialog(props) {
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
       <DialogContent className={classes.content}>
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexFlow: 'column'
-          }}
-        >
-          {content}
-        </div>
+        {content}
       </DialogContent>
       <DialogActions>
         {handleYes && (
