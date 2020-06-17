@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import {Typography, Box, Fade, Grid, TextField, Button, IconButton, withStyles} from '@material-ui/core';
+import { Typography, Box, Fade, Grid, TextField, Button, IconButton, withStyles } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import messages from 'containers/Group/messages';
 import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid';

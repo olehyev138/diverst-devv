@@ -75,8 +75,8 @@ const GroupSelector = (props) => {
   }, []);
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
+    <Grid container alignContent='center' alignItems='center' spacing={2}>
+      <Grid item style={{ flex: 1 }}>
         <DiverstSelect
           name={groupField}
           id={groupField}
@@ -91,11 +91,11 @@ const GroupSelector = (props) => {
           {...selectProps}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item>
         <Button
           onClick={() => setDialogSearch(true)}
         >
-          Open
+          <DiverstFormattedMessage {...messages.selectorDialog.select} />
         </Button>
       </Grid>
       <DiverstDialog

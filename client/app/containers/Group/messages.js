@@ -126,6 +126,9 @@ export default defineMessages({
     subTitle: {
       id: `${scope}.selectorDialog.subTitle`,
     },
+    select: {
+      id: `${scope}.selectorDialog.select`,
+    },
     search: {
       id: `${scope}.selectorDialog.search`,
     },
