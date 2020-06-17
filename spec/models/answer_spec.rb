@@ -26,7 +26,6 @@ RSpec.describe Answer, type: :model do
 
       # ActiveStorage
       it { expect(answer).to have_attached_file(:supporting_document) }
-
     end
   end
 
