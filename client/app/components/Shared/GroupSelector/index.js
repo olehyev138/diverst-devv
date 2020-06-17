@@ -102,8 +102,10 @@ const GroupSelector = (props) => {
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
         subTitle={<DiverstFormattedMessage {...messages.selectorDialog.subTitle} />}
-        handleNo={() => setDialogSearch(false)}
-        textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        handleYes={() => setDialogSearch(false)}
+        textYes={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        handleNo={() => onChange([])}
+        textNo={<DiverstFormattedMessage {...messages.selectorDialog.clear} />}
         paperProps={{
           style: {
             maxHeight: '90%',
