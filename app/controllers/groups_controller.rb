@@ -75,7 +75,7 @@ class GroupsController < ApplicationController
 
   def close_budgets
     authorize Group, :manage_all_group_budgets?
-    @groups = policy_scope(Group).includes(:children).all_parents
+    @groups = policy_scope(Group).includes(:children, :initiatives).all_parents
   end
 
   def close_budgets_export_csv
