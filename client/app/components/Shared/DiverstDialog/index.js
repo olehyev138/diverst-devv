@@ -27,7 +27,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, onClose, classes, paperProps } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content, onClose, classes, paperProps, extraActions } = props;
 
   return (
     <Dialog
@@ -45,7 +45,7 @@ export function DiverstDialog(props) {
       <DialogContent className={classes.content}>
         {content}
       </DialogContent>
-      {(handleYes || handleNo) && (
+      {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
           {handleYes && (
             <Button onClick={handleYes} color='primary' autoFocus>
@@ -53,10 +53,17 @@ export function DiverstDialog(props) {
             </Button>
           )}
           {handleNo && (
-            <Button onClick={handleNo} color='primary' autoFocus>
+            <Button onClick={handleNo} color='primary'>
               {textNo}
             </Button>
           )}
+          {extraActions.map(action => (
+            <React.Fragment key={action.key}>
+              <Button onClick={action.func} color={action.color || 'primary'}>
+                {action.label}
+              </Button>
+            </React.Fragment>
+          ))}
         </DialogActions>
       )}
     </Dialog>
@@ -74,6 +81,15 @@ DiverstDialog.propTypes = {
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
   paperProps: PropTypes.object,
+  extraActions: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    func: PropTypes.func,
+    label: PropTypes.node,
+  })),
 };
+
+DiverstDialog.defaultProps = {
+  extraActions: []
+}
 
 export default withStyles(styles)(DiverstDialog);

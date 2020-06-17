@@ -138,5 +138,8 @@ export default defineMessages({
     clear: {
       id: `${scope}.selectorDialog.clear`,
     },
+    close: {
+      id: `${scope}.selectorDialog.close`,
+    },
   }
 });

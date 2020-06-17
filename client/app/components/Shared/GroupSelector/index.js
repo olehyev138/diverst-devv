@@ -105,14 +105,21 @@ const GroupSelector = (props) => {
       <DiverstDialog
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
-        onClose={() => setDialogSearch(false)}
         handleYes={() => {
           onChange(dialogSelectedGroups);
           setDialogSearch(false);
         }}
         textYes={<DiverstFormattedMessage {...messages.selectorDialog.save} />}
-        handleNo={() => setDialogSelectedGroups([])}
-        textNo={<DiverstFormattedMessage {...messages.selectorDialog.clear} />}
+        handleNo={() => setDialogSearch(false)}
+        textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        extraActions={[
+          {
+            key: 'clear groups',
+            func: () => setDialogSelectedGroups([]),
+            label: <DiverstFormattedMessage {...messages.selectorDialog.clear} />,
+            color: 'secondary'
+          }
+        ]}
         paperProps={{
           style: {
             maxHeight: '90%',
