@@ -23,6 +23,10 @@ RSpec.describe Answer, type: :model do
       it { expect(answer).to validate_presence_of(:contributing_group) }
       it { expect(answer).to validate_length_of(:outcome).is_at_most(65535) }
       it { expect(answer).to validate_length_of(:content).is_at_most(65535) }
+
+      # ActiveStorage
+      it { expect(answer).to have_attached_file(:supporting_document) }
+
     end
   end
 
