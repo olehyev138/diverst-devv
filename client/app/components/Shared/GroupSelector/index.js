@@ -46,9 +46,9 @@ const GroupSelector = (props) => {
     if (selectProps.isMulti)
       return [
         // MULTI ADD GROUP
-        (...groups) => setFieldValue(groupField, union(values[groupField], groups), groupCompare),
+        (...groups) => setFieldValue(groupField, union(values[groupField], groups, groupCompare)),
         // MULTI REMOVE GROUP
-        (...groups) => setFieldValue(groupField, difference(values[groupField], groups), groupCompare),
+        (...groups) => setFieldValue(groupField, difference(values[groupField], groups, groupCompare)),
         // MULTI ON CHANGE
         value => setFieldValue(groupField, value || []),
         group => !!(values[groupField].find(x => x.value === group.value))
@@ -102,6 +102,13 @@ const GroupSelector = (props) => {
         subTitle={<DiverstFormattedMessage {...messages.selectorDialog.subTitle} />}
         handleNo={() => setDialogSearch(false)}
         textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        paperProps={{
+          style: {
+            maxHeight: '85%',
+            minHeight: '85%',
+            minWidth: '40%',
+          }
+        }}
         content={(
           <GroupListSelector
             groups={groups}

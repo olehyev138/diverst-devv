@@ -16,9 +16,6 @@ const styles = {
   paper: {
     overflow: 'hidden',
     margin: 'auto',
-    maxHeight: '85%',
-    minHeight: '85%',
-    minWidth: '40%',
   },
   content: {
     height: '100%',
@@ -29,7 +26,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, subTitle, classes } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content, subTitle, classes, paperProps } = props;
 
   return (
     <Dialog
@@ -38,7 +35,8 @@ export function DiverstDialog(props) {
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
       PaperProps={{
-        className: classes.paper
+        className: classes.paper,
+        ...paperProps,
       }}
       className={classes.dialog}
     >
@@ -81,6 +79,7 @@ DiverstDialog.propTypes = {
   textNo: PropTypes.node,
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
+  paperProps: PropTypes.object,
 };
 
 export default withStyles(styles)(DiverstDialog);
