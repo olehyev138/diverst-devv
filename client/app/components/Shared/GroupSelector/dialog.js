@@ -10,6 +10,7 @@ import messages from 'containers/Group/messages';
 import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import ClearIcon from '@material-ui/icons/Clear';
+import { difference, union } from 'utils/arrayHelpers';
 
 const styles = {
   bottom: {
@@ -35,6 +36,7 @@ const GroupListSelector = (props) => {
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
+  const [selectedGroups, setSelectedGroup] = useState({});
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && props.groups.length !== 0 && Object.keys(expandedGroups).length <= 0) {
@@ -120,22 +122,6 @@ const GroupListSelector = (props) => {
     />
   );
 
-  const toReturn = (
-    <DiverstCSSGrid
-      columns={1}
-      rows='1fr auto'
-      areas={[
-        'list',
-        'paginator',
-      ]}
-      rowGap='16px'
-      columnGap='24px'
-    >
-      <DiverstCSSCell area='list'>{list}</DiverstCSSCell>
-      <DiverstCSSCell area='paginator'>{paginator}</DiverstCSSCell>
-    </DiverstCSSGrid>
-  );
-
   return (
     <React.Fragment>
       {header}
@@ -155,6 +141,7 @@ const GroupListSelector = (props) => {
 GroupListSelector.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
+  isMulti: PropTypes.bool,
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,

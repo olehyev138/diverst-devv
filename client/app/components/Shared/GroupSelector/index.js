@@ -23,9 +23,7 @@ import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 import { Grid, Button } from '@material-ui/core';
-import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstDialog from 'components/Shared/DiverstDialog';
-import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
@@ -35,6 +33,7 @@ const GroupSelector = (props) => {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
+  const [dialogSelectedGroups, setDialogSelectedGroups] = useState({});
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 
@@ -42,27 +41,29 @@ const GroupSelector = (props) => {
     return g1.value === g2.value;
   }
 
-  const [addGroup, removeGroup, onChange, isSelected] = (() => {
+  const onChange = (() => {
+    if (selectProps.isMulti)
+      return value => setFieldValue(groupField, value || []);
+    return value => setFieldValue(groupField, value || '');
+  })();
+
+  const [addGroup, removeGroup, isSelected] = (() => {
     if (selectProps.isMulti)
       return [
         // MULTI ADD GROUP
-        (...groups) => setFieldValue(groupField, union(values[groupField], groups, groupCompare)),
+        (...groups) => setDialogSelectedGroups(union(dialogSelectedGroups, groups, groupCompare)),
         // MULTI REMOVE GROUP
-        (...groups) => setFieldValue(groupField, difference(values[groupField], groups, groupCompare)),
-        // MULTI ON CHANGE
-        value => setFieldValue(groupField, value || []),
+        (...groups) => setDialogSelectedGroups(difference(dialogSelectedGroups, groups, groupCompare)),
         // MULTI IS SELECTED
-        group => !!(values[groupField].find(x => x.value === group.value))
+        group => !!(dialogSelectedGroups.find(x => x.value === group.value))
       ];
     return [
       // SINGLE ADD GROUP
-      group => setFieldValue(groupField, group),
+      group => setDialogSelectedGroups(group),
       // SINGLE REMOVE GROUP
-      group => values[groupField].value === group.value ? setFieldValue(groupField, '') : null,
-      // SINGLE ON CHANGE
-      value => setFieldValue(groupField, value || ''),
+      group => dialogSelectedGroups.value === group.value ? setDialogSelectedGroups('') : null,
       // SINGLE IS SELECTED
-      group => values[groupField].value === group.value
+      group => dialogSelectedGroups.value === group.value
     ];
   })();
 
@@ -93,7 +94,10 @@ const GroupSelector = (props) => {
       </Grid>
       <Grid item>
         <Button
-          onClick={() => setDialogSearch(true)}
+          onClick={() => {
+            setDialogSelectedGroups(values[groupField]);
+            setDialogSearch(true);
+          }}
         >
           <DiverstFormattedMessage {...messages.selectorDialog.select} />
         </Button>
@@ -101,10 +105,13 @@ const GroupSelector = (props) => {
       <DiverstDialog
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
-        subTitle={<DiverstFormattedMessage {...messages.selectorDialog.subTitle} />}
-        handleYes={() => setDialogSearch(false)}
-        textYes={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
-        handleNo={() => onChange([])}
+        onClose={() => setDialogSearch(false)}
+        handleYes={() => {
+          onChange(dialogSelectedGroups);
+          setDialogSearch(false);
+        }}
+        textYes={<DiverstFormattedMessage {...messages.selectorDialog.save} />}
+        handleNo={() => setDialogSelectedGroups([])}
         textNo={<DiverstFormattedMessage {...messages.selectorDialog.clear} />}
         paperProps={{
           style: {

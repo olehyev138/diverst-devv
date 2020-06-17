@@ -132,8 +132,8 @@ export default defineMessages({
     search: {
       id: `${scope}.selectorDialog.search`,
     },
-    close: {
-      id: `${scope}.selectorDialog.close`,
+    save: {
+      id: `${scope}.selectorDialog.save`,
     },
     clear: {
       id: `${scope}.selectorDialog.clear`,

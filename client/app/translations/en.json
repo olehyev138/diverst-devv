@@ -232,7 +232,7 @@
   "diverst.containers.Group.selectorDialog.subTitle": "Double click to select all {sub_erg_p}",
   "diverst.containers.Group.selectorDialog.select": "Select",
   "diverst.containers.Group.selectorDialog.search": "Search",
-  "diverst.containers.Group.selectorDialog.close": "Close",
+  "diverst.containers.Group.selectorDialog.save": "Save",
   "diverst.containers.Group.selectorDialog.clear": "Clear All",
   "diverst.containers.Group.settings.form.button.save": "Save",
   "diverst.containers.Group.GroupPlan.KPI.tabs.metrics": "Metrics",

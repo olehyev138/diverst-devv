@@ -27,12 +27,12 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, subTitle, classes, paperProps } = props;
+  const { title, open, handleYes, textYes, handleNo, textNo, content, onClose, classes, paperProps } = props;
 
   return (
     <Dialog
       open={open}
-      onClose={handleNo}
+      onClose={onClose || handleNo}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
       PaperProps={{
@@ -45,18 +45,20 @@ export function DiverstDialog(props) {
       <DialogContent className={classes.content}>
         {content}
       </DialogContent>
-      <DialogActions>
-        {handleYes && (
-          <Button onClick={handleYes} color='primary' autoFocus>
-            {textYes}
-          </Button>
-        )}
-        {handleNo && (
-          <Button onClick={handleNo} color='primary' autoFocus>
-            {textNo}
-          </Button>
-        )}
-      </DialogActions>
+      {(handleYes || handleNo) && (
+        <DialogActions>
+          {handleYes && (
+            <Button onClick={handleYes} color='primary' autoFocus>
+              {textYes}
+            </Button>
+          )}
+          {handleNo && (
+            <Button onClick={handleNo} color='primary' autoFocus>
+              {textNo}
+            </Button>
+          )}
+        </DialogActions>
+      )}
     </Dialog>
   );
 }
