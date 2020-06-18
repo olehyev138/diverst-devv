@@ -12,4 +12,3 @@ RSpec.describe EnterpriseEmailVariable do
   it { should validate_presence_of(:key) }
   it { should validate_presence_of(:description) }
 end
-
