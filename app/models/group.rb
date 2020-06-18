@@ -94,8 +94,6 @@ class Group < ApplicationRecord
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
-  belongs_to :lead_manager, class_name: 'User'
-  belongs_to :owner, class_name: 'User'
   has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
@@ -224,8 +222,6 @@ class Group < ApplicationRecord
   validates_length_of :name, maximum: 191
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
-
-  validates_format_of :contact_email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
