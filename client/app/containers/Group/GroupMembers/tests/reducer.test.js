@@ -18,12 +18,12 @@ describe('membersReducer', () => {
 
   it('returns the initial state', () => {
     const expected = state;
-    expect(budgetItemReducer(undefined, {})).toEqual(expected);
+    expect(membersReducer(undefined, {})).toEqual(expected);
   });
 
   it('handles the getMembersSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.memberList = { id: 4, name: 'dummy' };
+      draft.memberList = [{ status: undefined, user: undefined }];
       draft.memberTotal = 31;
       draft.isFetchingMembers = false;
     });
@@ -32,7 +32,7 @@ describe('membersReducer', () => {
       membersReducer(
         state,
         getMembersSuccess({
-          items: { id: 4, name: 'dummy' },
+          items: [{ id: 4, name: 'dummy' }],
           total: 31,
         })
       )

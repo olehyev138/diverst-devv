@@ -189,11 +189,11 @@ describe('Tests for members saga', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [exportMemberSuccess(), push(ROUTES.group.members.index.path()), notified];
+      const results = [exportMembersSuccess(), push(ROUTES.group.members.index.path()), notified];
 
       const initialAction = { payload: {
-          id: 1,
-        } };
+        id: 1,
+      } };
 
       const dispatched = await recordSaga(
         exportMembers,
@@ -215,7 +215,7 @@ describe('Tests for members saga', () => {
       };
 
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [exportMemberError(response), notified];
+      const results = [exportMembersError(response), notified];
       const initialAction = { payload: { member: undefined } };
       const dispatched = await recordSaga(
         exportMembers,

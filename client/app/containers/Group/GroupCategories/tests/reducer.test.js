@@ -26,7 +26,7 @@ describe('groupCategoryReducer', () => {
 
   it('handles the getGroupCategoriesSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.groupCategoriesList = { 4: { id: 4, name: 'dummy' }};
+      draft.groupCategoriesList = { 4: { id: 4, name: 'dummy' } };
       draft.groupCategoriesTotal = 31;
       draft.isLoading = false;
     });

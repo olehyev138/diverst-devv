@@ -82,7 +82,7 @@ describe('GroupLeader selectors', () => {
       const mockedState = { groupLeaderList: [{ user: { id: 37, name: 'dummy' }, user_role: { id: 37, role_name: 'dummy' } }] };
       const selected = selectFormGroupLeaders().resultFunc(mockedState);
 
-      expect(selected).toEqual([{ user: { label: 'dummy', value: 37 }, user_role: { label: 'dummy', value: 37} }]);
+      expect(selected).toEqual([{ user: { label: 'dummy', value: 37 }, user_role: { label: 'dummy', value: 37 } }]);
     });
   });
 });
