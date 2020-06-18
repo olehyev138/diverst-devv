@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -32,13 +32,14 @@ export function EventCreatePage(props) {
   useInjectSaga({ key: 'events', saga });
 
   const { group_id: groupId } = useParams();
+  const location = useLocation();
 
   const { currentUser, currentGroup } = props;
   const links = {
     eventsIndex: ROUTES.group.events.index.path(groupId),
   };
   const { intl } = props;
-  const pillar = props.location.state ? props.location.state.pillar : null;
+  const pillar = location.state ? location.state.pillar : null;
 
   return (
     <React.Fragment>
