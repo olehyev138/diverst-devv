@@ -49,7 +49,7 @@ export function FolderEditPage(props) {
   const location = useLocation();
   const { group_id: groupId, item_id: folderId } = useParams();
 
-  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
+  const type = location.pathname.startsWith('/groups') ? 'group' : 'admin';
 
   const { currentUser, currentGroup, currentFolder, currentFormFolder, currentEnterprise, valid } = props;
 
@@ -189,6 +189,6 @@ export default compose(
   ['currentFolder.permissions.update?', 'isFormLoading'],
   (props, params, location) => location.fromFolder
     ? getFolderShowPath(location.fromFolder.folder)
-    : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', params.group_id),
+    : getFolderIndexPath(location.pathname.startsWith('/groups') ? 'group' : 'admin', params.group_id),
   'resource.groupFolder.folderEditPage'
 ));
