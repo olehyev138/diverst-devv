@@ -40,27 +40,28 @@ const GroupManageLayout = (props) => {
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPage = ManagePages.find(page => location.pathname.includes(page));
 
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || ManagePages[0]);
 
   useEffect(() => {
     if (matchPath(location.pathname, { path: ROUTES.group.manage.index.path(), exact: true }))
-      if (permission(rest.currentGroup, 'update?'))
+      if (permission(currentGroup, 'update?'))
         redirectAction(ROUTES.group.manage.settings.index.path(groupId));
-      else if (permission(rest.currentGroup, 'leaders_view?'))
+      else if (permission(currentGroup, 'leaders_view?'))
         redirectAction(ROUTES.group.manage.leaders.index.path(groupId));
       else {
         showSnackbar({ message: 'You do not have permission to manage this group', options: { variant: 'warning' } });
         redirectAction(ROUTES.group.home.path(groupId));
       }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
-  }, [currentPage]);
+  }, [currentPage, currentGroup]);
 
   return (
     <React.Fragment>
       <GroupManageLinks
         currentTab={tab}
+        currentGroup={currentGroup}
         {...rest}
       />
       <Fade in appear>
