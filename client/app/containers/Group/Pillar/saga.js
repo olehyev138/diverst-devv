@@ -80,7 +80,7 @@ export function* deletePillar(action) {
   try {
     const response = { data: 'API CALL' };
 
-    yield put(deletePillarSuccess({}));
+    yield put(deletePillarSuccess());
     yield put(showSnackbar({ message: 'Successfully deleted pillar', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePillarError(err));
