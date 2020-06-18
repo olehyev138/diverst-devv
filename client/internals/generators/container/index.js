@@ -82,7 +82,7 @@ module.exports = {
     }
 
     // If they want actions and a reducer, generate actions.js, constants.js,
-    // reducer.js and the corresponding tests for actions and the reducer
+    // reducer.test.js and the corresponding tests for actions and the reducer
     if (data.wantActionsAndReducer) {
       // Actions
       actions.push({
@@ -124,8 +124,8 @@ module.exports = {
       // Reducer
       actions.push({
         type: 'add',
-        path: '../../app/containers/{{properCase name}}/reducer.js',
-        templateFile: './container/reducer.js.hbs',
+        path: '../../app/containers/{{properCase name}}/reducer.test.js',
+        templateFile: './container/reducer.test.js.hbs',
         abortOnFail: true,
       });
       actions.push({
