@@ -10,13 +10,10 @@ RSpec.describe Folder, type: :model do
     it { expect(folder).to have_many(:groups).through(:folder_shares).source(:group) }
     it { expect(folder).to have_many(:views).dependent(:destroy) }
     it { expect(folder).to have_many(:children).class_name('Folder').with_foreign_key(:parent_id).dependent(:destroy) }
-    it { expect(folder).to have_many(:views).dependent(:destroy) }
 
     it { expect(folder).to belong_to(:group) }
     it { expect(folder).to belong_to(:enterprise) }
     it { expect(folder).to belong_to(:parent).class_name('Folder').with_foreign_key(:parent_id) }
-
-    it { expect(folder).to validate_presence_of(:name) }
   end
 
   describe 'test validations' do
@@ -28,6 +25,14 @@ RSpec.describe Folder, type: :model do
 
     it { expect(folder).to validate_presence_of(:password) }
     it { expect(folder).to validate_length_of(:password).is_at_least(6) }
+
+    it { expect(folder).to validate_uniqueness_of(:name).scoped_to(:group_id) }
+    # Todo
+    # describe 'test folder uniqueness enterprise' do
+    #  let!(:enterprise) { create(:enterprise) }
+    #  let!(:folder_enterprise) { create(:folder, enterprise: enterprise) }
+    #  it { expect(folder_enterprise).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+    # end
   end
 
   describe 'test that' do

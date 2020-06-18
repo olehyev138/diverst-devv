@@ -24,7 +24,7 @@ RSpec.describe Field do
           before do
             field.type = type
           end
-          it { should validate_uniqueness_of(:title).scoped_to(:field_definer_id, :field_definer_type) }
+          it { expect(field).to validate_uniqueness_of(:title).scoped_to(:field_definer_id, :field_definer_type) }
         end
       end
     end
