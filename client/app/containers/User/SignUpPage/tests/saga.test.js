@@ -33,7 +33,7 @@ const user = {
 };
 
 describe('Tests for signup saga', () => {
-  describe('Get signup Saga', () => {
+  xdescribe('Get signup Saga', () => {
     it('Should return a user', async () => {
       api.users.getInvitedUser.mockImplementation(() => Promise.resolve({ data: { page: { ...user } } }));
       const results = [getUserByTokenSuccess(user)];
