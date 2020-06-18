@@ -10,4 +10,6 @@ RSpec.describe EnterpriseEmailVariable do
   it { should validate_length_of(:description).is_at_most(191) }
   it { should validate_length_of(:key).is_at_most(191) }
   it { should validate_presence_of(:key) }
+  it { should validate_presence_of(:description) }
 end
+
