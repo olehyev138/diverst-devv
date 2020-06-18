@@ -14,12 +14,6 @@ import {
   DELETE_GROUP_CATEGORIES_BEGIN,
   DELETE_GROUP_CATEGORIES_SUCCESS,
   DELETE_GROUP_CATEGORIES_ERROR,
-  ADD_GROUP_CATEGORIES_BEGIN,
-  ADD_GROUP_CATEGORIES_ERROR,
-  ADD_GROUP_CATEGORIES_SUCCESS,
-  UPDATE_GROUP_CATEGORY_TYPE_BEGIN,
-  UPDATE_GROUP_CATEGORY_TYPE_ERROR,
-  UPDATE_GROUP_CATEGORY_TYPE_SUCCESS,
   CATEGORIES_UNMOUNT,
 } from '../constants';
 
@@ -39,12 +33,6 @@ import {
   deleteGroupCategoriesBegin,
   deleteGroupCategoriesError,
   deleteGroupCategoriesSuccess,
-  updateGroupCategoryTypeError,
-  updateGroupCategoryTypeBegin,
-  updateGroupCategoryTypeSuccess,
-  addGroupCategoriesBegin,
-  addGroupCategoriesError,
-  addGroupCategoriesSuccess,
   categoriesUnmount
 } from '../actions';
 
@@ -178,72 +166,6 @@ describe('groupCategory actions', () => {
       };
 
       expect(updateGroupCategoriesError({ value: 709 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategoryBegin', () => {
-    it('has a type of ADD_GROUP_CATEGORY_BEGIN and sets a given payload', () => {
-      const expected = {
-        type: ADD_GROUP_CATEGORIES_BEGIN,
-        payload: { value: 118 }
-      };
-
-      expect(addGroupCategoriesBegin({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategorySuccess', () => {
-    it('has a type of ADD_GROUP_CATEGORY_SUCCESS and sets a given payload', () => {
-      const expected = {
-        type: ADD_GROUP_CATEGORIES_SUCCESS,
-        payload: { value: 118 }
-      };
-
-      expect(addGroupCategoriesSuccess({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategoryError', () => {
-    it('has a type of ADD_GROUP_CATEGORY_ERROR and sets a given error', () => {
-      const expected = {
-        type: ADD_GROUP_CATEGORIES_ERROR,
-        error: { value: 709 }
-      };
-
-      expect(addGroupCategoriesError({ value: 709 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategoryBegin', () => {
-    it('has a type of ADD_GROUP_CATEGORY_BEGIN and sets a given payload', () => {
-      const expected = {
-        type: UPDATE_GROUP_CATEGORY_TYPE_BEGIN,
-        payload: { value: 118 }
-      };
-
-      expect(updateGroupCategoryTypeBegin({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategorySuccess', () => {
-    it('has a type of ADD_GROUP_CATEGORY_SUCCESS and sets a given payload', () => {
-      const expected = {
-        type: UPDATE_GROUP_CATEGORY_TYPE_SUCCESS,
-        payload: { value: 118 }
-      };
-
-      expect(updateGroupCategoryTypeSuccess({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('addGroupCategoryError', () => {
-    it('has a type of ADD_GROUP_CATEGORY_ERROR and sets a given error', () => {
-      const expected = {
-        type: UPDATE_GROUP_CATEGORY_TYPE_ERROR,
-        error: { value: 709 }
-      };
-
-      expect(updateGroupCategoryTypeError({ value: 709 })).toEqual(expected);
     });
   });
 
