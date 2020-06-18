@@ -13,7 +13,7 @@ import {
   updateGroupSettingsBegin
 } from 'containers/Group/actions';
 
-import { selectGroupIsCommitting, selectGroupIsFormLoading } from 'containers/Group/selectors';
+import { selectGroupIsCommitting, selectGroupIsFormLoading, selectGroup } from 'containers/Group/selectors';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
@@ -43,6 +43,7 @@ GroupSettingsPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectGroupIsCommitting(),
   isFormLoading: selectGroupIsFormLoading(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {
