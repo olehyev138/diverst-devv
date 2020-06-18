@@ -4,25 +4,19 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
+  Button, Card, CardActions, CardContent, Grid, TextField, Divider,
 } from '@material-ui/core';
-import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
@@ -138,7 +132,7 @@ export function SponsorForm(props) {
 SponsorForm.propTypes = {
   sponsorAction: PropTypes.func,
   sponsor: PropTypes.object,
-  sponsorableId: PropTypes.number,
+  sponsorableId: PropTypes.string,
 };
 
 SponsorFormInner.propTypes = {
