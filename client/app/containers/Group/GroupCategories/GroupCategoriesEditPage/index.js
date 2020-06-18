@@ -10,7 +10,7 @@ import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
 import { updateGroupCategoriesBegin, categoriesUnmount, getGroupCategoryBegin } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedSelectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedSelectGroupCategories, selectFormGroupCategories, selectIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 
@@ -67,7 +67,7 @@ const mapStateToProps = createStructuredSelector({
   groupCategory: selectFormGroupCategories(),
   groupCategories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
-  isCommitting: selectGroupCategoriesIsCommitting(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
