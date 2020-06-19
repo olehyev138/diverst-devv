@@ -34,12 +34,14 @@ export function Logo(props) {
   let isDefault = true;
   let logo = props.coloredDefault ? defaultLogoPrimary : defaultLogo;
   let logoRedirectUrl = `${window.location.protocol}//${window.location.host}`; // Defaults to current URL without path
+  let logoContentType = null;
 
   const logoData = dig(props.enterprise, 'theme', 'logo_data');
 
   if (logoData) {
     logo = logoData;
     logoRedirectUrl = dig(props.enterprise, 'theme', 'logo_redirect_url');
+    logoContentType = dig(props.enterprise, 'theme', 'logo_content_type');
     isDefault = false;
   }
 
@@ -48,6 +50,7 @@ export function Logo(props) {
       // If it's default add some bottom padding as the SVGs have no padding
       className={isDefault ? classes.logoPadding : undefined}
       data={logo}
+      contentType={logoContentType}
       alt={alt}
       naturalSrc={!logoData}
       {...rest}
