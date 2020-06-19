@@ -1,11 +1,11 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
@@ -15,11 +15,9 @@ import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading } fro
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
-import RouteService from 'utils/routeHelpers';
-
 import FoldersList from 'components/Resource/Folder/FoldersList';
 import {
-  getFolderEditPath, getFolderIndexPath,
+  getFolderEditPath,
   getFolderNewPath,
   getFolderShowPath
 } from 'utils/resourceHelpers';
@@ -38,11 +36,11 @@ export function FoldersPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
 
   const links = {
     folderShow: folder => getFolderShowPath(folder),
-    folderNew: getFolderNewPath('admin', rs.params('group_id')),
+    folderNew: getFolderNewPath('admin', groupId),
     folderEdit: folder => getFolderEditPath(folder),
   };
 
@@ -134,6 +132,6 @@ export default compose(
 )(Conditional(
   FoldersPage,
   ['permissions.enterprise_folders_view'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.resource.enterpriseFolder.foldersPage
 ));

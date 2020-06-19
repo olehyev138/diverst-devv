@@ -4,22 +4,16 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
-import classNames from 'classnames';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden, CardActions, Divider
+  Box, Grid, Typography, Button,
 } from '@material-ui/core';
 
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-
 import AddIcon from '@material-ui/icons/Add';
-import FolderIcon from '@material-ui/icons/Folder';
-import LockIcon from '@material-ui/icons/Lock';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Resource/Folder/messages';
@@ -67,8 +61,6 @@ const styles = theme => ({
 
 export function FoldersList(props, context) {
   const { classes, intl, type, currentGroup, permissions } = props;
-
-  const routeContext = useContext(RouteContext);
 
   return (
     <React.Fragment>

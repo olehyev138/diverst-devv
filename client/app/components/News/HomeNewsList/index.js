@@ -97,7 +97,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   defaultParams: PropTypes.object,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
@@ -117,6 +117,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(

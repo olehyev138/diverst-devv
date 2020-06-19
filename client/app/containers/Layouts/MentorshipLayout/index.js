@@ -1,36 +1,38 @@
 import React, { memo, useEffect } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
+import dig from 'object-dig';
+import { useLocation, useParams } from 'react-router-dom';
 
-import Container from '@material-ui/core/Container';
-import UserLinks from 'components/User/UserLinks';
+import { CardContent, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AuthenticatedLayout from '../AuthenticatedLayout';
 
-import Scrollbar from 'components/Shared/Scrollbar';
-import UserLayout from '../UserLayout';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Mentorship/saga';
-import RouteService from 'utils/routeHelpers';
-import dig from 'object-dig';
 
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
 import {
   selectEnterprise,
-  selectMentoringInterests,
   selectUser as selectUserSession
 } from 'containers/Shared/App/selectors';
+
 import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
-import { CardContent, Grid } from '@material-ui/core';
+
 import MentorshipMenu from 'components/Mentorship/MentorshipMenu/Loadable';
 import Conditional from 'components/Compositions/Conditional';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import { customTexts } from 'utils/customTextHelpers';
+import { renderChildrenWithProps } from 'utils/componentHelpers';
+import { findTitleForPath } from 'utils/routeHelpers';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -40,77 +42,73 @@ const styles = theme => ({
   },
 });
 
-const MentorshipLayout = ({ component: Component, ...rest }) => {
+const MentorshipLayout = (props) => {
+  const { classes, user, formUser, ...rest } = props;
+
   useInjectReducer({ key: 'mentorship', reducer });
   useInjectSaga({ key: 'mentorship', saga });
-
-  const {
-    classes, data, computedMatch, user, location, disableBreadcrumbs, ...other
-  } = rest;
 
   /* - currentGroup will be wrapped around every container in the group section
    * - Connects to store & handles general current group state, such as current group object, layout
    */
 
-  const rs = new RouteService({ computedMatch, location });
+  const location = useLocation();
+  const { user_id: userId } = useParams();
+
+  // eslint-disable-next-line comma-spacing
+  const [pageTitle,] = findTitleForPath({
+    path: location.pathname,
+    textArguments: customTexts(),
+  });
 
   useEffect(() => {
-    const userId1A = rs.params('user_id');
-    const userId1 = userId1A || null;
+    const userId1 = userId || null;
     const userId2 = dig(rest, 'userSession', 'user_id');
 
     // const userId = userId1;
     const userId = userId1 || userId2;
 
     if (userId && dig(rest, 'user', 'id') !== userId)
-      other.getUserBegin({ id: userId });
+      rest.getUserBegin({ id: userId });
 
     return () => {
-      other.userUnmount();
+      rest.userUnmount();
     };
   }, [dig(rest, 'userSession', 'user_id')]);
 
   return (
-    <UserLayout
-      disableBreadcrumbs={disableBreadcrumbs}
-      data={data}
-      user={rest.user}
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          {user && (
-            <Grid container>
-              <Grid item xs={3}>
-                <CardContent>
-                  {user && (
-                    <MentorshipMenu
-                      user={user}
-                      userSession={dig(rest, 'userSession')}
-                    />
-                  )}
-                </CardContent>
-              </Grid>
-              <Grid item xs={9}>
-                {user && (
-                  <CardContent>
-                    <Component user={user} formUser={rest.formUser} pageTitle={data.titleMessage} {...rest} />
-                  </CardContent>
-                )}
-              </Grid>
-            </Grid>
-          )}
-        </React.Fragment>
+    <React.Fragment>
+      {user && (
+        <Grid container>
+          <Grid item xs={3}>
+            <CardContent>
+              {user && (
+                <MentorshipMenu
+                  user={user}
+                  userSession={dig(rest, 'userSession')}
+                />
+              )}
+            </CardContent>
+          </Grid>
+          <Grid item xs={9}>
+            {user && (
+              <CardContent>
+                {renderChildrenWithProps(props.children, { user, formUser, pageTitle, ...rest })}
+              </CardContent>
+            )}
+          </Grid>
+        </Grid>
       )}
-    />
+    </React.Fragment>
   );
 };
 
 MentorshipLayout.propTypes = {
+  children: PropTypes.any,
   userSession: PropTypes.object,
   user: PropTypes.object,
   formUser: PropTypes.object,
   classes: PropTypes.object,
-  component: PropTypes.elementType,
   pageTitle: PropTypes.object,
 };
 
@@ -140,6 +138,6 @@ export default compose(
 )(Conditional(
   MentorshipLayout,
   ['enterprise.mentorship_module_enabled', '!enterprise'],
-  (props, rs) => ROUTES.user.root.path(),
+  (props, params) => ROUTES.user.root.path(),
   permissionMessages.layouts.mentorship,
 ));

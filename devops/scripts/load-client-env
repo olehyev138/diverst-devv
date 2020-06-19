@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Dynamically load a .env file for the Diverst client
+#  - Pull API key & url for .env from parameter key store
+#  - Use chamber to deal with key store & format into dotenv
+#  - Assumes executing shell is authenticated with AWS environment account
+#  - Accepts a `environment` value, this is the 'header' the values are stored under
+
+# Usage: ./load-client-env <environment>
+
+ENVIRONMENT=$1
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+client_config=$(chamber export --format dotenv "$ENVIRONMENT")
+
+echo 'Deploying with client configuration:'
+echo "$client_config"
+
+echo "$client_config" > client/.env
+echo 'ENVIRONMENT="development"' >> client/.env

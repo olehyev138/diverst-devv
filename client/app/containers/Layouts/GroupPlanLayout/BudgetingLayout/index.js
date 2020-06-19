@@ -1,20 +1,25 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import { matchPath, useLocation, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 
-import { withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
+import { withStyles } from '@material-ui/core/styles';
 
-import GroupPlanLayout from '..';
-import BudgetLinks from 'components/Group/GroupPlan/BudgetLinks';
-import RouteService from 'utils/routeHelpers';
-import { permission } from 'utils/permissionsHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+
+import { selectGroup } from 'containers/Group/selectors';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import { permission } from 'utils/permissionsHelpers';
+import { renderChildrenWithProps } from 'utils/componentHelpers';
+
+import BudgetLinks from 'components/Group/GroupPlan/BudgetLinks';
 
 const styles = theme => ({});
 
@@ -25,61 +30,60 @@ const BudgetPages = Object.freeze([
 
 const redirectAction = path => push(path);
 
-const BudgetLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, location, computedMatch, redirectAction, showSnackbar, defaultPage, ...other } = rest;
+const BudgetLayout = (props) => {
+  const { classes, children, currentGroup, redirectAction, showSnackbar, ...rest } = props;
+
+  const location = useLocation();
+  const { group_id: groupId } = useParams();
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/budgets/1/edit/ -> budgets */
   const currentPage = BudgetPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || BudgetPages[0]);
 
   useEffect(() => {
-    if (defaultPage) {
-      const rs = new RouteService({ computedMatch, location });
+    if (!currentGroup) return;
 
-      if (permission(rest.currentGroup, 'annual_budgets_view?'))
-        redirectAction(ROUTES.group.plan.budget.overview.path(rs.params('group_id')));
-      else if (permission(rest.currentGroup, 'annual_budgets_manage?'))
-        redirectAction(ROUTES.group.plan.budget.editAnnualBudget.path(rs.params('group_id')));
+    if (matchPath(location.pathname, { path: ROUTES.group.plan.budget.index.path(), exact: true }))
+      if (permission(currentGroup, 'annual_budgets_view?'))
+        redirectAction(ROUTES.group.plan.budget.overview.path(groupId));
+      else if (permission(currentGroup, 'annual_budgets_manage?'))
+        redirectAction(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
       else {
         showSnackbar({ message: 'You do not have permission to manage this group\'s budget', options: { variant: 'warning' } });
-        redirectAction(ROUTES.group.plan.index.path(rs.params('group_id')));
+        redirectAction(ROUTES.group.plan.index.path(groupId));
       }
-    }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
-  }, [currentPage]);
+  }, [currentPage, currentGroup]);
 
   return (
-    <GroupPlanLayout
-      {...rest}
-      component={matchProps => (
-        <React.Fragment>
-          <BudgetLinks
-            currentTab={tab}
-            {...matchProps}
-          />
-          <Box mb={3} />
-          <Fade in appear>
-            <div>
-              {Component ? <Component {...other} /> : <React.Fragment />}
-            </div>
-          </Fade>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <BudgetLinks
+        currentTab={tab}
+        currentGroup={currentGroup}
+      />
+      <Box mb={3} />
+      <Fade in appear>
+        <div>
+          {renderChildrenWithProps(children, { ...rest })}
+        </div>
+      </Fade>
+    </React.Fragment>
   );
 };
 
 BudgetLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
-  pageTitle: PropTypes.object,
-  location: PropTypes.object,
-  defaultPage: PropTypes.bool,
-  computedMatch: PropTypes.object,
+  children: PropTypes.any,
   currentGroup: PropTypes.object,
+  redirectAction: PropTypes.func,
+  showSnackbar: PropTypes.func,
 };
+
+const mapStateToProps = createStructuredSelector({
+  currentGroup: selectGroup(),
+});
 
 const mapDispatchToProps = {
   redirectAction,
@@ -87,7 +91,7 @@ const mapDispatchToProps = {
 };
 
 const withConnect = connect(
-  createStructuredSelector({}),
+  mapStateToProps,
   mapDispatchToProps,
 );
 

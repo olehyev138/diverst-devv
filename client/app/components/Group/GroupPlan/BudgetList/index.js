@@ -30,6 +30,7 @@ import messages from 'containers/Group/GroupPlan/Budget/messages';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
+import { toCurrencyString } from 'utils/currencyHelpers';
 
 const styles = theme => ({
   budgetListItem: {
@@ -58,13 +59,13 @@ export function BudgetList(props, context) {
       title: intl.formatMessage(messages.columns.requested),
       field: 'requested_amount',
       sorting: false,
-      render: rowData => rowData.requested_amount ? `$${floatRound(rowData.requested_amount, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(props.intl, rowData.requested_amount || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.available),
       field: 'available_amount',
       sorting: false,
-      render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
+      render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.status),
@@ -151,7 +152,7 @@ export function BudgetList(props, context) {
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}
             rowsPerPage={5}
-            dataArray={Object.values(props.budgets)}
+            dataArray={props.budgets}
             dataTotal={props.budgetTotal}
             columns={columns}
             actions={actions}

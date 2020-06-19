@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -16,7 +16,8 @@ import {
   leaveGroupBegin,
   joinSubgroupsBegin
 } from 'containers/Group/actions';
-import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
+
+import { selectGroup } from 'containers/Group/selectors';
 
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });

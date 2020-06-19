@@ -29,13 +29,15 @@ export function EmailLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.globalSettings.emails.index.path()}
+            to={ROUTES.admin.system.globalSettings.emails.layouts.index.path()}
             label={<DiverstFormattedMessage {...messages.layouts} />}
+            value='layouts'
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.globalSettings.mailEvents.index.path()}
+            to={ROUTES.admin.system.globalSettings.emails.events.index.path()}
             label={<DiverstFormattedMessage {...messages.events} />}
+            value='events'
           />
         </ResponsiveTabs>
       </Paper>
@@ -45,7 +47,7 @@ export function EmailLinks(props) {
 
 EmailLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
 };
 
