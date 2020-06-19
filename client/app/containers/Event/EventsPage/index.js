@@ -133,22 +133,23 @@ export function EventsPage(props) {
         <DiverstBreadcrumbs />
       )}
       <List
-      events={props.events}
-      eventsTotal={props.eventsTotal}
-      isLoading={props.isLoading}
-      currentTab={tab}
-      handleChangeTab={handleChangeTab}
-      handlePagination={handlePagination}
-      handleCalendarChange={handleChangeCalendar}
-      calendar={calendar}
-      calendarEvents={props.calendarEvents}
-      currentGroup={props.currentGroup}
-      links={links}
-      readonly={props.readonly}
-      onlyUpcoming={props.onlyUpcoming}
-      calendarDateCallback={handleCalendarPage}
-      currentGroupID={props.currentGroup.id}
-    /></React.Fragment>
+        events={props.events}
+        eventsTotal={props.eventsTotal}
+        isLoading={props.isLoading}
+        currentTab={tab}
+        handleChangeTab={handleChangeTab}
+        handlePagination={handlePagination}
+        handleCalendarChange={handleChangeCalendar}
+        calendar={calendar}
+        calendarEvents={props.calendarEvents}
+        currentGroup={props.currentGroup}
+        links={links}
+        readonly={props.readonly}
+        onlyUpcoming={props.onlyUpcoming}
+        calendarDateCallback={handleCalendarPage}
+        currentGroupID={props.currentGroup.id}
+      />
+    </React.Fragment>
   );
 }
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
 
 import {
   Collapse, Divider, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, MenuItem,
@@ -290,29 +290,29 @@ export function AdminLinks(props) {
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
                 show={permission(props, 'archive_manage')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.manage.calendar.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'groups_calendars')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.calendar.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-              </List>
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.manage.calendar.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'groups_calendars')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.calendar.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+            </List>
           </Collapse>
           <ListPermission
             button

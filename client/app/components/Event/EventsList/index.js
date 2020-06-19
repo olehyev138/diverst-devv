@@ -86,7 +86,6 @@ export function EventsList(props) {
   useInjectSaga({ key: 'events', saga });
   const { classes, intl } = props;
 
-  const routeContext = useContext(RouteContext);
   const [eventId, setEvent] = useState(null);
 
   const clickEvent = (info) => {
