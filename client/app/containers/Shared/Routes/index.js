@@ -191,7 +191,10 @@ export default function Routes(props) {
                     {/* Home */}
                     <RouteWithProps exact path={ROUTES.user.home.path()}><HomePage /></RouteWithProps>
                     {/* Innovate */}
-                    <RouteWithProps exact path={ROUTES.user.innovate.path()}><PlaceholderPage /></RouteWithProps>
+                    { /*
+                       * -- Disabled --
+                       <RouteWithProps exact path={ROUTES.user.innovate.path()}><PlaceholderPage /></RouteWithProps>
+                    */ }
                     {/* News */}
                     <RouteWithProps exact path={ROUTES.user.news.path()}><UserNewsLinkPage /></RouteWithProps>
                     {/* Events */}
@@ -484,22 +487,16 @@ export default function Routes(props) {
                     <RouteWithProps path={ROUTES.admin.include.polls.show.path()}><PollShowPage /></RouteWithProps>
 
                     { /* Innovate - Campaigns */ }
+                    { /* -- Disabled --
                     <RouteWithProps exact path={ROUTES.admin.innovate.campaigns.index.path()}><CampaignListPage /></RouteWithProps>
-                    { /* Innovate - Campaign Create */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.new.path()}><CampaignCreatePage /></RouteWithProps>
-                    { /* Innovate - Campaign Edit */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.edit.path()}><CampaignEditPage /></RouteWithProps>
-                    { /* Innovate - Campaign Show */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.show.path()}><CampaignShowPage /></RouteWithProps>
-                    { /* Innovate - Campaign - Question Create */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.new.path()}><CampaignQuestionCreatePage /></RouteWithProps>
-                    { /* Innovate - Campaign - Question Edit */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.edit.path()}><CampaignQuestionEditPage /></RouteWithProps>
-                    { /* Innovate - Campaign - Question Show */ }
                     <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.show.path()}><CampaignQuestionShowPage /></RouteWithProps>
-
-                    { /* Innovate - Financials */ }
                     <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
+                    */ }
 
                     { /* System - Users */ }
                     <RouteWithProps path={ROUTES.admin.system.users.pathPrefix}>
