@@ -1,29 +1,27 @@
-import React, { memo, useEffect, useContext } from 'react';
-import dig from 'object-dig';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from '../saga';
 import reducer from '../reducer';
 
-import RouteService from 'utils/routeHelpers';
 import AnnualBudgetForm from 'components/Group/GroupPlan/AnnualBudgetForm';
 
 import {
   selectGroupIsCommitting,
   selectGroup
 } from 'containers/Group/selectors';
-import {
-  selectAnnualBudget, selectIsFetchingAnnualBudget
-} from '../selectors';
-import {
-  updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount
-} from '../actions';
+
+import { selectAnnualBudget, selectIsFetchingAnnualBudget } from '../selectors';
+import { updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount } from '../actions';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -31,10 +29,9 @@ export function AnnualBudgetEditPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
   useInjectSaga({ key: 'annualBudgets', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
     props.getCurrentAnnualBudgetBegin({ groupId });
 
     return () => props.annualBudgetsUnmount();
@@ -85,6 +82,6 @@ export default compose(
 )(Conditional(
   AnnualBudgetEditPage,
   ['currentGroup.permissions.annual_budgets_manage?'],
-  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.budget.index.path(params.group_id),
   permissionMessages.group.groupPlan.annualBudget.editPage
 ));

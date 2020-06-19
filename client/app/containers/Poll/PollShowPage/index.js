@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -10,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Poll/reducer';
 import saga from 'containers/Poll/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
@@ -55,8 +55,7 @@ export function PollCreatePage(props) {
   const [textField, setTextField] = useState(null);
   const [responseParams, setResponseParams] = useState(defaultParams);
 
-  const rs = new RouteService(useContext);
-  const pollId = rs.params('poll_id');
+  const { poll_id: pollId } = useParams();
 
   function getResponses(params) {
     props.getResponsesBegin({ poll_id: pollId, ...params });
@@ -77,7 +76,6 @@ export function PollCreatePage(props) {
   };
 
   useEffect(() => {
-    const pollId = rs.params('poll_id');
     if (pollId)
       props.getPollBegin({ id: pollId });
 
@@ -217,6 +215,6 @@ export default compose(
 )(Conditional(
   PollCreatePage,
   ['poll.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.include.polls.index.path(),
+  (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.showPage
 ));

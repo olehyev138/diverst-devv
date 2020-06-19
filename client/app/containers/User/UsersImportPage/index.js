@@ -12,12 +12,9 @@
  *    - on save - create/update user
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -43,7 +40,6 @@ import saga from 'containers/Shared/CsvFile/saga';
 import fieldReducer from 'containers/Shared/Field/reducer';
 import fieldSaga from 'containers/GlobalSettings/Field/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserImport from 'components/User/UserImport';
@@ -78,8 +74,6 @@ export function UserImportPage(props) {
       props.fieldUnmount();
     };
   }, []);
-
-  const rs = new RouteService(useContext);
 
   const links = {
     userNew: ROUTES.admin.system.users.new.path(),
@@ -137,6 +131,6 @@ export default compose(
 )(Conditional(
   UserImportPage,
   ['permissions.users_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.importPage
 ));

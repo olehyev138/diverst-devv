@@ -16,7 +16,7 @@ const NameToPathMap = Object.freeze({
   fields_manage: ROUTES.admin.system.globalSettings.fields.index,
   branding_manage: ROUTES.admin.system.branding.index,
   custom_text_manage: ROUTES.admin.system.globalSettings.customText.edit,
-  emails_manage: ROUTES.admin.system.globalSettings.emails.index,
+  emails_manage: ROUTES.admin.system.globalSettings.emails.layouts.index,
   integrations_manage: null,
   rewards_manage: null,
   logs_view: null,

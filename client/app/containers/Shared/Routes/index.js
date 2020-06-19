@@ -1,8 +1,10 @@
 import React from 'react';
-import { Switch } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 
 // Pages
 import {
+  ApplicationLayout,
+  AuthenticatedLayout,
   SignUpPage,
   UserLayout,
   GroupLayout,
@@ -155,212 +157,446 @@ import {
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import RouteWithProps from 'components/Shared/Routes/RouteWithProps';
+import SwitchWithProps from 'components/Shared/Routes/SwitchWithProps';
+
+import { expandRouteIntoPathArray } from 'utils/routeHelpers';
+
 export default function Routes(props) {
-  const expandRoute = route => ({ path: route.path(), data: route.data || {} });
-
-
   return (
-    <Switch>
-      { /* Session */ }
-      <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
-      <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
-      <SessionLayout {...expandRoute(ROUTES.session.sign_up)} component={SignUpPage} />
+    <ApplicationLayout>
+      <Switch>
+        {/* Session */}
+        <Route path={expandRouteIntoPathArray(ROUTES.session)}>
+          <SessionLayout>
+            <SwitchWithProps>
+              {/* Login */}
+              <RouteWithProps path={ROUTES.session.login.path()}><LoginPage /></RouteWithProps>
+              {/* Forgot password */}
+              <RouteWithProps path={ROUTES.session.forgotPassword.path()}><ForgotPasswordPage /></RouteWithProps>
+              {/* Sign up */}
+              <RouteWithProps path={ROUTES.session.signUp.path()}><SignUpPage /></RouteWithProps>
+            </SwitchWithProps>
+          </SessionLayout>
+        </Route>
 
-      { /* User */}
-      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={UserNewsLinkPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={UserDownloadsPage} />
-      <UserLayout {...expandRoute(ROUTES.user.edit)} component={UserEditPage} />
-      <UserLayout {...expandRoute(ROUTES.user.show)} component={UserProfilePage} disableBreadcrumbs />
+        {/* Authenticated */}
+        <Route path={[...expandRouteIntoPathArray(ROUTES.user), ROUTES.group.pathPrefix(), ROUTES.admin.pathPrefix]}>
+          <AuthenticatedLayout>
+            <Switch>
+              {/* User */}
+              <Route exact path={expandRouteIntoPathArray(ROUTES.user)}>
+                <UserLayout>
+                  <SwitchWithProps>
+                    {/* Home */}
+                    <RouteWithProps exact path={ROUTES.user.home.path()}><HomePage /></RouteWithProps>
+                    {/* Innovate */}
+                    <RouteWithProps exact path={ROUTES.user.innovate.path()}><PlaceholderPage /></RouteWithProps>
+                    {/* News */}
+                    <RouteWithProps exact path={ROUTES.user.news.path()}><UserNewsLinkPage /></RouteWithProps>
+                    {/* Events */}
+                    <RouteWithProps exact path={ROUTES.user.events.path()}><UserEventsPage /></RouteWithProps>
+                    {/* Groups */}
+                    <RouteWithProps exact path={ROUTES.user.groups.path()}><UserGroupListPage /></RouteWithProps>
+                    {/* Downloads */}
+                    <RouteWithProps exact path={ROUTES.user.downloads.path()}><UserDownloadsPage /></RouteWithProps>
 
-      { /* User - Mentorship */ }
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentors)} component={MentorsPage} type='mentors' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentees)} component={MentorsPage} type='mentees' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.proposals)} component={MentorRequestsPage} type='outgoing' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.requests)} component={MentorRequestsPage} type='incoming' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.schedule)} component={SessionsEditPage} type='new' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.edit)} component={SessionsEditPage} type='edit' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.hosting)} component={SessionsPage} type='hosting' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.participating)} component={SessionsPage} type='participating' disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.show)} component={SessionPage} disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
-      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
+                    {/* Profile Edit */}
+                    <RouteWithProps path={ROUTES.user.edit.path()}><UserEditPage /></RouteWithProps>
+                    {/* Profile */}
+                    <RouteWithProps path={ROUTES.user.show.path()}><UserProfilePage /></RouteWithProps>
 
-      { /* Admin */ }
-      { /* Admin - Analyze */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={UserDashboardPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupDashboardPage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
+                    {/* Mentorship */}
+                    <RouteWithProps path={ROUTES.user.mentorship.pathPrefix}>
+                      <MentorshipLayout>
+                        <SwitchWithProps>
+                          {/* Profile Edit */}
+                          <RouteWithProps path={ROUTES.user.mentorship.edit.path()}><MentorshipEditProfilePage /></RouteWithProps>
 
-      { /* Admin - Analyze - Custom */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.edit)} component={MetricsDashboardEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.new)} component={MetricsDashboardCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.graphs.new)} component={CustomGraphCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.graphs.edit)} component={CustomGraphEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.custom.show)} component={MetricsDashboardPage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.custom.index)} component={MetricsDashboardListPage} />
+                          {/* Mentors */}
+                          <RouteWithProps path={ROUTES.user.mentorship.mentors.path()}><MentorsPage /></RouteWithProps>
+                          {/* Mentees */}
+                          <RouteWithProps path={ROUTES.user.mentorship.mentees.path()}><MentorsPage /></RouteWithProps>
 
-      { /* Admin - Manage */ }
-      { /* Admin - Manage - Groups */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categorize)} component={GroupCategorizePage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.categories.index)} component={GroupCategoriesPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.new)} component={GroupCategoriesCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.edit)} component={GroupCategoriesEditPage} />
+                          {/* Proposals */}
+                          <RouteWithProps path={ROUTES.user.mentorship.proposals.path()}><MentorRequestsPage /></RouteWithProps>
+                          {/* Requests */}
+                          <RouteWithProps path={ROUTES.user.mentorship.requests.path()}><MentorRequestsPage /></RouteWithProps>
 
-      { /* Admin - Manage - Segments */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} edit />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
+                          {/* Session Schedule */}
+                          <RouteWithProps path={ROUTES.user.mentorship.sessions.schedule.path()}><SessionsEditPage /></RouteWithProps>
+                          {/* Session Edit */}
+                          <RouteWithProps path={ROUTES.user.mentorship.sessions.edit.path()}><SessionsEditPage /></RouteWithProps>
 
-      { /* Admin - Manage - Resources */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={EResourceCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={EResourceEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={EFolderEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={EFolderCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={EFolderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={EFoldersPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
+                          {/* Session Hosting */}
+                          <RouteWithProps path={ROUTES.user.mentorship.sessions.hosting.path()}><SessionsPage /></RouteWithProps>
+                          {/* Session Participating */}
+                          <RouteWithProps path={ROUTES.user.mentorship.sessions.participating.path()}><SessionsPage /></RouteWithProps>
 
-      { /* Admin - Plan - Budget */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />
+                          {/* Session Show */}
+                          <RouteWithProps path={ROUTES.user.mentorship.sessions.show.path()}><SessionPage /></RouteWithProps>
 
-      { /* Admin - Include - Poll */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.new)} component={PollCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.edit)} component={PollEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.show)} component={PollShowPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.include.polls.index)} component={PollsList} />
+                          {/* Profile */}
+                          <RouteWithProps path={ROUTES.user.mentorship.show.path()}><MentorshipProfilePage /></RouteWithProps>
+                          {/* Profile */}
+                          <RouteWithProps path={ROUTES.user.mentorship.home.path()}><MentorshipProfilePage /></RouteWithProps>
+                        </SwitchWithProps>
+                      </MentorshipLayout>
+                    </RouteWithProps>
+                  </SwitchWithProps>
+                </UserLayout>
+              </Route>
 
-      { /* Admin - Innovate */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.edit)} component={CampaignQuestionEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.show)} component={CampaignQuestionShowPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
+              {/* Group */}
+              <Route path={ROUTES.group.pathPrefix()}>
+                <GroupLayout>
+                  <SwitchWithProps>
+                    {/* Home */}
+                    <RouteWithProps exact path={ROUTES.group.home.path()}><GroupHomePage /></RouteWithProps>
 
-      { /* Admin - System - GlobalSettings */ }
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.index)} defaultPage />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
-      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
-      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
-      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={EmailEventsPage} />
-      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
+                    {/* Members */}
+                    <RouteWithProps exact path={ROUTES.group.members.index.path()}><GroupMemberListPage /></RouteWithProps>
+                    {/* Member Create */}
+                    <RouteWithProps path={ROUTES.group.members.new.path()}><GroupMemberCreatePage /></RouteWithProps>
 
-      { /* Admin - System - Users */ }
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.import)} component={UsersImportPage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
+                    {/* Events */}
+                    <RouteWithProps exact path={ROUTES.group.events.index.path()}><EventsPage /></RouteWithProps>
+                    {/* Event Create */}
+                    <RouteWithProps path={ROUTES.group.events.new.path()}><EventCreatePage /></RouteWithProps>
+                    {/* Event Edit */}
+                    <RouteWithProps path={ROUTES.group.events.edit.path()}><EventEditPage /></RouteWithProps>
+                    {/* Event Show */}
+                    <RouteWithProps exact path={ROUTES.group.events.show.path()}><EventPage /></RouteWithProps>
 
-      { /* Admin - System - User Roles */ }
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.index)} component={PolicyTemplatesPage} />
-      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.edit)} component={PolicyTemplateEditPage} />
+                    {/* Resources */}
+                    <RouteWithProps exact path={ROUTES.group.resources.index.path()}><FoldersPage /></RouteWithProps>
+                    {/* Resource Create */}
+                    <RouteWithProps path={ROUTES.group.resources.new.path()}><ResourceCreatePage /></RouteWithProps>
+                    {/* Resource Edit */}
+                    <RouteWithProps path={ROUTES.group.resources.edit.path()}><ResourceEditPage /></RouteWithProps>
+                    {/* Folder Create */}
+                    <RouteWithProps path={ROUTES.group.resources.folders.new.path()}><FolderCreatePage /></RouteWithProps>
+                    {/* Folder Edit */}
+                    <RouteWithProps path={ROUTES.group.resources.folders.edit.path()}><FolderEditPage /></RouteWithProps>
+                    {/* Folder Show */}
+                    <RouteWithProps exact path={ROUTES.group.resources.folders.show.path()}><FolderPage /></RouteWithProps>
 
-      { /* Admin - System - Branding */ }
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.index)} component={BrandingThemePage} />
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
-      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
+                    {/* News */}
+                    <RouteWithProps exact path={ROUTES.group.news.index.path()}><NewsFeedPage /></RouteWithProps>
+                    {/* Group Message Create */}
+                    <RouteWithProps path={ROUTES.group.news.messages.new.path()}><GroupMessageCreatePage /></RouteWithProps>
+                    {/* Group Message Edit */}
+                    <RouteWithProps path={ROUTES.group.news.messages.edit.path()}><GroupMessageEditPage /></RouteWithProps>
+                    {/* Group Message Show */}
+                    <RouteWithProps exact path={ROUTES.group.news.messages.show.path()}><GroupMessagePage /></RouteWithProps>
+                    {/* News Link Create */}
+                    <RouteWithProps path={ROUTES.group.news.news_links.new.path()}><NewsLinkCreatePage /></RouteWithProps>
+                    {/* News Link Edit */}
+                    <RouteWithProps path={ROUTES.group.news.news_links.edit.path()}><NewsLinkEditPage /></RouteWithProps>
+                    {/* News Link Show */}
+                    <RouteWithProps exact path={ROUTES.group.news.news_links.show.path()}><NewsLinkPage /></RouteWithProps>
+                    {/* Social Link Create */}
+                    <RouteWithProps path={ROUTES.group.news.social_links.new.path()}><SocialLinkCreatePage /></RouteWithProps>
+                    {/* Social Link Edit */}
+                    <RouteWithProps path={ROUTES.group.news.social_links.edit.path()}><SocialLinkEditPage /></RouteWithProps>
 
-      { /* Admin - System - Logs */ }
-      <AdminLayout exact {...expandRoute(ROUTES.admin.system.logs.index)} component={LogListPage} />
+                    {/* Plan */}
+                    <RouteWithProps path={ROUTES.group.plan.pathPrefix()}>
+                      <GroupPlanLayout>
+                        <SwitchWithProps>
+                          {/* Outcomes */}
+                          <RouteWithProps exact path={ROUTES.group.plan.outcomes.index.path()}><OutcomesPage /></RouteWithProps>
+                          {/* Outcome Create */}
+                          <RouteWithProps path={ROUTES.group.plan.outcomes.new.path()}><OutcomeCreatePage /></RouteWithProps>
+                          {/* Outcome Edit */}
+                          <RouteWithProps path={ROUTES.group.plan.outcomes.edit.path()}><OutcomeEditPage /></RouteWithProps>
 
-      { /* Group */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
-      <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
+                          {/* Events */}
+                          <RouteWithProps exact path={ROUTES.group.plan.events.index.path()}><GroupPlanEventsPage /></RouteWithProps>
+                          {/* Event Manage */}
+                          <RouteWithProps path={ROUTES.group.plan.events.manage.pathPrefix()}>
+                            <EventManageLayout>
+                              <SwitchWithProps>
+                                {/* Metrics */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.metrics.path()}><EventManageMetricsPage /></RouteWithProps>
+                                {/* Fields */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.fields.path()}><EventManageFieldsPage /></RouteWithProps>
 
-      { /* Group Events */ }
-      <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.events.edit)} component={EventEditPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.events.show)} component={EventPage} />
+                                {/* Updates */}
+                                <RouteWithProps exact path={ROUTES.group.plan.events.manage.updates.index.path()}><EventManageUpdatesPage /></RouteWithProps>
+                                {/* Update Create */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.updates.new.path()}><EventManageUpdateCreatePage /></RouteWithProps>
+                                {/* Update Edit */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.updates.edit.path()}><EventManageUpdateEditPage /></RouteWithProps>
+                                {/* Update Show */}
+                                <RouteWithProps exact path={ROUTES.group.plan.events.manage.updates.show.path()}><EventManageUpdatePage /></RouteWithProps>
 
-      { /* Group News Feed */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.edit)} component={NewsLinkEditPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.show)} component={NewsLinkPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.new)} component={SocialLinkCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.edit)} component={SocialLinkEditPage} />
+                                {/* Expenses */}
+                                <RouteWithProps exact path={ROUTES.group.plan.events.manage.expenses.index.path()}><EventManageExpensesPage /></RouteWithProps>
+                                {/* Expense Create */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.expenses.new.path()}><EventManageExpenseCreatePage /></RouteWithProps>
+                                {/* Expense Edit */}
+                                <RouteWithProps path={ROUTES.group.plan.events.manage.expenses.edit.path()}><EventManageExpenseEditPage /></RouteWithProps>
+                              </SwitchWithProps>
+                            </EventManageLayout>
+                          </RouteWithProps>
 
-      { /* Group Members */ }
-      <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
+                          {/* KPI */}
+                          <RouteWithProps path={ROUTES.group.plan.kpi.pathPrefix()}>
+                            <GroupKPILayout>
+                              <SwitchWithProps>
+                                {/* Metrics */}
+                                <RouteWithProps path={ROUTES.group.plan.kpi.metrics.path()}><GroupPlanKpiPage /></RouteWithProps>
+                                {/* Fields */}
+                                <RouteWithProps path={ROUTES.group.plan.kpi.fields.path()}><GroupPlanFieldsPage /></RouteWithProps>
+                                {/* Updates */}
+                                <RouteWithProps exact path={ROUTES.group.plan.kpi.updates.index.path()}><GroupPlanUpdatesPage /></RouteWithProps>
+                                {/* Update Create */}
+                                <RouteWithProps path={ROUTES.group.plan.kpi.updates.new.path()}><GroupPlanUpdateCreatePage /></RouteWithProps>
+                                {/* Update Edit */}
+                                <RouteWithProps path={ROUTES.group.plan.kpi.updates.edit.path()}><GroupPlanUpdateEditPage /></RouteWithProps>
+                                {/* Update Show */}
+                                <RouteWithProps exact path={ROUTES.group.plan.kpi.updates.show.path()}><GroupPlanUpdatePage /></RouteWithProps>
+                              </SwitchWithProps>
+                            </GroupKPILayout>
+                          </RouteWithProps>
 
-      { /* Group Plan */ }
-      { /* Group Plan - Structure/Outcomes */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.index)} component={GroupPlanLayout} defaultPage />
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
-      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
-      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
+                          {/* Budgets */}
+                          <RouteWithProps exact path={ROUTES.group.plan.budget.budgets.index.path()}><BudgetsPage /></RouteWithProps>
+                          {/* Budget Create */}
+                          <RouteWithProps path={ROUTES.group.plan.budget.budgets.new.path()}><BudgetRequestPage /></RouteWithProps>
+                          {/* Budget Show */}
+                          <RouteWithProps path={ROUTES.group.plan.budget.budgets.show.path()}><BudgetPage /></RouteWithProps>
+                          {/* Annual Budgets */}
+                          <RouteWithProps path={ROUTES.group.plan.budget.pathPrefix()}>
+                            <GroupBudgetLayout>
+                              <SwitchWithProps>
+                                {/* Edit */}
+                                <RouteWithProps exact path={ROUTES.group.plan.budget.editAnnualBudget.path()}><AnnualBudgetEditPage /></RouteWithProps>
+                                {/* Overview */}
+                                <RouteWithProps exact path={ROUTES.group.plan.budget.overview.path()}><AnnualBudgetsPage /></RouteWithProps>
+                              </SwitchWithProps>
+                            </GroupBudgetLayout>
+                          </RouteWithProps>
+                        </SwitchWithProps>
+                      </GroupPlanLayout>
+                    </RouteWithProps>
 
-      { /* Group Plan - Events */ }
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.fields)} component={EventManageFieldsPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.edit)} component={EventManageUpdateEditPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.new)} component={EventManageUpdateCreatePage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.show)} component={EventManageUpdatePage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.index)} component={EventManageUpdatesPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.new)} component={EventManageExpenseCreatePage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.edit)} component={EventManageExpenseEditPage} />
-      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.index)} component={EventManageExpensesPage} />
+                    {/* Manage */}
+                    <RouteWithProps path={ROUTES.group.manage.pathPrefix()}>
+                      <GroupManageLayout>
+                        <SwitchWithProps>
+                          {/* Settings */}
+                          <RouteWithProps path={ROUTES.group.manage.settings.index.path()}><GroupSettingsPage /></RouteWithProps>
 
-      { /* Group Plan - KPI */ }
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={GroupPlanFieldsPage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.edit)} component={GroupPlanUpdateEditPage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.new)} component={GroupPlanUpdateCreatePage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.show)} component={GroupPlanUpdatePage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
+                          {/* Sponsors */}
+                          <RouteWithProps exact path={ROUTES.group.manage.sponsors.index.path()}><GroupSponsorsListPage /></RouteWithProps>
+                          {/* Sponsor Create */}
+                          <RouteWithProps path={ROUTES.group.manage.sponsors.new.path()}><GroupSponsorsCreatePage /></RouteWithProps>
+                          {/* Sponsor Edit */}
+                          <RouteWithProps path={ROUTES.group.manage.sponsors.edit.path()}><GroupSponsorsEditPage /></RouteWithProps>
 
-      { /* Group Plan - Budget */ }
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.index)} component={GroupBudgetLayout} defaultPage />
-      <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
-      <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.overview)} component={AnnualBudgetsPage} />
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.new)} component={BudgetRequestPage} />
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.show)} component={BudgetPage} />
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.index)} component={BudgetsPage} />
+                          {/* Leaders */}
+                          <RouteWithProps exact path={ROUTES.group.manage.leaders.index.path()}><GroupLeadersListPage /></RouteWithProps>
+                          {/* Leader Create */}
+                          <RouteWithProps path={ROUTES.group.manage.leaders.new.path()}><GroupLeaderCreatePage /></RouteWithProps>
+                          {/* Leader Edit */}
+                          <RouteWithProps path={ROUTES.group.manage.leaders.edit.path()}><GroupLeaderEditPage /></RouteWithProps>
+                        </SwitchWithProps>
+                      </GroupManageLayout>
+                    </RouteWithProps>
+                  </SwitchWithProps>
+                </GroupLayout>
+              </Route>
 
-      { /* Group Manage */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.manage.index)} component={GroupManageLayout} defaultPage />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.new)} component={GroupSponsorsCreatePage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.edit)} component={GroupSponsorsEditPage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />
+              {/* Admin */}
+              <Route path={ROUTES.admin.pathPrefix}>
+                <AdminLayout>
+                  <SwitchWithProps>
+                    { /* Analyze - Overview */ }
+                    <RouteWithProps exact path={ROUTES.admin.analyze.overview.path()}><PlaceholderPage /></RouteWithProps>
+                    { /* Analyze - Users */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.users.path()}><UserDashboardPage /></RouteWithProps>
+                    { /* Analyze - Groups */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.groups.path()}><GroupDashboardPage /></RouteWithProps>
 
-      { /* Group Resources */ }
-      <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.edit)} component={ResourceEditPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.folders.edit)} component={FolderEditPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.folders.new)} component={FolderCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.folders.show)} component={FolderPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.index)} component={FoldersPage} />
+                    { /* Analyze - Custom */ }
+                    <RouteWithProps exact path={ROUTES.admin.analyze.custom.index.path()}><MetricsDashboardListPage /></RouteWithProps>
+                    { /* Analyze - Custom Edit */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.edit.path()}><MetricsDashboardEditPage /></RouteWithProps>
+                    { /* Analyze - Custom Create */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.new.path()}><MetricsDashboardCreatePage /></RouteWithProps>
+                    { /* Analyze - Custom Show */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.show.path()}><MetricsDashboardPage /></RouteWithProps>
+                    { /* Analyze - Custom - Graphs - New */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.new.path()}><CustomGraphCreatePage /></RouteWithProps>
+                    { /* Analyze - Custom - Graphs - Edit */ }
+                    <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.edit.path()}><CustomGraphEditPage /></RouteWithProps>
 
-      <ErrorLayout path='' component={NotFoundPage} />
-    </Switch>
+                    { /* Manage - Groups */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.index.path()}><AdminGroupListPage /></RouteWithProps>
+                    { /* Manage - Group Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.new.path()}><GroupCreatePage /></RouteWithProps>
+                    { /* Manage - Group Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.edit.path()}><GroupEditPage /></RouteWithProps>
+
+                    { /* Manage - Group Categories */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.categories.index.path()}><GroupCategoriesPage /></RouteWithProps>
+                    { /* Manage - Group Category Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categories.new.path()}><GroupCategoriesCreatePage /></RouteWithProps>
+                    { /* Manage - Group Category Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categories.edit.path()}><GroupCategoriesEditPage /></RouteWithProps>
+                    { /* Manage - Group Categorize */ }
+                    <RouteWithProps path={ROUTES.admin.manage.groups.categorize.path()}><GroupCategorizePage /></RouteWithProps>
+
+                    { /* Manage - Segments */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.segments.index.path()}><SegmentListPage /></RouteWithProps>
+                    { /* Manage - Segment Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.segments.new.path()}><SegmentPage /></RouteWithProps>
+                    { /* Manage - Segment Show */ }
+                    <RouteWithProps path={ROUTES.admin.manage.segments.show.path()}><SegmentPage /></RouteWithProps>
+
+                    { /* Manage - Resources */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.resources.index.path()}><EFoldersPage /></RouteWithProps>
+                    { /* Manage - Resources (Archived) */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.archived.index.path()}><ArchivesPage /></RouteWithProps>
+                    { /* Manage - Resource Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.new.path()}><EResourceCreatePage /></RouteWithProps>
+                    { /* Manage - Resource Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.edit.path()}><EResourceEditPage /></RouteWithProps>
+                    { /* Manage - Folder Create */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.new.path()}><EFolderCreatePage /></RouteWithProps>
+                    { /* Manage - Folder Edit */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.edit.path()}><EFolderEditPage /></RouteWithProps>
+                    { /* Manage - Folder Show */ }
+                    <RouteWithProps path={ROUTES.admin.manage.resources.folders.show.path()}><EFolderPage /></RouteWithProps>
+
+                    { /* Plan - Budget */ }
+                    <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>
+
+                    { /* Polls */ }
+                    <RouteWithProps exact path={ROUTES.admin.include.polls.index.path()}><PollsList /></RouteWithProps>
+                    { /* Poll Create */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.new.path()}><PollCreatePage /></RouteWithProps>
+                    { /* Poll Edit */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.edit.path()}><PollEditPage /></RouteWithProps>
+                    { /* Poll Show */ }
+                    <RouteWithProps path={ROUTES.admin.include.polls.show.path()}><PollShowPage /></RouteWithProps>
+
+                    { /* Innovate - Campaigns */ }
+                    <RouteWithProps exact path={ROUTES.admin.innovate.campaigns.index.path()}><CampaignListPage /></RouteWithProps>
+                    { /* Innovate - Campaign Create */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.new.path()}><CampaignCreatePage /></RouteWithProps>
+                    { /* Innovate - Campaign Edit */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.edit.path()}><CampaignEditPage /></RouteWithProps>
+                    { /* Innovate - Campaign Show */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.show.path()}><CampaignShowPage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Create */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.new.path()}><CampaignQuestionCreatePage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Edit */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.edit.path()}><CampaignQuestionEditPage /></RouteWithProps>
+                    { /* Innovate - Campaign - Question Show */ }
+                    <RouteWithProps path={ROUTES.admin.innovate.campaigns.questions.show.path()}><CampaignQuestionShowPage /></RouteWithProps>
+
+                    { /* Innovate - Financials */ }
+                    <RouteWithProps exact path={ROUTES.admin.innovate.financials.index.path()}><PlaceholderPage /></RouteWithProps>
+
+                    { /* System - Users */ }
+                    <RouteWithProps path={ROUTES.admin.system.users.pathPrefix}>
+                      <SystemUserLayout>
+                        <Switch>
+                          { /* Users */}
+                          <RouteWithProps exact path={ROUTES.admin.system.users.index.path()}><UsersPage /></RouteWithProps>
+                          { /* Users Import */}
+                          <RouteWithProps path={ROUTES.admin.system.users.import.path()}><UsersImportPage /></RouteWithProps>
+                          { /* User Create */}
+                          <RouteWithProps path={ROUTES.admin.system.users.new.path()}><UserCreatePage /></RouteWithProps>
+                          { /* User Edit */}
+                          <RouteWithProps path={ROUTES.admin.system.users.edit.path()}><UserEditPage /></RouteWithProps>
+
+                          { /* User Roles */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.users.roles.index.path()}><UserRolesListPage /></RouteWithProps>
+                          { /* User Role Create */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.roles.new.path()}><UserRoleCreatePage /></RouteWithProps>
+                          { /* User Role Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.roles.edit.path()}><UserRoleEditPage /></RouteWithProps>
+
+                          { /* Policy Templates */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.users.policy_templates.index.path()}><PolicyTemplatesPage /></RouteWithProps>
+                          { /* Policy Template Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.users.policy_templates.edit.path()}><PolicyTemplateEditPage /></RouteWithProps>
+                        </Switch>
+                      </SystemUserLayout>
+                    </RouteWithProps>
+
+                    { /* System - Global Settings */ }
+                    <RouteWithProps path={ROUTES.admin.system.globalSettings.pathPrefix}>
+                      <GlobalSettingsLayout>
+                        <Switch>
+                          { /* Fields */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.fields.index.path()}><FieldsPage /></RouteWithProps>
+                          { /* Custom Text Edit */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.customText.edit.path()}><CustomTextEditPage /></RouteWithProps>
+                          { /* Enterprise Configuration */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}><EnterpriseConfigurationPage /></RouteWithProps>
+                          { /* SSO Settings */}
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.ssoSettings.edit.path()}><SSOSettingsPage /></RouteWithProps>
+
+                          { /* Emails */}
+                          <RouteWithProps path={ROUTES.admin.system.globalSettings.emails.pathPrefix}>
+                            <EmailLayout>
+                              <Switch>
+                                { /* Layouts */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.layouts.index.path()}><EmailsPage /></RouteWithProps>
+                                { /* Layout Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.layouts.edit.path()}><EmailEditPage /></RouteWithProps>
+
+                                { /* Events */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.events.index.path()}><EmailEventsPage /></RouteWithProps>
+                                { /* Event Edit */}
+                                <RouteWithProps exact path={ROUTES.admin.system.globalSettings.emails.events.edit.path()}><EmailEventEditPage /></RouteWithProps>
+                              </Switch>
+                            </EmailLayout>
+                          </RouteWithProps>
+                        </Switch>
+                      </GlobalSettingsLayout>
+                    </RouteWithProps>
+
+                    { /* System - Branding */ }
+                    <RouteWithProps path={ROUTES.admin.system.branding.pathPrefix}>
+                      <BrandingLayout>
+                        <Switch>
+                          { /* Theme */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.theme.path()}><BrandingThemePage /></RouteWithProps>
+                          { /* Home */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.home.path()}><BrandingHomePage /></RouteWithProps>
+
+                          { /* Sponsors */ }
+                          <RouteWithProps exact path={ROUTES.admin.system.branding.sponsors.index.path()}><SponsorListPage /></RouteWithProps>
+                          { /* Sponsor Create */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.sponsors.new.path()}><SponsorCreatePage /></RouteWithProps>
+                          { /* Sponsor Edit */ }
+                          <RouteWithProps path={ROUTES.admin.system.branding.sponsors.edit.path()}><SponsorEditPage /></RouteWithProps>
+                        </Switch>
+                      </BrandingLayout>
+                    </RouteWithProps>
+
+                    { /* System - Logs */ }
+                    <RouteWithProps exact path={ROUTES.admin.system.logs.index.path()}><LogListPage /></RouteWithProps>
+                  </SwitchWithProps>
+                </AdminLayout>
+              </Route>
+            </Switch>
+          </AuthenticatedLayout>
+        </Route>
+
+        {/* Error */}
+        <Route>
+          <ErrorLayout>
+            <NotFoundPage />
+          </ErrorLayout>
+        </Route>
+      </Switch>
+    </ApplicationLayout>
   );
 }

@@ -1,13 +1,14 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
+import { useRouteMatch } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea, Avatar
+  AppBar, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, Avatar
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -94,193 +95,178 @@ const styles = theme => ({
   }
 });
 
-export class ApplicationHeader extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawerOpen: props.drawerOpen,
-      menuAnchor: null,
-    };
+export function ApplicationHeader(props) {
+  const { classes, group, user, permissions } = props;
 
-    this.logoutBegin = this.logoutBegin.bind(this);
-  }
+  const isAdmin = !!useRouteMatch(ROUTES.admin.pathPrefix);
 
-  logoutBegin() {
-    this.props.logoutBegin();
-  }
+  const [state, setState] = useState({
+    drawerOpen: props.drawerOpen,
+    menuAnchor: null,
+  });
 
-  handleProfileMenuOpen = (event) => {
-    this.setState({ menuAnchor: event.currentTarget });
-  };
+  const { menuAnchor } = state;
 
-  handleProfileMenuClose = () => {
-    this.setState({ menuAnchor: null });
-  };
+  const isMenuOpen = Boolean(menuAnchor);
 
-  handleDrawerToggle = () => {
-    this.setState(
-      state => ({ drawerOpen: !state.drawerOpen }),
-      () => (this.props.drawerToggleCallback(this.state.drawerOpen))
-    );
-  };
+  const adminPath = dig(permissions, 'adminPath');
 
-  render() {
-    const { menuAnchor } = this.state;
-    const {
-      classes, group, position, isAdmin, user, permissions
-    } = this.props;
-    const isMenuOpen = Boolean(menuAnchor);
+  const logoutBegin = () => props.logoutBegin();
 
-    const adminPath = dig(permissions, 'adminPath');
+  const handleProfileMenuOpen = event => setState({ menuAnchor: event.currentTarget });
 
-    const renderMenu = (
-      <Menu
-        classes={{
-          paper: classes.paper,
-        }}
-        id='userMenu'
-        disableAutoFocusItem
-        anchorEl={menuAnchor}
-        getContentAnchorEl={null}
-        elevation={0}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={isMenuOpen}
-        onClose={this.handleProfileMenuClose}
+  const handleProfileMenuClose = () => setState({ menuAnchor: null });
+
+  const handleDrawerToggle = () => setState(state => ({ drawerOpen: !state.drawerOpen }), () => (props.drawerToggleCallback(state.drawerOpen)));
+
+  const renderMenu = (
+    <Menu
+      classes={{
+        paper: classes.paper,
+      }}
+      id='userMenu'
+      disableAutoFocusItem
+      anchorEl={menuAnchor}
+      getContentAnchorEl={null}
+      elevation={0}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      open={isMenuOpen}
+      onClose={handleProfileMenuClose}
+    >
+      <MenuItem
+        component={WrappedNavLink}
+        to={isAdmin ? ROUTES.user.root.path() : ROUTES.admin.root.path()}
+        className={classes.dashboardSwitchMenuItem}
       >
-        <MenuItem
-          component={WrappedNavLink}
-          to={isAdmin ? ROUTES.user.root.path() : ROUTES.admin.root.path()}
-          className={classes.dashboardSwitchMenuItem}
-        >
+        { isAdmin
+          ? (
+            <React.Fragment>
+              <ListItemIcon>
+                <DvrIcon />
+              </ListItemIcon>
+              {<DiverstFormattedMessage {...messages.header.dashboard} />}
+            </React.Fragment>
+          )
+          : (
+            <React.Fragment>
+              <ListItemIcon>
+                <BuildIcon />
+              </ListItemIcon>
+              {<DiverstFormattedMessage {...messages.header.admin} />}
+            </React.Fragment>
+          )
+        }
+      </MenuItem>
+      <MenuItem
+        component={WrappedNavLink}
+        to={ROUTES.user.show.path(user.user_id)}
+        activeClassName={classes.navLinkActive}
+        onClick={handleProfileMenuClose}
+      >
+        <ListItemIcon>
+          <PermIdentityIcon />
+        </ListItemIcon>
+        {<DiverstFormattedMessage {...messages.header.profile} />}
+      </MenuItem>
+      <MenuItem onClick={logoutBegin}>
+        <ListItemIcon>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        {<DiverstFormattedMessage {...messages.header.logout} />}
+      </MenuItem>
+    </Menu>
+  );
+
+  return (
+    <React.Fragment>
+      <AppBar position='relative' className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
           { isAdmin
             ? (
-              <React.Fragment>
-                <ListItemIcon>
-                  <DvrIcon />
-                </ListItemIcon>
-                {<DiverstFormattedMessage {...messages.header.dashboard} />}
-              </React.Fragment>
+              <IconButton
+                aria-label='Open drawer'
+                edge='start'
+                onClick={handleDrawerToggle}
+                className={classNames(classes.drawerToggle, classes.whiteButton)}
+              >
+                <MenuIcon />
+              </IconButton>
             )
-            : (
-              <React.Fragment>
-                <ListItemIcon>
-                  <BuildIcon />
-                </ListItemIcon>
-                {<DiverstFormattedMessage {...messages.header.admin} />}
-              </React.Fragment>
-            )
+            : <React.Fragment />
           }
-        </MenuItem>
-        <MenuItem
-          component={WrappedNavLink}
-          to={ROUTES.user.show.path(user.user_id)}
-          activeClassName={classes.navLinkActive}
-        >
-          <ListItemIcon>
-            <PermIdentityIcon />
-          </ListItemIcon>
-          {<DiverstFormattedMessage {...messages.header.profile} />}
-        </MenuItem>
-        <MenuItem onClick={this.logoutBegin}>
-          <ListItemIcon>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          {<DiverstFormattedMessage {...messages.header.logout} />}
-        </MenuItem>
-      </Menu>
-    );
-
-    return (
-      <React.Fragment>
-        <AppBar position={position} className={classes.appBar}>
-          <Toolbar className={classes.toolbar}>
-            { isAdmin
-              ? (
-                <IconButton
-                  aria-label='Open drawer'
-                  edge='start'
-                  onClick={this.handleDrawerToggle}
-                  className={classNames(classes.drawerToggle, classes.whiteButton)}
-                >
-                  <MenuIcon />
-                </IconButton>
+          <Logo height='55px' withLink />
+          <div className={classNames(classes.grow, classes.centerText)}>
+            <Hidden xsDown>
+              {!isAdmin && group ? (
+                <Typography variant='h5'>
+                  {group.name}
+                </Typography>
               )
-              : <React.Fragment />
-            }
-            <Logo height='55px' withLink />
-            <div className={classNames(classes.grow, classes.centerText)}>
-              <Hidden xsDown>
-                {!isAdmin && group ? (
-                  <Typography variant='h5'>
-                    {group.name}
-                  </Typography>
-                )
-                  : (<React.Fragment />)
-                }
-              </Hidden>
-            </div>
-            <div className={classes.sectionDesktop}>
-              <div className={classes.buttonSection}>
-                <Permission show={isAdmin || !!adminPath}>
-                  <Hidden xsDown>
-                    <Link
-                      component={WrappedNavLink}
-                      to={isAdmin ? ROUTES.user.root.path() : adminPath && adminPath}
-                    >
-                      <Button
-                        className={classes.dashboardSwitchButton}
-                        variant='outlined'
-                      >
-                        { isAdmin
-                          ? (
-                            <span>
-                              <DvrIcon className={classes.dashboardIcon} />
-                              {<DiverstFormattedMessage {...messages.header.dashboard} />}
-                            </span>
-                          )
-                          : (
-                            <span>
-                              <BuildIcon className={classes.adminIcon} />
-                              {<DiverstFormattedMessage {...messages.header.admin} />}
-                            </span>
-                          )
-                        }
-                      </Button>
-                    </Link>
-                  </Hidden>
-                </Permission>
-                <div>
-                  <IconButton
-                    aria-controls={
-                      isMenuOpen
-                        ? 'userMenu'
-                        : undefined
-                    }
-                    aria-haspopup='true'
-                    onClick={this.handleProfileMenuOpen}
-                    className={classes.whiteButton}
+                : (<React.Fragment />)
+              }
+            </Hidden>
+          </div>
+          <div className={classes.sectionDesktop}>
+            <div className={classes.buttonSection}>
+              <Permission show={isAdmin || !!adminPath}>
+                <Hidden xsDown>
+                  <Link
+                    component={WrappedNavLink}
+                    to={isAdmin ? ROUTES.user.root.path() : adminPath && adminPath}
                   >
-                    {user.avatar_data ? (
-                      <Avatar>
-                        <DiverstImg
-                          data={user.avatar_data}
-                          maxWidth='100%'
-                          maxHeight='240px'
-                        />
-                      </Avatar>
-                    )
-                      : <AccountCircleIcon />}
-                  </IconButton>
-                </div>
+                    <Button
+                      className={classes.dashboardSwitchButton}
+                      variant='outlined'
+                    >
+                      { isAdmin
+                        ? (
+                          <span>
+                            <DvrIcon className={classes.dashboardIcon} />
+                            {<DiverstFormattedMessage {...messages.header.dashboard} />}
+                          </span>
+                        )
+                        : (
+                          <span>
+                            <BuildIcon className={classes.adminIcon} />
+                            {<DiverstFormattedMessage {...messages.header.admin} />}
+                          </span>
+                        )
+                      }
+                    </Button>
+                  </Link>
+                </Hidden>
+              </Permission>
+              <div>
+                <IconButton
+                  aria-controls={
+                    isMenuOpen
+                      ? 'userMenu'
+                      : undefined
+                  }
+                  aria-haspopup='true'
+                  onClick={handleProfileMenuOpen}
+                  className={classes.whiteButton}
+                >
+                  {user.avatar_data ? (
+                    <Avatar>
+                      <DiverstImg
+                        data={user.avatar_data}
+                        maxWidth='100%'
+                        maxHeight='240px'
+                      />
+                    </Avatar>
+                  )
+                    : <AccountCircleIcon />}
+                </IconButton>
               </div>
             </div>
-          </Toolbar>
-        </AppBar>
-        {renderMenu}
-      </React.Fragment>
-    );
-  }
+          </div>
+        </Toolbar>
+      </AppBar>
+      {renderMenu}
+    </React.Fragment>
+  );
 }
 
 ApplicationHeader.propTypes = {
@@ -291,24 +277,14 @@ ApplicationHeader.propTypes = {
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
-  position: PropTypes.string,
-  isAdmin: PropTypes.bool,
   logoutBegin: PropTypes.func,
   handleVisitAdmin: PropTypes.func,
   handleVisitHome: PropTypes.func,
 };
 
-ApplicationHeader.defaultProps = {
-  position: 'absolute'
+const mapDispatchToProps = {
+  logoutBegin,
 };
-
-export function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    logoutBegin() {
-      dispatch(logoutBegin());
-    },
-  };
-}
 
 const mapStateToProps = createStructuredSelector({
   user: selectUser(),
