@@ -1,4 +1,6 @@
 /* Layouts */
+import ApplicationLayout from 'containers/Layouts/ApplicationLayout/Loadable';
+import AuthenticatedLayout from 'containers/Layouts/AuthenticatedLayout/Loadable';
 import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
@@ -203,6 +205,8 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  ApplicationLayout,
+  AuthenticatedLayout,
   SignUpPage,
   UserLayout,
   GroupLayout,

@@ -12,12 +12,9 @@
  *    - on save - create/update user
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -45,13 +42,11 @@ import {
 import reducer from 'containers/Mentorship/Mentoring/reducer';
 import saga from 'containers/Mentorship/Mentoring/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import MentorList from 'components/Mentorship/MentorList';
 import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
-import { selectUser } from 'containers/Mentorship/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const Types = Object.freeze({
@@ -71,8 +66,6 @@ export function MentorsPage(props) {
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
   const [tab, setTab] = useState(Types.current);
-
-  const rs = new RouteService(useContext);
 
   const validType = type => type === 'mentors' || type === 'mentees';
 
@@ -252,7 +245,7 @@ export default compose(
 )(Conditional(
   MentorsPage,
   ['user.permissions.show?'],
-  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
   permissionMessages.mentorship.mentoring.mentorsPage,
   true
 ));

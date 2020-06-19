@@ -1,9 +1,10 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -11,10 +12,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/Session/reducer';
 import saga from 'containers/Mentorship/Session/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectUser } from 'containers/Mentorship/selectors';
 import { selectUser as selectUserSession } from 'containers/Shared/App/selectors';
 import {
   selectSession,
@@ -50,13 +49,12 @@ export function SessionPage(props) {
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', orderBy: 'id' });
 
-  const rs = new RouteService(useContext);
+  const { session_id: sessionId } = useParams();
   const links = {
     sessionEdit: id => ROUTES.user.mentorship.sessions.edit.path(id),
   };
 
   useEffect(() => {
-    const [sessionId] = rs.params('session_id');
     // get session specified in path
     props.getSessionBegin({ id: sessionId });
     props.getParticipatingUsersBegin({ ...defaultParams, sessionId });
@@ -65,8 +63,6 @@ export function SessionPage(props) {
   }, []);
 
   useEffect(() => {
-    const [sessionId] = rs.params('session_id');
-
     if (props.hasChanged) {
       props.getSessionBegin({ id: sessionId });
       props.getParticipatingUsersBegin({ ...params, sessionId });
@@ -184,6 +180,6 @@ export default compose(
 )(Conditional(
   SessionPage,
   ['session.permissions.update?', 'isFetchingSession'],
-  (props, rs) => ROUTES.user.root.path(),
+  (props, params) => ROUTES.user.root.path(),
   permissionMessages.mentorship.session.showPage
 ));

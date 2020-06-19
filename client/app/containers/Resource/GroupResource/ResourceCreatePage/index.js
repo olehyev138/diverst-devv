@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -15,19 +16,20 @@ import saga from 'containers/Resource/saga';
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 
-import RouteService from 'utils/routeHelpers';
-
 import {
   getFolderBegin, createResourceBegin,
   resourcesUnmount, getFoldersBegin,
 } from 'containers/Resource/actions';
-import ResourceForm from 'components/Resource/Resource/ResourceForm';
 
+import ResourceForm from 'components/Resource/Resource/ResourceForm';
 import messages from 'containers/Resource/Resource/messages';
+
 import {
   getFolderShowPath,
   getFolderIndexPath
 } from 'utils/resourceHelpers';
+
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -35,18 +37,18 @@ export function ResourceCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const { currentUser, currentGroup, currentEnterprise, currentFolder } = props;
-  const rs = new RouteService(useContext);
+  const { group_id: groupId, folder_id: folderId } = useParams();
+  const location = useLocation();
 
-  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
+  const { currentUser, currentGroup, currentEnterprise, currentFolder } = props;
+
+  const type = location.pathname.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, groupId),
   };
 
   useEffect(() => {
-    const groupId = rs.params('group_id');
-    const folderId = rs.params('folder_id');
     props.getFolderBegin({ id: folderId });
     if (type === 'group')
       props.getFoldersBegin({ group_id: groupId });
@@ -56,17 +58,20 @@ export function ResourceCreatePage(props) {
   }, []);
 
   return (
-    <ResourceForm
-      getFoldersBegin={props.getFoldersBegin}
-      selectFolders={props.searchFolders}
-      resourceAction={props.createResourceBegin}
-      buttonText={props.intl.formatMessage(messages.create)}
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      currentFolder={currentFolder}
-      links={links}
-      type={type}
-    />
+    <React.Fragment>
+      <DiverstBreadcrumbs />
+      <ResourceForm
+        getFoldersBegin={props.getFoldersBegin}
+        selectFolders={props.searchFolders}
+        resourceAction={props.createResourceBegin}
+        buttonText={props.intl.formatMessage(messages.create)}
+        currentUser={currentUser}
+        currentGroup={currentGroup}
+        currentFolder={currentFolder}
+        links={links}
+        type={type}
+      />
+    </React.Fragment>
   );
 }
 
@@ -116,6 +121,6 @@ export default compose(
 )(Conditional(
   ResourceCreatePage,
   ['currentGroup.permissions.resources_create?'],
-  (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  (props, params, location) => getFolderIndexPath(location.pathname.startsWith('/groups') ? 'group' : 'admin', params.group_id),
   permissionMessages.resource.groupResource.resourceCreatePage
 ));

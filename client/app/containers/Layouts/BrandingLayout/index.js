@@ -1,14 +1,15 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { useLocation, matchPath } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
-import { matchPath } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import AdminLayout from '../AdminLayout';
 import BrandingLinks from 'components/Branding/BrandingLinks';
 
 const styles = theme => ({
@@ -17,59 +18,64 @@ const styles = theme => ({
   },
 });
 
-const BrandingPages = Object.freeze({
-  theme: 0,
-  home: 1,
-  sponsors: 2
-});
+const BrandingPages = Object.freeze([
+  'theme',
+  'home',
+  'sponsors',
+]);
 
-const BrandingLayout = ({ component: Component, classes, ...rest }) => {
-  const { currentGroup, location, ...other } = rest;
+const redirectAction = path => push(path);
 
-  let currentPage;
-  if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.theme.path() }))
-    currentPage = 'theme';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.home.path() }))
-    currentPage = 'home';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.sponsors.index.path() }))
-    currentPage = 'sponsors';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.index.path() }))
-    currentPage = 'theme';
+const BrandingLayout = (props) => {
+  const { classes, children, redirectAction, ...rest } = props;
 
-  const [tab, setTab] = useState(BrandingPages[currentPage]);
+  const location = useLocation();
+
+  const currentPage = BrandingPages.find(page => location.pathname.includes(page));
+
+  const [tab, setTab] = useState(currentPage || BrandingPages[0]);
 
   useEffect(() => {
-    if (tab !== BrandingPages[currentPage])
-      setTab(BrandingPages[currentPage]);
+    if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.index.path(), exact: true }))
+      redirectAction(ROUTES.admin.system.branding.theme.path());
+
+    if (tab !== currentPage && currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (
-    <AdminLayout
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          <BrandingLinks
-            currentTab={tab}
-            {...rest}
-          />
-          <Fade in appear>
-            <div className={classes.content}>
-              <Component {...other} />
-            </div>
-          </Fade>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <BrandingLinks
+        currentTab={tab}
+        {...rest}
+      />
+      <Fade in appear>
+        <div className={classes.content}>
+          {children}
+        </div>
+      </Fade>
+    </React.Fragment>
   );
 };
 
 BrandingLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   pageTitle: PropTypes.object,
+  redirectAction: PropTypes.func,
 };
 
+const mapDispatchToProps = {
+  redirectAction,
+};
+
+const withConnect = connect(
+  undefined,
+  mapDispatchToProps,
+);
+
 export default compose(
+  withConnect,
   memo,
   withStyles(styles),
 )(BrandingLayout);

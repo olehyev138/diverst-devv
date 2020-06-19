@@ -45,7 +45,7 @@ const styles = theme => ({
     borderBottomStyle: 'solid',
     borderBottomColor: theme.custom.colors.lightGrey,
     paddingTop: 12,
-    paddingBottom: 6,
+    paddingBottom: 2,
   },
   mobileToolbar: {
     display: 'block',
@@ -333,7 +333,7 @@ export class UserLinks extends React.PureComponent {
               onClick={this.handleMobileNavOpen}
             >
               <ArrowDropDownIcon className={classNames(classes.arrowDropDownIcon, isMobileNavOpen ? classes.arrowDropDownIconRotated : null)} />
-              <DiverstFormattedMessage {...pageTitle} />
+              {pageTitle}
             </Button>
           </Toolbar>
           <MobileNavMenu
@@ -376,7 +376,7 @@ NavLinks.propTypes = {
 
 UserLinks.propTypes = {
   classes: PropTypes.object,
-  pageTitle: PropTypes.object,
+  pageTitle: PropTypes.string,
   user: PropTypes.object,
   enterprise: PropTypes.object,
   permissions: PropTypes.object,

@@ -1,7 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
-
+import React, { memo, useEffect, useState } from 'react';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,8 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { useParams } from 'react-router-dom';
 
 // reducers & sagas
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
@@ -28,8 +25,6 @@ import {
 
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
 import Conditional from 'components/Compositions/Conditional';
-import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
-import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -43,12 +38,12 @@ export function MetricsDashboardListPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectSaga({ key: 'customMetrics', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
   const links = {
-    metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(rs.params('group_id')),
-    metricsDashboardShow: id => ROUTES.admin.analyze.custom.show.path(rs.params('group_id'), id),
+    metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(groupId),
+    metricsDashboardShow: id => ROUTES.admin.analyze.custom.show.path(groupId, id),
     metricsDashboardNew: ROUTES.admin.analyze.custom.new.path(),
-    metricsDashboardEdit: id => ROUTES.admin.analyze.custom.edit.path(rs.params('group_id'), id)
+    metricsDashboardEdit: id => ROUTES.admin.analyze.custom.edit.path(groupId, id)
   };
 
   const [params, setParams] = useState(defaultParams);
@@ -117,6 +112,6 @@ export default compose(
 )(Conditional(
   MetricsDashboardListPage,
   ['permissions.metrics_overview'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.analyze.dashboards.metricsDashboard.listPage
 ));

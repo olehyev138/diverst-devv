@@ -1,6 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -19,8 +17,6 @@ import {
 } from 'containers/User/selectors';
 import { getUserDownloadsBegin, getUserDownloadDataBegin, userUnmount } from 'containers/User/actions';
 
-import RouteService from 'utils/routeHelpers';
-
 import DownloadsList from 'components/User/DownloadsList';
 
 const defaultParams = Object.freeze({
@@ -34,7 +30,6 @@ export function UserDownloadsPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
-  const rs = new RouteService(useContext);
   const links = {
   };
 

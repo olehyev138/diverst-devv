@@ -1,11 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
@@ -14,10 +13,8 @@ import saga from 'containers/Group/Outcome/saga';
 import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
 import { getOutcomesBegin, deleteOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
 import OutcomesList from 'components/Group/Outcome/OutcomesList';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -34,14 +31,14 @@ export function OutcomesPage(props) {
   useInjectSaga({ key: 'outcomes', saga });
 
   const [params, setParams] = useState(defaultParams);
-  const groupId = dig(props.currentGroup, 'id');
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
+
   const links = {
-    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
-    outcomeNew: ROUTES.group.plan.outcomes.new.path(rs.params('group_id')),
-    outcomeEdit: id => ROUTES.group.plan.outcomes.edit.path(rs.params('group_id'), id),
-    eventIndex: ROUTES.group.plan.events.index.path(rs.params('group_id')),
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(groupId),
+    outcomeNew: ROUTES.group.plan.outcomes.new.path(groupId),
+    outcomeEdit: id => ROUTES.group.plan.outcomes.edit.path(groupId, id),
+    eventIndex: ROUTES.group.plan.events.index.path(groupId),
   };
 
   useEffect(() => {
@@ -110,6 +107,6 @@ export default compose(
 )(Conditional(
   OutcomesPage,
   ['currentGroup.permissions.update?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.outcome.indexPage
 ));
