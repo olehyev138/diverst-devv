@@ -21,9 +21,10 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to belong_to(:budget_item) }
     it { expect(initiative).to have_one(:budget).through(:budget_item) }
+    it { expect(initiative).to have_one(:annual_budget).through(:budget) }
 
     it { expect(initiative).to have_many(:checklists).dependent(:destroy) }
-    it { expect(initiative).to have_many(:resources) }
+    it { expect(initiative).to have_many(:resources).dependent(:destroy) }
 
     it { expect(initiative).to have_many(:checklist_items).dependent(:destroy) }
     it { expect(initiative).to accept_nested_attributes_for(:checklist_items).allow_destroy(true) }
@@ -45,14 +46,18 @@ RSpec.describe Initiative, type: :model do
     # ActiveStorage
     it { expect(initiative).to have_attached_file(:picture) }
     it { expect(initiative).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
+    it { expect(initiative).to have_attached_file(:qr_code) }
+    it { expect(initiative).to validate_attachment_content_type(:qr_code, AttachmentHelper.common_image_types) }
 
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
     it { expect(initiative).to validate_presence_of(:pillar) }
+    it { expect(initiative).to validate_presence_of(:owner_group) }
     it { expect(initiative).to validate_numericality_of(:max_attendees).is_greater_than(0).allow_nil }
-    it { expect(initiative).to have_many(:resources).dependent(:destroy) }
-    it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
+    it { expect(initiative).to have_many(:user_reward_actions) }
     it { expect(initiative).to have_one(:outcome).through(:pillar) }
+    it { expect(initiative).to have_one(:group).through(:outcome) }
+    it { expect(initiative.end).to be >= initiative.start }
 
     context 'segment_enterprise' do
       let!(:user) { create(:user) }
@@ -71,6 +76,119 @@ RSpec.describe Initiative, type: :model do
         initiative = build(:initiative, owner_id: user.id, segments: [segment])
 
         expect(initiative).to be_valid
+      end
+    end
+  end
+
+  describe 'test scopes' do
+    context 'initiative::starts_between' do
+      let!(:starts_between_initiatives) { create_list(:initiative, 3, start: Date.today) }
+
+      it 'returns initiative starts_between' do
+        expect(Initiative.starts_between(Date.yesterday,Date.tomorrow).count).to eq 3
+      end
+    end
+
+    context 'initiative::past' do
+      let!(:past_initiatives) { create_list(:initiative, 3, end: Date.yesterday) }
+
+      it 'returns initiative past' do
+        expect(Initiative.past).to eq(past_initiatives.sort_by{|i| i.start}.reverse)
+      end
+    end
+
+    context 'initiative::upcoming' do
+      let!(:upcoming_initiatives) { create_list(:initiative, 3, start: Date.tomorrow) }
+
+      it 'returns initiative upcoming' do
+        expect(Initiative.upcoming).to eq(upcoming_initiatives.sort_by{|i| i.start})
+      end
+    end
+
+    context 'initiative::ongoing' do
+      let!(:ongoing_initiatives) { create_list(:initiative, 3, start: Date.yesterday, end: Date.tomorrow) }
+
+      it 'returns initiative ongoing' do
+        expect(Initiative.ongoing).to eq(ongoing_initiatives.sort_by{|i| i.start})
+      end
+    end
+
+    context 'initiative::of_annual_budget' do
+      let!(:annual_budget) { create :annual_budget, id: 100 }
+      let!(:budget) { create(:approved_budget, annual_budget: annual_budget) }
+      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first }
+
+      it 'returns initiative of_annual_budget' do
+        expect(Initiative.of_annual_budget(100)).to eq([annual_budget_initiative])
+      end
+    end
+
+    context 'initiative::joined_events_for_user' do
+      let!(:user) { create(:user, id: 1) }
+      let!(:user2) { create(:user, id: 2) }
+      before do
+        create(:initiative_user, user: user, initiative: create(:initiative))
+        create(:initiative_invitee, user: user, initiative: create(:initiative))
+        create(:initiative_invitee, user: user2, initiative: create(:initiative))
+      end
+      it 'returns initiative joined_events_for_user' do
+        expect(Initiative.joined_events_for_user(1).count).to eq 2
+      end
+    end
+
+    context 'initiative::available_events_for_user' do
+      let!(:user1) { create(:user, id: 1) }
+      let!(:user2) { create(:user, id: 2) }
+      let!(:group1) { create(:group) }
+      let!(:group2) { create(:group) }
+      let!(:pillar) { create(:pillar, outcome_id: create(:outcome, group_id: group2.id).id) }
+      before do
+        create(:user_group, user: user1, group: group1)
+        create(:user_group, user: user2, group: group2)
+        create(:initiative_invitee, user: user1, initiative: create(:initiative))
+        create(:initiative_participating_group, group: group1, initiative: create(:initiative))
+        create(:initiative, pillar_id: pillar.id)
+      end
+      it 'returns initiative available_events_for_user user1' do
+        expect(Initiative.available_events_for_user(1).distinct.count).to eq 2
+      end
+      it 'returns initiative available_events_for_user user2' do
+        expect(Initiative.available_events_for_user(2).distinct.count).to eq 1
+      end
+    end
+
+    context 'initiative::order_recent' do
+      let!(:order_recent_initiatives) { create_list(:initiative, 3) }
+
+      it 'returns initiative order_recent' do
+        expect(Initiative.order_recent).to eq(order_recent_initiatives.sort_by{|i| i.start}.reverse)
+      end
+    end
+
+    context 'initiative::finalized' do
+      let!(:finalized_initiatives) { create_list(:initiative, 3, finished_expenses: true) }
+
+      it 'returns initiative finalized' do
+        expect(Initiative.finalized.count).to eq 3
+      end
+    end
+
+    context 'initiative::active' do
+      let!(:active_initiatives) { create_list(:initiative, 3, finished_expenses: false) }
+
+      it 'returns initiative active' do
+        expect(Initiative.active.count).to eq 3
+      end
+    end
+
+    context 'initiative::archived' do
+      let!(:not_archived_initiatives) { create_list(:initiative, 3) }
+      let!(:archived_initiatives) { create_list(:initiative, 2, archived_at: Date.today) }
+      it 'returns initiative not_archived' do
+        expect(Initiative.not_archived.count).to eq 3
+      end
+      it 'returns initiative archived' do
+        expect(Initiative.archived.count).to eq 2
       end
     end
   end
