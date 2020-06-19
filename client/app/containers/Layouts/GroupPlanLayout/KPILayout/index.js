@@ -1,15 +1,14 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
 
-import GroupPlanLayout from '..';
-import KPILinks from 'components/Group/GroupPlan/KPILinks';
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 
-const styles = theme => ({});
+import KPILinks from 'components/Group/GroupPlan/KPILinks';
 
 const KPIPages = Object.freeze([
   // 'metrics', // NOT IMPLEMENTED YET
@@ -17,47 +16,42 @@ const KPIPages = Object.freeze([
   'updates',
 ]);
 
-const KPILayout = ({ component: Component, ...rest }) => {
-  const { classes, data, location, ...other } = rest;
+const KPILayout = (props) => {
+  const { classes, children, ...rest } = props;
+
+  const location = useLocation();
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/kpis/1/edit/ -> kpis */
   const currentPage = KPIPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || KPIPages[0]);
 
   useEffect(() => {
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage]);
 
   return (
-    <GroupPlanLayout
-      {...rest}
-      component={matchProps => (
-        <React.Fragment>
-          <KPILinks
-            currentTab={tab}
-            {...matchProps}
-          />
-          <Box mb={3} />
-          <Fade in appear>
-            <div>
-              <Component {...other} />
-            </div>
-          </Fade>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <KPILinks
+        currentTab={tab}
+        {...rest}
+      />
+      <Box mb={3} />
+      <Fade in appear>
+        <div>
+          {renderChildrenWithProps(children, { ...rest })}
+        </div>
+      </Fade>
+    </React.Fragment>
   );
 };
 
 KPILayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   pageTitle: PropTypes.object,
-  location: PropTypes.object,
 };
 
 export default compose(
   memo,
-  withStyles(styles),
 )(KPILayout);

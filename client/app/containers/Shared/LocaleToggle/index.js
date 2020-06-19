@@ -16,6 +16,7 @@ import { selectLocale } from 'containers/Shared/LanguageProvider/selectors';
 import DiverstLanguageSelect from 'components/Shared/DiverstLanguageSelect';
 
 import LocaleService from 'utils/localeService';
+import { getLanguageStringFromLocaleString } from 'utils/localeHelpers';
 
 export class LocaleToggle extends React.PureComponent {
   handleLocaleToggle = (e) => {
@@ -29,7 +30,7 @@ export class LocaleToggle extends React.PureComponent {
   render() {
     return (
       <DiverstLanguageSelect
-        value={this.props.locale}
+        value={getLanguageStringFromLocaleString(this.props.locale)}
         values={appLocales}
         onToggle={this.handleLocaleToggle}
       />

@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -10,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -32,22 +32,20 @@ export function NewsLinkPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId, item_id: itemId } = useParams();
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
-    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(rs.params('group_id'), id),
+    newsFeedIndex: ROUTES.group.news.index.path(groupId),
+    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(groupId, id),
   };
 
   useEffect(() => {
-    const newsItemId = rs.params('item_id');
-
     // get news item & comments specified in path
-    props.getNewsItemBegin({ id: newsItemId });
+    props.getNewsItemBegin({ id: itemId });
 
     return () => props.newsFeedUnmount();
   }, []);
 
-  const { currentUser, currentGroup, currentNewsItem } = props;
+  const { currentUser, currentNewsItem } = props;
 
   return (
     <NewsLink
@@ -101,6 +99,6 @@ export default compose(
 )(Conditional(
   NewsLinkPage,
   ['currentNewsItem.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.news.index.path(params.group_id),
   permissionMessages.news.newsLink.showPage
 ));

@@ -1,13 +1,11 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -31,22 +29,18 @@ import CampaignQuestionClose from 'components/Innovate/Campaign/CampaignQuestion
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { getFolderIndexPath } from 'utils/resourceHelpers';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionShowPage(props) {
   useInjectReducer({ key: 'questions', reducer });
   useInjectSaga({ key: 'questions', saga });
 
-  const rs = new RouteService(useContext);
+  const { campaign_id: campaignId, question_id: questionId } = useParams();
   const links = {
-    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
+    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
 
   useEffect(() => {
-    const campaignId = rs.params('campaign_id');
-    const questionId = rs.params('question_id');
-
     props.getQuestionBegin({ id: questionId });
     return () => props.campaignQuestionsUnmount();
   }, []);
@@ -112,6 +106,6 @@ export default compose(
 )(Conditional(
   CampaignQuestionShowPage,
   ['question.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  (props, params) => ROUTES.admin.innovate.campaigns.index.path(),
   permissionMessages.innovate.campaign.campaignQuestion.showPage
 ));

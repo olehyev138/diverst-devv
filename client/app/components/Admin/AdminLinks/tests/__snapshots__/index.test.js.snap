@@ -280,6 +280,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WrappedComponent
             button={true}
             onClick={[Function]}
+            show={false}
           >
             <WithStyles(ForwardRef(ListItemIcon))>
               <WbIncandescentIcon />
@@ -308,6 +309,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                show={false}
                 to="/admin/innovate/campaigns"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -326,6 +328,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                show={false}
                 to="/admin/innovate/financials"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -362,6 +365,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WrappedComponent>
           <WrappedComponent
             button={true}
+            show={false}
           >
             <WithStyles(ForwardRef(ListItemIcon))>
               <GroupWorkIcon />
@@ -477,6 +481,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                isActive={[Function]}
                 to="#"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -767,6 +772,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WrappedComponent
             button={true}
             onClick={[Function]}
+            show={false}
           >
             <WithStyles(ForwardRef(ListItemIcon))>
               <WbIncandescentIcon />
@@ -795,6 +801,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                show={false}
                 to="/admin/innovate/campaigns"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -813,6 +820,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                show={false}
                 to="/admin/innovate/financials"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
@@ -849,6 +857,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           </WrappedComponent>
           <WrappedComponent
             button={true}
+            show={false}
           >
             <WithStyles(ForwardRef(ListItemIcon))>
               <GroupWorkIcon />
@@ -964,6 +973,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
+                isActive={[Function]}
                 to="#"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>

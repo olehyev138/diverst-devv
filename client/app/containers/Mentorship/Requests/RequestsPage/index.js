@@ -12,12 +12,9 @@
  *    - on save - create/update user
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -28,7 +25,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import {
   selectPaginatedRequests,
   selectRequestsTotal,
-  selectRequest,
   selectIsFetchingRequests,
   selectSuccessfulChange
 } from 'containers/Mentorship/Requests/selectors';
@@ -44,15 +40,12 @@ import {
 import reducer from 'containers/Mentorship/Requests/reducer';
 import saga from 'containers/Mentorship/Requests/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import RequestList from 'components/Mentorship/MentorRequestList';
 import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
-import { selectUser } from 'containers/Mentorship/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -65,8 +58,6 @@ export function MentorsPage(props) {
   useInjectSaga({ key: 'request', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', orderBy: 'id' });
-
-  const rs = new RouteService(useContext);
 
   const validType = type => type === 'outgoing' || type === 'incoming';
 
@@ -196,7 +187,7 @@ export default compose(
 )(Conditional(
   MentorsPage,
   ['user.permissions.update?'],
-  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
   permissionMessages.mentorship.requests.indexPage,
   true
 ));

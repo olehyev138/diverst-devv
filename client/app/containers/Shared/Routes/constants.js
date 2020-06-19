@@ -4,7 +4,7 @@ const messages = require('./messages');
 const ROUTES = {
   // Session
   session: {
-    sign_up: {
+    signUp: {
       path: (token = ':token') => `/sign_up/${token}`,
     },
     login: {
@@ -18,18 +18,6 @@ const ROUTES = {
   // User
   user: {
     get root() { return this.home; },
-    show: {
-      path: (userId = ':user_id') => `/user/${userId}`,
-      data: {
-        titleMessage: messages.user.profile,
-      }
-    },
-    edit: {
-      path: (userId = ':user_id') => `/user/${userId}/edit`,
-      data: {
-        titleMessage: messages.user.edit,
-      }
-    },
     home: {
       path: () => '/',
       data: {
@@ -67,7 +55,20 @@ const ROUTES = {
         titleMessage: messages.user.downloads,
       }
     },
+    show: {
+      path: (userId = ':user_id') => `/user/${userId}`,
+      data: {
+        titleMessage: messages.user.profile,
+      }
+    },
+    edit: {
+      path: (userId = ':user_id') => `/user/${userId}/edit`,
+      data: {
+        titleMessage: messages.user.edit,
+      }
+    },
     mentorship: {
+      pathPrefix: '/mentorship',
       data: {
         titleMessage: messages.user.mentorship,
       },
@@ -149,7 +150,7 @@ const ROUTES = {
   },
 
   group: {
-    pathPrefix: '/groups',
+    pathPrefix: (groupId = ':group_id') => `/groups/${groupId}`,
     back: {
       data: {
         titleMessage: messages.groups.back,
@@ -254,6 +255,7 @@ const ROUTES = {
       }
     },
     plan: {
+      pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan`,
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/plan`,
         data: {
@@ -290,6 +292,7 @@ const ROUTES = {
           }
         },
         manage: {
+          pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
           index: {
             data: {
               pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
@@ -361,6 +364,7 @@ const ROUTES = {
         },
       },
       kpi: {
+        pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
         index: {
           data: {
             pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
@@ -407,6 +411,7 @@ const ROUTES = {
         },
       },
       budget: {
+        pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
           data: {
@@ -449,6 +454,7 @@ const ROUTES = {
       },
     },
     manage: {
+      pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/manage`,
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/manage`,
         data: {
@@ -831,6 +837,7 @@ const ROUTES = {
         }
       },
       users: {
+        pathPrefix: '/admin/system/users',
         index: {
           path: () => '/admin/system/users',
           data: {
@@ -895,23 +902,27 @@ const ROUTES = {
           },
         },
         emails: {
-          index: {
-            path: () => '/admin/system/settings/emailLayouts'
+          pathPrefix: '/admin/system/settings/emails',
+          layouts: {
+            index: {
+              path: () => '/admin/system/settings/emails/layouts'
+            },
+            edit: {
+              path: (emailId = ':email_id') => `/admin/system/settings/emails/layouts/${emailId}/edit`
+            },
           },
-          edit: {
-            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
-          },
-        },
-        mailEvents: {
-          index: {
-            path: () => '/admin/system/settings/emailEvents'
-          },
-          edit: {
-            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
+          events: {
+            index: {
+              path: () => '/admin/system/settings/emails/events'
+            },
+            edit: {
+              path: (eventId = ':event_id') => `/admin/system/settings/emails/events/${eventId}/edit`
+            },
           },
         },
       },
       branding: {
+        pathPrefix: '/admin/system/branding',
         index: {
           path: () => '/admin/system/branding',
           data: {

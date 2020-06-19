@@ -4,10 +4,9 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
@@ -82,12 +81,35 @@ const styles = theme => ({
   },
 });
 
-export function EventsList(props, context) {
+export function EventsList(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
   const { classes, intl } = props;
 
   const routeContext = useContext(RouteContext);
+  const [eventId, setEvent] = useState(null);
+
+  const clickEvent = (info) => {
+    const { event } = info;
+    // const extra = event.extendedProps;
+    setEvent(toNumber(event.id));
+  };
+
+  const dialog = (
+    <Dialog
+      open={!!eventId}
+      onClose={() => setEvent(null)}
+    >
+      <DialogContent>
+        <EventLite
+          event={props.events.find(event => event.id === eventId)}
+          isCommiting={props.isCommitting}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
+        />
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <React.Fragment>

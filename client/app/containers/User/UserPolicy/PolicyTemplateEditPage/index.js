@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/UserPolicy/reducer';
 import saga from 'containers/User/UserPolicy/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -32,13 +30,13 @@ export function PolicyEditPage(props) {
   useInjectReducer({ key: 'policies', reducer });
   useInjectSaga({ key: 'policies', saga });
 
-  const rs = new RouteService(useContext);
+  const { policy_id: policyId } = useParams();
+
   const links = {
     policiesIndex: ROUTES.admin.system.users.policy_templates.index.path(),
   };
 
   useEffect(() => {
-    const policyId = rs.params('policy_id');
     props.getPolicyBegin({ id: policyId });
 
     return () => props.policiesUnmount();
@@ -94,6 +92,6 @@ export default compose(
 )(Conditional(
   PolicyEditPage,
   ['currentPolicy.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.system.users.policy_templates.index.path(),
+  (props, params) => ROUTES.admin.system.users.policy_templates.index.path(),
   permissionMessages.user.userPolicy.policyTemplateEditPage
 ));

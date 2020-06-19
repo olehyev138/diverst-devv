@@ -1,16 +1,15 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
@@ -47,8 +46,6 @@ import {
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import FolderForm from 'components/Resource/Folder/FolderForm';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -61,8 +58,6 @@ export function FolderPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
-
   const {
     currentUser,
     currentFolder,
@@ -70,6 +65,8 @@ export function FolderPage(props) {
     resources,
     valid,
   } = props;
+
+  const { item_id: folderId } = useParams();
 
   const links = {
     folderShow: folder => getFolderShowPath(folder),
@@ -123,8 +120,6 @@ export function FolderPage(props) {
   };
 
   useEffect(() => {
-    const folderId = rs.params('item_id');
-
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
     getFolders(folderId);
@@ -135,8 +130,6 @@ export function FolderPage(props) {
 
   useEffect(() => {
     if (props.hasChanged) {
-      const folderId = rs.params('item_id');
-
       // get folder specified in path
       props.getFolderBegin({ id: folderId });
       getFolders(folderId);
@@ -168,7 +161,6 @@ export function FolderPage(props) {
           }}
           enableReinitialize
           onSubmit={(values, actions) => {
-            const folderId = rs.params('item_id');
             props.validateFolderPasswordBegin({
               id: folderId[0],
               password: values.password
@@ -300,8 +292,8 @@ export default compose(
 )(Conditional(
   FolderPage,
   ['currentFolder.permissions.show?', 'isFormLoading'],
-  (props, rs) => (props, rs) => rs.location.fromFolder
-    ? getFolderShowPath(rs.location.fromFolder.folder)
+  (props, params, location) => location.fromFolder
+    ? getFolderShowPath(location.fromFolder.folder)
     : getFolderIndexPath('admin'),
   'resource.enterpriseFolder.folderPage'
 ));

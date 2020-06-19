@@ -32,16 +32,19 @@ export function BrandingLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.theme.path()}
             label={<DiverstFormattedMessage {...messages.tabs.theme} />}
+            value='theme'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.home.path()}
             label={<DiverstFormattedMessage {...messages.tabs.home} />}
+            value='home'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.sponsors.index.path()}
             label={<DiverstFormattedMessage {...messages.tabs.sponsors} />}
+            value='sponsors'
           />
         </ResponsiveTabs>
       </Paper>
@@ -51,7 +54,7 @@ export function BrandingLinks(props) {
 
 BrandingLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object
 };
 
