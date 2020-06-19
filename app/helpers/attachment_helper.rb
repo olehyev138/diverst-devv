@@ -4,6 +4,7 @@ module AttachmentHelper
     JPG: 'image/jpg',
     JPEG: 'image/jpeg',
     GIF: 'image/gif',
+    SVG: 'image/svg+xml',
     PDF: 'application/pdf',
     CSV: 'text/csv',
     XML: 'text/xml',
@@ -21,7 +22,8 @@ module AttachmentHelper
     [
       COMMON_CONTENT_TYPES[:PNG],
       COMMON_CONTENT_TYPES[:JPG],
-      COMMON_CONTENT_TYPES[:JPEG]
+      COMMON_CONTENT_TYPES[:JPEG],
+      COMMON_CONTENT_TYPES[:SVG]
     ]
   end
 
