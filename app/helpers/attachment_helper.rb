@@ -41,4 +41,9 @@ module AttachmentHelper
   def self.attachment_data_string(attachment)
     Base64.encode64(attachment.download) if attachment.attached?
   end
+
+  # Attachment content type
+  def self.attachment_content_type(attachment)
+    attachment.content_type if attachment.attached?
+  end
 end
