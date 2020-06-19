@@ -12,7 +12,7 @@
  *    - on save - create/update update
  */
 
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dig from 'object-dig';
@@ -50,7 +50,6 @@ import fieldDataReducer from 'containers/Shared/FieldData/reducer';
 import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import RouteService from 'utils/routeHelpers';
 
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectEvent } from 'containers/Event/selectors';
@@ -65,8 +64,8 @@ export function UpdateEditPage(props) {
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
 
-  const rs = new RouteService(useContext);
   const { intl } = props;
+
   useEffect(() => {
     const updatableId = dig(props, 'currentEvent', 'id');
     if (updatableId)

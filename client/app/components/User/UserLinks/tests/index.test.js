@@ -27,7 +27,7 @@ const navProps = {
 
 const props = {
   classes: {},
-  pageTitle: ROUTES.user.home.data.titleMessage
+  pageTitle: 'Page Title'
 };
 
 describe('<UserLinks />', () => {

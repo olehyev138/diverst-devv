@@ -12,10 +12,11 @@
  *    - on save - create/update update
  */
 
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dig from 'object-dig';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -52,7 +53,6 @@ import fieldDataReducer from 'containers/Shared/FieldData/reducer';
 import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import RouteService from 'utils/routeHelpers';
 
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectGroup } from 'containers/Group/selectors';
@@ -68,9 +68,11 @@ export function UpdateEditPage(props) {
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
 
-  const rs = new RouteService(useContext);
-  const { location } = rs;
   const { intl } = props;
+
+  const location = useLocation();
+  const { update_id: updateId } = useParams();
+
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
@@ -79,10 +81,8 @@ export function UpdateEditPage(props) {
   const update = props.currentUpdate || location.update;
 
   useEffect(() => {
-    const id = rs.params('update_id');
-    // eslint-disable-next-line eqeqeq
-    if (!update || update.id != id)
-      props.getUpdateBegin(id);
+    if (!update || update.id !== updateId)
+      props.getUpdateBegin(updateId);
     else
       props.getUpdateSuccess({ update });
 
@@ -154,6 +154,6 @@ export default compose(
 )(Conditional(
   UpdateEditPage,
   ['currentGroup.permissions.kpi_manage?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.groupPlan.KPI.updateEditPage
 ));

@@ -54,7 +54,7 @@ export function GlobalSettingsLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.globalSettings.emails.index.path()}
+            to={ROUTES.admin.system.globalSettings.emails.layouts.index.path()}
             label={<DiverstFormattedMessage {...messages.emails} />}
             value='email'
           />
