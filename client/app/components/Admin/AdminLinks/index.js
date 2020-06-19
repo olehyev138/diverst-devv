@@ -79,8 +79,6 @@ const MenuPermission = WithPermission(MenuItem);
 export function AdminLinks(props) {
   const { classes } = props;
 
-  const location = useLocation();
-
   const [state, setState] = useState({
     drawerOpen: props.drawerOpen,
     analyze: {
