@@ -69,9 +69,17 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
       remove_foreign_key "video_rooms", "initiatives" if foreign_key_exists?("video_rooms", "initiatives")
     end
 
+    if table_exists? :video_participants
+      remove_foreign_key :video_participants, :video_rooms if foreign_key_exists?(:video_participants, :video_rooms)
+    end
+
     ### Primary keys
 
     if table_exists? :video_rooms
+      change_column :video_rooms, :id, :bigint, auto_increment: true
+    end
+
+    if table_exists? :video_participants
       change_column :video_rooms, :id, :bigint, auto_increment: true
     end
 
@@ -330,6 +338,10 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
       change_column :video_rooms, :initiative_id, :bigint
     end
 
+    if table_exists? :video_participants
+      change_column :video_participants, :video_room_id, :bigint
+    end
+
     add_foreign_key "answers", "groups", column: "contributing_group_id"
     add_foreign_key "badges", "enterprises"
     add_foreign_key "budget_items", "budgets"
@@ -390,6 +402,10 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     if table_exists? :video_rooms
       add_foreign_key "video_rooms", "enterprises"
       add_foreign_key "video_rooms", "initiatives"
+    end
+
+    if table_exists? :video_participants
+      add_foreign_key :video_participants, :video_rooms
     end
 
 
