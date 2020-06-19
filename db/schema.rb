@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_10_192239) do
+ActiveRecord::Schema.define(version: 2020_06_18_202924) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -289,19 +289,19 @@ ActiveRecord::Schema.define(version: 2020_06_10_192239) do
   end
 
   create_table "custom_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.string "erg", default: "Group"
+    t.string "erg", default: "Group", null: false
     t.bigint "enterprise_id"
-    t.string "program", default: "Goal"
-    t.string "structure", default: "Structure"
-    t.string "outcome", default: "Focus Areas"
-    t.string "badge", default: "Badge"
-    t.string "segment", default: "Segment"
-    t.string "dci_full_title", default: "Engagement"
-    t.string "dci_abbreviation", default: "Engagement"
-    t.string "member_preference", default: "Member Survey"
-    t.string "parent", default: "Parent"
-    t.string "sub_erg", default: "Sub-Group"
-    t.string "privacy_statement", default: "Privacy Statement"
+    t.string "program", default: "Goal", null: false
+    t.string "structure", default: "Structure", null: false
+    t.string "outcome", default: "Focus Areas", null: false
+    t.string "badge", default: "Badge", null: false
+    t.string "segment", default: "Segment", null: false
+    t.string "dci_full_title", default: "Engagement", null: false
+    t.string "dci_abbreviation", default: "Engagement", null: false
+    t.string "member_preference", default: "Member Survey", null: false
+    t.string "parent", default: "Parent", null: false
+    t.string "sub_erg", default: "Sub-Group", null: false
+    t.string "privacy_statement", default: "Privacy Statement", null: false
     t.index ["enterprise_id"], name: "index_custom_texts_on_enterprise_id"
   end
 
@@ -440,7 +440,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_192239) do
     t.bigint "field_user_id"
     t.string "field_user_type"
     t.bigint "field_id"
-    t.string "data"
+    t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["field_id"], name: "index_field_data_on_field_id"

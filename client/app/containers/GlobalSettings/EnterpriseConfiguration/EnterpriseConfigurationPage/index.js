@@ -16,7 +16,6 @@ import {
   configurationUnmount
 } from '../actions';
 
-import RouteService from 'utils/routeHelpers';
 import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';

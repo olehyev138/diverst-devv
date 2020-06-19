@@ -15,6 +15,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 
 import { LoginPage } from 'containers/Session/LoginPage/index';
 import LoginForm from 'components/Session/LoginForm';

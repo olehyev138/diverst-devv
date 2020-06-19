@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -25,8 +23,8 @@ export function GroupMemberCreatePage(props) {
   useInjectReducer({ key: 'members', reducer });
   useInjectSaga({ key: 'members', saga });
 
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
+  const { group_id: groupId } = useParams();
+
   const links = {
     groupMembersIndex: ROUTES.group.members.index.path(groupId),
   };
@@ -76,6 +74,6 @@ export default compose(
 )(Conditional(
   GroupMemberCreatePage,
   ['currentGroup.permissions.members_create?'],
-  (props, rs) => ROUTES.group.members.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.members.index.path(params.group_id),
   permissionMessages.group.groupMembers.createPage
 ));

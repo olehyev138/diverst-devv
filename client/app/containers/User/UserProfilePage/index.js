@@ -1,19 +1,18 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  getUserBegin, updateFieldDataBegin,
-  updateUserBegin, userUnmount
+  getUserBegin, userUnmount
 } from 'containers/User/actions';
 
 import { selectUser, selectFieldData, selectIsFormLoading } from 'containers/User/selectors';
@@ -27,13 +26,15 @@ export function UserProfilePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { user_id: userId } = useParams();
+
   const links = {
     userEdit: id => ROUTES.user.edit.path(id),
   };
 
   useEffect(() => {
-    props.getUserBegin({ id: rs.params('user_id') });
+    props.getUserBegin({ id: userId });
 
     return () => {
       props.userUnmount();

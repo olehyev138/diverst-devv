@@ -13,7 +13,6 @@ import {
   updateEnterpriseBegin,
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
-import RouteService from 'utils/routeHelpers';
 import BrandingHome from 'components/Branding/BrandingHome';
 
 import messages from 'containers/Branding/messages';
