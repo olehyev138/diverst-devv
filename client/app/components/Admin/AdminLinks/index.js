@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { matchPath } from 'react-router';
+import { matchPath, useLocation } from 'react-router-dom';
 
 import {
   Collapse, Divider, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, MenuItem,
@@ -76,517 +76,502 @@ const styles = theme => ({
 const ListPermission = WithPermission(ListItem);
 const MenuPermission = WithPermission(MenuItem);
 
-class AdminLinks extends React.PureComponent {
-  constructor(props) {
-    super(props);
+export function AdminLinks(props) {
+  const { classes } = props;
 
-    this.state = {
-      drawerOpen: props.drawerOpen,
-      analyze: {
-        open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.analyze.index.data.pathPrefix,
-          exact: false,
-          strict: false
-        }),
-      },
-      manage: {
-        open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.manage.index.data.pathPrefix,
-          exact: false,
-          strict: false
-        }),
-      },
-      innovate: {
-        open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.innovate.index.data.pathPrefix,
-          exact: false,
-          strict: false
-        }),
-      },
-      plan: {
-        open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.plan.index.data.pathPrefix,
-          exact: false,
-          strict: false
-        }),
-      },
-      system: {
-        open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.system.index.data.pathPrefix,
-          exact: false,
-          strict: false
-        }),
-      }
-    };
-  }
+  const location = useLocation();
 
-  handleDrawerToggle = () => {
-    this.setState(
-      state => ({ drawerOpen: !state.drawerOpen }),
-      () => (this.props.drawerToggleCallback(this.state.drawerOpen))
-    );
+  const [state, setState] = useState({
+    drawerOpen: props.drawerOpen,
+    analyze: {
+      open: !!matchPath(location.pathname, {
+        path: ROUTES.admin.analyze.index.data.pathPrefix,
+        exact: false,
+        strict: false
+      }),
+    },
+    manage: {
+      open: !!matchPath(location.pathname, {
+        path: ROUTES.admin.manage.index.data.pathPrefix,
+        exact: false,
+        strict: false
+      }),
+    },
+    innovate: {
+      open: !!matchPath(location.pathname, {
+        path: ROUTES.admin.innovate.index.data.pathPrefix,
+        exact: false,
+        strict: false
+      }),
+    },
+    plan: {
+      open: !!matchPath(location.pathname, {
+        path: ROUTES.admin.plan.index.data.pathPrefix,
+        exact: false,
+        strict: false
+      }),
+    },
+    system: {
+      open: !!matchPath(location.pathname, {
+        path: ROUTES.admin.system.index.data.pathPrefix,
+        exact: false,
+        strict: false
+      }),
+    }
+  });
+
+  const handleDrawerToggle = () => {
+    props.drawerToggleCallback(!state.drawerOpen);
+    setState({ ...state, drawerOpen: !state.drawerOpen });
   };
 
-  handleAnalyzeClick = () => {
-    this.setState(state => ({ analyze: { open: !state.analyze.open } }));
+  const handleAnalyzeClick = () => {
+    setState({ ...state, analyze: { open: !state.analyze.open } });
   };
 
-  handleManageClick = () => {
-    this.setState(state => ({ manage: { open: !state.manage.open } }));
+  const handleManageClick = () => {
+    setState({ ...state, manage: { open: !state.manage.open } });
   };
 
-  handlePlanClick = () => {
-    this.setState(state => ({ plan: { open: !state.plan.open } }));
+  const handlePlanClick = () => {
+    setState({ ...state, plan: { open: !state.plan.open } });
   };
 
-  handleInnovateClick = () => {
-    this.setState(state => ({ innovate: { open: !state.innovate.open } }));
+  const handleInnovateClick = () => {
+    setState({ ...state, innovate: { open: !state.innovate.open } });
   };
 
-  handleSystemClick = () => {
-    this.setState(state => ({ system: { open: !state.system.open } }));
+  const handleSystemClick = () => {
+    setState({ ...state, system: { open: !state.system.open } });
   };
 
-  drawer(classes) {
-    return (
-      <React.Fragment>
-        <div className={classes.toolbar} />
-        <Divider />
-        <Scrollbar>
-          <List>
-            <ListPermission button onClick={this.handleAnalyzeClick} show={permission(this.props, 'metrics_overview')}>
-              <ListItemIcon>
-                <EqualizerIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <DiverstFormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
-              </ListItemText>
-              {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListPermission>
-            <Collapse in={this.state.analyze.open} timeout='auto' unmountOnExit>
-              <List disablePadding>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  exact
-                  to={ROUTES.admin.analyze.overview.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'metrics_overview')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.analyze.users.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'metrics_overview')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.analyze.groups.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'metrics_overview')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.analyze.custom.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'metrics_overview')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.analyze.custom.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-              </List>
-            </Collapse>
+  const drawer = classes => (
+    <React.Fragment>
+      <div className={classes.toolbar} />
+      <Divider />
+      <Scrollbar>
+        <List>
+          <ListPermission button onClick={handleAnalyzeClick} show={permission(props, 'metrics_overview')}>
+            <ListItemIcon>
+              <EqualizerIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <DiverstFormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
+            </ListItemText>
+            {state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListPermission>
+          <Collapse in={state.analyze.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuPermission
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.analyze.overview.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'metrics_overview')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.analyze.users.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'metrics_overview')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.analyze.groups.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'metrics_overview')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.analyze.custom.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'metrics_overview')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.custom.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+            </List>
+          </Collapse>
 
-            <ListPermission
-              button
-              onClick={this.handleManageClick}
-              show={
-                permission(this.props, 'groups_create')
-                || permission(this.props, 'segments_create')
-                || permission(this.props, 'enterprise_folders_view')
-                || permission(this.props, 'archive_manage')
-              }
-            >
-              <ListItemIcon>
-                <DeviceHubIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <DiverstFormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
-              </ListItemText>
-              {this.state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListPermission>
-            <Collapse in={this.state.manage.open} timeout='auto' unmountOnExit>
-              <List disablePadding>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.manage.groups.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'groups_create')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.manage.segments.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'segments_create')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.manage.resources.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'enterprise_folders_view')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.manage.archived.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'archive_manage')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-              </List>
-            </Collapse>
-
-            <ListPermission
-              button
-              onClick={this.handlePlanClick}
-              show={
-                dig(this.props, 'enterprise', 'plan_module_enabled')
-                && permission(this.props, 'manage_all_budgets')
-              }
-            >
-              <ListItemIcon>
-                <AssignmentTurnedInIcon />
-              </ListItemIcon>
-              <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.plan.index.data.titleMessage} />} />
-              {this.state.plan.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListPermission>
-            <Collapse in={this.state.plan.open} timeout='auto' unmountOnExit>
-              <List disablePadding>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.plan.budgeting.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'manage_all_budgets')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    Group Budgets
-                  </ListItemText>
-                </MenuPermission>
-              </List>
-            </Collapse>
-
-            <ListPermission
-              button
-              onClick={this.handleInnovateClick}
-              show={permission(this.props, 'campaigns_create')}
-            >
-              <ListItemIcon>
-                <LightbulbIcon className={classes.lightbulbIcon} />
-              </ListItemIcon>
-              <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.innovate.index.data.titleMessage} />} />
-              {this.state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListPermission>
-            <Collapse in={this.state.innovate.open} timeout='auto' unmountOnExit>
-              <List disablePadding>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.innovate.campaigns.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'campaigns_create')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.innovate.financials.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={permission(this.props, 'campaigns_manage')}
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.innovate.financials.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-              </List>
-            </Collapse>
-
-            <ListPermission
-              button
-              component={WrappedNavLink}
-              to={ROUTES.admin.include.polls.index.path()}
-              activeClassName={classes.navLinkActive}
-              show={permission(this.props, 'polls_create')}
-            >
-              <ListItemIcon>
-                <HowToVoteIcon />
-              </ListItemIcon>
-              <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
-            </ListPermission>
-
-            <ListPermission
-              button
-              show={
-                dig(this.props, 'enterprise', 'mentorship_module_enabled')
-                && permission(this.props, 'mentoring_interests_create')
-              }
-            >
-              <ListItemIcon>
-                <UsersCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.mentorship.index.data.titleMessage} />} />
-            </ListPermission>
-
-            <Divider />
-
-            <ListPermission
-              button
-              onClick={this.handleSystemClick}
-              show={
-                permission(this.props, 'fields_manage')
-                || permission(this.props, 'custom_text_manage')
-                || permission(this.props, 'enterprise_manage')
-                || permission(this.props, 'sso_authentication')
-                || permission(this.props, 'emails_manage')
-                || permission(this.props, 'users_create')
-                || permission(this.props, 'policy_templates_create')
-                || permission(this.props, 'branding_manage')
-                || permission(this.props, 'integrations_manage')
-                || permission(this.props, 'rewards_manage')
-                || permission(this.props, 'logs_manage')
-              }
-            >
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <DiverstFormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
-              </ListItemText>
-              {this.state.system.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListPermission>
-            <Collapse in={this.state.system.open} timeout='auto' unmountOnExit>
-              <List disablePadding>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.system.globalSettings.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  isActive={(match, location) => !!matchPath(location.pathname, {
-                    path: ROUTES.admin.system.globalSettings.pathPrefix,
-                    exact: false,
-                    strict: false,
-                  })}
-                  show={
-                    permission(this.props, 'fields_manage')
-                    || permission(this.props, 'custom_text_manage')
-                    || permission(this.props, 'enterprise_manage')
-                    || permission(this.props, 'sso_authentication')
-                    || permission(this.props, 'emails_manage')
-                  }
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.system.globalSettings.fields.index.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.system.users.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={
-                    permission(this.props, 'users_create')
-                    || permission(this.props, 'policy_templates_create')
-                  }
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.system.branding.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={
-                    permission(this.props, 'branding_manage')
-                  }
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.system.branding.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to={ROUTES.admin.system.logs.index.path()}
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={
-                    permission(this.props, 'logs_manage')
-                  }
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-                <MenuPermission
-                  component={WrappedNavLink}
-                  to='#'
-                  className={classes.nested}
-                  activeClassName={classes.navLinkActive}
-                  show={
-                    permission(this.props, 'integrations_manage')
-                    || permission(this.props, 'rewards_manage')
-                  }
-                >
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
-                  </ListItemText>
-                </MenuPermission>
-              </List>
-            </Collapse>
-
-            <Divider />
-          </List>
-        </Scrollbar>
-      </React.Fragment>
-    );
-  }
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <nav className={classes.drawer}>
-        <Hidden mdUp>
-          <Drawer
-            variant='temporary'
-            open={this.state.drawerOpen}
-            onClose={this.handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
+          <ListPermission
+            button
+            onClick={handleManageClick}
+            show={
+              permission(props, 'groups_create')
+              || permission(props, 'segments_create')
+              || permission(props, 'enterprise_folders_view')
+              || permission(props, 'archive_manage')
+            }
           >
-            {this.drawer(classes)}
-          </Drawer>
-        </Hidden>
-        <Hidden smDown>
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant='permanent'
-            open
+            <ListItemIcon>
+              <DeviceHubIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <DiverstFormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
+            </ListItemText>
+            {state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListPermission>
+          <Collapse in={state.manage.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.manage.groups.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'groups_create')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.manage.segments.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'segments_create')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.manage.resources.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'enterprise_folders_view')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.manage.archived.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'archive_manage')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+            </List>
+          </Collapse>
+          <ListPermission
+            button
+            onClick={handlePlanClick}
+            show={
+              dig(props, 'enterprise', 'plan_module_enabled')
+              && permission(props, 'manage_all_budgets')
+            }
           >
-            {this.drawer(classes)}
-          </Drawer>
-        </Hidden>
-      </nav>
-    );
-  }
+            <ListItemIcon>
+              <AssignmentTurnedInIcon />
+            </ListItemIcon>
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.plan.index.data.titleMessage} />} />
+            {state.plan.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListPermission>
+          <Collapse in={state.plan.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.plan.budgeting.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'manage_all_budgets')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Group Budgets
+                </ListItemText>
+              </MenuPermission>
+            </List>
+          </Collapse>
+          <ListPermission
+            button
+            onClick={handleInnovateClick}
+            show={false && permission(props, 'campaigns_create')}
+          >
+            <ListItemIcon>
+              <LightbulbIcon className={classes.lightbulbIcon} />
+            </ListItemIcon>
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.innovate.index.data.titleMessage} />} />
+            {state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListPermission>
+          <Collapse in={state.innovate.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.innovate.campaigns.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={false && permission(props, 'campaigns_create')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.innovate.financials.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={false && permission(props, 'campaigns_manage')}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.innovate.financials.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+            </List>
+          </Collapse>
+
+          <ListPermission
+            button
+            component={WrappedNavLink}
+            to={ROUTES.admin.include.polls.index.path()}
+            activeClassName={classes.navLinkActive}
+            show={permission(props, 'polls_create')}
+          >
+            <ListItemIcon>
+              <HowToVoteIcon />
+            </ListItemIcon>
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
+          </ListPermission>
+
+          <ListPermission
+            button
+            show={
+              false &&
+              dig(props, 'enterprise', 'mentorship_module_enabled')
+              && permission(props, 'mentoring_interests_create')
+            }
+          >
+            <ListItemIcon>
+              <UsersCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.mentorship.index.data.titleMessage} />} />
+          </ListPermission>
+
+          <Divider />
+
+          <ListPermission
+            button
+            onClick={handleSystemClick}
+            show={
+              permission(props, 'fields_manage')
+              || permission(props, 'custom_text_manage')
+              || permission(props, 'enterprise_manage')
+              || permission(props, 'sso_authentication')
+              || permission(props, 'emails_manage')
+              || permission(props, 'users_create')
+              || permission(props, 'policy_templates_create')
+              || permission(props, 'branding_manage')
+              || permission(props, 'integrations_manage')
+              || permission(props, 'rewards_manage')
+              || permission(props, 'logs_manage')
+            }
+          >
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <DiverstFormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
+            </ListItemText>
+            {state.system.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListPermission>
+          <Collapse in={state.system.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.system.globalSettings.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                isActive={(match, location) => !!matchPath(location.pathname, {
+                  path: ROUTES.admin.system.globalSettings.pathPrefix,
+                  exact: false,
+                  strict: false,
+                })}
+                show={
+                  permission(props, 'fields_manage')
+                  || permission(props, 'custom_text_manage')
+                  || permission(props, 'enterprise_manage')
+                  || permission(props, 'sso_authentication')
+                  || permission(props, 'emails_manage')
+                }
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.globalSettings.fields.index.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.system.users.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={
+                  permission(props, 'users_create')
+                  || permission(props, 'policy_templates_create')
+                }
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.system.branding.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={
+                  permission(props, 'branding_manage')
+                }
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.branding.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.system.logs.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={
+                  permission(props, 'logs_manage')
+                }
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time
+                show={
+                  permission(props, 'integrations_manage')
+                  || permission(props, 'rewards_manage')
+                }
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
+                </ListItemText>
+              </MenuPermission>
+            </List>
+          </Collapse>
+
+          <Divider />
+        </List>
+      </Scrollbar>
+    </React.Fragment>
+  );
+
+  return (
+    <nav className={classes.drawer}>
+      <Hidden mdUp>
+        <Drawer
+          variant='temporary'
+          open={state.drawerOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          {drawer(classes)}
+        </Drawer>
+      </Hidden>
+      <Hidden smDown>
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant='permanent'
+          open
+        >
+          {drawer(classes)}
+        </Drawer>
+      </Hidden>
+    </nav>
+  );
 }
 
 AdminLinks.propTypes = {
   classes: PropTypes.object,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
-  location: PropTypes.object,
   permissions: PropTypes.object,
   enterprise: PropTypes.object,
 };
-
-export function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
@@ -595,7 +580,7 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps
+  undefined
 );
 
 // styled & unconnected

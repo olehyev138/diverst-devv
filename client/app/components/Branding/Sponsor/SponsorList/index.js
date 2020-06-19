@@ -111,7 +111,7 @@ export function SponsorList(props) {
 
 SponsorList.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   deleteSponsorBegin: PropTypes.func,
   links: PropTypes.shape({
     sponsorNew: PropTypes.string,

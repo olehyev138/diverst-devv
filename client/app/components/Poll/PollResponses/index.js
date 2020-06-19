@@ -100,7 +100,7 @@ export function PollResponses(props, context) {
   );
 }
 PollResponses.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   responses: PropTypes.array,
   responsesTotal: PropTypes.number,

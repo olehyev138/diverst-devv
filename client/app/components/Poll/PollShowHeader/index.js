@@ -96,7 +96,7 @@ export function PollShowHeader(props, context) {
   );
 }
 PollShowHeader.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   poll: PropTypes.object,
   links: PropTypes.shape({

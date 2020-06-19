@@ -17,7 +17,7 @@ import News from '../UserNewsFeedPage';
 import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import {
-  Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
+  Typography, Grid, CardContent, Paper,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -56,14 +56,13 @@ export class HomePage extends React.PureComponent {
     };
   }
 
-handleClickOpen = () => {
-  this.setState({ open: true });
-};
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
   handleClose = () => {
     this.setState({ open: false });
   };
-
 
   render() {
     const { classes } = this.props;

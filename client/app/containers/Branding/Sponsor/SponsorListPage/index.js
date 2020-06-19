@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useContext, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -21,7 +20,6 @@ import {
   selectIsFetchingSponsors
 } from 'containers/Shared/Sponsors/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
@@ -34,8 +32,6 @@ export function SponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
-  const rs = new RouteService(useContext);
-
   const [params, setParams] = useState({
     count: 10, page: 0, orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
   });
@@ -45,7 +41,7 @@ export function SponsorListPage(props) {
     sponsorEdit: id => ROUTES.admin.system.branding.sponsors.edit.path(id),
   };
 
-  const sponsorId = rs.params('sponsor_id');
+  const { sponsor_id: sponsorId } = useParams();
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -126,6 +122,6 @@ export default compose(
 )(Conditional(
   SponsorListPage,
   ['permissions.branding_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.branding.sponsor.listPage
 ));

@@ -14,7 +14,6 @@ import {
   sponsorsUnmount
 } from '../../../Shared/Sponsors/actions';
 
-import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

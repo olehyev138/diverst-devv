@@ -3,7 +3,7 @@ import React, { memo, useState } from 'react';
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import {
   Paper, Typography, Grid, Button, Box, Card, CardContent, Link, Hidden, Divider, CardActions, CardActionArea,
   Tab } from '@material-ui/core/index';
@@ -37,6 +37,7 @@ const ArchiveTypes = Object.freeze({
 });
 
 export function ArchiveList(props) {
+  const { intl } = props;
   return (
     <React.Fragment>
       <Paper>

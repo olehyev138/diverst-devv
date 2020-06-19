@@ -1,10 +1,9 @@
-import React, {
-  memo, useContext, useEffect, useRef, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import RouteService from 'utils/routeHelpers';
+import { useParams } from 'react-router-dom';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -23,9 +22,9 @@ export function CustomGraphPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectSaga({ key: 'customMetrics', saga });
 
-  const rs = new RouteService(useContext);
+  const { metrics_dashboard_id: metricsDashboardId } = useParams();
   const links = {
-    customGraphEdit: graphId => ROUTES.admin.analyze.custom.graphs.edit.path(rs.params('metrics_dashboard_id'), graphId)
+    customGraphEdit: graphId => ROUTES.admin.analyze.custom.graphs.edit.path(metricsDashboardId, graphId)
   };
 
   const { customGraph } = props;

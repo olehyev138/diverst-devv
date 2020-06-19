@@ -1,10 +1,11 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
@@ -13,10 +14,12 @@ import saga from 'containers/Event/saga';
 import { selectEventsTotal, selectIsLoading, selectPaginatedEvents, selectCalendarEvents } from 'containers/Event/selectors';
 import { eventsUnmount, getEventsBegin } from 'containers/Event/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import EventsList from 'components/Event/EventsList';
+import Conditional from 'components/Compositions/Conditional';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const EventTypes = Object.freeze({
@@ -36,12 +39,12 @@ export function EventsPage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
   const links = {
-    eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
-    eventShow: id => ROUTES.group.events.show.path(rs.params('group_id'), id),
-    eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
-    eventEdit: id => ROUTES.group.events.edit.path(rs.params('group_id'), id)
+    eventsIndex: ROUTES.group.events.index.path(groupId),
+    eventShow: id => ROUTES.group.events.show.path(groupId, id),
+    eventNew: ROUTES.group.events.new.path(groupId),
+    eventEdit: id => ROUTES.group.events.edit.path(groupId, id)
   };
 
   const [tab, setTab] = useState(EventTypes.upcoming);
@@ -109,21 +112,26 @@ export function EventsPage(props) {
   const List = props.listComponent || EventsList;
 
   return (
-    <List
-      events={props.events}
-      eventsTotal={props.eventsTotal}
-      isLoading={props.isLoading}
-      currentTab={tab}
-      handleChangeTab={handleChangeTab}
-      handlePagination={handlePagination}
-      handleCalendarChange={handleChangeCalendar}
-      calendar={calendar}
-      calendarEvents={props.calendarEvents}
-      currentGroup={props.currentGroup}
-      links={links}
-      readonly={props.readonly}
-      onlyUpcoming={props.onlyUpcoming}
-    />
+    <React.Fragment>
+      {!props.readonly && (
+        <DiverstBreadcrumbs />
+      )}
+      <List
+        events={props.events}
+        eventsTotal={props.eventsTotal}
+        isLoading={props.isLoading}
+        currentTab={tab}
+        handleChangeTab={handleChangeTab}
+        handlePagination={handlePagination}
+        handleCalendarChange={handleChangeCalendar}
+        calendar={calendar}
+        calendarEvents={props.calendarEvents}
+        currentGroup={props.currentGroup}
+        links={links}
+        readonly={props.readonly}
+        onlyUpcoming={props.onlyUpcoming}
+      />
+    </React.Fragment>
   );
 }
 
@@ -165,6 +173,6 @@ export default compose(
 )(Conditional(
   EventsPage,
   ['currentGroup.permissions.events_view?'],
-  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  (props, params) => props.readonly ? null : ROUTES.group.home.path(params.group_id),
   permissionMessages.event.indexPage
 ));

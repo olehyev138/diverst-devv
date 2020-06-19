@@ -187,7 +187,7 @@ export function EventLite(props) {
 }
 
 EventLite.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   deleteEventBegin: PropTypes.func,
   archiveEventBegin: PropTypes.func,
   joinEventBegin: PropTypes.func,
