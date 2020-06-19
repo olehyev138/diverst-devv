@@ -78,7 +78,7 @@ describe('Tests for signup saga', () => {
   // TODO
   describe('Get signup Saga', () => {
     xit('Should submit the password', async () => {
-      api.users.signUpUser.mockImplementation(() => Promise.resolve({ data: { ...poll } }));
+      api.users.signUpUser.mockImplementation(() => Promise.resolve({ data: { ...user } }));
       const results = [submitPasswordSuccess(user)];
       const initialAction = { payload: { id: user.id } };
 
