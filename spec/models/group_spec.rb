@@ -329,7 +329,7 @@ RSpec.describe Group, type: :model do
 
         it 'contain all group users' do
           expect(subject).to include active_user
-          expect(subject).to include pending_user
+          expect(subject).to_not include pending_user
         end
       end
 
@@ -337,7 +337,7 @@ RSpec.describe Group, type: :model do
         subject { group.pending_members }
 
         it 'contains no user' do
-          expect(subject).to_not include pending_user
+          expect(subject).to include pending_user
           expect(subject).to_not include active_user
         end
       end

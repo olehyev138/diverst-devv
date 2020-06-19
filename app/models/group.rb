@@ -283,19 +283,11 @@ class Group < BaseClass
   end
 
   def active_members
-    if pending_users.enabled?
-      filter_by_membership(true).active
-    else
-      members.active
-    end
+    filter_by_membership(true).active
   end
 
   def pending_members
-    if pending_users.enabled?
-      filter_by_membership(false).active
-    else
-      members.none
-    end
+    filter_by_membership(false).active
   end
 
   # Necessary for the `unless` in the `after_save :accept_pending_members` callback
