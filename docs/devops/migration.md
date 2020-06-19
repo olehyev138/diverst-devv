@@ -137,6 +137,8 @@ _Notes & Known Issues_:
    - If there are new tables or foreign keys, `ConvertKeysToBigInt` might break because the id types are mismatched (beta uses bigint). The `ConvertKeysTOBigInt` Migration needs to be updated to remove the foreign keys, change the primary & foreign key types, or the new migration may be updated as well. Changing of foreign key types should be on the new table first, ie `video_rooms` references `initiatives`, so`video_rooms` should be updated before `initiatives`. 
    - `AddPreviousAndNextToUpdates` references a job and sometimes fails on the first run - _TODO: more info_
    - Duplicate column issues from rerunning migrations - if new migrations have been added _from_ legacy, the legacy database will re run the migration and fail with duplicate column issues. Legacy migrations therefore need to be added with checks for column & table existence. 
+   - Custom texts strings being nil/empty strings - migration was added to fix this
+   - Field data being too long (string length max is 255) - migration added to update type from `string` to `text`
    
 #### Api Key & Authentication
 
