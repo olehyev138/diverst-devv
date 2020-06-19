@@ -332,6 +332,7 @@ export function AdminLinks(props) {
               </MenuPermission>
             </List>
           </Collapse>
+          { /* Disable Innovate */ }
           <ListPermission
             button
             onClick={handleInnovateClick}
@@ -345,6 +346,7 @@ export function AdminLinks(props) {
           </ListPermission>
           <Collapse in={state.innovate.open} timeout='auto' unmountOnExit>
             <List disablePadding>
+              { /* Disable Innovate */ }
               <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.innovate.campaigns.index.path()}
@@ -359,6 +361,7 @@ export function AdminLinks(props) {
                   <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
                 </ListItemText>
               </MenuPermission>
+              { /* Disable Innovate */ }
               <MenuPermission
                 component={WrappedNavLink}
                 to={ROUTES.admin.innovate.financials.index.path()}
@@ -389,11 +392,11 @@ export function AdminLinks(props) {
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
           </ListPermission>
 
+          { /* Disable Innovate */ }
           <ListPermission
             button
-            show={
-              false &&
-              dig(props, 'enterprise', 'mentorship_module_enabled')
+            show={false
+              && dig(props, 'enterprise', 'mentorship_module_enabled')
               && permission(props, 'mentoring_interests_create')
             }
           >
