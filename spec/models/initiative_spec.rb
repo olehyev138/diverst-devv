@@ -167,11 +167,32 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe 'test callbacks' do
-    let!(:new_initiative) { build(:initiative) }
+    describe 'before_save' do
+      context '#allocate_budget_funds' do
+        let!(:new_initiative) { build(:initiative) }
 
-    it '#allocate_budget_funds' do
-      expect(new_initiative).to receive(:allocate_budget_funds)
-      new_initiative.save
+        it 'allocate budget funds before save action' do
+          expect(new_initiative).to receive(:allocate_budget_funds)
+          new_initiative.save
+        end
+      end
+    end
+
+    describe 'after_commit' do
+      context '#update_video_rooms' do
+        let(:initiative) { create(:initiative, name: 'Virtual Hackathon') }
+        let(:room) { create(:video_room, event_name: initiative.name, initiative_id: initiative.id) }
+
+        it 'receive callback' do
+          expect(initiative).to receive(:update_video_rooms)
+          initiative.update(name: 'Virtual Hackathon Updated!')
+        end
+
+        it 'update event name after update on initiative' do
+          initiative.update(name: 'Virtual Hackathon Updated!')
+          expect(room.event_name).to eq('Virtual Hackathon Updated!')
+        end
+      end
     end
   end
 
