@@ -70,7 +70,7 @@ export function GroupMessageComment(props) {
 }
 
 GroupMessageComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteGroupMessageCommentBegin: PropTypes.func,

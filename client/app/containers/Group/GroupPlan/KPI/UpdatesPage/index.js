@@ -143,6 +143,6 @@ export default compose(
 )(Conditional(
   UpdateListPage,
   ['currentGroup.permissions.kpi_manage?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.groupPlan.KPI.updatesPage
 ));
