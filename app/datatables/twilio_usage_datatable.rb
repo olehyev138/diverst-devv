@@ -10,21 +10,20 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
   end
 
   def sortable_columns
-    @sortable_columns ||= ['VideoRoom.name',
-                           'VideoRoom.status', 'VideoRoom.start_time', 'VideoRoom.end_time',
-                           'VideoRoom.duration_per_minute', 'VideoRoom.number_of_participants',
+    @sortable_columns ||= ['VideoRoom.event_name',
+                           'VideoRoom.start_time', 'VideoRoom.end_time',
+                           'VideoRoom.duration', 'VideoRoom.participants',
                            'VideoRoom.billing']
   end
 
   def searchable_columns
-    @searchable_columns ||= ['VideoRoom.status',
-                             'VideoRoom.duration', 'VideoRoom.participants']
+    @searchable_columns ||= ['VideoRoom.event_name', 'VideoRoom.participants']
   end
 
   private
 
   def data
-    records.order(id: :desc).map do |record|
+    records.map do |record|
       [
         "#{link_to(record.event_name, twilio_dashboard_path(record), class: "#{record.status == 'completed' ? 'positive' : 'error'}")}",
         record.start_time,
@@ -37,6 +36,6 @@ class TwilioUsageDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    @rooms
+    @rooms.order(id: :desc)
   end
 end
