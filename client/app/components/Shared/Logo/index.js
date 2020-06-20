@@ -31,19 +31,23 @@ export function Logo(props) {
   const className = props.imgClass;
   const alt = props.alt || 'Logo';
 
+  const currentURLWithoutPath = `${window.location.protocol}//${window.location.host}`;
+
   let isDefault = true;
   let logo = props.coloredDefault ? defaultLogoPrimary : defaultLogo;
-  let logoRedirectUrl = `${window.location.protocol}//${window.location.host}`; // Defaults to current URL without path
-  let logoContentType = null;
+  let logoRedirectUrl = (dig(props.enterprise, 'theme', 'logo_redirect_url') || currentURLWithoutPath).toLowerCase(); // Defaults to current URL without path
+  const logoContentType = dig(props.enterprise, 'theme', 'logo_content_type');
 
   const logoData = dig(props.enterprise, 'theme', 'logo_data');
 
   if (logoData) {
     logo = logoData;
-    logoRedirectUrl = dig(props.enterprise, 'theme', 'logo_redirect_url');
-    logoContentType = dig(props.enterprise, 'theme', 'logo_content_type');
     isDefault = false;
   }
+
+  // To prevent odd append redirects, add 'https://' to the URL unless the URL is a relative path, or already has the protocol
+  if (logoRedirectUrl && !logoRedirectUrl.startsWith('/') && !logoRedirectUrl.startsWith('https://') && !logoRedirectUrl.startsWith('http://'))
+    logoRedirectUrl = `https://${logoRedirectUrl}`;
 
   const imageComponent = (
     <DiverstImg
