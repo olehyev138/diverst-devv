@@ -13,21 +13,98 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
   before {
     no_access.policy_group.manage_all = false
     no_access.policy_group.groups_manage = false
-    no_access.policy_group.groups_members_index = false
-    no_access.policy_group.groups_members_manage = false
+    no_access.policy_group.groups_budgets_index = false
+    no_access.policy_group.groups_budgets_manage = false
+    no_access.policy_group.groups_budgets_request = false
     no_access.policy_group.save!
   }
 
   describe 'for users with access' do
     context 'AnnualBudget Index' do
       context 'when manage_all is false' do
+        context 'when group.members_visibility is set to public' do
+          before { group.members_visibility = 'public' }
 
+          context 'when ONLY groups_budgets_manage is true' do
+            before { user.policy_group.update groups_budgets_manage: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when ONLY groups_budgets_index is true' do
+            before { user.policy_group.update groups_budgets_index: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when ONLY groups_budgets_request is true' do
+            before { user.policy_group.update groups_budgets_request: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'user has basic leader permissions and groups_members_manage is true' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update groups_budgets_manage: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+        end
+
+        context 'when group.members_visibility is set to group' do
+          before { group.members_visibility = 'group' }
+
+          context 'when groups_manage and groups_budgets_manage are true' do
+            before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'user has group leader permissions' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update groups_budgets_manage: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'user is member and groups_budgets_manage is true' do
+            before do
+              create(:user_group, user_id: user.id, group_id: group.id)
+              user.policy_group.update groups_budgets_manage: true
+            end
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+        end
       end
+
       context 'when manage_all is true' do
         before { user.policy_group.update manage_all: true }
 
         context 'when groups_members_manage, groups_manage and groups_members_index are false' do
-          before { user.policy_group.update groups_members_manage: false, groups_manage: false, groups_members_index: false }
+          before { user.policy_group.update groups_budgets_manage: false, groups_manage: false, groups_members_index: false }
           it { is_expected.to permit_actions([:create, :destroy]) }
 
           it 'returns true for #view_members?' do
@@ -36,8 +113,6 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
         end
       end
 
-    # manage all
-    #
+    end
   end
-  end
-  end
+end
