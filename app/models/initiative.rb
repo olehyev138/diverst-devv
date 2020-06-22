@@ -51,9 +51,9 @@ class Initiative < BaseClass
   has_one :outcome, through: :pillar
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
-  scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
-  scope :upcoming, -> { where('start > ? AND archived_at IS NULL', Time.current).order(start: :asc) }
-  scope :ongoing, -> { where('start <= ? AND archived_at IS NULL', Time.current).where('end >= ?', Time.current).order(start: :desc) }
+  scope :past, -> { where('end < ?', Time.current).includes(:owner_group, :pillar).order(start: :desc) }
+  scope :upcoming, -> { where('start > ? AND archived_at IS NULL', Time.current).includes(:owner_group, :pillar).order(start: :asc) }
+  scope :ongoing, -> { where('start <= ? AND archived_at IS NULL', Time.current).where('end >= ?', Time.current).includes(:owner_group, :pillar).order(start: :desc) }
   scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow, archived_at: nil) }
   scope :of_segments, ->(segment_ids) {
     initiative_conditions = ['initiative_segments.segment_id IS NULL']
