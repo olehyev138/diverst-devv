@@ -7,11 +7,37 @@ RSpec.describe InitiativeExpense, type: :model do
     it { expect(initiative_expense).to belong_to(:initiative) }
     it { expect(initiative_expense).to belong_to(:owner).class_name('User') }
     it { expect(initiative_expense).to have_one(:annual_budget) }
+    it { expect(initiative_expense).to have_one(:group).through(:annual_budget) }
+    it { expect(initiative_expense).to have_one(:enterprise).through(:group) }
     it { expect(initiative_expense).to validate_presence_of(:initiative) }
     it { expect(initiative_expense).to validate_presence_of(:owner) }
     it { expect(initiative_expense).to validate_presence_of(:amount) }
     it { expect(initiative_expense).to validate_numericality_of(:amount).is_greater_than_or_equal_to(0) }
     it { expect(initiative_expense).to validate_length_of(:description).is_at_most(191) }
+  end
+
+  describe 'test scopes' do
+    context 'initiative_expense::finalized' do
+      let!(:budget) { create(:approved_budget, annual_budget: (create :annual_budget)) }
+      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first}
+      let!(:finalized_initiative_expense) { create(:initiative_expense, initiative: annual_budget_initiative) }
+      before do
+        annual_budget_initiative.update(finished_expenses: true)
+      end
+      it 'returns initiative expense finalized' do
+        expect(InitiativeExpense.finalized).to eq([finalized_initiative_expense])
+      end
+    end
+
+    context 'initiative_expense::active' do
+      let!(:budget) { create(:approved_budget, annual_budget: (create :annual_budget)) }
+      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first}
+      let!(:active_initiative_expense) { create(:initiative_expense, initiative: annual_budget_initiative) }
+
+      it 'returns initiative expense active' do
+        expect(InitiativeExpense.active).to eq([active_initiative_expense])
+      end
+    end
   end
 
   describe 'test after_save and after_destroy callbacks' do
