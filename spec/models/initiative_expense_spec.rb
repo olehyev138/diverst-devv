@@ -19,7 +19,7 @@ RSpec.describe InitiativeExpense, type: :model do
   describe 'test scopes' do
     context 'initiative_expense::finalized' do
       let!(:budget) { create(:approved_budget, annual_budget: (create :annual_budget)) }
-      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first}
+      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first }
       let!(:finalized_initiative_expense) { create(:initiative_expense, initiative: annual_budget_initiative) }
       before do
         annual_budget_initiative.update(finished_expenses: true)
@@ -31,7 +31,7 @@ RSpec.describe InitiativeExpense, type: :model do
 
     context 'initiative_expense::active' do
       let!(:budget) { create(:approved_budget, annual_budget: (create :annual_budget)) }
-      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first}
+      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first }
       let!(:active_initiative_expense) { create(:initiative_expense, initiative: annual_budget_initiative) }
 
       it 'returns initiative expense active' do
