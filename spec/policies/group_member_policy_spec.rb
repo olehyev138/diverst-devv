@@ -19,8 +19,8 @@ RSpec.describe GroupMemberPolicy, type: :policy do
 
   describe 'for users with access' do
     context 'when manage_all is false' do
-      context 'when group.members_visibility is set to global' do
-        before { group.members_visibility = 'global' }
+      context 'when group.members_visibility is set to public' do
+        before { group.members_visibility = 'public' }
 
         context 'when ONLY groups_members_manage is true' do
           before { user.policy_group.update groups_members_manage: true }
@@ -177,7 +177,7 @@ RSpec.describe GroupMemberPolicy, type: :policy do
         it { is_expected.to permit_actions([:create, :destroy]) }
 
         it 'returns true for #view_members?' do
-          group.members_visibility = 'global'
+          group.members_visibility = 'public'
           expect(subject.view_members?).to eq true
         end
       end
