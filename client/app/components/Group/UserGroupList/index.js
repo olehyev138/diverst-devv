@@ -120,6 +120,7 @@ export function UserGroupList(props, context) {
                                   <Grid item xs='auto'>
                                     <DiverstImg
                                       data={group.logo_data}
+                                      contentType={group.logo_content_type}
                                       maxWidth='70px'
                                       maxHeight='70px'
                                       minWidth='70px'
@@ -193,6 +194,7 @@ export function UserGroupList(props, context) {
                                       <Grid item xs='auto'>
                                         <DiverstImg
                                           data={childGroup.logo_data}
+                                          contentType={childGroup.logo_content_type}
                                           maxWidth='60px'
                                           maxHeight='60px'
                                           minWidth='60px'
