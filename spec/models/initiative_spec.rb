@@ -93,7 +93,7 @@ RSpec.describe Initiative, type: :model do
       let!(:past_initiatives) { create_list(:initiative, 3, end: Date.yesterday) }
 
       it 'returns initiative past' do
-        expect(Initiative.past).to eq(past_initiatives.sort_by{ |i| i.start }.reverse)
+        expect(Initiative.past).to eq(past_initiatives.sort_by { |i| i.start }.reverse)
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe Initiative, type: :model do
       let!(:upcoming_initiatives) { create_list(:initiative, 3, start: Date.tomorrow) }
 
       it 'returns initiative upcoming' do
-        expect(Initiative.upcoming).to eq(upcoming_initiatives.sort_by{ |i| i.start })
+        expect(Initiative.upcoming).to eq(upcoming_initiatives.sort_by { |i| i.start })
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Initiative, type: :model do
       let!(:ongoing_initiatives) { create_list(:initiative, 3, start: Date.yesterday, end: Date.tomorrow) }
 
       it 'returns initiative ongoing' do
-        expect(Initiative.ongoing).to eq(ongoing_initiatives.sort_by{ |i| i.start })
+        expect(Initiative.ongoing).to eq(ongoing_initiatives.sort_by { |i| i.start })
       end
     end
 
@@ -161,7 +161,7 @@ RSpec.describe Initiative, type: :model do
       let!(:order_recent_initiatives) { create_list(:initiative, 3) }
 
       it 'returns initiative order_recent' do
-        expect(Initiative.order_recent).to eq(order_recent_initiatives.sort_by{ |i| i.start }.reverse)
+        expect(Initiative.order_recent).to eq(order_recent_initiatives.sort_by { |i| i.start }.reverse)
       end
     end
 
