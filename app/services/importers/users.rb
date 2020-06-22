@@ -74,7 +74,7 @@ class Importers::Users
   end
 
   def process_active_column(column_value)
-    truthy_values = [1, '1', true, 'true', 'TRUE', 'yes', 'YES', '', nil]
+    truthy_values = [1, '1', true, 'true', 'True', 'TRUE', 'yes', 'YES', '', nil]
 
     truthy_values.include? column_value
   end
