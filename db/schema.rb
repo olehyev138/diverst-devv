@@ -1026,10 +1026,6 @@ ActiveRecord::Schema.define(version: 2020_06_18_202924) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
-    t.bigint "author_id_id"
-    t.bigint "author_id"
-    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
-    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
