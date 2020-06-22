@@ -33,8 +33,4 @@ class VideoRoom < ActiveRecord::Base
   def end_time
     end_date&.strftime('%a, %d %b %Y %H:%M %p')
   end
-
-  def event_name
-    Initiative.find_by(id: initiative_id)&.name
-  end
 end
