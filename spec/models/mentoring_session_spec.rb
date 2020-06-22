@@ -37,7 +37,7 @@ RSpec.describe MentoringSession, type: :model do
 
   describe 'test scopes' do
     context 'mentoring_session::past' do
-      let!(:past_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1*60, end: Time.now - 1*50) }
+      let!(:past_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1 * 60, end: Time.now - 1 * 50) }
 
       it 'returns past mentoring session' do
         expect(MentoringSession.past.count).to eq 3
@@ -53,7 +53,7 @@ RSpec.describe MentoringSession, type: :model do
     end
 
     context 'mentoring_session::ongoing' do
-      let!(:ongoing_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1*60, end: Date.tomorrow) }
+      let!(:ongoing_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1 * 60, end: Date.tomorrow) }
 
       it 'returns ongoing mentoring session' do
         expect(MentoringSession.ongoing.count).to eq 3
