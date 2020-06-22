@@ -1,13 +1,14 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { Box, Card, CircularProgress, Divider, Grid, Typography } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import 'stylesheets/main.scss';
 
@@ -23,33 +24,81 @@ const styles = theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  legend: {
+    float: 'right',
+    backgroundColor: theme.palette.primary.main,
+    marginLeft: 5,
+  },
 });
 
 export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
 
+  const legend = (
+    <Grid container>
+      <Grid item xs={12}>
+        <Card className={classes.legend}>
+          <Box mb={1} mt={1} ml={1} mr={1}>
+            <Typography variant='h6'>
+              Legend
+            </Typography>
+            <Divider />
+            <Typography style={{ color: 'black' }}>
+              Participating
+            </Typography>
+            <Typography style={{ color: 'white' }}>
+              Not Participating
+            </Typography>
+          </Box>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+
+  const getMethods = obj => Object.getOwnPropertyNames(obj).filter(item => typeof obj[item] === 'function');
+  const getProperties = obj => Object.getOwnPropertyNames(obj).filter(item => typeof obj[item] !== 'function');
+
   return (
-    <div className={classes.wrapper}>
-      <FullCalendar
-        ref={calendarRef}
-        defaultView='dayGridMonth'
-        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-        header={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek'
-        }}
-        events={events}
-        {...rest}
-      />
-      {isLoading && (
-        <Grid container justify='center' alignContent='center'>
-          <Grid item>
-            <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+    <React.Fragment>
+      {/* {legend} */}
+      <div className={classes.wrapper}>
+        <FullCalendar
+          ref={calendarRef}
+          defaultView='dayGridMonth'
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+          contentHeight={600}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+          }}
+          events={events}
+          dayMaxEvents={5}
+          dayMaxEventRows={5}
+          // eventContent={(info) => {
+          //   console.log(info);
+          //   return (
+          //     <React.Fragment>
+          //       <div className='fc-event-time'>
+          //         {info.timeText}
+          //       </div>
+          //       <div className='fc-event-title-frame'>
+          //         {info.event.title}
+          //       </div>
+          //     </React.Fragment>
+          //   );
+          // }}
+          {...rest}
+        />
+        {isLoading && (
+          <Grid container justify='center' alignContent='center'>
+            <Grid item>
+              <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-    </div>
+        )}
+      </div>
+    </React.Fragment>
   );
 }
 
