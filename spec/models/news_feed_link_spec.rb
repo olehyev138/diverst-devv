@@ -13,11 +13,14 @@ RSpec.describe NewsFeedLink, type: :model do
     it { expect(news_feed_link).to have_many(:news_feed_link_segments).dependent(:destroy) }
     it { expect(news_feed_link).to have_many(:segments).through(:news_feed_link_segments) }
     it { expect(news_feed_link).to have_many(:shared_news_feed_links).class_name('SharedNewsFeedLink').dependent(:destroy) }
-    it { expect(news_feed_link).to have_many(:shared_news_feeds).through(:shared_news_feed_links) }
+    it { expect(news_feed_link).to have_many(:shared_news_feeds).through(:shared_news_feed_links).source(:news_feed) }
+    it { expect(news_feed_link).to have_many(:shared_groups).through(:shared_news_feeds).source(:group) }
     it { expect(news_feed_link).to have_many(:views).dependent(:destroy) }
     it { expect(news_feed_link).to have_many(:likes).dependent(:destroy) }
-    it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
-    it { expect(news_feed_link).to validate_presence_of(:news_feed_id) }
+    it { expect(news_feed_link).to have_many(:news_feed_link_tags) }
+    it { expect(news_feed_link).to have_many(:news_tags).through(:news_feed_link_tags) }
+    it { expect(news_feed_link).to have_one(:group).through(:news_feed) }
+
   end
 
   describe 'test scopes' do
@@ -31,7 +34,7 @@ RSpec.describe NewsFeedLink, type: :model do
       end
     end
 
-    describe '.not_approved' do
+    describe '.not_approved & .pending' do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:group2) { create(:group, enterprise_id: enterprise.id) }
@@ -46,9 +49,44 @@ RSpec.describe NewsFeedLink, type: :model do
         expect(NewsFeedLink.not_approved.count).to eq(6)
       end
 
+      it 'returns pending news_feed_links' do
+        expect(NewsFeedLink.pending.count).to eq(6)
+      end
+
       it 'returns not_approved for particular feed news_feed_links' do
         expect(NewsFeedLink.not_approved(group.news_feed.id).count).to eq(3)
       end
+    end
+
+    describe '.active' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before { create_list(:group_message, 2, group_id: group.id) }
+
+      it 'returns approved news_feed_links' do
+        expect(NewsFeedLink.active.count).to eq(2)
+      end
+    end
+
+    describe '.select_source' do
+    end
+
+    describe '.include_posts' do
+    end
+
+    describe '.not_archived' do
+    end
+
+    describe '.archived' do
+    end
+
+    describe '.not_pinned' do
+    end
+
+    describe '.pinned' do
+    end
+
+    describe '.filter_posts' do
     end
 
     describe '.combined_news_links' do
@@ -74,6 +112,9 @@ RSpec.describe NewsFeedLink, type: :model do
       it 'returns combined news links of a particular news feed' do
         expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(2)
       end
+    end
+
+    describe '.combined_news_links_with_segments' do
     end
   end
 

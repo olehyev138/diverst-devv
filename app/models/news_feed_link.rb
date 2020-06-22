@@ -21,9 +21,6 @@ class NewsFeedLink < ApplicationRecord
   has_many :news_feed_link_tags
   has_many :news_tags, through: :news_feed_link_tags
 
-  delegate :group,    to: :news_feed
-  delegate :segment,  to: :news_feed_link_segment, allow_nil: true
-
   scope :approved, -> { where(approved: true) }
   scope :pending, -> { where(approved: false) }
   scope :combined_news_links, -> (news_feed_id) {
