@@ -101,8 +101,8 @@ RSpec.describe GroupMemberPolicy, type: :policy do
         end
       end
 
-      context 'when group.members_visibility is set to managers_only' do
-        before { group.members_visibility = 'managers_only' }
+      context 'when group.members_visibility is set to leader' do
+        before { group.members_visibility = 'leader' }
 
         context 'when user is a manager' do
           context 'when groups_manage and groups_members_manage are true' do
