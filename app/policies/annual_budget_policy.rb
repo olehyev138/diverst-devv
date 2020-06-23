@@ -11,6 +11,10 @@ class AnnualBudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def group_visibility_setting
+    'members_visibility'
+  end
+
   class Scope < Scope
     def group_base
       group.annual_budgets

@@ -111,6 +111,7 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
         end
 
         context 'when group.members_visibility is set to leader' do
+          before { group.members_visibility = 'leaders_only' }
           context 'user has group leader permissions : is_a_leader' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
