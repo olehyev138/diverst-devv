@@ -94,15 +94,15 @@ else
 //   - use service worker events to auto update app (default is requiring all tabs to be closed)
 //     source: https://github.com/NekR/offline-plugin/blob/master/docs/updates.md
 if (process.env.NODE_ENV === 'production') {
-  const runtime = require('offline-plugin/runtime')
+  // eslint-next-disable-line global-require
+  const runtime = require('offline-plugin/runtime');
 
-  runtime.install({  // eslint-disable-line global-require
+  runtime.install({
     onUpdateReady: () => {
       // Tells new SW to take control immediately
       runtime.applyUpdate();
     },
     onUpdated: () => {
-      console.log('SW Event:', 'onUpdated');
       // Reload the webpage to load into the new version
       window.location.reload();
     }
