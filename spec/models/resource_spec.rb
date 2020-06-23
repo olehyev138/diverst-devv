@@ -36,7 +36,7 @@ RSpec.describe Resource, type: :model do
       end
 
       it 'returns unarchived_resources resource' do
-        expect(Resource.unarchived_resources([1,2],[3,4]).count).to eq(2)
+        expect(Resource.unarchived_resources([1,2], [3,4]).count).to eq(2)
       end
     end
 
@@ -56,7 +56,8 @@ RSpec.describe Resource, type: :model do
       end
     end
   end
-    describe 'test callbacks' do
+
+  describe 'test callbacks' do
     let(:resource) { build_stubbed(:resource) }
 
     context 'before_validation' do

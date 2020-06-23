@@ -10,8 +10,8 @@ RSpec.describe Reward do
     it { expect(reward).to validate_presence_of(:label) }
     it { expect(reward).to validate_presence_of(:responsible) }
 
-    it { expect(reward).to validate_length_of(:label).is_at_most(191)}
-    it { expect(reward).to validate_length_of(:description).is_at_most(65535)}
+    it { expect(reward).to validate_length_of(:label).is_at_most(191) }
+    it { expect(reward).to validate_length_of(:description).is_at_most(65535) }
     it { expect(reward).to belong_to(:enterprise) }
     it { expect(reward).to belong_to(:responsible).class_name('User').with_foreign_key('responsible_id') }
 
