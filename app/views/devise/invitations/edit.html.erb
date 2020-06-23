@@ -140,7 +140,7 @@
             <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
 
 
-            <h2>Explore your <%= resource.enterprise.custom_text.erg.pluralize %></h2>
+            <h2>Click on the logo to join your <%= resource.enterprise.custom_text.erg %></h2>
 
             <% resource.enterprise.groups.all_parents.where(private: false).each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
