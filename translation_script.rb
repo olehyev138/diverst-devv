@@ -84,6 +84,8 @@ json.each do |key, value|
 
   message_translations = message_translations.drop(1) # Remove primary language string
   message_translations.each_with_index do |translation, index|
+    break if index >= LANGUAGE_KEYS.length
+
     if translation.nil? || translation.empty?
       report_file.puts 'WARNING: Failed to find translation for:' if USE_PRETTY_OUTPUT
       if USE_PRETTY_OUTPUT
