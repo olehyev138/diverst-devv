@@ -125,6 +125,15 @@ export function UserImport(props, context) {
           <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
             The first row is reserved for headers and will not be imported. Every subsequent row will be imported as a user.
           </Typography>
+
+          <Button size='small' variant='outlined' className={classes.dataHeaders} onClick={() => props.getSampleImportBegin({})}>
+            <Typography component='body1' variant='body1'>
+              Sample File
+            </Typography>
+          </Button>
+          <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
+            Download a sample CSV to see what the required structure looks like. For convenience, your last 5 users will be included in the file.
+          </Typography>
         </CardContent>
       </Paper>
       <Box mb={3} />
@@ -148,6 +157,7 @@ UserImport.propTypes = {
   fields: PropTypes.array,
   isLoading: PropTypes.bool,
   importAction: PropTypes.func.isRequired,
+  getSampleImportBegin: PropTypes.func.isRequired,
 };
 
 ImportForm.propTypes = {
