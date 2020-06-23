@@ -77,7 +77,7 @@ json.each do |key, value|
     else
       report_file.puts "\"#{value}\",#{key}"
     end
-    object_output_per_language.each { |language_messages| language_messages[key] = 'MISSING TRANSLATION MESSAGE' }
+    object_output_per_language.each { |language_messages| language_messages[key] = "#{value} (Requires Translation)" }
     failure_count += 1
     next
   end
@@ -93,7 +93,7 @@ json.each do |key, value|
       else
         report_file.puts "#{LANGUAGE_KEYS[index]},\"#{value}\",#{key}"
       end
-      object_output_per_language[index][key] = 'MISSING TRANSLATION MESSAGE'
+      object_output_per_language[index][key] = "#{value} (Requires Translation)"
       failure_count += 1
     else
       object_output_per_language[index][key] = translation
