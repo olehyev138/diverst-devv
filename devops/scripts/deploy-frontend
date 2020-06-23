@@ -29,7 +29,6 @@ aws s3 sync \
   --exclude sw.js \
   build/ "s3://$FRONTEND_BUCKET"
 
-# Upload index & service worker to S3 seperately with no caching for proper cache busting
+# Upload index & service worker to S3 separately with no caching for proper cache busting
 aws s3 cp --cache-control max-age=0,no-cache,no-store,must-revalidate build/index.html "s3://$FRONTEND_BUCKET"
 aws s3 cp --cache-control max-age=0,no-cache,no-store,must-revalidate build/sw.js "s3://$FRONTEND_BUCKET"
-
