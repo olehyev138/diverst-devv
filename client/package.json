@@ -1,6 +1,6 @@
 {
   "name": "diverst-development",
-  "description": "Diverst - Divirsity & Inclusion",
+  "description": "Diverst - Diversity & Inclusion",
   "engines": {
     "npm": ">=5",
     "node": ">=8.15.1"
