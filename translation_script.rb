@@ -17,6 +17,19 @@
 # *Important*: If a value is excluded, you must still include the comma, otherwise values can be placed in the wrong
 #               language and/or you will not be warned if a translation message is missing
 
+##########
+# PARAMS
+##########
+# - 'csv'
+# By default this script will generate human readable output, if you pass 'csv' it will only output failed translations in CSV format
+#
+# - 'readonly'
+# By default this script will update/create translation files, if you pass 'readonly' it will only generate the report
+##########
+
+USE_PRETTY_OUTPUT = ARGV[0] != 'csv' && ARGV[1] != 'csv'
+READ_ONLY = ARGV[0] == 'readonly' || ARGV[1] == 'readonly'
+
 # File path for primary language JSON messages in the above format
 PRIMARY_MESSAGES_JSON_FILE_PATH = 'client/app/translations/en.json'
 
@@ -31,9 +44,6 @@ LANGUAGE_KEYS = [
   'es',
   'fr',
 ]
-
-# By default this script will generate human readable output, if you pass 'csv' it will only output failed translations in CSV format
-USE_PRETTY_OUTPUT = ARGV[0] != 'csv'
 
 # rubocop:disable Rails/Blank
 require 'json'
@@ -101,15 +111,17 @@ json.each do |key, value|
   end
 end
 
-# Create directory structure if it doesn't already exist
-FileUtils.mkdir_p OUTPUT_DIRECTORY
+unless READ_ONLY
+  # Create directory structure if it doesn't already exist
+  FileUtils.mkdir_p OUTPUT_DIRECTORY
 
-# Create JSON files with translation data
-object_output_per_language.each_with_index do |language_translations_object, index|
-  File.write(
-      File.join(OUTPUT_DIRECTORY, "#{LANGUAGE_KEYS[index]}.json"),
-      JSON.pretty_generate(language_translations_object, indent: "\t", object_nl: "\n")
-    )
+  # Create JSON files with translation data
+  object_output_per_language.each_with_index do |language_translations_object, index|
+    File.write(
+        File.join(OUTPUT_DIRECTORY, "#{LANGUAGE_KEYS[index]}.json"),
+        JSON.pretty_generate(language_translations_object, indent: "\t", object_nl: "\n")
+      )
+  end
 end
 
 report_file.puts '' if USE_PRETTY_OUTPUT
@@ -119,3 +131,4 @@ report_file.puts "Note that this number is a sum of both when the translation co
 report_file.close
 
 puts "Translation generation finished with #{failure_count} failure(s). A report was generated in this directory"
+puts 'Note that you were in READONLY mode so no translation files were modified or created' if READ_ONLY
