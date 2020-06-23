@@ -2,7 +2,7 @@
       <% @groups.each do |group| %>
       <div class="card">
       <div class="card__section">
-        <div class="media-object<%= " media-object--selected" if UserGroup.where(:group_id => group.id, :user_id => current_user.id).count > 0 %>">
+        <div class="media-object<%= " media-object--selected" if UserGroup.where(:group_id => group.id, :user_id => current_user.id).size > 0 %>">
           <%= link_to group_path(group), 'data-trackable-id': group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
             <div class="flex-row">
               <div class="flex-row__cell">
@@ -31,7 +31,7 @@
 
             <% group.children.each do |sub_group| %>
             <div class="children_<%= group.id %>" style="display:none; position: relative; top: 10px;">
-              <div class="media-object<%= " media-object--selected" if UserGroup.where(:group_id => sub_group.id, :user_id => current_user.id).count > 0 %>" style="margin-bottom: 10px;">
+              <div class="media-object<%= " media-object--selected" if UserGroup.where(:group_id => sub_group.id, :user_id => current_user.id).size > 0 %>" style="margin-bottom: 10px;">
                 <%= link_to group_path(sub_group), 'data-trackable-id': sub_group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
                   <div class="flex-row">
                     <div class="flex-row__cell">

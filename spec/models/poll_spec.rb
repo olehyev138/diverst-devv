@@ -204,17 +204,36 @@ RSpec.describe Poll, type: :model do
       let!(:pending_user_in_group) { create(:user, enterprise: poll.enterprise) }
       let!(:group) { create(:group, members: [user_in_group, pending_user_in_group]) }
 
-      before {
-        # add and accept members here. check they work
-        group.update(pending_users: 'enabled')
+      context 'when pending users are enabled' do
+        before do
+          # add and accept members here. check they work
+          group.update(pending_users: 'enabled')
+          group.accept_user_to_group(user_in_group.id)
+          group.user_groups.create(user_id: pending_user_in_group.id, accepted_member: false)
+          poll.update(groups: [group])
+        end
 
-        group.accept_user_to_group(user_in_group.id)
-      }
-      before(:each) { poll.update(groups: [group]) }
 
-      it 'returns users that are in groups of poll groups' do
-        expect(poll.targeted_users).to include user_in_group
-        expect(poll.targeted_users).to_not include pending_user_in_group
+        it 'returns users that are in groups of poll groups' do
+          expect(poll.targeted_users).to include user_in_group
+          expect(poll.targeted_users).to_not include pending_user_in_group
+        end
+      end
+
+      context 'when pending users are disabled' do
+        before do
+          # add and accept members here. check they work
+          group.update(pending_users: 'disabled')
+          group.accept_user_to_group(user_in_group.id)
+          group.user_groups.find_by(user_id: pending_user_in_group.id).update accepted_member: false
+          poll.update(groups: [group])
+        end
+
+
+        it 'returns users that are in groups of poll groups' do
+          expect(poll.targeted_users).to include user_in_group
+          expect(poll.targeted_users).to_not include pending_user_in_group
+        end
       end
     end
   end

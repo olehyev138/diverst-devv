@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200314230356) do
+ActiveRecord::Schema.define(version: 20200619080434) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.boolean  "onboarding_consent_enabled",                          default: false
     t.boolean  "enable_outlook",                                      default: false
     t.text     "onboarding_pop_up_content",             limit: 65535
+    t.boolean  "virtual_events_enabled",                              default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -704,6 +705,7 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.string   "video_content_type",   limit: 191
     t.integer  "video_file_size",      limit: 4
     t.datetime "video_updated_at"
+    t.boolean  "virtual",                                                    default: false
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -1528,6 +1530,36 @@ ActiveRecord::Schema.define(version: 20200314230356) do
 
   add_index "users_segments", ["user_id"], name: "index_users_segments_on_user_id", using: :btree
 
+  create_table "video_participants", force: :cascade do |t|
+    t.datetime "timestamp"
+    t.string   "identity",      limit: 191
+    t.integer  "duration",      limit: 4
+    t.integer  "video_room_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "video_participants", ["video_room_id"], name: "index_video_participants_on_video_room_id", using: :btree
+
+  create_table "video_rooms", force: :cascade do |t|
+    t.string   "sid",           limit: 191
+    t.string   "room_type",     limit: 191
+    t.string   "name",          limit: 191
+    t.string   "status",        limit: 191
+    t.integer  "duration",      limit: 4
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "participants",  limit: 4
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "initiative_id", limit: 4
+    t.string   "event_name",    limit: 191
+  end
+
+  add_index "video_rooms", ["enterprise_id"], name: "index_video_rooms_on_enterprise_id", using: :btree
+  add_index "video_rooms", ["initiative_id"], name: "index_video_rooms_on_initiative_id", using: :btree
+
   create_table "views", force: :cascade do |t|
     t.integer  "user_id",           limit: 4, null: false
     t.integer  "news_feed_link_id", limit: 4
@@ -1571,6 +1603,9 @@ ActiveRecord::Schema.define(version: 20200314230356) do
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+  add_foreign_key "video_participants", "video_rooms"
+  add_foreign_key "video_rooms", "enterprises"
+  add_foreign_key "video_rooms", "initiatives"
 
   create_view "duplicate_page_names", sql_definition: <<-SQL
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))

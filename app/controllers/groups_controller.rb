@@ -14,7 +14,7 @@ class GroupsController < ApplicationController
   def index
     authorize Group
 
-    @groups = @groups.includes(:children)
+    @groups = @groups.includes(:children, :accepted_members)
 
     respond_to do |format|
       format.html
@@ -75,7 +75,7 @@ class GroupsController < ApplicationController
 
   def close_budgets
     authorize Group, :manage_all_group_budgets?
-    @groups = policy_scope(Group).includes(:children).all_parents
+    @groups = policy_scope(Group).includes(:children, :initiatives).all_parents
   end
 
   def close_budgets_export_csv

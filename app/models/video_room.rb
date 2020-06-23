@@ -14,7 +14,7 @@ class VideoRoom < ActiveRecord::Base
   end
 
   def cumulative_participant_minutes
-    video_participants.sum(:duration)
+    video_participants.map { |participant| participant.duration / 60 }.sum
   end
 
   def duration_per_minute
@@ -32,9 +32,5 @@ class VideoRoom < ActiveRecord::Base
 
   def end_time
     end_date&.strftime('%a, %d %b %Y %H:%M %p')
-  end
-
-  def event_name
-    Initiative.find_by(id: initiative_id)&.name
   end
 end

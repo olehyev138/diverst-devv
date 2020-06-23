@@ -149,7 +149,7 @@ class InitiativesController < ApplicationController
     api_key_sid = ENV['TWILIO_API_KEY']
     api_key_secret = ENV['TWILIO_SECRET']
 
-    @video_room_name = "#{request.domain}Initiative#{@initiative.id}"
+    @video_room_name = "#{request.host}Initiative#{@initiative.id}"
     @enterprise = @group.enterprise
     # Create an Access Token
     token = Twilio::JWT::AccessToken.new(
@@ -192,6 +192,7 @@ class InitiativesController < ApplicationController
       name: name,
       status: status,
       duration: 0,
+      event_name: @initiative.name,
       enterprise_id: enterprise_id,
       initiative_id: @initiative.id
     )

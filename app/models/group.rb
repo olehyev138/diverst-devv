@@ -63,6 +63,7 @@ class Group < BaseClass
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
+  has_many :accepted_members, -> { where(accepted_member: true).active }, class_name: 'UserGroup'
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
@@ -282,19 +283,11 @@ class Group < BaseClass
   end
 
   def active_members
-    if pending_users.enabled?
-      filter_by_membership(true).active
-    else
-      members.active
-    end
+    filter_by_membership(true).active
   end
 
   def pending_members
-    if pending_users.enabled?
-      filter_by_membership(false).active
-    else
-      members.none
-    end
+    filter_by_membership(false).active
   end
 
   # Necessary for the `unless` in the `after_save :accept_pending_members` callback
