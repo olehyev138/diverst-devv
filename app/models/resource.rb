@@ -30,7 +30,7 @@ class Resource < ApplicationRecord
   validates_presence_of   :url, if: Proc.new { |r| !r.file.attached? }
   validates_length_of     :url, maximum: 255
 
-  scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
+  scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?) ', initiative_ids, folder_ids).where(archived_at: nil) }
   scope :not_archived, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
 

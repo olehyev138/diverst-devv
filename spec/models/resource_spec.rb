@@ -11,6 +11,7 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to belong_to(:mentoring_session) }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
+    it { expect(resource).to have_many(:views).dependent(:destroy) }
 
     it { expect(resource).to accept_nested_attributes_for(:tags) }
 
@@ -26,7 +27,36 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to validate_presence_of(:title) }
   end
 
-  describe 'test callbacks' do
+  describe 'test scopes' do
+    describe '.unarchived_resources' do
+      before do
+        create(:resource, folder: create(:folder, id: 1))
+        create(:resource, folder: create(:folder, id: 3))
+        create(:resource, initiative: create(:initiative, id: 3))
+      end
+
+      it 'returns unarchived_resources resource' do
+        expect(Resource.unarchived_resources([1,2],[3,4]).count).to eq(2)
+      end
+    end
+
+    describe '.not_archived' do
+      let!(:resource) { create_list(:resource, 2) }
+
+      it 'returns not_archived resource' do
+        expect(Resource.not_archived.count).to eq(2)
+      end
+    end
+
+    describe '.archived' do
+      let!(:resource) { create_list(:resource, 2, archived_at: Date.today) }
+
+      it 'returns archived resource' do
+        expect(Resource.archived.count).to eq(2)
+      end
+    end
+  end
+    describe 'test callbacks' do
     let(:resource) { build_stubbed(:resource) }
 
     context 'before_validation' do
