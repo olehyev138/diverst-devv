@@ -41,9 +41,10 @@ class NewsFeedLink < ApplicationRecord
   }
 
   scope :select_source, -> (news_feed_id) {
-    select(
-        "`news_feed_links`.`*`, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'self' "\
-        "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`,  "\
+    joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
+    .select(
+        "`news_feed_links`.*, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize_sql(news_feed_id)} THEN 'self' "\
+        "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize_sql(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`"\
       )
   }
 
