@@ -6,7 +6,7 @@ stack. The technologies being used, the conventions in place & how certain aspec
 
 ## Overview - internals, deployment, serving, caching
 
-The frontend application is built off of `react-boilerplate`, a base React application that provides us with sane defaults & a base for building a production React application. 
+The frontend application is built off of `react-boilerplate`, a base React application that follows best practices & standards, providing us with a base for building a production React application
 
 In a development environment we run a node server that serves the frontend.
 
