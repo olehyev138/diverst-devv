@@ -123,17 +123,6 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
               expect(subject.index?).to eq true
             end
           end
-
-          context 'user has groups_manage permission : is_admin_manager' do
-            before do
-              user.policy_group.update groups_manage: true
-              user.policy_group.update groups_budgets_manage: true
-            end
-
-            it 'returns true' do
-              expect(subject.index?).to eq true
-            end
-          end
         end
       end
 
