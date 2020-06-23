@@ -27,7 +27,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import { Field, Form, Formik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
-import {injectIntl, intlShape} from "react-intl";
+import { injectIntl, intlShape } from 'react-intl';
 
 
 const styles = theme => ({
