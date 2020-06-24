@@ -5,7 +5,7 @@ RSpec.describe ClockworkDatabaseEventPolicy, type: :policy do
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
 
-  subject { EnterprisePolicy.new(user.reload, Clockwork) }
+  subject { ClockworkDatabaseEventPolicy.new(user.reload, Clockwork) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -38,7 +38,7 @@ RSpec.describe ClockworkDatabaseEventPolicy, type: :policy do
         user_role.policy_group_template.update enterprise_manage: true
         group = create(:group, enterprise: enterprise)
         create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-               user_role_id: user_role.id)
+                              user_role_id: user_role.id)
       end
       it { is_expected.to forbid_action(:update) }
     end
