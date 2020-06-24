@@ -5,7 +5,7 @@ RSpec.describe EmailPolicy, type: :policy do
   let(:no_access) { create(:user) }
   let!(:user) { no_access }
 
-  subject { EmailPolicy.new(user.reload ,enterprise , Email) }
+  subject { EmailPolicy.new(user.reload, enterprise, Email) }
 
   before {
     no_access.policy_group.manage_all = false
