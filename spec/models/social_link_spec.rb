@@ -29,7 +29,6 @@ RSpec.describe SocialLink, type: :model do
         it 'returns budget not approved' do
           expect(SocialLink.unapproved).to eq([unapproved_social_link])
         end
-
       end
     end
     describe 'url population' do
