@@ -35,9 +35,9 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
 
         context 'when manage_all is true' do
           before { user.policy_group.update manage_all: true }
-            it 'returns true for #update?' do
-              expect(subject.update?).to eq true
-            end
+          it 'returns true for #update?' do
+            expect(subject.update?).to eq true
+          end
         end
 
         context 'when manage_posts is true' do
@@ -47,7 +47,6 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
           end
         end
       end
-
     end
   end
 end
