@@ -28,18 +28,6 @@ RSpec.describe Resource, type: :model do
   end
 
   describe 'test scopes' do
-    describe '.unarchived_resources' do
-      before do
-        create(:resource, folder: create(:folder, id: 1))
-        create(:resource, folder: create(:folder, id: 3))
-        create(:resource, initiative: create(:initiative, id: 3))
-      end
-
-      it 'returns unarchived_resources resource' do
-        expect(Resource.unarchived_resources([1, 2], [3, 4]).count).to eq(2)
-      end
-    end
-
     describe '.not_archived' do
       let!(:resource) { create_list(:resource, 2) }
 
