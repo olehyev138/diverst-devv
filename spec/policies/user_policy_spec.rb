@@ -125,7 +125,7 @@ RSpec.describe UserPolicy, type: :policy do
 
       context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do
         let(:other_user) { create(:user) }
-        before { user.policy_group.update groups_budgets_manage: false }
+        before { user.policy_group.update group_members_manage: false }
 
         it 'returns false' do
           expect(subject.join_or_leave_groups?).to eq false
