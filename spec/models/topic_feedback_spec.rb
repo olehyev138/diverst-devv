@@ -5,5 +5,5 @@ RSpec.describe TopicFeedback, type: :model do
 
   it { expect(topic_feedback).to belong_to(:topic) }
   it { expect(topic_feedback).to belong_to(:user) }
-  it { expect(topic_feedback).to validate_length_of(:user).is_at_most(65535) }
+  it { expect(topic_feedback).to validate_length_of(:content).is_at_most(65535) }
 end
