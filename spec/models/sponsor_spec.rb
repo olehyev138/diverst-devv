@@ -4,7 +4,7 @@ RSpec.describe Sponsor, type: :model do
   describe 'association and validations' do
     let(:sponsor) { build_stubbed(:sponsor) }
 
-    it { expect(sponsor).to belong_to(:sponsorable).polymorphic(true) }
+    it { expect(sponsor).to belong_to(:sponsorable) }
 
     it { expect(sponsor).to validate_length_of(:sponsorable_type).is_at_most(191) }
     it { expect(sponsor).to validate_length_of(:sponsor_message).is_at_most(65535) }
@@ -12,8 +12,11 @@ RSpec.describe Sponsor, type: :model do
     it { expect(sponsor).to validate_length_of(:sponsor_name).is_at_most(191) }
 
     # ActiveStorage
-    it { expect(sponsor).to have_attached_file(:sponsor_media) }
-    it { expect(sponsor).to validate_attachment_content_type(:sponsor_media, AttachmentHelper.common_image_types) }
+    context 'ActiveStorage' do
+      let!(:media) { build(:sponsor) }
+      it { expect(media).to have_attached_file(:sponsor_media) }
+      it { expect(media).to validate_attachment_content_type(:sponsor_media, AttachmentHelper.common_image_types) }
+    end
   end
 
   describe 'test scope' do
