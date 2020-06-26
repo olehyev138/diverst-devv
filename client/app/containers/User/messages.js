@@ -89,6 +89,35 @@ export default defineMessages({
       id: `${scope}.scope.saml`
     },
   },
+  imports: {
+    title: {
+      id: `${scope}.import.title`,
+    },
+    importInstructionsTitle: {
+      id: `${scope}.import.importInstructionsTitle`,
+    },
+    importInstructions: {
+      id: `${scope}.import.importInstructions`,
+    },
+    columnInstructionsTitle: {
+      id: `${scope}.import.columnInstructionsTitle`,
+    },
+    columnInstructions: {
+      id: `${scope}.import.columnInstructions`,
+    },
+    rowsInstructionsTitle: {
+      id: `${scope}.import.rowsInstructionsTitle`,
+    },
+    rowsInstructions: {
+      id: `${scope}.import.rowsInstructions`,
+    },
+    SampleInstructionsTitle: {
+      id: `${scope}.import.SampleInstructionsTitle`,
+    },
+    SampleInstructions: {
+      id: `${scope}.import.SampleInstructions`,
+    },
+  },
   downloads: {
     title: {
       id: `${scope}.downloads.title`
