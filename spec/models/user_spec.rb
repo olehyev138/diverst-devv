@@ -97,7 +97,7 @@ RSpec.describe User do
       it { expect(user).to validate_length_of(:last_name).is_at_most(191) }
       it { expect(user).to validate_length_of(:first_name).is_at_most(191) }
       it { expect(user).to validate_confirmation_of(:password) }
-      it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128),allow_value('',nil) }
+      it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128),allow_value('', nil) }
       it { expect(user).to validate_presence_of(:email) }
       it { expect(user).to validate_uniqueness_of(:email) }
       it { expect(user).to allow_value("email@addresse.foo").for(:email) }
@@ -169,7 +169,7 @@ RSpec.describe User do
         it { expect(user).to have_many(:likes).dependent(:destroy) }
         it { expect(user).to have_many(:csv_files) }
         it { expect(user).to have_many(:urls_visited).dependent(:destroy).class_name('PageVisitationData') }
-        it { expect(user).to have_many(:pages_visited).dependent(:destroy).class_name('PageVisitation')}
+        it { expect(user).to have_many(:pages_visited).dependent(:destroy).class_name('PageVisitation') }
         it { expect(user).to have_many(:page_names_visited).dependent(:destroy).class_name('PageVisitationByName') }
         it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id).dependent(:destroy) }
         it { expect(user).to have_many(:news_link_comments).with_foreign_key(:author_id).dependent(:destroy) }
@@ -381,10 +381,10 @@ RSpec.describe User do
     end
 
     describe '#top_participants' do
-      let!(:user1){ create(:user, total_weekly_points: 1) }
-      let!(:user2){ create(:user, total_weekly_points: 2) }
-      let!(:user3){ create(:user, total_weekly_points: 3) }
-      let!(:user4){ create(:user, total_weekly_points: 4) }
+      let!(:user1) { create(:user, total_weekly_points: 1) }
+      let!(:user2) { create(:user, total_weekly_points: 2) }
+      let!(:user3) { create(:user, total_weekly_points: 3) }
+      let!(:user4) { create(:user, total_weekly_points: 4) }
       it 'returns top_participants' do
         expect(User.top_participants(2)[0]).to eq(user4)
         expect(User.top_participants(2)[1]).to eq(user3)
@@ -392,10 +392,10 @@ RSpec.describe User do
     end
 
     describe '#of_role' do
-      let!(:users){ create_list(:user, 3) }
+      let!(:users) { create_list(:user, 3) }
       before do
         User.update_all(user_role_id: 1)
-        users[0].update(user_role_id:2)
+        users[0].update(user_role_id: 2)
       end
 
       it 'returns user of role' do
@@ -405,7 +405,7 @@ RSpec.describe User do
 
     describe '#es_index_for_enterprise' do
       let!(:enterprise1) { create :enterprise }
-      let!(:users){ create_list(:user, 3, enterprise: enterprise1) }
+      let!(:users) { create_list(:user, 3, enterprise: enterprise1) }
 
       it 'returns es_index_for_enterprise' do
         expect(User.es_index_for_enterprise(enterprise1).count).to eq 3
@@ -413,14 +413,14 @@ RSpec.describe User do
     end
 
     describe '#saml' do
-      let!(:user_saml){ create(:user, auth_source: 'saml') }
+      let!(:user_saml) { create(:user, auth_source: 'saml') }
       it 'returns es_index_for_enterprise' do
         expect(User.saml).to eq([user_saml])
       end
     end
 
     describe 'mentors' do
-      let!(:mentors){ create_list(:user, 3, mentor: true) }
+      let!(:mentors) { create_list(:user, 3, mentor: true) }
 
       it 'returns mentors' do
         expect(User.mentors.count).to eq 3
@@ -428,7 +428,7 @@ RSpec.describe User do
     end
 
     describe 'mentees' do
-      let!(:mentees){ create_list(:user, 3, mentee: true) }
+      let!(:mentees) { create_list(:user, 3, mentee: true) }
 
       it 'returns mentees' do
         expect(User.mentees.count).to eq 3
@@ -436,7 +436,7 @@ RSpec.describe User do
     end
 
     describe 'accepting_mentor_requests' do
-      let!(:accepting_mentor_requests){ create_list(:user, 3, accepting_mentor_requests: true) }
+      let!(:accepting_mentor_requests) { create_list(:user, 3, accepting_mentor_requests: true) }
 
       it 'returns accepting_mentor_requests' do
         expect(User.accepting_mentor_requests.count).to eq 5
@@ -444,7 +444,7 @@ RSpec.describe User do
     end
 
     describe 'accepting_mentee_requests' do
-      let!(:accepting_mentee_requests){ create_list(:user, 3, accepting_mentee_requests: true) }
+      let!(:accepting_mentee_requests) { create_list(:user, 3, accepting_mentee_requests: true) }
 
       it 'returns accepting_mentor_requests' do
         expect(User.accepting_mentee_requests.count).to eq 5
@@ -452,9 +452,9 @@ RSpec.describe User do
     end
 
     describe 'mentors_and_mentees' do
-      let!(:mentees){ create_list(:user, 2, mentee: true) }
-      let!(:montors){ create_list(:user, 2, mentor: true) }
-      let!(:montor_mentee){ create(:user, mentor: true, mentee: true) }
+      let!(:mentees) { create_list(:user, 2, mentee: true) }
+      let!(:montors) { create_list(:user, 2, mentor: true) }
+      let!(:montor_mentee) { create(:user, mentor: true, mentee: true) }
       it 'returns mentors_and_mentees' do
         expect(User.mentors_and_mentees.count).to eq 5
       end
@@ -467,7 +467,7 @@ RSpec.describe User do
         create(:user, id: 3, mentor: true)
       end
       it 'returns enterprise_mentors' do
-        expect(User.enterprise_mentors(user_ids=[1, 2]).count).to eq 1
+        expect(User.enterprise_mentors(user_ids = [1, 2]).count).to eq 1
       end
     end
 
@@ -478,7 +478,7 @@ RSpec.describe User do
         create(:user, id: 3, mentee: true)
       end
       it 'returns enterprise_mentees' do
-        expect(User.enterprise_mentees(user_ids=[1]).count).to eq 2
+        expect(User.enterprise_mentees(user_ids = [1]).count).to eq 2
       end
     end
   end
