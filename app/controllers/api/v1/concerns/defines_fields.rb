@@ -2,13 +2,8 @@ module Api::V1::Concerns::DefinesFields
   extend ActiveSupport::Concern
 
   def fields
-    if params[:id]
-      item = klass.find(params[:id])
-      base_authorize(item)
-    else
-      # to complete
-      item = klass.find(params[:poll_id])
-    end
+    item = klass.find(params[:id])
+    base_authorize(item)
 
     render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
   rescue => e
@@ -17,15 +12,10 @@ module Api::V1::Concerns::DefinesFields
 
   def create_field
     params[:field] = field_payload
-    if params[:id]
-      item = klass.find(params[:id])
-      base_authorize(item)
-      render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
-    else
-      # to complete
-      item = klass.find(params[:poll_id])
-      render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
-    end
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
   rescue => e
     case e
     when InvalidInputException
