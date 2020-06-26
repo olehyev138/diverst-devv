@@ -1,61 +1,61 @@
 require 'rails_helper'
 
-RSpec.describe GroupPostsPolicy, type: :policy do
+RSpec.describe GroupUpdatePolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let(:no_access) { create(:user, enterprise: enterprise) }
-  let(:user) { no_access }
-  let(:message) { create(:group_message, owner: user, group: group) }
+  let(:group_update) { create(:group_update) }
+  let(:no_access) { create(:user) }
+  let!(:user) { no_access }
 
-  subject { described_class.new(user.reload, [group, message]) }
+  subject { described_class.new(user.reload, [group, group_update]) }
 
   before {
     no_access.policy_group.manage_all = false
-    no_access.policy_group.group_posts_index = false
-    no_access.policy_group.manage_posts = false
+    no_access.policy_group.groups_manage = false
+    no_access.policy_group.groups_insights_manage = false
     no_access.policy_group.save!
   }
 
   describe 'for users with access' do
     context 'when manage_all is false' do
-      context 'view_latest_news?' do
+      context 'index?' do
         context 'when group.members_visibility is set to public' do
           before { group.members_visibility = 'public' }
 
-          context 'when ONLY groups_posts_index is true' do
-            before { user.policy_group.update group_posts_index: true }
+          context 'when ONLY groups_insights_manage is true' do
+            before { user.policy_group.update groups_insights_manage: true }
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
-          context 'when ONLY manage_posts is true' do
-            before { user.policy_group.update manage_posts: true }
+          context 'when ONLY groups_insights_manage is true' do
+            before { user.policy_group.update groups_insights_manage: true }
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
-          context 'when ONLY manage_posts is true' do
-            before { user.policy_group.update manage_posts: true }
+          context 'when ONLY groups_insights_manage is true' do
+            before { user.policy_group.update groups_insights_manage: true }
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
           context 'user has basic leader permissions and groups_members_manage is true' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-              user_role.policy_group_template.update manage_posts: true
+              user_role.policy_group_template.update groups_insights_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                      user_role_id: user_role.id)
             end
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
         end
@@ -63,46 +63,46 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'when group.members_visibility is set to group' do
           before { group.members_visibility = 'group' }
 
-          context 'when groups_manage and manage_posts are true' do
-            before { user.policy_group.update groups_manage: true, manage_posts: true }
+          context 'when groups_manage and groups_insights_manage are true' do
+            before { user.policy_group.update groups_manage: true, groups_insights_manage: true }
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
           context 'user has group leader permissions : is_a_leader' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-              user_role.policy_group_template.update manage_posts: true
+              user_role.policy_group_template.update groups_insights_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                      user_role_id: user_role.id)
             end
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
-          context 'user is member and manage_posts is true : is_a_member' do
+          context 'user is member and groups_insights_manage is true : is_a_member' do
             before do
               create(:user_group, user_id: user.id, group_id: group.id)
-              user.policy_group.update manage_posts: true
+              user.policy_group.update groups_insights_manage: true
             end
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
 
           context 'user has groups_manage permission : is_admin_manager' do
             before do
               user.policy_group.update groups_manage: true
-              user.policy_group.update manage_posts: true
+              user.policy_group.update groups_insights_manage: true
             end
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
           end
         end
@@ -112,22 +112,14 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           context 'user has group leader permissions : is_a_leader' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-              user_role.policy_group_template.update manage_posts: true
+              user_role.policy_group_template.update groups_insights_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                      user_role_id: user_role.id)
             end
 
             it 'returns true' do
-              expect(subject.view_latest_news?).to eq true
+              expect(subject.index?).to eq true
             end
-          end
-        end
-
-        context 'when group.latest_news_visibility is set to nil' do
-          before { group.latest_news_visibility = nil }
-
-          it 'returns false' do
-            expect(subject.view_latest_news?).to eq false
           end
         end
       end
@@ -136,7 +128,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user has groups_manage permission : is_admin_manager' do
           before do
             user.policy_group.update groups_manage: true
-            user.policy_group.update manage_posts: true
+            user.policy_group.update groups_insights_manage: true
           end
 
           it 'returns true' do
@@ -147,7 +139,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user has group leader permissions : is_a_leader' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update manage_posts: true
+            user_role.policy_group_template.update groups_insights_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                    user_role_id: user_role.id)
           end
@@ -160,7 +152,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user is an accepted member : is_an_accepted_member' do
           before do
             create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
-            user.policy_group.update manage_posts: true
+            user.policy_group.update groups_insights_manage: true
           end
 
           it 'returns true' do
@@ -173,7 +165,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user has groups_manage permission : is_admin_manager' do
           before do
             user.policy_group.update groups_manage: true
-            user.policy_group.update manage_posts: true
+            user.policy_group.update groups_insights_manage: true
           end
 
           it 'returns true' do
@@ -184,7 +176,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user has group leader permissions : is_a_leader' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update manage_posts: true
+            user_role.policy_group_template.update groups_insights_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                    user_role_id: user_role.id)
           end
@@ -197,7 +189,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         context 'user is an accepted member : is_an_accepted_member' do
           before do
             create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
-            user.policy_group.update manage_posts: true
+            user.policy_group.update groups_insights_manage: true
           end
 
           it 'returns true' do
@@ -205,38 +197,24 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           end
         end
       end
-
     end
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
 
-      context 'when group.latest_news_visibility is public' do
-        before { group.latest_news_visibility = 'public' }
+      context 'when groups_manage and groups_insights_manage are false' do
+        before { user.policy_group.update groups_manage: false, groups_insights_manage: false }
+        it { is_expected.to permit_actions([:create, :destroy]) }
 
-        context 'when group_posts_index and manage_posts are false' do
-          it 'returns false' do
-            expect(subject.view_latest_news?).to eq true
-          end
-        end
-
-        context 'when group.latest_news_visibility is group' do
-          before { group.latest_news_visibility = 'group' }
-
-          it 'returns true' do
-            expect(subject.view_latest_news?).to eq true
-          end
+        it 'returns true for #index?' do
+          expect(subject.index?).to eq true
         end
       end
     end
   end
-
-  describe 'for users with no access' do
-    let!(:user) { no_access }
-
-    it 'returns false' do
-      expect(subject.view_latest_news?).to eq false
+  describe 'for users without access' do
+    describe 'for users with no access' do
+      it { is_expected.to forbid_actions([:create, :destroy]) }
     end
   end
 end
-
