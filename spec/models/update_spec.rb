@@ -6,9 +6,9 @@ RSpec.describe Update, type: :model do
   describe 'test associations and validation' do
     let!(:update) { build_stubbed(:group_update2) }
 
-    it {validate_uniqueness_of expect(update).to belong_to(:owner).class_name('User') }
+    it { validate_uniqueness_of expect(update).to belong_to(:owner).class_name('User') }
     it { expect(update).to belong_to(:updatable) }
-    it { expect(update).to belong_to(:previous).class_name('Update').inverse_of(:next)  }
+    it { expect(update).to belong_to(:previous).class_name('Update').inverse_of(:next) }
 
     context 'initiative' do
       let!(:initiative_update) { build(:initiative_update2, updatable_type: 'Initiative') }
