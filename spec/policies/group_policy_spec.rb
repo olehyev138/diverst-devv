@@ -359,5 +359,138 @@ RSpec.describe GroupPolicy, type: :policy do
         expect(subject.is_a_leader?).to eq true
       end
     end
+
+    describe '#assign_leaders?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.assign_leaders?).to eq true
+        end
+      end
+
+      context 'when user is group leader : has_group_leader_permissions?' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update group_leader_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                 user_role_id: user_role.id)
+        end
+
+        it 'returns true' do
+          expect(subject.assign_leaders?).to eq true
+        end
+      end
+
+      context 'when group_leader_manage? is true' do
+        before { user.policy_group.update group_leader_manage: true }
+
+        it 'returns true' do
+          expect(subject.assign_leaders?).to eq true
+        end
+      end
+    end
+
+    describe '#calendar?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.calendar?).to eq true
+        end
+      end
+
+      context 'when global_calendar? is true' do
+        before { user.policy_group.update global_calendar: true }
+
+        it 'returns true' do
+          expect(subject.calendar?).to eq true
+        end
+      end
+    end
+
+    describe '#layouts?' do
+      context 'when ONLY manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.layouts?).to eq true
+        end
+      end
+
+      context 'when groups_manage and groups_layouts_manage are true' do
+        before { user.policy_group.update groups_manage: true, groups_layouts_manage: true }
+
+        it 'returns true' do
+          expect(subject.layouts?).to eq true
+        end
+      end
+
+      context 'user is group leader and groups_layouts_manage is true' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update groups_layouts_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                 user_role_id: user_role.id)
+        end
+
+        it 'returns true' do
+          expect(subject.layouts?).to eq true
+        end
+      end
+
+      context 'user is member and groups_insights_manage is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update groups_layouts_manage: true
+        end
+
+        it 'returns true' do
+          expect(subject.layouts?).to eq true
+        end
+      end
+    end
+
+    describe '#settings?' do
+      context 'when ONLY manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.settings?).to eq true
+        end
+      end
+
+      context 'when groups_manage and group_settings_manage are true' do
+        before { user.policy_group.update groups_manage: true, group_settings_manage: true }
+
+        it 'returns true' do
+          expect(subject.settings?).to eq true
+        end
+      end
+
+      context 'user is group leader and group_settings_manage is true' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update group_settings_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                 user_role_id: user_role.id)
+        end
+
+        it 'returns true' do
+          expect(subject.settings?).to eq true
+        end
+      end
+
+      context 'user is member and group_settings_manage is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update group_settings_manage: true
+        end
+
+        it 'returns true' do
+          expect(subject.settings?).to eq true
+        end
+      end
+    end
   end
 end
