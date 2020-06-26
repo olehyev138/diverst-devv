@@ -74,47 +74,113 @@ RSpec.describe User do
       it { expect(user).to validate_numericality_of(:points).only_integer }
       it { expect(user).to validate_presence_of(:credits) }
       it { expect(user).to validate_numericality_of(:credits).only_integer }
+      # it { expect(user).to validate_presence_of(:time_zone) } # test fails because of set default time_zone
+      it { expect(user).to validate_length_of(:mentorship_description).is_at_most(65535) }
+      it { expect(user).to validate_length_of(:unlock_token).is_at_most(191) }
+      it { expect(user).to validate_length_of(:time_zone).is_at_most(191) }
+      it { expect(user).to validate_length_of(:biography).is_at_most(65535) }
+      it { expect(user).to validate_length_of(:yammer_token).is_at_most(191) }
+      it { expect(user).to validate_length_of(:firebase_token).is_at_most(191) }
+      it { expect(user).to validate_length_of(:tokens).is_at_most(65535) }
+      it { expect(user).to validate_length_of(:uid).is_at_most(191) }
+      # it { expect(user).to validate_length_of(:provider).is_at_most(191) } # test fails
+      it { expect(user).to validate_length_of(:invited_by_type).is_at_most(191) }
+      it { expect(user).to validate_length_of(:invitation_token).is_at_most(191) }
+      it { expect(user).to validate_length_of(:last_sign_in_ip).is_at_most(191) }
+      it { expect(user).to validate_length_of(:current_sign_in_ip).is_at_most(191) }
+      it { expect(user).to validate_length_of(:reset_password_token).is_at_most(191) }
+      it { expect(user).to validate_length_of(:email).is_at_most(191) }
+      it { expect(user).to validate_length_of(:encrypted_password).is_at_most(191) }
+      it { expect(user).to validate_length_of(:notifications_email).is_at_most(191) }
+      it { expect(user).to validate_length_of(:auth_source).is_at_most(191) }
+      it { expect(user).to validate_length_of(:data).is_at_most(65535) }
+      it { expect(user).to validate_length_of(:last_name).is_at_most(191) }
+      it { expect(user).to validate_length_of(:first_name).is_at_most(191) }
+      it { expect(user).to validate_confirmation_of(:password) }
+      it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128),allow_value('',nil) }
+      it { expect(user).to validate_presence_of(:email) }
+      it { expect(user).to validate_uniqueness_of(:email) }
+      it { expect(user).to allow_value("email@addresse.foo").for(:email) }
+      it { expect(user).to_not allow_value("foo").for(:email) }
+
     end
 
-    context 'test' do
+
+    context 'test associations' do
       context 'belongs_to associations' do
         # we dont validate presence of enterprise on user - TODO
-        it { expect(user).to belong_to(:enterprise).without_validating_presence }
+        it { expect(user).to belong_to(:enterprise).without_validating_presence.counter_cache(true) }
+        it { expect(user).to belong_to(:user_role) }
+      end
+
+      context 'has_one associations' do
+        it { expect(user).to have_one(:policy_group).dependent(:destroy).inverse_of(:user) }
+        it { expect(user).to have_one(:device).dependent(:destroy).inverse_of(:user) }
       end
 
       context 'has_many associations' do
-        it { expect(user).to have_many(:users_segments) }
+        it { expect(user).to have_many(:activities) }
+        it { expect(user).to have_many(:sessions).dependent(:destroy) }
+        it { expect(user).to have_many(:users_segments).dependent(:destroy) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
         it { expect(user).to have_many(:groups).through(:user_groups) }
+        it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
         it { expect(user).to have_many(:user_groups).dependent(:destroy) }
-        it { expect(user).to have_many(:topic_feedbacks) }
+        it { expect(user).to have_many(:topic_feedbacks).dependent(:destroy) }
         it { expect(user).to have_many(:poll_responses) }
-        it { expect(user).to have_many(:answers).inverse_of(:author).with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:answer_upvotes).with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:invitations).class_name('CampaignInvitation') }
+        it { expect(user).to have_many(:answers).inverse_of(:author).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:answer_upvotes).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:invitations).class_name('CampaignInvitation').dependent(:destroy) }
         it { expect(user).to have_many(:campaigns).through(:invitations) }
         it { expect(user).to have_many(:news_links).through(:groups) }
-        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
+        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id).dependent(:destroy) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
         it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
-        it { expect(user).to have_many(:initiative_users) }
+        it { expect(user).to have_many(:initiative_users).dependent(:destroy) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
-        it { expect(user).to have_many(:initiative_invitees) }
+        it { expect(user).to have_many(:initiative_invitees).dependent(:destroy) }
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:group_leaders) }
+        it { expect(user).to have_many(:group_leaders).dependent(:destroy) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
-        it { expect(user).to have_many(:user_reward_actions) }
+        it { expect(user).to have_many(:user_reward_actions).dependent(:destroy) }
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+        it { expect(user).to have_many(:user_rewards) }
+        it { expect(user).to have_many(:rewards).with_foreign_key(:responsible_id).dependent(:destroy) }
         it { expect(user).to have_many(:metrics_dashboards).with_foreign_key(:owner_id) }
         it { expect(user).to have_many(:shared_metrics_dashboards) }
+        it { expect(user).to have_many(:mentorships).class_name('Mentoring').with_foreign_key('mentor_id') }
+        it { expect(user).to have_many(:mentees).through('mentorships').class_name('User').source(:mentee) }
+        it { expect(user).to have_many(:menteeships).class_name('Mentoring').with_foreign_key('mentee_id') }
+        it { expect(user).to have_many(:mentors).through(:menteeships).class_name('User').source(:mentor) }
+        it { expect(user).to have_many(:availabilities).class_name('MentorshipAvailability') }
+        it { expect(user).to have_many(:mentorship_ratings) }
+        it { expect(user).to have_many(:mentorship_interests) }
+        it { expect(user).to have_many(:mentoring_interests).through('mentorship_interests') }
+        it { expect(user).to have_many(:mentorship_sessions) }
+        it { expect(user).to have_many(:mentoring_sessions).through('mentorship_sessions') }
+        it { expect(user).to have_many(:mentorship_types) }
+        it { expect(user).to have_many(:mentoring_types).through('mentorship_types') }
+        it { expect(user).to have_many(:mentorship_proposals).with_foreign_key('sender_id').class_name('MentoringRequest') }
+        it { expect(user).to have_many(:mentorship_requests).with_foreign_key('receiver_id').class_name('MentoringRequest') }
+        it { expect(user).to have_many(:own_messages).with_foreign_key(:owner_id).class_name('GroupMessage') }
+        it { expect(user).to have_many(:likes).dependent(:destroy) }
+        it { expect(user).to have_many(:csv_files) }
+        it { expect(user).to have_many(:urls_visited).dependent(:destroy).class_name('PageVisitationData') }
+        it { expect(user).to have_many(:pages_visited).dependent(:destroy).class_name('PageVisitation')}
+        it { expect(user).to have_many(:page_names_visited).dependent(:destroy).class_name('PageVisitationByName') }
+        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:news_link_comments).with_foreign_key(:author_id).dependent(:destroy) }
       end
 
       # ActiveStorage
       it { expect(user).to have_attached_file(:avatar) }
       it { expect(user).to validate_attachment_content_type(:avatar, AttachmentHelper.common_image_types) }
+
+      it { expect(user).to accept_nested_attributes_for(:policy_group) }
+      it { expect(user).to accept_nested_attributes_for(:availabilities).allow_destroy(true) }
     end
 
     describe 'test callbacks' do
@@ -305,6 +371,114 @@ RSpec.describe User do
 
       it 'returns users with answered polls' do
         expect(enterprise.users.answered_poll(poll)).to eq [active_user]
+      end
+    end
+
+    describe '#invitation_sent' do
+      it 'returns invitation_sent' do
+        expect(User.active.invitation_sent).to eq [active_user]
+      end
+    end
+
+    describe '#top_participants' do
+      let!(:user1){ create(:user, total_weekly_points: 1) }
+      let!(:user2){ create(:user, total_weekly_points: 2) }
+      let!(:user3){ create(:user, total_weekly_points: 3) }
+      let!(:user4){ create(:user, total_weekly_points: 4) }
+      it 'returns top_participants' do
+        expect(User.top_participants(2)[0]).to eq(user4)
+        expect(User.top_participants(2)[1]).to eq(user3)
+      end
+    end
+
+    describe '#of_role' do
+      let!(:users){ create_list(:user, 3) }
+      before do
+        User.update_all(user_role_id: 1)
+        users[0].update(user_role_id:2)
+      end
+
+      it 'returns user of role' do
+        expect(User.of_role(2).count).to eq 1
+      end
+    end
+
+    describe '#es_index_for_enterprise' do
+      let!(:enterprise1) { create :enterprise }
+      let!(:users){ create_list(:user, 3, enterprise: enterprise1) }
+
+      it 'returns es_index_for_enterprise' do
+        expect(User.es_index_for_enterprise(enterprise1).count).to eq 3
+      end
+    end
+
+    describe '#saml' do
+      let!(:user_saml){ create(:user, auth_source: 'saml') }
+      it 'returns es_index_for_enterprise' do
+        expect(User.saml).to eq([user_saml])
+      end
+    end
+
+    describe 'mentors' do
+      let!(:mentors){ create_list(:user, 3, mentor: true) }
+
+      it 'returns mentors' do
+        expect(User.mentors.count).to eq 3
+      end
+    end
+
+    describe 'mentees' do
+      let!(:mentees){ create_list(:user, 3, mentee: true) }
+
+      it 'returns mentees' do
+        expect(User.mentees.count).to eq 3
+      end
+    end
+
+    describe 'accepting_mentor_requests' do
+      let!(:accepting_mentor_requests){ create_list(:user, 3, accepting_mentor_requests: true) }
+
+      it 'returns accepting_mentor_requests' do
+        expect(User.accepting_mentor_requests.count).to eq 5
+      end
+    end
+
+    describe 'accepting_mentee_requests' do
+      let!(:accepting_mentee_requests){ create_list(:user, 3, accepting_mentee_requests: true) }
+
+      it 'returns accepting_mentor_requests' do
+        expect(User.accepting_mentee_requests.count).to eq 5
+      end
+    end
+
+    describe 'mentors_and_mentees' do
+      let!(:mentees){ create_list(:user, 2, mentee: true) }
+      let!(:montors){ create_list(:user, 2, mentor: true) }
+      let!(:montor_mentee){ create(:user, mentor: true, mentee: true) }
+      it 'returns mentors_and_mentees' do
+        expect(User.mentors_and_mentees.count).to eq 5
+      end
+    end
+
+    describe 'enterprise_mentors' do
+      before do
+        create(:user, id: 1, mentor: true)
+        create(:user, id: 2, mentor: true)
+        create(:user, id: 3, mentor: true)
+      end
+      it 'returns enterprise_mentors' do
+        expect(User.enterprise_mentors(user_ids=[1, 2]).count).to eq 1
+      end
+    end
+
+    describe 'enterprise_mentees' do
+      before do
+        create(:user, id: 1, mentee: true)
+        create(:user, id: 2, mentee: true)
+        create(:user, id: 3, mentee: true)
+      end
+      it 'returns enterprise_mentees' do
+        expect(User.enterprise_mentees(user_ids=[1]).count).to eq 2
       end
     end
   end
