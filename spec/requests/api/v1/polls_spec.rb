@@ -83,7 +83,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
   end
 
-  describe '#fields' do
+  xdescribe '#fields' do
     it 'gets fields' do
       get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
       expect(response).to have_http_status(:ok)
@@ -97,7 +97,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   # TODO : Complete polls and capture error
-  describe '#create field' do
+  xdescribe '#create field' do
     it 'creates fields' do
       post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field': field.attributes }, headers: headers
       expect(response).to have_http_status(:created)
