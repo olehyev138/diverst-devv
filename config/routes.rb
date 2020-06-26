@@ -260,6 +260,7 @@ Diverst::Application.routes.draw do
           post '/sign_up_token', to: 'users#sign_up_token'
           post '/sign_up', to: 'users#sign_up'
           get 'prototype'
+          get 'sample_csv'
         end
       end
       resources :user_groups do

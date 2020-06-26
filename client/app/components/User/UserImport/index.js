@@ -27,6 +27,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import { Field, Form, Formik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+import { injectIntl, intlShape } from 'react-intl';
 
 
 const styles = theme => ({
@@ -85,26 +86,26 @@ export function ImportForm({ handleSubmit, handleChange, handleBlur, values, set
 }
 
 export function UserImport(props, context) {
-  const { classes, fields, isLoading, importAction } = props;
+  const { classes, fields, isLoading, importAction, intl } = props;
 
   return (
     <React.Fragment>
       <Paper>
         <CardHeader
-          title='Import users via CSV'
+          title={intl.formatMessage(messages.imports.title)}
         />
         <CardContent>
           <Typography component='h2' variant='h6' className={classes.dataHeaders}>
-            Import instructions
+            <DiverstFormattedMessage {...messages.imports.importInstructionsTitle} />
           </Typography>
           <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
-            To batch import users, upload a CSV file using the form below. The file needs to follow the following structure:
+            <DiverstFormattedMessage {...messages.imports.importInstructions} />
           </Typography>
           <Typography component='h2' variant='h6' className={classes.dataHeaders}>
-            Columns
+            <DiverstFormattedMessage {...messages.imports.columnInstructionsTitle} />
           </Typography>
           <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
-            The file must contain the following columns in the specified order. Leave a cell blank if you don&#39;t have the necessary information for the user. Columns marked with an asterisk are required.
+            <DiverstFormattedMessage {...messages.imports.columnInstructions} />
           </Typography>
 
           <Grid className={classes.padding}>
@@ -120,10 +121,19 @@ export function UserImport(props, context) {
           </Grid>
 
           <Typography component='h2' variant='h6' className={classes.dataHeaders}>
-            Rows
+            <DiverstFormattedMessage {...messages.imports.rowsInstructionsTitle} />
           </Typography>
           <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
-            The first row is reserved for headers and will not be imported. Every subsequent row will be imported as a user.
+            <DiverstFormattedMessage {...messages.imports.rowsInstructions} />
+          </Typography>
+
+          <Button size='small' variant='outlined' className={classes.dataHeaders} onClick={() => props.getSampleImportBegin({})}>
+            <Typography component='body1' variant='body1'>
+              <DiverstFormattedMessage {...messages.imports.SampleInstructionsTitle} />
+            </Typography>
+          </Button>
+          <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
+            <DiverstFormattedMessage {...messages.imports.SampleInstructions} />
           </Typography>
         </CardContent>
       </Paper>
@@ -144,10 +154,12 @@ export function UserImport(props, context) {
 }
 
 UserImport.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   fields: PropTypes.array,
   isLoading: PropTypes.bool,
   importAction: PropTypes.func.isRequired,
+  getSampleImportBegin: PropTypes.func.isRequired,
 };
 
 ImportForm.propTypes = {
@@ -163,5 +175,6 @@ ImportForm.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(UserImport);
