@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,8 +12,6 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import {
@@ -49,8 +46,7 @@ export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
-  const { location } = rs;
+  const location = useLocation();
 
   const { currentUser, currentGroup, currentFolder, currentFormFolder, currentEnterprise, valid } = props;
 
@@ -58,8 +54,9 @@ export function FolderEditPage(props) {
     cancelLink: getParentPage(currentFolder)
   };
 
+  const { item_id: folderId } = useParams();
+
   useEffect(() => {
-    const folderId = rs.params('item_id');
     props.getFolderBegin({ id: folderId });
     props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
 
@@ -75,7 +72,6 @@ export function FolderEditPage(props) {
           }}
           enableReinitialize
           onSubmit={(values, actions) => {
-            const folderId = rs.params('item_id');
             props.validateFolderPasswordBegin({
               id: folderId[0],
               password: values.password
@@ -190,8 +186,8 @@ export default compose(
 )(Conditional(
   FolderEditPage,
   ['currentFolder.permissions.update?', 'isFormLoading'],
-  (props, rs) => rs.location.fromFolder
-    ? getFolderShowPath(rs.location.fromFolder.folder)
+  (props, params, location) => location.fromFolder
+    ? getFolderShowPath(location.fromFolder.folder)
     : getFolderIndexPath('admin'),
   'resource.enterpriseFolder.folderEditPage'
 ));

@@ -4,30 +4,24 @@
  *
  */
 
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
   Box, CardContent, Grid, Link, Typography, Divider, CardActionArea
 } from '@material-ui/core';
 
-import AddIcon from '@material-ui/icons/Add';
 
 import { injectIntl } from 'react-intl';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import DiverstPagination from 'components/Shared/DiverstPagination';
-
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/messages';
-import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
 
@@ -62,8 +56,6 @@ const styles = theme => ({
 
 export function EventsList(props, context) {
   const { classes, intl } = props;
-
-  const routeContext = useContext(RouteContext);
 
   return (
     <React.Fragment>

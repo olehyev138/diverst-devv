@@ -2,27 +2,27 @@ import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
+import { Fade, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Fade from '@material-ui/core/Fade';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
 import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 import { eventsUnmount, getEventBegin } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
-import Box from '@material-ui/core/Box';
-import GroupLayout from '../GroupLayout';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({
   content: {
@@ -38,13 +38,14 @@ const EventManagePages = Object.freeze([
   'expenses',
 ]);
 
-const EventManageLayout = ({ component: Component, ...rest }) => {
+const EventManageLayout = (props) => {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
 
-  const { computedMatch, location, data, classes, ...other } = rest;
+  const { classes, children, ...rest } = props;
 
-  const rs = new RouteService({ computedMatch, location });
+  const location = useLocation();
+  const { event_id: eventId } = useParams();
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
   const currentPage = EventManagePages.find(page => location.pathname.includes(page));
@@ -56,7 +57,6 @@ const EventManageLayout = ({ component: Component, ...rest }) => {
   }, [currentPage]);
 
   useEffect(() => {
-    const eventId = rs.params('event_id');
     rest.getEventBegin({ id: eventId });
 
     return () => {
@@ -65,31 +65,25 @@ const EventManageLayout = ({ component: Component, ...rest }) => {
   }, []);
 
   return (
-    <GroupLayout
-      {...rest}
-      component={matchProps => (
-        other.event && (
-          <React.Fragment>
-            <EventManageLinks
-              currentTab={tab}
-              {...matchProps}
-            />
-            <Box mb={3} />
-            <Fade in appear>
-              <div>
-                <Component {...other} />
-              </div>
-            </Fade>
-          </React.Fragment>
-        )
-      )}
-    />
+    rest.event && (
+      <React.Fragment>
+        <EventManageLinks
+          currentTab={tab}
+        />
+        <Box mb={3} />
+        <Fade in appear>
+          <div>
+            {renderChildrenWithProps(children, { ...rest })}
+          </div>
+        </Fade>
+      </React.Fragment>
+    )
   );
 };
 
 EventManageLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   pageTitle: PropTypes.object,
   event: PropTypes.object,
   getEventBegin: PropTypes.func,
@@ -121,6 +115,6 @@ export default compose(
 )(Conditional(
   EventManageLayout,
   ['event.permissions.update?', 'isLoading'],
-  (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
+  (props, params) => ROUTES.group.events.show.path(params.group_id, params.event_id),
   permissionMessages.layouts.eventManage
 ));

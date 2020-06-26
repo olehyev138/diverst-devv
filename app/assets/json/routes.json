@@ -1,19 +1,19 @@
 {
   "session": {
-    "sign_up": "/sign_up/:token",
+    "signUp": "/sign_up/:token",
     "login": "/login",
     "forgotPassword": "/forgot"
   },
   "user": {
     "root": "/",
-    "show": "/user/:user_id",
-    "edit": "/user/:user_id/edit",
     "home": "/",
     "innovate": "/campaigns",
     "news": "/news",
     "events": "/events",
     "groups": "/groups",
     "downloads": "/downloads",
+    "show": "/user/:user_id",
+    "edit": "/user/:user_id/edit",
     "mentorship": {
       "home": "/mentorship",
       "show": "/mentorship/:user_id",
@@ -194,7 +194,8 @@
       "polls": {
         "index": "/admin/polls",
         "new": "/admin/polls/new",
-        "edit": "/admin/polls/:poll_id/edit"
+        "edit": "/admin/polls/:poll_id/edit",
+        "show": "/admin/polls/:poll_id"
       }
     },
     "innovate": {
@@ -244,12 +245,14 @@
           "edit": "/admin/system/settings/sso"
         },
         "emails": {
-          "index": "/admin/system/settings/emailLayouts",
-          "edit": "/admin/system/settings/emailLayouts/:email_id/edit"
-        },
-        "mailEvents": {
-          "index": "/admin/system/settings/emailEvents",
-          "edit": "/admin/system/settings/emailEvents/:event_id/edit"
+          "layouts": {
+            "index": "/admin/system/settings/emails/layouts",
+            "edit": "/admin/system/settings/emails/layouts/:email_id/edit"
+          },
+          "events": {
+            "index": "/admin/system/settings/emails/events",
+            "edit": "/admin/system/settings/emails/events/:event_id/edit"
+          }
         }
       },
       "branding": {

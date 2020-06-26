@@ -97,7 +97,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   defaultParams: PropTypes.object,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,

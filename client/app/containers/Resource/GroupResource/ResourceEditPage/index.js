@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,8 +12,6 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { injectIntl, intlShape } from 'react-intl';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
@@ -28,12 +25,13 @@ import {
   getResourceBegin,
 } from 'containers/Resource/actions';
 
+
 import ResourceForm from 'components/Resource/Resource/ResourceForm';
 import messages from 'containers/Resource/Resource/messages';
-import {
-  getFolderShowPath,
-  getFolderIndexPath,
-} from 'utils/resourceHelpers';
+
+import { getFolderShowPath, getFolderIndexPath, } from 'utils/resourceHelpers';
+
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -41,21 +39,18 @@ export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
-  const { location } = rs;
+  const { item_id: resourceId, folder_id: folderId, group_id: groupId } = useParams();
+  const location = useLocation();
 
-  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
+  const type = location.pathname.startsWith('/groups') ? 'group' : 'admin';
 
   const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, groupId),
   };
 
   useEffect(() => {
-    const resourceId = rs.params('item_id');
-    const folderId = rs.params('folder_id');
-    const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
     props.getResourceBegin({ id: resourceId });
     if (type === 'group')
@@ -67,21 +62,24 @@ export function ResourceEditPage(props) {
   }, []);
 
   return (
-    <ResourceForm
-      edit
-      getFoldersBegin={props.getFoldersBegin}
-      selectFolders={props.folders}
-      resourceAction={props.updateResourceBegin}
-      buttonText={props.intl.formatMessage(messages.update)}
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      resource={currentResource}
-      currentFolder={currentFolder}
-      links={links}
-      type={type}
-      isCommitting={props.isCommitting}
-      isFormLoading={props.isFormLoading}
-    />
+    <React.Fragment>
+      <DiverstBreadcrumbs />
+      <ResourceForm
+        edit
+        getFoldersBegin={props.getFoldersBegin}
+        selectFolders={props.folders}
+        resourceAction={props.updateResourceBegin}
+        buttonText={props.intl.formatMessage(messages.update)}
+        currentUser={currentUser}
+        currentGroup={currentGroup}
+        resource={currentResource}
+        currentFolder={currentFolder}
+        links={links}
+        type={type}
+        isCommitting={props.isCommitting}
+        isFormLoading={props.isFormLoading}
+      />
+    </React.Fragment>
   );
 }
 
@@ -136,7 +134,7 @@ export default compose(
 )(Conditional(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
-  (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  (props, params, location) => getFolderIndexPath(location.pathname.startsWith('/groups') ? 'group' : 'admin', params.group_id),
   permissionMessages.resource.groupResource.resourceEditPage,
   true
 ));

@@ -200,7 +200,7 @@ export function LogList(props, context) {
   );
 }
 LogList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   logs: PropTypes.array,
   logTotal: PropTypes.number,

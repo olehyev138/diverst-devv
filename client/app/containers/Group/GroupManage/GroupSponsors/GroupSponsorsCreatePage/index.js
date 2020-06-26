@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -23,9 +24,12 @@ import { injectIntl, intlShape } from 'react-intl';
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
+
+  const { group_id: groupId } = useParams();
+
   const { intl } = props;
   const links = {
-    sponsorIndex: ROUTES.group.manage.sponsors.index.path(props.currentGroup.id),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupId),
   };
 
   useEffect(() => () => props.sponsorsUnmount(), []);
@@ -36,7 +40,7 @@ export function SponsorCreatePage(props) {
         sponsorAction={props.createSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={props.currentGroup.id}
+        sponsorableId={groupId}
       />
     </React.Fragment>
   );
@@ -46,7 +50,6 @@ SponsorCreatePage.propTypes = {
   intl: intlShape,
   createSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func,
-  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

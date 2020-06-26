@@ -1,6 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -22,7 +20,6 @@ import {
   sessionsUnmount, deleteSessionBegin,
 } from 'containers/Mentorship/Session/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SessionsList from 'components/Mentorship/SessionsList';
@@ -61,7 +58,6 @@ export function SessionsPage(props) {
 
   const { user, type } = props;
 
-  const rs = new RouteService(useContext);
   const links = {
     sessionEdit: id => ROUTES.user.mentorship.sessions.edit.path(id),
     sessionShow: id => ROUTES.user.mentorship.sessions.show.path(id)
@@ -193,6 +189,6 @@ export default compose(
 )(Conditional(
   SessionsPage,
   ['user.permissions.update?'],
-  (props, rs) => ROUTES.user.root.path(),
+  (props, params) => ROUTES.user.root.path(),
   permissionMessages.mentorship.session.indexPage
 ));

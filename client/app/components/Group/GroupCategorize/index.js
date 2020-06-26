@@ -19,7 +19,7 @@ import messages from 'containers/Group/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Divider, Box,
+  Button, Card, CardActions, CardContent, Grid, Divider, Box, Typography
 } from '@material-ui/core';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
@@ -34,7 +34,12 @@ const styles = theme => ({
 export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
+      <Grid container spacing={3} justify='space-between'>
+        <Grid item>
+          <Typography color='primary' variant='h5'>
+            {values.name}
+          </Typography>
+        </Grid>
         <Grid item>
           <Button
             variant='contained'
@@ -47,24 +52,6 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
           </Button>
         </Grid>
       </Grid>
-      <Box mb={3} />
-      <Card>
-        <CardContent>
-          <Field
-            component={Select}
-            fullWidth
-            disabled={props.isCommitting}
-            id='name'
-            name='name'
-            margin='normal'
-            label={<DiverstFormattedMessage {...messages.categorize} />}
-            value={values.name}
-            options={props.selectGroups}
-            onChange={value => props.changePage(value.value)}
-            onBlur={() => setFieldTouched('name', true)}
-          />
-        </CardContent>
-      </Card>
       <Box mb={3} />
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
         <Card>
@@ -147,11 +134,9 @@ GroupCategorizeFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  selectGroups: PropTypes.array,
   categories: PropTypes.array,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  changePage: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 };

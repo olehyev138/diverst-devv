@@ -1,12 +1,14 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+
 import reducer from 'containers/Group/GroupPlan/Budget/reducer';
 import saga from 'containers/Group/GroupPlan/Budget/saga';
 import itemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
@@ -32,7 +34,6 @@ import {
   selectHasChanged
 } from 'containers/Group/GroupPlan/BudgetItem/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Budget from 'components/Group/GroupPlan/Budget';
 import Conditional from 'components/Compositions/Conditional';
@@ -51,13 +52,13 @@ export function BudgetPage(props) {
     back: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
   };
 
-  const rs = new RouteService(useContext);
-  const budget = dig(props, 'budget') || rs.location.budget;
+  const { budget_id: budgetId } = useParams();
+  const location = useLocation();
+
+  const budget = dig(props, 'budget') || location.budget;
 
   useEffect(() => {
-    const budgetId = rs.params('budget_id');
-    // eslint-disable-next-line eqeqeq
-    if (!budget || budget.id != budgetId)
+    if (!budget || budget.id !== budgetId)
       props.getBudgetBegin({ id: budgetId });
     else
       props.getBudgetSuccess({ budget });
@@ -66,7 +67,6 @@ export function BudgetPage(props) {
   }, []);
 
   useEffect(() => {
-    const budgetId = rs.params('budget_id');
     if (props.hasChanged)
       props.getBudgetBegin({ id: budgetId });
 
@@ -129,6 +129,6 @@ export default compose(
 )(Conditional(
   BudgetPage,
   ['budget.permissions.show?', 'isLoading'],
-  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.budget.index.path(params.group_id),
   permissionMessages.group.groupPlan.budget.showPage
 ));

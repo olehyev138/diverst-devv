@@ -1,9 +1,10 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
-import dig from 'object-dig';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import produce from 'immer';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -11,12 +12,7 @@ import saga from '../saga';
 import eventSaga from 'containers/Event/saga';
 import reducer from '../reducer';
 
-import RouteService from 'utils/routeHelpers';
-
-import {
-  selectGroupIsCommitting,
-  selectGroup
-} from 'containers/Group/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 import {
   selectPaginatedAnnualBudgets,
   selectIsFetchingAnnualBudgets,
@@ -25,18 +21,15 @@ import {
   selectInitiativesTotal,
   selectIsFetchingInitiatives
 } from '../selectors';
-import {
-  getAnnualBudgetsBegin, annualBudgetsUnmount
-} from '../actions';
-import {
-  getEventsBegin
-} from 'containers/Event/actions';
 
-import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListItem';
+import { getAnnualBudgetsBegin, annualBudgetsUnmount } from '../actions';
+import { getEventsBegin } from 'containers/Event/actions';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
-import produce from 'immer';
 import Conditional from 'components/Compositions/Conditional';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
@@ -51,9 +44,7 @@ export function AnnualBudgetsPage(props) {
   useInjectSaga({ key: 'annualBudgets', saga });
   useInjectSaga({ key: 'events', saga: eventSaga });
 
-  const rs = new RouteService(useContext);
-
-  const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
+  const { group_id: groupId } = useParams();
 
   const [params, setParams] = useState(defaultParams);
   const [initParams, setInitParams] = useState({});
@@ -169,6 +160,6 @@ export default compose(
 )(Conditional(
   AnnualBudgetsPage,
   ['currentGroup.permissions.annual_budgets_view?'],
-  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.home.path(params.group_id),
   permissionMessages.group.groupPlan.annualBudget.overviewPage
 ));
