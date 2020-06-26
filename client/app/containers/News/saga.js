@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {

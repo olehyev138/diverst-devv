@@ -1,6 +1,10 @@
 class GroupWithBudgetSerializer < ApplicationRecordSerializer
-  attributes :id, :name, :short_description, :description, :parent_id, :enterprise_id,
+  attributes :id, :name, :short_description, :description, :parent_id, :enterprise_id, :currency,
              :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, :permissions
+
+  def currency
+    object.annual_budget_currency
+  end
 
   def policies
     [

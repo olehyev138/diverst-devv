@@ -1,11 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
@@ -15,7 +14,6 @@ import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents, select
 import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
@@ -44,12 +42,12 @@ export function EventsPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
   const links = {
-    eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
-    eventShow: id => ROUTES.group.events.show.path(rs.params('group_id'), id),
-    eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
-    eventEdit: id => ROUTES.group.events.edit.path(rs.params('group_id'), id)
+    eventsIndex: ROUTES.group.events.index.path(groupId),
+    eventShow: id => ROUTES.group.events.show.path(groupId, id),
+    eventNew: ROUTES.group.events.new.path(groupId),
+    eventEdit: id => ROUTES.group.events.edit.path(groupId, id)
   };
 
   const [tab, setTab] = useState(EventTypes.upcoming);
@@ -222,6 +220,6 @@ export default compose(
 )(Conditional(
   EventsPage,
   ['permissions.events_view'],
-  (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
+  (props, params) => props.readonly ? null : ROUTES.user.home.path(),
   permissionMessages.user.eventsPage
 ));

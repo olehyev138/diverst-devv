@@ -7,7 +7,7 @@ ssh_key_name        = "key_<client-name"
 az_count            = 2
 nat_gateway_enabled = true
 
-backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.4 running Ruby 2.6 (Puma)"
+backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.7 running Ruby 2.6 (Puma)"
 backend_asg_min         = 1
 backend_asg_max         = 4
 backend_ec2_type        = "t2.small"

@@ -4,6 +4,7 @@ module AttachmentHelper
     JPG: 'image/jpg',
     JPEG: 'image/jpeg',
     GIF: 'image/gif',
+    SVG: 'image/svg+xml',
     PDF: 'application/pdf',
     CSV: 'text/csv',
     XML: 'text/xml',
@@ -21,7 +22,8 @@ module AttachmentHelper
     [
       COMMON_CONTENT_TYPES[:PNG],
       COMMON_CONTENT_TYPES[:JPG],
-      COMMON_CONTENT_TYPES[:JPEG]
+      COMMON_CONTENT_TYPES[:JPEG],
+      COMMON_CONTENT_TYPES[:SVG]
     ]
   end
 
@@ -38,5 +40,10 @@ module AttachmentHelper
   # Attachment data encoded in base64, useful for rendering the attachment as an image on deserialization
   def self.attachment_data_string(attachment)
     Base64.encode64(attachment.download) if attachment.attached?
+  end
+
+  # Attachment content type
+  def self.attachment_content_type(attachment)
+    attachment.content_type if attachment.attached?
   end
 end

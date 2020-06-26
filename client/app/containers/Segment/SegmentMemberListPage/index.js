@@ -1,10 +1,11 @@
 import React, {
-  memo, useEffect, useContext, useState
+  memo, useEffect, useState
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -16,12 +17,9 @@ import {
 } from 'containers/Segment/actions';
 import {
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
-  selectIsFetchingSegmentMembers, selectIsSegmentBuilding
+  selectIsFetchingSegmentMembers
 } from 'containers/Segment/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
-
-import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SegmentMemberList from 'components/Segment/SegmentMemberList';
 
@@ -29,8 +27,7 @@ export function SegmentMemberListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
   useInjectSaga({ key: 'segments', saga });
 
-  const rs = new RouteService(useContext);
-  const segmentId = rs.params('segment_id');
+  const { segment_id: segmentId } = useParams();
 
   const [params, setParams] = useState({
     segment_id: segmentId, count: 5, page: 0, order: 'asc'

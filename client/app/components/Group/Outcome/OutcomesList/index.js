@@ -150,7 +150,7 @@ export function OutcomesList(props, context) {
 }
 
 OutcomesList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   outcomes: PropTypes.array,
   outcomesTotal: PropTypes.number,

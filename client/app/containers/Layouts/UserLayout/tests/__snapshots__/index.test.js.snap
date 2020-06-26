@@ -1,9 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UserLayout /> Should render and match the snapshot 1`] = `
-<Connect(Component)
-  component={[Function]}
-  pageTitle={Object {}}
-  position="relative"
-/>
+<Fragment>
+  <Connect(WithStyles(memo(UserLinks)))
+    pageTitle={null}
+  />
+  <WithStyles(Scrollbar)>
+    <ForwardRef(Fade)
+      appear={true}
+      in={true}
+    >
+      <WithStyles(ForwardRef(Container))>
+        <div />
+      </WithStyles(ForwardRef(Container))>
+    </ForwardRef(Fade)>
+  </WithStyles(Scrollbar)>
+</Fragment>
 `;

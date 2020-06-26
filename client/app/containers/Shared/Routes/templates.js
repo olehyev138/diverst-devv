@@ -1,4 +1,6 @@
 /* Layouts */
+import ApplicationLayout from 'containers/Layouts/ApplicationLayout/Loadable';
+import AuthenticatedLayout from 'containers/Layouts/AuthenticatedLayout/Loadable';
 import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
@@ -72,6 +74,7 @@ import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 import PollsList from 'containers/Poll/PollListPage/Loadable';
 import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
 import PollEditPage from 'containers/Poll/PollEditPage/Loadable';
+import PollShowPage from 'containers/Poll/PollShowPage/Loadable';
 
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
@@ -202,6 +205,8 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  ApplicationLayout,
+  AuthenticatedLayout,
   SignUpPage,
   UserLayout,
   GroupLayout,
@@ -313,6 +318,7 @@ export {
   PollsList,
   PollCreatePage,
   PollEditPage,
+  PollShowPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,

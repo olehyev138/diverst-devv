@@ -12,7 +12,7 @@
  *    - on save - create/update update
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -87,6 +87,6 @@ export default compose(
 )(Conditional(
   KPIPage,
   ['currentGroup.permissions.kpi_manage?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.groupPlan.KPI.kpiPage
 ));

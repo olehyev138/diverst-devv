@@ -25,7 +25,7 @@ export function EmailUpdate(props) {
           <React.Fragment>
             <Link
               component={WrappedNavLink}
-              to={ROUTES.admin.system.globalSettings.emails.edit.path(activity.trackable_id)}
+              to={ROUTES.admin.system.globalSettings.emails.layouts.edit.path(activity.trackable_id)}
             >
               {activity.trackable.name}
             </Link>
