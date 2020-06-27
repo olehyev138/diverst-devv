@@ -84,6 +84,34 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
   end
 
+  # TODO
+  describe '#prototype' do
+    xit 'gets prototype' do
+      get "/api/v1/#{route}", headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:index).and_raise(BadRequestException)
+      get "/api/v1/#{route}", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  # TODO
+  describe '#export_members' do
+    xit 'exports members' do
+      get "/api/v1/#{route}/export_csv", headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    xit 'captures the error' do
+      allow(model.constantize).to receive(:show).and_raise(BadRequestException)
+      get "/api/v1/#{route}/export_csv", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+  
   describe '#sample_csv' do
     it 'Returns a user list csv' do
       get "/api/v1/#{route}/sample_csv", headers: headers
