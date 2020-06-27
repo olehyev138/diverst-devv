@@ -111,7 +111,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
-  
+
   describe '#sample_csv' do
     it 'Returns a user list csv' do
       get "/api/v1/#{route}/sample_csv", headers: headers
