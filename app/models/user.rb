@@ -530,7 +530,6 @@ class User < ApplicationRecord
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
-        user.field_data.preload(:field).load
         fields.each do |field|
           user_columns << field.csv_value(user[field])
         end

@@ -89,8 +89,22 @@ else
   render(translationMessages);
 
 
-// Install ServiceWorker and AppCache in the end since
-// it's not most important operation and if main code fails,
-// we do not want it installed
-if (process.env.NODE_ENV === 'production')
-  require('offline-plugin/runtime').install(); // eslint-disable-line global-require
+// Install ServiceWorker
+//   - do at end so if main code fails it is not installed in application
+//   - use service worker events to auto update app (default is requiring all tabs to be closed)
+//     source: https://github.com/NekR/offline-plugin/blob/master/docs/updates.md
+if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line global-require
+  const runtime = require('offline-plugin/runtime');
+
+  runtime.install({
+    onUpdateReady: () => {
+      // Tells new SW to take control immediately
+      runtime.applyUpdate();
+    },
+    onUpdated: () => {
+      // Reload the webpage to load into the new version
+      window.location.reload();
+    }
+  });
+}
