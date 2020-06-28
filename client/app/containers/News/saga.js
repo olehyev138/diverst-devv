@@ -323,7 +323,7 @@ export function* archiveNewsItem(action) {
     yield put(archiveNewsItemSuccess());
   } catch (err) {
     // TODO: intl message
-    yield put(archiveNewsItemSuccess(err));
+    yield put(archiveNewsItemError(err));
     yield put(showSnackbar({
       message: 'Failed to archive resource',
       options: { variant: 'warning' }
