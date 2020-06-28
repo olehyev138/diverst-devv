@@ -166,7 +166,7 @@ class User < ApplicationRecord
 
   after_update :add_to_default_mentor_group
 
-  scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
+  scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
@@ -179,6 +179,10 @@ class User < ApplicationRecord
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  def as_json(options = {})
+    super.merge({ name: name })
+  end
 
   # Format users field data for a elasticsearch index
   # Returns { <field_data.id> => <field_data.data } }
@@ -526,7 +530,6 @@ class User < ApplicationRecord
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
-        user.field_data.preload(:field).load
         fields.each do |field|
           user_columns << field.csv_value(user[field])
         end

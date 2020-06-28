@@ -48,6 +48,10 @@ class ResetCounterCachesJob < ActiveJob::Base
       Folder.reset_counters(folder.id, :views)
     end
 
+    Poll.find_each do |poll|
+      Poll.reset_counters(poll.id, :responses)
+    end
+
     Answer.find_each do |answer|
       Answer.reset_counters(answer.id, :likes)
     end

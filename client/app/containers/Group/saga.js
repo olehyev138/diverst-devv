@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -16,7 +16,7 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN,
+  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN,
   JOIN_SUBGROUPS_BEGIN
 } from './constants';
 
@@ -32,6 +32,7 @@ import {
   resetBudgetSuccess, resetBudgetError,
   leaveGroupSuccess, leaveGroupError,
   joinGroupSuccess, joinGroupError,
+  updateGroupPositionSuccess, updateGroupPositionError,
   groupCategorizeSuccess, groupCategorizeError,
   joinSubgroupsSuccess, joinSubgroupsError,
 } from 'containers/Group/actions';
@@ -42,7 +43,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getGroups(action) {
   try {
     const response = yield call(api.groups.all.bind(api.groups), action.payload);
-
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
@@ -126,9 +126,25 @@ export function* updateGroup(action) {
   }
 }
 
+export function* updateGroupPosition(action) {
+  try {
+    const payload = { group: action.payload };
+    yield call(api.groups.update.bind(api.groups), payload.group.id, payload.group);
+
+    yield put(updateGroupPositionSuccess());
+    yield put(showSnackbar({ message: 'Group order updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updateGroupPositionError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update group order', options: { variant: 'warning' } }));
+  }
+}
+
 export function* updateGroupSettings(action) {
   try {
     const payload = { group: action.payload };
+
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
     yield put(updateGroupSettingsSuccess({ group: response.data.group }));
@@ -151,6 +167,7 @@ export function* updateGroupSettings(action) {
 export function* deleteGroup(action) {
   try {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
+    yield put(deleteGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
   } catch (err) {
@@ -195,7 +212,7 @@ export function* joinGroup(action) {
     const response = yield call(api.userGroups.join.bind(api.userGroups), payload);
     yield put(joinGroupSuccess());
   } catch (err) {
-    yield put(joinGroupError());
+    yield put(joinGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join group', options: { variant: 'warning' } }));
@@ -209,7 +226,7 @@ export function* leaveGroup(action) {
 
     yield put(leaveGroupSuccess());
   } catch (err) {
-    yield put(leaveGroupError());
+    yield put(leaveGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave group', options: { variant: 'warning' } }));
@@ -221,7 +238,7 @@ export function* joinSubgroups(action) {
     const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
     yield put(joinSubgroupsSuccess());
   } catch (err) {
-    yield put(joinSubgroupsError());
+    yield put(joinSubgroupsError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
@@ -236,6 +253,7 @@ export default function* groupsSaga() {
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
+  yield takeEvery(UPDATE_GROUP_POSITION_BEGIN, updateGroupPosition);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);

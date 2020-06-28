@@ -118,13 +118,15 @@ export function NewsLinkListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                <DiverstLike
-                  isLiked={newsItem.current_user_likes}
-                  newsFeedLinkId={newsItem.id}
-                  totalLikes={newsItem.total_likes}
-                  likeNewsItemBegin={props.likeNewsItemBegin}
-                  unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-                />
+                {props.enableLikes && (
+                  <DiverstLike
+                    isLiked={newsItem.current_user_likes}
+                    newsFeedLinkId={newsItem.id}
+                    totalLikes={newsItem.total_likes}
+                    likeNewsItemBegin={props.likeNewsItemBegin}
+                    unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                  />
+                )}
                 { props.pinNewsItemBegin && (
                   <Permission show={permission(props.currentGroup, 'events_manage?')}>
                     <IconButton
@@ -219,7 +221,7 @@ export function NewsLinkListItem(props) {
 
 NewsLinkListItem.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   newsLink: PropTypes.object,
   currentGroup: PropTypes.object,
   readonly: PropTypes.bool,
@@ -234,6 +236,7 @@ NewsLinkListItem.propTypes = {
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(

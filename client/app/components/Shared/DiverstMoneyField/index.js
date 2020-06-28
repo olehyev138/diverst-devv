@@ -6,9 +6,10 @@ import dig from 'object-dig';
 import Select from 'react-select';
 
 import { Grid, FormHelperText, FormLabel, Input, InputAdornment, InputLabel } from '@material-ui/core';
-import { currencyOptions, moneyToString } from 'utils/currencyHelpers';
+import { currencyOptions, getCurrencyProps } from 'utils/currencyHelpers';
 import DiverstSelect from 'components/Shared/DiverstSelect';
 import DiverstCurrencyTextField from 'components/Shared/DiverstCurrencyTextField';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({});
 
@@ -27,7 +28,7 @@ export function DiverstMoneyField(props) {
           value={props.value}
           onChange={props.onChange}
           disabled={props.disabled}
-          numericProps={dig(props, 'currency', 'props')}
+          numericProps={getCurrencyProps(props.intl, dig(props, 'currency', 'value'))}
           max={props.max}
         />
       </Grid>
@@ -50,6 +51,7 @@ export function DiverstMoneyField(props) {
 }
 
 DiverstMoneyField.propTypes = {
+  intl: intlShape,
   id: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.node,
@@ -72,6 +74,7 @@ DiverstMoneyField.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   withTheme,
   withStyles(styles),
 )(DiverstMoneyField);

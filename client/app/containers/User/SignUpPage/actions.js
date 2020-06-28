@@ -28,10 +28,10 @@ export function getUserByTokenSuccess(payload) {
   };
 }
 
-export function getUserByTokenError(errors) {
+export function getUserByTokenError(error) {
   return {
     type: GET_USER_BY_TOKEN_ERROR,
-    errors
+    error
   };
 }
 
@@ -49,10 +49,10 @@ export function submitPasswordSuccess(payload) {
   };
 }
 
-export function submitPasswordError(errors) {
+export function submitPasswordError(error) {
   return {
     type: SUBMIT_PASSWORD_ERROR,
-    errors
+    error
   };
 }
 

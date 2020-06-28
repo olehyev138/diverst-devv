@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -10,11 +11,9 @@ import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
 import { updateGroupCategoriesBegin, categoriesUnmount, getGroupCategoryBegin } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedSelectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedSelectGroupCategories, selectFormGroupCategories, selectIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
-
-import RouteService from 'utils/routeHelpers';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupCategories/messages';
@@ -26,10 +25,11 @@ export function GroupCategoriesEditPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
   useInjectSaga({ key: 'groupCategories', saga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { group_category_type_id: groupCategoryTypeId } = useParams();
 
   useEffect(() => {
-    props.getGroupCategoryBegin({ id: rs.params('group_category_type_id') });
+    props.getGroupCategoryBegin({ id: groupCategoryTypeId });
     return () => {
       props.categoriesUnmount();
     };
@@ -67,7 +67,7 @@ const mapStateToProps = createStructuredSelector({
   groupCategory: selectFormGroupCategories(),
   groupCategories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
-  isCommitting: selectGroupCategoriesIsCommitting(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
@@ -88,6 +88,6 @@ export default compose(
 )(Conditional(
   GroupCategoriesEditPage,
   ['permissions.groups_manage'],
-  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  (props, params) => ROUTES.admin.manage.groups.index.path(),
   permissionMessages.group.groupCategories.editPage
 ));

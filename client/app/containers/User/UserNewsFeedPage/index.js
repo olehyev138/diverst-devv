@@ -1,11 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import dig from 'object-dig';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
@@ -14,10 +13,9 @@ import likeSaga from 'containers/Shared/Like/saga';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
@@ -33,7 +31,6 @@ export function NewsFeedPage(props, context) {
     count: 5, page: 0, order: 'desc', order_by: 'created_at',
   });
 
-  const rs = new RouteService(useContext);
   const links = {
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
     newsLinkShow: (groupId, id) => ROUTES.group.news.news_links.show.path(groupId, id),
@@ -69,6 +66,7 @@ export function NewsFeedPage(props, context) {
         readonly
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        enableLikes={props.currentEnterprise.enable_likes}
       />
     </React.Fragment>
   );
@@ -89,6 +87,7 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
+  currentEnterprise: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -97,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   isLoading: selectIsLoadingPosts(),
   permissions: selectPermissions(),
+  currentEnterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {
@@ -117,6 +117,6 @@ export default compose(
 )(Conditional(
   NewsFeedPage,
   ['permissions.news_view'],
-  (props, rs) => props.readonly ? null : ROUTES.user.home.path(),
+  (props, params) => props.readonly ? null : ROUTES.user.home.path(),
   permissionMessages.user.newsFeedPage
 ));

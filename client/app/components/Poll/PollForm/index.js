@@ -33,8 +33,6 @@ import GroupSelector from 'components/Shared/GroupSelector';
 import SegmentSelector from 'components/Shared/SegmentSelector';
 import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 
-const freePoll = { label: 'Create new free poll ($0.00)', value: null, available: 0 };
-
 /* eslint-disable object-curly-newline */
 export function PollFormInner({ formikProps, buttonText, header, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,

@@ -10,7 +10,6 @@ import { compose } from 'redux';
 
 import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader, Grid, Hidden } from '@material-ui/core';
 import Carousel from 'react-material-ui-carousel';
-import { injectIntl } from 'react-intl';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,
@@ -125,5 +124,4 @@ const withConnect = connect(
 export default compose(
   memo,
   withConnect,
-  injectIntl,
 )(SponsorCard);

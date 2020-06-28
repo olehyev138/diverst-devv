@@ -126,6 +126,13 @@ class Enterprise < ApplicationRecord
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
+  def banner_location
+    return nil unless banner.attached?
+
+    # banner.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(banner)
+  end
+
   def resolve_auto_archive_state
     update(auto_archive: false)
   end
@@ -212,21 +219,23 @@ class Enterprise < ApplicationRecord
   end
 
   def users_csv(nb_rows, export_csv_params = nil)
+    fields.load
+    users = User.preload(:groups, :field_data, :fields, field_data: [:field])
     group_roles = enterprise.user_roles.where(role_type: 'group').pluck(:role_name)
     non_group_roles = enterprise.user_roles.where.not(role_type: 'group').pluck(:role_name)
 
-    return User.to_csv_with_fields(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
-    return User.to_csv_with_fields(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
-    return User.to_csv_with_fields(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
+    return users.to_csv_with_fields(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
+    return users.to_csv_with_fields(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
+    return users.to_csv_with_fields(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
 
 
     if group_roles.include?(export_csv_params)
-      return User.to_csv_with_fields(users: users.joins(group_leaders: :user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+      return users.to_csv_with_fields(users: users.joins(group_leaders: :user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
     elsif non_group_roles.include?(export_csv_params)
-      return User.to_csv_with_fields(users: users.joins(:user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+      return users.to_csv_with_fields(users: users.joins(:user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
     end
 
-    User.to_csv_with_fields(users: [], fields: fields, nb_rows: nb_rows)
+    users.to_csv_with_fields(users: [], fields: fields, nb_rows: nb_rows)
   end
 
   def users_points_report_csv(users)

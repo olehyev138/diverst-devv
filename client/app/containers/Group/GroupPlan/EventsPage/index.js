@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -10,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
@@ -18,24 +18,23 @@ import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'c
 import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
 import EventsList from 'components/Group/GroupPlan/EventsList';
-import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
 
 export function EventsPage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
 
   const defaultParams = Object.freeze({
-    group_id: rs.params('group_id'),
+    group_id: groupId,
     count: 2,
     page: 0,
   });
 
   const links = {
-    outcomeIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
-    eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
-    eventManage: eventId => ROUTES.group.plan.events.manage.updates.index.path(rs.params('group_id'), eventId)
+    outcomeIndex: ROUTES.group.plan.outcomes.index.path(groupId),
+    eventNew: ROUTES.group.events.new.path(groupId),
+    eventManage: eventId => ROUTES.group.plan.events.manage.updates.index.path(groupId, eventId)
   };
 
   const [params, setParams] = useState(defaultParams);

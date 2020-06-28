@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useContext, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -17,25 +16,21 @@ import {
 
 import {
   selectPaginatedGroupLeaders, selectGroupLeaderTotal,
-  selectIsFetchingGroupLeaders, selectFormGroupLeader,
+  selectIsFetchingGroupLeaders,
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupLeadersList from 'components/Group/GroupManage/GroupLeaders/GroupLeadersList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
-import { GroupSettingsPage } from 'containers/Group/GroupManage/GroupSettingsPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupLeadersListPage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
 
-  const rs = new RouteService(useContext);
-
-  const groupId = rs.params('group_id');
+  const { group_id: groupId } = useParams();
 
   const [params, setParams] = useState({
     group_id: groupId, count: 10, page: 0,
@@ -50,7 +45,7 @@ export function GroupLeadersListPage(props) {
   }, []);
 
   const links = {
-    groupLeaderNew: ROUTES.group.manage.leaders.new.path(rs.params('group_id')),
+    groupLeaderNew: ROUTES.group.manage.leaders.new.path(groupId),
   };
 
   const handlePagination = (payload) => {
@@ -119,6 +114,6 @@ export default compose(
 )(Conditional(
   GroupLeadersListPage,
   ['currentGroup.permissions.leaders_view?'],
-  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.manage.index.path(params.group_id),
   permissionMessages.group.groupManage.groupLeaders.listPage
 ));

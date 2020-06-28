@@ -302,10 +302,10 @@ export function exportAttendeesBegin(payload) {
   };
 }
 
-export function exportAttendeesSuccess(error) {
+export function exportAttendeesSuccess(payload) {
   return {
     type: EXPORT_ATTENDEES_SUCCESS,
-    error,
+    payload,
   };
 }
 

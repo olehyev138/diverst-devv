@@ -5,11 +5,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import { Backdrop, Card, Fade, CardContent, CircularProgress, Typography } from '@material-ui/core';
+import { Backdrop, Card, Fade, CardContent, CircularProgress, Typography, Box } from '@material-ui/core';
 import ConnectionFailedIcon from '@material-ui/icons/CloudOff';
 
 import ApplicationHeader from 'components/Shared/ApplicationHeader';
-import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 import ApplicationFooter from 'components/Shared/ApplicationFooter';
 
 import { loginSuccess, logoutSuccess, fetchUserDataBegin } from 'containers/Shared/App/actions';
@@ -48,7 +47,7 @@ const NotAuthenticated = () => <Redirect to={ROUTES.session.login.path()} />;
 
 const AuthenticatedLayout = (props) => {
   const {
-    component: Component, classes, data, renderAppBar, drawerToggleCallback, drawerOpen,
+    classes, data, renderAppBar, drawerToggleCallback, drawerOpen,
     position, isAdmin, userData, isFetchingUserData, fetchUserDataError,
     ...rest
   } = props;
@@ -81,28 +80,24 @@ const AuthenticatedLayout = (props) => {
   if (userJwt) {
     if (userDataLoaded)
       return (
-        <ApplicationLayout
-          {...rest}
-          component={matchProps => (
+        <React.Fragment>
+          { !!renderAppBar && (
             <React.Fragment>
-              { !!renderAppBar && (
-                <React.Fragment>
-                  <ApplicationHeader
-                    drawerToggleCallback={drawerToggleCallback}
-                    drawerOpen={drawerOpen}
-                    position={position}
-                    isAdmin={isAdmin}
-                    {...matchProps}
-                  />
-                </React.Fragment>
-              )}
-              <Fade in appear>
-                <Component {...matchProps} />
-              </Fade>
-              <ApplicationFooter />
+              <ApplicationHeader
+                drawerToggleCallback={drawerToggleCallback}
+                drawerOpen={drawerOpen}
+                position={position}
+                isAdmin={isAdmin}
+              />
             </React.Fragment>
           )}
-        />
+          <Fade in appear>
+            <Box height='100%' display='flex' flexDirection='column' overflow='hidden'>
+              {props.children}
+            </Box>
+          </Fade>
+          <ApplicationFooter />
+        </React.Fragment>
       );
 
     return (
@@ -164,7 +159,7 @@ AuthenticatedLayout.propTypes = {
   isAdmin: PropTypes.bool,
   token: PropTypes.string,
   userData: PropTypes.any,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
 };
 
 AuthenticatedLayout.defaultProps = {

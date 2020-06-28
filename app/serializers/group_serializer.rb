@@ -1,19 +1,22 @@
 class GroupSerializer < ApplicationRecordSerializer
-  def initialize(object, options = {})
-    super
-    if instance_options[:family]
-      serializer_attributes :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data, :group_category
-    elsif policy&.show?
-      serializer_attributes :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
-                            :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
-                            :annual_budget, :annual_budget_leftover, :active,
-                            :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
-                            :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
-                            :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
-                            :logo, :logo_file_name, :logo_data, :children, :parent, :annual_budget_currency
-    else
-      serializer_attributes :id
-    end
+  attributes :id, :permissions
+
+  attributes_with_permission :id, :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :family?
+
+  attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
+                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
+                             :annual_budget, :annual_budget_leftover, :active,
+                             :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
+                             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
+                             :current_user_is_member, :banner, :banner_file_name, :banner_data, :banner_content_type,
+                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
+
+  def family?
+    instance_options[:family]
+  end
+
+  def show?
+    policy&.show? && !family?
   end
 
   def children
@@ -27,6 +30,7 @@ class GroupSerializer < ApplicationRecordSerializer
   def policies
     [
         :show?,
+        :destroy?,
         :update?,
         :events_view?,
         :members_view?,
@@ -76,6 +80,10 @@ class GroupSerializer < ApplicationRecordSerializer
     AttachmentHelper.attachment_data_string(object.banner)
   end
 
+  def banner_content_type
+    AttachmentHelper.attachment_content_type(object.banner)
+  end
+
   def logo
     AttachmentHelper.attachment_signed_id(object.logo)
   end
@@ -86,6 +94,10 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def logo_data
     AttachmentHelper.attachment_data_string(object.logo)
+  end
+
+  def logo_content_type
+    AttachmentHelper.attachment_content_type(object.logo)
   end
 
   def current_user_is_member

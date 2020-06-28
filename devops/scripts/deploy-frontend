@@ -16,8 +16,19 @@ fi
 
 cd client/
 
-# Build frontend
+# Build frontend (npm install is handled separately)
 npm run build
 
-aws s3 sync --cache-control 'max-age=604800' --exclude index.html build/ "s3://$FRONTEND_BUCKET"
-aws s3 sync --cache-control 'no-cache' build/ "s3://$FRONTEND_BUCKET"
+# Sync app build files with S3
+#  - delete flag deletes files on bucket if deleted locally
+#  - exclude service worker & index, all chunk files get cached
+aws s3 sync \
+  --delete \
+  --cache-control max-age=604800 \
+  --exclude index.html \
+  --exclude sw.js \
+  build/ "s3://$FRONTEND_BUCKET"
+
+# Upload index & service worker to S3 separately with no caching for proper cache busting
+aws s3 cp --cache-control max-age=0,no-cache,no-store,must-revalidate build/index.html "s3://$FRONTEND_BUCKET"
+aws s3 cp --cache-control max-age=0,no-cache,no-store,must-revalidate build/sw.js "s3://$FRONTEND_BUCKET"

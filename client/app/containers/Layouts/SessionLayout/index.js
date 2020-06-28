@@ -1,6 +1,6 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import { compose } from 'redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -13,14 +13,14 @@ import { findEnterpriseBegin } from 'containers/Shared/App/actions';
 
 import { selectEnterprise, selectFindEnterpriseError } from 'containers/Shared/App/selectors';
 
-import ApplicationLayout from '../ApplicationLayout';
-
 import AuthService from 'utils/authService';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import messages from 'containers/Shared/App/messages';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({
   container: {
@@ -42,15 +42,17 @@ const styles = theme => ({
   },
 });
 
-const SessionLayout = ({ component: Component, ...props }) => {
-  const { classes, ...other } = props;
+const SessionLayout = (props) => {
+  const { classes, children, enterprise, ...other } = props;
+
+  const location = useLocation();
 
   const authenticated = !!AuthService.getJwt();
 
   useEffect(() => {
     if (authenticated) return;
 
-    const query = new URLSearchParams(props.location.search);
+    const query = new URLSearchParams(location.search);
     const enterpriseId = query.get('enterpriseId');
 
     props.findEnterpriseBegin(enterpriseId ? { enterprise_id: enterpriseId } : {});
@@ -59,51 +61,46 @@ const SessionLayout = ({ component: Component, ...props }) => {
   if (authenticated) return <Redirect to={ROUTES.user.home.path()} />;
 
   return (
-    <ApplicationLayout
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          <Backdrop open={!props.enterprise}>
-            {!props.findEnterpriseError && (
-              <CircularProgress
-                color='secondary'
-                size={60}
-                thickness={1}
-              />
-            )}
-            {props.findEnterpriseError && (
-              <Fade in appear>
-                <Card elevation={24}>
-                  <CardContent className={classes.connectFailedCardContent}>
-                    <ConnectionFailedIcon color='primary' className={classes.connectFailedIcon} />
-                    <br />
-                    <br />
-                    <Typography variant='h6' color='primary'>
-                      <DiverstFormattedMessage {...messages.errors.findEnterprise} />
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Fade>
-            )}
-          </Backdrop>
-          {props.enterprise && (
-            <Container maxWidth='sm' className={classes.container}>
-              <Fade in appear>
-                <div className={classes.content}>
-                  <Component {...other} enterprise={props.enterprise} />
-                </div>
-              </Fade>
-            </Container>
-          )}
-        </React.Fragment>
+    <React.Fragment>
+      <Backdrop open={!props.enterprise}>
+        {!props.findEnterpriseError && (
+          <CircularProgress
+            color='secondary'
+            size={60}
+            thickness={1}
+          />
+        )}
+        {props.findEnterpriseError && (
+          <Fade in appear>
+            <Card elevation={24}>
+              <CardContent className={classes.connectFailedCardContent}>
+                <ConnectionFailedIcon color='primary' className={classes.connectFailedIcon} />
+                <br />
+                <br />
+                <Typography variant='h6' color='primary'>
+                  <DiverstFormattedMessage {...messages.errors.findEnterprise} />
+                </Typography>
+              </CardContent>
+            </Card>
+          </Fade>
+        )}
+      </Backdrop>
+      {props.enterprise && (
+        <Container maxWidth='sm' className={classes.container}>
+          <Fade in appear>
+            <div className={classes.content}>
+              {renderChildrenWithProps(children, { ...other, enterprise })}
+            </div>
+          </Fade>
+        </Container>
       )}
-    />
+    </React.Fragment>
   );
 };
 
 SessionLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   enterprise: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   location: PropTypes.object,

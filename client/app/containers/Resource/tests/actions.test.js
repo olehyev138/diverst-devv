@@ -34,6 +34,9 @@ import {
   UPDATE_RESOURCE_BEGIN,
   UPDATE_RESOURCE_SUCCESS,
   UPDATE_RESOURCE_ERROR,
+  ARCHIVE_RESOURCE_BEGIN,
+  ARCHIVE_RESOURCE_ERROR,
+  ARCHIVE_RESOURCE_SUCCESS,
   RESOURCES_UNMOUNT,
 } from '../constants';
 
@@ -72,7 +75,12 @@ import {
   deleteResourceBegin,
   deleteResourceSuccess,
   deleteResourceError,
+  archiveResourceBegin,
+  archiveResourceError,
+  archiveResourceSuccess,
   resourcesUnmount } from '../actions';
+import { DELETE_POLL_BEGIN, DELETE_POLL_ERROR, DELETE_POLL_SUCCESS } from '../../Poll/constants';
+import { deletePollBegin, deletePollError, deletePollSuccess } from '../../Poll/actions';
 
 describe('actions', () => {
   it('has a type of GET_FOLDERS_BEGIN and sets a given payload', () => {
@@ -393,5 +401,38 @@ describe('actions', () => {
     };
 
     expect(resourcesUnmount()).toEqual(expected);
+  });
+});
+
+describe('archiveResourceBegin', () => {
+  it('has a type of ARCHIVE_RESOURCE_BEGIN and sets a given payload', () => {
+    const expected = {
+      type: ARCHIVE_RESOURCE_BEGIN,
+      payload: { value: 118 }
+    };
+
+    expect(archiveResourceBegin({ value: 118 })).toEqual(expected);
+  });
+});
+
+describe('archiveResourceSuccess', () => {
+  it('has a type of ARCHIVE_RESOURCE_SUCCESS and sets a given payload', () => {
+    const expected = {
+      type: ARCHIVE_RESOURCE_SUCCESS,
+      payload: { value: 118 }
+    };
+
+    expect(archiveResourceSuccess({ value: 118 })).toEqual(expected);
+  });
+});
+
+describe('archiveResourceError', () => {
+  it('has a type of ARCHIVE_RESOURCE_ERROR and sets a given error', () => {
+    const expected = {
+      type: ARCHIVE_RESOURCE_ERROR,
+      error: { value: 709 }
+    };
+
+    expect(archiveResourceError({ value: 709 })).toEqual(expected);
   });
 });

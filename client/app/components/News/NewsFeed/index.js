@@ -200,7 +200,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   defaultParams: PropTypes.object,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
@@ -223,6 +223,7 @@ NewsFeed.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
+  enableLikes: PropTypes.bool,
 };
 
 export default compose(

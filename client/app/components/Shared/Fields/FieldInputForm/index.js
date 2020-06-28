@@ -21,7 +21,6 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { createStructuredSelector } from 'reselect';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { connect } from 'react-redux';
-import { mapDispatchToProps } from 'components/Admin/AdminLinks';
 import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({

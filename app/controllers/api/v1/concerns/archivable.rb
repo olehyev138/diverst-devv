@@ -1,14 +1,14 @@
 module Api::V1::Concerns::Archivable
   extend ActiveSupport::Concern
   def archive
-    params[klass.symbol][:archived_at] = Time.now
-    params[klass.symbol] = archive_payload
     item = klass.find(params[:id])
+    params[klass.symbol] = archive_payload
+    params[klass.symbol][:archived_at] = Time.now
+    params[klass.symbol][:id] = item.id
     base_authorize(item)
 
-    klass.update(self.diverst_request, params)
-    track_activities(item)
-    render status: 200, json: item
+    track_activity(item)
+    render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
     when InvalidInputException
@@ -26,14 +26,14 @@ module Api::V1::Concerns::Archivable
   end
 
   def un_archive
+    item = klass.find(params[:id])
     params[klass.symbol][:archived_at] = nil
     params[klass.symbol] = archive_payload
-    item = klass.find(params[:id])
-    base_authorize(item)
+    params[klass.symbol][:id] = item.id
 
-    klass.update(self.diverst_request, params)
-    track_activities(item)
-    render status: 200, json: item
+    base_authorize(item)
+    track_activity(item)
+    render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
     when InvalidInputException
