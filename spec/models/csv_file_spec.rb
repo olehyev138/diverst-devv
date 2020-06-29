@@ -21,7 +21,7 @@ RSpec.describe CsvFile, type: :model do
   end
 
   describe 'active storage download file' do
-    let(:csv_file) { create(:csv_file_download, download_file_name: 'name') }
+    let(:csv_file) { create(:csv_file_with_download, download_file_name: 'name') }
     it { expect(csv_file).to validate_attachment_presence(:download_file) }
     it { expect(csv_file).to validate_attachment_content_type(:download_file, ['text/csv']) }
   end
