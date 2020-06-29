@@ -73,7 +73,7 @@ export function* updateExpense(action) {
 
     const response = yield call(api.initiativeExpenses.update.bind(api.initiativeExpenses), id, payload);
 
-    yield put(updateExpenseSuccess({}));
+    yield put(updateExpenseSuccess());
     yield put(push(path));
     yield put(showSnackbar({ message: 'Successfully updated expense', options: { variant: 'success' } }));
   } catch (err) {
@@ -88,7 +88,7 @@ export function* deleteExpense(action) {
   try {
     const response = yield call(api.initiativeExpenses.destroy.bind(api.initiativeExpenses), action.payload.id);
 
-    yield put(deleteExpenseSuccess({}));
+    yield put(deleteExpenseSuccess());
     yield put(showSnackbar({ message: 'Successfully deleted expense', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteExpenseError(err));

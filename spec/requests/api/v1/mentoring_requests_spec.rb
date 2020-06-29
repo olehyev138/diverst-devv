@@ -78,4 +78,30 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#accept' do
+    it 'accept a request' do
+      post "/api/v1/#{route}/#{item.id}/accept", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error when BadRequestException' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      post "/api/v1/#{route}/#{item.id}/accept", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#reject' do
+    it 'reject a request' do
+      post "/api/v1/#{route}/#{item.id}/reject", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error when BadRequestException' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      post "/api/v1/#{route}/#{item.id}/reject", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end
