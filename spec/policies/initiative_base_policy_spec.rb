@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe InitiativeBasePolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let(:user_group) { create(:user_group, user: user, group: group)}
-  let(:initiative) { create(:initiative)}
+  let(:user_group) { create(:user_group, user: user, group: group) }
+  let(:initiative) { create(:initiative) }
   let(:initiative_user) { create(:initiative_user, initiative: initiative, user: user) }
   let(:no_access) { create(:user) }
   let!(:user) { no_access }
