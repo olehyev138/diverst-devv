@@ -27,17 +27,17 @@ const selectGroupCategories = () => createSelector(
   groupCategoriesState => groupCategoriesState.currentGroup
 );
 
-const selectGroupCategoriesIsLoading = () => createSelector(
+const selectIsLoading = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => groupCategoriesState.isLoading
 );
 
-const selectGroupCategoriesIsFormLoading = () => createSelector(
+const selectIsFormLoading = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => groupCategoriesState.isFormLoading
 );
 
-const selectGroupCategoriesIsCommitting = () => createSelector(
+const selectIsCommitting = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => groupCategoriesState.isCommitting
 );
@@ -59,6 +59,6 @@ const selectFormGroupCategories = () => createSelector(
 
 export {
   selectGroupCategoriesDomain, selectPaginatedGroupCategories, selectPaginatedSelectGroupCategories,
-  selectGroupCategoriesTotal, selectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsLoading,
-  selectGroupCategoriesIsCommitting, selectGroupCategoriesIsFormLoading
+  selectGroupCategoriesTotal, selectGroupCategories, selectFormGroupCategories, selectIsLoading,
+  selectIsCommitting, selectIsFormLoading
 };

@@ -11,6 +11,14 @@ class GroupResourcePolicy < GroupBasePolicy
     'group_resources_manage'
   end
 
+  def archive?
+    update?
+  end
+
+  def un_archive?
+    update?
+  end
+
   class Scope < Scope
     def is_member(permission)
       "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"

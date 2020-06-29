@@ -38,7 +38,7 @@ const GlobalSettingsLayout = (props) => {
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
   const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage);
+  const [tab, setTab] = useState(currentPage || GlobalSettingsPages[0]);
 
   useEffect(() => {
     if (isRoot)
@@ -57,7 +57,7 @@ const GlobalSettingsLayout = (props) => {
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
       }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage, permissions]);
 
