@@ -4,6 +4,9 @@
     "login": "/login",
     "forgotPassword": "/forgot"
   },
+  "response": {
+    "pollResponse": "/poll_response/:token"
+  },
   "user": {
     "root": "/",
     "home": "/",
