@@ -21,8 +21,8 @@ class Poll < ApplicationRecord
   has_many :segments, inverse_of: :polls, through: :polls_segments
   has_many :groups_polls, dependent: :destroy
   has_many :groups, inverse_of: :polls, through: :groups_polls
-  has_many :user_poll_tokens, -> { where cancelled: false }, inverse_of: :poll
-  has_many :cancelled_user_poll_tokens, -> { where cancelled: true }, class_name: 'UserPollToken', inverse_of: :poll
+  has_many :user_poll_tokens, -> { where cancelled: false }, inverse_of: :poll, dependent: :destroy
+  has_many :cancelled_user_poll_tokens, -> { where cancelled: true }, class_name: 'UserPollToken', inverse_of: :poll, dependent: :destroy
   has_many :token_users, class_name: 'User', through: :user_poll_tokens, source: :user
 
   belongs_to :enterprise, inverse_of: :polls, counter_cache: true
