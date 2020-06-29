@@ -75,4 +75,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:forbidden)
     end
   end
+
+  describe '#close_budget' do
+    it 'close a budget' do
+      post "/api/v1/#{route}/#{item.id}/close", params: {}, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow_any_instance_of(model.constantize).to receive(:is_done).and_raise(BadRequestException)
+      post "/api/v1/#{route}/#{item.id}/close", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

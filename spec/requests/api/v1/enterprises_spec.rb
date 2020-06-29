@@ -8,6 +8,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:field) { create(:field, type: 'NumericField') }
 
   describe '#index' do
     it 'gets all items' do
@@ -116,6 +117,65 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'captures the error' do
       allow(model.constantize).to receive(:sso_link).and_raise(BadRequestException)
       post "/api/v1/#{route}/#{item.id}/sso_link", params: {}, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#fields' do
+    it 'gets fields' do
+      get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow_any_instance_of(model.constantize).to receive(:fields).and_raise(BadRequestException)
+      get "/api/v1/#{route}/#{item.id}/fields", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#create field' do
+    it 'creates fields' do
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field': field.attributes }, headers: headers
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'captures the error' do
+      allow_any_instance_of(model.constantize).to receive(:fields).and_raise(BadRequestException)
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#get_auth_enterprise' do
+    it 'gets the authorized enterprise' do
+      get "/api/v1/#{route}/get_auth_enterprise", params: {}, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:first).and_raise(BadRequestException)
+      get "/api/v1/#{route}/get_auth_enterprise", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#get_enterprise' do
+    it 'gets the enterprise' do
+      get "/api/v1/#{route}/get_enterprise", params: {}, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe '#update enterprise' do
+    it 'update the enterprise' do
+      post "/api/v1/#{route}/update_enterprise", params: { "#{route.singularize}" => item.attributes }, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      get "/api/v1/#{route}/update_enterprise", headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end

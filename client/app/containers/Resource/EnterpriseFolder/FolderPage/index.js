@@ -126,7 +126,7 @@ export function FolderPage(props) {
     getResources(folderId);
 
     return () => props.foldersUnmount();
-  }, []);
+  }, [folderId]);
 
   useEffect(() => {
     if (props.hasChanged) {
@@ -136,7 +136,7 @@ export function FolderPage(props) {
       getResources(folderId);
     }
     return () => props.foldersUnmount();
-  }, [props.hasChanged]);
+  }, [folderId, props.hasChanged]);
 
   const handleFolderPagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
