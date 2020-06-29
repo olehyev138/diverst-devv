@@ -83,7 +83,6 @@ RSpec.describe User do
       it { expect(user).to validate_length_of(:firebase_token).is_at_most(191) }
       it { expect(user).to validate_length_of(:tokens).is_at_most(65535) }
       it { expect(user).to validate_length_of(:uid).is_at_most(191) }
-      # it { expect(user).to validate_length_of(:provider).is_at_most(191) } # test fails
       it { expect(user).to validate_length_of(:invited_by_type).is_at_most(191) }
       it { expect(user).to validate_length_of(:invitation_token).is_at_most(191) }
       it { expect(user).to validate_length_of(:last_sign_in_ip).is_at_most(191) }
@@ -102,8 +101,11 @@ RSpec.describe User do
       it { expect(user).to validate_uniqueness_of(:email) }
       it { expect(user).to allow_value('email@addresse.foo').for(:email) }
       it { expect(user).to_not allow_value('foo').for(:email) }
+      it 'provider length validation' do
+        user.uid = 'test'
+        expect(user).to validate_length_of(:provider).is_at_most(191)
+      end
     end
-
 
     context 'test associations' do
       context 'belongs_to associations' do
