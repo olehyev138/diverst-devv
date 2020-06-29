@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -14,8 +15,6 @@ import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
-
-import RouteService from 'utils/routeHelpers';
 
 import {
   getFolderBegin, createResourceBegin,
@@ -36,14 +35,13 @@ export function ResourceCreatePage(props) {
   useInjectSaga({ key: 'resource', saga });
 
   const { currentUser, currentGroup, currentEnterprise, currentFolder } = props;
-  const rs = new RouteService(useContext);
+  const { group_id: groupId, folder_id: folderId } = useParams();
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath('admin', rs.params('group_id')),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath('admin', groupId),
   };
 
   useEffect(() => {
-    const folderId = rs.params('folder_id');
     props.getFolderBegin({ id: folderId });
     return () => props.resourcesUnmount();
   }, []);
@@ -112,6 +110,6 @@ export default compose(
 )(Conditional(
   ResourceCreatePage,
   ['permissions.enterprise_folders_create'],
-  (props, rs) => getFolderIndexPath('admin'),
+  (props, params) => getFolderIndexPath('admin'),
   permissionMessages.resource.enterpriseResource.resourceCreatePage
 ));

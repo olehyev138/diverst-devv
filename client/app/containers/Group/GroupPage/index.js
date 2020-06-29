@@ -1,17 +1,15 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
-
-import RouteService from 'utils/routeHelpers';
 
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup } from 'containers/Group/selectors';
@@ -27,11 +25,9 @@ export function GroupPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    const groupId = rs.params('group_id');
-
     if (dig(props.currentGroup, 'id') !== groupId)
       props.getGroupBegin({ id: groupId });
 

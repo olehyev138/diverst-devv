@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -10,7 +11,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Poll/reducer';
 import saga from 'containers/Poll/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
@@ -22,16 +22,14 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Button } from '@material-ui/core';
 
 export function PollEditPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
 
-  const rs = new RouteService(useContext);
+  const { poll_id: pollId } = useParams();
 
   useEffect(() => {
-    const pollId = rs.params('poll_id');
     if (pollId)
       props.getPollBegin({ id: pollId });
 
@@ -95,6 +93,6 @@ export default compose(
 )(Conditional(
   PollEditPage,
   ['poll.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.include.polls.index.path(),
+  (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.editPage
 ));

@@ -1,6 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -17,7 +15,6 @@ import {
   getUsersBegin, userUnmount, getUserPrototypeBegin
 } from 'containers/User/actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -38,8 +35,9 @@ export function UserCreatePage(props) {
       props.userUnmount();
     };
   }, []);
+
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
   const links = {
     usersIndex: ROUTES.admin.system.users.index.path(),
   };
@@ -100,6 +98,6 @@ export default compose(
 )(Conditional(
   UserCreatePage,
   ['permissions.users_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.createPage
 ));

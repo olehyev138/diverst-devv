@@ -16,7 +16,6 @@ import {
   configurationUnmount
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
-import RouteService from 'utils/routeHelpers';
 import BrandingTheme from 'components/Branding/BrandingTheme';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';

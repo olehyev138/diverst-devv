@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -16,7 +17,6 @@ import {
   sponsorsUnmount
 } from '../../../Shared/Sponsors/actions';
 
-import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -30,13 +30,15 @@ export function SponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
-  const rs = new RouteService(useContext);
   const links = {
     sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
   };
   const { intl } = props;
+
+  const { sponsor_id: sponsorId } = useParams();
+
   useEffect(() => {
-    props.getSponsorBegin({ id: rs.params('sponsor_id') });
+    props.getSponsorBegin({ id: sponsorId });
 
     return () => {
       props.sponsorsUnmount();
@@ -87,6 +89,6 @@ export default compose(
 )(Conditional(
   SponsorEditPage,
   ['permissions.branding_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.branding.sponsor.editPage
 ));

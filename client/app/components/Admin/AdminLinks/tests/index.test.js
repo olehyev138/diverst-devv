@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
+import 'utils/mockReactRouterHooks';
 
 import { StyledAdminLinks } from 'components/Admin/AdminLinks/index';
 const AdminLinksNaked = unwrap(StyledAdminLinks);
@@ -9,7 +10,6 @@ const props = {
   classes: {},
   drawerOpen: true,
   drawerToggleCallback: jest.fn(),
-  location: { pathname: 'path' }
 };
 
 describe('<AdminLinks />', () => {

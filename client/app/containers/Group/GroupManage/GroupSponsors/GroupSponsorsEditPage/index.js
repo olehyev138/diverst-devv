@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -16,7 +17,6 @@ import {
   sponsorsUnmount
 } from 'containers/Shared/Sponsors/actions';
 
-import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -27,14 +27,15 @@ export function GroupSponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_sponsor_id: groupSponsorId } = useParams();
+
   const links = {
-    sponsorIndex: ROUTES.group.manage.sponsors.index.path(rs.params('group_sponsor_id')),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupSponsorId),
   };
   const { intl } = props;
 
   useEffect(() => {
-    props.getSponsorBegin({ id: rs.params('group_sponsor_id') });
+    props.getSponsorBegin({ id: groupSponsorId });
 
     return () => {
       props.sponsorsUnmount();
@@ -49,7 +50,7 @@ export function GroupSponsorEditPage(props) {
         sponsorAction={props.updateSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={rs.params('group_sponsor_id')}
+        sponsorableId={groupSponsorId}
       />
     </React.Fragment>
   );

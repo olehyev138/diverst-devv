@@ -1,4 +1,4 @@
-FROM ruby:2.6.5-buster
+FROM ruby:2.6.6-buster
 
 # Install base packages
 RUN apt-get update && apt-get install -y \

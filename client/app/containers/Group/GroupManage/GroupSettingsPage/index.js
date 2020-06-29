@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -13,7 +13,7 @@ import {
   updateGroupSettingsBegin
 } from 'containers/Group/actions';
 
-import { selectGroupIsCommitting, selectGroupIsFormLoading } from 'containers/Group/selectors';
+import { selectGroupIsCommitting, selectGroupIsFormLoading, selectGroup } from 'containers/Group/selectors';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
@@ -43,6 +43,7 @@ GroupSettingsPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectGroupIsCommitting(),
   isFormLoading: selectGroupIsFormLoading(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {
@@ -60,6 +61,6 @@ export default compose(
 )(Conditional(
   GroupSettingsPage,
   ['currentGroup.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.manage.index.path(params.group_id),
   permissionMessages.group.groupManage.groupSettingsPage
 ));

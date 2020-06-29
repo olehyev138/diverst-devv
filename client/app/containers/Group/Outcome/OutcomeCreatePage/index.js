@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -14,7 +15,6 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectIsCommitting } from 'containers/Group/Outcome/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
@@ -30,9 +30,10 @@ export function OutcomeCreatePage(props) {
   useInjectSaga({ key: 'outcomes', saga });
   const { intl } = props;
   const { currentUser, currentGroup } = props;
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
   const links = {
-    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(groupId),
   };
 
   useEffect(() => () => props.outcomesUnmount(), []);
@@ -81,6 +82,6 @@ export default compose(
 )(Conditional(
   OutcomeCreatePage,
   ['currentGroup.permissions.update?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.outcome.createPage
 ));

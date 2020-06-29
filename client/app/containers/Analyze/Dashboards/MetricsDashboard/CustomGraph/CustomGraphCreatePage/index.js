@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -27,7 +28,6 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectFields } from 'containers/Shared/Field/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
@@ -44,8 +44,7 @@ export function CustomGraphCreatePage(props) {
   useInjectSaga({ key: 'groups', saga: fieldSaga });
   useInjectSaga({ key: 'customMetrics', saga });
 
-  const rs = new RouteService(useContext);
-  const metricsDashboardId = rs.params('metrics_dashboard_id');
+  const { metrics_dashboard_id: metricsDashboardId } = useParams();
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
@@ -53,7 +52,6 @@ export function CustomGraphCreatePage(props) {
 
   useEffect(() => {
     // get metrics_dashboard specified in path
-    const metricsDashboardId = rs.params('metrics_dashboard_id');
     props.getMetricsDashboardBegin({ id: metricsDashboardId });
 
     return () => props.metricsDashboardsUnmount();
@@ -121,6 +119,6 @@ export default compose(
 )(Conditional(
   CustomGraphCreatePage,
   ['currentDashboard.permissions.update?', 'isLoading'],
-  (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
+  (props, params) => ROUTES.admin.analyze.custom.show.path(params.metrics_dashboard_id),
   permissionMessages.analyze.dashboards.metricsDashboard.customGraph.createPage
 ));

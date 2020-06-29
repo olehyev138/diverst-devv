@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -21,8 +22,6 @@ import {
 import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
-import RouteService from 'utils/routeHelpers';
-import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -33,10 +32,10 @@ export function GroupCategorizePage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    props.getGroupBegin({ id: rs.params('group_id') });
+    props.getGroupBegin({ id: groupId });
     props.getGroupCategoriesBegin();
     return () => {
       props.groupCategorizeUnmount();
@@ -91,6 +90,6 @@ export default compose(
 )(Conditional(
   GroupCategorizePage,
   ['group.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  (props, params) => ROUTES.admin.manage.groups.index.path(),
   permissionMessages.group.categorizePage
 ));

@@ -1,14 +1,11 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
-
+import React, { memo, useEffect, useState } from 'react';
 import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -29,8 +26,7 @@ export function CampaignShowPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
   useInjectSaga({ key: 'campaigns', saga });
 
-  const rs = new RouteService(useContext);
-  const campaignId = rs.params('campaign_id');
+  const { campaign_id: campaignId } = useParams();
 
   const [params, setParams] = useState({
     count: 10, page: 0, orderBy: '', order: 'asc'
@@ -41,8 +37,7 @@ export function CampaignShowPage(props) {
   };
 
   useEffect(() => {
-    const campaignId = rs.params('campaign_id');
-    props.getCampaignBegin({ id: rs.params('campaign_id') });
+    props.getCampaignBegin({ id: campaignId });
 
     return () => props.campaignsUnmount();
   }, []);
@@ -82,6 +77,6 @@ export default compose(
 )(Conditional(
   CampaignShowPage,
   ['campaign.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  (props, params) => ROUTES.admin.innovate.campaigns.index.path(),
   permissionMessages.innovate.campaign.showPage
 ));

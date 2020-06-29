@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -26,10 +27,8 @@ import {
   signUpUnmount,
 } from './actions';
 
-import RouteService from 'utils/routeHelpers';
-
+import { injectIntl } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import SignUpForm from 'components/User/SignUpForm';
 
@@ -37,11 +36,9 @@ export function SignUpPage(props) {
   useInjectReducer({ key: 'signUp', reducer });
   useInjectSaga({ key: 'signUp', saga });
 
-  const rs = new RouteService(useContext);
+  const { token } = useParams();
 
   useEffect(() => {
-    const token = rs.params('token');
-
     if (token)
       props.getUserByTokenBegin({
         token
@@ -105,6 +102,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(SignUpPage);

@@ -12,12 +12,9 @@
  *    - on save - create/update user
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -37,13 +34,15 @@ import {
 import {
   createCsvFileBegin
 } from 'containers/Shared/CsvFile/actions';
+import { getSampleImportBegin } from 'containers/User/actions';
 
 import reducer from 'containers/Shared/CsvFile/reducer';
 import saga from 'containers/Shared/CsvFile/saga';
 import fieldReducer from 'containers/Shared/Field/reducer';
 import fieldSaga from 'containers/GlobalSettings/Field/saga';
+import userReducer from 'containers/User/reducer';
+import userSaga from 'containers/User/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserImport from 'components/User/UserImport';
@@ -59,6 +58,8 @@ export function UserImportPage(props) {
   useInjectSaga({ key: 'csv_files', saga });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
   useInjectSaga({ key: 'fields', saga: fieldSaga });
+  useInjectReducer({ key: 'users', reducer: userReducer });
+  useInjectSaga({ key: 'users', saga: userSaga });
 
   const [params, setParams] = useState(defaultParams);
 
@@ -79,8 +80,6 @@ export function UserImportPage(props) {
     };
   }, []);
 
-  const rs = new RouteService(useContext);
-
   const links = {
     userNew: ROUTES.admin.system.users.new.path(),
     userEdit: id => ROUTES.admin.system.users.edit.path(id),
@@ -96,6 +95,7 @@ export function UserImportPage(props) {
         isLoading={props.isFetchingFields}
         importAction={props.createCsvFileBegin}
         isCommitting={props.isCommitting}
+        getSampleImportBegin={props.getSampleImportBegin}
         links={links}
       />
     </React.Fragment>
@@ -109,6 +109,7 @@ UserImportPage.propTypes = {
   fields: PropTypes.object,
   isFetchingFields: PropTypes.bool,
   fieldUnmount: PropTypes.func.isRequired,
+  getSampleImportBegin: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
 };
 
@@ -124,6 +125,7 @@ const mapDispatchToProps = {
   getFieldsBegin,
   fieldUnmount,
   createCsvFileBegin,
+  getSampleImportBegin
 };
 
 const withConnect = connect(
@@ -137,6 +139,6 @@ export default compose(
 )(Conditional(
   UserImportPage,
   ['permissions.users_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.importPage
 ));

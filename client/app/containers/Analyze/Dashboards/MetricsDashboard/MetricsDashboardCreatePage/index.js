@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -25,7 +25,6 @@ import { selectIsCommitting } from 'containers/Analyze/Dashboards/MetricsDashboa
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
@@ -35,8 +34,6 @@ import messages from 'containers/Analyze/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
-import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
-import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MetricsDashboardCreatePage(props) {
@@ -47,7 +44,6 @@ export function MetricsDashboardCreatePage(props) {
   useInjectSaga({ key: 'segments', saga: segmentSaga });
   useInjectSaga({ key: 'customMetrics', saga });
 
-  const rs = new RouteService(useContext);
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
   };
@@ -107,6 +103,6 @@ export default compose(
 )(Conditional(
   MetricsDashboardCreatePage,
   ['permissions.metrics_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.analyze.dashboards.metricsDashboard.createPage
 ));

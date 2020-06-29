@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -19,7 +17,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import { updateCampaignBegin, getCampaignBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
 import {
-  selectCampaignTotal,
   selectFormCampaign,
   selectIsCommitting,
   selectIsFormLoading
@@ -40,17 +37,19 @@ export function CampaignEditPage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const rs = new RouteService(useContext);
+  const { campaign_id: campaignId } = useParams();
   const links = {
     CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };
+
   const { intl } = props;
+
   useEffect(() => {
-    const campaignId = rs.params('campaign_id');
     props.getCampaignBegin({ id: campaignId });
 
     return () => props.campaignsUnmount();
   }, []);
+
   return (
     <CampaignForm
       edit
@@ -109,6 +108,6 @@ export default compose(
 )(Conditional(
   CampaignEditPage,
   ['campaign.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
+  (props, params) => ROUTES.admin.innovate.campaigns.show.path(params.campaign_id),
   permissionMessages.innovate.campaign.editPage
 ));

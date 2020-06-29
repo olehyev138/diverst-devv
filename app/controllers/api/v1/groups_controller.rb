@@ -2,9 +2,32 @@ class Api::V1::GroupsController < DiverstController
   include Api::V1::Concerns::DefinesFields
   include Api::V1::Concerns::Updatable
 
+  def assign_leaders
+    params[klass.symbol] = payload
+    item = klass.find(params[:id])
+    base_authorize(item)
+    render status: 200, json: klass.update(self.diverst_request, params)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def create_field
     params[:field][:field_type] = 'regular'
     super
+  end
+
+  def current_annual_budget
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.current_annual_budget!
+  rescue => e
+    raise BadRequestException.new(e.message)
   end
 
   def current_annual_budgets
@@ -19,7 +42,6 @@ class Api::V1::GroupsController < DiverstController
   def carryover_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
-
     updated_item = item.carryover_annual_budget(self.diverst_request)
     track_activity(updated_item)
     render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
@@ -34,15 +56,6 @@ class Api::V1::GroupsController < DiverstController
     updated_item = item.reset_annual_budget(self.diverst_request)
     track_activity(updated_item)
     render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
-  rescue => e
-    raise BadRequestException.new(e.message)
-  end
-
-  def current_annual_budget
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: item.current_annual_budget!
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -78,21 +91,6 @@ class Api::V1::GroupsController < DiverstController
   def load_sums(result)
     result.items = result.items.load_sums
     result
-  end
-
-  def assign_leaders
-    params[klass.symbol] = payload
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: klass.update(self.diverst_request, params)
-  rescue => e
-    case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
-    end
   end
 
   def leaders_payload

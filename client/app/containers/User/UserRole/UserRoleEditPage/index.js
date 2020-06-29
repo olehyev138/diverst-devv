@@ -1,20 +1,20 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import reducer from '../reducer';
 import saga from '../saga';
 
 import {
-  getUserRoleBegin, getUserRolesBegin,
+  getUserRoleBegin,
   updateUserRoleBegin, userRoleUnmount
 } from '../actions';
 import {
@@ -31,13 +31,13 @@ export function UserRoleEditPage(props) {
   useInjectReducer({ key: 'roles', reducer });
   useInjectSaga({ key: 'roles', saga });
 
-  const rs = new RouteService(useContext);
+  const { role_id: roleId } = useParams();
   const links = {
     userRolesIndex: ROUTES.admin.system.users.roles.index.path(),
   };
   const { intl } = props;
   useEffect(() => {
-    props.getUserRoleBegin({ id: rs.params('role_id') });
+    props.getUserRoleBegin({ id: roleId });
 
     return () => {
       props.userRoleUnmount();
@@ -94,6 +94,6 @@ export default compose(
 )(Conditional(
   UserRoleEditPage,
   ['userRole.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.system.users.roles.index.path(),
+  (props, params) => ROUTES.admin.system.users.roles.index.path(),
   permissionMessages.user.userRole.editPage
 ));

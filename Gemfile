@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.6.6'
 
 gem 'active_storage_validations', '~> 0.8.8'
 gem 'mini_magick', '~> 4.10.1'

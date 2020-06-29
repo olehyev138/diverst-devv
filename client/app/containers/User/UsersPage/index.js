@@ -12,9 +12,7 @@
  *    - on save - create/update user
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -36,7 +34,6 @@ import {
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
@@ -86,7 +83,6 @@ export function UserListPage(props) {
     }
   };
 
-  const rs = new RouteService(useContext);
   const links = {
     userNew: ROUTES.admin.system.users.new.path(),
     userEdit: id => ROUTES.admin.system.users.edit.path(id),
@@ -163,6 +159,6 @@ export default compose(
 )(Conditional(
   UserListPage,
   ['permissions.users_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.indexPage
 ));

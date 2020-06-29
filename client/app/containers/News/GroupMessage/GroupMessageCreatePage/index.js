@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -15,12 +16,10 @@ import { selectUser } from 'containers/Shared/App/selectors';
 
 import { selectIsCommitting } from 'containers/News/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
-import { Button } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
@@ -31,9 +30,10 @@ export function GroupMessageCreatePage(props) {
   useInjectSaga({ key: 'news', saga });
   const { intl } = props;
   const { currentUser, currentGroup } = props;
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
+    newsFeedIndex: ROUTES.group.news.index.path(groupId),
   };
 
   useEffect(() => () => props.newsFeedUnmount(), []);
@@ -82,6 +82,6 @@ export default compose(
 )(Conditional(
   GroupMessageCreatePage,
   ['currentGroup.permissions.news_create?'],
-  (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.news.index.path(params.group_id),
   permissionMessages.news.groupMessage.createPage
 ));

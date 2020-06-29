@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -33,8 +31,8 @@ export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
-  const campaignId = rs.params('campaign_id');
+
+  const { campaign_id: campaignId } = useParams();
   const links = {
     questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
@@ -90,6 +88,6 @@ export default compose(
 )(Conditional(
   CampaignQuestionCreatePage,
   ['campaign.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  (props, params) => ROUTES.admin.innovate.campaigns.index.path(),
   permissionMessages.innovate.campaign.campaignQuestion.createPage
 ));

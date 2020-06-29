@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -12,7 +10,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/GlobalSettings/CustomText/saga';
 import reducer from 'containers/GlobalSettings/CustomText/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectIsCommitting } from 'containers/GlobalSettings/CustomText/selectors';
@@ -26,14 +23,12 @@ import CustomTextForm from 'components/GlobalSettings/CustomText/CustomTextForm'
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { UserListPage } from 'containers/User/UsersPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomTextEditPage(props) {
   useInjectReducer({ key: 'custom_text', reducer });
   useInjectSaga({ key: 'custom_text', saga });
 
-  const rs = new RouteService(useContext);
   const links = {
     customTextEdit: ROUTES.admin.system.globalSettings.customText.edit.path()
   };
@@ -85,6 +80,6 @@ export default compose(
 )(Conditional(
   CustomTextEditPage,
   ['permissions.custom_text_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.customText.editPage
 ));
