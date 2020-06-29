@@ -19,7 +19,7 @@ FactoryBot.define do
 
     factory :csv_file_download do
       user
-      download_file_name {'test'}
+      download_file_name { 'test' }
 
       transient do
         download_file_file { Pathname.new("#{Rails.root}/spec/fixtures/files/diverst_csv_download.csv") }
