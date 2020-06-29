@@ -222,7 +222,8 @@ class Group < ApplicationRecord
   validates_length_of :name, maximum: 191
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
-
+  # contact_email is not an attribute
+  validates_format_of :contact_email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
 

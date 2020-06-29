@@ -6,6 +6,8 @@ class MentoringSession < ApplicationRecord
   belongs_to :creator, class_name: 'User'
   belongs_to :enterprise
 
+  # there is no entity called mentoring_rating??
+  has_many :mentoring_ratings
   has_many :resources, dependent: :destroy
   has_many :mentoring_session_topics, dependent: :destroy
   has_many :mentoring_interests, through: :mentoring_session_topics
