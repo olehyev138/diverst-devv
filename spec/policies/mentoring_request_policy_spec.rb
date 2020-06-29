@@ -22,14 +22,12 @@ RSpec.describe MentoringRequestPolicy, type: :policy do
   describe 'for users with access' do
     context 'when manage_all is false' do
       context 'when user is the sender' do
-
         it 'returns true for #show?' do
           expect(subject.show?).to eq true
         end
       end
 
       context 'when user is the receiver' do
-
         it 'returns true for #show?' do
           expect(subject.show?).to eq true
         end

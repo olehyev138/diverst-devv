@@ -21,11 +21,10 @@ RSpec.describe MentoringSessionCommentPolicy, type: :policy do
   describe 'for users with access' do
     context 'when manage_all is false' do
       context 'when user is the creator' do
-
         it 'returns true for #creator?' do
           expect(subject.creator?).to eq true
         end
       end
+    end
   end
 end
-  end

@@ -57,8 +57,4 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
       it { is_expected.to permit_actions([:destroy]) }
     end
   end
-
-  context 'for users with no access' do
-    it { is_expected.to forbid_actions([:destroy]) }
-  end
 end
