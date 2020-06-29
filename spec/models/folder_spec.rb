@@ -27,12 +27,12 @@ RSpec.describe Folder, type: :model do
     it { expect(folder).to validate_length_of(:password).is_at_least(6) }
 
     it { expect(folder).to validate_uniqueness_of(:name).scoped_to(:group_id) }
-    # Todo
-    # describe 'test folder uniqueness enterprise' do
-    #  let!(:enterprise) { create(:enterprise) }
-    #  let!(:folder_enterprise) { create(:folder, enterprise: enterprise) }
-    #  it { expect(folder_enterprise).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
-    # end
+  end
+
+  describe 'test folder uniqueness enterprise' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:folder_enterprise) { create(:folder, enterprise_id: enterprise.id) }
+    it { expect(folder_enterprise).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
   end
 
   describe 'test that' do
