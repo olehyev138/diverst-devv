@@ -98,18 +98,22 @@ RSpec.describe Initiative, type: :model do
     end
 
     context 'initiative::upcoming' do
-      let!(:upcoming_initiatives) { create_list(:initiative, 3, start: Date.tomorrow) }
+      let!(:upcoming_initiatives1) { create(:initiative, start: Date.tomorrow) }
+      let!(:upcoming_initiatives2) { create(:initiative, start: 2.days.from_now) }
 
       it 'returns initiative upcoming' do
-        expect(Initiative.upcoming).to eq(upcoming_initiatives.sort_by { |i| i.start })
+        expect(Initiative.upcoming[0]).to eq(upcoming_initiatives1)
+        expect(Initiative.upcoming[1]).to eq(upcoming_initiatives2)
       end
     end
 
     context 'initiative::ongoing' do
-      let!(:ongoing_initiatives) { create_list(:initiative, 3, start: Date.yesterday, end: Date.tomorrow) }
+      let!(:ongoing_initiatives1) { create(:initiative, start: 2.days.ago, end: Date.tomorrow) }
+      let!(:ongoing_initiatives2) { create(:initiative, start: Date.yesterday, end: Date.tomorrow) }
 
       it 'returns initiative ongoing' do
-        expect(Initiative.ongoing).to eq(ongoing_initiatives.sort_by { |i| i.start })
+        expect(Initiative.ongoing[0]).to eq(ongoing_initiatives2)
+        expect(Initiative.ongoing[1]).to eq(ongoing_initiatives1)
       end
     end
 
