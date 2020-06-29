@@ -100,9 +100,8 @@ RSpec.describe User do
       it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128),allow_value('', nil) }
       it { expect(user).to validate_presence_of(:email) }
       it { expect(user).to validate_uniqueness_of(:email) }
-      it { expect(user).to allow_value("email@addresse.foo").for(:email) }
-      it { expect(user).to_not allow_value("foo").for(:email) }
-
+      it { expect(user).to allow_value('email@addresse.foo').for(:email) }
+      it { expect(user).to_not allow_value('foo').for(:email) }
     end
 
 
