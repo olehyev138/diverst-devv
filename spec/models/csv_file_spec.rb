@@ -10,8 +10,6 @@ RSpec.describe CsvFile, type: :model do
     # ActiveStorage
     it { expect(csv_file).to have_attached_file(:import_file) }
     it { expect(csv_file).to have_attached_file(:download_file) }
-    # it { expect(csv_file).to validate_attachment_presence(:download_file) }
-    # it { expect(csv_file).to validate_attachment_content_type(:download_file, ['text/csv']) }
   end
 
   describe 'active storage import file' do
