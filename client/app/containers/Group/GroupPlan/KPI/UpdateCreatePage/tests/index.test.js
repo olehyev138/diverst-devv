@@ -10,9 +10,8 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { UpdateEditPage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
+import 'utils/mockReactRouterHooks';
 
-jest.mock('utils/routeHelpers');
-const RouteService = require.requireMock('utils/routeHelpers');
 const props = {
   getUpdatePrototypeBegin: jest.fn(),
   createUpdateBegin: jest.fn(),

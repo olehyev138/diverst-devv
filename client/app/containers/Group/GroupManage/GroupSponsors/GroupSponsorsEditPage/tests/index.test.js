@@ -10,9 +10,8 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 // import { GroupSponsorEditPage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
+import 'utils/mockReactRouterHooks';
 
-jest.mock('utils/routeHelpers');
-const RouteService = require.requireMock('utils/routeHelpers');
 loadTranslation('./app/translations/en.json');
 // Todo: TypeError: Invalid URL
 describe('<GroupSponsorEditPage />', () => {

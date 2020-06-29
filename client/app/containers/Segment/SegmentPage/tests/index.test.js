@@ -10,11 +10,10 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { SegmentPage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
+import 'utils/mockReactRouterHooks';
 
 loadTranslation('./app/translations/en.json');
 
-jest.mock('utils/routeHelpers');
-const RouteService = require.requireMock('utils/routeHelpers');
 describe('<SegmentPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');

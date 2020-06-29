@@ -9,9 +9,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { EmailEditPage } from '../index';
-
-jest.mock('utils/routeHelpers');
-const RouteService = require.requireMock('utils/routeHelpers');
+import 'utils/mockReactRouterHooks';
 
 describe('<EmailEditPage />', () => {
   it('Expect to not log errors in console', () => {
