@@ -6,6 +6,7 @@ class CreateUserPollTokens < ActiveRecord::Migration[5.2]
       t.string :token
       t.boolean :submitted, default: false
       t.boolean :cancelled, default: false
+      t.boolean :email_sent, default: false
 
       t.timestamps
     end

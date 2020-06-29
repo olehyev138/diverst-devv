@@ -1593,6 +1593,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_173224) do
     t.string "token"
     t.boolean "submitted", default: false
     t.boolean "cancelled", default: false
+    t.boolean "email_sent", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["poll_id"], name: "index_user_poll_tokens_on_poll_id"
