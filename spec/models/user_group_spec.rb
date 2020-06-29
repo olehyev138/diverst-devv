@@ -8,7 +8,7 @@ RSpec.describe UserGroup do
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
-    it { expect(user_group).to validate_length_of(:data).is_at_most(65535)}
+    it { expect(user_group).to validate_length_of(:data).is_at_most(65535) }
 
     it 'validates 1 user per group' do
       group_member = create(:user)
