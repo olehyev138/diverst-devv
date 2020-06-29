@@ -27,8 +27,8 @@ FactoryBot.define do
             csv_file_download.import_file.detach
           end
           csv_file_download.download_file.attach(
-              io: evaluator.download_file_file.open,
-              filename: evaluator.download_file_file.basename.to_s
+            io: evaluator.download_file_file.open,
+            filename: evaluator.download_file_file.basename.to_s
           )
         end
       end

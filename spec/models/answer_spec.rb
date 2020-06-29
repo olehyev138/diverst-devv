@@ -16,7 +16,6 @@ RSpec.describe Answer, type: :model do
       it { expect(answer).to have_many(:likes).dependent(:destroy) }
       it { expect(answer).to accept_nested_attributes_for(:expenses).allow_destroy(true) }
 
-      # it { expect(answer).to have_attached_file(:supporting_document) }
       it { expect(answer).to validate_presence_of(:question) }
       it { expect(answer).to validate_presence_of(:author) }
       it { expect(answer).to validate_presence_of(:content) }
