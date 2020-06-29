@@ -300,6 +300,27 @@ export function createNewsLinkCommentError(error) {
   };
 }
 
+export function deleteNewsLinkCommentBegin(payload) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function deleteNewsLinkCommentSuccess(payload) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteNewsLinkCommentError(error) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_ERROR,
+    error,
+  };
+}
+
 // Social Link Actions
 
 export function createSocialLinkBegin(payload) {
@@ -311,7 +332,7 @@ export function createSocialLinkBegin(payload) {
 
 export function createSocialLinkSuccess(payload) {
   return {
-    type: CREATE_NEWSLINK_SUCCESS,
+    type: CREATE_SOCIALLINK_SUCCESS,
     payload,
   };
 }
@@ -388,27 +409,6 @@ export function createSocialLinkCommentSuccess(payload) {
 export function createSocialLinkCommentError(error) {
   return {
     type: CREATE_SOCIALLINK_COMMENT_ERROR,
-    error,
-  };
-}
-
-export function deleteNewsLinkCommentBegin(payload) {
-  return {
-    type: DELETE_NEWSLINK_COMMENT_BEGIN,
-    payload,
-  };
-}
-
-export function deleteNewsLinkCommentSuccess(payload) {
-  return {
-    type: DELETE_NEWSLINK_COMMENT_SUCCESS,
-    payload,
-  };
-}
-
-export function deleteNewsLinkCommentError(error) {
-  return {
-    type: DELETE_NEWSLINK_COMMENT_ERROR,
     error,
   };
 }

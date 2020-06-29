@@ -15,9 +15,7 @@ import {
 export const initialState = {
   userList: [],
   userTotal: null,
-
   currentUser: null,
-
   isFetchingUsers: true,
 };
 

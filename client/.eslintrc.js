@@ -90,7 +90,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["reducer.js"],
+      files: ["reducer.test.js"],
       rules: {
         'default-case': 'off',
       },
