@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user_poll_token do
-    association ""
-    association ""
+    association ''
+    association ''
   end
 end

@@ -21,6 +21,9 @@ class Poll < ApplicationRecord
   has_many :segments, inverse_of: :polls, through: :polls_segments
   has_many :groups_polls, dependent: :destroy
   has_many :groups, inverse_of: :polls, through: :groups_polls
+  has_many :user_poll_tokens, -> { where cancelled: false }, inverse_of: :poll
+  has_many :cancelled_user_poll_tokens, -> { where cancelled: true }, class_name: 'UserPollToken', inverse_of: :poll
+  has_many :token_users, class_name: 'User', through: :user_poll_tokens, source: :user
 
   belongs_to :enterprise, inverse_of: :polls, counter_cache: true
   belongs_to :owner, class_name: 'User'
@@ -60,15 +63,7 @@ class Poll < ApplicationRecord
 
   # Returns the list of users who meet the participation criteria for the poll
   def targeted_users
-    @targeted_users ||= begin
-                         if groups.any?
-                           target = User.joins(:groups).where(groups: { id: groups.ids }).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
-                         else
-                           target = enterprise.users.active
-                         end
-                         target = target.for_segments(segments)
-                         target.distinct
-                       end
+    @targeted_users ||= targeted_users_load
   end
 
   def targeted_users_count
@@ -155,5 +150,36 @@ class Poll < ApplicationRecord
 
   def remove_associated_fields
     fields.delete_all if fields.any?
+  end
+
+  def update_tokens
+    to_create, to_cancel, to_uncancel = user_diff
+
+    user_poll_tokens.create(to_create.map { |create_user_id| { user_id: create_user_id } })
+    user_poll_tokens.where(user_id: to_cancel).update_all(cancelled: true)
+    cancelled_user_poll_tokens.where(user_id: to_uncancel).update_all(cancelled: false)
+    reload
+  end
+
+  def user_diff
+    targets = targeted_users_load.pluck(:id)
+    old_valid_targets = user_poll_tokens.pluck(:user_id)
+    old_cancelled_targets = cancelled_user_poll_tokens.pluck(:user_id)
+
+    to_cancel = old_valid_targets - targets
+    to_uncancel = targets & old_cancelled_targets
+    to_create = targets - old_valid_targets - old_cancelled_targets
+
+    [to_create, to_cancel, to_uncancel]
+  end
+
+  def targeted_users_load
+    if groups.any?
+      target = User.joins(:groups).where(groups: { id: groups.ids }).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
+    else
+      target = enterprise.users.active
+    end
+    target = target.for_segments(segments)
+    target.distinct
   end
 end
