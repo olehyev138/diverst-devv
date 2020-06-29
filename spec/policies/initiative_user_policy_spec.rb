@@ -19,7 +19,7 @@ RSpec.describe InitiativeUserPolicy, type: :policy do
   }
 
   permissions '.scope' do
-    describe 'for users with access' do
+    xdescribe 'for users with access' do
       context 'when manage_all is false' do
         context 'index?' do
           context 'when group.event_attendance_visibility is set to public' do
