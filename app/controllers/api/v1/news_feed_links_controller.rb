@@ -18,8 +18,11 @@ class Api::V1::NewsFeedLinksController < DiverstController
   end
 
   def pin
-    params[klass.symbol][:is_pinned] = true
     item = klass.find(params[:id])
+    params[klass.symbol] = payload
+    params[klass.symbol][:is_pinned] = true
+
+    params[klass.symbol][:id] = item.id
     base_authorize(item)
 
     render status: 200, json: klass.update(self.diverst_request, params)
@@ -33,8 +36,11 @@ class Api::V1::NewsFeedLinksController < DiverstController
   end
 
   def un_pin
-    params[klass.symbol][:is_pinned] = false
     item = klass.find(params[:id])
+    params[klass.symbol] = payload
+    params[klass.symbol][:is_pinned] = true
+
+    params[klass.symbol][:id] = item.id
     base_authorize(item)
 
     render status: 200, json: klass.update(self.diverst_request, params)

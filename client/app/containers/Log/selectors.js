@@ -19,5 +19,5 @@ const selectIsLoading = () => createSelector(
 );
 
 export {
-  selectPaginatedLogs, selectLogTotal, selectIsLoading,
+  selectPaginatedLogs, selectLogTotal, selectIsLoading, selectLogsDomain
 };
