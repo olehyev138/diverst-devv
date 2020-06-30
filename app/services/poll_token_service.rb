@@ -5,7 +5,7 @@ class PollTokenService < TokenService
 
   def self.first_jwt(poll_token, params = {})
     payload = {
-        poll_token: poll_token,
+        poll_token: poll_token.token,
         type: 'first'
     }
 
@@ -18,7 +18,7 @@ class PollTokenService < TokenService
     [
         create_jwt_token({
                              poll_token: poll_token.token,
-                             type: 'second',
+                             type: 'response',
                              created: Time.now,
                          }),
         PollResponse.create_prototype(poll_token.poll)
@@ -26,13 +26,13 @@ class PollTokenService < TokenService
   end
 
   def self.verify_jwt_token(token, type)
-    token, payload = get_token_from_jwt(token)
+    poll_token, payload = get_token_from_jwt(token)
 
-    user_token_error('Invalid Poll Token') if token.blank? || token.poll.blank? || token.cancelled?
-    user_token_error('User Already Answered') if token.submitted?
-    user_token_error('Token Expired. Please Try again') if type == 'second' && token.created < TOKEN_EXPIRATION.ago
+    user_token_error('Invalid Poll Token') if poll_token.blank? || poll_token.poll.blank? || poll_token.cancelled?
+    user_token_error('User Already Answered') if poll_token.submitted?
+    user_token_error('Token Expired. Please Try again') if type == 'response' && poll_token.created < TOKEN_EXPIRATION.ago
 
-    token
+    poll_token
   end
 
   def self.get_token_from_jwt(token)

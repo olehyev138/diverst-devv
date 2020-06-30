@@ -71,7 +71,7 @@ class ReactRoutes
       @routes_class ||= make_class routes_hash
     end
 
-    delegate :inspect, :user, :group, :session, :admin, to: :routes
+    delegate :inspect, :user, :group, :session, :response, :admin, to: :routes
 
     # catch other base routes that have not been explicitly defined above
     def method_missing(method, *args, &block)
