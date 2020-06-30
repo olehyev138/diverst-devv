@@ -9,7 +9,7 @@ import { initialState } from '../reducer';
 describe('Poll selectors', () => {
   describe('selectPollDomain', () => {
     it('should select the archives domain', () => {
-      const mockedState = { signUp: { } };
+      const mockedState = { pollResponse: { } };
       const selected = selectPollResponseDomain(mockedState);
 
       expect(selected).toEqual({ });

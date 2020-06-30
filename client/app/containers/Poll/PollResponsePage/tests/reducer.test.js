@@ -34,7 +34,7 @@ describe('signUpReducer', () => {
         state,
         getQuestionnaireByTokenSuccess({
           token: { id: 4, name: 'dummy' },
-          user: {},
+          response: {},
         })
       )
     ).toEqual(expected);
