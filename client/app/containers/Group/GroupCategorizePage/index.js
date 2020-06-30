@@ -19,7 +19,7 @@ import {
   selectCategorizeGroup,
   selectGroupIsFormLoading
 } from 'containers/Group/selectors';
-import { selectPaginatedSelectGroupCategories } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedSelectGroupCategories, selectIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -68,7 +68,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   categories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
-  isCommitting: selectGroupCategoriesIsCommitting(),
+  isCommitting: selectIsCommitting(),
   isFormLoading: selectGroupIsFormLoading(),
 });
 

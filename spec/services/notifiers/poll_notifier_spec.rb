@@ -57,10 +57,10 @@ RSpec.describe Notifiers::PollNotifier do
                         :user,
                         enterprise: enterprise,
                         groups: [group]
-                    )
-                )
+                      )
+                  )
             ]
-        )
+          )
       }
       let!(:users) { create_list(:user, 2, enterprise: enterprise, groups: [group]) }
       let!(:poll) { create(:poll, status: 'published', email_sent: false, enterprise: enterprise, initiative: initiative) }
