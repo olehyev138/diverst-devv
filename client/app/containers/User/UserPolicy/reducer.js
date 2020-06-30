@@ -38,6 +38,7 @@ export const initialState = {
 function policyReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_POLICY_BEGIN:
         draft.isFetchingPolicy = true;
