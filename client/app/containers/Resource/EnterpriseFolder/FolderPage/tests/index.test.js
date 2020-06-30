@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { FolderPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { FolderPage } from '../index';
 
 describe('<FolderPage />', () => {
   it('Expect to not log errors in console', () => {

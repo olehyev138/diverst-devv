@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { FoldersPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { FoldersPage } from '../index';
 
 const props = {
   getFoldersBegin: jest.fn(),

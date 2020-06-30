@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PollListPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { PollListPage } from '../index';
 
 const props = {
   getPollsBegin: jest.fn(),

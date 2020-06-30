@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SegmentListPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { SegmentListPage } from '../index';
 
 const props = {
   getSegmentsBegin: jest.fn(),

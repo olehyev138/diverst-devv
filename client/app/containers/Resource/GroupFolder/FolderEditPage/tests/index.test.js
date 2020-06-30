@@ -8,9 +8,9 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-import { FolderEditPage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
 import 'utils/mockReactRouterHooks';
+import { FolderEditPage } from '../index';
 
 loadTranslation('./app/translations/en.json');
 
