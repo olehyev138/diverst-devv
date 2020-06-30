@@ -8,12 +8,14 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockBudgetLayout from './mock';
+import BudgetLayout from '../index';
+import configureStore from 'redux-mock-store';
+const mockStore = configureStore([]);
 
 describe('<BudgetLayout />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<MockBudgetLayout classes={{}} />);
+    const wrapper = shallow(<BudgetLayout classes={{}} store={mockStore()} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

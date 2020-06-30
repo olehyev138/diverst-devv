@@ -8,12 +8,14 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockGroupManageLayout from './mock';
+import GroupManageLayout from '../index';
+import configureStore from 'redux-mock-store';
+const mockStore = configureStore([]);
 
 describe('<GroupManageLayout />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<MockGroupManageLayout classes={{}} />);
+    const wrapper = shallow(<GroupManageLayout classes={{}} store={mockStore()} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
