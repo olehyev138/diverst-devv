@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import KPILayout from '../index';
 
 describe('<KPILayout />', () => {
