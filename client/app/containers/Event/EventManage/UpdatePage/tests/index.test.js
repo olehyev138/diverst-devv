@@ -8,14 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import { UpdateEditPage } from '../index';
-import RouteService from 'utils/routeHelpers';
 
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-  params: jest.fn()
-}));
 const props = {
   getUpdateBegin: jest.fn(),
   getUpdateSuccess: jest.fn(),

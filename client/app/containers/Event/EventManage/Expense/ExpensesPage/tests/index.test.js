@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ExpenseListPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { ExpenseListPage } from '../index';
 
 const props = {
   getExpensesBegin: jest.fn(),

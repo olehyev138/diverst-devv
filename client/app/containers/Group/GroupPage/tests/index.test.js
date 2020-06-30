@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GroupPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { GroupPage } from '../index';
 
 const props = {
   children: <p></p>,

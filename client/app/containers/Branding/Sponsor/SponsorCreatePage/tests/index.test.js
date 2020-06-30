@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import 'utils/mockReactRouterHooks';
 // import { SponsorCreatePage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
 

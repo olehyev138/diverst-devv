@@ -11,13 +11,13 @@ import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { intl } from 'tests/mocks/react-intl';
 import { BudgetCreatePage } from '../index';
 
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-  params: jest.fn()
-}));
+// import RouteService from 'utils/routeHelpers';
+import 'utils/mockReactRouterHooks';
+// jest.mock('utils/routeHelpers');
+// RouteService.mockImplementation(() => ({
+//   location: {},
+//   params: jest.fn()
+// }));
 const props = {
   getUpdateBegin: jest.fn(),
   getUpdateSuccess: jest.fn(),

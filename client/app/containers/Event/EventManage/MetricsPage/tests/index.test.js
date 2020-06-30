@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { MetricsPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { MetricsPage } from '../index';
 
 const props = {
   currentUser: {}

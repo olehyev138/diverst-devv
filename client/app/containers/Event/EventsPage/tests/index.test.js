@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { EventsPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { EventsPage } from '../index';
 
 const props = {
   getEventsBegin: jest.fn(),

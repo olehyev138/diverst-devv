@@ -8,8 +8,9 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-// import { BrandingHomePage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
+import 'utils/mockReactRouterHooks';
+// import { BrandingHomePage } from '../index';
 
 loadTranslation('./app/translations/en.json');
 // Todo: TypeError: Invalid URL
