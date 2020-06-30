@@ -19,7 +19,7 @@ import {
   selectCategorizeGroup,
   selectGroupIsFormLoading
 } from 'containers/Group/selectors';
-import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedSelectGroupCategories } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
 import { ROUTES } from 'containers/Shared/Routes/constants';

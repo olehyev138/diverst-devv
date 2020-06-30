@@ -10,7 +10,7 @@ import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
 import { createGroupCategoriesBegin, getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedGroupCategories } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 import { injectIntl, intlShape } from 'react-intl';

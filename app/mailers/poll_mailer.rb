@@ -6,7 +6,7 @@ class PollMailer < ApplicationMailer
     @uer_poll_token = poll.user_poll_tokens.find_by(user: user)
     @token = PollTokenService.first_jwt(@uer_poll_token)
     return if @enterprise.disable_emails?
-    return unless @uer_poll_token.present?
+    return if @uer_poll_token.blank?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email_for_notification

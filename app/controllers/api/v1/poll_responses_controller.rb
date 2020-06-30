@@ -35,6 +35,6 @@ class Api::V1::PollResponsesController < DiverstController
             field_data_attributes: [
                 :data,
             ]
-        )
+          )
   end
 end
