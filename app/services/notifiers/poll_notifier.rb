@@ -5,24 +5,26 @@ class Notifiers::PollNotifier
   end
 
   def notify!
-    token = targeted_tokens
-    token.find_each(batch_size: 100) do |token|
-      PollMailer.invitation(@poll, token.user).deliver_later
-      DeviceNotificationJob.perform_later(token.user_id, { "notification": {
-        "title": @poll.title,
-        "body": @poll.description,
-        "org": 'diverst',
-        "survey": ''
-      } })
+    if should_notify?
+      token = targeted_tokens
+      token.find_each(batch_size: 100) do |token|
+        PollMailer.invitation(@poll, token.user).deliver_later
+        DeviceNotificationJob.perform_later(token.user_id, { "notification": {
+            "title": @poll.title,
+            "body": @poll.description,
+            "org": 'diverst',
+            "survey": ''
+        } })
+      end
+      token.update_all(email_sent: true)
+      @poll.update_column(:email_sent, true)
     end
-    token.update_all(email_sent: true)
-    @poll.update_column(:email_sent, true)
   end
 
   private
 
   def should_notify?
-    (!@poll.email_sent) && @poll.published? && initiative_ended_up?
+    @poll.published? && initiative_ended_up?
   end
 
   def initiative_ended_up?
@@ -32,6 +34,7 @@ class Notifiers::PollNotifier
   end
 
   def targeted_tokens
+    @poll.update_tokens
     tokens = @poll.user_poll_tokens.preload(:user).where(email_sent: false)
     tokens = filter_by_initiative(tokens) if @initiative.present?
     tokens.distinct

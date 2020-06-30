@@ -30,7 +30,6 @@ class Poll < ApplicationRecord
   belongs_to :initiative
 
   after_create :create_default_graphs
-  after_save :update_tokens
   after_commit :schedule_users_notification, on: [:create, :update]
 
   before_destroy :remove_associated_fields, prepend: true
@@ -68,6 +67,15 @@ class Poll < ApplicationRecord
 
   def targeted_users_count
     targeted_users.size
+  end
+
+  def update_tokens
+    to_create, to_cancel, to_uncancel = user_diff
+
+    user_poll_tokens.create(to_create.map { |create_user_id| { user_id: create_user_id } })
+    user_poll_tokens.where(user_id: to_cancel).update_all(cancelled: true)
+    cancelled_user_poll_tokens.where(user_id: to_uncancel).update_all(cancelled: false)
+    reload
   end
 
   # Defines which fields will be usable when creating graphs
@@ -133,7 +141,7 @@ class Poll < ApplicationRecord
   end
 
   def validate_associated_objects
-    if (!groups.empty? || !segments.empty?) && !initiative.nil?
+    if (!groups.empty?) && !initiative.nil?
       errors.add(:associated_objects, 'invalid configuration of poll')
     end
   end
@@ -152,15 +160,6 @@ class Poll < ApplicationRecord
     fields.delete_all if fields.any?
   end
 
-  def update_tokens
-    to_create, to_cancel, to_uncancel = user_diff
-
-    user_poll_tokens.create(to_create.map { |create_user_id| { user_id: create_user_id } })
-    user_poll_tokens.where(user_id: to_cancel).update_all(cancelled: true)
-    cancelled_user_poll_tokens.where(user_id: to_uncancel).update_all(cancelled: false)
-    reload
-  end
-
   def user_diff
     targets = targeted_users_load.pluck(:id)
     old_valid_targets = user_poll_tokens.pluck(:user_id)
@@ -176,6 +175,8 @@ class Poll < ApplicationRecord
   def targeted_users_load
     if groups.any?
       target = User.joins(:groups).where(groups: { id: groups.ids }).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
+    elsif initiative_id.present?
+      target = initiative.attendees.active
     else
       target = enterprise.users.active
     end
