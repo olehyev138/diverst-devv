@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { EmailsPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { EmailsPage } from '../index';
 
 describe('<EmailsPage />', () => {
   it('Expect to not log errors in console', () => {
