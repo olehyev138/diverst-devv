@@ -9,9 +9,8 @@
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { intl } from 'tests/mocks/react-intl';
-
 import { DiverstFormattedMessage } from '../index';
-import 'utils/mockReactRouterHooks';
+
 
 describe('<DiverstFormattedMessage />', () => {
   it('Expect to not log errors in console', () => {
