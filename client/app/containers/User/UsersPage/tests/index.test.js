@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { UserListPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { UserListPage } from '../index';
 
 const props = {
   getUsersBegin: jest.fn(),

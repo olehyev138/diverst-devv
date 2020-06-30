@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PolicyEditPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { PolicyEditPage } from '../index';
 
 describe('<PolicyEditPage />', () => {
   it('Expect to not log errors in console', () => {

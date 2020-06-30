@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { UserDownloadsPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { UserDownloadsPage } from '../index';
 
 const props = {
   getUserDownloadDataBegin: jest.fn(),
