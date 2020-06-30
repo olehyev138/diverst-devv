@@ -16,7 +16,7 @@ class Notifiers::PollNotifier
       } })
     end
     token.update_all(email_sent: true)
-    @poll.column_update(:email_sent, true)
+    @poll.update_column(:email_sent, true)
   end
 
   private
