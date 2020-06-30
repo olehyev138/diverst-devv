@@ -6,15 +6,152 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.PollResponse';
+export const scope = 'diverst.containers.User';
 
 export default defineMessages({
-  form: {
-    anonymous: {
-      id: `${scope}.anonymous`
+  new: {
+    id: `${scope}.index.button.new`,
+  },
+  edit: {
+    id: `${scope}.index.button.edit`,
+  },
+  delete: {
+    id: `${scope}.index.button.delete`,
+  },
+  delete_message: {
+    id: `${scope}.index.text.delete_message`,
+  },
+  delete_confirm: {
+    id: `${scope}.index.text.delete_confirm`,
+  },
+  children_collapse: {
+    id: `${scope}.index.button.children_collapse`,
+  },
+  rows: {
+    id: `${scope}.index.button.rows`,
+  },
+  page: {
+    id: `${scope}.index.button.page`,
+  },
+  create: {
+    id: `${scope}.form.button.create`,
+  },
+  update: {
+    id: `${scope}.form.button.update`,
+  },
+  cancel: {
+    id: `${scope}.form.button.cancel`,
+  },
+  first_name: {
+    id: `${scope}.form.input.first_name`,
+  },
+  last_name: {
+    id: `${scope}.form.input.last_name`,
+  },
+  email: {
+    id: `${scope}.form.input.email`,
+  },
+  avatar: {
+    id: `${scope}.form.input.avatar`,
+  },
+  biography: {
+    id: `${scope}.form.input.biography`,
+  },
+  time_zone: {
+    id: `${scope}.form.input.time_zone`,
+  },
+  active: {
+    id: `${scope}.form.input.active`,
+  },
+  user_role: {
+    id: `${scope}.form.input.user_role`,
+  },
+  fields: {
+    id: `${scope}.profile.fields`
+  },
+  preface: {
+    id: `${scope}.profile.privacy`
+  },
+  fields_save: {
+    id: `${scope}.profile.fields.form.save`
+  },
+  scopes: {
+    all: {
+      id: `${scope}.scope.all`,
     },
-    submit: {
-      id: `${scope}.submit`
+    inactive: {
+      id: `${scope}.scope.inactive`
     },
-  }
+    invitation_sent: {
+      id: `${scope}.scope.invitation_sent`
+    },
+    saml: {
+      id: `${scope}.scope.saml`
+    },
+  },
+  imports: {
+    title: {
+      id: `${scope}.import.title`,
+    },
+    importInstructionsTitle: {
+      id: `${scope}.import.importInstructionsTitle`,
+    },
+    importInstructions: {
+      id: `${scope}.import.importInstructions`,
+    },
+    columnInstructionsTitle: {
+      id: `${scope}.import.columnInstructionsTitle`,
+    },
+    columnInstructions: {
+      id: `${scope}.import.columnInstructions`,
+    },
+    rowsInstructionsTitle: {
+      id: `${scope}.import.rowsInstructionsTitle`,
+    },
+    rowsInstructions: {
+      id: `${scope}.import.rowsInstructions`,
+    },
+    SampleInstructionsTitle: {
+      id: `${scope}.import.SampleInstructionsTitle`,
+    },
+    SampleInstructions: {
+      id: `${scope}.import.SampleInstructions`,
+    },
+  },
+  downloads: {
+    title: {
+      id: `${scope}.downloads.title`
+    },
+    empty: {
+      id: `${scope}.downloads.empty`
+    },
+    expireInfo: {
+      id: `${scope}.downloads.expireInfo`
+    },
+    downloadButton: {
+      id: `${scope}.downloads.downloadButton`
+    },
+  },
+  tab: {
+    users: {
+      id: `${scope}.tab.users`
+    },
+    roles: {
+      id: `${scope}.tab.roles`
+    },
+    policy: {
+      id: `${scope}.tab.policy`
+    }
+  },
+  members: {
+    id: `${scope}.list.members`
+  },
+  tooltip: {
+    edit: {
+      id: `${scope}.tooltip.edit`
+    },
+    delete: {
+      id: `${scope}.tooltip.delete`
+    },
+  },
 });
