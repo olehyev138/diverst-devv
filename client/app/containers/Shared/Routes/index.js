@@ -10,7 +10,6 @@ import {
   GroupLayout,
   AdminLayout,
   SessionLayout,
-  ResponseLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
