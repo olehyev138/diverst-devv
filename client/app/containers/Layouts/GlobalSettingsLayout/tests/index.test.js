@@ -8,12 +8,14 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockGlobalSettingsLayout from './mock';
+import GlobalSettingsLayout from '../index';
+import configureStore from 'redux-mock-store';
+const mockStore = configureStore([]);
 
 describe('<GlobalSettingsLayout />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<MockGlobalSettingsLayout classes={{}} />);
+    const wrapper = shallow(<GlobalSettingsLayout classes={{}} store={mockStore()} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

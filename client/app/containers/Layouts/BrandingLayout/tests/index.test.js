@@ -8,7 +8,6 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-// import MockBrandingLayout from './mock';
 import BrandingLayout from '../index';
 import configureStore from 'redux-mock-store';
 const mockStore = configureStore([]);
