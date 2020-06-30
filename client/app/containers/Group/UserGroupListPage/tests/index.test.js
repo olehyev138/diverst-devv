@@ -9,9 +9,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { UserGroupListPage } from '../index';
+import 'utils/mockReactRouterHooks';
 
-jest.mock('utils/routeHelpers');
-const RouteService = require.requireMock('utils/routeHelpers');
 const props = {
   getGroupsBegin: jest.fn(),
   groupListUnmount: jest.fn(),
