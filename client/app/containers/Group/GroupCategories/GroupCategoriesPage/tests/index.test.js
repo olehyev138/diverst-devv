@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GroupCategoriesPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { GroupCategoriesPage } from '../index';
 
 const props = {
   deleteGroupCategoriesBegin: jest.fn(),

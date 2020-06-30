@@ -8,15 +8,9 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import 'utils/mockReactRouterHooks';
 import { UpdateEditPage } from '../index';
 import { intl } from 'tests/mocks/react-intl';
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-  params: jest.fn()
-}));
 
 loadTranslation('./app/translations/en.json');
 const props = {

@@ -8,15 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import { BudgetsPage } from '../index';
 
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-  params: jest.fn()
-}));
 const props = {
   getBudgetsBegin: jest.fn(),
   getAnnualBudgetBegin: jest.fn(),

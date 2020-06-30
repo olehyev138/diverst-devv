@@ -8,15 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import { AnnualBudgetsPage } from '../index';
 
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-  params: jest.fn()
-}));
 describe('<AnnualBudgetsPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');

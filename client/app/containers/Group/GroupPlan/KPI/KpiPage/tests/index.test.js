@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { KPIPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { KPIPage } from '../index';
 
 const props = {
   getMetricsBegin: jest.fn(),

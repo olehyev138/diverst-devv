@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { FieldListPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { FieldListPage } from '../index';
 
 const props = {
   getFieldsBegin: jest.fn(),

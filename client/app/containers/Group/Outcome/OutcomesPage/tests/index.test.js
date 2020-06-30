@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { OutcomesPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { OutcomesPage } from '../index';
 
 const props = {
   getOutcomesBegin: jest.fn(),

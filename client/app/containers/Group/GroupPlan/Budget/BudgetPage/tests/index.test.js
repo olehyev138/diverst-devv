@@ -8,14 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import { BudgetPage } from '../index';
-
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-}));
 
 describe('<BudgetPage />', () => {
   it('Expect to not log errors in console', () => {

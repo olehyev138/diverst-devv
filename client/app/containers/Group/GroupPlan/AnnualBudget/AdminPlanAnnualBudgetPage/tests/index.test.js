@@ -8,14 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import 'utils/mockReactRouterHooks';
 import { AdminAnnualBudgetPage } from '../index';
 
-import RouteService from 'utils/routeHelpers';
-
-jest.mock('utils/routeHelpers');
-RouteService.mockImplementation(() => ({
-  location: {},
-}));
 const props = {
   getAnnualBudgetsBegin: jest.fn(),
   groupListUnmount: jest.fn(),

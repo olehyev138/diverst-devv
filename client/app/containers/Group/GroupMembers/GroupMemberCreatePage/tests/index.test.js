@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GroupMemberCreatePage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { GroupMemberCreatePage } from '../index';
 
 describe('<GroupMemberCreatePage />', () => {
   it('Expect to not log errors in console', () => {
