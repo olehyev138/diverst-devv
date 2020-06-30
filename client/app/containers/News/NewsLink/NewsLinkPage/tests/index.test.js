@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NewsLinkPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { NewsLinkPage } from '../index';
 
 const props = {
   currentUser: {},

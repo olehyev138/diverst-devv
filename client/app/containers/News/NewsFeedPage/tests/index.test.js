@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NewsFeedPage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { NewsFeedPage } from '../index';
 
 const props = {
   currentEnterprise: {},

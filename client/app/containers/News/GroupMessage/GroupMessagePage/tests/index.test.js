@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GroupMessagePage } from '../index';
 import 'utils/mockReactRouterHooks';
+import { GroupMessagePage } from '../index';
 
 const props = {
   currentUser: {}
