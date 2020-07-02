@@ -38,7 +38,7 @@ class PollTokenService < TokenService
   def self.get_token_from_jwt(token)
     payload, _ = get_poll_payload(token)
 
-    [UserPollToken.find_by(token: payload.poll_token), payload]
+    [UserPollToken.find_by(token: payload['poll_token']), payload]
   end
 
   private

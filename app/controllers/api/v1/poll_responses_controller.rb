@@ -1,12 +1,16 @@
 class Api::V1::PollResponsesController < DiverstController
+  skip_before_action :verify_jwt_token, only: [
+      :questionnaire,
+      :create
+  ]
+
   def questionnaire
     token = params[:token]
     second_token, prototype = PollTokenService.second_jwt(token)
 
-    base_authorize(klass)
     render status: 200, json: {
         token: second_token,
-        response: prototype,
+        response: PollResponseSerializer.new(prototype).as_json,
     }
   rescue => e
     raise BadRequestException.new(e.message)
@@ -20,7 +24,15 @@ class Api::V1::PollResponsesController < DiverstController
       response_params[:poll_id] = poll_token.poll_id
       response_params[:user_id] = poll_token.user_id unless response_params[:anonymous]
     end
-    super
+    params[klass.symbol] = payload
+
+    new_item = klass.build(self.diverst_request, params)
+    render status: 201, json: new_item
+  rescue => e
+    case e
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   private

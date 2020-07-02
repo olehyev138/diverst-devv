@@ -75,6 +75,7 @@ import PollsList from 'containers/Poll/PollListPage/Loadable';
 import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
 import PollEditPage from 'containers/Poll/PollEditPage/Loadable';
 import PollShowPage from 'containers/Poll/PollShowPage/Loadable';
+import PollResponsePage from 'containers/Poll/PollResponsePage/Loadable';
 
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
@@ -319,6 +320,7 @@ export {
   PollCreatePage,
   PollEditPage,
   PollShowPage,
+  PollResponsePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,

@@ -113,6 +113,7 @@ import {
   PollCreatePage,
   PollEditPage,
   PollShowPage,
+  PollResponsePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -185,7 +186,7 @@ export default function Routes(props) {
           <SessionLayout noRedirect maxWidth='xl'>
             <SwitchWithProps>
               {/* Poll Response */}
-              <RouteWithProps path={ROUTES.response.pollResponse.path()}><PlaceholderPage /></RouteWithProps>
+              <RouteWithProps path={ROUTES.response.pollResponse.path()}><PollResponsePage /></RouteWithProps>
             </SwitchWithProps>
           </SessionLayout>
         </Route>
