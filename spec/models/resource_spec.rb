@@ -11,6 +11,7 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to belong_to(:mentoring_session) }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
+    it { expect(resource).to have_many(:views).dependent(:destroy) }
 
     it { expect(resource).to accept_nested_attributes_for(:tags) }
 
@@ -24,6 +25,24 @@ RSpec.describe Resource, type: :model do
     # it { expect(resource).to validate_attachment_presence(:file)}
 
     it { expect(resource).to validate_presence_of(:title) }
+  end
+
+  describe 'test scopes' do
+    describe '.not_archived' do
+      let!(:resource) { create_list(:resource, 2) }
+
+      it 'returns not_archived resource' do
+        expect(Resource.not_archived.count).to eq(2)
+      end
+    end
+
+    describe '.archived' do
+      let!(:resource) { create_list(:resource, 2, archived_at: Date.today) }
+
+      it 'returns archived resource' do
+        expect(Resource.archived.count).to eq(2)
+      end
+    end
   end
 
   describe 'test callbacks' do

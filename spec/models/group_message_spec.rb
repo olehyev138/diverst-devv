@@ -12,20 +12,59 @@ RSpec.describe GroupMessage, type: :model do
     it { expect(group_message).to validate_length_of(:subject).is_at_most(191) }
 
     it { expect(group_message).to belong_to(:group) }
-    it { expect(group_message).to belong_to(:owner).class_name('User') }
+    it { expect(group_message).to belong_to(:owner).class_name('User').counter_cache(:own_messages_count) }
 
-    it { expect(group_message).to have_many(:segments).through(:group_messages_segments) }
-
-    it { expect(group_message).to have_many(:comments).class_name('GroupMessageComment').with_foreign_key(:message_id) }
+    it { expect(group_message).to have_many(:comments).class_name('GroupMessageComment').with_foreign_key(:message_id).dependent(:destroy) }
     it { expect(group_message).to have_many(:group_messages_segments).dependent(:destroy) }
     it { expect(group_message).to have_many(:segments).through(:group_messages_segments) }
+    it { expect(group_message).to have_many(:user_reward_actions) }
     it { expect(group_message).to have_one(:news_feed_link) }
+    it { expect(group_message).to have_many(:news_tags).through(:news_feed_link) }
 
     it { expect(group_message).to delegate_method(:increment_view).to(:news_feed_link) }
     it { expect(group_message).to delegate_method(:total_views).to(:news_feed_link) }
     it { expect(group_message).to delegate_method(:unique_views).to(:news_feed_link) }
 
     it { expect(group_message).to accept_nested_attributes_for(:news_feed_link).allow_destroy(true) }
+  end
+
+  describe 'test scopes' do
+    context 'group_message::approved' do
+      let!(:approved_group_message) { create(:group_message, id: 1) }
+      # let!(:news_feed_link) { create(:news_feed_link, group_message_id: 1, approved: true) }
+
+      it 'returns budget approved' do
+        expect(GroupMessage.approved).to eq([approved_group_message])
+      end
+    end
+
+    context 'group_message::not_approved' do
+      let!(:not_approved_group_message) { create(:group_message, id: 1) }
+      before do
+        NewsFeedLink.where(group_message_id: 1).update_all(approved: false)
+      end
+      it 'returns budget not approved' do
+        expect(GroupMessage.unapproved).to eq([not_approved_group_message])
+      end
+    end
+
+    describe '.of_segments' do
+      let(:owner) { create(:user) }
+      let(:group) { build(:group, enterprise: owner.enterprise) }
+
+      let(:segment1) { build :segment, enterprise: owner.enterprise }
+      let(:segment2) { build :segment, enterprise: owner.enterprise }
+
+      let!(:group_message_without_segment) { create(:group_message, owner_id: owner.id, segments: []) }
+      let!(:group_message_with_segment) { create(:group_message, owner_id: owner.id, segments: [segment1]) }
+      let!(:group_message_with_another_segment) {
+        build(:group_message, owner_id: owner.id, segments: [segment2])
+      }
+
+      it 'returns initiatives that has specific segments or does not have any segment' do
+        expect(GroupMessage.of_segments([segment1.id])).to match_array([group_message_without_segment, group_message_with_segment])
+      end
+    end
   end
 
   describe 'test callbacks' do
@@ -60,24 +99,6 @@ RSpec.describe GroupMessage, type: :model do
         expect { GroupMessagesSegment.find(group_messages_segment.id) }.to raise_error(ActiveRecord::RecordNotFound)
         expect { GroupMessageComment.find(group_message_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
-    end
-  end
-
-  describe '.of_segments' do
-    let(:owner) { create(:user) }
-    let(:group) { build(:group, enterprise: owner.enterprise) }
-
-    let(:segment1) { build :segment, enterprise: owner.enterprise }
-    let(:segment2) { build :segment, enterprise: owner.enterprise }
-
-    let!(:group_message_without_segment) { create(:group_message, owner_id: owner.id, segments: []) }
-    let!(:group_message_with_segment) { create(:group_message, owner_id: owner.id, segments: [segment1]) }
-    let!(:group_message_with_another_segment) {
-      build(:group_message, owner_id: owner.id, segments: [segment2])
-    }
-
-    it 'returns initiatives that has specific segments or does not have any segment' do
-      expect(GroupMessage.of_segments([segment1.id])).to match_array([group_message_without_segment, group_message_with_segment])
     end
   end
 
