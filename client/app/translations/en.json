@@ -190,6 +190,7 @@
   "diverst.containers.Group.index.button.new": "New {erg}",
   "diverst.containers.Group.index.button.edit": "Edit",
   "diverst.containers.Group.index.button.delete": "Delete",
+  "diverst.containers.Group.index.button.my_groups": "My Groups",
   "diverst.containers.Group.index.button.change_order": "Change Order",
   "diverst.containers.Group.index.button.set_order": "Save Current Order",
   "diverst.containers.Group.index.button.setAnnualBudget": "Set Annual Budget",

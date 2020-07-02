@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { Button, CardActions, Grid } from '@material-ui/core';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -23,10 +25,13 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import messages from '../messages';
 
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+
+  const { intl } = props;
 
   const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
 
@@ -45,14 +50,29 @@ export function UserGroupListPage(props) {
 
   return (
     <React.Fragment>
-      <GroupList
-        isLoading={props.isLoading}
-        groups={props.groups}
-        groupTotal={props.groupTotal}
-        defaultParams={params}
-        deleteGroupBegin={props.deleteGroupBegin}
-        handlePagination={handlePagination}
-      />
+      <Grid container justify='space-between' spacing={3}>
+        <Grid item>
+        </Grid>
+        <Grid item>
+          <Button
+            size='small'
+            color='primary'
+            variant='contained'
+          >
+            {intl.formatMessage(messages.myGroups)}
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <GroupList
+            isLoading={props.isLoading}
+            groups={props.groups}
+            groupTotal={props.groupTotal}
+            defaultParams={params}
+            deleteGroupBegin={props.deleteGroupBegin}
+            handlePagination={handlePagination}
+          />
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 }
@@ -63,7 +83,8 @@ UserGroupListPage.propTypes = {
   isLoading: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func
+  deleteGroupBegin: PropTypes.func,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -89,6 +110,7 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl,
 )(Conditional(
   UserGroupListPage,
   ['permissions.groups_view'],

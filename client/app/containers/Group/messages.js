@@ -119,6 +119,8 @@ export default defineMessages({
   joinSubgroups: {
     id: `${scope}.index.message.joinSubgroups`,
   },
-
+  myGroups: {
+    id: `${scope}.index.button.my_groups`
+  },
 
 });
