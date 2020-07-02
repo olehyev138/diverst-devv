@@ -28,10 +28,10 @@ export function getQuestionnaireByTokenSuccess(payload) {
   };
 }
 
-export function getQuestionnaireByTokenError(error) {
+export function getQuestionnaireByTokenError(errors) {
   return {
     type: GET_QUESTIONNAIRE_BY_TOKEN_ERROR,
-    error,
+    errors,
   };
 }
 
@@ -49,10 +49,10 @@ export function submitResponseSuccess(payload) {
   };
 }
 
-export function submitResponseError(error) {
+export function submitResponseError(errors) {
   return {
     type: SUBMIT_RESPONSE_ERROR,
-    error,
+    errors,
   };
 }
 
