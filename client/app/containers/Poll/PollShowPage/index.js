@@ -118,7 +118,7 @@ export function PollCreatePage(props) {
       );
     if (tab === 'graphs')
       return <PollGraphs {...componentProps} />;
-    if (tab === 'text')
+    if (tab === 'texts')
       return (
         <PollTestAnswers
           {...componentProps}
