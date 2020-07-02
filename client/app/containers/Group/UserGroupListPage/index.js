@@ -23,7 +23,7 @@ import saga from 'containers/Group/saga';
 import GroupList from 'components/Group/UserGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import messages from '../messages';
 
@@ -48,6 +48,12 @@ export function UserGroupListPage(props) {
     setParams(newParams);
   };
 
+  const getJoinedGroups = () => {
+    const newParams = { count: params.count, page: params.page, order: params.order, query_scopes: [['joined_groups', props.user.user_id]] };
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>
@@ -58,6 +64,7 @@ export function UserGroupListPage(props) {
             size='small'
             color='primary'
             variant='contained'
+            onClick={getJoinedGroups}
           >
             {intl.formatMessage(messages.myGroups)}
           </Button>
@@ -82,6 +89,7 @@ UserGroupListPage.propTypes = {
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   groups: PropTypes.array,
+  user: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
   intl: intlShape.isRequired,
@@ -92,6 +100,7 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
   permissions: selectPermissions(),
+  user: selectUser(),
 });
 
 function mapDispatchToProps(dispatch) {
