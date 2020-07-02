@@ -443,10 +443,19 @@ RSpec.describe Group, type: :model do
   describe 'test scopes' do
     let!(:enterprise) { create(:enterprise) }
     let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+    let!(:user) { create(:user) }
+    let!(:group) { create(:group) }
+    let(:user_group) { create(:user_group, user_id: user.id, group_id: group.id) }
 
     context 'Group::by_enterprise' do
       it 'returns groups belonging to the enterprise' do
         expect(Group.by_enterprise(enterprise).ids.sort).to eq(groups.pluck(:id).sort)
+      end
+    end
+
+    context 'Group::joined_groups' do
+      it 'returns groups that a user has joined' do
+        expect(Group.joined_groups(user.id).ids).to eq([group.id])
       end
     end
 

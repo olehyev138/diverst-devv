@@ -148,7 +148,7 @@ export function UserGroupList(props, context) {
                       </CardActionArea>
                     </Link>
                   </Grid>
-                  {group.children && group.children.length > 0 && (
+                  {props.viewChildren && group.children && group.children.length > 0 && (
                     <Grid item className={classes.expandActionAreaContainer}>
                       <CardActionArea
                         className={classes.expandActionArea}
@@ -247,7 +247,8 @@ UserGroupList.propTypes = {
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  viewChildren: PropTypes.bool,
 };
 
 export default compose(

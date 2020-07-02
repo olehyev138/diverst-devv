@@ -248,8 +248,8 @@ class Group < ApplicationRecord
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
   scope :by_enterprise, -> (e) { where(enterprise_id: e) }
-  scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
-  scope :joined_groups, -> (u) { joins(:user_groups).where(user_groups: {user_id: u}) }
+  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :joined_groups, -> (u) { joins(:user_groups).where(user_groups: { user_id: u }) }
   # Active Record already has a defined a class method with the name private so we use is_private.
   scope :is_private,        -> { where(private: true) }
   scope :non_private,       -> { where(private: false) }

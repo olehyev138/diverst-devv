@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import { Button, CardActions, Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -34,6 +34,7 @@ export function UserGroupListPage(props) {
   const { intl } = props;
 
   const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
+  const [displayMyGroups, setDisplayMyGroups] = useState(false);
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -49,9 +50,19 @@ export function UserGroupListPage(props) {
   };
 
   const getJoinedGroups = () => {
-    const newParams = { count: params.count, page: params.page, order: params.order, query_scopes: [['joined_groups', props.user.user_id]] };
+    const newParams = { count: 5, page: 0, order: params.order, query_scopes: [['joined_groups', props.user.user_id]] };
+
     props.getGroupsBegin(newParams);
     setParams(newParams);
+    setDisplayMyGroups(true);
+  };
+
+  const getAllGroups = () => {
+    const newParams = { count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] };
+
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
+    setDisplayMyGroups(false);
   };
 
   return (
@@ -60,14 +71,25 @@ export function UserGroupListPage(props) {
         <Grid item>
         </Grid>
         <Grid item>
-          <Button
-            size='small'
-            color='primary'
-            variant='contained'
-            onClick={getJoinedGroups}
-          >
-            {intl.formatMessage(messages.myGroups)}
-          </Button>
+          {displayMyGroups ? (
+            <Button
+              size='small'
+              color='primary'
+              variant='contained'
+              onClick={getAllGroups}
+            >
+              {intl.formatMessage(messages.allGroups)}
+            </Button>
+          ) : (
+            <Button
+              size='small'
+              color='primary'
+              variant='contained'
+              onClick={getJoinedGroups}
+            >
+              {intl.formatMessage(messages.myGroups)}
+            </Button>
+          )}
         </Grid>
         <Grid item xs={12}>
           <GroupList
@@ -77,6 +99,7 @@ export function UserGroupListPage(props) {
             defaultParams={params}
             deleteGroupBegin={props.deleteGroupBegin}
             handlePagination={handlePagination}
+            viewChildren={!displayMyGroups}
           />
         </Grid>
       </Grid>

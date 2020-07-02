@@ -122,5 +122,8 @@ export default defineMessages({
   myGroups: {
     id: `${scope}.index.button.my_groups`
   },
+  allGroups: {
+    id: `${scope}.index.button.all_groups`
+  },
 
 });
