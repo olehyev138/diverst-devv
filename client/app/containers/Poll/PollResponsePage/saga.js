@@ -32,7 +32,8 @@ export function* getQuestionnaireByToken(action) {
 
 export function* submitResponse(action) {
   try {
-    const response = yield call(api.pollResponses.create.bind(api.pollResponses), action.payload);;
+    const payload = { poll_response: action.payload }
+    const response = yield call(api.pollResponses.create.bind(api.pollResponses), payload);
 
     yield put(submitResponseSuccess({}));
     yield put(showSnackbar({ message: 'Successfully submitted response', options: { variant: 'success' } }));

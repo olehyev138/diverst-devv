@@ -112,7 +112,7 @@ export function PollResponseForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = {
-          ...values,
+          anonymous: values.anonymous,
           field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
         };
         props.submitAction({ token: props.token, ...payload });

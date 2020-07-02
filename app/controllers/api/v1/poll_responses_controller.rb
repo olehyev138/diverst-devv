@@ -17,16 +17,15 @@ class Api::V1::PollResponsesController < DiverstController
   end
 
   def create
-    if params[:poll_response]
-      response_params = params[:poll_response]
-      token = response_params[:token]
-      poll_token = PollTokenService.verify_jwt_token(token, 'response')
-      response_params[:poll_id] = poll_token.poll_id
-      response_params[:user_id] = poll_token.user_id unless response_params[:anonymous]
-    end
+    response_params = params[:poll_response]
+    token = response_params[:token]
+    poll_token = PollTokenService.verify_jwt_token(token, 'response')
+    response_params[:poll_id] = poll_token.poll_id
+    response_params[:user_id] = poll_token.user_id unless response_params[:anonymous]
     params[klass.symbol] = payload
 
     new_item = klass.build(self.diverst_request, params)
+    poll_token.update(submitted: true)
     render status: 201, json: new_item
   rescue => e
     case e
@@ -46,6 +45,7 @@ class Api::V1::PollResponsesController < DiverstController
             :user_id,
             field_data_attributes: [
                 :data,
+                :field_id
             ]
           )
   end

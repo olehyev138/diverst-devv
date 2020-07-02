@@ -30,7 +30,7 @@ class PollTokenService < TokenService
 
     user_token_error('Invalid Poll Token') if poll_token.blank? || poll_token.poll.blank? || poll_token.cancelled?
     user_token_error('User Already Answered') if poll_token.submitted?
-    user_token_error('Token Expired. Please Try again') if type == 'response' && poll_token.created < TOKEN_EXPIRATION.ago
+    user_token_error('Token Expired. Please Try again') if type == 'response' && payload['created'] < RESPONSE_TIME_LIMIT.ago
 
     poll_token
   end
