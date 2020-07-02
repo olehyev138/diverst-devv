@@ -25,7 +25,7 @@ class MentorshipSession < ApplicationRecord
 
   scope :upcoming, -> {
     includes(:mentoring_session)
-      .where('mentoring_sessions.end > ?', Time.now.utc)
+      .where('mentoring_sessions.start > ?', Time.now.utc)
       .references(:mentoring_session)
   }
 

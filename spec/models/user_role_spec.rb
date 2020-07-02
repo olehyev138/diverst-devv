@@ -3,14 +3,36 @@ require 'rails_helper'
 RSpec.describe UserRole do
   include ActiveJob::TestHelper
 
-  describe 'when validating' do
-    let(:user_role) { create(:user_role) }
+  describe 'test association and validation' do
+    let(:user_role) { build_stubbed(:user_role) }
+
+    context 'test associations' do
+      it { expect(user_role).to belong_to(:enterprise).inverse_of(:user_roles) }
+      it { expect(user_role).to have_one(:policy_group_template).inverse_of(:user_role).dependent(:delete) }
+    end
 
     context 'test validations' do
       it { expect(user_role).to validate_presence_of(:role_name) }
+      it { expect(user_role).to validate_length_of(:role_name).is_at_most(191) }
       it { expect(user_role).to validate_presence_of(:role_type) }
+      it { expect(user_role).to validate_length_of(:role_type).is_at_most(191) }
       it { expect(user_role).to validate_presence_of(:enterprise) }
       it { expect(user_role).to validate_presence_of(:priority) }
+      it { expect(user_role).to validate_presence_of(:policy_group_template).on(:update) }
+    end
+
+    context 'test uniqueness' do
+      let!(:uniqueness) { create(:user_role) }
+      it { expect(uniqueness).to validate_uniqueness_of(:priority).scoped_to(:enterprise_id) }
+      it { expect(uniqueness).to validate_uniqueness_of(:role_name).scoped_to(:enterprise_id) }
+    end
+
+    context 'test uniqueness default' do
+      let!(:uniqueness_default) { create(:user_role) }
+      before do
+        uniqueness_default.update(default: true)
+      end
+      it { expect(uniqueness_default).to validate_uniqueness_of(:default).scoped_to(:enterprise_id) }
     end
   end
 

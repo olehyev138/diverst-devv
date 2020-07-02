@@ -10,8 +10,10 @@ RSpec.describe Mentoring, type: :model do
     it { expect(mentoring).to validate_presence_of(:mentee) }
     it { expect(mentoring).to validate_presence_of(:mentor) }
 
-    it { expect(mentoring).to belong_to(:mentee).class_name('User') }
-    it { expect(mentoring).to belong_to(:mentor).class_name('User') }
+    it { expect(mentoring).to belong_to(:mentee).class_name('User').counter_cache(:mentors_count) }
+    it { expect(mentoring).to belong_to(:mentor).class_name('User').counter_cache(:mentees_count) }
+
+    it { expect(mentoring).to validate_uniqueness_of(:mentor_id).scoped_to(:mentee_id) }
   end
 
   describe '.active_mentorships' do
