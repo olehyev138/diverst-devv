@@ -18,7 +18,7 @@ import {
 
 export function* getQuestionnaireByToken(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.pollResponses.getQuestionnaire.bind(api.pollResponses), action.payload);
 
     yield put(getQuestionnaireByTokenSuccess(response.data));
   } catch (err) {
@@ -32,7 +32,7 @@ export function* getQuestionnaireByToken(action) {
 
 export function* submitResponse(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.pollResponses.create.bind(api.pollResponses), action.payload);;
 
     yield put(submitResponseSuccess({}));
     yield put(showSnackbar({ message: 'Successfully submitted response', options: { variant: 'success' } }));

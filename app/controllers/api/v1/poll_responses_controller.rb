@@ -1,5 +1,5 @@
 class Api::V1::PollResponsesController < DiverstController
-  def prototype
+  def questionnaire
     token = params[:token]
     second_token, prototype = PollTokenService.second_jwt(token)
 
