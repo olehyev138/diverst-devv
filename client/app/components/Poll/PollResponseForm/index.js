@@ -27,6 +27,7 @@ import Scrollbar from 'components/Shared/Scrollbar';
 import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
+import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function PollResponseFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -103,6 +104,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
 
 export function PollResponseForm(props) {
   const user = dig(props, 'response');
+  const { intl } = props;
 
   const initialValues = buildValues(user, {
     anonymous: { default: false },
@@ -114,11 +116,14 @@ export function PollResponseForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = {
-          anonymous: values.anonymous,
-          field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
-        };
-        props.submitAction({ token: props.token, ...payload });
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm(intl.formatMessage(messages.form.submitConfirmation))) {
+          const payload = {
+            anonymous: values.anonymous,
+            field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
+          };
+          props.submitAction({ token: props.token, ...payload });
+        }
       }}
     >
       {formikProps => <PollResponseFormInner {...props} formikProps={formikProps} errors={props.errors} />}
@@ -127,6 +132,7 @@ export function PollResponseForm(props) {
 }
 
 PollResponseForm.propTypes = {
+  intl: intlShape.isRequired,
   submitAction: PropTypes.func,
   response: PropTypes.object,
   isCommitting: PropTypes.bool,
@@ -150,4 +156,5 @@ PollResponseFormInner.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
 )(PollResponseForm);

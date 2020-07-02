@@ -16,6 +16,9 @@ export default defineMessages({
     submit: {
       id: `${scope}.form.submit`
     },
+    submitConfirmation: {
+      id: `${scope}.form.submitConfirmation`
+    },
   },
   fields: {
     fields: {
