@@ -37,6 +37,7 @@ export function* submitResponse(action) {
 
     yield put(submitResponseSuccess({}));
     yield put(showSnackbar({ message: 'Successfully submitted response', options: { variant: 'success' } }));
+    yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(submitResponseError(err));
 
