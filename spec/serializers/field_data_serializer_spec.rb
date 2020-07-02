@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FieldDataSerializer, type: :serializer do
-  it 'returns fields' do
+  it 'returns field data' do
     field_data = create(:field_data)
     serializer = FieldDataSerializer.new(field_data, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
