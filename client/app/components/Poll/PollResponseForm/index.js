@@ -33,7 +33,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>
-      <Container maxWidth='xl'>
+      <Container>
         <React.Fragment>
           <Logo coloredDefault maxHeight='60px' />
           <Box mb={2} />
