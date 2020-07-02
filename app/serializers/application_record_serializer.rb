@@ -45,7 +45,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
           unless permission_module.instance_methods(false).include? attr
             permission_module.define_method(attr) do
-              if permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+              if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
                 if defined?(super)
                   super() rescue nil
                 else
