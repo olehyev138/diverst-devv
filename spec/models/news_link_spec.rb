@@ -11,7 +11,7 @@ RSpec.describe NewsLink, type: :model do
     it { expect(news_link).to validate_presence_of(:author_id) }
 
     it { expect(news_link).to belong_to(:group) }
-    it { expect(news_link).to belong_to(:author).class_name('User') }
+    it { expect(news_link).to belong_to(:author).class_name('User').counter_cache(:own_news_links_count) }
 
     it { expect(news_link).to have_many(:segments).through(:news_link_segments) }
     it { expect(news_link).to have_many(:comments).class_name('NewsLinkComment').dependent(:destroy) }
@@ -19,10 +19,12 @@ RSpec.describe NewsLink, type: :model do
     it { expect(news_link).to have_many(:news_link_segments).dependent(:destroy) }
     it { expect(news_link).to have_many(:news_link_photos).dependent(:destroy) }
     it { expect(news_link).to have_many(:user_reward_actions) }
+    it { expect(news_link).to have_many(:news_tags).through(:news_feed_link) }
 
     it { expect(news_link).to have_one(:news_feed_link) }
 
     it { expect(news_link).to accept_nested_attributes_for(:photos).allow_destroy(true) }
+    it { expect(news_link).to accept_nested_attributes_for(:news_feed_link).allow_destroy(true) }
 
     # ActiveStorage
     it { expect(news_link).to have_attached_file(:picture) }

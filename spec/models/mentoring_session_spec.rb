@@ -4,6 +4,9 @@ RSpec.describe MentoringSession, type: :model do
   describe 'test associations and validations' do
     let(:mentoring_session) { build_stubbed(:mentoring_session) }
 
+    it { expect(mentoring_session).to belong_to(:creator).class_name('User') }
+    it { expect(mentoring_session).to belong_to(:enterprise) }
+
     it { expect(mentoring_session).to validate_presence_of(:start) }
     it { expect(mentoring_session).to validate_presence_of(:end) }
     it { expect(mentoring_session).to validate_presence_of(:status) }
@@ -27,6 +30,51 @@ RSpec.describe MentoringSession, type: :model do
     it { expect(mentoring_session).to validate_length_of(:access_token).is_at_most(65535) }
     it { expect(mentoring_session).to validate_length_of(:link).is_at_most(191) }
     it { expect(mentoring_session).to validate_length_of(:medium).is_at_most(191) }
+
+    it { expect(mentoring_session.start).to be > Date.yesterday }
+    it { expect(mentoring_session.end).to be > mentoring_session.start }
+  end
+
+  describe 'test scopes' do
+    context 'mentoring_session::past' do
+      let!(:past_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1 * 60, end: Time.now - 1 * 50) }
+
+      it 'returns past mentoring session' do
+        expect(MentoringSession.past.count).to eq 3
+      end
+    end
+
+    context 'mentoring_session::upcoming' do
+      let!(:upcoming_mentoring_session) { create_list(:mentoring_session, 3, start: Date.tomorrow) }
+
+      it 'returns upcoming mentoring session' do
+        expect(MentoringSession.upcoming.count).to eq 3
+      end
+    end
+
+    context 'mentoring_session::ongoing' do
+      let!(:ongoing_mentoring_session) { create_list(:mentoring_session, 3, start: Time.now - 1 * 60, end: Date.tomorrow) }
+
+      it 'returns ongoing mentoring session' do
+        expect(MentoringSession.ongoing.count).to eq 3
+      end
+    end
+
+    context 'mentoring_session::no_ratings' do
+      let!(:mentoring_session) { create(:mentoring_session) }
+
+      it 'returns pending budget' do
+        expect(MentoringSession.no_ratings).to eq([mentoring_session])
+      end
+    end
+
+    context 'mentoring_session::with_ratings' do
+      let!(:mentorship_rating) { create(:mentorship_rating, mentoring_session: create(:mentoring_session)) }
+
+      it 'returns pending budget' do
+        expect(MentoringSession.with_ratings.count).to eq 1
+      end
+    end
   end
 
   describe 'elasticsearch methods' do

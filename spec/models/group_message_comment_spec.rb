@@ -4,8 +4,9 @@ RSpec.describe GroupMessageComment, type: :model do
   describe 'when validating' do
     let(:group_message_comment) { build(:group_message_comment) }
 
-    it { expect(group_message_comment).to belong_to(:author).class_name('User') }
+    it { expect(group_message_comment).to belong_to(:author).class_name('User').counter_cache(:message_comments_count) }
     it { expect(group_message_comment).to belong_to(:message).class_name('GroupMessage') }
+    it { expect(group_message_comment).to have_one(:news_feed_link).through(:message) }
     it { expect(group_message_comment).to validate_length_of(:content).is_at_most(65535) }
     it { expect(group_message_comment).to have_many(:user_reward_actions) }
     it { expect(group_message_comment).to validate_presence_of(:author) }
