@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ClockworkDatabaseEventSerializer, type: :serializer do
-  it 'returns fields' do
+  it 'returns clockwork_database_event' do
     clockwork_database_event = create(:clockwork_database_event)
     serializer = ClockworkDatabaseEventSerializer.new(clockwork_database_event, scope: serializer_scopes(create(:user)), scope_name: :scope)
 

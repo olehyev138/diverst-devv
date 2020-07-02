@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe EmailSerializer, type: :serializer do
-  it 'returns event' do
+  it 'returns emails' do
     email = create(:email)
     enterprise_email_variable = create(:enterprise_email_variable)
     email_variables = create_list(:email_variable, 3, email_id: email.id, enterprise_email_variable_id: enterprise_email_variable.id)
@@ -15,6 +15,6 @@ RSpec.describe EmailSerializer, type: :serializer do
     end
 
     expect(serializer.serializable_hash[:id]).to eq email.id
-    expect(serializer.serializable_hash[:variables]).to eq (variables)
+    expect(serializer.serializable_hash[:variables]).to eq variables
   end
 end

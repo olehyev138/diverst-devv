@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe EmailVariableSerializer, type: :serializer do
-  it 'returns event' do
+  it 'returns email variable' do
     email_variable = create(:email_variable)
     serializer = EmailVariableSerializer.new(email_variable, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
