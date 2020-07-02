@@ -26,18 +26,14 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import Scrollbar from 'components/Shared/Scrollbar';
 import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
-import { FormattedMessage } from 'react-intl';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
-import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 /* eslint-disable object-curly-newline */
 export function PollResponseFormInner({ formikProps, buttonText, errors, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>
-      <Container>
+      <Container maxWidth='xl'>
         <React.Fragment>
           <Logo coloredDefault maxHeight='60px' />
           <Box mb={2} />
