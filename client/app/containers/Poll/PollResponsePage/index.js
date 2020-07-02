@@ -28,7 +28,7 @@ import {
 import { injectIntl } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import SignUpForm from 'components/User/SignUpForm';
+import PollResponseForm from 'components/Poll/PollResponseForm';
 
 export function SignUpPage(props) {
   useInjectReducer({ key: 'pollResponse', reducer });
@@ -52,8 +52,8 @@ export function SignUpPage(props) {
   }, []);
 
   return (
-    <SignUpForm
-      user={props.user}
+    <PollResponseForm
+      response={props.response}
       isLoading={props.isLoading}
       isCommitting={props.isCommitting}
       token={props.token}
@@ -73,7 +73,7 @@ SignUpPage.propTypes = {
 
   isCommitting: PropTypes.bool,
   token: PropTypes.string,
-  user: PropTypes.object,
+  response: PropTypes.object,
   isLoading: PropTypes.bool,
   formErrors: PropTypes.object,
 };

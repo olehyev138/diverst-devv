@@ -17,8 +17,7 @@ import {
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
-import messages from 'containers/User/messages';
-import PollResponseMessages from 'containers/Poll/PollResponsePage/messages';
+import messages from 'containers/Poll/PollResponsePage/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -84,14 +83,14 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
                     isCommitting={props.isCommitting}
                     isFetching={props.isLoading}
 
-                    messages={messages}
+                    messages={messages.fields}
                     formikProps={formikProps}
                   />
                 </CardContent>
                 <Divider />
                 <CardActions>
                   <DiverstSubmit isCommitting={props.isCommitting}>
-                    {<FormattedMessage {...messages.submit} />}
+                    {<DiverstFormattedMessage {...messages.form.submit} />}
                   </DiverstSubmit>
                 </CardActions>
               </Card>

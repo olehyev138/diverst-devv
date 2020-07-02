@@ -6,15 +6,29 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.SignUp';
+export const scope = 'diverst.containers.PollResponse';
 
 export default defineMessages({
   form: {
     anonymous: {
-      id: `${scope}.anonymous`
+      id: `${scope}.form.anonymous`
     },
     submit: {
-      id: `${scope}.submit`
+      id: `${scope}.form.submit`
+    },
+  },
+  fields: {
+    fields: {
+      id: `${scope}.fields.fields`
+    },
+    preface: {
+      id: `${scope}.fields.preface`
+    },
+    create_field: {
+      id: `${scope}.fields.create_field`
+    },
+    fields_save: {
+      id: `${scope}.fields.fields_save`
     },
   }
 });
