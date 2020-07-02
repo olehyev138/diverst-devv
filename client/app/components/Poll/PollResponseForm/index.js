@@ -116,7 +116,7 @@ export function PollResponseForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // eslint-disable-next-line no-restricted-globals
+        /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm(intl.formatMessage(messages.form.submitConfirmation))) {
           const payload = {
             anonymous: values.anonymous,

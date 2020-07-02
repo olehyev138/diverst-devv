@@ -32,7 +32,7 @@ export function* getQuestionnaireByToken(action) {
 
 export function* submitResponse(action) {
   try {
-    const payload = { poll_response: action.payload }
+    const payload = { poll_response: action.payload };
     const response = yield call(api.pollResponses.create.bind(api.pollResponses), payload);
 
     yield put(submitResponseSuccess({}));
