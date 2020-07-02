@@ -21,9 +21,6 @@ class NewsFeedLink < ApplicationRecord
   has_many :news_feed_link_tags
   has_many :news_tags, through: :news_feed_link_tags
 
-  delegate :group,    to: :news_feed
-  delegate :segment,  to: :news_feed_link_segment, allow_nil: true
-
   scope :approved, -> { where(approved: true) }
   scope :pending, -> { where(approved: false) }
   scope :combined_news_links, -> (news_feed_id) {
@@ -44,9 +41,10 @@ class NewsFeedLink < ApplicationRecord
   }
 
   scope :select_source, -> (news_feed_id) {
-    select(
-        "`news_feed_links`.`*`, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'self' "\
-        "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`,  "\
+    joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
+    .select(
+        "`news_feed_links`.*, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize_sql(news_feed_id)} THEN 'self' "\
+        "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize_sql(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`"\
       )
   }
 
