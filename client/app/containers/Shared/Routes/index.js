@@ -10,6 +10,7 @@ import {
   GroupLayout,
   AdminLayout,
   SessionLayout,
+  ResponseLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
@@ -183,12 +184,12 @@ export default function Routes(props) {
 
         {/* Responses */}
         <Route path={expandRouteIntoPathArray(ROUTES.response)}>
-          <SessionLayout noRedirect maxWidth='xl'>
+          <ResponseLayout>
             <SwitchWithProps>
               {/* Poll Response */}
               <RouteWithProps path={ROUTES.response.pollResponse.path()}><PollResponsePage /></RouteWithProps>
             </SwitchWithProps>
-          </SessionLayout>
+          </ResponseLayout>
         </Route>
 
         {/* Authenticated */}

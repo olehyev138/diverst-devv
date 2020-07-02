@@ -35,8 +35,9 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
     <Scrollbar>
       <Container>
         <React.Fragment>
-          <Logo coloredDefault maxHeight='60px' />
-          <Box mb={2} />
+          <Box mb={6} />
+          <Logo maxHeight='60px' />
+          <Box mb={6} />
           <Card>
             <CardHeader
               title={dig(props, 'response', 'poll', 'title')}
@@ -51,6 +52,15 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
           <DiverstFormLoader isLoading={props.isLoading} isError={!props.response}>
             <Form>
               <Card>
+                <FieldInputForm
+                  fieldData={dig(props, 'response', 'field_data') || []}
+                  isCommitting={props.isCommitting}
+                  isFetching={props.isLoading}
+
+                  messages={messages.fields}
+                  formikProps={formikProps}
+                />
+                <Divider />
                 <CardContent>
                   <FormControl
                     variant='outlined'
@@ -74,14 +84,6 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
                       label={<DiverstFormattedMessage {...messages.form.anonymous} />}
                     />
                   </FormControl>
-                  <FieldInputForm
-                    fieldData={dig(props, 'response', 'field_data') || []}
-                    isCommitting={props.isCommitting}
-                    isFetching={props.isLoading}
-
-                    messages={messages.fields}
-                    formikProps={formikProps}
-                  />
                 </CardContent>
                 <Divider />
                 <CardActions>
@@ -92,6 +94,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
               </Card>
             </Form>
           </DiverstFormLoader>
+          <Box mb={4} />
         </React.Fragment>
       </Container>
     </Scrollbar>

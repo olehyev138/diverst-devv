@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResponseLayout /> Should render and match the snapshot 1`] = `
+<Fragment>
+  <WithStyles(ForwardRef(Backdrop))
+    open={true}
+  >
+    <WithStyles(ForwardRef(CircularProgress))
+      color="secondary"
+      size={60}
+      thickness={1}
+    />
+  </WithStyles(ForwardRef(Backdrop))>
+</Fragment>
+`;
