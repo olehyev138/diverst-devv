@@ -45,7 +45,7 @@ describe('pollResponse actions', () => {
     it('has a type of GET_QUESTIONNAIRE_BY_TOKEN_ERROR and sets a given error', () => {
       const expected = {
         type: GET_QUESTIONNAIRE_BY_TOKEN_ERROR,
-        error: { value: 709 }
+        errors: { value: 709 }
       };
 
       expect(getQuestionnaireByTokenError({ value: 709 })).toEqual(expected);
@@ -78,7 +78,7 @@ describe('pollResponse actions', () => {
     it('has a type of SUBMIT_RESPONSE_ERROR and sets a given error', () => {
       const expected = {
         type: SUBMIT_RESPONSE_ERROR,
-        error: { value: 709 }
+        errors: { value: 709 }
       };
 
       expect(submitResponseError({ value: 709 })).toEqual(expected);

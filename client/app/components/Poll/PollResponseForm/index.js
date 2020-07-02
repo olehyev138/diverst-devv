@@ -117,7 +117,7 @@ export function PollResponseForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl.formatMessage(messages.form.submitConfirmation))) {
+        if (confirm(intl ? intl.formatMessage(messages.form.submitConfirmation) : 'confirm?')) {
           const payload = {
             anonymous: values.anonymous,
             field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
@@ -132,7 +132,7 @@ export function PollResponseForm(props) {
 }
 
 PollResponseForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: intlShape,
   submitAction: PropTypes.func,
   response: PropTypes.object,
   isCommitting: PropTypes.bool,
