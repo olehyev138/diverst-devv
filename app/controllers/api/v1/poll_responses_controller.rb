@@ -14,11 +14,11 @@ class Api::V1::PollResponsesController < DiverstController
 
   def create
     if params[:poll_response]
-      poll_params = params[:poll_params]
-      token = poll_params[:token]
+      response_params = params[:poll_response]
+      token = response_params[:token]
       poll_token = PollTokenService.verify_jwt_token(token, 'response')
-      poll_params[:poll_id] = poll_token.poll_id
-      poll_params[:user_id] = poll_token.user_id unless poll_params[:anonymous]
+      response_params[:poll_id] = poll_token.poll_id
+      response_params[:user_id] = poll_token.user_id unless response_params[:anonymous]
     end
     super
   end
