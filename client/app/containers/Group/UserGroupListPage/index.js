@@ -52,16 +52,16 @@ export function UserGroupListPage(props) {
   const getJoinedGroups = () => {
     const newParams = { count: 5, page: 0, order: params.order, query_scopes: [['joined_groups', props.user.user_id]] };
 
-    props.getGroupsBegin(newParams);
     setParams(newParams);
+    props.getGroupsBegin(newParams);
     setDisplayMyGroups(true);
   };
 
   const getAllGroups = () => {
     const newParams = { count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] };
 
-    props.getGroupsBegin(newParams);
     setParams(newParams);
+    props.getGroupsBegin(newParams);
     setDisplayMyGroups(false);
   };
 

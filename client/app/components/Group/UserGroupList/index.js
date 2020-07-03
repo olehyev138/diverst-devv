@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -235,6 +235,7 @@ export function UserGroupList(props, context) {
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
         handlePagination={props.handlePagination}
+        page={defaultParams.page}
       />
     </React.Fragment>
   );

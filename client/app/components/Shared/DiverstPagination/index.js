@@ -142,6 +142,10 @@ export function DiverstPagination(props) {
   if (props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0)
     return <React.Fragment />;
 
+  // If out of bounds, return to page 0, useful for lists with changing data
+  if (page >= Math.ceil(props.count / rowsPerPage) || props.page !== page)
+    setPage(0);
+
   return (
     <div className={classes.paginationContainer}>
       <TablePagination
