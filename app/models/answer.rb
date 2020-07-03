@@ -24,7 +24,7 @@ class Answer < BaseClass
   validates_length_of :content, maximum: 65535
   validates :question, presence: true
   validates :author, presence: true
-  validates :content, presence: true
+  validates :content, presence: true, unless: Proc.new { |a| a.supporting_document.present? }
   validates :contributing_group, presence: true
 
   def supporting_document_extension

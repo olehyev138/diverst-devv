@@ -63,7 +63,8 @@ class User::UserAnswersController < ApplicationController
       .require(:answer)
       .permit(
         :content,
-        :contributing_group_id
+        :contributing_group_id,
+        :supporting_document
       )
   end
 end
