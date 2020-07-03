@@ -119,6 +119,7 @@
     "react-router-dom": "5.2.0",
     "react-router-last-location": "^2.0.1",
     "react-select": "^3.0.8",
+    "react-tooltip": "^4.2.7",
     "react-vega": "^7.3.0",
     "react-vis": "^1.11.7",
     "redux": "4.0.1",

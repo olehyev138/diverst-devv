@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -9,8 +9,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-
 import 'stylesheets/main.scss';
+import ReactTooltip from 'react-tooltip';
 
 const styles = theme => ({
   wrapper: {
@@ -55,16 +55,14 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
     </Grid>
   );
 
-  const getMethods = obj => Object.getOwnPropertyNames(obj).filter(item => typeof obj[item] === 'function');
-  const getProperties = obj => Object.getOwnPropertyNames(obj).filter(item => typeof obj[item] !== 'function');
-
   return (
     <React.Fragment>
       {/* {legend} */}
+      <ReactTooltip />
       <div className={classes.wrapper}>
         <FullCalendar
           ref={calendarRef}
-          defaultView='dayGridMonth'
+          initialView='dayGridMonth'
           plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
           contentHeight={600}
           headerToolbar={{
@@ -73,21 +71,33 @@ export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
           events={events}
+          eventDisplay='block'
           dayMaxEvents={5}
           dayMaxEventRows={5}
-          // eventContent={(info) => {
-          //   console.log(info);
-          //   return (
-          //     <React.Fragment>
-          //       <div className='fc-event-time'>
-          //         {info.timeText}
-          //       </div>
-          //       <div className='fc-event-title-frame'>
-          //         {info.event.title}
-          //       </div>
-          //     </React.Fragment>
-          //   );
-          // }}
+          eventDidMount={(info) => {
+            const { event } = info;
+            const xProps = event.extendedProps;
+
+            info.el.setAttribute('data-tip',
+              `${xProps.group.name}${xProps.description.length > 0 ? `<br>${xProps.description}` : ''}`);
+            // eslint-disable-next-line func-names
+            info.el.setAttribute('data-place', (function () {
+              switch (calendarRef.current.getApi().view.type) {
+                case 'dayGridMonth':
+                  return 'top';
+                case 'timeGridWeek':
+                  return 'left';
+                case 'listWeek':
+                  return 'right';
+                default:
+                  return 'top';
+              }
+            }()));
+            info.el.setAttribute('data-effect', 'solid');
+            info.el.setAttribute('data-delay-show', '200');
+            info.el.setAttribute('data-multiline', 'true');
+            ReactTooltip.rebuild();
+          }}
           {...rest}
         />
         {isLoading && (
