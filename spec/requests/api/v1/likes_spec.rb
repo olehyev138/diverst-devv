@@ -9,6 +9,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:news_feed_link) { create(:news_feed_link) }
+  let(:like) { create(:like, news_feed_link: news_feed_link, user: user, enterprise: enterprise) }
 
   describe '#index' do
     it 'gets all items' do
@@ -62,8 +64,6 @@ RSpec.describe "#{model.pluralize}", type: :request do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
       expect(response).to have_http_status(:forbidden)
     end
-
-    # include_examples 'InvalidInputException when updating', model
   end
 
   describe '#destroy' do
@@ -76,6 +76,19 @@ RSpec.describe "#{model.pluralize}", type: :request do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:forbidden)
+    end
+  end
+
+  describe '#un_like' do
+    it 'un-likes a like' do
+      post "/api/v1/#{route}/unlike", params: { "#{route.singularize}": like.attributes }, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      post "/api/v1/#{route}/unlike", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end
