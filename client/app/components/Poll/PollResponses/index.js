@@ -158,6 +158,12 @@ PollResponses.propTypes = {
     pollEdit: PropTypes.func
   })
 };
+
+PollResponses.defaultProps = {
+  field: {},
+  fieldOptions: [],
+};
+
 export default compose(
   injectIntl,
   memo,
