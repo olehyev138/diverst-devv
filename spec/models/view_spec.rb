@@ -10,7 +10,12 @@ RSpec.describe View, type: :model do
   end
 
   describe 'associations' do
-    it { expect(view).to belong_to(:news_feed_link) }
+    it { expect(view).to belong_to(:news_feed_link).counter_cache(true) }
+    it { expect(view).to belong_to(:group).counter_cache(true) }
+    it { expect(view).to belong_to(:user) }
+    it { expect(view).to belong_to(:enterprise) }
+    it { expect(view).to belong_to(:resource).counter_cache(true) }
+    it { expect(view).to belong_to(:folder).counter_cache(true) }
   end
 
   describe 'elasticsearch methods' do

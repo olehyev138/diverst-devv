@@ -11,6 +11,7 @@ RSpec.describe GroupCategoryType, type: :model do
   it { expect(group_category_type).to validate_presence_of(:name) }
   it { expect(group_category_type).to validate_uniqueness_of(:name) }
 
+  it { expect(group_category_type).to accept_nested_attributes_for(:group_categories).allow_destroy(true) }
 
   describe '#category_names=(names)' do
     let!(:group_category_type) { create(:group_category_type) }

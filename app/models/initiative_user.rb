@@ -6,5 +6,5 @@ class InitiativeUser < ApplicationRecord
 
   validates_presence_of :initiative
   validates_presence_of :user
-  validates_uniqueness_of :user, scope: [:initiative], message: 'has already joined this event'
+  validates_uniqueness_of :user_id, scope: [:initiative_id], message: 'has already joined this event'
 end

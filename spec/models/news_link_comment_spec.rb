@@ -4,7 +4,7 @@ RSpec.describe NewsLinkComment, type: :model do
   describe 'test associations and validations' do
     let(:news_link_comment) { build(:news_link_comment) }
 
-    it { expect(news_link_comment).to belong_to(:author).class_name('User') }
+    it { expect(news_link_comment).to belong_to(:author).class_name('User').counter_cache(:news_link_comments_count) }
     it { expect(news_link_comment).to belong_to(:news_link) }
     it { expect(news_link_comment).to have_many(:user_reward_actions) }
 

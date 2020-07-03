@@ -5,20 +5,26 @@ RSpec.describe Answer, type: :model do
     let(:answer) { build(:answer) }
 
     describe 'test associations and validations' do
-      it { expect(answer).to belong_to(:question).inverse_of(:answers) }
+      it { expect(answer).to belong_to(:question).inverse_of(:answers).counter_cache(true) }
       it { expect(answer).to belong_to(:author).class_name('User').inverse_of(:answers) }
       it { expect(answer).to belong_to(:contributing_group).class_name('Group') }
-      it { expect(answer).to have_many(:votes).class_name('AnswerUpvote') }
+      it { expect(answer).to have_many(:votes).class_name('AnswerUpvote').dependent(:destroy) }
       it { expect(answer).to have_many(:voters).through(:votes).class_name('User').source(:user) }
-      it { expect(answer).to have_many(:comments).class_name('AnswerComment') }
-      it { expect(answer).to have_many(:expenses).class_name('AnswerExpense') }
+      it { expect(answer).to have_many(:comments).class_name('AnswerComment').dependent(:destroy) }
+      it { expect(answer).to have_many(:expenses).class_name('AnswerExpense').dependent(:destroy) }
+      it { expect(answer).to have_many(:user_reward_actions) }
+      it { expect(answer).to have_many(:likes).dependent(:destroy) }
       it { expect(answer).to accept_nested_attributes_for(:expenses).allow_destroy(true) }
 
-      # it { expect(answer).to have_attached_file(:supporting_document) }
       it { expect(answer).to validate_presence_of(:question) }
       it { expect(answer).to validate_presence_of(:author) }
       it { expect(answer).to validate_presence_of(:content) }
       it { expect(answer).to validate_presence_of(:contributing_group) }
+      it { expect(answer).to validate_length_of(:outcome).is_at_most(65535) }
+      it { expect(answer).to validate_length_of(:content).is_at_most(65535) }
+
+      # ActiveStorage
+      it { expect(answer).to have_attached_file(:supporting_document) }
     end
   end
 
