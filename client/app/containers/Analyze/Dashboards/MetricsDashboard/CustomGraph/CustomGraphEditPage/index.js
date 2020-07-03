@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -26,7 +25,6 @@ import { selectFormCustomGraph, selectIsCommitting, selectIsFormLoading } from '
 import { selectPaginatedSelectFields } from 'containers/Shared/Field/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 
@@ -34,7 +32,6 @@ import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/Cust
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
-import { CustomGraphCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomGraphEditPage(props) {
@@ -43,16 +40,14 @@ export function CustomGraphEditPage(props) {
   useInjectSaga({ key: 'customMetrics', saga });
   useInjectSaga({ key: 'fields', saga: fieldSaga });
 
-  const rs = new RouteService(useContext);
-  const metricsDashboardId = rs.params('metrics_dashboard_id');
+  const { metrics_dashboard_id: metricsDashboardId, graph_id: graphId } = useParams();
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
   const { intl } = props;
 
   useEffect(() => {
-    const customGraphId = rs.params('graph_id');
-    props.getCustomGraphBegin({ id: customGraphId });
+    props.getCustomGraphBegin({ id: graphId });
 
     return () => props.customGraphUnmount();
   }, []);
@@ -66,7 +61,7 @@ export function CustomGraphEditPage(props) {
       buttonText={intl.formatMessage(messages.update)}
       customGraph={props.currentCustomGraph}
       currentEnterprise={props.currentEnterprise}
-      metricsDashboardId={metricsDashboardId[0]}
+      metricsDashboardId={metricsDashboardId}
       links={links}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
@@ -114,6 +109,6 @@ export default compose(
 )(Conditional(
   CustomGraphEditPage,
   ['currentCustomGraph.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
+  (props, params) => ROUTES.admin.analyze.custom.show.path(params.metrics_dashboard_id),
   permissionMessages.analyze.dashboards.metricsDashboard.customGraph.editPage
 ));

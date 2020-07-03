@@ -10,6 +10,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:field) { create(:field, type: 'NumericField') }
 
   describe '#index' do
     it 'gets all items' do
@@ -78,6 +79,33 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'captures the error' do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  xdescribe '#fields' do
+    it 'gets fields' do
+      get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow_any_instance_of(model.constantize).to receive(:fields).and_raise(BadRequestException)
+      get "/api/v1/#{route}/#{item.id}/fields", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  # TODO : Complete polls and capture error
+  xdescribe '#create field' do
+    it 'creates fields' do
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field': field.attributes }, headers: headers
+      expect(response).to have_http_status(:created)
+    end
+
+    xit 'captures the error' do
+      allow_any_instance_of(model.constantize).to receive(:fields).and_raise(BadRequestException)
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end

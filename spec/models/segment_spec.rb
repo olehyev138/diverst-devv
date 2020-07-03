@@ -21,14 +21,10 @@ RSpec.describe Segment, type: :model do
     it { expect(segment).to have_many(:polls).through(:polls_segments) }
     it { expect(segment).to have_many(:group_messages_segments).dependent(:destroy) }
     it { expect(segment).to have_many(:group_messages).through(:group_messages_segments) }
-    it { expect(segment).to have_many(:invitation_segments_groups) }
+    it { expect(segment).to have_many(:invitation_segments_groups).dependent(:destroy) }
     it { expect(segment).to have_many(:groups).through(:invitation_segments_groups).inverse_of(:invitation_segments) }
     it { expect(segment).to have_many(:initiative_segments).dependent(:destroy) }
     it { expect(segment).to have_many(:initiatives).through(:initiative_segments) }
-
-    it { expect(segment).to validate_presence_of(:name) }
-    it { expect(segment).to validate_presence_of(:enterprise) }
-    it { expect(segment).to validate_presence_of(:active_users_filter) }
 
     # Nested rule attributes
     it { expect(segment).to accept_nested_attributes_for(:field_rules).allow_destroy(true) }
@@ -46,6 +42,9 @@ RSpec.describe Segment, type: :model do
     it { expect(segment).to validate_presence_of(:name) }
     it { expect(segment).to validate_presence_of(:active_users_filter) }
     it { expect(segment).to validate_presence_of(:enterprise) }
+
+    it { expect(segment).to validate_inclusion_of(:job_status).in_array([0, 1]) }
+    it { expect(segment).to validate_inclusion_of(:active_users_filter).in_array([:both_active_and_inactive, :only_active, :only_inactive]) }
 
     context 'raise error' do
       it 'when segment with the same name is created' do

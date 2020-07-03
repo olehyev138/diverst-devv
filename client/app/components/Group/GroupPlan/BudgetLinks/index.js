@@ -19,7 +19,7 @@ const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function BudgetLinks(props) {
-  const { currentTab } = props;
+  const { currentTab, currentGroup } = props;
 
   const PermissionTabs = WithPermission(Tab);
 
@@ -33,16 +33,16 @@ export function BudgetLinks(props) {
         >
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.budget.overview.path(currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.overview} />}
-            show={permission(props.currentGroup, 'annual_budgets_view?')}
+            show={permission(currentGroup, 'annual_budgets_view?')}
             value='overview'
           />
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.editAnnualBudget.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.budget.editAnnualBudget.path(currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.editAnnualBudget} />}
-            show={permission(props.currentGroup, 'annual_budgets_manage?')}
+            show={permission(currentGroup, 'annual_budgets_manage?')}
             value='annual_budget'
           />
         </ResponsiveTabs>
@@ -55,6 +55,7 @@ BudgetLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
+  groupId: PropTypes.number,
 };
 
 export const StyledGroupManageLinks = withStyles(styles)(BudgetLinks);

@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -14,7 +15,6 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors';
 
 import RequestForm from 'components/Group/GroupPlan/BudgetRequestForm';
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
@@ -34,9 +34,7 @@ export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer: annualReducer });
   useInjectSaga({ key: 'annualBudgets', saga: annualSaga });
 
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
-  const annualBudgetId = rs.params('annual_budget_id');
+  const { group_id: groupId, annual_budget_id: annualBudgetId } = useParams();
 
   const links = {
     index: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
@@ -92,6 +90,6 @@ export default compose(
 )(Conditional(
   BudgetCreatePage,
   ['currentGroup.permissions.budgets_create?'],
-  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.budget.index.path(params.group_id),
   permissionMessages.group.groupPlan.budget.createPage
 ));

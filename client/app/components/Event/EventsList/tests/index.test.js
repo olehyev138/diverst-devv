@@ -11,7 +11,7 @@ import { EventsList } from '../index';
 import { intl } from 'tests/mocks/react-intl';
 
 jest.mock('utils/customTextHelpers');
-const customTexts = require.requireMock('utils/customTextHelpers');
+const customTexts = jest.requireMock('utils/customTextHelpers');
 loadTranslation('./app/translations/en.json');
 const props = {
   events: [],

@@ -14,7 +14,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/User/UserPolicy/saga';
 import reducer from 'containers/User/UserPolicy/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {

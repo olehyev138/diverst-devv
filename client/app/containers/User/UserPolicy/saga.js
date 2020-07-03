@@ -53,7 +53,7 @@ export function* createPolicy(action) {
     const payload = { policy_group_template: action.payload };
     const response = yield call(api.policyTemplates.create.bind(api.policyTemplates), payload);
 
-    yield put(createPolicySuccess({}));
+    yield put(createPolicySuccess());
     yield put(showSnackbar({ message: 'Successfully created policy', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPolicyError(err));
@@ -68,7 +68,7 @@ export function* updatePolicy(action) {
     const payload = { policy_group_template: action.payload };
     const response = yield call(api.policyTemplates.update.bind(api.policyTemplates), payload.policy_group_template.id, payload);
 
-    yield put(updatePolicySuccess({}));
+    yield put(updatePolicySuccess());
     yield put(showSnackbar({ message: 'Successfully updated policy', options: { variant: 'success' } }));
     yield put(push(ROUTES.admin.system.users.policy_templates.index.path()));
   } catch (err) {
@@ -83,7 +83,7 @@ export function* deletePolicy(action) {
   try {
     yield call(api.policyTemplates.destroy.bind(api.policyTemplates), action.payload.id);
 
-    yield put(deletePolicySuccess({}));
+    yield put(deletePolicySuccess());
     yield put(showSnackbar({ message: 'Successfully deleted policy', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePolicyError(err));

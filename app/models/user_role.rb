@@ -19,10 +19,10 @@ class UserRole < ApplicationRecord
   validates :priority,                presence: true
   validates :policy_group_template,   presence: true, on: :update
 
-  validates_uniqueness_of :role_name,             scope: [:enterprise]
-  validates_uniqueness_of :priority,              scope: [:enterprise]
+  validates_uniqueness_of :role_name,             scope: [:enterprise_id]
+  validates_uniqueness_of :priority,              scope: [:enterprise_id]
   # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
-  validates_uniqueness_of :default,               scope: [:enterprise], conditions: -> { where(default: true) }
+  validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
   before_destroy  :can_destroy?, prepend: true
 

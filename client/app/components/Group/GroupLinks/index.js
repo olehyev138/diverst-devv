@@ -1,10 +1,10 @@
-import React, { useContext, memo } from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
-import { matchPath } from 'react-router';
+import { matchPath, useParams } from 'react-router-dom';
 
 import { useLastLocation } from 'react-router-last-location';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -20,7 +20,6 @@ import NewsIcon from '@material-ui/icons/QuestionAnswerOutlined';
 import ManageIcon from '@material-ui/icons/SettingsOutlined';
 import PlanIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Permission from 'components/Shared/DiverstPermission';
@@ -115,8 +114,8 @@ const styles = theme => ({
 
 export function GroupLinks(props) {
   const { classes, currentGroup } = props;
-  const rs = new RouteService(useContext);
 
+  const params = useParams();
   const lastLocation = useLastLocation();
   let lastPageWasGroupLayout = true;
 
@@ -155,7 +154,7 @@ export function GroupLinks(props) {
           <Button
             component={WrappedNavLink}
             exact
-            to={ROUTES.group.home.path(rs.params('group_id'))}
+            to={ROUTES.group.home.path(params.group_id)}
             className={classes.navLink}
             activeClassName={classes.navLinkActive}
           >
@@ -168,7 +167,7 @@ export function GroupLinks(props) {
           <Permission show={permission(props.currentGroup, 'members_view?')}>
             <Button
               component={WrappedNavLink}
-              to={ROUTES.group.members.index.path(rs.params('group_id'))}
+              to={ROUTES.group.members.index.path(params.group_id)}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
             >
@@ -182,7 +181,7 @@ export function GroupLinks(props) {
           <Permission show={permission(props.currentGroup, 'events_view?')}>
             <Button
               component={WrappedNavLink}
-              to={ROUTES.group.events.index.path(rs.params('group_id'))}
+              to={ROUTES.group.events.index.path(params.group_id)}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
             >
@@ -196,8 +195,7 @@ export function GroupLinks(props) {
           <Permission show={permission(props.currentGroup, 'resources_view?')}>
             <Button
               component={WrappedNavLink}
-              exact
-              to={ROUTES.group.resources.index.path(rs.params('group_id'))}
+              to={ROUTES.group.resources.index.path(params.group_id)}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
             >
@@ -211,7 +209,7 @@ export function GroupLinks(props) {
           <Permission show={permission(props.currentGroup, 'news_view?')}>
             <Button
               component={WrappedNavLink}
-              to={ROUTES.group.news.index.path(rs.params('group_id'))}
+              to={ROUTES.group.news.index.path(params.group_id)}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
             >
@@ -234,9 +232,9 @@ export function GroupLinks(props) {
               component={WrappedNavLink}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
-              to={ROUTES.group.plan.index.path(rs.params('group_id'))}
+              to={ROUTES.group.plan.index.path(params.group_id)}
               isActive={(match, location) => !!matchPath(location.pathname, {
-                path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
+                path: ROUTES.group.plan.index.data.pathPrefix(params.group_id),
                 exact: false,
                 strict: false,
               })}
@@ -253,9 +251,9 @@ export function GroupLinks(props) {
               component={WrappedNavLink}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
-              to={ROUTES.group.manage.index.path(rs.params('group_id'))}
+              to={ROUTES.group.manage.index.path(params.group_id)}
               isActive={(match, location) => !!matchPath(location.pathname, {
-                path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
+                path: ROUTES.group.manage.index.data.pathPrefix(params.group_id),
                 exact: false,
                 strict: false,
               })}

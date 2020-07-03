@@ -1,6 +1,7 @@
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -10,7 +11,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
-import RouteService from 'utils/routeHelpers';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/messages';
 import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
@@ -19,9 +19,7 @@ import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 export function EventManageLinks(props) {
   const { currentTab, event } = props;
 
-  const rs = new RouteService(useContext);
-
-  const groupId = rs.params('group_id');
+  const { group_id: groupId } = useParams();
 
   return (
     <React.Fragment>

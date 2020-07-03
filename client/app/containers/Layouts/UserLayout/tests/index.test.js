@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
+import 'utils/mockReactRouterHooks';
 
 import { StyledUserLayout } from '../index';
 const UserLayoutNaked = unwrap(StyledUserLayout);

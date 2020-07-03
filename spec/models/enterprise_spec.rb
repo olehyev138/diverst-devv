@@ -45,7 +45,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:mentoring_sessions).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy).through(:groups) }
 
     it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
 
@@ -53,7 +53,7 @@ RSpec.describe Enterprise, type: :model do
       it { expect(enterprise).to accept_nested_attributes_for(attribute).allow_destroy(true) }
     end
 
-    [:cdo_picture, :banner, :xml_sso_config, :onboarding_sponsor_media].each do |attribute|
+    [:cdo_picture, :banner, :xml_sso_config, :sponsor_media, :onboarding_sponsor_media].each do |attribute|
       # ActiveStorage
       it { expect(enterprise).to have_attached_file(attribute) }
     end
@@ -78,6 +78,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
 
+    it { expect(enterprise).to allow_value('').for(:idp_sso_target_url) }
     it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
     it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
   end

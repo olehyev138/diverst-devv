@@ -78,4 +78,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#delete_mentorship' do
+    it 'deletes a mentorship' do
+      post "/api/v1/#{route}/delete_mentorship", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find_by).and_raise(BadRequestException)
+      post "/api/v1/#{route}/delete_mentorship", params: { "#{route.singularize}": item.attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

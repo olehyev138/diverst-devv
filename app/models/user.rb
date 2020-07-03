@@ -94,7 +94,6 @@ class User < ApplicationRecord
   has_many :urls_visited, dependent: :destroy, class_name: 'PageVisitationData'
   has_many :pages_visited, dependent: :destroy, class_name: 'PageVisitation'
   has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
-  has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
 
@@ -138,8 +137,8 @@ class User < ApplicationRecord
   validates_confirmation_of :password
 
   validates_presence_of   :email
-  validates_uniqueness_of :email, allow_blank: false, if: :email_changed?
-  validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false, if: :email_changed?
+  validates_uniqueness_of :email, allow_blank: false
+  validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
   validates_length_of     :password, within: 8..128, allow_blank: true
 
@@ -171,7 +170,6 @@ class User < ApplicationRecord
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :of_role, -> (role_id) { where(user_role_id: role_id) }
-  scope :not_owners, -> { where(owner: false) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
@@ -530,7 +528,6 @@ class User < ApplicationRecord
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
-        user.field_data.preload(:field).load
         fields.each do |field|
           user_columns << field.csv_value(user[field])
         end

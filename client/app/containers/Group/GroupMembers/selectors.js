@@ -40,5 +40,5 @@ const selectIsCommitting = () => createSelector(
 
 export {
   selectMembersDomain, selectPaginatedMembers, selectPaginatedSelectMembers,
-  selectMemberTotal, selectIsFetchingMembers, selectIsCommitting
+  selectMemberTotal, selectIsFetchingMembers, selectIsCommitting,
 };

@@ -55,7 +55,7 @@ export function* createPoll(action) {
 
     const response = yield call(api.polls.create.bind(api.polls), payload);
 
-    yield put(createPollSuccess({}));
+    yield put(createPollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
     yield put(showSnackbar({ message: 'Successfully created poll', options: { variant: 'success' } }));
   } catch (err) {
@@ -72,7 +72,7 @@ export function* updatePoll(action) {
 
     const response = yield call(api.polls.update.bind(api.polls), action.payload.id, payload);
 
-    yield put(updatePollSuccess({}));
+    yield put(updatePollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
     yield put(showSnackbar({ message: 'Successfully updated poll', options: { variant: 'success' } }));
   } catch (err) {
@@ -86,7 +86,7 @@ export function* updatePoll(action) {
 export function* deletePoll(action) {
   try {
     yield call(api.polls.destroy.bind(api.polls), action.payload.id);
-    yield put(deletePollSuccess({}));
+    yield put(deletePollSuccess());
     yield put(showSnackbar({ message: 'Successfully deleted poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePollError(err));

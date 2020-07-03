@@ -1,12 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 
-import AdminLayout from '../AdminLayout';
 import InnovateLinks from 'components/Innovate/InnovateLinks';
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({});
 
@@ -15,8 +16,10 @@ const InnovatePages = Object.freeze({
   financials: 1
 });
 
-const InnovateLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, location, ...other } = rest;
+const InnovateLayout = (props) => {
+  const { classes, children, ...rest } = props;
+
+  const location = useLocation();
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPagePath = location.pathname.split('/').pop();
@@ -28,27 +31,19 @@ const InnovateLayout = ({ component: Component, ...rest }) => {
   }, [currentPagePath]);
 
   return (
-    <AdminLayout
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          <InnovateLinks
-            currentTab={tab}
-            {...matchProps}
-          />
-          <Box mb={3} />
-          <Component {...other} />
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <InnovateLinks
+        currentTab={tab}
+      />
+      <Box mb={3} />
+      {renderChildrenWithProps(children, { ...rest })}
+    </React.Fragment>
   );
 };
 
 InnovateLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
-  pageTitle: PropTypes.object,
-  location: PropTypes.object,
+  children: PropTypes.any,
 };
 
 export default compose(

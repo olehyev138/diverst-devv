@@ -12,12 +12,11 @@
  *    - on save - create/update expense
  */
 
-import React, { memo, useContext, useEffect, useState } from 'react';
-import RouteService from 'utils/routeHelpers';
+import React, { memo, useEffect, useState } from 'react';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
+import { useParams } from 'react-router-dom';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -55,15 +54,14 @@ export function ExpenseCreatePage({ intl, ...props }) {
     }
   );
 
-  const rs = new RouteService(useContext);
+  const { expenses_id: expensesId } = useParams;
   const links = {
     index: ROUTES.group.plan.events.manage.expenses.index.path(props.currentGroup.id, props.currentEvent.id),
   };
 
   useEffect(() => {
-    const expenseId = rs.params('expenses_id');
-    if (expenseId)
-      props.getExpenseBegin({ id: expenseId });
+    if (expensesId)
+      props.getExpenseBegin({ id: expensesId });
     return () => props.expensesUnmount();
   }, []);
 

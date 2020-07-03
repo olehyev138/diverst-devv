@@ -23,7 +23,6 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { OutcomesPage } from 'containers/Group/Outcome/OutcomesPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const styles = theme => ({
@@ -195,6 +194,6 @@ export default compose(
 )(Conditional(
   EventsList,
   ['currentGroup.permissions.events_manage?'],
-  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.index.path(params.group_id),
   permissionMessages.group.groupPlan.eventList
 ));
