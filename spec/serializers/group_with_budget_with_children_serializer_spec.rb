@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupWithBudgetWithChildrenSerializer, type: :serializer do
-  it 'returns Group With Budget' do
+  it 'returns group with budget with children' do
     enterprise = create(:enterprise)
     group = create(:group, enterprise: enterprise)
     children = create(:group, parent_id: group.id)
