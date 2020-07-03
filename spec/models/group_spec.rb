@@ -446,7 +446,7 @@ RSpec.describe Group, type: :model do
     let!(:user_with_no_groups) { create(:user) }
     let!(:user_with_groups) { create(:user) }
     let!(:group_with_member) { create(:group) }
-    let!(:user_group) { create(:user_group, user:user_with_groups, group:group_with_member) }
+    let!(:user_group) { create(:user_group, user: user_with_groups, group: group_with_member) }
 
     context 'Group::by_enterprise' do
       it 'returns groups belonging to the enterprise' do
