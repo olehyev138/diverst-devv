@@ -11,5 +11,6 @@ RSpec.describe GroupUpdate, type: :model do
 
     it { expect(group_update).to validate_presence_of(:created_at) }
     it { expect(group_update).to validate_length_of(:comments).is_at_most(65535) }
+    it { expect(group_update).to validate_length_of(:data).is_at_most(65535) }
   end
 end

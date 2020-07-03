@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe ClockworkDatabaseEvent, type: :model do
   let(:clockwork_database_event) { build_stubbed(:clockwork_database_event) }
 
-  describe 'validations' do
+  describe 'association & validations' do
+    it { expect(clockwork_database_event).to belong_to(:frequency_period) }
+    it { expect(clockwork_database_event).to belong_to(:enterprise) }
+
     it { expect(clockwork_database_event).to validate_presence_of(:name) }
     it { expect(clockwork_database_event).to validate_presence_of(:frequency_quantity) }
     it { expect(clockwork_database_event).to validate_presence_of(:frequency_period) }

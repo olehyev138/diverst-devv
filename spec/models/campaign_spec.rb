@@ -7,7 +7,7 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to define_enum_for(:status).with([:published, :draft]) }
     it { expect(campaign).to belong_to(:enterprise) }
     it { expect(campaign).to belong_to(:owner).class_name('User') }
-    it { expect(campaign).to have_many(:questions) }
+    it { expect(campaign).to have_many(:questions).dependent(:destroy) }
     it { expect(campaign).to have_many(:campaigns_groups).dependent(:destroy) }
     it { expect(campaign).to have_many(:groups).through(:campaigns_groups) }
     it { expect(campaign).to have_many(:campaigns_segments).dependent(:destroy) }
@@ -24,9 +24,13 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to accept_nested_attributes_for(:sponsors).allow_destroy(true) }
 
     it { expect(campaign).to validate_presence_of(:title) }
+    it { expect(campaign).to validate_length_of(:title).is_at_most(191) }
     it { expect(campaign).to validate_presence_of(:description) }
-    it { expect(campaign).to validate_presence_of(:start).with_message('must be after today') }
+    it { expect(campaign).to validate_length_of(:description).is_at_most(65535) }
+    it { expect(campaign).to validate_presence_of(:start) }
+    it { expect(campaign.start).to be >= Date.today }
     it { expect(campaign).to validate_presence_of(:end).with_message('must be after start') }
+    it { expect(campaign.end).to be >= campaign.start }
     it { expect(campaign).to validate_presence_of(:groups).with_message('Please select at least 1 group') }
 
     # ActiveStorage
@@ -37,6 +41,16 @@ RSpec.describe Campaign, type: :model do
 
     it 'is valid' do
       expect(campaign).to be_valid
+    end
+  end
+
+  describe 'test scopes' do
+    context 'campaign::ongoing' do
+      let!(:ongoing_campaign) { create(:campaign, start: Time.now, end: Date.tomorrow) }
+
+      it 'returns campaign ongoing' do
+        expect(Campaign.ongoing).to eq([ongoing_campaign])
+      end
     end
   end
 

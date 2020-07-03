@@ -135,7 +135,7 @@ class Initiative < ApplicationRecord
 
   scope :order_recent, -> { order(start: :desc) }
 
-  scope :finalized, -> { where(finished_expenses: false) }
+  scope :finalized, -> { where(finished_expenses: true) }
   scope :active, -> { where(finished_expenses: false) }
 
   scope :not_archived, -> { where(archived_at: nil) }
