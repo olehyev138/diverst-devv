@@ -4,7 +4,7 @@ RSpec.describe GroupWithBudgetWithChildrenSerializer, type: :serializer do
   it 'returns Group With Budget' do
     enterprise = create(:enterprise)
     group = create(:group, enterprise: enterprise)
-    children =  create(:group, parent_id: group.id)
+    children = create(:group, parent_id: group.id)
     annual_budget = create(:annual_budget, enterprise: enterprise, group: group)
 
     serializer = GroupWithBudgetWithChildrenSerializer.new(group, scope: serializer_scopes(create(:user)), scope_name: :scope)
