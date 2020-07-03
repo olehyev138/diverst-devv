@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ActivitySerializer, type: :serializer do
-  it 'returns all fields and associations' do
+  it 'returns activity' do
     activity = create(:activity)
     serializer = ActivitySerializer.new(activity, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
