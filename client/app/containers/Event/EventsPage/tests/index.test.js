@@ -14,7 +14,9 @@ import { EventsPage } from '../index';
 const props = {
   getEventsBegin: jest.fn(),
   eventsUnmount: jest.fn(),
+  currentGroup: { id: 1 }
 };
+
 describe('<EventsPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
