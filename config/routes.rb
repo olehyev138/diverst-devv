@@ -80,6 +80,7 @@ Diverst::Application.routes.draw do
       resources :groups do
         collection do
           get '/annual_budgets', to: 'groups#current_annual_budgets'
+          get '/calendar_colors', to: 'groups#calendar_colors'
         end
         member do
           get  '/fields', to: 'groups#fields'

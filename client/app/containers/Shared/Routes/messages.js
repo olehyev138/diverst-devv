@@ -277,6 +277,9 @@ const messages = defineMessages({
       },
       archived: {
         id: `${scope}.admin.manage.archived`
+      },
+      calendar: {
+        id: `${scope}.admin.manage.calendar`
       }
     },
     system: {
