@@ -192,7 +192,7 @@ const withConnect = connect(
 HomePage.propTypes = {
   classes: PropTypes.object,
   enterprise: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };
 
 export default compose(

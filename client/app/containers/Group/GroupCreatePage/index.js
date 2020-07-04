@@ -39,7 +39,7 @@ export function GroupCreatePage(props) {
 }
 
 GroupCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,

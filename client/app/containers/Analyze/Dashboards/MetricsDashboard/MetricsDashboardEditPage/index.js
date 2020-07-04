@@ -77,7 +77,7 @@ export function MetricsDashboardEditPage(props) {
 }
 
 MetricsDashboardEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getMetricsDashboardBegin: PropTypes.func,
   updateMetricsDashboardBegin: PropTypes.func,
   metricsDashboardsUnmount: PropTypes.func,
