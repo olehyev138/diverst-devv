@@ -46,7 +46,7 @@ export function SSOSettingsPage(props) {
 }
 
 SSOSettingsPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,

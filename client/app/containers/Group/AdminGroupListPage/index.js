@@ -78,7 +78,7 @@ AdminGroupListPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

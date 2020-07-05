@@ -74,7 +74,7 @@ export function CustomGraphCreatePage(props) {
 }
 
 CustomGraphCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createCustomGraphBegin: PropTypes.func,
   getFieldsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,
