@@ -55,7 +55,7 @@ export function CampaignQuestionCreatePage(props) {
 }
 
 CampaignQuestionCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   getCampaignBegin: PropTypes.func,

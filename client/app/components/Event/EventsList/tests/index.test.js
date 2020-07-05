@@ -9,9 +9,8 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { EventsList } from '../index';
 import { intl } from 'tests/mocks/react-intl';
+import 'utils/mockReactRouterHooks';
 
-jest.mock('utils/customTextHelpers');
-const customTexts = jest.requireMock('utils/customTextHelpers');
 loadTranslation('./app/translations/en.json');
 const props = {
   events: [],

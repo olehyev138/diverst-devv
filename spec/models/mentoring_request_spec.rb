@@ -19,6 +19,11 @@ RSpec.describe MentoringRequest, type: :model do
     it { expect(mentoring_request).to validate_presence_of(:receiver) }
     it { expect(mentoring_request).to validate_length_of(:status) }
 
+    context 'uniqueness' do
+      let(:uniqueness_mentoring_request) { create(:mentoring_request, receiver: create(:user, accepting_mentor_requests: true)) }
+      it { expect(uniqueness_mentoring_request).to validate_uniqueness_of(:sender_id).scoped_to(:receiver_id).with_message("There's already a pending request") }
+    end
+
     context 'custom validations' do
       let(:sender) { create(:user) }
       let(:receiver) { create(:user, accepting_mentor_requests: false) }

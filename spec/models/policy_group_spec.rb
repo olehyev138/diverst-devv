@@ -6,12 +6,7 @@ RSpec.describe PolicyGroup, type: :model do
     let(:policy_group) { user.policy_group }
 
     it { expect(policy_group).to belong_to(:user).inverse_of(:policy_group) }
-
-    xit {
-      # TODO: fix issue with unique user
-      pending 'mysql error - breaks fk constraint'
-      expect(policy_group).to validate_uniqueness_of(:user_id)
-    }
+    it { expect(policy_group).to validate_uniqueness_of(:user_id) }
   end
 
   describe '.update_all_permissions' do

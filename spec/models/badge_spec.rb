@@ -4,9 +4,7 @@ RSpec.describe Badge, type: :model do
   describe 'when validating' do
     let(:badge) { build(:badge) }
 
-    it { expect(badge).to validate_length_of(:image_content_type) }
-    it { expect(badge).to validate_length_of(:image_file_name) }
-    it { expect(badge).to validate_length_of(:label) }
+    it { expect(badge).to validate_length_of(:label).is_at_most(191) }
     it { expect(badge).to validate_presence_of(:label) }
     it { expect(badge).to validate_numericality_of(:points).is_greater_than_or_equal_to(0).only_integer }
     it { expect(badge).to validate_presence_of(:points) }
