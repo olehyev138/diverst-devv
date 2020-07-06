@@ -131,8 +131,11 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
           <CardContent>
             <GroupSelector
               groupField='child_ids'
+
               dialogSelector
               dialogNoChildren
+              hardReload
+
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               disabled={props.isCommitting}
@@ -144,8 +147,11 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
           <CardContent>
             <GroupSelector
               groupField='parent_id'
+
               dialogSelector
               dialogNoChildren
+              hardReload
+
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
               queryScopes={['all_parents']}
