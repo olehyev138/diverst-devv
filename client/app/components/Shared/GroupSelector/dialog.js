@@ -33,7 +33,7 @@ const GroupListSelector = (props) => {
   const { groups, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
-  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, ['all_parents']) });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
   const [selectedGroups, setSelectedGroup] = useState({});
@@ -147,7 +147,7 @@ GroupListSelector.propTypes = {
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-
+  queryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
