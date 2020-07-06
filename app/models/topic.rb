@@ -1,8 +1,6 @@
 class Topic < ApplicationRecord
   belongs_to :enterprise
-  belongs_to :admin # <== i thought there was no entity called admin??
-  # instead of admin, it probably should belong_to :user since there is user_id in topic model
-  # belongs_to :user
+  belongs_to :user
   has_many :feedbacks, class_name: 'TopicFeedback', dependent: :destroy
 
   # Returns a list of topics for which nor e1 nor e2 have given feedback for already.
