@@ -70,6 +70,9 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 /* Admin - Manage - Archive */
 import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 
+/* Admin - Manage - Calendar */
+import AdminCalendarPage from 'containers/Calendar/AdminCalendarPage';
+
 /* Admin - Include - Polls */
 import PollsList from 'containers/Poll/PollListPage/Loadable';
 import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
@@ -353,5 +356,6 @@ export {
   NewsLinkPage,
   UserDownloadsPage,
   ArchivesPage,
+  AdminCalendarPage,
   LogListPage
 };

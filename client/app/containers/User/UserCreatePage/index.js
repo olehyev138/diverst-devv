@@ -59,7 +59,7 @@ export function UserCreatePage(props) {
 }
 
 UserCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,

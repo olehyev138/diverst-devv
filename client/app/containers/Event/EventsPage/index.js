@@ -48,6 +48,7 @@ export function EventsPage(props) {
   };
 
   const [tab, setTab] = useState(EventTypes.upcoming);
+  const [dateRange, setDateRange] = useState([]);
   const [params, setParams] = useState(defaultParams);
   const [calendar, setCalendar] = useState(null);
 
@@ -58,12 +59,21 @@ export function EventsPage(props) {
       setParams(defaultParams);
 
     if (id) {
-      const newParams = {
-        ...params,
-        group_id: id,
-        query_scopes: scopes || params.query_scopes
-      };
-      props.getEventsBegin(calendar ? { ...newParams, query_scopes: ['not_archived'], count: -1 } : newParams);
+      let newParams;
+      if (calendar)
+        newParams = {
+          ...params,
+          group_id: id,
+          query_scopes: ['not_archived', ['date_range', ...dateRange]],
+          count: -1
+        };
+      else
+        newParams = {
+          ...params,
+          group_id: id,
+          query_scopes: scopes || params.query_scopes
+        };
+      props.getEventsBegin(newParams);
       setParams(newParams);
     }
   };
@@ -79,7 +89,7 @@ export function EventsPage(props) {
   useEffect(() => {
     if (calendar != null)
       getEvents();
-  }, [calendar]);
+  }, [dateRange]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
@@ -98,8 +108,14 @@ export function EventsPage(props) {
     }
   };
 
+  const handleCalendarPage = (start, end) => {
+    setDateRange([start, end]);
+  };
+
   const handleChangeCalendar = () => {
     setCalendar(!calendar);
+    if (calendar) // was calendar noe list
+      setDateRange([]);
   };
 
   const handlePagination = (payload) => {
@@ -130,6 +146,8 @@ export function EventsPage(props) {
         links={links}
         readonly={props.readonly}
         onlyUpcoming={props.onlyUpcoming}
+        calendarDateCallback={handleCalendarPage}
+        currentGroupID={props.currentGroup.id}
       />
     </React.Fragment>
   );

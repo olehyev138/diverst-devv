@@ -68,7 +68,7 @@ export function CampaignEditPage(props) {
 }
 
 CampaignEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getCampaignBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   updateCampaignBegin: PropTypes.func,

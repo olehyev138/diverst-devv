@@ -5,6 +5,9 @@ const axios = require('axios');
 const Groups = new API({ controller: 'groups' });
 
 Object.assign(Groups, {
+  colors() {
+    return axios.get(appendQueryArgs(`${this.url}/calendar_colors`));
+  },
   annualBudgets(payload) {
     return axios.get(appendQueryArgs(`${this.url}/annual_budgets`, payload));
   },
