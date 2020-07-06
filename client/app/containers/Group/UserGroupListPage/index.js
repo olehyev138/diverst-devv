@@ -25,6 +25,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
 
 export function UserGroupListPage(props) {
@@ -78,7 +79,7 @@ export function UserGroupListPage(props) {
               variant='contained'
               onClick={getAllGroups}
             >
-              {intl.formatMessage(messages.allGroups)}
+              <DiverstFormattedMessage {...messages.allGroups} />
             </Button>
           ) : (
             <Button
@@ -87,7 +88,7 @@ export function UserGroupListPage(props) {
               variant='contained'
               onClick={getJoinedGroups}
             >
-              {intl.formatMessage(messages.myGroups)}
+              <DiverstFormattedMessage {...messages.myGroups} />
             </Button>
           )}
         </Grid>
