@@ -30,7 +30,7 @@ const styles = {
 };
 
 const GroupListSelector = (props) => {
-  const { groups, ...rest } = props;
+  const { groups, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
@@ -125,13 +125,13 @@ const GroupListSelector = (props) => {
   return (
     <React.Fragment>
       {header}
-      <div className={props.classes.search}>
+      <div className={classes.search}>
         {searchBar}
       </div>
-      <div className={props.classes.list}>
+      <div className={classes.list}>
         {list}
       </div>
-      <div className={props.classes.bottom}>
+      <div className={classes.bottom}>
         {paginator}
       </div>
     </React.Fragment>

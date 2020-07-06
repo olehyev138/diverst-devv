@@ -88,7 +88,6 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
                     dialogSelector
                     label={<DiverstFormattedMessage {...messages.groups} />}
                     isMulti
-                    inputCallback={(props, searchKey = '') => searchKey}
                     {...formikProps}
                   />
                 </Grid>
