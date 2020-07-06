@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import { Button, Grid } from '@material-ui/core';
-import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -31,8 +30,6 @@ import messages from '../messages';
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-
-  const { intl } = props;
 
   const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
   const [displayMyGroups, setDisplayMyGroups] = useState(false);
@@ -116,7 +113,6 @@ UserGroupListPage.propTypes = {
   user: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
-  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -143,7 +139,6 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl,
 )(Conditional(
   UserGroupListPage,
   ['permissions.groups_view'],
