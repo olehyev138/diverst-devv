@@ -108,7 +108,11 @@ DiverstSelect.propTypes = {
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
   isLoading: PropTypes.bool,
-  onInputChange: PropTypes.func.isRequired,
+  onInputChange: PropTypes.func,
+};
+
+DiverstSelect.defaultProps = {
+  onInputChange: () => null,
 };
 
 export default compose(
