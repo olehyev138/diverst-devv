@@ -34,7 +34,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles } from '@material-ui/core/styles';
-import useClickPreventionOnDoubleClick from 'utils/doubleClickHelper';
+import useClickPreventionOnDoubleClick from 'utils/cancelablePromises/doubleClickHelper';
 
 const styles = theme => ({
   errorButton: {
