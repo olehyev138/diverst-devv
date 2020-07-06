@@ -58,7 +58,7 @@ export function GroupSponsorEditPage(props) {
 }
 
 GroupSponsorEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
   updateSponsorBegin: PropTypes.func,

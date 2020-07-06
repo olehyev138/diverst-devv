@@ -16,6 +16,8 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
+  alias_method :calendar_colors?, :index?
+
   def current_annual_budgets?
     index?
   end
@@ -320,13 +322,16 @@ class GroupPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    def index?
-      GroupPolicy.new(user, nil).index?
-    end
+    delegate :manage?, to: :policy
+    delegate :index?, to: :policy
 
     def resolve
-      if index?
-        scope.where(enterprise_id: user.enterprise_id).all
+      if manage?
+        scope.where(enterprise_id: user.enterprise_id)
+      elsif index?
+        scope.joins(:user_groups)
+            .where(enterprise_id: user.enterprise_id)
+            .where('user_groups.user_id = ? OR groups.private = FALSE', user.id).all
       else
         scope.none
       end
