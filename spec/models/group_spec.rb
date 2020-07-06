@@ -968,30 +968,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe '#set_default_group_contact' do
-    it 'updates contact email if group leader is default_group_contact' do
-      user = create(:user)
-      group = create(:group, enterprise: user.enterprise)
-      create(:user_group, user: user, group: group, accepted_member: true)
-
-      group_leader = create(:group_leader, group: group, user: user, default_group_contact: true)
-      group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-
-
-      expect(group.contact_email).to eq group_leader&.email
-    end
-
-    it 'sets contact email to nil if group leader is not set.' do
-      user = create(:user)
-      group = create(:group, enterprise: user.enterprise)
-      create(:user_group, user: user, group: group, accepted_member: true)
-
-      create(:group_leader, group: group, user: user, default_group_contact: false)
-
-      expect(group.contact_email).to eq nil
-    end
-  end
-
   describe '#total_views' do
     it 'returns 10' do
       group = create(:group)

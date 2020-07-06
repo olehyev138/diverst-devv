@@ -146,7 +146,6 @@ class Api::V1::GroupsController < DiverstController
       :upcoming_events_visibility,
       :calendar_color,
       :active,
-      :contact_email,
       :sponsor_image,
       :company_video_url,
       :layout,
