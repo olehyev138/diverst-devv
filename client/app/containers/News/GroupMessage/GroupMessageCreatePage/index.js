@@ -51,7 +51,7 @@ export function GroupMessageCreatePage(props) {
 }
 
 GroupMessageCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,

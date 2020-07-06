@@ -35,8 +35,12 @@ export const splitOptions = field => produce(field, (draft) => {
 export const mapFieldNames = (item, nameChanges = {}, base = {}) => {
   const toChange = Object.keys(nameChanges);
   return toChange.reduce((sum, n) => {
-    const parts = nameChanges[n].split('.');
-    sum[n] = dig(...[item, ...parts]);
+    if (typeof nameChanges[n] === 'string') {
+      const parts = nameChanges[n].split('.');
+      sum[n] = dig(...[item, ...parts]);
+    } else if (typeof nameChanges[n] === 'function')
+      sum[n] = nameChanges[n](item);
+
     return sum;
   }, base);
 };
@@ -47,3 +51,9 @@ export const mapSelectField = (item, label = 'name', ...additionalFields) => ite
     return sum;
   }, {}) }
   : null;
+
+export const formatColor = (color) => {
+  if (typeof color === 'string' && color[0] !== '#')
+    return `#${color}`;
+  return color;
+};

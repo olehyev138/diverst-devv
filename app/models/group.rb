@@ -233,6 +233,9 @@ class Group < ApplicationRecord
   validate :ensure_not_own_parent
   validate :ensure_not_own_child
 
+  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
+  before_validation -> (group) { group.calendar_color = group.calendar_color.presence&.gsub('#', '') }
+
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_validation :smart_add_url_protocol
@@ -260,10 +263,6 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-
-  def color_hash
-    calendar_color.starts_with?('#') ? calendar_color : "##{calendar_color}"
-  end
 
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
@@ -353,8 +352,8 @@ class Group < ApplicationRecord
     group_id.to_i
   end
 
-  def calendar_color
-    self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
+  def get_calendar_color
+    self[:calendar_color].presence || enterprise.try(:theme).try(:primary_color) || 'cccccc'
   end
 
   def active_members

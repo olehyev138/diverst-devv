@@ -596,14 +596,14 @@ RSpec.describe Group, type: :model do
   describe '#calendar_color' do
     it 'returns cccccc' do
       group = build(:group)
-      expect(group.calendar_color).to eq('cccccc')
+      expect(group.get_calendar_color).to eq('cccccc')
     end
 
     it 'returns theme primary_color' do
       theme = build_stubbed(:theme)
       enterprise = build_stubbed(:enterprise, theme: theme)
       group = build_stubbed(:group, enterprise: enterprise)
-      expect(group.calendar_color).to eq(enterprise.theme.primary_color)
+      expect(group.get_calendar_color).to eq(enterprise.theme.primary_color)
     end
   end
 
