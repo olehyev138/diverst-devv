@@ -46,7 +46,7 @@ export function SponsorCreatePage(props) {
 }
 
 SponsorCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func
 };

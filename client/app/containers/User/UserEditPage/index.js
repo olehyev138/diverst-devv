@@ -76,7 +76,7 @@ export function UserEditPage(props) {
 }
 
 UserEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   user: PropTypes.object,
   fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,

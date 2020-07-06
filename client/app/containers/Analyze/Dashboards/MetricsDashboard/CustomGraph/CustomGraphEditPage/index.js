@@ -70,7 +70,7 @@ export function CustomGraphEditPage(props) {
 }
 
 CustomGraphEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getCustomGraphBegin: PropTypes.func,
   updateCustomGraphBegin: PropTypes.func,
   currentCustomGraph: PropTypes.object,

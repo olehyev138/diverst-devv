@@ -58,7 +58,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
 
-export function UpdateEditPage(props) {
+export function UpdateCreatePage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
@@ -99,8 +99,8 @@ export function UpdateEditPage(props) {
   );
 }
 
-UpdateEditPage.propTypes = {
-  intl: intlShape,
+UpdateCreatePage.propTypes = {
+  intl: intlShape.isRequired,
   getUpdatePrototypeBegin: PropTypes.func.isRequired,
   createUpdateBegin: PropTypes.func.isRequired,
   updateFieldDataBegin: PropTypes.func.isRequired,
@@ -144,4 +144,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(UpdateEditPage);
+)(UpdateCreatePage);

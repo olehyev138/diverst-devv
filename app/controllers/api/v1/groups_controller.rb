@@ -86,6 +86,29 @@ class Api::V1::GroupsController < DiverstController
     end
   end
 
+  def calendar_colors
+    base_authorize(klass)
+
+    render status: 200, json: {
+        items: GroupPolicy::Scope.new(current_user, Group).resolve
+                   .select(:id, :name, :calendar_color, :enterprise_id)
+                   .preload(:enterprise, enterprise: [:theme])
+                   .distinct
+                   .map do |g|
+                 {
+                     id: g.id,
+                     name: g.name,
+                     calendar_color: g.get_calendar_color,
+                 }
+               end
+    }
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   private
 
   def load_sums(result)

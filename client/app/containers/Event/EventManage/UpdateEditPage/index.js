@@ -108,7 +108,7 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getUpdateBegin: PropTypes.func.isRequired,
   getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
