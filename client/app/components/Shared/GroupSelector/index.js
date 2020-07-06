@@ -141,6 +141,7 @@ const GroupSelector = (props) => {
             removeGroup={removeGroup}
             isSelected={isSelected}
             selected={values[groupField]}
+            dialogNoChildren={props.dialogNoChildren}
           />
         )}
       />
@@ -151,6 +152,8 @@ const GroupSelector = (props) => {
 
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
+  dialogNoChildren: PropTypes.bool,
+
   groupField: PropTypes.string.isRequired,
   label: PropTypes.node.isRequired,
   handleChange: PropTypes.func.isRequired,

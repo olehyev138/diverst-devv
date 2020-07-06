@@ -132,6 +132,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
             <GroupSelector
               groupField='child_ids'
               dialogSelector
+              dialogNoChildren
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               disabled={props.isCommitting}
@@ -144,6 +145,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
             <GroupSelector
               groupField='parent_id'
               dialogSelector
+              dialogNoChildren
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
               queryScopes={['all_parents']}

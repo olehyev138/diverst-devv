@@ -103,6 +103,7 @@ const GroupListSelector = (props) => {
           group={group}
           expandedGroups={expandedGroups}
           setExpandedGroups={setExpandedGroups}
+          dialogNoChildren={props.dialogNoChildren}
         />
       ))}
     </DiverstLoader>
@@ -142,6 +143,7 @@ GroupListSelector.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   isMulti: PropTypes.bool,
+  dialogNoChildren: PropTypes.bool,
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
