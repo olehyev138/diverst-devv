@@ -152,7 +152,7 @@ export function BudgetList(props, context) {
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}
             rowsPerPage={5}
-            dataArray={Object.values(props.budgets)}
+            dataArray={props.budgets}
             dataTotal={props.budgetTotal}
             columns={columns}
             actions={actions}

@@ -50,6 +50,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               <Grid item xs='auto'>
                 <DiverstImg
                   data={group.logo_data}
+                  contentType={group.logo_content_type}
                   maxWidth='70px'
                   maxHeight='70px'
                   minWidth='70px'
@@ -275,6 +276,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                           <Grid item xs='auto'>
                             <DiverstImg
                               data={childGroup.logo_data}
+                              contentType={childGroup.logo_content_type}
                               maxWidth='60px'
                               maxHeight='60px'
                               minWidth='60px'
@@ -354,5 +356,5 @@ DraggableGroupAdminCard.propTypes = {
   classes: PropTypes.object,
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };

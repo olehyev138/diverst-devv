@@ -13,7 +13,7 @@ import { Grid } from '@material-ui/core';
 import { intlShape } from 'react-intl';
 
 export function DroppableList(props) {
-  const [cards, setCards] = useState(Object.values(props.items));
+  const [cards, setCards] = useState(props.items);
   const [save, setSave] = useState(props.save);
   const total = cards.length;
 
@@ -65,5 +65,5 @@ DroppableList.propTypes = {
   importAction: PropTypes.func,
   draggable: PropTypes.bool,
   renderCard: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };

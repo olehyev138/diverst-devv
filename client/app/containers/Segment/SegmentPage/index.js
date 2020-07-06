@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -29,8 +30,6 @@ import {
 
 import { Divider, Box } from '@material-ui/core';
 
-import RouteService from 'utils/routeHelpers';
-
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
@@ -49,9 +48,8 @@ export function SegmentPage(props) {
   useInjectSaga({ key: 'groups', saga: groupSaga });
   useInjectSaga({ key: 'fields', saga: fieldsSaga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
-  const segmentIds = rs.params('segment_id');
-  const segmentId = segmentIds ? segmentIds[0] : null;
+
+  const { segment_id: segmentId } = useParams();
 
   const params = {
     segment_id: segmentId, count: 5, page: 0, order: 'asc'
@@ -59,7 +57,7 @@ export function SegmentPage(props) {
 
   useEffect(() => {
     if (segmentId)
-      props.getSegmentBegin({ id: rs.params('segment_id') });
+      props.getSegmentBegin({ id: segmentId });
 
     return () => {
       props.segmentUnmount();
@@ -93,7 +91,7 @@ export function SegmentPage(props) {
 }
 
 SegmentPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   segment: PropTypes.object,
   rules: PropTypes.object,
@@ -146,7 +144,7 @@ export default compose(
 )(Conditional(
   SegmentPage,
   ['edit', 'permissions.segments_create', 'segment.permissions.update?', 'isFormLoading'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.segment.showPage,
   true,
   a => a[3] || (a[0] ? a[2] : a[1])

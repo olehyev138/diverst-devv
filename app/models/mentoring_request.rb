@@ -19,7 +19,7 @@ class MentoringRequest < ApplicationRecord
   validates :receiver,    presence: true
 
   # only allow one unique request per sender
-  validates_uniqueness_of :sender, scope: [:receiver], message: "There's already a pending request"
+  validates_uniqueness_of :sender_id, scope: [:receiver_id], message: "There's already a pending request"
 
   validate :receiver_has_requests_enabled, on: :create
 

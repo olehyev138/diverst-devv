@@ -11,7 +11,7 @@ class Mentoring < ApplicationRecord
   validates   :mentee,  presence: true
 
   # only allow one unique mentor per mentee
-  validates_uniqueness_of :mentor, scope: [:mentee]
+  validates_uniqueness_of :mentor_id, scope: [:mentee_id]
 
   def self.active_mentorships(enterprise)
     mentorship_user_ids = enterprise.users.ids

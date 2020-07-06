@@ -15,6 +15,11 @@ RSpec.describe Theme, type: :model do
       it { expect(theme).to allow_value('FFFFFF').for(color) }
       it { expect(theme).to_not allow_value('red').for(color) }
     end
+
+    it { expect(theme).to validate_length_of(:logo_redirect_url).is_at_most(191) }
+    it { expect(theme).to validate_length_of(:secondary_color).is_at_most(191) }
+    it { expect(theme).to validate_length_of(:digest).is_at_most(191) }
+    it { expect(theme).to validate_length_of(:primary_color).is_at_most(191) }
   end
 
   describe 'validation' do

@@ -106,7 +106,7 @@ export function UserRoleList(props, context) {
 }
 
 UserRoleList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   userRoles: PropTypes.object,
   userRoleTotal: PropTypes.number,

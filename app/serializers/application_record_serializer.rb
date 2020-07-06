@@ -21,35 +21,40 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
-  def self.permission_module
-    @@module ||= begin
-                   temp = Module.new do
-                     def self.attr_conditions
-                       @@attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+  def self.inherited(subclass)
+    super
+    class << subclass
+      def permission_module
+        @module ||= begin
+                       temp = Module.new do
+                         def self.attr_conditions
+                           @attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+                         end
+                       end
+                       prepend(temp)
+                       temp
                      end
-                   end
-                   self.prepend(temp)
-                   temp
-                 end
-  end
+      end
 
-  def self.attributes_with_permission(*attribute_names, **options)
-    raise RuntimeError.new('No Attributes') if attribute_names.blank?
+      def attributes_with_permission(*attribute_names, **options)
+        raise RuntimeError.new('No Attributes') if attribute_names.blank?
 
-    attribute_names.each do |attr|
-      self.attributes attr unless _attributes.include? attr
-      ifs = permission_module.attr_conditions[attr] << options[:if]
+        attribute_names.each do |attr|
+          attributes attr unless _attributes.include? attr
+          ifs = permission_module.attr_conditions[attr] << options[:if]
 
-      unless permission_module.instance_methods(false).include? attr
-        permission_module.define_method(attr) do
-          if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
-            if defined?(super)
-              super() rescue nil
-            else
-              object&.send(attr) rescue nil
+          unless permission_module.instance_methods(false).include? attr
+            permission_module.define_method(attr) do
+              if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+                if defined?(super)
+                  super() rescue nil
+                else
+                  object&.send(attr)
+                end
+              else
+                nil
+              end
             end
-          else
-            nil
           end
         end
       end

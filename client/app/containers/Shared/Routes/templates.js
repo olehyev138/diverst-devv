@@ -1,4 +1,6 @@
 /* Layouts */
+import ApplicationLayout from 'containers/Layouts/ApplicationLayout/Loadable';
+import AuthenticatedLayout from 'containers/Layouts/AuthenticatedLayout/Loadable';
 import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
@@ -67,6 +69,9 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 
 /* Admin - Manage - Archive */
 import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
+
+/* Admin - Manage - Calendar */
+import AdminCalendarPage from 'containers/Calendar/AdminCalendarPage';
 
 /* Admin - Include - Polls */
 import PollsList from 'containers/Poll/PollListPage/Loadable';
@@ -203,6 +208,8 @@ import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
+  ApplicationLayout,
+  AuthenticatedLayout,
   SignUpPage,
   UserLayout,
   GroupLayout,
@@ -349,5 +356,6 @@ export {
   NewsLinkPage,
   UserDownloadsPage,
   ArchivesPage,
+  AdminCalendarPage,
   LogListPage
 };

@@ -1,49 +1,55 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { injectIntl, intlShape } from 'react-intl';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/User/reducer';
 
-import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import saga from 'containers/User/saga';
+import reducer from 'containers/User/reducer';
+import fieldDataReducer from 'containers/Shared/FieldData/reducer';
+import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
 import {
-  getUserBegin, getUsersBegin, updateFieldDataBegin,
+  getUserBegin, updateFieldDataBegin,
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
 import { selectFormUser, selectFieldData, selectIsCommitting, selectIsFormLoading } from 'containers/User/selectors';
-
-import saga from 'containers/User/saga';
-import UserForm from 'components/User/UserForm';
-import fieldDataReducer from 'containers/Shared/FieldData/reducer';
-import fieldDataSaga from 'containers/Shared/FieldData/saga';
-
-import { injectIntl, intlShape } from 'react-intl';
-import messages from 'containers/User/messages';
-import Conditional from 'components/Compositions/Conditional';
-import { UserCreatePage } from 'containers/User/UserCreatePage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+
+import messages from 'containers/User/messages';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+import Conditional from 'components/Compositions/Conditional';
+
+import UserForm from 'components/User/UserForm';
 
 export function UserEditPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
+
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { user_id: userId } = useParams();
+  const location = useLocation();
+
   const links = {
     usersIndex: ROUTES.admin.system.users.index.path(),
     usersPath: id => ROUTES.user.show.path(id),
   };
 
   useEffect(() => {
-    props.getUserBegin({ id: rs.params('user_id') });
+    props.getUserBegin({ id: userId });
 
     return () => {
       props.userUnmount();
@@ -52,6 +58,7 @@ export function UserEditPage(props) {
 
   return (
     <React.Fragment>
+      <DiverstBreadcrumbs />
       <UserForm
         edit
         userAction={props.updateUserBegin}
@@ -60,7 +67,7 @@ export function UserEditPage(props) {
         user={props.user}
         fieldData={props.fieldData}
         buttonText={intl.formatMessage(messages.update)}
-        admin={props.path.startsWith('/admin')}
+        admin={location.pathname.startsWith('/admin')}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
@@ -69,8 +76,7 @@ export function UserEditPage(props) {
 }
 
 UserEditPage.propTypes = {
-  intl: intlShape,
-  path: PropTypes.string,
+  intl: intlShape.isRequired,
   user: PropTypes.object,
   fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,
@@ -108,6 +114,6 @@ export default compose(
 )(Conditional(
   UserEditPage,
   ['user.permissions.update?', 'isFormLoading'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.editPage
 ));

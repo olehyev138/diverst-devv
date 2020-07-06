@@ -15,21 +15,35 @@ import {
   DELETE_USER_BEGIN,
   UPDATE_FIELD_DATA_BEGIN,
   EXPORT_USERS_BEGIN,
-  GET_USER_DOWNLOAD_DATA_BEGIN, GET_USER_PROTOTYPE_BEGIN,
+  GET_USER_DOWNLOAD_DATA_BEGIN, GET_USER_PROTOTYPE_BEGIN, GET_SAMPLE_IMPORT_BEGIN,
 } from './constants';
 
 import {
-  getUsersSuccess, getUsersError,
-  getUserSuccess, getUserError,
-  getUserPostsSuccess, getUserPostsError,
-  getUserEventsSuccess, getUserEventsError,
-  getUserDownloadsSuccess, getUserDownloadsError,
-  createUserSuccess, createUserError,
-  updateUserSuccess, updateUserError,
-  deleteUserSuccess, deleteUserError,
-  updateFieldDataSuccess, updateFieldDataError,
-  exportUsersSuccess, exportUsersError,
-  getUserDownloadDataSuccess, getUserDownloadDataError, getUserPrototypeSuccess, getUserPrototypeError,
+  getUsersSuccess,
+  getUsersError,
+  getUserSuccess,
+  getUserError,
+  getUserPostsSuccess,
+  getUserPostsError,
+  getUserEventsSuccess,
+  getUserEventsError,
+  getUserDownloadsSuccess,
+  getUserDownloadsError,
+  createUserSuccess,
+  createUserError,
+  updateUserSuccess,
+  updateUserError,
+  deleteUserSuccess,
+  deleteUserError,
+  updateFieldDataSuccess,
+  updateFieldDataError,
+  exportUsersSuccess,
+  exportUsersError,
+  getUserDownloadDataSuccess,
+  getUserDownloadDataError,
+  getUserPrototypeSuccess,
+  getUserPrototypeError,
+  getSampleImportSuccess, getSampleImportError,
 } from './actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -157,13 +171,12 @@ export function* updateFieldData(action) {
     yield put(updateFieldDataSuccess());
     yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(updateUserError(err));
+    yield put(updateFieldDataError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
   }
 }
-
 
 export function* exportUsers(action) {
   try {
@@ -173,6 +186,18 @@ export function* exportUsers(action) {
     yield put(showSnackbar({ message: 'Successfully exported users', options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportUsersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export users', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getSampleImport(action) {
+  try {
+    const response = yield call(api.users.sampleCSV.bind(api.users), action.payload);
+    yield put(getSampleImportSuccess({}));
+  } catch (err) {
+    yield put(getSampleImportError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to export users', options: { variant: 'warning' } }));
@@ -192,7 +217,7 @@ export function* getUserDownloadData(action) {
   }
 }
 
-export function* getUserPrototype(action, updatableKey) {
+export function* getUserPrototype(action) {
   try {
     const response = yield call(api.users.prototype.bind(api.users), action.payload);
 
@@ -217,6 +242,7 @@ export default function* usersSaga() {
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
   yield takeLatest(EXPORT_USERS_BEGIN, exportUsers);
+  yield takeLatest(GET_SAMPLE_IMPORT_BEGIN, getSampleImport);
   yield takeLatest(GET_USER_DOWNLOAD_DATA_BEGIN, getUserDownloadData);
   yield takeLatest(GET_USER_PROTOTYPE_BEGIN, getUserPrototype);
 }

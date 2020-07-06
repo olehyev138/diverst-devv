@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -15,7 +16,6 @@ import { selectUser } from 'containers/Shared/App/selectors';
 
 import { selectIsCommitting } from 'containers/News/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
@@ -30,9 +30,10 @@ export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
+    newsFeedIndex: ROUTES.group.news.index.path(groupId),
   };
 
   useEffect(() => () => props.newsFeedUnmount(), []);
@@ -54,7 +55,7 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -85,6 +86,6 @@ export default compose(
 )(Conditional(
   NewsLinkCreatePage,
   ['currentGroup.permissions.news_create?'],
-  (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.news.index.path(params.group_id),
   permissionMessages.news.newsLink.createPage
 ));

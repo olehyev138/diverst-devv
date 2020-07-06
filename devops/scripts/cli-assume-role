@@ -14,7 +14,7 @@ DURATION_SECONDS=14400
 # Exit on error
 set -e
 
-# Call sts assume-role, use cut to get access key id, secret acccess key & session token
+# Call sts assume-role, use cut to get access key id, secret access key & session token
 creds=$(aws --output text sts assume-role --duration-seconds "$DURATION_SECONDS" --role-arn "$ROLE_ARN" --role-session-name "cli-session" | grep CREDENTIALS | cut -f2,4,5)
 
 # Use cut to get each secret/token & export into appropriate environment variable

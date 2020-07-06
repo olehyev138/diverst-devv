@@ -1,13 +1,14 @@
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import { Breadcrumbs, Link, Paper, Typography } from '@material-ui/core';
 import BreadcrumbSeparatorIcon from '@material-ui/icons/NavigateNext';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import RouteService from 'utils/routeHelpers';
+import { findTitleForPath } from 'utils/routeHelpers';
 
 import { customTexts } from 'utils/customTextHelpers';
 
@@ -30,8 +31,10 @@ const styles = theme => ({
 export function DiverstBreadcrumbs(props) {
   const { classes } = props;
 
-  const rs = new RouteService(useContext);
-  const pathNames = rs.routeData.location.pathname.split('/').filter(x => x);
+  const location = useLocation();
+  const params = useParams();
+
+  const pathNames = location.pathname.split('/').filter(x => x);
 
   if (pathNames.length <= 1)
     return (<React.Fragment />);
@@ -46,9 +49,9 @@ export function DiverstBreadcrumbs(props) {
           {pathNames.map((value, index) => {
             const last = index === pathNames.length - 1;
             const to = `/${pathNames.slice(0, index + 1).join('/')}`;
-            const [title, isPathPrefix] = rs.findTitleForPath({
+            const [title, isPathPrefix] = findTitleForPath({
               path: to,
-              params: Object.values(rs.routeData.computedMatch.params),
+              params: Object.values(params),
               textArguments: customTexts()
             });
 

@@ -123,8 +123,8 @@ export function* fetchUserData() {
 
     const payload = response.data;
 
-    yield put(setUserData(payload));
     payload.permissions.adminPath = resolveRootManagePath(payload.permissions);
+    yield put(setUserData(payload));
 
     yield put(fetchUserDataSuccess());
   } catch (err) {

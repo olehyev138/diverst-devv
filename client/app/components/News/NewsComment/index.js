@@ -79,7 +79,7 @@ export function NewsComment(props) {
 }
 
 NewsComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteCommentAction: PropTypes.func,

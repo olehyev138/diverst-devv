@@ -35,6 +35,9 @@ import {
   EXPORT_USERS_BEGIN,
   EXPORT_USERS_SUCCESS,
   EXPORT_USERS_ERROR,
+  GET_SAMPLE_IMPORT_BEGIN,
+  GET_SAMPLE_IMPORT_SUCCESS,
+  GET_SAMPLE_IMPORT_ERROR,
   GET_USER_DOWNLOAD_DATA_BEGIN,
   GET_USER_DOWNLOAD_DATA_SUCCESS,
   GET_USER_DOWNLOAD_DATA_ERROR,
@@ -260,6 +263,27 @@ export function exportUsersSuccess(payload) {
 export function exportUsersError(error) {
   return {
     type: EXPORT_USERS_ERROR,
+    error,
+  };
+}
+
+export function getSampleImportBegin(payload) {
+  return {
+    type: GET_SAMPLE_IMPORT_BEGIN,
+    payload,
+  };
+}
+
+export function getSampleImportSuccess(payload) {
+  return {
+    type: GET_SAMPLE_IMPORT_SUCCESS,
+    payload,
+  };
+}
+
+export function getSampleImportError(error) {
+  return {
+    type: GET_SAMPLE_IMPORT_ERROR,
     error,
   };
 }

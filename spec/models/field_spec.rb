@@ -3,53 +3,29 @@ require 'rails_helper'
 RSpec.describe Field do
   describe 'when validating' do
     let(:field) { build(:field, field_definer: build(:enterprise)) }
-    let(:field1) { build(:field, field_definer: build(:enterprise)) }
 
-    context 'validate presence of title for field' do
-      it 'valid if title is present' do
-        field.title = 'title'
-        expect(field).to be_valid
-      end
+    describe 'test associations and validations' do
+      it { expect(field).to belong_to(:field_definer) }
+      it { expect(field).to have_many(:field_data).class_name('FieldData').dependent(:destroy) }
+      it { expect(field).to have_many(:yammer_field_mappings).with_foreign_key('diverst_field_id').dependent(:delete_all) }
 
-      it 'invalid if title is absent' do
-        field.title = ''
-        expect(field).not_to be_valid
-      end
-    end
+      it { expect(field).to validate_presence_of(:title) }
+      it { expect(field).to validate_presence_of(:type) }
+      it { expect(field).to validate_presence_of(:field_definer) }
 
-    context 'validate presence of type for field' do
-      it 'valid if type is present' do
-        field.type = 'TextField'
-        expect(field).to be_valid
-      end
-
-      it 'invalid if type is absent' do
-        field.type = ''
-        expect(field).not_to be_valid
-      end
-    end
-
-    context 'validate inclusion of type for field' do
-      it 'valid if type is present' do
-        field.type = 'TextField'
-        expect(field).to be_valid
-      end
-
-      it 'invalid if type is fake field' do
-        field.type = 'TestField'
-        expect(field).not_to be_valid
-      end
-    end
-
-    context 'validate presence of title for field1' do
-      it 'valid if title is present' do
-        field1.title = 'title'
-        expect(field1).to be_valid
-      end
-
-      it 'valid if title is absent' do
-        field1.title = ''
-        expect(field1).not_to be_valid
+      it { expect(field).to validate_length_of(:field_type).is_at_most(191) }
+      it { expect(field).to validate_length_of(:options_text).is_at_most(65535) }
+      it { expect(field).to validate_length_of(:saml_attribute).is_at_most(191) }
+      it { expect(field).to validate_length_of(:title).is_at_most(191) }
+      it { expect(field).to validate_length_of(:type).is_at_most(191) }
+      it { expect(field).to validate_inclusion_of(:type).in_array(['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']) }
+      context 'unless SegmentsField, GroupsField' do
+        ['SelectField', 'TextField', 'NumericField', 'CheckboxField', 'DateField'].each do |type|
+          before do
+            field.type = type
+          end
+          it { expect(field).to validate_uniqueness_of(:title).scoped_to(:field_definer_id, :field_definer_type) }
+        end
       end
     end
   end

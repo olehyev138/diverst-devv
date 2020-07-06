@@ -163,7 +163,7 @@ GroupCategoriesForm.propTypes = {
 };
 
 GroupCategoriesFormInner.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   groupCategories: PropTypes.array,
   groupCategory: PropTypes.object,
   handleChange: PropTypes.func,

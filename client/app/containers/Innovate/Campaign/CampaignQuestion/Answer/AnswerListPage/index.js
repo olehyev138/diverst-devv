@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useContext, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -20,20 +19,16 @@ import {
   selectIsFetchingAnswers
 } from 'containers/Innovate/Campaign/CampaignQuestion/Answer/selectors';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import AnswerList from 'components/Innovate/Campaign/CampaignQuestion/Answer/AnswerList';
 import { push } from 'connected-react-router';
 
-
 export function AnswerListPage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
 
-  const rs = new RouteService(useContext);
-  const questionId = rs.params('question_id');
-  const campaignId = rs.params('campaign_id');
+  const { campaign_id: campaignId, question_id: questionId } = useParams();
 
   const [params, setParams] = useState({
     question_id: questionId, count: 5, page: 0,

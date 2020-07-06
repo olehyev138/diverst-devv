@@ -159,7 +159,7 @@ BrandingHomeInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   isCommitting: PropTypes.bool,
   enterprise: PropTypes.object,
 };
