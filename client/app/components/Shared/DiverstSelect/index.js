@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import delayedTextInputCallback from 'utils/cancelablePromises/delayedTextInputCallback';
 
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
 
@@ -20,7 +21,9 @@ const styles = theme => ({
 });
 
 export function DiverstSelect(props) {
-  const { theme, classes, ...rest } = props;
+  const { theme, classes, onInputChange, ...rest } = props;
+
+  const delayedInputChange = delayedTextInputCallback(onInputChange);
 
   // Form Control props
   const {
@@ -62,6 +65,7 @@ export function DiverstSelect(props) {
         menuPlacement='auto'
         captureMenuScroll={false}
         aria-describedby={`${props.id}-helper-text`}
+        onInputChange={delayedInputChange}
         theme={selectTheme => ({
           ...selectTheme,
           colors: {
@@ -104,6 +108,7 @@ DiverstSelect.propTypes = {
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
   isLoading: PropTypes.bool,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 export default compose(

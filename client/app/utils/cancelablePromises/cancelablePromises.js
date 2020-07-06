@@ -33,11 +33,14 @@ export const useCancellablePromises = () => {
     pendingPromises.current = pendingPromises.current.filter(p => p !== promise);
   };
 
+  const peekPendingPromises = () => [...pendingPromises.current];
+
   const clearPendingPromises = () => pendingPromises.current.map(p => p.cancel());
 
   return {
     appendPendingPromise,
     removePendingPromise,
     clearPendingPromises,
+    peekPendingPromises,
   };
 };
