@@ -156,18 +156,20 @@ RSpec.describe NewsFeedLink, type: :model do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:group2) { create(:group, enterprise_id: enterprise.id) }
-      let!(:social_links) { create_list(:social_link, 4, group_id: group.id) }
-
+      let!(:news_feed_link_segment) { create(:news_feed_link_segment) }
+      let!(:group_message) { create_list(:group_message, 3, group_id: group.id) }
+      i = 1
       before do
-        create_list(:group_message, 2, group_id: group.id)
-        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: social_links[0].news_feed_link.id)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[1].news_feed_link.id, segment_id: 1)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[2].news_feed_link.id, segment_id: 2)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[3].news_feed_link.id, segment_id: 2)
+        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
+        news_feed_link_segment.news_feed_link do |n|
+          n.update(news_feed_id: group2.id)
+          n.update(segment_id: i)
+          i = i + 1
+        end
       end
 
       it 'returns news_feed_links combined_news_links_with_segments' do
-        expect(NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, [1]).count).to eq(6)
+        expect(NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, [1]).count).to eq(4)
         expect(NewsFeedLink.combined_news_links_with_segments(group2.news_feed.id, [1]).count).to eq(4)
       end
     end
@@ -213,9 +215,6 @@ RSpec.describe NewsFeedLink, type: :model do
       it 'returns combined news links of a particular news feed' do
         expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(2)
       end
-    end
-
-    describe '.combined_news_links_with_segments' do
     end
   end
 
