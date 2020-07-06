@@ -132,7 +132,7 @@ export function CustomGraph(props) {
 
 CustomGraph.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   data: PropTypes.array,
   customGraph: PropTypes.object,
   links: PropTypes.object,

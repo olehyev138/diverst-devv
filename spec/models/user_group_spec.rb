@@ -8,6 +8,7 @@ RSpec.describe UserGroup do
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
+    it { expect(user_group).to validate_length_of(:data).is_at_most(65535) }
 
     it 'validates 1 user per group' do
       group_member = create(:user)
@@ -33,7 +34,83 @@ RSpec.describe UserGroup do
       let(:third) { create(:user_group, total_weekly_points: 10) }
       let(:second) { create(:user_group, total_weekly_points: 20) }
 
-      it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
+      it 'returns top_participants' do
+        expect(UserGroup.top_participants(3)).to eq [first, second, third]
+      end
+    end
+
+    context 'active' do
+      let!(:user_group) { create(:user_group) }
+
+      it 'returns active user' do
+        expect(UserGroup.active).to eq([user_group])
+      end
+    end
+
+    context 'inactive' do
+      let!(:user_group) { create(:user_group, user: create(:user, active: false)) }
+
+      it 'returns inactive user' do
+        expect(UserGroup.inactive).to eq([user_group])
+      end
+    end
+
+    context 'pending' do
+      let!(:user_group) { create(:user_group, accepted_member: false, group: create(:group, pending_users: 'enabled')) }
+
+      it 'returns pending user' do
+        expect(UserGroup.pending).to eq([user_group])
+      end
+    end
+
+    context 'with_answered_survey' do
+      let!(:user_group) { create(:user_group, data: 'test') }
+
+      it 'returns users with answered_survey' do
+        expect(UserGroup.with_answered_survey).to eq([user_group])
+      end
+    end
+
+    describe '#for_segment_ids' do
+      let!(:user) { create(:user) }
+      let!(:segment) { create(:segment) }
+      let!(:user_segment) { create(:users_segment, user_id: user.id, segment_id: segment.id) }
+      let!(:user_group) { create(:user_group, user: user) }
+
+      it 'returns users with segment_ids' do
+        expect(UserGroup.for_segment_ids([segment.id])).to eq([user_group])
+      end
+    end
+
+    context 'joined_from' do
+      let!(:user_group) { create_list(:user_group, 3) }
+
+      it 'returns users joined_from' do
+        expect(UserGroup.joined_from(Date.yesterday).count).to eq 3
+      end
+    end
+
+    context 'joined_to' do
+      let!(:user_group) { create_list(:user_group, 3) }
+
+      it 'returns users joined_to' do
+        expect(UserGroup.joined_to(Date.tomorrow).count).to eq 3
+      end
+    end
+
+    context 'user_search' do
+      let!(:user1) { create(:user, email: 'test1@gmail.com') }
+      let!(:user2) { create(:user, first_name: 'testfirst') }
+      let!(:user3) { create(:user, last_name: 'lasttest') }
+      before do
+        create(:user_group, user: user1)
+        create(:user_group, user: user2)
+        create(:user_group, user: user3)
+      end
+
+      it 'returns user search' do
+        expect(UserGroup.user_search('test').count).to eq 3
+      end
     end
 
     describe '.accepted_users' do

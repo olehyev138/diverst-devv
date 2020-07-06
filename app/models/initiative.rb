@@ -75,6 +75,15 @@ class Initiative < ApplicationRecord
 
     merge(user.initiatives.custom_or(user.invited_initiatives))
   }
+  scope :for_groups, ->(group_ids) {
+    joins(:outcome).where(outcomes: { group_id: group_ids })
+  }
+  scope :for_segments, ->(segment_ids) {
+    joins(:initiative_segments).where(initiative_segments: { segment_id: segment_ids })
+  }
+  scope :date_range, ->(start = Time.now, fin = Time.now) {
+    where('end > ? AND start < ?', start, fin)
+  }
   scope :available_events_for_user, ->(user_id) {
     # SCOPE AND
     # ( INVITED OR (
@@ -126,7 +135,7 @@ class Initiative < ApplicationRecord
 
   scope :order_recent, -> { order(start: :desc) }
 
-  scope :finalized, -> { where(finished_expenses: false) }
+  scope :finalized, -> { where(finished_expenses: true) }
   scope :active, -> { where(finished_expenses: false) }
 
   scope :not_archived, -> { where(archived_at: nil) }
