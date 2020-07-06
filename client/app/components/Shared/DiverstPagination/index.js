@@ -105,7 +105,7 @@ export function DiverstPagination(props) {
   const [page, setPage] = useState(props.page || 0);
   const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
   const [doScrollToBottom, setDoScrollToBottom] = useState(false);
-  console.log(page);
+
   const paginationClassName = `pagination-${paginationKey}`;
 
   const handleChangePage = (event, newPage) => {
@@ -149,7 +149,7 @@ export function DiverstPagination(props) {
         className={paginationClassName}
         ActionsComponent={PaginationActionsComponent}
         component='div'
-        page={page >= Math.ceil(props.count / rowsPerPage) || props.page !== page ? 0 : page}
+        page={page}
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
         rowsPerPage={rowsPerPage || 0}
         count={props.count || 0}
