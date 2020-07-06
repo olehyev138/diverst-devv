@@ -85,6 +85,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
                 <Grid item xs={12} md={6}>
                   <GroupSelector
                     groupField='group_ids'
+                    dialogSelector
                     label={<DiverstFormattedMessage {...messages.groups} />}
                     isMulti
                     inputCallback={(props, searchKey = '') => searchKey}
