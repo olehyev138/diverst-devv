@@ -4,7 +4,7 @@ RSpec.describe PolicyGroupSerializer, type: :serializer do
   it 'returns policy group' do
     user = create(:user)
     policy_group = user.policy_group
-    serializer = PolicyGroupSerializer.new(policy_group, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = PolicyGroupSerializer.new(policy_group, scope: serializer_scopes(user), scope_name: :scope)
 
     expect(serializer.serializable_hash.key?('id')).to be false
     expect(serializer.serializable_hash.key?('user_id')).to be false
