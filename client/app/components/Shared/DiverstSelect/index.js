@@ -6,6 +6,7 @@ import Select from 'react-select';
 import delayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
+import useArgumentRemembering from 'utils/customHooks/rememberArguments';
 
 const styles = theme => ({
   formControl: {
@@ -23,11 +24,15 @@ const styles = theme => ({
 export function DiverstSelect(props) {
   const { theme, classes, onInputChange, forceLoad, ...rest } = props;
 
+  const ignoredDuplicates = useArgumentRemembering(onInputChange);
   const ignoreOnClose = (searchKey, event) => {
     if (!(event && event.action === 'menu-close'))
-      onInputChange(searchKey, event);
+      ignoredDuplicates(searchKey);
   };
   const delayedInputChange = delayedTextInputCallback(ignoreOnClose);
+
+  const handleOpen = forceLoad ? () => onInputChange('') : () => ignoredDuplicates('');
+  const handleInputChange = delayedInputChange;
 
   // Form Control props
   const {
@@ -69,8 +74,8 @@ export function DiverstSelect(props) {
         menuPlacement='auto'
         captureMenuScroll={false}
         aria-describedby={`${props.id}-helper-text`}
-        onInputChange={delayedInputChange}
-        onFocus={() => onInputChange('')}
+        onInputChange={handleInputChange}
+        onFocus={handleOpen}
         theme={selectTheme => ({
           ...selectTheme,
           colors: {
