@@ -80,7 +80,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
             <Grid item xs={12}>
               <FormControl>
                 <FormControlLabel
-                  labelPlacement='start'
+                  labelPlacement='end'
                   label={intl.formatMessage(messages.Home.consent_message)}
                   control={(
                     <Field
