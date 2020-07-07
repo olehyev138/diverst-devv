@@ -23,7 +23,11 @@ const styles = theme => ({
 export function DiverstSelect(props) {
   const { theme, classes, onInputChange, ...rest } = props;
 
-  const delayedInputChange = delayedTextInputCallback(onInputChange);
+  const ignoreOnClose = (searchKey, event) => {
+    if (!(event && event.action === 'menu-close'))
+      onInputChange(searchKey, event);
+  };
+  const delayedInputChange = delayedTextInputCallback(ignoreOnClose);
 
   // Form Control props
   const {
@@ -66,6 +70,7 @@ export function DiverstSelect(props) {
         captureMenuScroll={false}
         aria-describedby={`${props.id}-helper-text`}
         onInputChange={delayedInputChange}
+        onFocus={() => onInputChange('')}
         theme={selectTheme => ({
           ...selectTheme,
           colors: {
