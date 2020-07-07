@@ -78,6 +78,24 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
         <CardContent>
           <Grid container spacing={3} alignItems='center'>
             <Grid item xs={12}>
+              <Field
+                component={DiverstFileInput}
+                id='banner'
+                name='banner'
+                margin='normal'
+                fileName={props.enterprise.banner_file_name}
+                fullWidth
+                label={intl.formatMessage(messages.Home.banner)}
+                disabled={props.isCommitting}
+                value={values.banner}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
               <FormControl>
                 <FormControlLabel
                   labelPlacement='end'
@@ -97,37 +115,21 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 />
               </FormControl>
             </Grid>
-            { values.onboarding_consent_enabled && <Grid item xs={12}>
-              <Field
-                component={DiverstRichTextInput}
-                required
-                onChange={value => setFieldValue('onboarding_consent_message', value)}
-                fullWidth
-                id='onboarding_consent_message'
-                name='onboarding_consent_message'
-                margin='normal'
-                value={values.onboarding_consent_message}
-              />
-            </Grid>
-              }
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3} alignItems='center'>
-            <Grid item xs={12}>
-              <Field
-                component={DiverstFileInput}
-                id='banner'
-                name='banner'
-                margin='normal'
-                fileName={props.enterprise.banner_file_name}
-                fullWidth
-                label={intl.formatMessage(messages.Home.banner)}
-                disabled={props.isCommitting}
-                value={values.banner}
-              />
-            </Grid>
+            { values.onboarding_consent_enabled && (
+              <Grid item xs={12}>
+                <Field
+                  component={DiverstRichTextInput}
+                  required
+                  onChange={value => setFieldValue('onboarding_consent_message', value)}
+                  fullWidth
+                  id='onboarding_consent_message'
+                  name='onboarding_consent_message'
+                  margin='normal'
+                  value={values.onboarding_consent_message}
+                />
+              </Grid>
+            )
+            }
           </Grid>
         </CardContent>
         <Divider />
