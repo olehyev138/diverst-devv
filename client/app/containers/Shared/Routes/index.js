@@ -150,6 +150,7 @@ import {
   SocialLinkEditPage,
   UserDownloadsPage,
   ArchivesPage,
+  AdminCalendarPage,
   LogListPage,
   GroupSponsorsListPage,
   GroupSponsorsCreatePage,
@@ -485,6 +486,8 @@ export default function Routes(props) {
                     <RouteWithProps path={ROUTES.admin.manage.resources.folders.edit.path()}><EFolderEditPage /></RouteWithProps>
                     { /* Manage - Folder Show */ }
                     <RouteWithProps path={ROUTES.admin.manage.resources.folders.show.path()}><EFolderPage /></RouteWithProps>
+                    { /* Manage - Calendar */ }
+                    <RouteWithProps path={ROUTES.admin.manage.calendar.index.path()}><AdminCalendarPage /></RouteWithProps>
 
                     { /* Plan - Budget */ }
                     <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>

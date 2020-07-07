@@ -119,6 +119,7 @@ export function LogList(props, context) {
                     groupField='groupLabels'
                     label=''
                     isMulti
+                    dialogSelector
                     {...formikProps}
                   />
                 </Grid>

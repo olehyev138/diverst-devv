@@ -63,7 +63,7 @@ export function GroupMessageEditPage(props) {
 }
 
 GroupMessageEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,

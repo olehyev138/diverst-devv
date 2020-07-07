@@ -57,7 +57,7 @@ export function GroupEditPage(props) {
 }
 
 GroupEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   group: PropTypes.object,
   groups: PropTypes.array,
   getGroupBegin: PropTypes.func,

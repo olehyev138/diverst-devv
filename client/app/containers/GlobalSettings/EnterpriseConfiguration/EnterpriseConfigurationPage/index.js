@@ -47,7 +47,7 @@ export function EnterpriseConfigurationPage(props) {
 }
 
 EnterpriseConfigurationPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,

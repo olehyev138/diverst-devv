@@ -36,8 +36,8 @@ export function EventEditPage(props) {
 
   const { event_id: eventId } = useParams();
   const links = {
-    eventsIndex: ROUTES.admin.system.globalSettings.mailEvents.index.path(),
-    eventEdit: ROUTES.admin.system.globalSettings.mailEvents.edit.path(eventId),
+    eventsIndex: ROUTES.admin.system.globalSettings.emails.events.index.path(),
+    eventEdit: ROUTES.admin.system.globalSettings.emails.events.edit.path(eventId),
   };
 
   const { currentEvent, intl } = props;

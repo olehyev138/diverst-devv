@@ -36,7 +36,7 @@ export function GroupCategoriesCreatePage(props) {
 }
 
 GroupCategoriesCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,

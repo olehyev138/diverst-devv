@@ -44,7 +44,7 @@ const defaultParams = Object.freeze({
   orderBy: 'poll_responses.id',
 });
 
-export function PollCreatePage(props) {
+export function PollShowPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
   useInjectReducer({ key: 'responses', reducer: responseReducer });
@@ -158,8 +158,8 @@ export function PollCreatePage(props) {
   );
 }
 
-PollCreatePage.propTypes = {
-  intl: intlShape,
+PollShowPage.propTypes = {
+  intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   getPollBegin: PropTypes.func,
@@ -200,7 +200,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  PollCreatePage,
+  PollShowPage,
   ['poll.permissions.show?', 'isFormLoading'],
   (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.showPage
