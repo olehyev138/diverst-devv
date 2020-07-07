@@ -43,6 +43,7 @@ export function DiverstSelect(props) {
     margin,
     required,
     variant,
+    onMenuOpen, // To prevent its use
     ...selectProps
   } = rest;
 
