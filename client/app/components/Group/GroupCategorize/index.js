@@ -74,6 +74,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
                       setFieldValue(`children[${i}].category`, value);
                     }
                     }
+                    isClearable
                   />
                 </Grid>
               ))}
