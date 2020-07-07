@@ -132,6 +132,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               fullWidth
               id='child_ids'
               name='child_ids'
+              forceReload
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               margin='normal'
@@ -151,6 +152,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               fullWidth
               id='parent_id'
               name='parent_id'
+              forceReload
               label={<DiverstFormattedMessage {...messages.parent} />}
               margin='normal'
               disabled={props.isCommitting}
