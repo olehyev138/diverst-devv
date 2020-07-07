@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import delayedTextInputCallback from 'utils/cancelablePromises/delayedTextInputCallback';
+import delayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
 
@@ -21,7 +21,7 @@ const styles = theme => ({
 });
 
 export function DiverstSelect(props) {
-  const { theme, classes, onInputChange, ...rest } = props;
+  const { theme, classes, onInputChange, forceLoad, ...rest } = props;
 
   const ignoreOnClose = (searchKey, event) => {
     if (!(event && event.action === 'menu-close'))
@@ -113,6 +113,7 @@ DiverstSelect.propTypes = {
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
   isLoading: PropTypes.bool,
+  forceLoad: PropTypes.bool,
   onInputChange: PropTypes.func,
 };
 

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useCancellablePromises, cancellablePromise, delay } from 'utils/cancelablePromises/cancelablePromises';
+import { useCancellablePromises, cancellablePromise, delay } from 'utils/customHooks/cancelablePromises';
 
 const useDelayedTextInputCallback = (inputChange, wait = 300) => {
   const api = useCancellablePromises();
