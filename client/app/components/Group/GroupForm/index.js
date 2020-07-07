@@ -162,6 +162,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               onChange={value => setFieldValue('parent_id', value)}
               onInputChange={value => parentSelectAction(value)}
               onBlur={() => setFieldTouched('parent_id', true)}
+              isClearable
             />
           </CardContent>
           <Divider />
