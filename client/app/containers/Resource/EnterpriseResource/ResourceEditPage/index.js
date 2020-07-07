@@ -1,10 +1,9 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -13,8 +12,6 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { injectIntl, intlShape } from 'react-intl';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import {
@@ -41,18 +38,15 @@ export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
-  const { location } = rs;
+  const { group_id: groupId, folder_id: folderId, item_id: resourceId } = useParams();
 
   const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath('admin', rs.params('group_id')),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath('admin', groupId),
   };
 
   useEffect(() => {
-    const resourceId = rs.params('item_id');
-    const folderId = rs.params('folder_id');
     props.getFolderBegin({ id: folderId });
     props.getResourceBegin({ id: resourceId });
     props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
@@ -133,6 +127,6 @@ export default compose(
 )(Conditional(
   ResourceEditPage,
   ['currentResource.permissions.update?', 'isFormLoading'],
-  (props, rs) => getFolderIndexPath('admin'),
+  (props, params) => getFolderIndexPath('admin'),
   permissionMessages.resource.enterpriseResource.resourceEditPage
 ));

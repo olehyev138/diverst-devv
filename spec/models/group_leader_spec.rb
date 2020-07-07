@@ -13,6 +13,7 @@ RSpec.describe GroupLeader, type: :model do
     it { expect(group_leader).to belong_to(:user) }
     it { expect(group_leader).to belong_to(:group) }
     it { expect(group_leader).to belong_to(:user_role) }
+    it { expect(group_leader).to have_one(:policy_group_template).through(:user_role) }
   end
 
   describe 'test scopes' do

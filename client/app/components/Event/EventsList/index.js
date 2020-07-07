@@ -4,10 +4,9 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
@@ -82,12 +81,11 @@ const styles = theme => ({
   },
 });
 
-export function EventsList(props, context) {
+export function EventsList(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
   const { classes, intl } = props;
 
-  const routeContext = useContext(RouteContext);
   const [eventId, setEvent] = useState(null);
 
   const clickEvent = (info) => {
@@ -114,7 +112,6 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      {dialog}
       {!props.readonly && (
         <React.Fragment>
           <Permission show={permission(props.currentGroup, 'events_create?')}>
@@ -179,9 +176,12 @@ export function EventsList(props, context) {
       <br />
       { props.calendar ? (
         <DiverstCalendar
-          events={props.calendarEvents}
+          calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          eventClick={clickEvent}
+          events={props.events}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
+          calendarDateCallback={props.calendarDateCallback}
         />
       ) : (
         <React.Fragment>
@@ -258,6 +258,8 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
+  currentGroupID: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({

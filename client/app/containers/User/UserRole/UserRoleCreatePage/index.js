@@ -1,6 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -17,14 +15,12 @@ import {
   getUserRolesBegin, userRoleUnmount
 } from '../actions';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { UserRoleListPage } from 'containers/User/UserRole/UserRoleListPage';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 
@@ -33,8 +29,9 @@ export function UserRoleCreatePage(props) {
   useInjectSaga({ key: 'roles', saga });
 
   useEffect(() => () => props.userRoleUnmount(), []);
+
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
   const links = {
     userRolesIndex: ROUTES.admin.system.users.roles.index.path(),
   };
@@ -53,7 +50,7 @@ export function UserRoleCreatePage(props) {
 }
 
 UserRoleCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createUserRoleBegin: PropTypes.func,
   getUserRolesBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func,
@@ -84,6 +81,6 @@ export default compose(
 )(Conditional(
   UserRoleCreatePage,
   ['permissions.policy_templates_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.userRole.createPage
 ));

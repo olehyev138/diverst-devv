@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -47,8 +45,7 @@ export function GroupLeaderCreatePage(props) {
   const { intl } = props;
   const { isCommitting, members, ...rest } = props;
 
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
+  const { group_id: groupId } = useParams();
 
   const links = {
     index: ROUTES.group.manage.leaders.index.path(groupId),
@@ -85,7 +82,7 @@ export function GroupLeaderCreatePage(props) {
 }
 
 GroupLeaderCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
@@ -127,6 +124,6 @@ export default compose(
 )(Conditional(
   GroupLeaderCreatePage,
   ['currentGroup.permissions.leaders_create?'],
-  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.manage.index.path(params.group_id),
   permissionMessages.group.groupManage.groupLeaders.createPage
 ));

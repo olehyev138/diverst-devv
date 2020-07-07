@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
+import { useLocation } from 'react-router-dom';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -27,11 +28,13 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 export function LoginPage(props) {
   useInjectReducer({ key: 'loginPage', reducer });
 
+  const location = useLocation();
+
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     /* global URLSearchParams */
-    const query = new URLSearchParams(props.location.search);
+    const query = new URLSearchParams(location.search);
 
     // SSO
     const userToken = query.get('userToken');

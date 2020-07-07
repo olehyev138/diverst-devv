@@ -80,12 +80,12 @@ Diverst::Application.routes.draw do
       resources :groups do
         collection do
           get '/annual_budgets', to: 'groups#current_annual_budgets'
+          get '/calendar_colors', to: 'groups#calendar_colors'
         end
         member do
           get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
-          get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
@@ -260,6 +260,7 @@ Diverst::Application.routes.draw do
           post '/sign_up_token', to: 'users#sign_up_token'
           post '/sign_up', to: 'users#sign_up'
           get 'prototype'
+          get 'sample_csv'
         end
       end
       resources :user_groups do

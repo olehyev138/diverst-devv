@@ -221,7 +221,7 @@ export function NewsLinkListItem(props) {
 
 NewsLinkListItem.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   newsLink: PropTypes.object,
   currentGroup: PropTypes.object,
   readonly: PropTypes.bool,

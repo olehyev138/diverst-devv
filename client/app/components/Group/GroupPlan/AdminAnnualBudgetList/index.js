@@ -125,7 +125,7 @@ export function AnnualBudgetList(props, context) {
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingAnnualBudgets}
             rowsPerPage={10}
-            dataArray={Object.values(props.annualBudgets)}
+            dataArray={props.annualBudgets}
             dataTotal={props.annualBudgetTotal}
             columns={columns}
             actions={actions}

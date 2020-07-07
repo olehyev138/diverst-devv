@@ -1,13 +1,9 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-
-import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -29,14 +25,15 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/Answer/messa
 export function AnswerCreatePage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
-  useInjectReducer({ key: 'questions', reducer });
-  useInjectSaga({ key: 'questions', saga });
+  useInjectReducer({ key: 'questions', reducer: questionReducer });
+  useInjectSaga({ key: 'questions', saga: questionSaga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
+
   const { intl } = props;
-  const rs = new RouteService(useContext);
-  const questionId = rs.params('question_id');
-  const campaignId = rs.params('campaign_id');
+
+  const { question_id: questionId, campaign_id: campaignId } = useParams();
+
   // const links = {
   //   questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   // };
@@ -46,8 +43,8 @@ export function AnswerCreatePage(props) {
   return (
     <AnswerForm
       answerAction={props.createAnswerBegin}
-      campaignId={campaignId[0]}
-      questionId={questionId[0]}
+      campaignId={campaignId}
+      questionId={questionId}
       buttonText={intl.formatMessage(messages.create)}
       isCommitting={props.isCommitting}
       // links={links}
@@ -56,7 +53,7 @@ export function AnswerCreatePage(props) {
 }
 
 AnswerCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createAnswerBegin: PropTypes.func,
   questionAnswersUnmount: PropTypes.func,
   getAnswerBegin: PropTypes.func,

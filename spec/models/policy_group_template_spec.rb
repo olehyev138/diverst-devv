@@ -18,6 +18,13 @@ RSpec.describe PolicyGroupTemplate, type: :model do
 
     it { expect(policy_group_template).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
     it { expect(policy_group_template).to validate_uniqueness_of(:user_role).scoped_to(:enterprise_id) }
+    context 'uniqueness' do
+      before do
+        user_role.policy_group_template.update(default: true)
+      end
+      let!(:uniqueness_policy_group_template) { user_role.policy_group_template }
+      it { expect(uniqueness_policy_group_template).to_not be_valid }
+    end
   end
 
   describe '#update_user_roles' do

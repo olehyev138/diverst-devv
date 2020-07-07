@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -56,7 +55,7 @@ export function CampaignCreatePage(props) {
 }
 
 CampaignCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createCampaignBegin: PropTypes.func,
   campaignsUnmount: PropTypes.func,
   getGroupsBegin: PropTypes.func,

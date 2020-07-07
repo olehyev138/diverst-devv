@@ -15,6 +15,7 @@ import messages from 'containers/Group/GroupManage/messages';
 
 import { permission } from 'utils/permissionsHelpers';
 import WithPermission from 'components/Compositions/WithPermission';
+
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -32,24 +33,24 @@ export function GroupManageLinks(props) {
         >
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
+            to={ROUTES.group.manage.settings.index.path(currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.settings} />}
-            show={permission(props.currentGroup, 'update?')}
+            show={permission(currentGroup, 'update?')}
             value='settings'
           />
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
+            to={ROUTES.group.manage.leaders.index.path(currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.leaders} />}
-            show={permission(props.currentGroup, 'leaders_view?')}
+            show={permission(currentGroup, 'leaders_view?')}
             value='leaders'
           />
 
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.manage.sponsors.index.path(props.currentGroup.id)}
+            to={ROUTES.group.manage.sponsors.index.path(currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.sponsors} />}
-            show={permission(props.currentGroup, 'update?')}
+            show={permission(currentGroup, 'update?')}
             value='sponsors'
           />
         </ResponsiveTabs>

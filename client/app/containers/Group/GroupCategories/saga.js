@@ -67,6 +67,7 @@ export function* createGroupCategories(action) {
 export function* deleteGroupCategories(action) {
   try {
     yield call(api.groupCategoryTypes.destroy.bind(api.groupCategoryTypes), action.payload);
+    yield put(deleteGroupCategoriesSuccess());
     yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
     yield put(showSnackbar({ message: 'Group categories deleted', options: { variant: 'success' } }));
   } catch (err) {

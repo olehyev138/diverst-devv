@@ -73,4 +73,8 @@ To deploy the frontend, run the `deploy-frontend` script as follows:
 
 - `frontend-bucket` - name of the frontend bucket created by Terraform.
 
-`./create-app-version <frontend-bucket>`
+`./deploy-frontend <frontend-bucket>`
+
+### Analytics
+
+_TODO_

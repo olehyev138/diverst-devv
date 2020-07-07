@@ -12,13 +12,11 @@
  *    - on save - create/update expense
  */
 
-import React, { memo, useContext, useEffect, useState } from 'react';
-import RouteService from 'utils/routeHelpers';
+import React, { memo, useEffect, useState } from 'react';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -63,7 +61,6 @@ export function ExpenseListPage(props) {
     }
   );
 
-  const rs = new RouteService(useContext);
   const links = {
     newExpense: ROUTES.group.plan.events.manage.expenses.new.path(props.currentGroup.id, props.currentEvent.id),
     editExpense: id => props.handleVisitEditPage(props.currentGroup.id, props.currentEvent.id, id),

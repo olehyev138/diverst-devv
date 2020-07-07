@@ -70,7 +70,12 @@ function deserializeDatum(fieldDatum) {
 
   switch (type) {
     case 'CheckboxField':
-      return (parsed || []).map(i => ({ label: i, value: i }));
+      // Seeds seem to be malformed. This is a safety net
+      if (parsed instanceof Array)
+        return parsed.map(i => ({ label: i, value: i }));
+      if (parsed != null)
+        return [{ label: parsed, value: parsed }];
+      return [];
     case 'SelectField':
       /* Certain fields have there data json serialized as a single item array  */
       return { label: (parsed || [])[0], value: (parsed || [])[0] };

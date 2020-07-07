@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -38,7 +36,7 @@ import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupLeaderEditPage(props) {
-  const { members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
+  const { intl, members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
 
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
@@ -46,10 +44,8 @@ export function GroupLeaderEditPage(props) {
   useInjectSaga({ key: 'members', saga: memberSaga });
   useInjectReducer({ key: 'roles', reducer: userRoleReducer });
   useInjectSaga({ key: 'roles', saga: userRoleSaga });
-  const { intl } = props;
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
-  const groupLeaderId = rs.params('group_leader_id');
+
+  const { group_id: groupId, group_leader_id: groupLeaderId } = useParams();
 
   const links = {
     index: ROUTES.group.manage.leaders.index.path(groupId),
@@ -85,7 +81,7 @@ export function GroupLeaderEditPage(props) {
 }
 
 GroupLeaderEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getGroupLeaderBegin: PropTypes.func,
   getGroupMembersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
@@ -132,6 +128,6 @@ export default compose(
 )(Conditional(
   GroupLeaderEditPage,
   ['currentGroup.permissions.leaders_manage?'],
-  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.manage.index.path(params.group_id),
   permissionMessages.group.groupManage.groupLeaders.editPage
 ));

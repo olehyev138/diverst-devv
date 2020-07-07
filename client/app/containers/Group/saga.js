@@ -16,8 +16,10 @@ import {
   RESET_BUDGET_BEGIN,
   JOIN_GROUP_BEGIN,
   LEAVE_GROUP_BEGIN,
-  GROUP_CATEGORIZE_BEGIN, UPDATE_GROUP_POSITION_BEGIN,
-  JOIN_SUBGROUPS_BEGIN
+  GROUP_CATEGORIZE_BEGIN,
+  UPDATE_GROUP_POSITION_BEGIN,
+  JOIN_SUBGROUPS_BEGIN,
+  GET_COLORS_BEGIN
 } from './constants';
 
 import {
@@ -35,6 +37,7 @@ import {
   updateGroupPositionSuccess, updateGroupPositionError,
   groupCategorizeSuccess, groupCategorizeError,
   joinSubgroupsSuccess, joinSubgroupsError,
+  getColorsError, getColorsSuccess,
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -46,6 +49,19 @@ export function* getGroups(action) {
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getColors(action) {
+  try {
+    const response = yield call(api.groups.colors.bind(api.groups));
+
+    yield put(getColorsSuccess(response.data));
+  } catch (err) {
+    yield put(getColorsError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
@@ -167,6 +183,7 @@ export function* updateGroupSettings(action) {
 export function* deleteGroup(action) {
   try {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
+    yield put(deleteGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
   } catch (err) {
@@ -211,7 +228,7 @@ export function* joinGroup(action) {
     const response = yield call(api.userGroups.join.bind(api.userGroups), payload);
     yield put(joinGroupSuccess());
   } catch (err) {
-    yield put(joinGroupError());
+    yield put(joinGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join group', options: { variant: 'warning' } }));
@@ -225,7 +242,7 @@ export function* leaveGroup(action) {
 
     yield put(leaveGroupSuccess());
   } catch (err) {
-    yield put(leaveGroupError());
+    yield put(leaveGroupError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave group', options: { variant: 'warning' } }));
@@ -237,7 +254,7 @@ export function* joinSubgroups(action) {
     const response = yield call(api.userGroups.joinSubgroups.bind(api.userGroups), action.payload);
     yield put(joinSubgroupsSuccess());
   } catch (err) {
-    yield put(joinSubgroupsError());
+    yield put(joinSubgroupsError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join groups', options: { variant: 'warning' } }));
@@ -247,6 +264,7 @@ export function* joinSubgroups(action) {
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
+  yield takeLatest(GET_COLORS_BEGIN, getColors);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);

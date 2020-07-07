@@ -16,7 +16,6 @@ import {
   configurationUnmount
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
-import RouteService from 'utils/routeHelpers';
 import BrandingTheme from 'components/Branding/BrandingTheme';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
@@ -51,7 +50,7 @@ export function BrandingThemePage(props) {
 }
 
 BrandingThemePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,

@@ -111,6 +111,12 @@ module.exports = require('./webpack.base.babel')({
 
       // Removes warning for about `additional` section usage
       safeToUseOptionalCaches: true,
+
+      // Turn on events so we can auto update app (code in app.js)
+      // Source: https://github.com/NekR/offline-plugin/blob/master/docs/updates.md
+      ServiceWorker: {
+        events: true
+      }
     }),
 
     new CompressionPlugin({

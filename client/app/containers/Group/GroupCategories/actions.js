@@ -9,9 +9,7 @@ import {
   GET_GROUP_CATEGORY_BEGIN, GET_GROUP_CATEGORY_SUCCESS, GET_GROUP_CATEGORY_ERROR,
   CREATE_GROUP_CATEGORIES_BEGIN, CREATE_GROUP_CATEGORIES_SUCCESS, CREATE_GROUP_CATEGORIES_ERROR,
   UPDATE_GROUP_CATEGORIES_BEGIN, UPDATE_GROUP_CATEGORIES_SUCCESS, UPDATE_GROUP_CATEGORIES_ERROR,
-  ADD_GROUP_CATEGORIES_BEGIN, ADD_GROUP_CATEGORIES_SUCCESS, ADD_GROUP_CATEGORIES_ERROR,
   DELETE_GROUP_CATEGORIES_BEGIN, DELETE_GROUP_CATEGORIES_SUCCESS, DELETE_GROUP_CATEGORIES_ERROR,
-  UPDATE_GROUP_CATEGORY_TYPE_BEGIN, UPDATE_GROUP_CATEGORY_TYPE_SUCCESS, UPDATE_GROUP_CATEGORY_TYPE_ERROR,
   CATEGORIES_UNMOUNT
 } from 'containers/Group/GroupCategories/constants';
 
@@ -101,27 +99,6 @@ export function updateGroupCategoriesError(error) {
   };
 }
 
-export function addGroupCategoriesBegin(payload) {
-  return {
-    type: ADD_GROUP_CATEGORIES_BEGIN,
-    payload
-  };
-}
-
-export function addGroupCategoriesSuccess(payload) {
-  return {
-    type: ADD_GROUP_CATEGORIES_SUCCESS,
-    payload
-  };
-}
-
-export function addGroupCategoriesError(error) {
-  return {
-    type: ADD_GROUP_CATEGORIES_ERROR,
-    error,
-  };
-}
-
 export function deleteGroupCategoriesBegin(payload) {
   return {
     type: DELETE_GROUP_CATEGORIES_BEGIN,
@@ -139,27 +116,6 @@ export function deleteGroupCategoriesSuccess(payload) {
 export function deleteGroupCategoriesError(error) {
   return {
     type: DELETE_GROUP_CATEGORIES_ERROR,
-    error,
-  };
-}
-
-export function updateGroupCategoryTypeBegin(payload) {
-  return {
-    type: UPDATE_GROUP_CATEGORY_TYPE_BEGIN,
-    payload
-  };
-}
-
-export function updateGroupCategoryTypeSuccess(payload) {
-  return {
-    type: UPDATE_GROUP_CATEGORY_TYPE_SUCCESS,
-    payload
-  };
-}
-
-export function updateGroupCategoryTypeError(error) {
-  return {
-    type: UPDATE_GROUP_CATEGORY_TYPE_ERROR,
     error,
   };
 }

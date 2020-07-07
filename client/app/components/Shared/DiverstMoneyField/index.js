@@ -51,7 +51,7 @@ export function DiverstMoneyField(props) {
 }
 
 DiverstMoneyField.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   id: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.node,

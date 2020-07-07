@@ -4,23 +4,18 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden, CardHeader, CardActions,
+  Box, Tab, Card, CardContent, Grid, Link, Typography, Button, CardHeader,
 } from '@material-ui/core';
-
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import AddIcon from '@material-ui/icons/Add';
 
 import { injectIntl } from 'react-intl';
 import messages from 'containers/Mentorship/Session/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstPagination from 'components/Shared/DiverstPagination';
@@ -63,7 +58,6 @@ const styles = theme => ({
 export function SessionsList(props, context) {
   const { classes, intl } = props;
 
-  const routeContext = useContext(RouteContext);
   const titleMessage = props.type === 'hosting' ? messages.title.hosting : messages.title.participating;
 
   return (

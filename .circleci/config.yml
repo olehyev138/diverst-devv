@@ -32,7 +32,7 @@ jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
     docker:
-      - image: awsdiverst/cci-primary:0.0.2
+      - image: awsdiverst/cci-primary:0.0.3
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -79,6 +79,7 @@ jobs:
             export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
             export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
             bundle exec pronto run -f github_status github_pr -c origin/react_update
+          no_output_timeout: 60m
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
     parallelism: 2
@@ -86,7 +87,7 @@ jobs:
     environment:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results/rspec
     docker:
-      - image: awsdiverst/cci-primary:0.0.2
+      - image: awsdiverst/cci-primary:0.0.3
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -159,7 +160,7 @@ jobs:
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
-      - image: awsdiverst/cci-primary:0.0.2
+      - image: awsdiverst/cci-primary:0.0.3
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -206,7 +207,7 @@ jobs:
   deploy-testing:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
-      - image: awsdiverst/cci-primary:0.0.2
+      - image: awsdiverst/cci-primary:0.0.3
         environment:
           RAILS_ENV: test
           RACK_ENV: test
