@@ -34,7 +34,10 @@ api.enterprises.getAuthEnterprise = jest.fn();
 api.enterprises.getSsoLink = jest.fn();
 api.policyGroups.get = jest.fn();
 api.user.getUserData = jest.fn();
-window.location.assign = jest.fn();
+Object.defineProperty(window, 'location', {
+  writable: true,
+  value: { assign: jest.fn() }
+});
 
 const token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZW50ZXJwcmlzZSI6eyJpZCI6MSwibmFtZSI6IlBlcHNpIENvIiwidGhlbWUiOm51bGx9LCJjcmVhdGVkX2F0IjoiU3VuLCAwNCBBdWcgMjAxOSAxMzo1NjowNSBFRFQgLTA0OjAwIiwiZW1haWwiOiJkZXZAZGl2ZXJzdC5jb20iLCJwb2xpY3lfZ3JvdXAiOnsibWFuYWdlX2FsbCI6ZmFsc2V9LCJ1c2VyX3Rva2VuIjoiV0RGczNZOFdWcmFwRnktMWVjWGEiLCJ0aW1lX3pvbmUiOiJBbWVyaWNhL05ld19Zb3JrIiwidGltZSI6MTIzNDU2Nzg5MCwicm9sZSI6IlN1cGVyIEFkbWluIiwianRpIjoiMmYzNjg2NzgtZjZmOC00ODUwLWFlZmItZjViNGE0NTMyMjhlIiwiZXhwIjoxNTY2NTE0MTE1LCJpYXQiOjE1NjY1MTA1MTV9.4tqmNDZFgWtglFw7o9dZAR_wSAqcuLpEyP7EMrnacAU';
 const user = {

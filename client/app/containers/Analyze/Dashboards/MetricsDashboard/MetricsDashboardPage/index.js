@@ -1,12 +1,12 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { useParams } from 'react-router-dom';
 
 // reducers & sagas
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
@@ -28,16 +28,15 @@ export function MetricsDashboardPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectSaga({ key: 'customMetrics', saga });
 
-  const rs = new RouteService(useContext);
+  const { metrics_dashboard_id: metricsDashboardId } = useParams();
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
-    metricsDashboardEdit: ROUTES.admin.analyze.custom.edit.path(rs.params('metrics_dashboard_id')),
-    customGraphNew: ROUTES.admin.analyze.custom.graphs.new.path(rs.params('metrics_dashboard_id')),
+    metricsDashboardEdit: ROUTES.admin.analyze.custom.edit.path(metricsDashboardId),
+    customGraphNew: ROUTES.admin.analyze.custom.graphs.new.path(metricsDashboardId),
   };
 
   useEffect(() => {
     // get metrics_dashboard specified in path
-    const metricsDashboardId = rs.params('metrics_dashboard_id');
     props.getMetricsDashboardBegin({ id: metricsDashboardId });
 
     return () => props.metricsDashboardsUnmount();
@@ -83,6 +82,6 @@ export default compose(
 )(Conditional(
   MetricsDashboardPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.analyze.custom.index.path(),
+  (props, params) => ROUTES.admin.analyze.custom.index.path(),
   permissionMessages.analyze.dashboards.metricsDashboard.showPage
 ));

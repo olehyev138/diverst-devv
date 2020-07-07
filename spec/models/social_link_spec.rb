@@ -8,15 +8,29 @@ RSpec.describe SocialLink, type: :model do
       expect(social_link).to be_valid
     end
 
-    it { expect(social_link).to belong_to(:author).class_name('User') }
+    it { expect(social_link).to belong_to(:author).class_name('User').counter_cache(true) }
     it { expect(social_link).to validate_presence_of(:author_id) }
+    it { expect(social_link).to validate_presence_of(:author) }
 
     it { expect(social_link).to have_many(:segments).through(:social_link_segments) }
-    it { expect(social_link).to have_many(:social_link_segments) }
+    it { expect(social_link).to have_many(:social_link_segments).dependent(:destroy) }
+    it { expect(social_link).to have_many(:user_reward_actions).dependent(:destroy) }
     it { expect(social_link).to have_one(:news_feed_link) }
     it { expect(social_link).to belong_to(:group) }
 
+    it { expect(social_link).to accept_nested_attributes_for(:news_feed_link).allow_destroy(true) }
 
+    describe 'test scope' do
+      describe '.unapproved' do
+        let!(:unapproved_social_link) { create(:social_link, id: 1) }
+        before do
+          NewsFeedLink.where(social_link_id: 1).update_all(approved: false)
+        end
+        it 'returns budget not approved' do
+          expect(SocialLink.unapproved).to eq([unapproved_social_link])
+        end
+      end
+    end
     describe 'url population' do
       let(:social_link) { build :social_link, :without_embed_code }
 

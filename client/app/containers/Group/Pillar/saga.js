@@ -52,7 +52,7 @@ export function* createPillar(action) {
   try {
     const response = { data: 'API CALL' };
 
-    yield put(createPillarSuccess({}));
+    yield put(createPillarSuccess());
     yield put(showSnackbar({ message: 'Successfully created pillar', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPillarError(err));
@@ -66,7 +66,7 @@ export function* updatePillar(action) {
   try {
     const response = { data: 'API CALL' };
 
-    yield put(updatePillarSuccess({}));
+    yield put(updatePillarSuccess());
     yield put(showSnackbar({ message: 'Successfully updated pillar', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePillarError(err));
@@ -80,7 +80,7 @@ export function* deletePillar(action) {
   try {
     const response = { data: 'API CALL' };
 
-    yield put(deletePillarSuccess({}));
+    yield put(deletePillarSuccess());
     yield put(showSnackbar({ message: 'Successfully deleted pillar', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePillarError(err));

@@ -1,12 +1,10 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -17,7 +15,7 @@ import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
 
 import {
-  selectQuestionTotal, selectIsCommitting, selectQuestion, selectIsFormLoading
+  selectIsCommitting, selectQuestion, selectIsFormLoading
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
@@ -33,16 +31,15 @@ export function CampaignQuestionEditPage(props) {
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
+
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { campaign_id: campaignId, question_id: questionId } = useParams();
   const links = {
-    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
+    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
 
   useEffect(() => {
-    const campaignId = rs.params('campaign_id');
-    const questionId = rs.params('question_id');
-
     props.getQuestionBegin({ id: questionId });
 
     return () => props.campaignQuestionsUnmount();
@@ -64,7 +61,7 @@ export function CampaignQuestionEditPage(props) {
 }
 
 CampaignQuestionEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   getQuestionBegin: PropTypes.func,
   updateQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
@@ -101,6 +98,6 @@ export default compose(
 )(Conditional(
   CampaignQuestionEditPage,
   ['question.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  (props, params) => ROUTES.admin.innovate.campaigns.index.path(),
   permissionMessages.innovate.campaign.campaignQuestion.editPage
 ));

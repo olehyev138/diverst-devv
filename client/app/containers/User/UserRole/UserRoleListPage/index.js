@@ -4,9 +4,7 @@
  *
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -28,12 +26,10 @@ import {
 import reducer from '../reducer';
 import saga from '../saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleList from 'components/User/UserRole/UserRoleList';
 import Conditional from 'components/Compositions/Conditional';
-import { CampaignListPage } from 'containers/Innovate/Campaign/CampaignListPage';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -51,7 +47,6 @@ export function UserRoleListPage(props) {
     };
   }, []);
 
-  const rs = new RouteService(useContext);
   const links = {
     userRoleNew: ROUTES.admin.system.users.roles.new.path(),
     userRoleEdit: id => ROUTES.admin.system.users.edit.path(id),
@@ -122,6 +117,6 @@ export default compose(
 )(Conditional(
   UserRoleListPage,
   ['permissions.policy_templates_create'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.userRole.listPage
 ));

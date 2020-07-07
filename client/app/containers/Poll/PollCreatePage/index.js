@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -10,10 +10,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Poll/reducer';
 import saga from 'containers/Poll/saga';
 
-import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
-
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createPollBegin, pollsUnmount } from 'containers/Poll/actions';
@@ -25,7 +21,6 @@ import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Button } from '@material-ui/core';
 
 export function PollCreatePage(props) {
   useInjectReducer({ key: 'polls', reducer });
@@ -33,7 +28,6 @@ export function PollCreatePage(props) {
 
   useEffect(() => () => {}, []);
 
-  const rs = new RouteService(useContext);
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),
   };
@@ -53,7 +47,7 @@ export function PollCreatePage(props) {
 }
 
 PollCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createPollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
@@ -79,7 +73,7 @@ export default compose(
   memo,
 )(Conditional(
   PollCreatePage,
-  ['currentGroup.permissions.polls_create?'],
-  (props, rs) => ROUTES.admin.include.polls.index.path(),
+  ['currentGroup.permissions.polls_create'],
+  (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.createPage
 ));

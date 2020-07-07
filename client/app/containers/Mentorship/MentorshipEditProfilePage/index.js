@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -8,7 +8,6 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -28,8 +27,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function MentorshipEditProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
   useInjectSaga({ key: 'mentorship', saga });
-
-  const rs = new RouteService(useContext);
 
   return (
     <React.Fragment>
@@ -82,7 +79,7 @@ export default compose(
 )(Conditional(
   MentorshipEditProfilePage,
   ['formUser.permissions.update?'],
-  (props, rs) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
   permissionMessages.mentorship.editProfilePage,
   true
 ));

@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
+import { formatColor, mapFieldNames } from 'utils/selectorHelpers';
 
 const selectGroupsDomain = state => state.groups || initialState;
+
+const changeGroupColor = group => formatColor(group.calendar_color);
 
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
@@ -11,12 +14,15 @@ const selectPaginatedGroups = () => createSelector(
 /* Select group list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
+
+const groupMapper = group => ({ value: group.id, label: group.name, logo_data: group.logo_data, children: (group.children || []).map(groupMapper) });
+
 const selectPaginatedSelectGroups = () => createSelector(
   selectGroupsDomain,
   groupsState => (
     Object
       .values(groupsState.groupList)
-      .map(group => ({ value: group.id, label: group.name }))
+      .map(groupMapper)
   )
 );
 
@@ -36,14 +42,7 @@ const selectCategorizeGroup = () => createSelector(
     const { currentGroup } = groupsState;
     if (!currentGroup) return null;
 
-    const selectGroup = {
-      ...groupsState.currentGroup, ...{
-        name: {
-          label: groupsState.currentGroup.name,
-          value: groupsState.currentGroup.id
-        }
-      }
-    };
+    const selectGroup = currentGroup;
 
     selectGroup.children = selectGroup.children.map(child => ({
       id: child.id,

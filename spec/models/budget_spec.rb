@@ -6,12 +6,43 @@ RSpec.describe Budget, type: :model do
     let(:approved) { build :approved_budget }
 
     it { expect(budget).to have_one(:group) }
+    it { expect(budget).to belong_to(:annual_budget) }
     it { expect(budget).to belong_to(:approver).class_name('User').with_foreign_key('approver_id') }
     it { expect(budget).to belong_to(:requester).class_name('User').with_foreign_key('requester_id') }
-    it { expect(budget).to have_many(:checklists) }
-    it { expect(budget).to have_many(:budget_items) }
+    it { expect(budget).to have_many(:checklists).dependent(:destroy) }
+    it { expect(budget).to have_many(:budget_items).dependent(:destroy) }
 
     it { expect(budget).to accept_nested_attributes_for(:budget_items).allow_destroy(true) }
+
+    it { expect(budget).to validate_length_of(:decline_reason).is_at_most(191) }
+    it { expect(budget).to validate_length_of(:comments).is_at_most(65535) }
+    it { expect(budget).to validate_length_of(:description).is_at_most(65535) }
+  end
+
+  describe 'test scopes' do
+    context 'budget::approved' do
+      let!(:approved_budget) { create(:budget, is_approved: true) }
+
+      it 'returns budget approved' do
+        expect(Budget.approved).to eq([approved_budget])
+      end
+    end
+
+    context 'budget::not_approved' do
+      let!(:not_approved_budget) { create(:budget, is_approved: false) }
+
+      it 'returns budget not approved' do
+        expect(Budget.not_approved).to eq([not_approved_budget])
+      end
+    end
+
+    context 'budget::pending' do
+      let!(:budgets) { create_list(:budget, 3) }
+
+      it 'returns pending budget' do
+        expect(Budget.pending.ids.sort).to eq(budgets.pluck(:id).sort)
+      end
+    end
   end
 
   describe 'amounts' do

@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -36,12 +35,14 @@ import {
   createGroupMessageError,
   createGroupMessageCommentError,
   updateGroupMessageSuccess,
+  updateGroupMessageError,
   createGroupMessageCommentSuccess,
   createNewsLinkBegin,
   createNewsLinkSuccess,
   createNewsLinkError,
   createNewsLinkCommentError,
   updateNewsLinkSuccess,
+  updateNewsLinkError,
   createNewsLinkCommentSuccess,
   createSocialLinkBegin,
   deleteGroupMessageBegin,
@@ -51,6 +52,7 @@ import {
   createSocialLinkError,
   createSocialLinkCommentError,
   updateSocialLinkSuccess,
+  updateSocialLinkError,
   createSocialLinkCommentSuccess,
   deleteNewsLinkBegin,
   deleteNewsLinkError,
@@ -108,7 +110,7 @@ export function* updateNewsItem(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News feed link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateNewsItemError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update news feed link', options: { variant: 'warning' } }));
@@ -140,7 +142,7 @@ export function* updateGroupMessage(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateGroupMessageError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update group message', options: { variant: 'warning' } }));
@@ -218,7 +220,7 @@ export function* updateNewsLink(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'News link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateNewsLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update news link', options: { variant: 'warning' } }));
@@ -296,7 +298,7 @@ export function* updateSocialLink(action) {
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'Social link updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupMessageError(err));
+    yield put(updateSocialLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update social link', options: { variant: 'warning' } }));
@@ -306,11 +308,11 @@ export function* updateSocialLink(action) {
 export function* deleteSocialLink(action) {
   try {
     yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
-    yield put(deleteNewsLinkSuccess());
+    yield put(deleteSocialLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Social link deleted', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(deleteNewsLinkError(err));
+    yield put(deleteSocialLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to remove social link', options: { variant: 'warning' } }));
@@ -324,7 +326,7 @@ export function* archiveNewsItem(action) {
     yield put(archiveNewsItemSuccess());
   } catch (err) {
     // TODO: intl message
-    yield put(archiveNewsItemSuccess(err));
+    yield put(archiveNewsItemError(err));
     yield put(showSnackbar({
       message: 'Failed to archive resource',
       options: { variant: 'warning' }

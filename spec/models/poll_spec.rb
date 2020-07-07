@@ -12,7 +12,6 @@ RSpec.describe Poll, type: :model do
       it { expect(poll).to belong_to(:initiative) }
 
       it { expect(poll).to have_many(:segments).inverse_of(:polls).through(:polls_segments) }
-      it { expect(poll).to have_many(:groups).through(:groups_polls) }
 
       it { expect(poll).to have_many(:fields).dependent(:destroy) }
       it { expect(poll).to have_many(:responses).class_name('PollResponse').inverse_of(:poll).dependent(:destroy) }
@@ -24,12 +23,6 @@ RSpec.describe Poll, type: :model do
     end
 
     context 'test validation' do
-      it { expect(poll).to validate_presence_of(:title) }
-      it { expect(poll).to validate_presence_of(:description) }
-      it { expect(poll).to validate_presence_of(:status) }
-      it { expect(poll).to validate_presence_of(:enterprise) }
-      it { expect(poll).to validate_presence_of(:owner) }
-
       [:title, :description, :status, :enterprise, :owner].each do |attribute|
         it { expect(poll).to validate_presence_of(attribute) }
       end

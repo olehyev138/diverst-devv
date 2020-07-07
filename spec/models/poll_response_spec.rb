@@ -4,9 +4,9 @@ RSpec.describe PollResponse do
   it_behaves_like 'it Contains Field Data'
 
   describe 'test associations' do
-    let(:poll_response) { build_stubbed(:poll_response) }
+    let(:poll_response) { build(:poll_response) }
 
-    it { expect(poll_response).to belong_to(:poll) }
+    it { expect(poll_response).to belong_to(:poll).counter_cache(:responses_count) }
     it { expect(poll_response).to belong_to(:user) }
 
     # Skip until polls implementation
