@@ -22,7 +22,7 @@ const styles = theme => ({
 });
 
 export function DiverstSelect(props) {
-  const { theme, classes, onInputChange, forceLoad, ...rest } = props;
+  const { theme, classes, onInputChange, forceReload, ...rest } = props;
 
   const ignoredDuplicates = useArgumentRemembering(onInputChange);
   const ignoreOnClose = (searchKey, event) => {
@@ -31,7 +31,7 @@ export function DiverstSelect(props) {
   };
   const delayedInputChange = delayedTextInputCallback(ignoreOnClose);
 
-  const handleOpen = forceLoad ? () => onInputChange('') : () => ignoredDuplicates('');
+  const handleOpen = forceReload ? () => onInputChange('') : () => ignoredDuplicates('');
   const handleInputChange = delayedInputChange;
 
   // Form Control props
@@ -119,7 +119,7 @@ DiverstSelect.propTypes = {
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
   isLoading: PropTypes.bool,
-  forceLoad: PropTypes.bool,
+  forceReload: PropTypes.bool,
   onInputChange: PropTypes.func,
 };
 
