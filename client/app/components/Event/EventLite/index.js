@@ -116,6 +116,7 @@ export function EventLite(props) {
             {event.picture_data && (
               <DiverstImg
                 data={event.picture_data}
+                contentType={event.picture_content_type}
                 maxWidth='100%'
                 maxHeight='240px'
               />

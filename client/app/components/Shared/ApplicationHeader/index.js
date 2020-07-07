@@ -252,6 +252,7 @@ export function ApplicationHeader(props) {
                     <Avatar>
                       <DiverstImg
                         data={user.avatar_data}
+                        contentType={user.avatar_content_type}
                         maxWidth='100%'
                         maxHeight='240px'
                       />
