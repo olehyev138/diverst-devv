@@ -28,7 +28,7 @@ import reducer from 'containers/Shared/Sponsors/reducer';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import DiverstImg from 'components/Shared/DiverstImg';
-import ScrollBar from "react-perfect-scrollbar";
+import ScrollBar from 'react-perfect-scrollbar';
 
 const SponsorType = Object.freeze({
   Group: 'group',
