@@ -53,7 +53,7 @@ const selectFormUser = () => createSelector(
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
         draft.timezones = timezoneMap(timezoneArray, user, draft);
-        draft.field_data = mapAndDeserializeFieldData(user.field_data);
+        draft.field_data = deserializeFields(user.field_data);
         draft.user_role_id = mapSelectField(user.user_role, 'role_name');
         draft.available_roles = user.available_roles
           && user.available_roles.map(item => mapSelectField(item, 'role_name', 'default'));

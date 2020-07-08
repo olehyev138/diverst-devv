@@ -4,7 +4,7 @@ import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from './reducer';
-import { mapAndDeserializeFieldData, mapSelectField, timezoneMap } from 'utils/selectorHelpers';
+import { deserializeFields, timezoneMap } from 'utils/selectorHelpers';
 
 const selectSignUpDomain = state => state.signUp || initialState;
 
@@ -21,7 +21,7 @@ const selectUser = () => createSelector(
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
         draft.timezones = timezoneMap(timezoneArray, user, draft);
-        draft.field_data = mapAndDeserializeFieldData(user.field_data);
+        draft.field_data = deserializeFields(user.field_data);
       });
     }
     return null;

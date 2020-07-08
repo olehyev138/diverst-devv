@@ -15,7 +15,7 @@ export const deserializeFields = fieldData => produce(fieldData, (draft) => {
   if (fieldData)
     draft.forEach((datum) => {
       datum.data = deserializeDatum(datum);
-      datum.field.options_text = deserializeOptionsText(datum.field);
+      datum.field.options = deserializeOptionsText(datum.field);
     });
 });
 
@@ -23,8 +23,6 @@ export const deserializeFields = fieldData => produce(fieldData, (draft) => {
 export const mapFieldData = fieldData => fieldData.map(fieldDatum => produce(fieldDatum, (draft) => {
   draft.field = splitOptions(fieldDatum.field);
 }));
-
-export const mapAndDeserializeFieldData = fieldData => deserializeFields(mapFieldData(fieldData));
 
 // Takes fields and transforms the options texts in the form of ("Option1\nOption2\nOption3\n")
 // and turns it into an array of select field options [{label: "Option1", value: "Option1"}, ...]

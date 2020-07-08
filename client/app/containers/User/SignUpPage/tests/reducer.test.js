@@ -10,6 +10,7 @@ describe('signUpReducer', () => {
   beforeEach(() => {
     state = {
       token: null,
+      groups: [],
       isLoading: true,
       isCommitting: false,
       user: null,
