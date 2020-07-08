@@ -8,6 +8,7 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone
 
   belongs_to :theme
+  has_many :sponsors
 
   # Custom Attributes
 
