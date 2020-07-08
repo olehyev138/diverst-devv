@@ -14,11 +14,7 @@ export function DiverstHTMLEmbedder({ html, gridProps, interweaveProps }) {
     <Grid
       container
       {...gridProps}
-      spacing={0}
-      direction='column'
-      alignItems='center'
-      justify='center'
-    >
+      >
       <Grid item>
         <Interweave
           content={html}
