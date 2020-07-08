@@ -5,7 +5,7 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :time_zone, :default_from_email_address, :default_from_email_display_name,
              :redirect_email_contact, :mentorship_module_enabled, :enable_likes, :enable_pending_comments,
              :collaborate_module_enabled, :scope_module_enabled, :has_enabled_onboarding_email, :disable_emails,
-             :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone
+             :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone, :privacy_statement
 
   belongs_to :theme
   has_many :sponsors
