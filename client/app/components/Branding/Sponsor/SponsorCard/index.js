@@ -41,60 +41,65 @@ export function SponsorCard(props) {
   const { sponsorList } = props;
 
   useEffect(() => {
-    if (props.type === SponsorType.Group)
-      props.getSponsorsBegin({
-        orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup.id
-      });
-    else
-      props.getSponsorsBegin({
-        orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
-      });
+    if (!props.noAsync)
+      if (props.type === SponsorType.Group)
+        props.getSponsorsBegin({
+          orderBy: '', order: 'asc', query_scopes: ['group_sponsor'], sponsorable_id: props.currentGroup.id
+        });
+      else
+        props.getSponsorsBegin({
+          orderBy: '', order: 'asc', query_scopes: ['enterprise_sponsor']
+        });
   }, []);
 
-  if (props.sponsorTotal > 0)
+  const individualSponsor = sponsor => (
+    <Card key={sponsor.id}>
+      <CardContent>
+        <Grid container spacing={2} direction='column'>
+          {sponsor.sponsor_media_data && (
+            <React.Fragment>
+              <Hidden xsDown>
+                <Grid item xs={12}>
+                  <DiverstImg
+                    data={sponsor.sponsor_media_data}
+                    maxWidth='100%'
+                    maxHeight='100px'
+                    height='auto'
+                  />
+                </Grid>
+              </Hidden>
+            </React.Fragment>
+          )}
+          <Grid item>
+            <Typography variant='h6'>
+              {sponsor.sponsor_name}
+            </Typography>
+            <Typography>
+              {sponsor.sponsor_title}
+            </Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardContent>
+        { sponsor.sponsor_message}
+      </CardContent>
+    </Card>
+  );
+
+  if (props.sponsorTotal > 1 && !props.single)
     return (
       <Carousel
         autoPlay={false}
       >
-        {sponsorList.map(sponsor => (
-          <Card key={sponsor.id}>
-            <CardContent>
-              <Grid container spacing={2} direction='column'>
-                {sponsor.sponsor_media_data && (
-                  <React.Fragment>
-                    <Hidden xsDown>
-                      <Grid item xs={12}>
-                        <DiverstImg
-                          data={sponsor.sponsor_media_data}
-                          maxWidth='100%'
-                          maxHeight='100px'
-                          height='auto'
-                        />
-                      </Grid>
-                    </Hidden>
-                  </React.Fragment>
-                )}
-                <Grid item>
-                  <Typography variant='h6'>
-                    {sponsor.sponsor_name}
-                  </Typography>
-                  <Typography>
-                    {sponsor.sponsor_title}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardContent>
-              { sponsor.sponsor_message}
-            </CardContent>
-          </Card>
-        ))}
+        {sponsorList.map(individualSponsor)}
       </Carousel>
     );
-  return (
-    <React.Fragment>
 
-    </React.Fragment>
+  if (props.sponsor || props.sponsorTotal >= 1)
+    return individualSponsor(props.sponsor || props.sponsorList[0]);
+
+  return (
+    <React.Fragment />
   );
 }
 
@@ -104,6 +109,9 @@ SponsorCard.propTypes = {
   currentGroup: PropTypes.object,
   sponsorList: PropTypes.array,
   sponsorTotal: PropTypes.number,
+  sponsor: PropTypes.object,
+  single: PropTypes.bool,
+  noAsync: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
