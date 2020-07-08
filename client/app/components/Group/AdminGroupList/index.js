@@ -136,6 +136,7 @@ export function AdminGroupList(props, context) {
           currentPage={defaultParams.page}
           importAction={props.importAction}
           intl={props.intl}
+          rowsPerPage={defaultParams.count}
         />
       </DiverstLoader>
       <DiverstPagination

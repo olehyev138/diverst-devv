@@ -42,7 +42,7 @@ export function DroppableList(props) {
 
   if (props.save && save)
     cards.forEach((card, index) => {
-      card.position = index + props.currentPage * cards.length;
+      card.position = index + 1 + props.currentPage * props.rowsPerPage;
       props.updateOrderAction(card);
       setSave(false);
     });
@@ -65,5 +65,6 @@ DroppableList.propTypes = {
   importAction: PropTypes.func,
   draggable: PropTypes.bool,
   renderCard: PropTypes.func,
+  rowsPerPage: PropTypes.number,
   intl: intlShape.isRequired,
 };
