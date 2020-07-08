@@ -1,7 +1,6 @@
 es:
-  login: 
-    title: "Iniciar Sesión"
-    email: "Correo Electrónico"
-    password: "Contraseña"
-    remember_me: "Recuérdame"
-    forgot_password: "¿Olvidaste tu contraseña?"
+  errors:
+    not_found: {
+      one: "Lo sentimos, el recurso que busca no existe.",
+      other: "Lo sentimos, el recurso que busca no existe."
+    }
