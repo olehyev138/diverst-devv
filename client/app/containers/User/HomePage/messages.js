@@ -28,8 +28,10 @@ export default defineMessages({
   ok: {
     id: `${scope}.ok`,
   },
+  cancel: {
+    id: `${scope}.cancel`,
+  },
   consent: {
     id: `${scope}.consent`,
   },
-
 });

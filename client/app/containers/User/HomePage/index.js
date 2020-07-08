@@ -71,6 +71,10 @@ export class HomePage extends React.PureComponent {
     this.setState({ consentOpen: false });
   };
 
+  handleCancel = () => {
+    this.setState({ consentOpen: false });
+  };
+
   render() {
     const { classes } = this.props;
     const events = (
@@ -161,6 +165,8 @@ export class HomePage extends React.PureComponent {
         open={this.props.enterprise && this.props.enterprise.onboarding_consent_enabled && this.state.consentOpen}
         handleYes={this.handleYes}
         textYes={this.props.intl ? this.props.intl.formatMessage(messages.ok) : ' '}
+        handleNo={this.handleCancel}
+        textNo={this.props.intl ? this.props.intl.formatMessage(messages.cancel) : ' '}
         content={(
           <DiverstHTMLEmbedder
             html={

@@ -62,6 +62,7 @@
   "diverst.containers.HomePage.privacy": "Privacy Statement",
   "diverst.containers.HomePage.close": "Close",
   "diverst.containers.HomePage.ok": "OK",
+  "diverst.containers.HomePage.cancel": "Cancel",
   "diverst.containers.HomePage.consent": "Consent Message",
   "diverst.containers.Login.button.login": "Login",
   "diverst.containers.Login.button.signup": "Sign Up",
