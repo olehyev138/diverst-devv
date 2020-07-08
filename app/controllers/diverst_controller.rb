@@ -4,6 +4,8 @@ class DiverstController < ApplicationController
   include BaseAuthentication
   include ActionController::Serialization
 
+  around_action :apply_locale
+
   serialization_scope :get_serialization_scope
 
   before_action :init_response
@@ -12,6 +14,12 @@ class DiverstController < ApplicationController
 
   # skip filter for routing errors
   skip_before_action :verify_jwt_token, only: [:routing_error]
+
+  # Get locale from params, otherwise fallback to default. This requires every request to contain the user's locale
+  def apply_locale(&action)
+    locale = params[:locale] || I18n.default_locale
+    I18n.with_locale(locale, &action)
+  end
 
   def error_json(e)
     json = { message: e.message }
