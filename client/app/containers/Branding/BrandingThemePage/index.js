@@ -50,7 +50,7 @@ export function BrandingThemePage(props) {
 }
 
 BrandingThemePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,

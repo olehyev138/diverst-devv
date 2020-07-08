@@ -114,7 +114,7 @@ export function CampaignList(props) {
 
 CampaignList.propTypes = {
   classes: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
   deleteCampaignBegin: PropTypes.func,
   links: PropTypes.shape({
     campaignNew: PropTypes.string,

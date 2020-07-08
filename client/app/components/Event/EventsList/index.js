@@ -112,7 +112,6 @@ export function EventsList(props) {
 
   return (
     <React.Fragment>
-      {dialog}
       {!props.readonly && (
         <React.Fragment>
           <Permission show={permission(props.currentGroup, 'events_create?')}>
@@ -179,9 +178,12 @@ export function EventsList(props) {
       <br />
       { props.calendar ? (
         <DiverstCalendar
-          events={props.calendarEvents}
+          calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          eventClick={clickEvent}
+          events={props.events}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
+          calendarDateCallback={props.calendarDateCallback}
         />
       ) : (
         <React.Fragment>
@@ -258,6 +260,8 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
+  currentGroupID: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({

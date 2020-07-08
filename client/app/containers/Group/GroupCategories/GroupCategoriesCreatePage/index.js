@@ -10,7 +10,7 @@ import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
 import { createGroupCategoriesBegin, getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedGroupCategories, selectIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 import { injectIntl, intlShape } from 'react-intl';
@@ -36,7 +36,7 @@ export function GroupCategoriesCreatePage(props) {
 }
 
 GroupCategoriesCreatePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   createGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,
@@ -47,7 +47,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   groupCategories: selectPaginatedGroupCategories(),
   currentEnterprise: selectEnterprise(),
-  isCommitting: selectGroupCategoriesIsCommitting(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

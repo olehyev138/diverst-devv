@@ -8,8 +8,15 @@ import { createStructuredSelector } from 'reselect';
 import { selectCustomText } from 'containers/Shared/App/selectors';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import BasicErrorBoundary from 'containers/Shared/BasicErrorBoundary';
 
-export const DiverstFormattedMessage = ({ customText, ...props }) => <FormattedMessage {...props} values={customTexts(customText)} />;
+export const DiverstFormattedMessage = ({ customText, ...props }) => (
+  <BasicErrorBoundary
+    render={({ error, info }) => 'UNDEFINED MESSAGE'}
+  >
+    <FormattedMessage {...props} values={customTexts(customText)} />
+  </BasicErrorBoundary>
+);
 
 DiverstFormattedMessage.propTypes = {
   customText: PropTypes.object,

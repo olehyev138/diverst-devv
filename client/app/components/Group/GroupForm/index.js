@@ -132,13 +132,13 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               fullWidth
               id='child_ids'
               name='child_ids'
+              forceReload
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               margin='normal'
               disabled={props.isCommitting}
               value={values.child_ids}
               options={props.selectGroups}
-              onMenuOpen={childrenSelectAction}
               onChange={value => setFieldValue('child_ids', value)}
               onInputChange={value => childrenSelectAction(value)}
               onBlur={() => setFieldTouched('child_ids', true)}
@@ -151,15 +151,16 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
               fullWidth
               id='parent_id'
               name='parent_id'
+              forceReload
               label={<DiverstFormattedMessage {...messages.parent} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.parent_id}
               options={props.selectGroups}
-              onMenuOpen={parentSelectAction}
               onChange={value => setFieldValue('parent_id', value)}
               onInputChange={value => parentSelectAction(value)}
               onBlur={() => setFieldTouched('parent_id', true)}
+              isClearable
             />
           </CardContent>
           <Divider />

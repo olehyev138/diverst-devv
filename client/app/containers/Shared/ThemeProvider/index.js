@@ -19,6 +19,8 @@ import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 
+import { formatColor } from 'utils/selectorHelpers';
+
 // Date/time pickers
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import LuxonUtils from '@date-io/luxon';
@@ -38,7 +40,7 @@ export function ThemeProvider(props) {
         default: '#f5f5f5',
       },
       primary: {
-        main: `#${brandingColor}`,
+        main: formatColor(brandingColor),
         main25: `#${brandingColor}40`,
         main50: `#${brandingColor}80`,
         main75: `#${brandingColor}C0`,
@@ -50,7 +52,7 @@ export function ThemeProvider(props) {
         main: '#9d9e9f',
       },
       graphs: {
-        main: `#${graphsColor}`
+        main: formatColor(graphsColor)
       },
       error: {
         main: '#D32F2F',
@@ -59,7 +61,7 @@ export function ThemeProvider(props) {
         main: '#ffa000',
       },
       info: {
-        main: `#${brandingColor}`,
+        main: formatColor(brandingColor),
       },
       success: {
         main: '#43a047',
