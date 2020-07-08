@@ -45,11 +45,6 @@ module BaseController
     base_authorize(item)
 
     render status: 200, json: klass.show(self.diverst_request, params)
-  rescue => e
-    case e
-    when Pundit::NotAuthorizedError then raise
-    else raise BadRequestException.new(e.message)
-    end
   end
 
   def update
