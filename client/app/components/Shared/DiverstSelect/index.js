@@ -3,8 +3,10 @@ import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import delayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
+import useArgumentRemembering from 'utils/customHooks/rememberArguments';
 
 const styles = theme => ({
   formControl: {
@@ -20,7 +22,17 @@ const styles = theme => ({
 });
 
 export function DiverstSelect(props) {
-  const { theme, classes, ...rest } = props;
+  const { theme, classes, onInputChange, forceReload, ...rest } = props;
+
+  const ignoredDuplicates = useArgumentRemembering(onInputChange);
+  const ignoreOnClose = (searchKey, event) => {
+    if (!(event && event.action === 'menu-close'))
+      ignoredDuplicates(searchKey);
+  };
+  const delayedInputChange = delayedTextInputCallback(ignoreOnClose);
+
+  const handleOpen = forceReload ? () => onInputChange('') : () => ignoredDuplicates('');
+  const handleInputChange = delayedInputChange;
 
   // Form Control props
   const {
@@ -31,6 +43,7 @@ export function DiverstSelect(props) {
     margin,
     required,
     variant,
+    onMenuOpen, // To prevent its use
     ...selectProps
   } = rest;
 
@@ -62,6 +75,8 @@ export function DiverstSelect(props) {
         menuPlacement='auto'
         captureMenuScroll={false}
         aria-describedby={`${props.id}-helper-text`}
+        onInputChange={handleInputChange}
+        onFocus={handleOpen}
         theme={selectTheme => ({
           ...selectTheme,
           colors: {
@@ -104,6 +119,12 @@ DiverstSelect.propTypes = {
   alt: PropTypes.string,
   hideHelperText: PropTypes.bool,
   isLoading: PropTypes.bool,
+  forceReload: PropTypes.bool,
+  onInputChange: PropTypes.func,
+};
+
+DiverstSelect.defaultProps = {
+  onInputChange: () => null,
 };
 
 export default compose(

@@ -28,9 +28,10 @@ export function GroupSponsorEditPage(props) {
   useInjectSaga({ key: 'sponsors', saga });
 
   const { group_sponsor_id: groupSponsorId } = useParams();
+  const { group_id: groupId } = useParams();
 
   const links = {
-    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupSponsorId),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupId),
   };
   const { intl } = props;
 
@@ -50,7 +51,7 @@ export function GroupSponsorEditPage(props) {
         sponsorAction={props.updateSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={groupSponsorId}
+        sponsorableId={groupId}
       />
     </React.Fragment>
   );
