@@ -29,6 +29,11 @@ const selectUser = () => createSelector(
   }
 );
 
+const selectGroups = () => createSelector(
+  selectSignUpDomain,
+  usersState => usersState.groups
+);
+
 const selectIsLoading = () => createSelector(
   selectSignUpDomain,
   usersState => usersState.isLoading
@@ -47,5 +52,5 @@ const selectFormErrors = () => createSelector(
 export {
   selectSignUpDomain, selectToken,
   selectIsLoading, selectUser, selectFormErrors,
-  selectIsCommitting,
+  selectIsCommitting, selectGroups
 };

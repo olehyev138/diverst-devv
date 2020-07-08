@@ -19,6 +19,7 @@ export const initialState = {
   isLoading: true,
   isCommitting: false,
   user: null,
+  groups: [],
   errors: null,
 };
 
@@ -32,6 +33,7 @@ function signUpReducer(state = initialState, action) {
       case GET_USER_BY_TOKEN_SUCCESS:
         draft.isLoading = false;
         draft.user = action.payload.user;
+        draft.groups = action.payload.groups;
         draft.token = action.payload.token;
         break;
       case GET_USER_BY_TOKEN_ERROR:
