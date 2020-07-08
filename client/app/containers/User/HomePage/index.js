@@ -68,7 +68,7 @@ export class HomePage extends React.PureComponent {
   };
 
   handleYes = () => {
-    this.setState({ consentOpen: false })
+    this.setState({ consentOpen: false });
   };
 
   render() {

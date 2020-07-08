@@ -1,96 +1,108 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<HomePage /> Should render and match the snapshot 1`] = `
-<WithStyles(Grid__Grid)
-  areas={
-    Array [
-      "header header  header  header  header  header  header  header  header  header",
-      "message message  message  message  message  message  message  message  message  message",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
-      "privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy",
-    ]
-  }
-  columnGap="24px"
-  columns={10}
-  rowGap="16px"
-  rows="auto auto auto auto 1fr"
->
-  <DiverstCSSCell
-    area="header"
+<Fragment>
+  <WithStyles(DiverstDialog)
+    content={
+      <Memo(WithStyles(WithTheme(DiverstHTMLEmbedder)))
+        html=""
+      />
+    }
+    handleYes={[Function]}
+    textYes="OK"
+    title="Consent Message"
   />
-  <DiverstCSSCell
-    area="message"
+  <WithStyles(Grid__Grid)
+    areas={
+      Array [
+        "header header  header  header  header  header  header  header  header  header",
+        "message message  message  message  message  message  message  message  message  message",
+        "events events  events  events  news   news    news    news    sponsor  sponsor",
+        "events events  events  events  news   news    news    news    sponsor  sponsor",
+        "events events  events  events  news   news    news    news    sponsor  sponsor",
+        "privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy",
+      ]
+    }
+    columnGap="24px"
+    columns={10}
+    rowGap="16px"
+    rows="auto auto auto auto 1fr"
   >
-    <Memo(WithStyles(WithTheme(DiverstHTMLEmbedder)))
-      html=""
+    <DiverstCSSCell
+      area="header"
     />
-  </DiverstCSSCell>
-  <DiverstCSSCell
-    area="events"
-  >
-    <WithStyles(ForwardRef(Paper))>
-      <WithStyles(ForwardRef(CardContent))>
-        <WithStyles(ForwardRef(Typography))
-          variant="h5"
-        >
-          <Memo(Connect(DiverstFormattedMessage))
-            id="diverst.containers.HomePage.events"
-          />
-        </WithStyles(ForwardRef(Typography))>
-        <Connect(Component)
-          listComponent={[Function]}
-          loaderProps={
-            Object {
-              "transitionProps": Object {
-                "direction": "right",
-              },
+    <DiverstCSSCell
+      area="message"
+    >
+      <Memo(WithStyles(WithTheme(DiverstHTMLEmbedder)))
+        html=""
+      />
+    </DiverstCSSCell>
+    <DiverstCSSCell
+      area="events"
+    >
+      <WithStyles(ForwardRef(Paper))>
+        <WithStyles(ForwardRef(CardContent))>
+          <WithStyles(ForwardRef(Typography))
+            variant="h5"
+          >
+            <Memo(Connect(DiverstFormattedMessage))
+              id="diverst.containers.HomePage.events"
+            />
+          </WithStyles(ForwardRef(Typography))>
+          <Connect(Component)
+            listComponent={[Function]}
+            loaderProps={
+              Object {
+                "transitionProps": Object {
+                  "direction": "right",
+                },
+              }
             }
-          }
-          readonly={true}
-        />
-      </WithStyles(ForwardRef(CardContent))>
-    </WithStyles(ForwardRef(Paper))>
-  </DiverstCSSCell>
-  <DiverstCSSCell
-    area="news"
-  >
-    <WithStyles(ForwardRef(Paper))>
-      <WithStyles(ForwardRef(CardContent))>
-        <WithStyles(ForwardRef(Typography))
-          variant="h5"
-        >
-          <Memo(Connect(DiverstFormattedMessage))
-            id="diverst.containers.HomePage.news"
+            readonly={true}
           />
-        </WithStyles(ForwardRef(Typography))>
-        <Connect(Component)
-          listComponent={
-            Object {
-              "$$typeof": Symbol(react.memo),
-              "compare": null,
-              "type": [Function],
+        </WithStyles(ForwardRef(CardContent))>
+      </WithStyles(ForwardRef(Paper))>
+    </DiverstCSSCell>
+    <DiverstCSSCell
+      area="news"
+    >
+      <WithStyles(ForwardRef(Paper))>
+        <WithStyles(ForwardRef(CardContent))>
+          <WithStyles(ForwardRef(Typography))
+            variant="h5"
+          >
+            <Memo(Connect(DiverstFormattedMessage))
+              id="diverst.containers.HomePage.news"
+            />
+          </WithStyles(ForwardRef(Typography))>
+          <Connect(Component)
+            listComponent={
+              Object {
+                "$$typeof": Symbol(react.memo),
+                "compare": null,
+                "type": [Function],
+              }
             }
-          }
-          readonly={true}
-        />
-      </WithStyles(ForwardRef(CardContent))>
-    </WithStyles(ForwardRef(Paper))>
-  </DiverstCSSCell>
-  <DiverstCSSCell
-    area="sponsor"
-  >
-    <Memo(Connect(SponsorCard))
-      currentGroup={null}
-      type="enterprise"
+            readonly={true}
+          />
+        </WithStyles(ForwardRef(CardContent))>
+      </WithStyles(ForwardRef(Paper))>
+    </DiverstCSSCell>
+    <DiverstCSSCell
+      area="sponsor"
+    >
+      <Memo(Connect(SponsorCard))
+        currentGroup={null}
+        type="enterprise"
+      />
+    </DiverstCSSCell>
+    <DiverstCSSCell
+      area="privacy"
     />
-  </DiverstCSSCell>
-  <DiverstCSSCell
-    area="privacy"
-  />
-  <DiverstCSSCell
-    area="null"
-  />
-</WithStyles(Grid__Grid)>
+    <DiverstCSSCell
+      area="null"
+    />
+  </WithStyles(Grid__Grid)>
+</Fragment>
 `;
