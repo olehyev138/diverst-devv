@@ -30,7 +30,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PollResponseForm from 'components/Poll/PollResponseForm';
 
-export function SignUpPage(props) {
+export function PollResponsePage(props) {
   useInjectReducer({ key: 'pollResponse', reducer });
   useInjectSaga({ key: 'pollResponse', saga });
 
@@ -64,7 +64,7 @@ export function SignUpPage(props) {
   );
 }
 
-SignUpPage.propTypes = {
+PollResponsePage.propTypes = {
   getQuestionnaireByTokenBegin: PropTypes.func,
   submitResponseBegin: PropTypes.func,
   pollResponseUnmount: PropTypes.func,
@@ -103,4 +103,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SignUpPage);
+)(PollResponsePage);
