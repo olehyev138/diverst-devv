@@ -30,6 +30,7 @@ import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
 import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -165,6 +166,16 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   onChange={value => setFieldValue('time_zone', value)}
                   onBlur={() => setFieldTouched('time_zone', true)}
                 />
+                <FieldInputForm
+                  fieldData={dig(props, 'user', 'field_data') || []}
+                  updateFieldDataBegin={props.updateFieldDataBegin}
+                  isCommitting={props.isCommitting}
+                  isFormLoading={props.isFormLoading}
+
+                  admin={props.admin}
+                  messages={messages}
+                  formikProps={formikProps}
+                />
               </CardContent>
               <Divider />
               <CardActions>
@@ -188,7 +199,7 @@ export function SignUpForm(props) {
     first_name: { default: '' },
     last_name: { default: '' },
     biography: { default: '' },
-    time_zone: { default: null },
+    time_zone: { default: '' },
     password: '',
     password_confirmation: '',
     field_data: { default: [], customKey: 'fieldData' },
@@ -201,6 +212,8 @@ export function SignUpForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone']);
+        payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
+        delete payload.fieldData;
         props.submitAction({ token: props.token, ...payload });
       }}
     >
