@@ -18,6 +18,29 @@
 #
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
+#
+#
+# Documentation:
+# ===============
+#
+# Usage
+#   Use `t('key.subkey...')` excluding the root language key (ex: 'en') in controllers to utilize translation messages
+#
+#
+# Variable Interpolation
+#   Define your translation value like this: `translation_key: "Foo %{variable} Bar"`
+#   And then you can use it by doing: `t('translation_key', variable: model_instance.value)`
+#
+#
+# Pluralization
+#   If the message would be different if pluralized, singular, and/or when it's 0 (optional), you can pass an object as the message instead:
+#   Ex. translation_key: {
+#         zero: "No messages", # optional
+#         one: "One message",
+#         other: "%{count} messages"
+#       }
+#   To pass the count: `t('translation_key', count: N)`
+#
 
 en:
   login:
