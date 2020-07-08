@@ -124,7 +124,6 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
               disabled={props.isCommitting}
               value={values.group_ids}
               options={props.selectGroups}
-              onMenuOpen={groupSelectAction}
               onChange={value => setFieldValue('group_ids', value)}
               onInputChange={value => groupSelectAction(value)}
               onBlur={() => setFieldTouched('group_ids', true)}

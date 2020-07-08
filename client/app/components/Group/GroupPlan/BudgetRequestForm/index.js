@@ -232,7 +232,6 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
               disabled={props.isCommitting || !props.currentGroup}
               value={values.approver_id}
               options={Object.values(props.approvers)}
-              onMenuOpen={approverSelectAction}
               onChange={value => setFieldValue('approver_id', value)}
               onInputChange={value => approverSelectAction(value)}
               onBlur={() => setFieldTouched('approver_id', true)}
