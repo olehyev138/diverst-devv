@@ -32,6 +32,8 @@ import { FormattedMessage } from 'react-intl';
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+  const { user, groups, enterprise, ...rest } = props;
+
   return (
     <Scrollbar>
       <Container>
@@ -182,23 +184,22 @@ export function SignUpForm(props) {
 SignUpForm.propTypes = {
   submitAction: PropTypes.func,
   user: PropTypes.object,
+  groups: PropTypes.object,
+  enterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
   token: PropTypes.string,
-  errors: PropTypes.object,
-};
-
-SignUpFormInner.propTypes = {
-  formikProps: PropTypes.object,
-  errors: PropTypes.object,
-  user: PropTypes.object,
   buttonText: PropTypes.string,
-  isCommitting: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  errors: PropTypes.object,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
   })
+};
+
+SignUpFormInner.propTypes = {
+  ...SignUpForm.propTypes,
+  formikProps: PropTypes.object,
 };
 
 export default compose(
