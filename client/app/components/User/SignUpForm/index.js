@@ -13,11 +13,12 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Typography, Box
+  Divider, CardHeader, Box
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
 import messages from 'containers/User/messages';
+import appMessages from 'containers/Shared/App/messages';
 import signUpMessages from 'containers/User/SignUpPage/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -27,8 +28,8 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import Scrollbar from 'components/Shared/Scrollbar';
 import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
-import { FormattedMessage } from 'react-intl';
 import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -45,6 +46,21 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
               single
               noAsync
             />
+            <Box mb={2} />
+          </React.Fragment>
+        )}
+        { dig(enterprise, 'privacy_statement') && (
+          <React.Fragment>
+            <Card>
+              <CardHeader
+                title={<DiverstFormattedMessage {...appMessages.custom_text.privacy_statement} />}
+              />
+              <CardContent>
+                <DiverstHTMLEmbedder
+                  html={enterprise.privacy_statement}
+                />
+              </CardContent>
+            </Card>
             <Box mb={2} />
           </React.Fragment>
         )}
@@ -153,7 +169,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
               <Divider />
               <CardActions>
                 <DiverstSubmit isCommitting={props.isCommitting}>
-                  {<FormattedMessage {...signUpMessages.activate} />}
+                  {<DiverstFormattedMessage {...signUpMessages.activate} />}
                 </DiverstSubmit>
               </CardActions>
             </Form>
