@@ -129,7 +129,6 @@ export function EventFormInner({
               disabled={props.isCommitting}
               value={values.pillar_id}
               options={props.pillars}
-              onMenuOpen={pillarSelectAction}
               onChange={value => setFieldValue('pillar_id', value)}
               onInputChange={value => pillarSelectAction(value)}
               onBlur={() => setFieldTouched('pillar_id', true)}
@@ -155,7 +154,6 @@ export function EventFormInner({
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
                   options={[freeEvent, ...props.budgetItems]}
-                  onMenuOpen={budgetSelectAction}
                   onChange={(value) => {
                     setFieldValue('budget_item_id', value);
                     setFieldValue('estimated_funding', value.available);

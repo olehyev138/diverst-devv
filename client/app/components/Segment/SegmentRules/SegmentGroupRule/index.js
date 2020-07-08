@@ -48,7 +48,6 @@ const SegmentGroupRule = ({ rule, ...props }) => {
             isMulti
             options={props.groups}
             value={groups}
-            onMenuOpen={groupSelectAction}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.group_ids`, v)}
             onInputChange={value => groupSelectAction(value)}
             onBlur={() => props.formik.setFieldTouched('group_ids', true)}
