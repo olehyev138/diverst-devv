@@ -25,4 +25,11 @@ export default defineMessages({
   close: {
     id: `${scope}.close`,
   },
+  ok: {
+    id: `${scope}.ok`,
+  },
+  consent: {
+    id: `${scope}.consent`,
+  },
+
 });

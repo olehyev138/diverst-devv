@@ -61,6 +61,8 @@
   "diverst.containers.HomePage.events": "Your Upcoming Events",
   "diverst.containers.HomePage.privacy": "Privacy Statement",
   "diverst.containers.HomePage.close": "Close",
+  "diverst.containers.HomePage.ok": "OK",
+  "diverst.containers.HomePage.consent": "Consent Message",
   "diverst.containers.Login.button.login": "Login",
   "diverst.containers.Login.button.signup": "Sign Up",
   "diverst.containers.Login.input.email": "Email",

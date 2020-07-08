@@ -32,6 +32,7 @@ import { selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
+import AuthService from 'utils/authService';
 
 const styles = theme => ({
   title: {
@@ -53,7 +54,8 @@ export class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      consentOpen: true
     };
   }
 
@@ -63,6 +65,10 @@ export class HomePage extends React.PureComponent {
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  handleYes = () => {
+    this.setState({ consentOpen: false })
   };
 
   render() {
@@ -150,29 +156,51 @@ export class HomePage extends React.PureComponent {
       />
     ) : null;
 
+    const consentMessage = (
+      <DiverstDialog
+        open={this.props.enterprise && this.props.enterprise.onboarding_consent_enabled && this.state.consentOpen}
+        handleYes={this.handleYes}
+        textYes={this.props.intl ? this.props.intl.formatMessage(messages.ok) : ' '}
+        content={(
+          <DiverstHTMLEmbedder
+            html={
+              this.props.enterprise
+                ? this.props.enterprise.onboarding_consent_message
+                : ''
+            }
+          />
+        )}
+        title={this.props.intl ? this.props.intl.formatMessage(messages.consent) : ' '}
+      />
+    );
+
     return (
-      <DiverstCSSGrid
-        columns={10}
-        rows='auto auto auto auto 1fr'
-        areas={[
-          'header header  header  header  header  header  header  header  header  header',
-          'message message  message  message  message  message  message  message  message  message',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
-        ]}
-        rowGap='16px'
-        columnGap='24px'
-      >
-        <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
-        <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
-        <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
-        <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
-        <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
-      </DiverstCSSGrid>
+      <React.Fragment>
+        {consentMessage}
+        <DiverstCSSGrid
+          columns={10}
+          rows='auto auto auto auto 1fr'
+          areas={[
+            'header header  header  header  header  header  header  header  header  header',
+            'message message  message  message  message  message  message  message  message  message',
+            'events events  events  events  news   news    news    news    sponsor  sponsor',
+            'events events  events  events  news   news    news    news    sponsor  sponsor',
+            'events events  events  events  news   news    news    news    sponsor  sponsor',
+            'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+          ]}
+          rowGap='16px'
+          columnGap='24px'
+        >
+          <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
+          <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
+          <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
+          <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
+          <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
+          <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
+          <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
+        </DiverstCSSGrid>
+      </React.Fragment>
+
     );
   }
 }
