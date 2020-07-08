@@ -74,7 +74,9 @@ class DiverstController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :not_found, json: { message: 'Sorry, the resource you are looking for does not exist.' }
+    apply_locale do
+      render status: :not_found, json: { message: t('errors.not_found', count: 1) }
+    end
   end
 
   rescue_from ActiveRecord::StatementInvalid do |e|
