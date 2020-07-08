@@ -108,7 +108,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               />
               <FormControl>
                 <FormControlLabel
-                  labelPlacement='right'
+                  labelPlacement='end'
                   label={<DiverstFormattedMessage {...messages.active} />}
                   control={(
                     <Field
