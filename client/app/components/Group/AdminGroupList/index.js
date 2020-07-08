@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -75,6 +75,10 @@ export function AdminGroupList(props, context) {
   const { classes, defaultParams } = props;
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
+
+  useEffect(() => {
+    setSave(false);
+  }, [defaultParams.page]);
 
   return (
     <React.Fragment>
