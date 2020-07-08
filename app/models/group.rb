@@ -263,6 +263,8 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  attribute :position, :integer, default: Group.all.count+1
+
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
 

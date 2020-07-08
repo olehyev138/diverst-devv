@@ -7,6 +7,8 @@ class Field < ApplicationRecord
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
+  attribute :position, :integer, default: Field.all.count+1
+
   validates_length_of :field_type, maximum: 191
   validates_length_of :options_text, maximum: 65535
   validates_length_of :saml_attribute, maximum: 191
