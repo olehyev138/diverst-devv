@@ -28,6 +28,7 @@ import Scrollbar from 'components/Shared/Scrollbar';
 import Container from '@material-ui/core/Container';
 import Logo from 'components/Shared/Logo';
 import { FormattedMessage } from 'react-intl';
+import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -37,6 +38,16 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   return (
     <Scrollbar>
       <Container>
+        { enterprise.sponsors.length > 0 && (
+          <React.Fragment>
+            <LargeSponsorCard
+              sponsor={enterprise.sponsors[0]}
+              single
+              noAsync
+            />
+            <Box mb={2} />
+          </React.Fragment>
+        )}
         <DiverstFormLoader isLoading={props.isLoading} isError={!props.user}>
           <Card>
             <Form>
@@ -164,7 +175,8 @@ export function SignUpForm(props) {
     time_zone: { default: null },
     password: '',
     password_confirmation: '',
-    field_data: { default: [], customKey: 'fieldData' }
+    field_data: { default: [], customKey: 'fieldData' },
+    group_ids: { default: [] },
   });
 
   return (
@@ -184,7 +196,7 @@ export function SignUpForm(props) {
 SignUpForm.propTypes = {
   submitAction: PropTypes.func,
   user: PropTypes.object,
-  groups: PropTypes.object,
+  groups: PropTypes.arrayOf(PropTypes.object),
   enterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
