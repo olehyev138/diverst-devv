@@ -111,6 +111,7 @@ class Api::V1::UsersController < DiverstController
     render status: 200, json: {
         token: token,
         user: InvitedUserSerializer.new(user).as_json,
+        groups: Group.where(parent_id: nil, private: false, enterprise_id: user.enterprise_id).map { |group| GroupSerializer.new(group).as_json }
     }
   rescue => e
     raise BadRequestException.new(e.message)
