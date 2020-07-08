@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_18_202924) do
+ActiveRecord::Schema.define(version: 2020_07_08_170943) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -469,6 +469,7 @@ ActiveRecord::Schema.define(version: 2020_06_18_202924) do
     t.boolean "required", default: false
     t.string "field_type"
     t.boolean "add_to_member_list", default: false
+    t.integer "position"
     t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 
