@@ -2,6 +2,7 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes :id, :permissions
 
   attributes_with_permission :id, :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :family?
+  attributes_with_permission :id, :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :public?
 
   attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                              :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
@@ -13,6 +14,10 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def family?
     instance_options[:family]
+  end
+
+  def public?
+    !object[:private]
   end
 
   def show?
