@@ -83,7 +83,7 @@ export function LargeSponsorCard(props) {
               <Typography variant='h6'>
                 {sponsor.sponsor_title}
               </Typography>
-              <Typography variant='body'>
+              <Typography variant='body1'>
                 {sponsor.sponsor_message}
               </Typography>
             </ScrollBar>
