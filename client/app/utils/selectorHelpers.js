@@ -24,6 +24,8 @@ export const mapFieldData = fieldData => fieldData.map(fieldDatum => produce(fie
   draft.field = splitOptions(fieldDatum.field);
 }));
 
+export const mapAndDeserializeFieldData = fieldData => deserializeFields(mapFieldData(fieldData));
+
 // Takes fields and transforms the options texts in the form of ("Option1\nOption2\nOption3\n")
 // and turns it into an array of select field options [{label: "Option1", value: "Option1"}, ...]
 export const splitOptions = field => produce(field, (draft) => {

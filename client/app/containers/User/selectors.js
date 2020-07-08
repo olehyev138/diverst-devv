@@ -5,8 +5,14 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 
-import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { mapFieldData, mapFieldNames, mapSelectField, timezoneMap, formatColor } from 'utils/selectorHelpers';
+import {
+  mapAndDeserializeFieldData,
+  mapFieldNames,
+  mapSelectField,
+  timezoneMap,
+  formatColor,
+  deserializeFields
+} from 'utils/selectorHelpers';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -47,7 +53,7 @@ const selectFormUser = () => createSelector(
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
         draft.timezones = timezoneMap(timezoneArray, user, draft);
-        draft.field_data = mapFieldData(user.field_data);
+        draft.field_data = mapAndDeserializeFieldData(user.field_data);
         draft.user_role_id = mapSelectField(user.user_role, 'role_name');
         draft.available_roles = user.available_roles
           && user.available_roles.map(item => mapSelectField(item, 'role_name', 'default'));
@@ -145,13 +151,7 @@ const selectFieldData = () => createSelector(
     const fieldData = dig(usersState, 'currentUser', 'field_data');
     if (!fieldData) return fieldData;
 
-    return produce(fieldData, (draft) => {
-      if (fieldData)
-        draft.forEach((datum) => {
-          datum.data = deserializeDatum(datum);
-          datum.field.options = deserializeOptionsText(datum.field);
-        });
-    });
+    return deserializeFields(fieldData);
   }
 );
 
