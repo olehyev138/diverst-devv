@@ -17,6 +17,7 @@ import {
   selectIsLoading,
   selectIsCommitting,
   selectFormErrors,
+  selectGroups,
 } from './selectors';
 
 import {
@@ -29,6 +30,7 @@ import { injectIntl } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import SignUpForm from 'components/User/SignUpForm';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function SignUpPage(props) {
   useInjectReducer({ key: 'signUp', reducer });
@@ -58,6 +60,8 @@ export function SignUpPage(props) {
       isCommitting={props.isCommitting}
       token={props.token}
       errors={props.formErrors}
+      enterprise={props.enterprise}
+      groups={props.groups}
 
       submitAction={props.submitPasswordBegin}
     />
@@ -74,6 +78,8 @@ SignUpPage.propTypes = {
   isCommitting: PropTypes.bool,
   token: PropTypes.string,
   user: PropTypes.object,
+  groups: PropTypes.arrayOf(PropTypes.object),
+  enterprise: PropTypes.object,
   isLoading: PropTypes.bool,
   formErrors: PropTypes.object,
 };
@@ -84,6 +90,8 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   isLoading: selectIsLoading(),
   formErrors: selectFormErrors(),
+  groups: selectGroups(),
+  enterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {
