@@ -92,6 +92,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   # then instead return a pseudo policy which will return false on any method call
   def policy
     @policy ||= begin
+                  # User provided policy, or find an instantiate a new policy based on the serialized object
                   @instance_options[:policy].presence || Pundit::PolicyFinder.new(object).policy.new(
                         scope&.dig(:current_user),
                         object,
