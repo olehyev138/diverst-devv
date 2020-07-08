@@ -141,7 +141,8 @@ class Api::V1::UsersController < DiverstController
             :biography,
             :time_zone,
             field_data_attributes: [
-                :data
+                :id,
+                :data,
             ]
           )
   end
