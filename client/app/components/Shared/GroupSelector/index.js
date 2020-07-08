@@ -29,7 +29,7 @@ import messages from 'containers/Group/messages';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
-  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, hardReload, dialogNoChildren, ...rest } = props;
+  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
@@ -68,7 +68,7 @@ const GroupSelector = (props) => {
   })();
 
   const groupSelectAction = (searchKey = '') => {
-    if (props.hardReload)
+    if (props.forceReload)
       props.getGroupsSuccess({ items: [] });
     props.inputCallback(props, searchKey);
   };
@@ -88,6 +88,7 @@ const GroupSelector = (props) => {
           margin='normal'
           label={label}
           fullWidth
+          forceReload={forceReload}
           options={groups}
           value={values[groupField]}
           onChange={onChange}
@@ -159,7 +160,7 @@ const GroupSelector = (props) => {
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
   dialogNoChildren: PropTypes.bool,
-  hardReload: PropTypes.bool,
+  forceReload: PropTypes.bool,
 
   groupField: PropTypes.string.isRequired,
   label: PropTypes.node.isRequired,

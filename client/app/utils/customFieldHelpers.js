@@ -47,7 +47,7 @@ function serializeDatum(fieldDatum) {
 
   switch (type) {
     case 'CheckboxField':
-      if (datum.lenght === 0)
+      if (datum.length === 0)
         return '[]';
       if (typeof datum[0] === 'object')
         return JSON.stringify(datum.map(i => i.value));
@@ -60,6 +60,8 @@ function serializeDatum(fieldDatum) {
       return datum;
   }
 }
+
+const dateMap = {};
 
 function deserializeDatum(fieldDatum) {
   const datum = fieldDatum.data;

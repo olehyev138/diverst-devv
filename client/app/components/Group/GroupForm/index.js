@@ -134,7 +134,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
 
               dialogSelector
               dialogNoChildren
-              hardReload
+              forceReload
 
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
@@ -150,7 +150,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
 
               dialogSelector
               dialogNoChildren
-              hardReload
+              forceReload
 
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
