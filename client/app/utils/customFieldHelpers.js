@@ -53,7 +53,7 @@ function serializeDatum(fieldDatum) {
         return JSON.stringify(datum.map(i => i.value));
       return JSON.stringify(datum);
     case 'SelectField':
-      return JSON.stringify([datum.value]);
+      return datum.value ? JSON.stringify([datum.value]) : null;
     case 'DateField':
       return JSON.stringify(datum);
     default:
