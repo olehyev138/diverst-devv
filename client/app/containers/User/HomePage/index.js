@@ -32,7 +32,6 @@ import { selectEnterprise } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
-import AuthService from 'utils/authService';
 
 const styles = theme => ({
   title: {
@@ -54,7 +53,7 @@ export class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      open: false
     };
   }
 
