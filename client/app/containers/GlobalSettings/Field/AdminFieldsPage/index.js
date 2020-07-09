@@ -1,6 +1,6 @@
 /**
  *
- * FieldsPage
+ * AdminFieldsPage
  *
  *  - lists all enterprise custom fields
  *  - renders forms for creating & editing custom fields
