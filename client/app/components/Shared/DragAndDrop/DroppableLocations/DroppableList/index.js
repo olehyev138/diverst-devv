@@ -69,5 +69,5 @@ DroppableList.propTypes = {
   renderCard: PropTypes.func,
   rowsPerPage: PropTypes.number,
   positions: PropTypes.array,
-  intl: intlShape.isRequired,
+  intl: intlShape,
 };

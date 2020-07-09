@@ -28,6 +28,8 @@ import Field from 'components/Shared/Fields/FieldIndexItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
+import {DroppableFieldList} from "../../../../containers/GlobalSettings/Field/DroppableFieldAdminList";
+
 
 const styles = theme => ({
   fieldListItem: {
@@ -56,7 +58,7 @@ const styles = theme => ({
 
 export function AdminFieldList(props, context) {
   const { classes, ...rest } = props;
-
+  const { defaultParams } = props;
   const FIELDS = {
     text: {
       field: {
@@ -234,21 +236,18 @@ export function AdminFieldList(props, context) {
       </Grid>
       <Box mb={2} />
       <DiverstLoader isLoading={props.isLoading}>
-        <Grid container spacing={3}>
-          { /* eslint-disable-next-line arrow-body-style */ }
-          {props.fields && Object.values(props.fields).map((field, i) => {
-            return (
-              <Field
-                currentEnterprise={props.currentEnterprise}
-                updateFieldBegin={props.updateFieldBegin}
-                deleteFieldBegin={props.deleteFieldBegin}
-                field={field}
-                key={field.id}
-                toggles={props.toggles}
-              />
-            );
-          })}
-        </Grid>
+        <DroppableFieldList
+          items={props.fields}
+          positions={props.positions}
+          classes={classes}
+          draggable={order}
+          save={save}
+          updateGroupPositionBegin={props.updateFieldPositionBegin}
+          deleteGroupBegin={props.deleteFieldBegin}
+          currentPage={defaultParams.page}
+          importAction={props.importAction}
+          rowsPerPage={defaultParams.count}
+        />
       </DiverstLoader>
       <DiverstPagination
         isLoading={props.isLoading}
@@ -262,7 +261,7 @@ export function AdminFieldList(props, context) {
 
 AdminFieldList.propTypes = {
   classes: PropTypes.object,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   createFieldBegin: PropTypes.func,
@@ -273,18 +272,16 @@ AdminFieldList.propTypes = {
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
 
-  textField: PropTypes.bool,
-  selectField: PropTypes.bool,
-  checkboxField: PropTypes.bool,
-  dateField: PropTypes.bool,
-  numberField: PropTypes.bool,
-
   toggles: PropTypes.shape({
     visible: PropTypes.bool,
     editable: PropTypes.bool,
     required: PropTypes.bool,
     memberList: PropTypes.bool,
-  })
+  }),
+  defaultParams: PropTypes.object,
+  importAction: PropTypes.func,
+  updateFieldPositionBegin: PropTypes.func,
+  positions: PropTypes.array,
 };
 
 AdminFieldList.defaultProps = {

@@ -124,7 +124,7 @@ AdminFieldsPage.propTypes = {
   createFieldBegin: PropTypes.func.isRequired,
   updateFieldBegin: PropTypes.func.isRequired,
   updateFieldPositionBegin: PropTypes.func.isRequired,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,

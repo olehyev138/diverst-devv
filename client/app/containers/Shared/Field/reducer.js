@@ -18,7 +18,7 @@ export const initialState = {
   isLoading: true,
   isCommitting: false,
   commitSuccess: undefined,
-  fieldList: {},
+  fieldList: [],
   fieldTotal: null,
   currentField: null,
   hasChanged: false,
@@ -33,7 +33,7 @@ function fieldsReducer(state = initialState, action) {
         draft.isLoading = true;
         break;
       case GET_FIELDS_SUCCESS:
-        draft.fieldList = formatFields(action.payload.items);
+        draft.fieldList = action.payload.items;
         draft.fieldTotal = action.payload.total;
         draft.isLoading = false;
         break;
