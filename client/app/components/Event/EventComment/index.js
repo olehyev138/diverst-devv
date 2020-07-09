@@ -89,7 +89,6 @@ EventComment.propTypes = {
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
-  event: PropTypes.object,
   currentUserId: PropTypes.number,
 };
 
