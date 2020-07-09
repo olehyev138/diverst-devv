@@ -33,7 +33,7 @@ import {
 } from 'containers/Shared/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
-  fieldUnmount, deleteFieldBegin
+  fieldUnmount, deleteFieldBegin, updateFieldPositionBegin,
 } from 'containers/Shared/Field/actions';
 
 import reducer from 'containers/Shared/Field/reducer';
@@ -45,7 +45,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
-export function FieldListPage(props) {
+export function AdminFieldsPage(props) {
   useInjectReducer({ key: 'fields', reducer });
   useInjectSaga({ key: 'fields', saga });
 
@@ -113,15 +113,17 @@ export function FieldListPage(props) {
 
         positions={positions}
         defaultParams={params}
+        updateFieldPositionBegin={props.updateFieldPositionBegin}
       />
     </React.Fragment>
   );
 }
 
-FieldListPage.propTypes = {
+AdminFieldsPage.propTypes = {
   getFieldsBegin: PropTypes.func.isRequired,
   createFieldBegin: PropTypes.func.isRequired,
   updateFieldBegin: PropTypes.func.isRequired,
+  updateFieldPositionBegin: PropTypes.func.isRequired,
   fields: PropTypes.object,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
@@ -151,6 +153,7 @@ const mapDispatchToProps = {
   createFieldBegin,
   updateFieldBegin,
   deleteFieldBegin,
+  updateFieldPositionBegin,
   fieldUnmount,
 };
 
@@ -163,7 +166,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  FieldListPage,
+  AdminFieldsPage,
   ['permissions.fields_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.field.indexPage

@@ -124,7 +124,7 @@ import EventCreatePage from 'containers/Event/EventCreatePage/Loadable';
 import EventEditPage from 'containers/Event/EventEditPage/Loadable';
 import EventManageMetricsPage from 'containers/Event/EventManage/MetricsPage/Loadable';
 import EventManageLayout from 'containers/Layouts/EventManageLayout/Loadable';
-import EventManageFieldsPage from 'containers/Event/EventManage/AdminFieldsPage/Loadable';
+import EventManageFieldsPage from 'containers/Event/EventManage/FieldsPage/Loadable';
 import EventManageUpdatesPage from 'containers/Event/EventManage/UpdatesPage/Loadable';
 import EventManageUpdatePage from 'containers/Event/EventManage/UpdatePage/Loadable';
 import EventManageUpdateEditPage from 'containers/Event/EventManage/UpdateEditPage/Loadable';
@@ -152,7 +152,7 @@ import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 
 /* Group - Plan - KPI */
 import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
-import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/AdminFieldsPage/Loadable';
+import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/FieldsPage/Loadable';
 import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loadable';
 import GroupPlanUpdatePage from 'containers/Group/GroupPlan/KPI/UpdatePage/Loadable';
 import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPage/Loadable';
