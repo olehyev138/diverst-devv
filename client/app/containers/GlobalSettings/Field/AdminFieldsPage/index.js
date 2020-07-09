@@ -54,7 +54,7 @@ export function FieldListPage(props) {
       count: 5,
       page: 0,
       order: 'asc',
-      orderBy: 'fields.id',
+      orderBy: 'position',
       fieldDefinerId: dig(props, 'currentEnterprise', 'id')
     }
   );
@@ -83,6 +83,10 @@ export function FieldListPage(props) {
     setParams(newParams);
   };
 
+  const positions = [];
+  for (let i = 0; i < props.fields.length; i += 1)
+    positions[i] = { id: props.fields[i].id, position: props.fields[i].position };
+
   return (
     <React.Fragment>
       <AdminFieldList
@@ -100,18 +104,15 @@ export function FieldListPage(props) {
         commitSuccess={props.commitSuccess}
         currentEnterprise={props.currentEnterprise}
 
-        textField
-        selectField
-        checkboxField
-        dateField
-        numberField
-
         toggles={{
           visible: true,
           editable: true,
           memberList: true,
           required: true,
         }}
+
+        positions={positions}
+        defaultParams={params}
       />
     </React.Fragment>
   );
