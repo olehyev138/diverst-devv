@@ -262,7 +262,6 @@ export function Event(props) {
                 key={comment.id}
                 comment={comment}
                 deleteEventCommentBegin={props.deleteEventCommentBegin}
-                event={props.event}
                 currentUserId={props.currentUserId}
               />
             );

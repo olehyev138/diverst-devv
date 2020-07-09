@@ -204,7 +204,11 @@ Diverst::Application.routes.draw do
         get  '/fields',       to: 'polls#fields'
         post '/create_field', to: 'polls#create_field'
       end
-      resources :poll_responses
+      resources :poll_responses, except: [:destroy, :update] do
+        collection do
+          get 'questionnaire', to: 'poll_responses#questionnaire'
+        end
+      end
       resources :polls_segments
       resources :questions
       resources :resources do
