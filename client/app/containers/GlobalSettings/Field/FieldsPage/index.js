@@ -39,7 +39,7 @@ import {
 import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
-import FieldList from 'components/Shared/Fields/FieldList';
+import AdminFieldList from 'components/Shared/Fields/AdminFieldList';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -85,7 +85,7 @@ export function FieldListPage(props) {
 
   return (
     <React.Fragment>
-      <FieldList
+      <AdminFieldList
         fields={props.fields}
         fieldTotal={props.fieldTotal}
         isLoading={props.isLoading}

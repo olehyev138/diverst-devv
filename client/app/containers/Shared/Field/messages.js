@@ -84,4 +84,10 @@ export default defineMessages({
   header: {
     id: `${scope}.form.header`,
   },
+  change_order: {
+    id: `diverst.containers.Group.index.button.change_order`,
+  },
+  set_order: {
+    id: `diverst.containers.Group.index.button.set_order`,
+  },
 });
