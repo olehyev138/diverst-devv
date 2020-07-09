@@ -52,7 +52,7 @@ export function PollShowPage(props) {
 
   const [tab, setTab] = useState('responses');
   const [textField, setTextField] = useState(null);
-  const [textFieldOptions, setTestFieldOptions] = useState([]);
+  const [textFieldOptions, setTextFieldOptions] = useState([]);
   const [responseParams, setResponseParams] = useState(defaultParams);
 
   const { poll_id: pollId } = useParams();
@@ -92,7 +92,7 @@ export function PollShowPage(props) {
 
   useEffect(() => {
     if (props.poll)
-      setTestFieldOptions(dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField')));
+      setTextFieldOptions(dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField')));
 
     return () => null;
   }, [dig(props, 'poll', 'id')]);
