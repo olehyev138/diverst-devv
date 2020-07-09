@@ -6,7 +6,7 @@ class Api::V1::PollResponsesController < DiverstController
 
   def questionnaire
     token = params[:token]
-    second_token, prototype = PollTokenService.second_jwt(token)
+    second_token, prototype = PollTokenService.submission_jwt_token(token)
 
     render status: 200, json: {
         token: second_token,

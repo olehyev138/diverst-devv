@@ -3,7 +3,8 @@ require 'jwt'
 class PollTokenService < TokenService
   RESPONSE_TIME_LIMIT = 2.hours
 
-  def self.first_jwt(poll_token, params = {})
+  # Gets the encoded JWT token to be used in the email to get to the front page
+  def self.email_jwt_token(poll_token, params = {})
     payload = {
         poll_token: poll_token.token,
         type: 'first'
@@ -12,7 +13,8 @@ class PollTokenService < TokenService
     create_jwt_token(payload)
   end
 
-  def self.second_jwt(token)
+  # Encode the JWT token to be sent to the front end to validate the form submission
+  def self.submission_jwt_token(token)
     poll_token = verify_jwt_token(token, 'first')
 
     [

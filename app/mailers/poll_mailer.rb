@@ -4,7 +4,7 @@ class PollMailer < ApplicationMailer
     @poll = poll
     @enterprise = @user.enterprise
     @uer_poll_token = poll.user_poll_tokens.find_by(user: user)
-    @token = PollTokenService.first_jwt(@uer_poll_token)
+    @token = PollTokenService.email_jwt_token(@uer_poll_token)
     return if @enterprise.disable_emails?
     return if @uer_poll_token.blank?
 
