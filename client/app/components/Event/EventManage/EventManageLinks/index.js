@@ -18,7 +18,6 @@ import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 /* eslint-disable react/no-multi-comp */
 export function EventManageLinks(props) {
   const { currentTab, event } = props;
-
   const { group_id: groupId } = useParams();
 
   return (
@@ -26,7 +25,7 @@ export function EventManageLinks(props) {
       <Grid container>
         <Button
           variant='contained'
-          to={ROUTES.group.plan.events.index.path(props.event.owner_group_id)}
+          to={ROUTES.group.plan.events.index.path(event.owner_group_id)}
           color='secondary'
           size='medium'
           component={WrappedNavLink}
@@ -37,7 +36,7 @@ export function EventManageLinks(props) {
       </Grid>
       <Box mb={3} />
       <Typography variant='h4' component='h6' align='center' color='primary'>
-        <strong>{props.event.name}</strong>
+        <strong>{event.name}</strong>
       </Typography>
       <Box mb={1} />
       <Paper>
