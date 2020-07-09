@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ResponseLayout /> Should render and match the snapshot 1`] = `
+exports[`<AnonymousLayout /> Should render and match the snapshot 1`] = `
 <Fragment>
   <WithStyles(ForwardRef(Backdrop))
     open={true}

@@ -15,8 +15,9 @@ const ROUTES = {
     },
   },
 
-  // Responses
-  response: {
+  // Anonymous
+  anonymous: {
+    // Poll Response
     pollResponse: {
       path: (token = ':token') => `/poll_response/${token}`,
     },

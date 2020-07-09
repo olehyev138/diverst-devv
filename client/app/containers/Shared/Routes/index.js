@@ -10,7 +10,7 @@ import {
   GroupLayout,
   AdminLayout,
   SessionLayout,
-  ResponseLayout,
+  AnonymousLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
@@ -183,14 +183,14 @@ export default function Routes(props) {
           </SessionLayout>
         </Route>
 
-        {/* Responses */}
-        <Route path={expandRouteIntoPathArray(ROUTES.response)}>
-          <ResponseLayout>
+        {/* Anonymous */}
+        <Route path={expandRouteIntoPathArray(ROUTES.anonymous)}>
+          <AnonymousLayout>
             <SwitchWithProps>
               {/* Poll Response */}
-              <RouteWithProps path={ROUTES.response.pollResponse.path()}><PollResponsePage /></RouteWithProps>
+              <RouteWithProps path={ROUTES.anonymous.pollResponse.path()}><PollResponsePage /></RouteWithProps>
             </SwitchWithProps>
-          </ResponseLayout>
+          </AnonymousLayout>
         </Route>
 
         {/* Authenticated */}

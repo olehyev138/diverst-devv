@@ -5,7 +5,7 @@ import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
-import ResponseLayout from 'containers/Layouts/ResponseLayout/Loadable';
+import AnonymousLayout from 'containers/Layouts/AnonymousLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
@@ -217,7 +217,7 @@ export {
   GroupLayout,
   AdminLayout,
   SessionLayout,
-  ResponseLayout,
+  AnonymousLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,

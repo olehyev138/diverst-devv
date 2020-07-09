@@ -42,7 +42,7 @@ const styles = theme => ({
   },
 });
 
-const ResponseLayout = (props) => {
+const AnonymousLayout = (props) => {
   const { classes, children, enterprise, noRedirect, maxWidth, ...other } = props;
 
   const location = useLocation();
@@ -94,7 +94,7 @@ const ResponseLayout = (props) => {
   );
 };
 
-ResponseLayout.propTypes = {
+AnonymousLayout.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
   enterprise: PropTypes.object,
@@ -105,7 +105,7 @@ ResponseLayout.propTypes = {
   maxWidth: PropTypes.string,
 };
 
-ResponseLayout.defaultProps = {
+AnonymousLayout.defaultProps = {
   maxWidth: 'xl',
 };
 
@@ -123,10 +123,10 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export const StyledSessionLayout = withStyles(styles)(ResponseLayout);
+export const StyledSessionLayout = withStyles(styles)(AnonymousLayout);
 
 export default compose(
   memo,
   withConnect,
   withStyles(styles),
-)(ResponseLayout);
+)(AnonymousLayout);

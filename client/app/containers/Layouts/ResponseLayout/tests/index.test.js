@@ -19,7 +19,7 @@ const props = {
   component: jest.fn()
 };
 
-describe('<ResponseLayout />', () => {
+describe('<AnonymousLayout />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const wrapper = shallow(<SessionLayoutNaked {...props} />);

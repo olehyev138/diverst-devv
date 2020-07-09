@@ -27,6 +27,6 @@ class PollMailer < ApplicationMailer
   end
 
   def url
-    ReactRoutes.response.pollResponse(@token)
+    ReactRoutes.anonymous.pollResponse(@token)
   end
 end

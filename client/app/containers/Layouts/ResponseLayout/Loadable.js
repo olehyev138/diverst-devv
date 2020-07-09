@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for ResponseLayout
+ * Asynchronously loads the component for AnonymousLayout
  *
  */
 

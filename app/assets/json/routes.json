@@ -4,7 +4,7 @@
     "login": "/login",
     "forgotPassword": "/forgot"
   },
-  "response": {
+  "anonymous": {
     "pollResponse": "/poll_response/:token"
   },
   "user": {
