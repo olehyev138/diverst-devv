@@ -242,11 +242,14 @@ export function AdminFieldList(props, context) {
           classes={classes}
           draggable={order}
           save={save}
-          updateGroupPositionBegin={props.updateFieldPositionBegin}
-          deleteGroupBegin={props.deleteFieldBegin}
+          updateFieldPositionBegin={props.updateFieldPositionBegin}
+          deleteFieldBegin={props.deleteFieldBegin}
+          updateFieldBegin={props.updateFieldBegin}
           currentPage={defaultParams.page}
           importAction={props.importAction}
           rowsPerPage={defaultParams.count}
+          currentEnterprise={props.currentEnterprise}
+          toggles={props.toggles}
         />
       </DiverstLoader>
       <DiverstPagination

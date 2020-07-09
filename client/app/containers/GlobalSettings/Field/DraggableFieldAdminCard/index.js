@@ -24,9 +24,10 @@ import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
 import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
+import Field from 'components/Shared/Fields/FieldIndexItem';
 
 
-export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable, deleteFieldBegin }, props) {
+export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable, deleteFieldBegin, toggles }, props) {
   const ref = useRef(null);
   const ItemTypes = {
     CARD: 'card',
@@ -34,9 +35,17 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
   const drop = getListDrop(index, moveCard, ref);
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
-console.log(field);
+
   return (
     <Grid item key={field.id} xs={12}>
+      <Field
+        currentEnterprise={props.currentEnterprise}
+        updateFieldBegin={props.updateFieldBegin}
+        deleteFieldBegin={props.deleteFieldBegin}
+        field={field}
+        key={field.id}
+        toggles={toggles}
+      />
     </Grid>
   );
 }
@@ -51,4 +60,12 @@ DraggableFieldAdminCard.propTypes = {
   classes: PropTypes.object,
   importAction: PropTypes.func,
   deleteFieldBegin: PropTypes.func,
+  updateFieldBegin: PropTypes.func,
+  currentEnterprise: PropTypes.object,
+  toggles: PropTypes.shape({
+    visible: PropTypes.bool,
+    editable: PropTypes.bool,
+    required: PropTypes.bool,
+    memberList: PropTypes.bool,
+  }),
 };

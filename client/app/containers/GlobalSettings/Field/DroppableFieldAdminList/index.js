@@ -25,6 +25,9 @@ export function DroppableFieldList(props) {
         draggable={props.draggable}
         importAction={props.importAction}
         deleteFieldBegin={props.deleteFieldBegin}
+        updateFieldBegin={props.updateFieldBegin}
+        currentEnterprise={props.currentEnterprise}
+        toggles={props.toggles}
       />
     </Grid>
   );
@@ -53,7 +56,15 @@ DroppableFieldList.propTypes = {
   currentPage: PropTypes.number,
   importAction: PropTypes.func,
   deleteFieldBegin: PropTypes.func,
+  updateFieldBegin: PropTypes.func,
   draggable: PropTypes.bool,
   rowsPerPage: PropTypes.number,
   positions: PropTypes.array,
+  currentEnterprise: PropTypes.object,
+  toggles: PropTypes.shape({
+    visible: PropTypes.bool,
+    editable: PropTypes.bool,
+    required: PropTypes.bool,
+    memberList: PropTypes.bool,
+  }),
 };
