@@ -13,7 +13,6 @@ import { Grid } from '@material-ui/core';
 import { intlShape } from 'react-intl';
 
 export function DroppableList(props) {
-  console.log(props.positions);
   const [cards, setCards] = useState(props.items);
   const [save, setSave] = useState(props.save);
   const total = cards.length;
@@ -41,7 +40,7 @@ export function DroppableList(props) {
     [cards],
   );
 
-  if (props.save && save) {
+  if (props.save && save)
     cards.forEach((card, index) => {
       if (card.id !== props.positions[index].id) {
         card.position = props.positions[index].position;
@@ -49,7 +48,7 @@ export function DroppableList(props) {
       }
       setSave(false);
     });
-  }
+
   return (
     <DragDropContext>
       <Grid container spacing={3} justify='flex-end'>
