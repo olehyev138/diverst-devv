@@ -1,6 +1,7 @@
 import {
   selectGlobal, selectRouter, selectLocation,
-  selectEnterprise, selectToken, selectUser
+  selectEnterprise, selectToken, selectUser,
+  selectAdminDrawerOpen
 } from 'containers/Shared/App/selectors';
 
 describe('App selectors', () => {
@@ -55,6 +56,15 @@ describe('App selectors', () => {
       const selected = selectUser().resultFunc(mockedState.global);
 
       expect(selected).toEqual('user');
+    });
+  });
+
+  describe('selectAdminDrawerOpen', () => {
+    it('should select the admin drawer open boolean', () => {
+      const mockedState = { global: { adminDrawerOpen: false } };
+      const selected = selectAdminDrawerOpen().resultFunc(mockedState.global);
+
+      expect(selected).toEqual(false);
     });
   });
 });
