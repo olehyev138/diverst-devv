@@ -30,7 +30,7 @@ export function RouteWithProps(props) {
     <Route {...routeProps}>
       {/* We provide a key because otherwise React simply updates the furthest nested changed components instead of running the transition again with the new Route */}
       <Fade in appear={fade} mountOnEnter unmountOnExit key={path.toString()}>
-        <Box>
+        <Box style={{ flex: 1 }}>
           {renderChildrenWithProps(children, { ...propsToPassDown })}
         </Box>
       </Fade>

@@ -520,24 +520,24 @@ export function AdminLinks(props) {
                   <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
                 </ListItemText>
               </MenuPermission>
-              <MenuPermission
-                component={WrappedNavLink}
-                to='#'
-                className={classes.nested}
-                activeClassName={classes.navLinkActive}
-                isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time
-                show={
-                  permission(props, 'integrations_manage')
-                  || permission(props, 'rewards_manage')
-                }
-              >
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText>
-                  <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
-                </ListItemText>
-              </MenuPermission>
+              {/* <MenuPermission */}
+              {/*  component={WrappedNavLink} */}
+              {/*  to='#' */}
+              {/*  className={classes.nested} */}
+              {/*  activeClassName={classes.navLinkActive} */}
+              {/*  isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time */}
+              {/*  show={ */}
+              {/*    permission(props, 'integrations_manage') */}
+              {/*    || permission(props, 'rewards_manage') */}
+              {/*  } */}
+              {/* > */}
+              {/*  <ListItemIcon> */}
+              {/*    <ListIcon /> */}
+              {/*  </ListItemIcon> */}
+              {/*  <ListItemText> */}
+              {/*    <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} /> */}
+              {/*  </ListItemText> */}
+              {/* </MenuPermission> */}
             </List>
           </Collapse>
 
