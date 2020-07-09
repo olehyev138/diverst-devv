@@ -4,9 +4,6 @@ const messages = require('./messages');
 const ROUTES = {
   // Session
   session: {
-    signUp: {
-      path: (token = ':token') => `/sign_up/${token}`,
-    },
     login: {
       path: () => '/login',
     },
@@ -17,6 +14,9 @@ const ROUTES = {
 
   // Anonymous
   anonymous: {
+    signUp: {
+      path: (token = ':token') => `/sign_up/${token}`,
+    },
     // Poll Response
     pollResponse: {
       path: (token = ':token') => `/poll_response/${token}`,

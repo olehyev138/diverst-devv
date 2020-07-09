@@ -17,7 +17,7 @@ class DiverstMailer < ApplicationMailer
       user: @user,
       enterprise: @enterprise,
       custom_text: @enterprise.custom_text,
-      click_here: "<a href=\"#{ReactRoutes.session.signUp(@token)}\" target=\"_blank\">Click Here</a>",
+      click_here: "<a href=\"#{ReactRoutes.anonymous.signUp(@token)}\" target=\"_blank\">Click Here</a>",
     }
   end
 
