@@ -33,6 +33,7 @@ module BaseBuilder
 
       # save the item
       unless item.save
+        pp item.errors
         raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
       end
 
