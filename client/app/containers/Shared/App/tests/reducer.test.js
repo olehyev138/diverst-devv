@@ -8,7 +8,8 @@ import {
   findEnterpriseError,
   fetchUserDataBegin,
   fetchUserDataSuccess,
-  fetchUserDataError
+  fetchUserDataError,
+  toggleAdminDrawer
 }
   from 'containers/Shared/App/actions';
 
@@ -23,6 +24,7 @@ describe('appReducer', () => {
       findEnterpriseError: false,
       isFetchingUserData: true,
       fetchUserDataError: false,
+      adminDrawerOpen: false,
     };
   });
 
@@ -97,5 +99,21 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, fetchUserDataError())).toEqual(expected);
+  });
+
+  it('handles the toggleAdminDrawer action correctly with no argument', () => {
+    const expected = produce(state, (draft) => {
+      draft.adminDrawerOpen = true;
+    });
+
+    expect(appReducer(state, toggleAdminDrawer())).toEqual(expected);
+  });
+
+  it('handles the toggleAdminDrawer action correctly with an argument', () => {
+    const expected = produce(state, (draft) => {
+      draft.adminDrawerOpen = false;
+    });
+
+    expect(appReducer(state, toggleAdminDrawer(false))).toEqual(expected);
   });
 });
