@@ -160,6 +160,10 @@ class Poll < ApplicationRecord
     fields.delete_all if fields.any?
   end
 
+  # Use to get the following list
+  # - The list of users who are allowed to take the survey, but do not have a token
+  # - A list of users who are NOT allowed to take the survey, but have a valid token
+  # - A list of users who are allowed to take the survey, but have an invalidated token
   def user_diff
     targets = targeted_users_load.pluck(:id)
     old_valid_targets = user_poll_tokens.pluck(:user_id)
@@ -172,9 +176,15 @@ class Poll < ApplicationRecord
     [to_create, to_cancel, to_uncancel]
   end
 
+  # Forcefully loads the list of users who are allowed to take the survey
+  # If groups are defined, take the accepted members of the groups
+  # If an event is defined, take the attendees of that event
+  # Otherwise take all the users of an enterprise
+  #
+  # Then Filter the user on segments (no defined segments mean every user)
   def targeted_users_load
     if groups.any?
-      target = User.joins(:groups).where(groups: { id: groups.ids }).where('groups.pending_users = \'disabled\' OR user_groups.accepted_member = TRUE').active
+      target = User.joins(:groups).where(groups: { id: groups.ids }, user_groups: { accepted_member: true }).active
     elsif initiative_id.present?
       target = initiative.attendees.active
     else
