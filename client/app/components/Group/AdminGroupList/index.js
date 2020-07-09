@@ -132,6 +132,7 @@ export function AdminGroupList(props, context) {
       <DiverstLoader isLoading={props.isLoading}>
         <DroppableGroupList
           items={props.groups}
+          positions={props.positions}
           classes={classes}
           draggable={order}
           save={save}
@@ -163,6 +164,7 @@ AdminGroupList.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   handlePagination: PropTypes.func,
+  positions: PropTypes.array,
   importAction: PropTypes.func,
 };
 

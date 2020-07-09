@@ -52,11 +52,16 @@ export function AdminGroupListPage(props) {
     setParams(newParams);
   };
 
+  const positions = [];
+  for (let i = 0; i < props.groups.length; i += 1)
+    positions[i] = { id: props.groups[i].id, position: props.groups[i].position };
+
   return (
     <React.Fragment>
       <GroupList
         isLoading={props.isLoading}
         groups={props.groups}
+        positions={positions}
         groupTotal={props.groupTotal}
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
