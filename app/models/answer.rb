@@ -25,7 +25,7 @@ class Answer < BaseClass
   validates :question, presence: true
   validates :author, presence: true
   validates :content, presence: true, unless: Proc.new { |a| a.supporting_document.present? }
-  validates :contributing_group, presence: true
+  validates :contributing_group, presence: true, unless: Proc.new { |a| a.supporting_document.present? }
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase
