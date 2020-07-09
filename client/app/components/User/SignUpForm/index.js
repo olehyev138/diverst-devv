@@ -40,6 +40,9 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   return (
     <Scrollbar>
       <Container>
+        <Box mb={6} />
+        <Logo maxHeight='60px' />
+        <Box mb={6} />
         { enterprise.sponsors.length > 0 && (
           <React.Fragment>
             <LargeSponsorCard
@@ -69,8 +72,6 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
           <Card>
             <Form>
               <CardContent>
-                <Logo coloredDefault maxHeight='60px' />
-                <Box pb={2} />
                 <Field
                   component={TextField}
                   onChange={handleChange}
@@ -186,6 +187,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             </Form>
           </Card>
         </DiverstFormLoader>
+        <Box mb={4} />
       </Container>
     </Scrollbar>
   );
