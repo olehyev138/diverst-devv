@@ -14,6 +14,7 @@ describe('signUpReducer', () => {
       isCommitting: false,
       response: null,
       errors: null,
+      groups: []
     };
   });
 
