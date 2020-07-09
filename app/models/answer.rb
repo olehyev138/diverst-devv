@@ -12,6 +12,7 @@ class Answer < BaseClass
   has_many :likes, dependent: :destroy
 
   belongs_to :contributing_group, class_name: 'Group'
+  belongs_to :idea_category
 
   has_attached_file :supporting_document, s3_permissions: 'private'
   do_not_validate_attachment_file_type :supporting_document

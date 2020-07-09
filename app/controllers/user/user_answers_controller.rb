@@ -65,6 +65,7 @@ class User::UserAnswersController < ApplicationController
       .permit(
         :title,
         :content,
+        :idea_category_id,
         :contributing_group_id,
         :supporting_document
       )
