@@ -6,7 +6,6 @@ import dig from 'object-dig';
 import { initialState } from 'containers/User/reducer';
 
 import {
-  mapAndDeserializeFieldData,
   mapFieldNames,
   mapSelectField,
   timezoneMap,
