@@ -16,7 +16,6 @@ video#recorded-video {
 </div>
 
 <div class="content__main">
-
   <% if !@question.solved_at.nil? %>
     <div class="card">
       <div class="card__section card__section--border">
@@ -62,6 +61,8 @@ video#recorded-video {
               <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
             </div>
             <div class="answer__content">
+              <h3><%= answer.title %></h3>
+              <p>category: <%= answer.idea_category.name %></p>
               <p><%= answer.content || video_tag(answer.supporting_document.expiring_url(3600), controls: true, size: '200x200') %></p>
 
               <% answer.comments.each do |comment| %>
@@ -123,6 +124,7 @@ video#recorded-video {
           <br>
           <div class="col-sm-12" id="answer_content_wrapper" style="display: none;">
             <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
+              <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
               <%= f.input :title, label: 'Name/Title of idea' %>
               <%= f.input :content, label: "<h3>Write out your idea</h3>".html_safe, placeholder: "Type an answer here..." %>
               <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
@@ -134,10 +136,23 @@ video#recorded-video {
             <br>
             <div class="row">
               <div class="col-sm-6">
+                <div class="field select optional answer_idea_category">
+                  <label class="field__label select optional" for="answer_idea_category_id">Idea category</label>
+                  <div class="field__input-wrapper">
+                    <span class="field__add-on field__add-on--right">
+                    <span class="icon icon--chevron-down"></span></span>
+                    <select class="field__input field__input--right-add-on select optional " name="answer[idea_category_id]" id="answer_video_category_id"><option value=""></option>
+                        <option value="1">Product</option>
+                        <option value="2">Technical</option>
+                        <option value="3">Business Model</option>
+                        <option value="4">Process</option></select>
+                  </div>
+                </div>
+
                 <label class="field__label text optional" for="answer_content"><h3>Idea name/title</h3></label>
                 <div class="field__input-wrapper">
                   <input class="field__input string optional " 
-                  type="text" name="answer[title]" id="answer_title">
+                  type="text" name="answer[title]" id="answer_title_video">
                 </div>
                 <video id="recorded-video" autoplay muted></video>
               </div>  
@@ -158,6 +173,7 @@ video#recorded-video {
           
           <div class="col-sm-6" id="answer_supporting_video" style="display: none;">
             <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
+              <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
               <%= f.input :title, label: 'Name/Title of idea' %>
               <%= f.input :supporting_document, as: :attachment_preview %>
               <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
@@ -357,8 +373,11 @@ video#recorded-video {
   
     var formData = new FormData();
     formData.append('answer[supporting_document]', blob, 'recording.webm');
-    formData.append('answer[title]', $('#answer_title').val());
+    formData.append('answer[title]', $('#answer_title_video').val());
+    formData.append('answer[idea_category_id]', $('#answer_video_category_id').val());
     console.log(formData);
+    console.log('idea category', $('#answer_video_category_id').val());
+    console.log('idea name', $('#answer_title_video').val());
 
     $.ajax({
       url: '<%= user_question_user_answers_path(@question) %>',
