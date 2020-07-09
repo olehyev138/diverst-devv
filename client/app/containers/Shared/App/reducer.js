@@ -19,6 +19,7 @@ export const initialState = {
 
 function appReducer(state = initialState, action) {
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case LOGIN_SUCCESS:
         draft.token = action.token;
