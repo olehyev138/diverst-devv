@@ -1,7 +1,6 @@
 module Group::Actions
   def self.included(klass)
     klass.extend ClassMethods
-    klass.extend ControllerMethods
   end
 
   def carryover_annual_budget(diverst_request)
