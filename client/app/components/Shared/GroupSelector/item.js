@@ -176,7 +176,7 @@ const GroupSelectorItem = (props) => {
                 });
               }}
             >
-              {expandedGroups[group.value] ? (
+              {expandedGroups[group.value || group.id] ? (
                 <RemoveIcon color='primary' className={classes.expandIcon} />
               ) : (
                 <AddIcon color='primary' className={classes.expandIcon} />
