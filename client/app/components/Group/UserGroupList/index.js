@@ -148,7 +148,7 @@ export function UserGroupList(props, context) {
                       </CardActionArea>
                     </Link>
                   </Grid>
-                  {props.viewChildren && group.children && group.children.length > 0 && (
+                  {group.children && group.children.length > 0 && (
                     <Grid item className={classes.expandActionAreaContainer}>
                       <CardActionArea
                         className={classes.expandActionArea}
