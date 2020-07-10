@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect, getIn } from 'formik';
+import { connect, FastField, getIn } from 'formik';
 import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
@@ -17,7 +17,8 @@ const CustomTextField = (props) => {
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
-    <TextField
+    <FastField
+      component={TextField}
       required={fieldDatum.field.required}
       name={dataLocation}
       id={dataLocation}

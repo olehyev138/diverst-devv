@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect, Field, getIn } from 'formik';
+import { connect, FastField, Field, getIn } from 'formik';
 import dig from 'object-dig';
 
 import { KeyboardDatePicker } from '@material-ui/pickers';
@@ -20,7 +20,8 @@ const CustomDateField = (props) => {
 
   return (
     <React.Fragment>
-      <KeyboardDatePicker
+      <FastField
+        component={KeyboardDatePicker}
         format='yyyy/MM/dd'
         mask='____/__/__'
         fullWidth

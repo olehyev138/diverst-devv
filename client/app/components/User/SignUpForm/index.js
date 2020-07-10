@@ -10,7 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form, ErrorMessage } from 'formik';
+import { Field, Formik, Form, ErrorMessage, FastField } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
   Divider, CardHeader, Box, Typography, Checkbox, FormControlLabel, FormGroup
@@ -85,7 +85,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
           <Card>
             <Form>
               <CardContent>
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -100,7 +100,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                     readOnly: true,
                   }}
                 />
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -113,7 +113,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   value={values.password}
                   label={<DiverstFormattedMessage {...signUpMessages.password} />}
                 />
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -129,7 +129,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                 <Box mb={1} />
                 <Divider />
                 <Box mb={1} />
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -141,7 +141,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   value={values.first_name}
                   label={<DiverstFormattedMessage {...messages.first_name} />}
                 />
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -153,7 +153,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   value={values.last_name}
                   label={<DiverstFormattedMessage {...messages.last_name} />}
                 />
-                <Field
+                <FastField
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
@@ -167,7 +167,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   value={values.biography}
                   label={<DiverstFormattedMessage {...messages.biography} />}
                 />
-                <Field
+                <FastField
                   component={Select}
                   fullWidth
                   disabled={props.isCommitting}
