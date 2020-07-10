@@ -205,6 +205,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                     group={group}
                     expandedGroups={expandedGroups}
                     setExpandedGroups={setExpandedGroups}
+                    large
                   />
                 ))}
               </CardContent>
