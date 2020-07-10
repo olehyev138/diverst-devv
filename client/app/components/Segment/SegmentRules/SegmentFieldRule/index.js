@@ -106,7 +106,6 @@ const SegmentFieldRule = (props) => {
             label={<DiverstFormattedMessage {...messages.rule.field} />}
             options={props.selectFields}
             value={(currentField) ? { value: currentField.id, label: currentField.title } : {}}
-            onMenuOpen={fieldSelectAction}
             onChange={onFieldSelectChange}
             onInputChange={value => fieldSelectAction(value)}
           />

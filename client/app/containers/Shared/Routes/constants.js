@@ -15,6 +15,14 @@ const ROUTES = {
     },
   },
 
+  // Anonymous
+  anonymous: {
+    // Poll Response
+    pollResponse: {
+      path: (token = ':token') => `/poll_response/${token}`,
+    },
+  },
+
   // User
   user: {
     get root() { return this.home; },

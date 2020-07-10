@@ -47,7 +47,6 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             margin='normal'
             value={values.member_ids}
             options={props.selectUsers}
-            onMenuOpen={usersSelectAction}
             onChange={value => setFieldValue('member_ids', value)}
             onInputChange={value => usersSelectAction(value)}
             onBlur={() => setFieldTouched('member_ids', true)}

@@ -47,7 +47,6 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
             isMulti
             options={props.groups}
             value={values.groups}
-            onMenuOpen={groupSelectAction}
             onChange={v => setFieldValue('groups', v)}
             onInputChange={value => groupSelectAction(value)}
             hideHelperText
