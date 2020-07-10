@@ -111,6 +111,8 @@ const GroupSelectorItem = (props) => {
     },
   );
 
+  const imageDimensions = props.large ? '100px' : '30px';
+
   return (
     <React.Fragment>
       <Divider />
@@ -127,10 +129,10 @@ const GroupSelectorItem = (props) => {
                   <Grid item xs='auto'>
                     <DiverstImg
                       data={group.logo_data}
-                      maxWidth='30px'
-                      maxHeight='30px'
-                      minWidth='30px'
-                      minHeight='30px'
+                      maxWidth={imageDimensions}
+                      maxHeight={imageDimensions}
+                      minWidth={imageDimensions}
+                      minHeight={imageDimensions}
                     />
                   </Grid>
                 </Hidden>
@@ -194,6 +196,7 @@ GroupSelectorItem.propTypes = {
   addGroup: PropTypes.func,
   removeGroup: PropTypes.func,
   isSelected: PropTypes.func,
+  large: PropTypes.bool,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
