@@ -171,7 +171,7 @@ const GroupSelectorItem = (props) => {
               onClick={() => {
                 setExpandedGroups({
                   ...expandedGroups,
-                  [group.value]: !expandedGroups[group.value]
+                  [group.value || group.id]: !expandedGroups[group.value || group.id]
                 });
               }}
             >
@@ -185,7 +185,7 @@ const GroupSelectorItem = (props) => {
         )}
       </Grid>
       <Divider />
-      <Collapse in={expandedGroups[`${group.value}`]}>
+      <Collapse in={expandedGroups[`${group.value || group.id}`]}>
         {group.children && group.children.map((childGroup, i) => (
           <React.Fragment key={childGroup.value || childGroup.id}>
             <GroupSelectorItem {...props} group={childGroup} child />
