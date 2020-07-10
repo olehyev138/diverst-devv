@@ -233,8 +233,8 @@ export function SignUpForm(props) {
     last_name: { default: '' },
     biography: { default: '' },
     time_zone: { default: '' },
-    password: '',
-    password_confirmation: '',
+    password: { default: '' },
+    password_confirmation: { default: '' },
     field_data: { default: [], customKey: 'fieldData' },
     group_ids: { default: [] },
   });
