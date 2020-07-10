@@ -140,6 +140,7 @@ class Api::V1::UsersController < DiverstController
             :last_name,
             :biography,
             :time_zone,
+            group_ids: [],
             field_data_attributes: [
                 :id,
                 :data,
