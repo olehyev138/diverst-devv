@@ -30,8 +30,8 @@ export function* getField(action) {
 
 export function* updateFieldPosition(action) {
   try {
-    const payload = { field: action.payload };
-    yield call(api.fields.update.bind(api.fields), payload.field.id, payload.field);
+    const payload = { field: { id: action.payload.id, position: action.payload.position, type: action.payload.type } };
+    yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
     yield put(updateFieldPositionSuccess());
     yield put(showSnackbar({ message: 'Field order updated', options: { variant: 'success' } }));
   } catch (err) {

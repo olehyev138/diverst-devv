@@ -23,8 +23,6 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 import { injectIntl, intlShape } from 'react-intl';
-import DiverstPagination from 'components/Shared/DiverstPagination';
-import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
   fieldListItem: {

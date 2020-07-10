@@ -16,12 +16,13 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/Field/messages';
 import { Formik } from 'formik';
 
-import { ImportForm } from 'components/User/UserImport';
+import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
 import Field from 'components/Shared/Fields/FieldIndexItem';
 
 
-export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable, deleteFieldBegin, toggles }, props) {
+export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable,
+  deleteFieldBegin, toggles, currentEnterprise, updateFieldBegin }, props) {
   const ref = useRef(null);
   const ItemTypes = {
     CARD: 'card',
@@ -32,7 +33,7 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
   const drop = getListDrop(index, moveCard, ref);
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
-console.log(ref);
+
   return (
     <Grid item key={field.id} xs={12}>
       { draggable ? (
@@ -91,6 +92,20 @@ console.log(ref);
             </Button>
           </CardActions>
         </Card>
+      )}
+      { !draggable && (
+        <Collapse in={form}>
+          <FieldForm
+            edit
+            currentEnterprise={currentEnterprise}
+            field={field}
+            fieldAction={updateFieldBegin}
+            cancelAction={() => setForm(false)}
+            toggles={toggles}
+            updateFieldBegin={updateFieldBegin}
+            deleteFieldBegin={deleteFieldBegin}
+          />
+        </Collapse>
       )}
     </Grid>
   );
