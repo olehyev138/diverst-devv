@@ -201,7 +201,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                     key={group.id}
                     isSelected={group => values.group_ids.includes(group.id)}
                     addGroup={group => setFieldValue('group_ids', [...values.group_ids, group.id])}
-                    removeGroup={group => setFieldValue('group_ids', values.group_ids.filter(gId => gId !==  group.id))}
+                    removeGroup={group => setFieldValue('group_ids', values.group_ids.filter(gId => gId !== group.id))}
                     group={group}
                     expandedGroups={expandedGroups}
                     setExpandedGroups={setExpandedGroups}
