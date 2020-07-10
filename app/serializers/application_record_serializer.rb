@@ -3,7 +3,7 @@
 #     - Blacklist:
 #         The quickest method of implementing a serializer.
 #
-#         Simply creating the serializer class with no content will default to serializing all the fields of a model.
+#         Simply creating the serializer class with no content will serialize nothing
 #
 #         Define an `excluded_keys` method in your class that returns an array of symbols representing the keys
 #         of the fields you want to exclude. Ex: `[:enterprise_id]`
