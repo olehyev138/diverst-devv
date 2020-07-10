@@ -22,6 +22,7 @@ const selectUser = () => createSelector(
       return produce(user, (draft) => {
         draft.timezones = timezoneMap(timezoneArray, user, draft);
         draft.field_data = deserializeFields(user.field_data);
+        draft.group_ids = new Set(user.group_ids);
       });
     }
     return null;

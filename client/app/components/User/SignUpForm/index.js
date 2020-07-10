@@ -199,9 +199,17 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                 {(props.groups || []).map(group => (
                   <GroupSelectorItem
                     key={group.id}
-                    isSelected={group => values.group_ids.includes(group.id)}
-                    addGroup={group => setFieldValue('group_ids', [...values.group_ids, group.id])}
-                    removeGroup={group => setFieldValue('group_ids', values.group_ids.filter(gId => gId !== group.id))}
+                    isSelected={group => values.group_ids.has(group.id)}
+                    addGroup={(group) => {
+                      const clonedSet = new Set(values.group_ids);
+                      clonedSet.add(group.id);
+                      setFieldValue('group_ids', clonedSet);
+                    }}
+                    removeGroup={(group) => {
+                      const clonedSet = new Set(values.group_ids);
+                      clonedSet.delete(group.id);
+                      setFieldValue('group_ids', clonedSet);
+                    }}
                     group={group}
                     expandedGroups={expandedGroups}
                     setExpandedGroups={setExpandedGroups}
@@ -236,7 +244,7 @@ export function SignUpForm(props) {
     password: { default: '' },
     password_confirmation: { default: '' },
     field_data: { default: [], customKey: 'fieldData' },
-    group_ids: { default: [] },
+    group_ids: { default: new Set() },
   });
 
   return (
@@ -246,6 +254,7 @@ export function SignUpForm(props) {
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone']);
         payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
+        payload.group_ids = [...payload.group_ids];
         delete payload.fieldData;
         props.submitAction({ token: props.token, ...payload });
       }}
