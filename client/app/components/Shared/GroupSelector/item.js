@@ -107,7 +107,7 @@ const styles = theme => ({
 });
 
 const GroupSelectorItem = (props) => {
-  const { group, classes, ...rest } = props;
+  const { group, classes, doubleClickWait, ...rest } = props;
   const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups } = rest;
 
   const [handleClick, handleDoubleClick] = useClickPreventionOnDoubleClick(
@@ -123,6 +123,7 @@ const GroupSelectorItem = (props) => {
       else
         props.addGroup(...[props.group, ...props.group.children]);
     },
+    doubleClickWait,
   );
 
   const imageDimensions = props.large ? '80px' : '30px';
@@ -212,10 +213,15 @@ GroupSelectorItem.propTypes = {
   isSelected: PropTypes.func,
   large: PropTypes.bool,
   child: PropTypes.bool,
+  doubleClickWait: PropTypes.number,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
   ]),
+};
+
+GroupSelectorItem.defaultProps = {
+  doubleClickWait: 200,
 };
 
 const mapStateToProps = createStructuredSelector({
