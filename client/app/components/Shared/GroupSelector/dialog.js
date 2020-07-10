@@ -160,6 +160,10 @@ GroupListSelector.propTypes = {
   ]),
 };
 
+GroupListSelector.defaultProps = {
+  queryScopes: [],
+};
+
 export default compose(
   memo,
   withStyles(styles)
