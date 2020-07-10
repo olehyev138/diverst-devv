@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -49,6 +49,20 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
     props.groups.map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
+
+  const isSelected = useCallback(
+    group => values.groupIds[group.id],
+    [values.groupIds],
+  );
+  const addGroup = useCallback(
+    group => setFieldValue(`groupIds[${group.id}]`, true),
+    [values.groupIds],
+  );
+
+  const removeGroup = useCallback(
+    group => setFieldValue(`groupIds[${group.id}]`, undefined),
+    [values.groupIds],
+  );
 
   return (
     <Scrollbar>
@@ -199,17 +213,9 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                 {(props.groups || []).map(group => (
                   <GroupSelectorItem
                     key={group.id}
-                    isSelected={group => values.group_ids.has(group.id)}
-                    addGroup={(group) => {
-                      const clonedSet = new Set(values.group_ids);
-                      clonedSet.add(group.id);
-                      setFieldValue('group_ids', clonedSet);
-                    }}
-                    removeGroup={(group) => {
-                      const clonedSet = new Set(values.group_ids);
-                      clonedSet.delete(group.id);
-                      setFieldValue('group_ids', clonedSet);
-                    }}
+                    isSelected={isSelected}
+                    addGroup={addGroup}
+                    removeGroup={removeGroup}
                     group={group}
                     expandedGroups={expandedGroups}
                     setExpandedGroups={setExpandedGroups}
@@ -244,8 +250,10 @@ export function SignUpForm(props) {
     password: { default: '' },
     password_confirmation: { default: '' },
     field_data: { default: [], customKey: 'fieldData' },
-    group_ids: { default: new Set() },
+    group_ids: { default: {}, customKey: 'groupIds' },
   });
+
+  // const [formGroupIds, setFormGroupIds] = useState({});
 
   return (
     <Formik
@@ -254,12 +262,21 @@ export function SignUpForm(props) {
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone']);
         payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
-        payload.group_ids = [...payload.group_ids];
+        payload.group_ids = Object.keys(payload.groupIds).filter(key => payload.groupIds[key]);
         delete payload.fieldData;
+        delete payload.groupIds;
         props.submitAction({ token: props.token, ...payload });
       }}
     >
-      {formikProps => <SignUpFormInner {...props} formikProps={formikProps} errors={props.errors} />}
+      {formikProps => (
+        <SignUpFormInner
+          {...props}
+          formikProps={formikProps}
+          errors={props.errors}
+          // formGroupIds={formGroupIds}
+          // setFormGroupIds={setFormGroupIds}
+        />
+      )}
     </Formik>
   );
 }
@@ -283,6 +300,8 @@ SignUpForm.propTypes = {
 SignUpFormInner.propTypes = {
   ...SignUpForm.propTypes,
   formikProps: PropTypes.object,
+  setFormGroupIds: PropTypes.func,
+  formGroupIds: PropTypes.object,
 };
 
 export default compose(
