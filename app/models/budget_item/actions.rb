@@ -4,7 +4,7 @@ module BudgetItem::Actions
   end
 
   def close(diverst_request)
-    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+    raise BadRequestException.new "#{BudgetItem.name.titleize} ID required" if id.blank?
 
     unless self.close!
       raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })

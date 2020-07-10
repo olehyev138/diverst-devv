@@ -7,6 +7,10 @@ RSpec.describe Activity::Actions, type: :action do
     it { expect(Activity.valid_scopes.include?('for_group_ids')).to eq true }
   end
 
+  describe 'base_includes' do
+    it { expect(Activity.base_includes.include?(:owner)).to eq true }
+  end
+
   describe 'base_preloads' do
     it { expect(Activity.base_preloads.include?(:owner)).to eq true }
   end
