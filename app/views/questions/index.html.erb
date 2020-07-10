@@ -3,7 +3,7 @@
     <%= link_to "Campaigns", campaigns_path %> /
     <%= @campaign.title %>
   </h1>
-  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" if CampaignPolicy.new(current_user, @campaign).edit? %>
+  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" unless @campaign.closed? %>
 </div>
 
 <div class="content__main">
@@ -12,7 +12,13 @@
     <div class="card__section">
       <h3>Questions</h3>
       <% if @questions.empty? %>
-        <p>There are no questions in this campaign yet. <%= link_to "Create one", new_campaign_question_path(@campaign) %> and start leveraging your team's diverse opinions to solve problems.</p>
+        
+        <% if @campaign.closed? %>
+          <p>There are no questions in this campaign yet. This campaign is closed.</p>
+        <% else %>
+          <p>There are no questions in this campaign yet. 
+          <%= link_to "Create one", new_campaign_question_path(@campaign) %> and start leveraging your team's diverse opinions to solve problems.</p>  
+        <% end %>  
       <% else %>
         <table class="table--has-border">
           <thead>

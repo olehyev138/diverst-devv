@@ -65,10 +65,11 @@
             </div>
             <div class="answer__content">
               <p>
-                <%= answer.content %> &mdash;
-                <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
+              <h3><%= answer.title %></h3>
+              <p><%= answer.content || video_tag(answer.supporting_document.expiring_url(3600), controls: true, size: '200x200') %></p> &mdash;
+              <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
               </p>
-
+    
               <% answer.comments.each do |comment| %>
                 <div class="comment">
                   <p>

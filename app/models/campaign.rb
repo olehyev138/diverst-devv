@@ -1,7 +1,7 @@
 class Campaign < BaseClass
   include PublicActivity::Common
 
-  enum status: [:published, :draft]
+  enum status: [:published, :draft, :closed, :reopened]
 
   belongs_to :enterprise
   belongs_to :owner, class_name: 'User'

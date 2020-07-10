@@ -6,7 +6,7 @@ class User::UserCampaignsController < ApplicationController
   layout 'user'
 
   def index
-    @campaigns = current_user.campaigns.published.order(created_at: :desc)
+    @campaigns = current_user.campaigns.where(status: [0, 2, 3]).order(created_at: :desc)
   end
 
   # MISSING TEMPLATE

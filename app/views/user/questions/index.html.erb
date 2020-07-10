@@ -22,7 +22,7 @@
           <hr>
           <h3><%= @campaign.users.count %> participants</h3>
           <hr>
-          <h3><%= @campaign.progression %>% solved</h3>
+          <h3><%= @campaign.closed? ? 'Closed' : 'Opened' %></h3>
         </div>
         <% if @sponsors.any? %>
           <div class="flex-row__cell flex-row__cell--spaced flex-2">
