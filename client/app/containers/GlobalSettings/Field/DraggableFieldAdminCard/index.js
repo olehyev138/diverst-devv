@@ -16,9 +16,8 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/Field/messages';
 import { Formik } from 'formik';
 
-import { ImportForm } from 'components/User/UserImport';
+import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
-import Field from 'components/Shared/Fields/FieldIndexItem';
 
 
 export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable, deleteFieldBegin, toggles }, props) {
@@ -32,7 +31,9 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
   const drop = getListDrop(index, moveCard, ref);
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
-console.log(ref);
+
+  const { ...rest } = props;
+
   return (
     <Grid item key={field.id} xs={12}>
       { draggable ? (
@@ -62,35 +63,47 @@ console.log(ref);
           </CardActions>
         </Card>
       ) : (
-        <Card ref={ref}>
-          <CardContent>
-            <Typography variant='h5' component='h2' display='inline' color='primary'>
-              {field.title}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              color='primary'
-              size='small'
-              onClick={() => {
-                setForm(!form);
-              }}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              size='small'
-              className={classes.errorButton}
-              onClick={() => {
+        <Grid>
+          <Card ref={ref}>
+            <CardContent>
+              <Typography variant='h5' component='h2' display='inline' color='primary'>
+                {field.title}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                color='primary'
+                size='small'
+                onClick={() => {
+                  setForm(!form);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                size='small'
+                className={classes.errorButton}
+                onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('delete?'))
-                  props.deleteFieldBegin(field.id);
-              }}
-            >
-              <DiverstFormattedMessage {...messages.delete} />
-            </Button>
-          </CardActions>
-        </Card>
+                  if (confirm('delete?'))
+                    props.deleteFieldBegin(field.id);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+            </CardActions>
+          </Card>
+          <Collapse in={form}>
+            <FieldForm
+              edit
+              currentEnterprise={props.currentEnterprise}
+              field={field}
+              fieldAction={props.updateFieldBegin}
+              cancelAction={() => setForm(false)}
+              {...rest}
+            />
+          </Collapse>
+        </Grid>
       )}
     </Grid>
   );
