@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -32,11 +32,23 @@ import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { union, difference, intersection } from 'utils/arrayHelpers';
+import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   const { user, groups, enterprise, ...rest } = props;
+
+  const [expandedGroups, setExpandedGroups] = useState({});
+  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
+  if (props.groups && props.groups.length !== 0 && Object.keys(expandedGroups).length <= 0) {
+    const initialExpandedGroups = {};
+
+    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
+    /* eslint-disable-next-line no-return-assign */
+    props.groups.map((id, i) => initialExpandedGroups[id] = false);
+    setExpandedGroups(initialExpandedGroups);
+  }
 
   return (
     <Scrollbar>
@@ -184,30 +196,16 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                 <Typography variant='h6'>
                   Explore your groups
                 </Typography>
-                { props.groups.map(group => (
-                  <FormGroup key={group.id}>
-                    <FormControlLabel
-                      control={(
-                        <Field
-                          component={Checkbox}
-                          onChange={(event, value) => {
-                            if (value)
-                              setFieldValue('group_ids', [...values.group_ids, group.id]);
-                            else
-                              setFieldValue('group_ids', values.group_ids.filter(id => id !== group.id));
-                          }}
-                          id={`group_${group.id}`}
-                          name={`group_${group.id}`}
-                          margin='normal'
-                          disabled={props.isCommitting}
-                          label={group.name}
-                          value={values.group_ids.includes(group.id)}
-                          checked={values.group_ids.includes(group.id)}
-                        />
-                      )}
-                      label={group.name}
-                    />
-                  </FormGroup>
+                {(props.groups || []).map(group => (
+                  <GroupSelectorItem
+                    key={group.id}
+                    isSelected={group => values.group_ids.includes(group.id)}
+                    addGroup={group => setFieldValue('group_ids', [...values.group_ids, group.id])}
+                    removeGroup={group => setFieldValue('group_ids', values.group_ids.filter(gId => gId !==  group.id))}
+                    group={group}
+                    expandedGroups={expandedGroups}
+                    setExpandedGroups={setExpandedGroups}
+                  />
                 ))}
               </CardContent>
               <Divider />

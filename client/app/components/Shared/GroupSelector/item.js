@@ -139,7 +139,7 @@ const GroupSelectorItem = (props) => {
                 </Grid>
                 <Grid item xs>
                   <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
-                    {group.label}
+                    {group.label || group.name}
                   </Typography>
                 </Grid>
               </Grid>
