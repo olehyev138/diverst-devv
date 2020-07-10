@@ -11,12 +11,6 @@ import {
   Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden, Dialog, DialogContent,
 } from '@material-ui/core';
 
-import DiverstImg from 'components/Shared/DiverstImg';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import Permission from 'components/Shared/DiverstPermission';
-import { permission } from 'utils/permissionsHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/Field/messages';
@@ -32,10 +26,13 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
   const ItemTypes = {
     CARD: 'card',
   };
+
+  const [form, setForm] = useState(false);
+
   const drop = getListDrop(index, moveCard, ref);
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
-
+console.log(ref);
   return (
     <Grid item key={field.id} xs={12}>
       { draggable ? (
@@ -65,14 +62,35 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
           </CardActions>
         </Card>
       ) : (
-        <Field
-          currentEnterprise={props.currentEnterprise}
-          updateFieldBegin={props.updateFieldBegin}
-          deleteFieldBegin={props.deleteFieldBegin}
-          field={field}
-          key={field.id}
-          toggles={toggles}
-        />
+        <Card ref={ref}>
+          <CardContent>
+            <Typography variant='h5' component='h2' display='inline' color='primary'>
+              {field.title}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              color='primary'
+              size='small'
+              onClick={() => {
+                setForm(!form);
+              }}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Button
+              size='small'
+              className={classes.errorButton}
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('delete?'))
+                  props.deleteFieldBegin(field.id);
+              }}
+            >
+              <DiverstFormattedMessage {...messages.delete} />
+            </Button>
+          </CardActions>
+        </Card>
       )}
     </Grid>
   );

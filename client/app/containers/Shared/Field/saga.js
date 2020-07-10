@@ -32,7 +32,6 @@ export function* updateFieldPosition(action) {
   try {
     const payload = { field: action.payload };
     yield call(api.fields.update.bind(api.fields), payload.field.id, payload.field);
-
     yield put(updateFieldPositionSuccess());
     yield put(showSnackbar({ message: 'Field order updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -107,5 +106,4 @@ export default function* fieldsSaga() {
   yield takeLatest(GET_FIELD_BEGIN, getField);
   yield takeLatest(UPDATE_FIELD_BEGIN, updateField);
   yield takeLatest(DELETE_FIELD_BEGIN, deleteField);
-  yield takeEvery(UPDATE_FIELD_POSITION_BEGIN, updateFieldPosition);
 }

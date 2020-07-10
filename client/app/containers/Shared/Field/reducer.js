@@ -11,6 +11,7 @@ import {
   GET_FIELDS_BEGIN, GET_FIELDS_ERROR, GET_FIELD_ERROR,
   CREATE_FIELD_BEGIN, CREATE_FIELD_SUCCESS, CREATE_FIELD_ERROR,
   UPDATE_FIELD_BEGIN, UPDATE_FIELD_SUCCESS, UPDATE_FIELD_ERROR,
+  UPDATE_FIELD_POSITION_BEGIN, UPDATE_FIELD_POSITION_SUCCESS, UPDATE_FIELD_POSITION_ERROR,
   DELETE_FIELD_BEGIN, DELETE_FIELD_SUCCESS, DELETE_FIELD_ERROR,
 } from 'containers/Shared/Field/constants';
 
@@ -52,6 +53,7 @@ function fieldsReducer(state = initialState, action) {
         draft.commitSuccess = undefined;
         break;
       case UPDATE_FIELD_BEGIN:
+      case UPDATE_FIELD_POSITION_BEGIN:
       case DELETE_FIELD_BEGIN:
         draft.isCommitting = true;
         draft.commitSuccess = undefined;
@@ -63,6 +65,7 @@ function fieldsReducer(state = initialState, action) {
         draft.hasChanged = true;
         break;
       case UPDATE_FIELD_SUCCESS:
+      case UPDATE_FIELD_POSITION_SUCCESS:
       case DELETE_FIELD_SUCCESS:
         draft.isCommitting = false;
         draft.commitSuccess = true;
@@ -70,6 +73,7 @@ function fieldsReducer(state = initialState, action) {
         break;
       case CREATE_FIELD_ERROR:
       case UPDATE_FIELD_ERROR:
+      case UPDATE_FIELD_POSITION_ERROR:
       case DELETE_FIELD_ERROR:
         draft.isCommitting = false;
         draft.commitSuccess = false;
