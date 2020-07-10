@@ -26,7 +26,9 @@ RSpec.describe Activity::Actions, type: :action do
     end
 
     describe 'file_name' do
-      it { expect(Activity.file_name({ query_scopes: [['joined_from', Date.yesterday], ['joined_to',Date.tomorrow], ['for_group_ids', [group.id]]] })).to eq "from_#{Date.yesterday.strftime('%Y-%m-%d')}_to_#{Date.tomorrow.strftime('%Y-%m-%d')}_of_groups_#{group.name}_Logs" }
+      it { expect(Activity.file_name({ query_scopes: [['joined_from', Date.yesterday], ['joined_to', Date.tomorrow], ['for_group_ids', [group.id]]] })).to\
+      eq "from_#{Date.yesterday.strftime('%Y-%m-%d')}_to_#{Date.tomorrow.strftime('%Y-%m-%d')}_of_groups_#{group.name}_Logs"
+      }
     end
   end
 end
