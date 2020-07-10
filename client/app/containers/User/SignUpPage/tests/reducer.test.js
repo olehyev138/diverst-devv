@@ -23,7 +23,7 @@ describe('signUpReducer', () => {
     expect(signUpReducer(undefined, {})).toEqual(expected);
   });
 
-  it('handles the getPollsSuccess action correctly', () => {
+  it('handles the get getUserByTokenSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.token = { id: 4, name: 'dummy' };
       draft.user = {};
@@ -36,6 +36,7 @@ describe('signUpReducer', () => {
         getUserByTokenSuccess({
           token: { id: 4, name: 'dummy' },
           user: {},
+          groups: [],
         })
       )
     ).toEqual(expected);

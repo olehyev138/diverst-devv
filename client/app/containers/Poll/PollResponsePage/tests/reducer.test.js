@@ -2,10 +2,10 @@ import produce from 'immer';
 import {
   getQuestionnaireByTokenSuccess
 } from '../actions';
-import signUpReducer from '../reducer';
+import PollResponseReducer from '../reducer';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('signUpReducer', () => {
+describe('PollResponseReducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -14,13 +14,12 @@ describe('signUpReducer', () => {
       isCommitting: false,
       response: null,
       errors: null,
-      groups: []
     };
   });
 
   it('returns the initial state', () => {
     const expected = state;
-    expect(signUpReducer(undefined, {})).toEqual(expected);
+    expect(PollResponseReducer(undefined, {})).toEqual(expected);
   });
 
   it('handles the getPollsSuccess action correctly', () => {
@@ -31,7 +30,7 @@ describe('signUpReducer', () => {
     });
 
     expect(
-      signUpReducer(
+      PollResponseReducer(
         state,
         getQuestionnaireByTokenSuccess({
           token: { id: 4, name: 'dummy' },
