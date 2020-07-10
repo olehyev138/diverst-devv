@@ -88,7 +88,21 @@ const styles = theme => ({
     fontSize: 34,
   },
   buttonBase: {
-    width: '100%'
+    width: '100%',
+  },
+  cardContentSelected: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: '100%',
+    borderLeftStyle: 'solid',
+    borderLeftColor: theme.palette.primary.main,
+  },
+  cardContentNotSelected: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: '100%',
+    borderLeftStyle: 'solid',
+    borderLeftColor: theme.palette.secondary.main,
   }
 });
 
@@ -123,7 +137,7 @@ const GroupSelectorItem = (props) => {
             onDoubleClick={handleDoubleClick}
             className={classes.buttonBase}
           >
-            <CardContent className={classes.groupCardContent}>
+            <CardContent className={props.isSelected(props.group) ? classes.cardContentSelected : classes.cardContentNotSelected}>
               <Grid container spacing={2} alignItems='center' alignContent='flex-start'>
                 <Hidden xsDown>
                   <Grid item xs='auto'>
@@ -136,9 +150,11 @@ const GroupSelectorItem = (props) => {
                     />
                   </Grid>
                 </Hidden>
-                <Grid item xs='auto'>
-                  {props.isSelected(props.group) ? <CheckBoxRoundedIcon /> : <CheckBoxOutlineBlankRoundedIcon />}
-                </Grid>
+                {!props.large && (
+                  <Grid item xs='auto'>
+                    {props.isSelected(props.group) ? <CheckBoxRoundedIcon /> : <CheckBoxOutlineBlankRoundedIcon />}
+                  </Grid>
+                )}
                 <Grid item xs>
                   <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
                     {group.label || group.name}
@@ -170,16 +186,13 @@ const GroupSelectorItem = (props) => {
       </Grid>
       <Divider />
       <Collapse in={expandedGroups[`${group.value}`]}>
-        <Box mt={1} />
-        <Grid container spacing={2} justify='flex-end'>
-          {group.children && group.children.map((childGroup, i) => (
-            <React.Fragment key={childGroup.value || childGroup.id}>
-              <GroupSelectorItem {...props} group={childGroup} />
-            </React.Fragment>
-          ))}
-        </Grid>
+        {group.children && group.children.map((childGroup, i) => (
+          <React.Fragment key={childGroup.value || childGroup.id}>
+            <GroupSelectorItem {...props} group={childGroup} child />
+          </React.Fragment>
+        ))}
       </Collapse>
-      {props.large ? <Box mb={1} /> : <React.Fragment />}
+      {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
     </React.Fragment>
   );
 };
@@ -198,6 +211,7 @@ GroupSelectorItem.propTypes = {
   removeGroup: PropTypes.func,
   isSelected: PropTypes.func,
   large: PropTypes.bool,
+  child: PropTypes.bool,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
