@@ -5,9 +5,6 @@
 import {
   getResponses,
   getResponse,
-  createResponse,
-  updateResponse,
-  deleteResponse
 } from 'containers/Poll/Response/saga';
 
 import {
@@ -15,12 +12,6 @@ import {
   getResponseSuccess,
   getResponsesError,
   getResponsesSuccess,
-  createResponseError,
-  createResponseSuccess,
-  updateResponseError,
-  updateResponseSuccess,
-  deleteResponseError,
-  deleteResponseSuccess,
   responsesUnmount
 } from '../actions';
 

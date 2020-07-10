@@ -37,6 +37,7 @@ export const initialState = {
 function mentorshipReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       // BEGIN
       case GET_USER_MENTORS_BEGIN:

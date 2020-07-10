@@ -25,6 +25,7 @@ export const initialState = {
 /* eslint-disable default-case, no-param-reassign, consistent-return  */
 function commentsReducer(state = initialState, action) {
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_COMMENTS_BEGIN:
         draft.isFetchingComments = true;

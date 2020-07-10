@@ -70,13 +70,13 @@ DiverstGroupLegend.propTypes = {
   isLoading: PropTypes.bool,
   groupListUnmount: PropTypes.func,
   getColorsBegin: PropTypes.func,
-  groups: PropTypes.shape({
-    id: PropTypes.shape({
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
       calendar_color: PropTypes.string,
     })
-  }),
+  ),
 };
 
 const mapStateToProps = createStructuredSelector({
