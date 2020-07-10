@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, CardHeader, Box
+  Divider, CardHeader, Box, Typography, Checkbox, FormControlLabel, FormGroup
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
@@ -31,6 +31,7 @@ import Logo from 'components/Shared/Logo';
 import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
+import { union, difference, intersection } from 'utils/arrayHelpers';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -177,6 +178,37 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   messages={messages}
                   formikProps={formikProps}
                 />
+              </CardContent>
+              <Divider />
+              <CardContent>
+                <Typography variant='h6'>
+                  Explore your groups
+                </Typography>
+                { props.groups.map(group => (
+                  <FormGroup key={group.id}>
+                    <FormControlLabel
+                      control={(
+                        <Field
+                          component={Checkbox}
+                          onChange={(event, value) => {
+                            if (value)
+                              setFieldValue('group_ids', [...values.group_ids, group.id]);
+                            else
+                              setFieldValue('group_ids', values.group_ids.filter(id => id !== group.id));
+                          }}
+                          id={`group_${group.id}`}
+                          name={`group_${group.id}`}
+                          margin='normal'
+                          disabled={props.isCommitting}
+                          label={group.name}
+                          value={values.group_ids.includes(group.id)}
+                          checked={values.group_ids.includes(group.id)}
+                        />
+                      )}
+                      label={group.name}
+                    />
+                  </FormGroup>
+                ))}
               </CardContent>
               <Divider />
               <CardActions>
