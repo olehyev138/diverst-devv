@@ -9,7 +9,7 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 import { DroppableList } from 'components/Shared/DragAndDrop/DroppableLocations/DroppableList';
-import DraggableFieldAdminCard from "../DraggableFieldAdminCard";
+import DraggableFieldAdminCard from '../DraggableFieldAdminCard';
 
 export function DroppableFieldList(props) {
   const renderCard = (card, index, moveCard) => (

@@ -28,7 +28,7 @@ import Field from 'components/Shared/Fields/FieldIndexItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
-import {DroppableFieldList} from "../../../../containers/GlobalSettings/Field/DroppableFieldAdminList";
+import { DroppableFieldList } from '../../../../containers/GlobalSettings/Field/DroppableFieldAdminList';
 
 
 const styles = theme => ({

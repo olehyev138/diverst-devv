@@ -38,14 +38,42 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
 
   return (
     <Grid item key={field.id} xs={12}>
-      <Field
-        currentEnterprise={props.currentEnterprise}
-        updateFieldBegin={props.updateFieldBegin}
-        deleteFieldBegin={props.deleteFieldBegin}
-        field={field}
-        key={field.id}
-        toggles={toggles}
-      />
+      { draggable ? (
+        <Card
+          ref={ref}
+        >
+          <CardContent>
+            <Typography variant='h5' component='h2' display='inline' color='primary'>
+              {field.title}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              color='primary'
+              size='small'
+              disabled
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Button
+              size='small'
+              className={classes.errorButton}
+              disabled
+            >
+              <DiverstFormattedMessage {...messages.delete} />
+            </Button>
+          </CardActions>
+        </Card>
+      ) : (
+        <Field
+          currentEnterprise={props.currentEnterprise}
+          updateFieldBegin={props.updateFieldBegin}
+          deleteFieldBegin={props.deleteFieldBegin}
+          field={field}
+          key={field.id}
+          toggles={toggles}
+        />
+      )}
     </Grid>
   );
 }
