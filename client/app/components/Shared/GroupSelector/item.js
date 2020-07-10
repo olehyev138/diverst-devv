@@ -111,7 +111,7 @@ const GroupSelectorItem = (props) => {
     },
   );
 
-  const imageDimensions = props.large ? '100px' : '30px';
+  const imageDimensions = props.large ? '80px' : '30px';
 
   return (
     <React.Fragment>
@@ -179,6 +179,7 @@ const GroupSelectorItem = (props) => {
           ))}
         </Grid>
       </Collapse>
+      {props.large ? <Box mb={1} /> : <React.Fragment />}
     </React.Fragment>
   );
 };
