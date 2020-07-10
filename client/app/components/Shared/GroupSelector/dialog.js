@@ -30,10 +30,10 @@ const styles = {
 };
 
 const GroupListSelector = (props) => {
-  const { groups, ...rest } = props;
+  const { groups, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
-  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, ['all_parents']) });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
   const [selectedGroups, setSelectedGroup] = useState({});
@@ -103,6 +103,7 @@ const GroupListSelector = (props) => {
           group={group}
           expandedGroups={expandedGroups}
           setExpandedGroups={setExpandedGroups}
+          dialogNoChildren={props.dialogNoChildren}
         />
       ))}
     </DiverstLoader>
@@ -125,13 +126,13 @@ const GroupListSelector = (props) => {
   return (
     <React.Fragment>
       {header}
-      <div className={props.classes.search}>
+      <div className={classes.search}>
         {searchBar}
       </div>
-      <div className={props.classes.list}>
+      <div className={classes.list}>
         {list}
       </div>
-      <div className={props.classes.bottom}>
+      <div className={classes.bottom}>
         {paginator}
       </div>
     </React.Fragment>
@@ -142,10 +143,11 @@ GroupListSelector.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   isMulti: PropTypes.bool,
+  dialogNoChildren: PropTypes.bool,
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-
+  queryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
