@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_08_170943) do
+ActiveRecord::Schema.define(version: 2020_06_26_173224) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1586,6 +1586,19 @@ ActiveRecord::Schema.define(version: 2020_07_08_170943) do
     t.text "data"
     t.index ["group_id"], name: "index_user_groups_on_group_id"
     t.index ["user_id"], name: "index_user_groups_on_user_id"
+  end
+
+  create_table "user_poll_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "poll_id"
+    t.string "token"
+    t.boolean "submitted", default: false
+    t.boolean "cancelled", default: false
+    t.boolean "email_sent", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_user_poll_tokens_on_poll_id"
+    t.index ["user_id"], name: "index_user_poll_tokens_on_user_id"
   end
 
   create_table "user_reward_actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|

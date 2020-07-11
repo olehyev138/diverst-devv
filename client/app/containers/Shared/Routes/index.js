@@ -10,6 +10,7 @@ import {
   GroupLayout,
   AdminLayout,
   SessionLayout,
+  AnonymousLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
@@ -113,6 +114,7 @@ import {
   PollCreatePage,
   PollEditPage,
   PollShowPage,
+  PollResponsePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -179,6 +181,16 @@ export default function Routes(props) {
               <RouteWithProps path={ROUTES.session.signUp.path()}><SignUpPage /></RouteWithProps>
             </SwitchWithProps>
           </SessionLayout>
+        </Route>
+
+        {/* Anonymous */}
+        <Route path={expandRouteIntoPathArray(ROUTES.anonymous)}>
+          <AnonymousLayout>
+            <SwitchWithProps>
+              {/* Poll Response */}
+              <RouteWithProps path={ROUTES.anonymous.pollResponse.path()}><PollResponsePage /></RouteWithProps>
+            </SwitchWithProps>
+          </AnonymousLayout>
         </Route>
 
         {/* Authenticated */}
