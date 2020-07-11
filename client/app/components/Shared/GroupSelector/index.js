@@ -8,7 +8,7 @@ import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  getGroupsBegin, groupListUnmount
+  getGroupsBegin, groupListUnmount, getGroupsSuccess
 } from 'containers/Group/actions';
 
 import { compose } from 'redux';
@@ -29,7 +29,7 @@ import messages from 'containers/Group/messages';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
-  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, ...rest } = props;
+  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
@@ -67,7 +67,11 @@ const GroupSelector = (props) => {
     ];
   })();
 
-  const groupSelectAction = (searchKey = '') => props.inputCallback(props, searchKey);
+  const groupSelectAction = (searchKey = '') => {
+    if (props.forceReload)
+      props.getGroupsSuccess({ items: [] });
+    props.inputCallback(props, searchKey);
+  };
 
   useEffect(() => {
     groupSelectAction();
@@ -84,10 +88,12 @@ const GroupSelector = (props) => {
           margin='normal'
           label={label}
           fullWidth
+          forceReload={forceReload}
           options={groups}
           value={values[groupField]}
           onChange={onChange}
           onInputChange={groupSelectAction}
+          onFocus={event => groupSelectAction('')}
           hideHelperText
           {...selectProps}
         />
@@ -141,6 +147,8 @@ const GroupSelector = (props) => {
             removeGroup={removeGroup}
             isSelected={isSelected}
             selected={values[groupField]}
+            dialogNoChildren={props.dialogNoChildren}
+            queryScopes={props.queryScopes}
           />
         )}
       />
@@ -151,6 +159,9 @@ const GroupSelector = (props) => {
 
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
+  dialogNoChildren: PropTypes.bool,
+  forceReload: PropTypes.bool,
+
   groupField: PropTypes.string.isRequired,
   label: PropTypes.node.isRequired,
   handleChange: PropTypes.func.isRequired,
@@ -161,6 +172,7 @@ GroupSelector.propTypes = {
 
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
+  getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
 
   inputCallback: PropTypes.func,
@@ -186,6 +198,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getGroupsBegin,
   groupListUnmount,
+  getGroupsSuccess
 };
 
 const withConnect = connect(
