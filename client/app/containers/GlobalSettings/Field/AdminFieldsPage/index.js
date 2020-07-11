@@ -39,6 +39,8 @@ import {
 import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import AdminFieldList from 'components/Shared/Fields/AdminFieldList';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
@@ -58,6 +60,8 @@ export function AdminFieldsPage(props) {
       fieldDefinerId: dig(props, 'currentEnterprise', 'id')
     }
   );
+
+  const { intl } = props;
 
   useEffect(() => {
     props.getFieldsBegin(params);
@@ -114,6 +118,7 @@ export function AdminFieldsPage(props) {
         positions={positions}
         defaultParams={params}
         updateFieldPositionBegin={props.updateFieldPositionBegin}
+        intl={intl}
       />
     </React.Fragment>
   );
@@ -134,7 +139,8 @@ AdminFieldsPage.propTypes = {
   hasChanged: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number
-  })
+  }),
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -163,6 +169,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(Conditional(

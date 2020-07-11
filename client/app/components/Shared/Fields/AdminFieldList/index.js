@@ -29,6 +29,7 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import { DroppableFieldList } from '../../../../containers/GlobalSettings/Field/DroppableFieldAdminList';
+import { injectIntl, intlShape } from 'react-intl';
 
 
 const styles = theme => ({
@@ -132,7 +133,6 @@ export function AdminFieldList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
-              className={classes.optionButton}
               onClick={() => {
                 setSave(true);
                 setOrder(false);
@@ -149,7 +149,6 @@ export function AdminFieldList(props, context) {
               color='primary'
               size='large'
               startIcon={<ReorderIcon />}
-              className={classes.optionButton}
               onClick={() => {
                 setSave(false);
                 setOrder(true);
@@ -250,6 +249,7 @@ export function AdminFieldList(props, context) {
           rowsPerPage={defaultParams.count}
           currentEnterprise={props.currentEnterprise}
           toggles={props.toggles}
+          intl={props.intl}
         />
       </DiverstLoader>
       <DiverstPagination
@@ -274,7 +274,7 @@ AdminFieldList.propTypes = {
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
-
+  intl: intlShape.isRequired,
   toggles: PropTypes.shape({
     visible: PropTypes.bool,
     editable: PropTypes.bool,
@@ -293,5 +293,6 @@ AdminFieldList.defaultProps = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(AdminFieldList);

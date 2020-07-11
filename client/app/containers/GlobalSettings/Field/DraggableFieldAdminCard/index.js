@@ -18,11 +18,11 @@ import { Formik } from 'formik';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
-import Field from 'components/Shared/Fields/FieldIndexItem';
+import { intlShape } from 'react-intl';
 
 
-export default function DraggableFieldAdminCard({ id, text, index, moveCard, field, classes, draggable,
-  deleteFieldBegin, toggles, currentEnterprise, updateFieldBegin }, props) {
+export default function DraggableFieldAdminCard({ id, index, moveCard, field, classes, draggable,
+  deleteFieldBegin, toggles, currentEnterprise, updateFieldBegin, intl }, props) {
   const ref = useRef(null);
   const ItemTypes = {
     CARD: 'card',
@@ -84,8 +84,8 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
               className={classes.errorButton}
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('delete?'))
-                  props.deleteFieldBegin(field.id);
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
+                  deleteFieldBegin(field.id);
               }}
             >
               <DiverstFormattedMessage {...messages.delete} />
@@ -104,6 +104,7 @@ export default function DraggableFieldAdminCard({ id, text, index, moveCard, fie
             toggles={toggles}
             updateFieldBegin={updateFieldBegin}
             deleteFieldBegin={deleteFieldBegin}
+            intl={intl}
           />
         </Collapse>
       )}
@@ -123,6 +124,7 @@ DraggableFieldAdminCard.propTypes = {
   deleteFieldBegin: PropTypes.func,
   updateFieldBegin: PropTypes.func,
   currentEnterprise: PropTypes.object,
+  intl: intlShape.isRequired,
   toggles: PropTypes.shape({
     visible: PropTypes.bool,
     editable: PropTypes.bool,
