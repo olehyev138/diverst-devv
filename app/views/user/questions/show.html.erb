@@ -54,8 +54,10 @@ video#recorded-video {
             </div>
             <div class="answer__content">
               <h3><%= answer.title %></h3>
-              <p><%= answer.content || video_tag(answer.supporting_document.expiring_url(3600), controls: true, size: '200x200') %></p>
-
+              <p><%= answer.content if answer.content.present? %></p>
+              <p><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></p>                
+              <p><%= link_to answer.supporting_document_file_name, answer.supporting_document.expiring_url(3600) unless answer.supporting_document.blank? %></p>
+  
               <% answer.comments.each do |comment| %>
                 <%# only show comment if its been approved OR pending comments are not enabled OR if user is an erg leader %>
                 <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (CampaignPolicy.new(current_user, Campaign).manage?) %>
@@ -148,6 +150,11 @@ video#recorded-video {
                     <input class="field__input string optional " 
                     type="text" name="answer[title]" id="answer_title_video">
                   </div>
+                  <label class="field__label text optional" for="answer_content"><h3>Attach Supporting Document</h3></label>
+                  <div class="field__input-wrapper">
+                    <input class="field__input attachment_preview optional " type="file" name="answer[supporting_document]" 
+                    id="answer_supporting_document_video">
+                  </div>
                   <video id="recorded-video" autoplay muted></video>
                 </div>  
               </div>
@@ -169,6 +176,7 @@ video#recorded-video {
               <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
                 <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
                 <%= f.input :title, label: 'Name/Title of idea' %>
+                <%= f.input :video_upload, as: :attachment_preview %>
                 <%= f.input :supporting_document, as: :attachment_preview %>
                 <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
                 <%= f.button :submit, value: "Submit" %>
@@ -357,23 +365,22 @@ video#recorded-video {
       type: 'video/webm'
     });
 
-    console.log(blob);
-
     var url = URL.createObjectURL(blob);
-    console.log(url);
     var a = document.createElement("a");
     document.body.appendChild(a);
     a.style = "display: none";
     a.href = url;
   
     var formData = new FormData();
-    formData.append('answer[supporting_document]', blob, 'recording.webm');
+    var supporting_document = document.querySelector('#answer_supporting_document_video').files[0];
+    formData.append('answer[video_upload]', blob, 'recording.webm');
+    
+    if(supporting_document != undefined) {
+      formData.append('answer[supporting_document]', supporting_document, supporting_document.name.split('\\')[2]);
+    }
     formData.append('answer[title]', $('#answer_title_video').val());
     formData.append('answer[idea_category_id]', $('#answer_video_category_id').val());
-    console.log(formData);
-    console.log('idea category', $('#answer_video_category_id').val());
-    console.log('idea name', $('#answer_title_video').val());
-
+    
     $.ajax({
       url: '<%= user_question_user_answers_path(@question) %>',
       type: 'POST',

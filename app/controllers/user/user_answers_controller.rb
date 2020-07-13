@@ -67,7 +67,8 @@ class User::UserAnswersController < ApplicationController
         :content,
         :idea_category_id,
         :contributing_group_id,
-        :supporting_document
+        :supporting_document,
+        :video_upload
       )
   end
 end
