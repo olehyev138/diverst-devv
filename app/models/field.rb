@@ -139,6 +139,7 @@ class Field < ApplicationRecord
   end
 
   def set_position
+    return if self.id.nil?
     self.position = self.id
     save
   end
