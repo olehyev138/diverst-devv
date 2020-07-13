@@ -68,10 +68,6 @@ class GroupEventsPolicy < GroupBasePolicy
     when 'group'
       index?
     when 'leaders_only'
-      # to join a group event user must have leaders permission defined below.
-      return true if is_a_manager?
-      return true if is_a_manager?
-
       is_a_manager?
     else
       return false
