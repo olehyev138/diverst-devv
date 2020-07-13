@@ -239,7 +239,7 @@ class Group < ApplicationRecord
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_validation :smart_add_url_protocol
-  after_create :set_position
+  after_save :set_position
   after_update :accept_pending_members, unless: :pending_members_enabled?
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
@@ -646,8 +646,7 @@ class Group < ApplicationRecord
   end
 
   def set_position
-    group_id = self.id
-    self.position = group_id
+    self.position = self.id
     save
   end
 end

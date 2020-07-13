@@ -7,7 +7,7 @@ class Field < ApplicationRecord
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  after_create :set_position
+  after_save :set_position
   validates_length_of :field_type, maximum: 191
   validates_length_of :options_text, maximum: 65535
   validates_length_of :saml_attribute, maximum: 191
@@ -139,8 +139,7 @@ class Field < ApplicationRecord
   end
 
   def set_position
-    field_id = self.id
-    self.position = field_id
+    self.position = self.id
     save
   end
 end
