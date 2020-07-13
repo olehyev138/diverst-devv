@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BudgetItem::Actions, type: :action do
+RSpec.describe BudgetItem::Actions, type: :model do
   describe 'valid_scopes' do
     it { expect(BudgetItem.valid_scopes.include?('approved')).to eq true }
   end

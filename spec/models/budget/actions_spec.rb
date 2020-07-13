@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Budget::Actions, type: :action do
+RSpec.describe Budget::Actions, type: :model do
   describe 'base_includes' do
     it { expect(Budget.base_includes.include?(:budget_items)).to eq true }
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Activity::Actions, type: :action do
+RSpec.describe Activity::Actions, type: :model do
   describe 'valid_scopes' do
     it { expect(Activity.valid_scopes.include?('joined_from')).to eq true }
     it { expect(Activity.valid_scopes.include?('joined_to')).to eq true }
