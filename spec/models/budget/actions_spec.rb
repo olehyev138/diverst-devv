@@ -43,15 +43,22 @@ RSpec.describe Budget::Actions, type: :model do
       budget.budget_items.update_all(estimated_amount: 0)
       expect(budget.approve(approver).is_approved).to eq true
     end
+
+    it 'BudgetMailer' do
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        BudgetMailer.budget_approved(budget).deliver_later
+      }.to have_enqueued_job.on_queue('mailers')
+    end
   end
 
   describe 'decline' do
     let!(:approver) { create(:user) }
     let!(:budget) { create(:budget) }
-
     before do
       budget.decline(approver)
     end
+
     it 'budget' do
       expect(budget.is_approved).to eq false
     end
@@ -60,6 +67,13 @@ RSpec.describe Budget::Actions, type: :model do
       budget.budget_items.each do | item |
         expect(item.is_done).to eq true
       end
+    end
+
+    it 'BudgetMailer' do
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        BudgetMailer.budget_declined(budget).deliver_later
+      }.to have_enqueued_job.on_queue('mailers')
     end
   end
 end
