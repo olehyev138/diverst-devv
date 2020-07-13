@@ -17,15 +17,15 @@ RSpec.describe Folder::Actions, type: :model do
     end
 
     it 'Folder does not exist' do
-      expect { Folder.validate_password(Request.create_request(create(:user)), {id: folder.id + 1, password: 'test'}) }.to raise_error(BadRequestException, 'Folder does not exist')
+      expect { Folder.validate_password(Request.create_request(create(:user)), { id: folder.id + 1, password: 'test' }) }.to raise_error(BadRequestException, 'Folder does not exist')
     end
 
     it 'Incorrect password' do
-      expect { Folder.validate_password(Request.create_request(create(:user)), {id: folder.id, password: 'test'}) }.to raise_error(BadRequestException, 'Incorrect password')
+      expect { Folder.validate_password(Request.create_request(create(:user)), { id: folder.id, password: 'test' }) }.to raise_error(BadRequestException, 'Incorrect password')
     end
 
     it 'validated password' do
-      expect(Folder.validate_password(Request.create_request(create(:user)), {id: folder.id, password: 'testPassword'})).to eq folder
+      expect(Folder.validate_password(Request.create_request(create(:user)), { id: folder.id, password: 'testPassword' })).to eq folder
     end
   end
 end
