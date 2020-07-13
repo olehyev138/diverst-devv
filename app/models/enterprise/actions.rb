@@ -6,7 +6,7 @@ module Enterprise::Actions
   end
 
   module ClassMethods
-    def base_preload
+    def base_preloads
       [ :theme ]
     end
 
