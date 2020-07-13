@@ -174,8 +174,8 @@ video#recorded-video {
             
             <div class="col-sm-6" id="answer_supporting_video" style="display: none;">
               <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
-                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
-                <%= f.input :title, label: 'Name/Title of idea' %>
+                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] }, input_html: { id: 'answer_idea_category_id_video_upload' } %>
+                <%= f.input :title, label: 'Name/Title of idea', input_html: { id: 'answer_title_video_upload' } %>
                 <%= f.input :video_upload, as: :attachment_preview %>
                 <%= f.input :supporting_document, as: :attachment_preview %>
                 <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
@@ -217,6 +217,19 @@ video#recorded-video {
   // Submit comments using the return key
   Utility.submitOnReturn($('.submit-on-return'));
 
+  var validateTextSubmitForm = function() {
+    var idea_category = $('#answer_idea_category_id').val();
+    var answer_title = $('#answer_title').val();
+    var answer_content = $('#answer_content').val();
+    
+    if(idea_category.length==0 || answer_title.length==0 || answer_content.length==0) {
+      $('input[type="submit"]').prop('disabled', true);
+    }else if(idea_category.length!=0 || answer_title.length!=0 || answer_content.length!=0){
+      $('input[type="submit"]').prop('disabled', false);
+    }
+  }
+
+
   $('#text-submit-picture').click(function(){
       $('#answer_content_wrapper').slideToggle();
       $('#answer_supporting_video').hide();
@@ -229,7 +242,13 @@ video#recorded-video {
         });
       }
       video.srcObject = null;
+
+      validateTextSubmitForm();
     }); //endof click
+
+  $('#answer_title, #answer_content, #answer_idea_category_id').on('keyup change', function(e){
+    validateTextSubmitForm();
+  });
 
   $('#video-contribution').on('click', function(){
     $('#video-upload-options').slideToggle();
@@ -255,9 +274,28 @@ video#recorded-video {
     .catch(e => { console.error('getUserMedia() failed: ' + e); });
   });
 
+  var validateVideoUploadForm = function() {
+    var idea_category = $('#answer_idea_category_id_video_upload').val();
+    var answer_title = $('#answer_title_video_upload').val();
+    var video_upload = $('#answer_video_upload').val();
+    var supporting_document = $('#answer_supporting_document').val();
+
+    if(idea_category.length==0 || answer_title.length==0 || (video_upload.length==0 && supporting_document.length==0)) {
+      $('input[type="submit"]').prop('disabled', true);
+    } else if(idea_category.length!=0 && answer_title.length!=0 && video_upload.length!=0) {
+      $('input[type="submit"]').prop('disabled', false);
+    }
+  }
+
   $('#upload-video').on('click', function(){
     $('#answer_supporting_video').show();
     $('#video-upload-options').hide();
+
+    validateVideoUploadForm();
+  });
+
+  $('#answer_idea_category_id_video_upload, #answer_title_video_upload, #answer_video_upload, #answer_supporting_document').on('keyup change', function(){
+    validateVideoUploadForm();
   });
 
   var recordedChunks = [];
@@ -272,7 +310,6 @@ video#recorded-video {
 
   function getMediaStream(stream) {
     video.srcObject = stream;
-    console.log('activate webcam...', stream);
 
     let options = {mimeType: 'video/webm;codecs=vp9,opus'};
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
@@ -296,7 +333,6 @@ video#recorded-video {
       return;
     }
 
-    console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
     theMediaRecorder = mediaRecorder;
   }
 
@@ -306,12 +342,9 @@ video#recorded-video {
         throw new Error('InvalidStateError')
       }
       recordedChunks = [];
-      console.log('MediaRecorder started...', this);
     }
 
     theMediaRecorder.ondataavailable = function(event) {
-      // console.log(' Recorded chunk of size ' + event.data.size + "B");
-      console.log('state: ', theMediaRecorder.state)
       if(theMediaRecorder.state == 'recording'){
         recordedChunks.push(event.data);
       }
@@ -340,7 +373,10 @@ video#recorded-video {
 
     stopRecordingButton.disabled = true;
     startRecordingButton.disabled = false;
-    saveRecordingButton.disabled = false;
+
+    if($('#answer_video_category_id').val().length!=0 && $('#answer_title_video').val().length!=0){
+      saveRecordingButton.disabled = false;
+    }
 
     var stream = video.srcObject;
       if(stream) {
@@ -350,6 +386,12 @@ video#recorded-video {
       }
       video.srcObject = null;
   }
+
+  $('#answer_video_category_id, #answer_title_video').on('keyup change', function() {
+    if($('#answer_video_category_id').val().length!=0 && $('#answer_title_video').val().length!=0 && recordedChunks.length!=0){
+      saveRecordingButton.disabled = false;
+    }
+  });
 
   var stopRecordingButton = document.querySelector('#stop-recording');
   stopRecordingButton.addEventListener('click', stopRecording);
@@ -389,6 +431,7 @@ video#recorded-video {
       processData: false,
       cache: false,
       data: formData,
+
       success: function() {
         location.reload();
       }
