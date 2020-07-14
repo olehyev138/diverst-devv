@@ -90,35 +90,39 @@ export function* updatePoll(action) {
 
 export function* createPollAndPublish(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { poll: action.payload };
+
+    const response = yield call(api.polls.createAndPublish.bind(api.polls), payload);
 
     yield put(createPollAndPublishSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully created poll and publish', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully created and published poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollAndPublishError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create poll and publish', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create and publish poll', options: { variant: 'warning' } }));
   }
 }
 
 export function* updatePollAndPublish(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { poll: action.payload };
+
+    const response = yield call(api.polls.updateAndPublish.bind(api.polls), action.payload.id, payload);
 
     yield put(updatePollAndPublishSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated poll and publish', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully updated and published poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollAndPublishError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update poll and publish', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update and publish poll', options: { variant: 'warning' } }));
   }
 }
 
 export function* publishPoll(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.polls.publish.bind(api.polls), action.payload.id);
 
     yield put(publishPollSuccess({}));
     yield put(showSnackbar({ message: 'Successfully published poll', options: { variant: 'success' } }));
