@@ -29,6 +29,10 @@ class PollPolicy < ApplicationPolicy
     @record.owner == @user
   end
 
+  alias_method :create_and_publish?, :update?
+  alias_method :update_and_publish?, :update?
+  alias_method :publish?, :update?
+
   def destroy?
     update?
   end
