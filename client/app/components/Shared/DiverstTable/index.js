@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import MaterialTable, { MTableHeader } from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
-import buildDataFunction from 'utils/dataTableHelper';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstTable/messages';
 
@@ -51,16 +50,7 @@ export function DiverstTable(props) {
     });
   };
 
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => {
-    if (ref.current && !props.static)
-      ref.current.onQueryChange({ page: page(), pageSize: rowsPerPage() });
-  }, [props.dataArray]);
-
-  const dataResolver = () => props.static
-    ? props.dataArray
-    : buildDataFunction(props.dataArray, page() || 0, props.dataTotal || 0);
+  const handleSearchChange = searchText => props.handleSearching(searchText);
 
   return (
     <div className={classes.materialTableContainer}>
