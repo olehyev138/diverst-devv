@@ -57,4 +57,54 @@ RSpec.describe Group::Actions, type: :model do
       expect(Group.update_child_categories(Request.create_request(create(:user)), params)).to_not be nil
     end
   end
+
+  describe 'carryover_annual_budget' do
+    it 'missing id' do
+      group_without_id = build(:group, id: nil)
+      expect { group_without_id.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
+    end
+
+    it 'no annual budget' do
+      group_without_budget = build(:group)
+      expect { group_without_budget.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
+    end
+
+    let!(:annual_budget) { create(:annual_budget, amount: 100) }
+
+    it 'can not be reset' do
+      group = annual_budget.group
+      budget = create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
+      expect { group.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
+    end
+
+    it 'carryover success' do
+      group = annual_budget.group
+      expect(group.carryover_annual_budget(Request.create_request(create(:user))).annual_budget).to eq 100
+    end
+  end
+
+  describe 'reset_annual_budget' do
+    it 'missing id' do
+      group_without_id = build(:group, id: nil)
+      expect { group_without_id.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
+    end
+
+    it 'no annual budget' do
+      group_without_budget = build(:group)
+      expect { group_without_budget.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
+    end
+
+    let!(:annual_budget) { create(:annual_budget, amount: 100) }
+
+    it 'can not be reset' do
+      group = annual_budget.group
+      budget = create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
+      expect { group.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
+    end
+
+    it 'carryover success' do
+      group = annual_budget.group
+      expect(group.reset_annual_budget(Request.create_request(create(:user))).annual_budget).to eq 100
+    end
+  end
 end
