@@ -201,8 +201,15 @@ Diverst::Application.routes.draw do
       resources :policy_groups
       resources :policy_group_templates
       resources :polls do
-        get  '/fields',       to: 'polls#fields'
-        post '/create_field', to: 'polls#create_field'
+        collection do
+          post '/publish', to: 'polls#create_and_publish'
+        end
+        member do
+          get  '/fields',       to: 'polls#fields'
+          post '/create_field', to: 'polls#create_field'
+          put '/publish', to: 'polls#update_and_publish'
+          patch '/publish', to: 'polls#update_and_publish'
+        end
       end
       resources :poll_responses, except: [:destroy, :update] do
         collection do
