@@ -26,7 +26,7 @@ RSpec.describe NewsFeedLinkPolicy, type: :policy do
         context 'when group.latest_news_visibility is set to public' do
           before { group.latest_news_visibility = 'public' }
 
-          context 'when ONLY groups_budgets_indexgroup_posts_index is true' do
+          context 'when ONLY group_posts_index is true' do
             before { user.policy_group.update group_posts_index: true }
 
             it 'returns true' do
@@ -219,6 +219,186 @@ RSpec.describe NewsFeedLinkPolicy, type: :policy do
   describe 'for users without access' do
     describe 'for users with no access' do
       it { is_expected.to forbid_actions([:create, :destroy]) }
+    end
+
+    context 'index?' do
+      context 'when group.latest_news_visibility is set to public' do
+        before { group.latest_news_visibility = 'public' }
+
+        context 'when ONLY group_posts_index is false' do
+          before { user.policy_group.update group_posts_index: false }
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'when ONLY manage_posts is false' do
+          before { user.policy_group.update manage_posts: false }
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'when ONLY manage_posts is false' do
+          before { user.policy_group.update manage_posts: false }
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'user has basic leader permissions and groups_members_manage is false' do
+          before do
+            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update manage_posts: false
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+      end
+
+      context 'when group.latest_news_visibility is set to group' do
+        before { group.latest_news_visibility = 'group' }
+
+        context 'when groups_manage and manage_posts are false' do
+          before { user.policy_group.update groups_manage: false, manage_posts: false }
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'user has group leader permissions : is_a_leader' do
+          before do
+            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update manage_posts: false
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'user is member and manage_posts is false : is_a_member' do
+          before do
+            create(:user_group, user_id: user.id, group_id: group.id)
+            user.policy_group.update manage_posts: false
+          end
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+
+        context 'user has groups_manage permission : is_admin_manager' do
+          before do
+            user.policy_group.update groups_manage: false
+            user.policy_group.update manage_posts: false
+          end
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+      end
+
+      context 'when group.latest_news_visibility is set to leader' do
+        before { group.latest_news_visibility = 'leaders_only' }
+        context 'user has group leader permissions : is_a_leader' do
+          before do
+            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update manage_posts: false
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it 'returns false' do
+            expect(subject.index?).to eq false
+          end
+        end
+      end
+    end
+
+    context 'manage?' do
+      context 'user has groups_manage permission : is_admin_manager' do
+        before do
+          user.policy_group.update groups_manage: false
+          user.policy_group.update manage_posts: false
+        end
+
+        it 'returns false' do
+          expect(subject.manage?).to eq false
+        end
+      end
+
+      context 'user has group leader permissions : is_a_leader' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update manage_posts: false
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it 'returns false' do
+          expect(subject.manage?).to eq false
+        end
+      end
+
+      context 'user is an accepted member : is_an_accepted_member' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
+          user.policy_group.update manage_posts: false
+        end
+
+        it 'returns false' do
+          expect(subject.manage?).to eq false
+        end
+      end
+    end
+
+    context 'create?' do
+      context 'user has groups_manage permission : is_admin_manager' do
+        before do
+          user.policy_group.update groups_manage: false
+          user.policy_group.update manage_posts: false
+        end
+
+        it 'returns false' do
+          expect(subject.create?).to eq false
+        end
+      end
+
+      context 'user has group leader permissions : is_a_leader' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update manage_posts: false
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it 'returns false' do
+          expect(subject.create?).to eq false
+        end
+      end
+
+      context 'user is an accepted member : is_an_accepted_member' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
+          user.policy_group.update manage_posts: false
+        end
+
+        it 'returns false' do
+          expect(subject.create?).to eq false
+        end
+      end
     end
   end
 end
