@@ -25,27 +25,27 @@ const styles = theme => ({
 });
 
 export function DiverstTable(props) {
-  const { classes, params, ...rest } = props;
+  const { classes, params, dataArray, dataTotal, page, rowsPerPage, title, columns, actions, isStatic, tableOptions, ...rest } = props;
 
-  const [pageState, setPage] = useState(props.page || 0);
-  const [rowsPerPageState, setRowsPerPage] = useState(props.rowsPerPage || 10);
+  const [pageState, setPage] = useState(page || 0);
+  const [rowsPerPageState, setRowsPerPage] = useState(rowsPerPage || 10);
 
-  const page = () => params ? params.page : pageState;
-  const rowsPerPage = () => params ? params.count : rowsPerPageState;
+  const currentPage = () => params ? params.page : pageState;
+  const currentRowsPerPage = () => params ? params.count : rowsPerPageState;
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    props.handlePagination({ count: rowsPerPage(), page: newPage });
+    props.handlePagination({ count: currentRowsPerPage(), page: newPage });
   };
 
   const handleChangeRowsPerPage = (pageSize) => {
     setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page: page() });
+    props.handlePagination({ count: +pageSize, page: currentPage() });
   };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : props.columns[columnId].field,
+      orderBy: (columnId === -1) ? 'id' : columns[columnId].field,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
@@ -55,17 +55,17 @@ export function DiverstTable(props) {
   return (
     <div className={classes.materialTableContainer}>
       <MaterialTable
-        tableRef={ref}
-        page={page()}
+        data={dataArray || []}
+        totalCount={dataTotal || 0}
+        page={currentPage()}
         icons={tableIcons}
-        title={props.title || <DiverstFormattedMessage {...messages.title} />}
+        title={title || <DiverstFormattedMessage {...messages.title} />}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
         onRowClick={props.handleRowClick}
-        data={dataResolver()}
-        columns={props.columns}
-        actions={props.actions}
+        columns={columns}
+        actions={actions}
         options={{
           ...props.my_options,
           actionsColumnIndex: -1,
