@@ -4,7 +4,7 @@ module Poll::Actions
   end
 
   def publish!
-    klass.update(status: 'published')
+    update(status: 'published')
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
