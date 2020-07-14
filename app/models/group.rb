@@ -244,7 +244,6 @@ class Group < ApplicationRecord
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   attr_accessor :skip_label_consistency_check
-  attr_accessor :position
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
@@ -263,7 +262,6 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-
 
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
