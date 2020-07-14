@@ -117,6 +117,6 @@ export default compose(
 )(Conditional(
   AdminAnnualBudgetPage,
   ['permissions.manage_all_budgets'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.group.groupPlan.annualBudget.adminPlanPage
 ));
