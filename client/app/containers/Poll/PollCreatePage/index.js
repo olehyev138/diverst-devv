@@ -12,7 +12,7 @@ import saga from 'containers/Poll/saga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createPollBegin, pollsUnmount } from 'containers/Poll/actions';
+import { createPollBegin, pollsUnmount, createPollAndPublishBegin } from 'containers/Poll/actions';
 import PollForm from 'components/Poll/PollForm';
 import { selectIsCommitting } from 'containers/Poll/selectors';
 
@@ -37,6 +37,7 @@ export function PollCreatePage(props) {
     <React.Fragment>
       <PollForm
         pollAction={props.createPollBegin}
+        pollActionPublish={props.createPollAndPublishBegin}
         isCommitting={props.isCommitting}
         buttonText={<DiverstFormattedMessage {...messages.create} />}
         header={<DiverstFormattedMessage {...messages.form.header.create} />}
@@ -49,6 +50,7 @@ export function PollCreatePage(props) {
 PollCreatePage.propTypes = {
   intl: intlShape.isRequired,
   createPollBegin: PropTypes.func,
+  createPollAndPublishBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
 };
@@ -59,7 +61,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   createPollBegin,
-  pollsUnmount
+  createPollAndPublishBegin,
+  pollsUnmount,
 };
 
 const withConnect = connect(

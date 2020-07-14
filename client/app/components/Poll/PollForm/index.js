@@ -36,7 +36,7 @@ import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 /* eslint-disable object-curly-newline */
 export function PollFormInner({ formikProps, buttonText, header, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
-    setFieldValue, setFieldTouched, setFieldError } = formikProps;
+    setFieldValue, setFieldTouched, setFieldError, setSubmitting } = formikProps;
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.poll}>
@@ -109,6 +109,16 @@ export function PollFormInner({ formikProps, buttonText, header, ...props }) {
               {buttonText}
             </DiverstSubmit>
             <Button
+              disabled={props.isCommitting}
+              onClick={() => {
+                setSubmitting(true);
+                props.pollAction(mapFields({ ...values }, ['group_ids', 'segment_ids']));
+                setSubmitting(false);
+              }}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+            <Button
               to={props.poll ? props.links.pollShow : props.links.pollsIndex}
               component={WrappedNavLink}
               disabled={props.isCommitting}
@@ -138,7 +148,7 @@ export function PollForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.pollAction(mapFields(values, ['group_ids', 'segment_ids']));
+        props.pollActionPublish(mapFields(values, ['group_ids', 'segment_ids']));
       }}
     >
       {formikProps => <PollFormInner {...props} formikProps={formikProps} />}
@@ -149,6 +159,7 @@ export function PollForm(props) {
 PollForm.propTypes = {
   edit: PropTypes.bool,
   pollAction: PropTypes.func,
+  pollActionPublish: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
@@ -158,6 +169,7 @@ PollForm.propTypes = {
 PollFormInner.propTypes = {
   edit: PropTypes.bool,
   poll: PropTypes.object,
+  pollAction: PropTypes.func,
   formikProps: PropTypes.shape({
     handleSubmit: PropTypes.func,
     handleChange: PropTypes.func,
@@ -168,6 +180,7 @@ PollFormInner.propTypes = {
     setFieldValue: PropTypes.func,
     setFieldTouched: PropTypes.func,
     setFieldError: PropTypes.func,
+    setSubmitting: PropTypes.func,
   }),
   header: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

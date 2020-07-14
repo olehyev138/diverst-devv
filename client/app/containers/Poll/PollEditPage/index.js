@@ -13,7 +13,7 @@ import saga from 'containers/Poll/saga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
+import { getPollBegin, pollsUnmount, updatePollBegin, updatePollAndPublishBegin } from 'containers/Poll/actions';
 import PollForm from 'components/Poll/PollForm';
 import { selectIsCommitting, selectIsFetchingPoll, selectFormPoll } from 'containers/Poll/selectors';
 
@@ -47,6 +47,7 @@ export function PollEditPage(props) {
       <PollForm
         poll={props.poll}
         pollAction={props.updatePollBegin}
+        pollActionPublish={props.updatePollAndPublishBegin}
         isCommitting={props.isCommitting}
         buttonText={<DiverstFormattedMessage {...messages.update} />}
         header={<DiverstFormattedMessage {...messages.form.header.edit} />}
@@ -62,6 +63,7 @@ export function PollEditPage(props) {
 PollEditPage.propTypes = {
   intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
+  updatePollAndPublishBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   getPollBegin: PropTypes.func,
   poll: PropTypes.object,
@@ -77,6 +79,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   updatePollBegin,
+  updatePollAndPublishBegin,
   pollsUnmount,
   getPollBegin,
 };
