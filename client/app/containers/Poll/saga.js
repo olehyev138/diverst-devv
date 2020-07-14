@@ -95,6 +95,7 @@ export function* createPollAndPublish(action) {
     const response = yield call(api.polls.createAndPublish.bind(api.polls), payload);
 
     yield put(createPollAndPublishSuccess({}));
+    yield put(push(ROUTES.admin.include.polls.index.path()));
     yield put(showSnackbar({ message: 'Successfully created and published poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollAndPublishError(err));
@@ -111,6 +112,7 @@ export function* updatePollAndPublish(action) {
     const response = yield call(api.polls.updateAndPublish.bind(api.polls), action.payload.id, payload);
 
     yield put(updatePollAndPublishSuccess({}));
+    yield put(push(ROUTES.admin.include.polls.index.path()));
     yield put(showSnackbar({ message: 'Successfully updated and published poll', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollAndPublishError(err));
