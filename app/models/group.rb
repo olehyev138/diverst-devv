@@ -238,6 +238,7 @@ class Group < ApplicationRecord
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
+  before_save :set_position
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
   after_update :accept_pending_members, unless: :pending_members_enabled?
@@ -263,7 +264,6 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
-  attribute :position, :integer, default: Group.all.count+1
 
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
@@ -644,5 +644,9 @@ class Group < ApplicationRecord
     return nil if group_sizes.length == 0
 
     group_sizes.sum / group_sizes.length
+  end
+
+  def set_position
+    self.position = self.id
   end
 end

@@ -7,7 +7,7 @@ class Field < ApplicationRecord
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  attribute :position, :integer, default: Field.all.count+1
+  before_save :set_position
 
   validates_length_of :field_type, maximum: 191
   validates_length_of :options_text, maximum: 65535
@@ -137,5 +137,9 @@ class Field < ApplicationRecord
     association(:field_definer).reader.enterprise
   rescue
     nil
+  end
+
+  def set_position
+    self.position = self.id
   end
 end
