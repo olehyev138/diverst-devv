@@ -39,7 +39,8 @@ export function PollCreatePage(props) {
         pollAction={props.createPollBegin}
         pollActionPublish={props.createPollAndPublishBegin}
         isCommitting={props.isCommitting}
-        buttonText={<DiverstFormattedMessage {...messages.create} />}
+        buttonText={<DiverstFormattedMessage {...messages.createPublish} />}
+        draftButtonText={<DiverstFormattedMessage {...messages.createDraft} />}
         header={<DiverstFormattedMessage {...messages.form.header.create} />}
         links={links}
       />

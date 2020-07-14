@@ -49,7 +49,8 @@ export function PollEditPage(props) {
         pollAction={props.updatePollBegin}
         pollActionPublish={props.updatePollAndPublishBegin}
         isCommitting={props.isCommitting}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={<DiverstFormattedMessage {...messages.updatePublish} />}
+        draftButtonText={<DiverstFormattedMessage {...messages.updateDraft} />}
         header={<DiverstFormattedMessage {...messages.form.header.edit} />}
         isFormLoading={props.isFormLoading}
         edit

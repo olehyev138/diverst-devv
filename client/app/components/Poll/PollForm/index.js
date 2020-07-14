@@ -34,12 +34,12 @@ import SegmentSelector from 'components/Shared/SegmentSelector';
 import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
 
 /* eslint-disable object-curly-newline */
-export function PollFormInner({ formikProps, buttonText, header, ...props }) {
+export function PollFormInner({ formikProps, buttonText, draftButtonText, header, poll, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
     setFieldValue, setFieldTouched, setFieldError, setSubmitting } = formikProps;
 
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.poll}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !poll}>
       <Form>
         <Card>
           <CardContent>
@@ -108,16 +108,15 @@ export function PollFormInner({ formikProps, buttonText, header, ...props }) {
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              disabled={props.isCommitting}
-              onClick={() => {
-                setSubmitting(true);
-                props.pollAction(mapFields({ ...values }, ['group_ids', 'segment_ids']));
-                setSubmitting(false);
-              }}
-            >
-              <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            {dig(poll, 'status') === 'published' || (
+              <Button
+                to={props.poll ? props.links.pollShow : props.links.pollsIndex}
+                component={WrappedNavLink}
+                disabled={props.isCommitting}
+              >
+                {draftButtonText}
+              </Button>
+            )}
             <Button
               to={props.poll ? props.links.pollShow : props.links.pollsIndex}
               component={WrappedNavLink}
@@ -184,6 +183,7 @@ PollFormInner.propTypes = {
   }),
   header: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  draftButtonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({

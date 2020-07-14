@@ -30,11 +30,17 @@ export default defineMessages({
   page: {
     id: `${scope}.index.button.page`,
   },
-  create: {
-    id: `${scope}.form.button.create`,
+  createPublish: {
+    id: `${scope}.form.button.createPublish`,
   },
-  update: {
-    id: `${scope}.form.button.update`,
+  updatePublish: {
+    id: `${scope}.form.button.updatePublish`,
+  },
+  createDraft: {
+    id: `${scope}.form.button.createDraft`,
+  },
+  updateDraft: {
+    id: `${scope}.form.button.updateDraft`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
