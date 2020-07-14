@@ -13,8 +13,7 @@ RSpec.describe EmailPolicy, type: :policy do
   }
 
   describe 'for users with access' do
-    context 'when manage_all is false' do
-    end
+    # Enterprise policy tests
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
@@ -24,12 +23,10 @@ RSpec.describe EmailPolicy, type: :policy do
       end
 
       it 'returns true for #show?' do
-        p user.policy_group
         expect(subject.show?).to eq true
       end
 
       it 'returns true for #update?' do
-        p user.policy_group
         expect(subject.update?).to eq true
       end
     end

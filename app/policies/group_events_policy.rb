@@ -49,7 +49,6 @@ class GroupEventsPolicy < GroupBasePolicy
     # super admins can join group
     return true if user.policy_group.manage_all?
 
-    p group.upcoming_events_visibility
     case group.upcoming_events_visibility
     when 'public'
       # allows only members of group to join group event

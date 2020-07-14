@@ -18,11 +18,7 @@ RSpec.describe ClockworkDatabaseEventPolicy, type: :policy do
   }
 
   describe 'for users with access' do
-    context 'when manage_all is false' do
-      context 'update?' do
-      end
-    end
-
+    # Enterprise policy checks
     context 'when manage_all is true' do
       context 'update?' do
         before { user.policy_group.update manage_all: true }
