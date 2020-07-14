@@ -173,12 +173,12 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             >
               <Tab
                 onClick={() => setTab('general')}
-                label='General Fields'
+                label={<DiverstFormattedMessage {...messages.generalTab} />}
                 value='general'
               />
               <Tab
                 onClick={() => setTab('fields')}
-                label='Custom Fields'
+                label={<DiverstFormattedMessage {...messages.fieldTab} />}
                 value='fields'
               />
             </ResponsiveTabs>

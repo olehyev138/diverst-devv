@@ -66,6 +66,12 @@ export default defineMessages({
   user_role: {
     id: `${scope}.form.input.user_role`,
   },
+  generalTab: {
+    id: `${scope}.form.tab.general`,
+  },
+  fieldTab: {
+    id: `${scope}.form.tab.field`,
+  },
   fields: {
     id: `${scope}.profile.fields`
   },
