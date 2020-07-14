@@ -42,8 +42,10 @@ export function DroppableList(props) {
 
   if (props.save && save)
     cards.forEach((card, index) => {
-      card.position = index + props.currentPage * cards.length;
-      props.updateOrderAction(card);
+      if (card.id !== props.positions[index].id) {
+        card.position = props.positions[index].position;
+        props.updateOrderAction(card);
+      }
       setSave(false);
     });
 
@@ -65,5 +67,7 @@ DroppableList.propTypes = {
   importAction: PropTypes.func,
   draggable: PropTypes.bool,
   renderCard: PropTypes.func,
-  intl: intlShape.isRequired,
+  rowsPerPage: PropTypes.number,
+  positions: PropTypes.array,
+  intl: intlShape,
 };

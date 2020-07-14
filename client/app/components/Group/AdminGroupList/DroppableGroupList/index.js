@@ -36,6 +36,7 @@ export function DroppableGroupList(props) {
   return (
     <DroppableList
       items={props.items}
+      positions={props.positions}
       renderCard={renderCard}
       classes={props.classes}
       draggable={props.draggable}
@@ -43,6 +44,7 @@ export function DroppableGroupList(props) {
       updateOrderAction={props.updateGroupPositionBegin}
       currentPage={props.currentPage}
       importAction={props.importAction}
+      rowsPerPage={props.rowsPerPage}
       intl={props.intl}
     />
   );
@@ -57,5 +59,7 @@ DroppableGroupList.propTypes = {
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   draggable: PropTypes.bool,
+  rowsPerPage: PropTypes.number,
+  positions: PropTypes.array,
   intl: intlShape.isRequired,
 };

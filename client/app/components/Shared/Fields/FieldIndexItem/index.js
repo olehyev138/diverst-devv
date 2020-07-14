@@ -15,16 +15,11 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import AddIcon from '@material-ui/icons/Add';
-
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/Field/messages';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 import { injectIntl, intlShape } from 'react-intl';
-import DiverstPagination from 'components/Shared/DiverstPagination';
-import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
   fieldListItem: {

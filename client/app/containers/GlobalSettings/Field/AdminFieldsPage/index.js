@@ -1,6 +1,6 @@
 /**
  *
- * FieldsPage
+ * AdminFieldsPage
  *
  *  - lists all enterprise custom fields
  *  - renders forms for creating & editing custom fields
@@ -33,19 +33,21 @@ import {
 } from 'containers/Shared/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
-  fieldUnmount, deleteFieldBegin
+  fieldUnmount, deleteFieldBegin, updateFieldPositionBegin,
 } from 'containers/Shared/Field/actions';
 
 import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
-import FieldList from 'components/Shared/Fields/FieldList';
+import { injectIntl, intlShape } from 'react-intl';
+
+import AdminFieldList from 'components/Shared/Fields/AdminFieldList';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
-export function FieldListPage(props) {
+export function AdminFieldsPage(props) {
   useInjectReducer({ key: 'fields', reducer });
   useInjectSaga({ key: 'fields', saga });
 
@@ -54,10 +56,12 @@ export function FieldListPage(props) {
       count: 5,
       page: 0,
       order: 'asc',
-      orderBy: 'fields.id',
+      orderBy: 'position',
       fieldDefinerId: dig(props, 'currentEnterprise', 'id')
     }
   );
+
+  const { intl } = props;
 
   useEffect(() => {
     props.getFieldsBegin(params);
@@ -83,9 +87,13 @@ export function FieldListPage(props) {
     setParams(newParams);
   };
 
+  const positions = [];
+  for (let i = 0; i < props.fields.length; i += 1)
+    positions[i] = { id: props.fields[i].id, position: props.fields[i].position };
+
   return (
     <React.Fragment>
-      <FieldList
+      <AdminFieldList
         fields={props.fields}
         fieldTotal={props.fieldTotal}
         isLoading={props.isLoading}
@@ -100,28 +108,28 @@ export function FieldListPage(props) {
         commitSuccess={props.commitSuccess}
         currentEnterprise={props.currentEnterprise}
 
-        textField
-        selectField
-        checkboxField
-        dateField
-        numberField
-
         toggles={{
           visible: true,
           editable: true,
           memberList: true,
           required: true,
         }}
+
+        positions={positions}
+        defaultParams={params}
+        updateFieldPositionBegin={props.updateFieldPositionBegin}
+        intl={intl}
       />
     </React.Fragment>
   );
 }
 
-FieldListPage.propTypes = {
+AdminFieldsPage.propTypes = {
   getFieldsBegin: PropTypes.func.isRequired,
   createFieldBegin: PropTypes.func.isRequired,
   updateFieldBegin: PropTypes.func.isRequired,
-  fields: PropTypes.object,
+  updateFieldPositionBegin: PropTypes.func.isRequired,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,
@@ -131,7 +139,8 @@ FieldListPage.propTypes = {
   hasChanged: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number
-  })
+  }),
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -150,6 +159,7 @@ const mapDispatchToProps = {
   createFieldBegin,
   updateFieldBegin,
   deleteFieldBegin,
+  updateFieldPositionBegin,
   fieldUnmount,
 };
 
@@ -159,10 +169,11 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(Conditional(
-  FieldListPage,
+  AdminFieldsPage,
   ['permissions.fields_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.field.indexPage

@@ -48,6 +48,7 @@ function annualBudgetReducer(state = initialState, action) {
   let annualBudgetId;
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_CURRENT_ANNUAL_BUDGET_BEGIN:
       case GET_ANNUAL_BUDGET_BEGIN:

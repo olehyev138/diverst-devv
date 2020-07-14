@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -76,6 +76,10 @@ export function AdminGroupList(props, context) {
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
 
+  useEffect(() => {
+    setSave(false);
+  }, [defaultParams.page]);
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -128,6 +132,7 @@ export function AdminGroupList(props, context) {
       <DiverstLoader isLoading={props.isLoading}>
         <DroppableGroupList
           items={props.groups}
+          positions={props.positions}
           classes={classes}
           draggable={order}
           save={save}
@@ -136,6 +141,7 @@ export function AdminGroupList(props, context) {
           currentPage={defaultParams.page}
           importAction={props.importAction}
           intl={props.intl}
+          rowsPerPage={defaultParams.count}
         />
       </DiverstLoader>
       <DiverstPagination
@@ -158,6 +164,7 @@ AdminGroupList.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   handlePagination: PropTypes.func,
+  positions: PropTypes.array,
   importAction: PropTypes.func,
 };
 

@@ -23,6 +23,7 @@ class Api::V1::FieldsController < DiverstController
         :private,
         :required,
         :add_to_member_list,
+        :position
       )
   end
 end

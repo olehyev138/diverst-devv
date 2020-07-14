@@ -40,7 +40,10 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
+  JOIN_SUBGROUPS_ERROR,
+  UPDATE_GROUP_POSITION_BEGIN,
+  UPDATE_GROUP_POSITION_ERROR,
+  UPDATE_GROUP_POSITION_SUCCESS,
 } from '../constants';
 
 import {
@@ -85,7 +88,10 @@ import {
   groupCategorizeSuccess,
   joinSubgroupsBegin,
   joinSubgroupsError,
-  joinSubgroupsSuccess
+  joinSubgroupsSuccess,
+  updateGroupPositionBegin,
+  updateGroupPositionError,
+  updateGroupPositionSuccess
 } from '../actions';
 
 describe('group actions', () => {
@@ -562,6 +568,39 @@ describe('group actions', () => {
         };
 
         expect(groupFormUnmount()).toEqual(expected);
+      });
+    });
+  });
+
+  describe('group position actions', () => {
+    it('has a type of UPDATE_GROUP_POSITION_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: UPDATE_GROUP_POSITION_BEGIN,
+        payload: { value: 314 }
+      };
+
+      expect(updateGroupPositionBegin({ value: 314 })).toEqual(expected);
+    });
+
+    describe('updateGroupSuccess', () => {
+      it('has a type of UPDATE_GROUP_POSITION_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: UPDATE_GROUP_POSITION_SUCCESS,
+          payload: { value: 49 }
+        };
+
+        expect(updateGroupPositionSuccess({ value: 49 })).toEqual(expected);
+      });
+    });
+
+    describe('updateGroupError', () => {
+      it('has a type of UPDATE_GROUP_POSITION_ERROR and sets a given error', () => {
+        const expected = {
+          type: UPDATE_GROUP_POSITION_ERROR,
+          error: { value: 25 }
+        };
+
+        expect(updateGroupPositionError({ value: 25 })).toEqual(expected);
       });
     });
   });
