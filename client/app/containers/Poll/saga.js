@@ -11,6 +11,9 @@ import {
   GET_POLLS_BEGIN,
   CREATE_POLL_BEGIN,
   UPDATE_POLL_BEGIN,
+  CREATE_POLL_AND_PUBLISH_BEGIN,
+  UPDATE_POLL_AND_PUBLISH_BEGIN,
+  PUBLISH_POLL_BEGIN,
   DELETE_POLL_BEGIN,
 } from './constants';
 
@@ -19,9 +22,11 @@ import {
   getPollsSuccess, getPollsError,
   createPollSuccess, createPollError,
   updatePollSuccess, updatePollError,
+  createPollAndPublishSuccess, createPollAndPublishError,
+  updatePollAndPublishSuccess, updatePollAndPublishError,
+  publishPollSuccess, publishPollError,
   deletePollSuccess, deletePollError,
 } from './actions';
-import { createEventSuccess, deleteEventSuccess } from 'containers/Event/actions';
 
 export function* getPoll(action) {
   try {
@@ -83,6 +88,48 @@ export function* updatePoll(action) {
   }
 }
 
+export function* createPollAndPublish(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(createPollAndPublishSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully created poll and publish', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createPollAndPublishError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create poll and publish', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updatePollAndPublish(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(updatePollAndPublishSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully updated poll and publish', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updatePollAndPublishError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update poll and publish', options: { variant: 'warning' } }));
+  }
+}
+
+export function* publishPoll(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(publishPollSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully published poll', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(publishPollError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to publish poll', options: { variant: 'warning' } }));
+  }
+}
+
 export function* deletePoll(action) {
   try {
     yield call(api.polls.destroy.bind(api.polls), action.payload.id);
@@ -102,5 +149,8 @@ export default function* PollSaga() {
   yield takeLatest(GET_POLLS_BEGIN, getPolls);
   yield takeLatest(CREATE_POLL_BEGIN, createPoll);
   yield takeLatest(UPDATE_POLL_BEGIN, updatePoll);
+  yield takeLatest(CREATE_POLL_AND_PUBLISH_BEGIN, createPollAndPublish);
+  yield takeLatest(UPDATE_POLL_AND_PUBLISH_BEGIN, updatePollAndPublish);
+  yield takeLatest(PUBLISH_POLL_BEGIN, publishPoll);
   yield takeLatest(DELETE_POLL_BEGIN, deletePoll);
 }

@@ -17,6 +17,15 @@ import {
   UPDATE_POLL_BEGIN,
   UPDATE_POLL_SUCCESS,
   UPDATE_POLL_ERROR,
+  CREATE_POLL_AND_PUBLISH_BEGIN,
+  CREATE_POLL_AND_PUBLISH_SUCCESS,
+  CREATE_POLL_AND_PUBLISH_ERROR,
+  UPDATE_POLL_AND_PUBLISH_BEGIN,
+  UPDATE_POLL_AND_PUBLISH_SUCCESS,
+  UPDATE_POLL_AND_PUBLISH_ERROR,
+  PUBLISH_POLL_BEGIN,
+  PUBLISH_POLL_SUCCESS,
+  PUBLISH_POLL_ERROR,
   DELETE_POLL_BEGIN,
   DELETE_POLL_SUCCESS,
   DELETE_POLL_ERROR,
@@ -103,6 +112,69 @@ export function updatePollSuccess(payload) {
 export function updatePollError(error) {
   return {
     type: UPDATE_POLL_ERROR,
+    error,
+  };
+}
+
+export function createPollAndPublishBegin(payload) {
+  return {
+    type: CREATE_POLL_AND_PUBLISH_BEGIN,
+    payload,
+  };
+}
+
+export function createPollAndPublishSuccess(payload) {
+  return {
+    type: CREATE_POLL_AND_PUBLISH_SUCCESS,
+    payload,
+  };
+}
+
+export function createPollAndPublishError(error) {
+  return {
+    type: CREATE_POLL_AND_PUBLISH_ERROR,
+    error,
+  };
+}
+
+export function updatePollAndPublishBegin(payload) {
+  return {
+    type: UPDATE_POLL_AND_PUBLISH_BEGIN,
+    payload,
+  };
+}
+
+export function updatePollAndPublishSuccess(payload) {
+  return {
+    type: UPDATE_POLL_AND_PUBLISH_SUCCESS,
+    payload,
+  };
+}
+
+export function updatePollAndPublishError(error) {
+  return {
+    type: UPDATE_POLL_AND_PUBLISH_ERROR,
+    error,
+  };
+}
+
+export function publishPollBegin(payload) {
+  return {
+    type: PUBLISH_POLL_BEGIN,
+    payload,
+  };
+}
+
+export function publishPollSuccess(payload) {
+  return {
+    type: PUBLISH_POLL_SUCCESS,
+    payload,
+  };
+}
+
+export function publishPollError(error) {
+  return {
+    type: PUBLISH_POLL_ERROR,
     error,
   };
 }
