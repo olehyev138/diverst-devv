@@ -239,11 +239,12 @@ class Group < ApplicationRecord
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_validation :smart_add_url_protocol
-  after_save :set_position
+  before_create :set_position
   after_update :accept_pending_members, unless: :pending_members_enabled?
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   attr_accessor :skip_label_consistency_check
+  attr_accessor :position
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
@@ -646,7 +647,6 @@ class Group < ApplicationRecord
   end
 
   def set_position
-    self.position = self.id
-    save
+    self.position = id
   end
 end
