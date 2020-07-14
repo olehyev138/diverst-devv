@@ -63,6 +63,7 @@ export function DiverstTable(props) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
+        onSearchChange={handleSearchChange}
         onRowClick={props.handleRowClick}
         columns={columns}
         actions={actions}
@@ -87,6 +88,7 @@ DiverstTable.propTypes = {
   actions: PropTypes.array,
   handlePagination: PropTypes.func.isRequired,
   handleOrdering: PropTypes.func,
+  handleSearching: PropTypes.func,
   handleRowClick: PropTypes.func,
   title: PropTypes.string,
   page: PropTypes.number,
