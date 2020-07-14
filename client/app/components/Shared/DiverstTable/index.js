@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import MaterialTable, { MTableHeader } from 'material-table';
+import MaterialTable from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
