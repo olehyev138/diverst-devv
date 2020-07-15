@@ -48,6 +48,36 @@ RSpec.describe BudgetItemPolicy, type: :policy do
               expect(subject.index?).to eq true
             end
           end
+
+          context 'when only one permission is false' do
+            before { user.policy_group.update initiatives_create: true
+                     user.policy_group.update groups_budgets_manage: true
+                     user.policy_group.update groups_budgets_request: true
+            }
+            context 'when ONLY initiatives_create is false' do
+              before { user.policy_group.update initiatives_create: false }
+
+              it 'returns false' do
+                expect(subject.index?).to eq true
+              end
+            end
+
+            context 'when ONLY groups_budgets_manage is false' do
+              before { user.policy_group.update groups_budgets_manage: false }
+
+              it 'returns false' do
+                expect(subject.index?).to eq true
+              end
+            end
+
+            context 'when ONLY groups_budgets_request is false' do
+              before { user.policy_group.update groups_budgets_request: false }
+
+              it 'returns false' do
+                expect(subject.index?).to eq true
+              end
+            end
+          end
         end
       end
 
@@ -161,34 +191,6 @@ RSpec.describe BudgetItemPolicy, type: :policy do
 
   describe 'for users without access' do
     describe 'when manage_all is false' do
-      context 'index?' do
-        context 'when visibility is not set' do
-          context 'when ONLY initiatives_create is false' do
-            before { user.policy_group.update initiatives_create: false }
-
-            it 'returns false' do
-              expect(subject.index?).to eq false
-            end
-          end
-
-          context 'when ONLY groups_budgets_manage is false' do
-            before { user.policy_group.update groups_budgets_manage: false }
-
-            it 'returns false' do
-              expect(subject.index?).to eq false
-            end
-          end
-
-          context 'when ONLY groups_budgets_request is false' do
-            before { user.policy_group.update groups_budgets_request: false }
-
-            it 'returns false' do
-              expect(subject.index?).to eq false
-            end
-          end
-        end
-      end
-
       context 'manage?' do
         context 'user doesnt have groups_manage permission : is_admin_manager' do
           before do
