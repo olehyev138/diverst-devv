@@ -50,7 +50,7 @@ export function DiverstTable(props) {
     });
   };
 
-  const handleSearchChange = searchText => props.handleSearching(searchText);
+  const handleSearchChange = searchText => props.handleSearching && props.handleSearching(searchText);
 
   return (
     <div className={classes.materialTableContainer}>
