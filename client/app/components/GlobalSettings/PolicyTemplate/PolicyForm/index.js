@@ -186,7 +186,7 @@ export function PolicyFormInner({
       Create_Message: 'group_messages_create',
       Create_News_Link: 'news_links_create',
       Create_Social_Link: 'social_links_create',
-      Manage: 'posts_manage',
+      Manage: 'manage_posts',
     },
     Budgets: {
       View: 'groups_budgets_index',
@@ -326,6 +326,7 @@ export function PolicyForm(props) {
     group_posts_index: { default: false },
     mentorship_manage: { default: false },
     auto_archive_manage: { default: false },
+    branding_manage: { default: false },
   });
 
   const [open, setOpen] = React.useState(false);
