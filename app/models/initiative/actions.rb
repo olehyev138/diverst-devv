@@ -7,7 +7,7 @@ module Initiative::Actions
   end
 
   def finalize_expenses(diverst_request)
-    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+    raise BadRequestException.new "#{self.class.name.titleize} ID required" if id.blank?
 
     unless self.finish_expenses!
       raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })

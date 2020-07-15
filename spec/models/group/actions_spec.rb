@@ -47,6 +47,9 @@ RSpec.describe Group::Actions, type: :model do
     it 'ID required' do
       expect { Group.update_child_categories(Request.create_request(create(:user)), {}) }.to raise_error(BadRequestException)
     end
+    it 'symbol required' do
+      expect { Group.update_child_categories(Request.create_request(create(:user)), { id: parent_group.id }) }.to raise_error(BadRequestException)
+    end
 
     it 'update categories' do
       params = { id: parent_group.id,
@@ -73,7 +76,7 @@ RSpec.describe Group::Actions, type: :model do
 
     it 'can not be reset' do
       group = annual_budget.group
-      budget = create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
+      create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
       expect { group.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 
@@ -98,7 +101,7 @@ RSpec.describe Group::Actions, type: :model do
 
     it 'can not be reset' do
       group = annual_budget.group
-      budget = create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
+      create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
       expect { group.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 

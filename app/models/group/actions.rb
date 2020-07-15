@@ -4,10 +4,10 @@ module Group::Actions
   end
 
   def carryover_annual_budget(diverst_request)
-    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+    raise BadRequestException.new "#{self.class.name.titleize} ID required" if id.blank?
 
     cab = self.current_annual_budget
-    raise BadRequestException.new "#{self.name.titleize} has no annual budget" if cab.nil?
+    raise BadRequestException.new "#{self.class.name.titleize} has no annual budget" if cab.nil?
 
     unless cab.carryover!
       raise InvalidInputException.new({ message: cab.errors.full_messages.first, attribute: cab.errors.messages.first&.first })
@@ -17,10 +17,10 @@ module Group::Actions
   end
 
   def reset_annual_budget(diverst_request)
-    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+    raise BadRequestException.new "#{self.class.name.titleize} ID required" if id.blank?
 
     cab = self.current_annual_budget
-    raise BadRequestException.new "#{self.name.titleize} has no annual budget" if cab.nil?
+    raise BadRequestException.new "#{self.class.name.titleize} has no annual budget" if cab.nil?
 
     unless cab.reset!
       raise InvalidInputException.new({ message: cab.errors.full_messages.first, attribute: cab.errors.messages.first.first })
