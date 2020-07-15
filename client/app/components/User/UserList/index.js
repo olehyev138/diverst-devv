@@ -146,7 +146,7 @@ export function UserList(props, context) {
                 disabled: !permission(rowData, 'destroy?')
               })
             ]}
-            my_options={{
+            tableOptions={{
               exportButton: true,
               exportCsv: (columns, data) => {
                 props.exportUsers();
