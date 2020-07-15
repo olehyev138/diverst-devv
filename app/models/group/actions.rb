@@ -31,7 +31,7 @@ module Group::Actions
     end
 
     def valid_scopes
-      ['all_children', 'all_parents', 'no_children', 'is_private', 'except_id']
+      ['all_children', 'all_parents', 'no_children', 'is_private', 'replace_with_children']
     end
 
     # List of all attributes to preload.

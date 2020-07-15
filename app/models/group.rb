@@ -256,6 +256,7 @@ class Group < ApplicationRecord
   scope :all_parents,     -> { where(parent_id: nil) }
   scope :all_children,    -> { where.not(parent_id: nil) }
   scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
+  scope :replace_with_children, -> (*args) { where.not(id: args).where(parent_id: [nil] + args) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
