@@ -45,8 +45,7 @@ import GroupSelector from 'components/Shared/GroupSelector';
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
 /* eslint-disable object-curly-newline */
-export function EventFormInner({buttonText, formikProps, ...props
-}) {
+export function EventFormInner({ buttonText, formikProps, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors, setFieldValue, setFieldTouched, setFieldError } = formikProps;
 
   useInjectReducer({ key: 'pillars', reducer: pillarReducer });
@@ -138,15 +137,13 @@ export function EventFormInner({buttonText, formikProps, ...props
           <CardContent>
             <GroupSelector
               groupField='participating_group_ids'
-
               dialogSelector
-              dialogNoChildren
-              forceReload
 
               label={<DiverstFormattedMessage {...messages.inputs.goal} />}
               isMulti
               disabled={props.isCommitting}
               queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
+              dialogQueryScopes={[['replace_with_children', dig(props, 'currentGroup', 'id')]]}
               {...formikProps}
             />
           </CardContent>
