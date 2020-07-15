@@ -90,13 +90,14 @@ export function PolicyFormInner({
           />
         )}
         label={underToSpace(key)}
+        key={key}
       />
     ));
   }
 
   function policiesRender(policies) {
     return Object.keys(policies).map(key => (
-      <Grid item xs={12} sm={6} md={3}>
+      <Grid item xs={12} sm={6} md={3} key={key}>
         <FormLabel component='legend'>{underToSpace(key)}</FormLabel>
         <FormGroup>
           {policyRender(policies[key])}
