@@ -174,6 +174,7 @@ GroupSelector.propTypes = {
   groupListUnmount: PropTypes.func.isRequired,
   getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
+  extraParams: PropTypes.object,
 
   inputCallback: PropTypes.func,
 };
@@ -184,9 +185,11 @@ GroupSelector.defaultProps = {
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       query_scopes: props.queryScopes || [],
+      ...props.extraParams,
       ...params,
     });
   },
+  extraParams: {},
 };
 
 const mapStateToProps = createStructuredSelector({
