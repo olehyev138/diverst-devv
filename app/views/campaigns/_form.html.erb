@@ -85,7 +85,7 @@
 
     <%= button_tag "Save and publish", value: "published", name: "campaign[status]", class: "btn btn--primary" if @campaign.draft? || @campaign.published? || @campaign.reopened? %>
     <%= button_tag "Save as draft", value: "draft", name: "campaign[status]", class: "btn btn--secondary" unless @campaign.published? || @campaign.closed? || @campaign.reopened? %>
-    <%= button_tag "Close Campaign", value: "closed", name: "campaign[status]", class: "btn btn--tertiary" if @campaign.published? || @campaign.reopened? %>    
+    <%= button_tag "Close Campaign", value: "closed", name: "campaign[status]", class: "btn btn--tertiary" if (@campaign.published? || @campaign.reopened?) && @campaign.persisted? %>    
     <%= button_tag "Reopen Campaign", value: "reopened", name: "campaign[status]", class: "btn btn--secondary" if @campaign.closed? %>
   <% end %>
 </div>
