@@ -48,6 +48,11 @@ class Campaign < BaseClass
   after_create :create_invites, :send_invitation_emails
 
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
+  scope :closed, -> { where('end < :current_time', current_time: Time.current) }
+
+  def closed?
+    self.end < Time.current
+  end
 
   def create_invites
     return if enterprise.nil?

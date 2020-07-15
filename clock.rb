@@ -53,4 +53,5 @@ module Clockwork
   every(1.day, 'Archive expired events', at: '00:00') { Group.find_each { |group| Initiative.archive_expired_events(group) } }
 
   every(30.minutes, 'Delete expired files') { ClearExpiredFilesJob.perform_later }
+  every(30.minutes, 'Close expired campaigns') { Enterprise.find_each { |enterprise| enterprise.campaigns.closed.update_all(status: 2) } }
 end
