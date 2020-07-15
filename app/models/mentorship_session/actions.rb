@@ -5,13 +5,13 @@ module MentorshipSession::Actions
 
   def accept!
     unless self.update({ status: 'accepted' })
-      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: self.errors.messages.first.first })
     end
   end
 
   def decline!
     unless self.update({ status: 'declined' })
-      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: self.errors.messages.first.first })
     end
   end
 

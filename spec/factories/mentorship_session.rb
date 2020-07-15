@@ -4,5 +4,8 @@ FactoryBot.define do
     association :mentoring_session,   factory: :mentoring_session
     status { 'pending' }
     role { 'presenter' }
+    factory :mentorship_session_skips_validate do
+      to_create { |instance| instance.save(validate: false) }
+    end
   end
 end
