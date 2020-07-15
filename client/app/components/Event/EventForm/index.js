@@ -139,7 +139,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               groupField='participating_group_ids'
               dialogSelector
 
-              label={<DiverstFormattedMessage {...messages.inputs.goal} />}
+              label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
               isMulti
               disabled={props.isCommitting}
               queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}

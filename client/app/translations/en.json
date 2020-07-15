@@ -852,6 +852,7 @@
   "diverst.containers.Event.form.input.picture": "Picture",
   "diverst.containers.Event.form.input.image": "Event Image",
   "diverst.containers.Event.form.input.goal": "Choosing which {program} this event will participate in",
+  "diverst.containers.Event.form.input.participatingGroups": "You may also invite other {erg_p}",
   "diverst.containers.Event.form.input.budgetName": "Attach a budget to the event",
   "diverst.containers.Event.form.input.budgetAmount": "Specify amount to deduct from budget",
   "diverst.containers.Event.form.input.freeEvent": "Create new free event ($0.00)",
