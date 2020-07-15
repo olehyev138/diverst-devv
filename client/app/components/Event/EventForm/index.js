@@ -40,15 +40,15 @@ import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
+import GroupSelector from 'components/Shared/GroupSelector';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
 /* eslint-disable object-curly-newline */
-export function EventFormInner({
-  handleSubmit, handleChange, handleBlur, values, touched, errors,
-  buttonText, setFieldValue, setFieldTouched, setFieldError,
-  ...props
+export function EventFormInner({buttonText, formikProps, ...props
 }) {
+  const { handleSubmit, handleChange, handleBlur, values, touched, errors, setFieldValue, setFieldTouched, setFieldError } = formikProps;
+
   useInjectReducer({ key: 'pillars', reducer: pillarReducer });
   useInjectSaga({ key: 'pillars', saga: pillarSaga });
   useInjectReducer({ key: 'budgetItems', reducer: budgetItemReducer });
@@ -132,6 +132,22 @@ export function EventFormInner({
               onChange={value => setFieldValue('pillar_id', value)}
               onInputChange={value => pillarSelectAction(value)}
               onBlur={() => setFieldTouched('pillar_id', true)}
+            />
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <GroupSelector
+              groupField='participating_group_ids'
+
+              dialogSelector
+              dialogNoChildren
+              forceReload
+
+              label={<DiverstFormattedMessage {...messages.inputs.goal} />}
+              isMulti
+              disabled={props.isCommitting}
+              queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
+              {...formikProps}
             />
           </CardContent>
           <Divider />
@@ -281,7 +297,7 @@ export function EventForm(props) {
         props.eventAction(payload);
       }}
     >
-      {formikProps => <EventFormInner {...props} {...formikProps} />}
+      {formikProps => <EventFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -299,16 +315,19 @@ EventForm.propTypes = {
 EventFormInner.propTypes = {
   edit: PropTypes.bool,
   event: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
-  touched: PropTypes.object,
-  errors: PropTypes.object,
   buttonText: PropTypes.string,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  setFieldError: PropTypes.func,
+
+  formikProps: PropTypes.shape({
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleBlur: PropTypes.func,
+    values: PropTypes.object,
+    touched: PropTypes.object,
+    errors: PropTypes.object,
+    setFieldValue: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+    setFieldError: PropTypes.func,
+  }),
 
   getPillarsBegin: PropTypes.func.isRequired,
   getBudgetItemsBegin: PropTypes.func.isRequired,
