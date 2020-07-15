@@ -149,6 +149,7 @@ const GroupSelector = (props) => {
             selected={values[groupField]}
             dialogNoChildren={props.dialogNoChildren}
             queryScopes={props.queryScopes}
+            dialogQueryScopes={props.dialogQueryScopes}
           />
         )}
       />
@@ -159,6 +160,7 @@ const GroupSelector = (props) => {
 
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
+  dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   dialogNoChildren: PropTypes.bool,
   forceReload: PropTypes.bool,
 

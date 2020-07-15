@@ -33,7 +33,7 @@ const GroupListSelector = (props) => {
   const { groups, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
-  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, ['all_parents']) });
+  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
   const [selectedGroups, setSelectedGroup] = useState({});
@@ -148,6 +148,7 @@ GroupListSelector.propTypes = {
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   queryScopes: PropTypes.arrayOf(PropTypes.string),
+  dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
@@ -162,6 +163,7 @@ GroupListSelector.propTypes = {
 
 GroupListSelector.defaultProps = {
   queryScopes: [],
+  dialogQueryScopes: ['all_parents'],
 };
 
 export default compose(
