@@ -294,7 +294,10 @@ class Initiative < ApplicationRecord
   end
 
   def finish_expenses!
-    return false if finished_expenses?
+    if finished_expenses?
+      errors.add(:initiative, 'Expenses are already finished')
+      return false
+    end
 
     self.update(finished_expenses: true)
   end

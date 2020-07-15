@@ -27,4 +27,29 @@ RSpec.describe Initiative::Actions, type: :model do
     it { expect(Initiative.valid_scopes.include?('for_segments')).to eq true }
     it { expect(Initiative.valid_scopes.include?('date_range')).to eq true }
   end
+
+  describe 'generate_qr_code' do
+    it 'generate_qr_code' do
+      item = create(:initiative)
+      Initiative.generate_qr_code(Request.create_request(create(:user)), { id: item.id })
+      expect(item.qr_code).to_not be nil
+    end
+  end
+
+  describe 'finalize_expenses' do
+    it 'missing id' do
+      item = build(:initiative, id: nil)
+      expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
+    end
+
+    it 'finished expense' do
+      item = create(:initiative, finished_expenses: true)
+      expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
+    end
+
+    it 'finalize expense' do
+      item = create(:initiative, finished_expenses: false)
+      expect(item.finalize_expenses(Request.create_request(create(:user))).finished_expenses).to eq true
+    end
+  end
 end
