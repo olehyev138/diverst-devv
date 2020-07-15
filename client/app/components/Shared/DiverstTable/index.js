@@ -68,6 +68,7 @@ export function DiverstTable(props) {
         columns={columns}
         actions={actions}
         options={{
+          search: !!props.handleSearching, // Disable searching when callback isn't passed
           actionsColumnIndex: -1,
           pageSize: currentRowsPerPage(),
           emptyRowsWhenPaging: false,
