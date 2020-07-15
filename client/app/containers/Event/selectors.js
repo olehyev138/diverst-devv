@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer/dist/immer';
-import {mapFieldNames, formatColor, mapSelectField} from 'utils/selectorHelpers';
+import { mapFieldNames, formatColor, mapSelectField } from 'utils/selectorHelpers';
 
 const selectEventsDomain = state => state.events || initialState;
 
