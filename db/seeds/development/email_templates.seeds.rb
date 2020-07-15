@@ -123,6 +123,16 @@ after 'development:enterprise' do
             :subject => "Thank you for participating in our '%{survey.title} survey", 
             :description => "Email that goes out to users after they have submitted a response to a survey.",
             :template => ""
+          }, 
+          #campaign_response_mailer
+          {
+            :name => "Campaign Response Notification Mailer",
+            :mailer_name => "campaign_response_mailer",
+            :mailer_method => "notification",
+            :content => "<p>Thank you for submitting an idea to %{campaign.title} campaign. Your idea response is being evaluated now.<p>Sincerely, %{sponsor} Sponsor</p></p>",
+            :subject => "Thank you for participating in our %{campaign.title} campaign",
+            :description => "Email that goes out to users after they have submitted an idea.",
+            :template => ""
           }
         ]
       )
@@ -137,6 +147,9 @@ after 'development:enterprise' do
           {:key => "enterprise.id", :description => "Displays a enterprise's id", :emails => emails, :example => "20"},
           {:key => "enterprise.name", :description => "Displays a enterprise's name", :emails => emails, :example => "Microsoft"},
           {:key => "survey.title", :description => "Displays a survey's title", :emails => emails, :example => "What do you think of our group banner?"},
+          {:key => "campaign.title", :description => "Displays a campaign's title", :emails => emails, :example => "Innovative Ideas for COVID-19"},          
+          {:key => "sponsor_name", :description => "Displays a sponsor's name", :emails => emails, :example => "Elon Musk"},
+          {:key => "answer.title", :description => "Displays title of idea", :emails => emails, :example => "Global Warming Solution"},
           {:key => "click_here", :description => "Displays a link to a resource or resources", :emails => emails, :example => "<a href=\"https://www.diverst.com\" target=\"_blank\">Click here</a>"},
           {:key => "custom_text.erg_text", :description => "Displays the enterprise's custom text for groups", :emails => emails, :example => "ERG"},
           {:key => "count", :description => "Displays a count", :emails => emails, :example => "4"}

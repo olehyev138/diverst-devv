@@ -39,6 +39,8 @@ class Answer < BaseClass
   validates :title, presence: true
   validates :idea_category, presence: true
 
+  after_create :send_email_notification
+
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase
   rescue
@@ -80,5 +82,12 @@ class Answer < BaseClass
         methods: [:total_votes]
       )
     )
+  end
+
+
+  private
+
+  def send_email_notification
+    CampaignResponseNotifierJob.perform_later(self.id, self.question.campaign_id)
   end
 end
