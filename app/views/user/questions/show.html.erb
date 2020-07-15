@@ -223,9 +223,9 @@ video#recorded-video {
     var answer_content = $('#answer_content').val();
     
     if(idea_category.length==0 || answer_title.length==0 || answer_content.length==0) {
-      $('input[type="submit"]').prop('disabled', true);
+      $('#new_answer > input[type="submit"]').prop('disabled', true);
     }else if(idea_category.length!=0 || answer_title.length!=0 || answer_content.length!=0){
-      $('input[type="submit"]').prop('disabled', false);
+      $('#new_answer > input[type="submit"]').prop('disabled', false);
     }
   }
 
@@ -281,9 +281,9 @@ video#recorded-video {
     var supporting_document = $('#answer_supporting_document').val();
 
     if(idea_category.length==0 || answer_title.length==0 || (video_upload.length==0 && supporting_document.length==0)) {
-      $('input[type="submit"]').prop('disabled', true);
+      $('#new_answer > input[type="submit"]').prop('disabled', true);
     } else if(idea_category.length!=0 && answer_title.length!=0 && video_upload.length!=0) {
-      $('input[type="submit"]').prop('disabled', false);
+      $('#new_answer > input[type="submit"]').prop('disabled', false);
     }
   }
 

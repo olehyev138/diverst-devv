@@ -4,7 +4,7 @@ class CampaignResponseMailer < ApplicationMailer
     @campaign = Campaign.find_by(id: campaign_id)
     @enterprise = @campaign.enterprise
     @user = @answer.author
-    @sponsor_name = @campaign.owner.name
+    @sponsor_name = @campaign.sponsors.first&.sponsor_name || @campaign.owner.name
     return if @enterprise.disable_emails?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
