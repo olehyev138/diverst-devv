@@ -32,7 +32,7 @@ module MentoringRequest::Actions
 
   module ClassMethods
     def valid_includes
-      ['sender', 'reciever']
+      ['sender', 'receiver']
     end
 
     def valid_scopes
