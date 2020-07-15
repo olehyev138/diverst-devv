@@ -269,6 +269,7 @@ export function EventForm(props) {
     finished_expenses: { default: false },
     pillar: { default: props.pillar, customKey: 'pillar_id' },
     owner_id: { default: '' },
+    participating_group: { default: [], customKey: 'participating_group_ids' },
     owner_group_id: { default: props.currentGroup.id }
   });
   return (
@@ -276,7 +277,7 @@ export function EventForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['budget_item_id', 'pillar_id']);
+        const payload = mapFields(values, ['budget_item_id', 'pillar_id', 'participating_group_ids']);
         props.eventAction(payload);
       }}
     >

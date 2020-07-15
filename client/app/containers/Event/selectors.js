@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer/dist/immer';
-import { mapFieldNames, formatColor } from 'utils/selectorHelpers';
+import {mapFieldNames, formatColor, mapSelectField} from 'utils/selectorHelpers';
 
 const selectEventsDomain = state => state.events || initialState;
 
@@ -46,6 +46,7 @@ const selectFormEvent = () => createSelector(
           value: eventsState.currentEvent.budget_item.id,
           available: eventsState.currentEvent.budget_item.available_amount
         };
+      draft.participating_group = eventsState.currentEvent.participating_groups.map(group => mapSelectField(group));
     }
   })
 );
