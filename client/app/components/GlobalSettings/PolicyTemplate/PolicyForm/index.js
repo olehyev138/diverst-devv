@@ -128,7 +128,7 @@ export function PolicyFormInner({
       Manage: 'diversity_manage',
     },
     Branding: {
-      View: 'branding_manage',
+      Manage: 'branding_manage',
     },
     Metrics_Dashboards: {
       View: 'metrics_dashboards_index',
