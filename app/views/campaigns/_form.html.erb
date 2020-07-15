@@ -34,12 +34,6 @@
       </div>
 
       <div class="card__section card__section--border">
-        <%= f.input :nb_invites,
-              label: "How many <strong>invites</strong> do you want to send out?".html_safe,
-              max: current_user.enterprise.users.size %>
-      </div>
-
-      <div class="card__section card__section--border">
         <%= f.association :managers,
             as: :select,
             input_html: { class: "select2-field", autofocus: true },
