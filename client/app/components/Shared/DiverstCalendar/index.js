@@ -174,7 +174,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
               `${xProps.group.name}${xProps.description.length > 0 ? `<br>${xProps.description}` : ''}`);
             // eslint-disable-next-line func-names
             info.el.setAttribute('data-place', (function () {
-              switch (calendarRef.current.getApi().view.type) {
+              switch (dig(calendarRef, 'current', cal => cal.getApi().view.type)) {
                 case 'dayGridMonth':
                   return 'top';
                 case 'timeGridWeek':
