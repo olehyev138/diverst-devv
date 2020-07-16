@@ -294,6 +294,7 @@
   "diverst.containers.Group.Manage.settings.logo": "Add Logo",
   "diverst.containers.Group.Manage.settings.calendar_color": "Calendar Colour",
   "diverst.containers.Group.Manage.settings.form.button.save": "Save",
+  "diverst.containers.Group.Manage.settings.auto_archive": "Auto Archiving",
   "diverst.containers.Group.customgraph.delete_confirm": "Delete metricsDashboard?",
   "diverst.containers.Innovate.links.campaigns": "Campaigns",
   "diverst.containers.Innovate.links.financial": "Financials",

@@ -89,7 +89,9 @@ export default defineMessages({
     save: {
       id: `${scope}.settings.form.button.save`,
     },
-
+    auto_archive: {
+      id: `${scope}.settings.auto_archive`,
+    }
   },
   visibility: {
     public: {

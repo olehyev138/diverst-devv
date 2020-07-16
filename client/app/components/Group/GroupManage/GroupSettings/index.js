@@ -91,6 +91,7 @@ function setHeader(value) {
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
+  console.log(setFieldValue);
   return (
     <Card>
       <Form>
@@ -248,6 +249,26 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 }}
               />
             </Grid>
+            <Grid item xs='auto'>
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='top'
+                  label={intl.formatMessage(messages.settings.auto_archive)}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={value => setFieldValue('auto_archive', value)}
+                      color='primary'
+                      id='auto_archive'
+                      name='auto_archive'
+                      margin='normal'
+                      checked={values.auto_archive}
+                      value={values.auto_archive}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -274,11 +295,11 @@ export function GroupSettings(props) {
     latest_news_visibility: { default: '' },
     upcoming_events_visibility: { default: '' },
     calendar_color: { default: '' },
-    auto_archive: { default: '' },
+    auto_archive: { default: false },
     banner: { default: null },
     logo: { default: null },
   });
-
+  console.log(props);
   return (
     <Formik
       initialValues={initialValues}
