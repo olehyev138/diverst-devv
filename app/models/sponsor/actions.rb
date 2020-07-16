@@ -1,4 +1,4 @@
-module Sponsors::Actions
+module Sponsor::Actions
   def self.included(klass)
     klass.extend ClassMethods
   end
