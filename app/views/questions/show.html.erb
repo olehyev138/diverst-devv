@@ -66,7 +66,9 @@
             <div class="answer__content">
               <p>
               <h3><%= answer.title %></h3>
-              <p><%= answer.content || video_tag(answer.supporting_document.expiring_url(3600), controls: true, size: '200x200') %></p> &mdash;
+              <p><%= answer.content if answer.content.present? %></p>
+              <p><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></p>                
+              <p><%= link_to answer.supporting_document_file_name, answer.supporting_document.expiring_url(3600) unless answer.supporting_document.blank? %></p>
               <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
               </p>
     
@@ -119,9 +121,9 @@
           chosen: !isStarred
         }
       },
-      error: function(data){
-        setState(star.data('last-known-state'));
-      },
+      // error: function(data){
+      //   setState(star.data('last-known-state'));
+      // },
       success: function(data){
         setState(data.chosen);
         star.data('last-known-state', data.chosen);

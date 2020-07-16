@@ -129,7 +129,7 @@ after 'development:enterprise' do
             :name => "Campaign Response Notification Mailer",
             :mailer_name => "campaign_response_mailer",
             :mailer_method => "notification",
-            :content => "<p>Thank you for submitting an idea to %{campaign.title} campaign. Your idea response is being evaluated now.<p>Sincerely, %{sponsor} Sponsor</p></p>",
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Thank you for submitting an idea to <strong> %{campaign.title} </strong> campaign. Your idea response is being evaluated now. </p><p>Sincerely, %{sponsor_name} (%{campaign.title} Sponsor)</p></p>",
             :subject => "Thank you for participating in our %{campaign.title} campaign",
             :description => "Email that goes out to users after they have submitted an idea.",
             :template => ""
