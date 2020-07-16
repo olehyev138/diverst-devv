@@ -161,6 +161,8 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
           events={events}
+          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(view.currentStart, view.currentEnd))}
+          eventClick={clickEvent}
           eventDisplay='block'
           dayMaxEvents={5}
           dayMaxEventRows={5}
