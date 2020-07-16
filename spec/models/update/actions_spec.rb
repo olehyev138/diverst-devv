@@ -6,7 +6,8 @@ RSpec.describe Update::Actions, type: :model do
     it { expect(Update.base_preloads.include?(:previous)).to eq true }
     it { expect(Update.base_preloads.include?(:next)).to eq true }
     it { expect(Update.base_preloads.include?({ field_data: [:field, { field: [:field_definer] }],
-                                                previous: [:field_data, { field_data: [:field, { field: [:field_definer] }] }] })).to eq true }
+                                                previous: [:field_data, { field_data: [:field, { field: [:field_definer] }] }] })).to eq true
+    }
   end
 
   describe 'lesser_preloads' do
