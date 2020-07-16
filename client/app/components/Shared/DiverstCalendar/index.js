@@ -190,6 +190,13 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
           }}
           {...rest}
         />
+        {isLoading && (
+          <Grid container justify='center' alignContent='center'>
+            <Grid item>
+              <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+            </Grid>
+          </Grid>
+        )}
       </div>
     </React.Fragment>
   );
