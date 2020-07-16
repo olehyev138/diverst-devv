@@ -1,24 +1,22 @@
-import React, { memo, useEffect, useState } from 'react';
-import { compose } from 'redux';
+import React, {memo, useState} from 'react';
+import {compose} from 'redux';
 import PropTypes from 'prop-types';
 
-import { withStyles, withTheme } from '@material-ui/core/styles';
-import { Box, Card, CircularProgress, Divider, Grid, Typography, CardActions, CardContent } from '@material-ui/core';
+import {withStyles, withTheme} from '@material-ui/core/styles';
+import {Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography} from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { formatDate } from '@fullcalendar/core';
 import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
 import ReactTooltip from 'react-tooltip';
-import { Formik, Form } from 'formik';
+import {Form, Formik} from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Calendar/messages';
 import GroupSelector from 'components/Shared/GroupSelector';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import { mapFields } from 'utils/formHelpers';
-import { toNumber } from 'utils/floatRound';
+import {mapFields} from 'utils/formHelpers';
+import {toNumber} from 'utils/floatRound';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import EventLite from 'components/Event/EventLite';
@@ -43,6 +41,10 @@ const styles = theme => ({
     marginLeft: 5,
   },
 });
+
+function addDays(date, numberOfDays) {
+  return new Date(date.getTime() + 24 * 60 * 60 * 1000 * numberOfDays);
+}
 
 export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
@@ -161,7 +163,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
           events={events}
-          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(view.currentStart, view.currentEnd))}
+          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(addDays(view.currentStart, -14), addDays(view.currentEnd, 14)))}
           eventClick={clickEvent}
           eventDisplay='block'
           dayMaxEvents={5}
