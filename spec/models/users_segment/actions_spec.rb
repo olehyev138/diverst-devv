@@ -10,7 +10,8 @@ RSpec.describe UsersSegment::Actions, type: :model do
                                                              :news_links,
                                                              :avatar_attachment,
                                                              :avatar_blob,
-                                                             { enterprise: [:theme, :mobile_fields], field_data: [:field, { field: [:field_definer] }] }] })).to eq true }
+                                                             { enterprise: [:theme, :mobile_fields], field_data: [:field, { field: [:field_definer] }] }] })).to eq true
+    }
   end
 
   describe 'base_includes' do
