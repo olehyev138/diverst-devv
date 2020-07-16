@@ -462,7 +462,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
           end
         end
 
-        context 'user has basic leader permissions and initiatives_manage is false' do
+        context 'user doesnt have basic leader permissions and initiatives_manage is false' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_manage: false
@@ -475,7 +475,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
           end
         end
 
-        context 'user has basic leader permissions and initiatives_create is false' do
+        context 'user doesnt have basic leader permissions and initiatives_create is false' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_create: false
@@ -488,7 +488,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
           end
         end
 
-        context 'user has basic leader permissions and initiatives_index is false' do
+        context 'user doesnt have basic leader permissions and initiatives_index is false' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_index: false
@@ -513,7 +513,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
           end
         end
 
-        context 'user has group leader permissions and  initiatives_manage is false' do
+        context 'user doesnt have group leader permissions and  initiatives_manage is false' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_manage: false

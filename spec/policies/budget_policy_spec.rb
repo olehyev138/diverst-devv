@@ -428,7 +428,7 @@ RSpec.describe BudgetPolicy, type: :policy do
             it { is_expected.to forbid_actions([:approve, :decline]) }
           end
 
-          context 'user has group leader permissions and groups_budgets_manage is false' do
+          context 'user doesnt have group leader permissions and groups_budgets_manage is false' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update groups_budgets_manage: false
@@ -439,7 +439,7 @@ RSpec.describe BudgetPolicy, type: :policy do
             it { is_expected.to forbid_actions([:approve, :decline]) }
           end
 
-          context 'user is group member and groups_budgets_manage is false' do
+          context 'user is not a group member and groups_budgets_manage is false' do
             before do
               create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
               user.policy_group.update groups_budgets_manage: false
@@ -448,7 +448,7 @@ RSpec.describe BudgetPolicy, type: :policy do
             it { is_expected.to forbid_actions([:approve, :decline]) }
           end
 
-          context 'user has basic group leader permissions and budget_approval is false' do
+          context 'user doesnt have basic group leader permissions and budget_approval is false' do
             before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update budget_approval: false
