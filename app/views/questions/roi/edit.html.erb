@@ -14,13 +14,18 @@
       <%= f.simple_fields_for :answers, @answers do |a| %>
         <div class="card">
           <div class="card__section card__section--border">
-            <h3>Answer #<%= a.index + 1 %></h3>
+            <h3>Idea #<%= a.index + 1 %> (<%= a.object.title %>)</h3>
             <p><%= a.object.content %> - <em><%= a.object.author.name_with_status %></em></p>
           </div>
           <div class="card__section card__section--border">
             <h4>Planning</h4>
             <%= a.input :outcome, input_html: { autofocus: true } %>
-            <%= a.input :supporting_document, as: :attachment_preview %>
+            <p><% if a.object.supporting_document.exists? %> (<a href="<%= a.object.supporting_document.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(a.object) %>)"></a> <%= link_to "documentation", a.object.supporting_document.expiring_url(3600) %>)<% end %></p>
+            <% if a.object.supporting_document_from_sponsor.exists? %>
+              (<a href="<%= a.object.supporting_document_from_sponsor.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(a.object) %>)"></a> <%= link_to " supporting documentation", a.object.supporting_document_from_sponsor.expiring_url(3600) %>)              
+            <% else %>
+              <%= a.input :supporting_document_from_sponsor, label: 'supporting document', as: :attachment_preview %>
+            <% end %>
           </div>
           <div class="card__section card__section--border">
             <h4>Financials</h4>

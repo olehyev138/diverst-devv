@@ -23,6 +23,11 @@ class Answer < BaseClass
   validates_attachment_content_type :video_upload,
                                     content_type: ['video/mp4', 'video/webm'],
                                     message: 'This format is not supported', if: Proc.new { |a| a.content.blank? && a.supporting_document.blank? }
+  
+  has_attached_file :supporting_document_from_sponsor, s3_permissions: 'private'
+  validates_attachment_content_type :supporting_document_from_sponsor,
+                                    content_type: ['text/plain', 'application/pdf'],
+                                    message: 'This format is not supported'                                
 
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
 
@@ -40,7 +45,7 @@ class Answer < BaseClass
   validates :idea_category, presence: true
 
   after_create :send_email_notification
-  
+
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase

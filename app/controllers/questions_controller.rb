@@ -92,7 +92,7 @@ class QuestionsController < ApplicationController
           :outcome,
           :value,
           :benefit_type,
-          :supporting_document,
+          :supporting_document_from_sponsor,
           expenses_attributes: [
             :id,
             :_destroy,
