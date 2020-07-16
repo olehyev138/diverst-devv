@@ -40,14 +40,7 @@ class Answer < BaseClass
   validates :idea_category, presence: true
 
   after_create :send_email_notification
-
-  def toggle_chosen
-    if chosen 
-      update(chosen: true)
-    else
-      update(chosen: false)
-    end
-  end
+  
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase
