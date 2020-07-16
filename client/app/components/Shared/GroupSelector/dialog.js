@@ -124,7 +124,7 @@ const GroupListSelector = (props) => {
 
   return (
     <React.Fragment>
-      {header}
+      {props.isMulti && !props.dialogNoChildren && header}
       <div className={classes.search}>
         {searchBar}
       </div>
