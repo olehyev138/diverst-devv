@@ -111,4 +111,54 @@ RSpec.describe User::Actions, type: :model do
       expect(User.find_user_by_email(Request.create_request(user), { email: user.email })).to eq user
     end
   end
+
+  describe 'send_reset_password_instructions' do
+
+  end
+
+  describe 'valid_reset_password_token?' do
+
+  end
+
+  describe 'reset_password_by_token' do
+
+  end
+
+  describe 'sign_up' do
+
+  end
+
+  describe 'post' do
+    let!(:user) { create(:user) }
+    let!(:group) { create(:group, latest_news_visibility: 'public') }
+    let!(:group_leader_only) { create(:group, latest_news_visibility: 'public') }
+
+    before {
+      create(:user_group, user: user, group: group)
+      create_list(:group_message, 3, group_id: group.id)
+      create_list(:group_message, 3, group_id: group_leader_only.id)
+    }
+
+    it do
+      expect(user.posts({}).total).to eq 3
+    end
+  end
+
+  describe 'downloads' do
+    it do
+      user = create(:user)
+      csvFiles = create_list(:csv_file_download, 3, user: user)
+      downloads = Request.create_request(user).user.downloads({})
+      expect(downloads.total).to eq csvFiles.count
+    end
+  end
+
+  describe 'index_except_self' do
+    it do
+      users = create_list(:user, 10)
+      index_except_self = User.first.index_except_self({ order_by: 'id', order: 'asc' })
+      expect(index_except_self.total).to eq users.count - 1
+      expect(index_except_self.attributes[:items].first).to_not eq User.first
+    end
+  end
 end
