@@ -13,6 +13,16 @@ RSpec.describe Activity::Actions, type: :model do
 
   describe 'base_preloads' do
     it { expect(Activity.base_preloads.include?(:owner)).to eq true }
+    it { expect(Activity.base_preloads.include?({ owner: [:field_data,
+                                                          :enterprise,
+                                                          :user_groups,
+                                                          :user_role,
+                                                          :news_links,
+                                                          :avatar_attachment,
+                                                          :avatar_blob,
+                                                          { enterprise: [:theme, :mobile_fields], field_data: [:field, { field: [:field_definer] }] }
+                                                         ] })).to eq true
+    }
   end
 
   describe 'ClassMethods' do
