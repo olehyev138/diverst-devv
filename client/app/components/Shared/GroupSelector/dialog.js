@@ -11,6 +11,8 @@ import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import ClearIcon from '@material-ui/icons/Clear';
 import { difference, union } from 'utils/arrayHelpers';
+import useArgumentRemembering from "utils/customHooks/rememberArguments";
+import useDelayedTextInputCallback from "utils/customHooks/delayedTextInputCallback";
 
 const styles = {
   bottom: {
@@ -49,6 +51,7 @@ const GroupListSelector = (props) => {
   }
 
   const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, params);
+  const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
     if (props.open)
@@ -70,16 +73,12 @@ const GroupListSelector = (props) => {
           id='search key'
           fullWidth
           type='text'
-          onChange={e => setSearchKey(e.target.value)}
+          onChange={(e) => {
+            setSearchKey(e.target.value);
+            delayedSearchAction(e.target.value, params);
+          }}
           value={searchKey}
         />
-      </Grid>
-      <Grid item>
-        <Button
-          onClick={() => groupSearchAction(searchKey, params)}
-        >
-          <DiverstFormattedMessage {...messages.selectorDialog.search} />
-        </Button>
       </Grid>
       <Grid item>
         <IconButton
