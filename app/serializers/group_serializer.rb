@@ -9,6 +9,7 @@ class GroupSerializer < ApplicationRecordSerializer
                              :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
                              :enterprise_id, :event_attendance_visibility, :get_calendar_color, :auto_archive,
                              :current_user_is_member, :banner, :banner_file_name, :banner_data, :banner_content_type,
+                             :unit_of_expiry_age, :expiry_age_for_resources, :expiry_age_for_news, :expiry_age_for_events,
                              :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
 
   def family?
