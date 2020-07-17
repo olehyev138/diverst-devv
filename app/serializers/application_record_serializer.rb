@@ -71,9 +71,14 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
 
     super(object, options)
-    if @scope.nil? && Rails.env.test?
+    if @scope.nil?
       def self.scope
-        raise SerializerScopeNotDefinedException
+        if Rails.env.test?
+          raise SerializerScopeNotDefinedException
+        else
+          Rollbar.error(SerializerScopeNotDefinedException.new)
+          nil
+        end
       end
     end
   end
