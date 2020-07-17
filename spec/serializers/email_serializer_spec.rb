@@ -8,8 +8,8 @@ RSpec.describe EmailSerializer, type: :serializer do
     serializer = EmailSerializer.new(email, scope: serializer_scopes(create(:user)))
 
     variables = email_variables.reduce({}) do |sum, var|
-      join_vars = EmailVariableSerializer.new(var, scope: serializer_scopes(create(:user))).as_json
-      real_vars = EnterpriseEmailVariableSerializer.new(var.enterprise_email_variable, scope: serializer_scopes(create(:user))).as_json
+      join_vars = EmailVariableSerializer.new(var).as_json
+      real_vars = EnterpriseEmailVariableSerializer.new(var.enterprise_email_variable).as_json
 
       sum.merge({ var.enterprise_email_variable.key => join_vars.merge(real_vars) })
     end
