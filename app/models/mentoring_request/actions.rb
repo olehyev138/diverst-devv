@@ -17,7 +17,7 @@ module MentoringRequest::Actions
       notify_accepted_request
       self
     else
-      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: self.errors.messages.first.first })
     end
   end
 
@@ -26,7 +26,7 @@ module MentoringRequest::Actions
       notify_declined_request
       self
     else
-      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: self.errors.messages.first.first })
     end
   end
 

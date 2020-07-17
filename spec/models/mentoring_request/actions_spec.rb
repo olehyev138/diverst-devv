@@ -13,6 +13,14 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'accept' do
+    it 'InvalidInputException' do
+      sender = create(:user)
+      receiver = create(:user)
+      create(:mentoring_request, sender: sender, receiver: receiver)
+      invalid_mentoring_request = create(:mentoring_request_skips_validate, sender: sender, receiver: receiver)
+      expect { invalid_mentoring_request.accept(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
+    end
+
     it 'mentor' do
       mentoring_request_mentor = create(:mentoring_request, mentoring_type: 'mentor')
       mentoring_request_mentor.accept(Request.create_request(create(:user)))
@@ -41,6 +49,14 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'reject' do
+    it 'InvalidInputException' do
+      sender = create(:user)
+      receiver = create(:user)
+      create(:mentoring_request, sender: sender, receiver: receiver)
+      invalid_mentoring_request = create(:mentoring_request_skips_validate, sender: sender, receiver: receiver)
+      expect { invalid_mentoring_request.reject }.to raise_error(InvalidInputException)
+    end
+
     it do
       mentoring_request_mentor = create(:mentoring_request)
       mentoring_request_mentor.reject
