@@ -203,7 +203,7 @@ RSpec.describe BudgetItemPolicy, type: :policy do
           end
         end
 
-        context 'user doesnt have group leader permissions : is_a_leader' do
+        context 'user has have group leader permissions but groups_budgets_manage is false: is_a_leader' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update groups_budgets_manage: false
@@ -216,7 +216,7 @@ RSpec.describe BudgetItemPolicy, type: :policy do
           end
         end
 
-        context 'user is not an accepted member : is_an_accepted_member' do
+        context 'user is not an accepted member and groups_budgets_manage is false: is_an_accepted_member' do
           before do
             create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
             user.policy_group.update groups_budgets_manage: false
@@ -240,7 +240,7 @@ RSpec.describe BudgetItemPolicy, type: :policy do
           end
         end
 
-        context 'user doesnt have group leader permissions : is_a_leader' do
+        context 'user has group leader permissions and groups_budgets_manage is false: is_a_leader' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update groups_budgets_manage: false
@@ -253,7 +253,7 @@ RSpec.describe BudgetItemPolicy, type: :policy do
           end
         end
 
-        context 'user is not an accepted member : is_an_accepted_member' do
+        context 'user is not an accepted member and groups_budgets_manage is false: is_an_accepted_member' do
           before do
             create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
             user.policy_group.update groups_budgets_manage: false

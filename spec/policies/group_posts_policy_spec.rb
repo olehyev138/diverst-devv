@@ -299,7 +299,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           end
         end
 
-        context 'user has group leader permissions : is_a_leader' do
+        context 'user has group leader permissions and manage_posts is false: is_a_leader' do
           before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update manage_posts: false
@@ -323,7 +323,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           end
         end
 
-        context 'user has groups_manage permission : is_admin_manager' do
+        context 'user has groups_manage permission and manage_posts is false: is_admin_manager' do
           before do
             user.policy_group.update groups_manage: false
             user.policy_group.update manage_posts: false
@@ -353,7 +353,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
     end
 
     context 'manage?' do
-      context 'user has groups_manage permission : is_admin_manager' do
+      context 'user doesnt have groups_manage permission : is_admin_manager' do
         before do
           user.policy_group.update groups_manage: false
           user.policy_group.update manage_posts: false
@@ -364,7 +364,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         end
       end
 
-      context 'user has group leader permissions : is_a_leader' do
+      context 'user has group leader permissions and manage_posts is false: is_a_leader' do
         before do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update manage_posts: false
@@ -377,7 +377,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         end
       end
 
-      context 'user is an accepted member : is_an_accepted_member' do
+      context 'user is an accepted member and manage_posts is false: is_an_accepted_member' do
         before do
           create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
           user.policy_group.update manage_posts: false
@@ -390,7 +390,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
     end
 
     context 'create?' do
-      context 'user has groups_manage permission : is_admin_manager' do
+      context 'user doesnt have groups_manage permission and manage_posts is false: is_admin_manager' do
         before do
           user.policy_group.update groups_manage: false
           user.policy_group.update manage_posts: false
@@ -401,7 +401,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         end
       end
 
-      context 'user has group leader permissions : is_a_leader' do
+      context 'user has group leader permissions and manage_posts is false: is_a_leader' do
         before do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update manage_posts: false
@@ -414,7 +414,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
         end
       end
 
-      context 'user is an accepted member : is_an_accepted_member' do
+      context 'user is an accepted member and manage_posts is false: is_an_accepted_member' do
         before do
           create(:user_group, user_id: user.id, group_id: group.id, accepted_member: false)
           user.policy_group.update manage_posts: false
