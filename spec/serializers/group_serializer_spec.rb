@@ -6,9 +6,9 @@ RSpec.describe GroupSerializer, type: :serializer do
     @group_category = create(:group_category, enterprise: @enterprise)
     @group_category_type = create(:group_category_type, enterprise: @enterprise)
     @group = create(:group, logo: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
-                   banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }, enterprise: @enterprise,
-                   group_category_id: @group_category.id, group_category_type_id: @group_category_type.id,
-                   annual_budget: 1000)
+                            banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }, enterprise: @enterprise,
+                            group_category_id: @group_category.id, group_category_type_id: @group_category_type.id,
+                            annual_budget: 1000)
     create(:group, enterprise: @group.enterprise, parent_id: @group.id)
     create(:group, enterprise: @group.enterprise, parent_id: @group.id)
     @group.reload
@@ -19,7 +19,7 @@ RSpec.describe GroupSerializer, type: :serializer do
         @group,
         scope: serializer_scopes(create(:user)),
         scope_name: :scope
-    )
+      )
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(@enterprise.id)
     expect(serializer.serializable_hash[:group_category]).to_not be nil
@@ -39,7 +39,7 @@ RSpec.describe GroupSerializer, type: :serializer do
         scope_name: :scope,
         budgets: true,
         with_children: true
-    )
+      )
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(@enterprise.id)
     expect(serializer.serializable_hash[:group_category]).to be nil

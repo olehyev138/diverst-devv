@@ -35,7 +35,7 @@ class GroupSerializer < ApplicationRecordSerializer
   def children
     if budgets?
       if instance_options[:with_children]
-        return object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
+        object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
       end
     else
       object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
