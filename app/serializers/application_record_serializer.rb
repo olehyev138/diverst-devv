@@ -47,7 +47,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             permission_module.define_method(attr) do
               if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
                 if defined?(super)
-                  super() rescue nil
+                  super()
                 else
                   object&.send(attr)
                 end
