@@ -78,5 +78,24 @@ export default defineMessages({
   certificate: {
     id: `${scope}.certificate`,
   },
-
+  auto_archive: {
+    id: `${scope}.settings.auto_archive`,
+  },
+  expiry_units: {
+    id: `${scope}.settings.expiry_units`,
+  },
+  expiry_resources: {
+    id: `${scope}.settings.expiry_resources`,
+  },
+  units: {
+    years: {
+      id: `${scope}.settings.units.years`,
+    },
+    months: {
+      id: `${scope}.settings.units.months`,
+    },
+    weeks: {
+      id: `${scope}.settings.units.weeks`,
+    },
+  },
 });

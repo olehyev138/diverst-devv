@@ -132,9 +132,9 @@ class Group < ApplicationRecord
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
 
-  validates :expiry_age_for_news, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :expiry_age_for_events, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :expiry_age_for_resources, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :expiry_age_for_news, numericality: { greater_than_or_equal_to: 0 }
+  validates :expiry_age_for_events, numericality: { greater_than_or_equal_to: 0 }
+  validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
 
   def create_annual_budget
     AnnualBudget.create(group: self, closed: false)
