@@ -15,7 +15,7 @@ RSpec.describe NewsLink::Actions, type: :model do
                                                          :avatar_attachment,
                                                          :avatar_blob,
                                                          { enterprise: [:theme, :mobile_fields],
-                                                           field_data: [:field, {field: [:field_definer] }] }],
+                                                           field_data: [:field, { field: [:field_definer] }] }],
                                                 comments: [:author,
                                                            { author: [:field_data,
                                                                       :enterprise,
@@ -25,7 +25,7 @@ RSpec.describe NewsLink::Actions, type: :model do
                                                                       :avatar_attachment,
                                                                       :avatar_blob,
                                                                       { enterprise: [:theme, :mobile_fields],
-                                                                        field_data: [:field, {field: [:field_definer] }] }] }],
+                                                                        field_data: [:field, { field: [:field_definer] }] }] }],
                                                 group: [:enterprise])).to eq true
     }
   end
