@@ -48,7 +48,7 @@ module User::Actions
     order_by = params[:order_by].to_sym rescue :created_at
 
     # get the news_feed_ids
-    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public', 'global', 'non-members'] }).ids
+    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public'] }).ids
 
     # get the news_feed_links
     base_nfls = NewsFeedLink

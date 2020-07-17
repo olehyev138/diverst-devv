@@ -10,7 +10,7 @@ RSpec.describe Folder::Actions, type: :model do
   end
 
   describe 'validate_password' do
-    let!(:folder) { create(:folder, password_protected: true, password_digest: BCrypt::Password.create('testPassword')) }
+    let!(:folder) { create(:folder, password_protected: true, password: 'testPassword') }
 
     it 'Folder ID and password required' do
       expect { Folder.validate_password(Request.create_request(create(:user)), {}) }.to raise_error(BadRequestException, 'Folder ID and password required')
