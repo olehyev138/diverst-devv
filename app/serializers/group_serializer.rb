@@ -43,7 +43,7 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def parent
-    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, scope_name: :scope, family: true) : nil
+    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, family: true) : nil
   end
 
   def policies

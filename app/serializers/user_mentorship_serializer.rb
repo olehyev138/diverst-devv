@@ -19,13 +19,13 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   def mentors
     object.mentors.map do |m|
-      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+      UserMentorshipLiteSerializer.new(m, scope: scope).as_json
     end
   end
 
   def mentees
     object.mentees.map do |m|
-      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+      UserMentorshipLiteSerializer.new(m, scope: scope).as_json
     end
   end
 

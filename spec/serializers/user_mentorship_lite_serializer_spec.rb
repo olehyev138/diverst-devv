@@ -5,7 +5,7 @@ RSpec.describe UserMentorshipLiteSerializer, type: :serializer do
     enterprise = create(:enterprise)
     mentor = create(:user, enterprise: enterprise)
     create_list(:mentorship_interest, 3, user_id: mentor.id)
-    serializer = UserMentorshipLiteSerializer.new(mentor, scope: serializer_scopes(mentor), scope_name: :scope)
+    serializer = UserMentorshipLiteSerializer.new(mentor, scope: serializer_scopes(mentor))
 
     expect(serializer.serializable_hash[:id]).to eq mentor.id
     expect(serializer.serializable_hash[:enterprise_id]).to  eq enterprise.id

@@ -4,7 +4,7 @@ RSpec.describe NewsLinkSerializer, type: :serializer do
   it 'returns associations' do
     news_link = create(:news_link, picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
     create(:news_link_photo, news_link: news_link, file: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
-    serializer = NewsLinkSerializer.new(news_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = NewsLinkSerializer.new(news_link, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:group]).to be_nil
     expect(serializer.serializable_hash[:group_id]).to_not be_nil
