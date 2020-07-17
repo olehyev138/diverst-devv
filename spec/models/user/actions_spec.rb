@@ -113,35 +113,41 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'send_reset_password_instructions' do
-
   end
 
   describe 'valid_reset_password_token?' do
-
   end
 
   describe 'reset_password_by_token' do
-
   end
 
   describe 'sign_up' do
-
   end
 
   describe 'post' do
     let!(:user) { create(:user) }
-    let!(:group) { create(:group, latest_news_visibility: 'public') }
-    let!(:group_leader_only) { create(:group, latest_news_visibility: 'public') }
+    let!(:group) { create(:group, latest_news_visibility: 'group') }
+    let!(:public_group) { create(:group, latest_news_visibility: 'public') }
+    let!(:global_group) { create(:group, latest_news_visibility: 'public') }
+    let!(:non_members_group) { create(:group, latest_news_visibility: 'public') }
+    let!(:group_leader_only) { create(:group) }
 
     before {
       create(:user_group, user: user, group: group)
+      create(:user_group, user: user, group: public_group)
+      create(:user_group, user: user, group: global_group)
+      create(:user_group, user: user, group: non_members_group)
+      create(:user_group, user: user, group: group_leader_only)
       create_list(:group_message, 3, group_id: group.id)
-      create_list(:group_message, 3, group_id: group_leader_only.id)
+      create_list(:group_message, 3, group_id: public_group.id)
+      create_list(:group_message, 3, group_id: global_group.id)
+      create_list(:news_link, 3, group_id: non_members_group.id)
+      create_list(:social_link, 3, group_id: group_leader_only.id)
+      GroupMessage.first.news_feed_link.update(archived_at: Date.today)
+      NewsLink.first.news_feed_link.update(approved: false)
     }
 
-    it do
-      expect(user.posts({}).total).to eq 3
-    end
+    it { expect(user.posts({}).total).to eq 10 }
   end
 
   describe 'downloads' do
