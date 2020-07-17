@@ -26,6 +26,10 @@ RSpec.describe GroupSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group_category_type]).to_not be nil
     expect(serializer.serializable_hash[:banner]).to_not be nil
     expect(serializer.serializable_hash[:annual_budget]).to_not be nil
+    expect(serializer.serializable_hash[:annual_budget_leftover]).to_not be nil
+    expect(serializer.serializable_hash[:annual_budget_approved]).to be nil
+    expect(serializer.serializable_hash[:annual_budget_available]).to be nil
+    expect(serializer.serializable_hash[:currency]).to be nil
   end
 
   it 'returns associations for budgets and children' do
@@ -38,9 +42,13 @@ RSpec.describe GroupSerializer, type: :serializer do
     )
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(@enterprise.id)
-    expect(serializer.serializable_hash[:group_category]).to_not be nil
-    expect(serializer.serializable_hash[:group_category_type]).to_not be nil
-    expect(serializer.serializable_hash[:banner]).to_not be nil
+    expect(serializer.serializable_hash[:group_category]).to be nil
+    expect(serializer.serializable_hash[:group_category_type]).to be nil
+    expect(serializer.serializable_hash[:banner]).to be nil
     expect(serializer.serializable_hash[:annual_budget]).to_not be nil
+    expect(serializer.serializable_hash[:annual_budget_leftover]).to_not be nil
+    expect(serializer.serializable_hash[:annual_budget_approved]).to_not be nil
+    expect(serializer.serializable_hash[:annual_budget_available]).to_not be nil
+    expect(serializer.serializable_hash[:currency]).to_not be nil
   end
 end

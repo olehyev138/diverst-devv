@@ -23,7 +23,7 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def show?
-    policy&.show? && !family?
+    policy&.show? && !family? && !budgets?
   end
 
   # **instance_options
@@ -35,10 +35,10 @@ class GroupSerializer < ApplicationRecordSerializer
   def children
     if budgets?
       if instance_options[:with_children]
-        return object.children.map { |child| GroupSerializer.new(child, budgets: true).as_json }
+        return object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
       end
     else
-      object.children.map { |child| GroupSerializer.new(child, family: true).as_json }
+      object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
     end
   end
 
