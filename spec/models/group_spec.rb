@@ -1094,22 +1094,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe '#archive_switch' do
-    let!(:enterprise) { create(:enterprise) }
-    let!(:group) { create(:group, enterprise: enterprise, expiry_age_for_news: 1) }
-
-    it 'turn on auto archive switch' do
-      group.archive_switch
-      expect(group.auto_archive).to eq true
-    end
-
-    it 'turn off auto archive switch' do
-      group.update auto_archive: true
-      group.archive_switch
-      expect(group.auto_archive).to eq false
-    end
-  end
-
   describe '#resolve_auto_archive_state callback' do
     let!(:enterprise) { create(:enterprise) }
     let!(:group) { create(:group, enterprise: enterprise, auto_archive: true) }
