@@ -13,8 +13,37 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'base_preloads' do
-    it { expect(Group.base_preloads.include?(:parent)).to eq true }
+    it { expect(Group.base_preloads.include?(:news_feed)).to eq true }
+    it { expect(Group.base_preloads.include?(:annual_budgets)).to eq true }
+    it { expect(Group.base_preloads.include?(:logo_attachment)).to eq true }
+    it { expect(Group.base_preloads.include?(:banner_attachment)).to eq true }
+    it { expect(Group.base_preloads.include?({ enterprise: [:theme] })).to eq true }
+    it { expect(Group.base_preloads.include?(:user_groups)).to eq true }
+    it { expect(Group.base_preloads.include?(:group_leaders)).to eq true }
     it { expect(Group.base_preloads.include?(:children)).to eq true }
+    it { expect(Group.base_preloads.include?(:parent)).to eq true }
+    it { expect(Group.base_preloads.include?(:enterprise)).to eq true }
+    it { expect(Group.base_preloads.include?({ children: [:news_feed,
+                                                          :annual_budgets,
+                                                          :logo_attachment,
+                                                          :banner_attachment,
+                                                          { enterprise: [:theme] },
+                                                          :user_groups,
+                                                          :group_leaders,
+                                                          :children,
+                                                          :parent,
+                                                          :enterprise],
+                                               parent: [:news_feed,
+                                                        :annual_budgets,
+                                                        :logo_attachment,
+                                                        :banner_attachment,
+                                                        { enterprise: [:theme] },
+                                                        :user_groups,
+                                                        :group_leaders,
+                                                        :children,
+                                                        :parent,
+                                                        :enterprise] })).to eq true
+    }
   end
 
   describe 'base_preloads_budget' do
@@ -22,6 +51,11 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'base_preload_no_recursion' do
+    it { expect(Group.base_preload_no_recursion.include?(:news_feed)).to eq true }
+    it { expect(Group.base_preload_no_recursion.include?(:annual_budgets)).to eq true }
+    it { expect(Group.base_preload_no_recursion.include?(:logo_attachment)).to eq true }
+    it { expect(Group.base_preload_no_recursion.include?(:banner_attachment)).to eq true }
+    it { expect(Group.base_preload_no_recursion.include?({ enterprise: [:theme] })).to eq true }
     it { expect(Group.base_preload_no_recursion.include?(:user_groups)).to eq true }
     it { expect(Group.base_preload_no_recursion.include?(:group_leaders)).to eq true }
     it { expect(Group.base_preload_no_recursion.include?(:children)).to eq true }

@@ -15,6 +15,20 @@ RSpec.describe MentorshipSession::Actions, type: :model do
   describe 'base_preloads' do
     it { expect(MentorshipSession.base_preloads.include?(:user)).to eq true }
     it { expect(MentorshipSession.base_preloads.include?(:mentoring_session)).to eq true }
+    it { expect(MentorshipSession.base_preloads.include?(mentoring_session: [:creator,
+                                                                             :users,
+                                                                             :mentoring_interests,
+                                                                             { creator: [:mentoring_interests,
+                                                                                         :mentoring_types,
+                                                                                         :mentors,
+                                                                                         :mentees,
+                                                                                         :mentorship_ratings,
+                                                                                         :availabilities,
+                                                                                         { mentees: [:mentoring_interests, :mentoring_types, :availabilities],
+                                                                                           mentors: [:mentoring_interests, :mentoring_types, :availabilities] }],
+                                                                               users: [:mentoring_interests, :mentoring_types, :availabilities] }],
+                                                         user: [:mentoring_interests, :mentoring_types, :availabilities])).to eq true
+    }
   end
 
   describe 'accept' do
