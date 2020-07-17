@@ -71,7 +71,11 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
 
     super(object, options)
-    raise SerializerScopeNotDefinedException if @scope.nil? && Rails.env.test?
+    if @scope.nil? && Rails.env.test?
+      def self.scope
+        raise SerializerScopeNotDefinedException
+      end
+    end
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
