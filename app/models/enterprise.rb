@@ -117,6 +117,8 @@ class Enterprise < ApplicationRecord
   has_one_attached :sponsor_media
   has_one_attached :onboarding_sponsor_media
 
+  validates :expiry_age_for_resources, :numericality => { :greater_than_or_equal_to => 0 }
+
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :banner_paperclip
   has_attached_file :cdo_picture_paperclip, s3_permissions: 'private'
