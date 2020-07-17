@@ -103,8 +103,9 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                         scope&.dig(:params) || @instance_options[:params] || {}
                     )
                   end
-                rescue Pundit::NotAuthorizedError, NoMethodError
-                  # If the user isn't defined, or the policy not found, return the pseudo policy
+                rescue Pundit::NotAuthorizedError
+                  raise if Rails.env.test? && !instance_options[:no_user]
+                  # If the user isn't defined, return the pseudo policy
                   Class.new do
                     def method_missing(m, *args, &block)
                       false
