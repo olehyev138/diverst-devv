@@ -33,7 +33,7 @@ class UserSerializer < ApplicationRecordSerializer
   # Custom attributes
 
   def enterprise
-    EnterpriseSerializer.new(object.enterprise).attributes
+    EnterpriseSerializer.new(object.enterprise, **instance_options).attributes
   end
 
   def timezones
