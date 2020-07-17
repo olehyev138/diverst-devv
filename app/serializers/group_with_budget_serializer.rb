@@ -5,7 +5,7 @@ class GroupWithBudgetSerializer < ApplicationRecordSerializer
   def children
     if instance_options[:with_children]
       object.children.map do |child|
-        GroupWithBudgetSerializer.new(child).as_json
+        GroupWithBudgetSerializer.new(child, **instance_options, family: true).as_json
       end
     end
   end

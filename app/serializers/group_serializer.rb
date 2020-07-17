@@ -20,7 +20,7 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def children
-    object.children.map { |child| GroupSerializer.new(child, scope: scope, scope_name: :scope, family: true).as_json }
+    object.children.map { |child| GroupSerializer.new(child, **@instance_options, family: true).as_json }
   end
 
   def parent
