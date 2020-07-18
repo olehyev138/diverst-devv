@@ -6,7 +6,7 @@ RSpec.describe MentoringRequestSerializer, type: :serializer do
     receiver = create(:user)
     mentoring_request = create(:mentoring_request, sender_id: sender.id, receiver_id: receiver.id)
 
-    serializer = MentoringRequestSerializer.new(mentoring_request, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = MentoringRequestSerializer.new(mentoring_request, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(mentoring_request.id)
     expect(serializer.serializable_hash[:sender]).to_not be nil

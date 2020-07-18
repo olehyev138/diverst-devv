@@ -4,7 +4,7 @@ RSpec.describe MentoringRequestLiteSerializer, type: :serializer do
   it 'returns mentoring request lite' do
     mentoring_request = create(:mentoring_request)
 
-    serializer = MentoringRequestLiteSerializer.new(mentoring_request, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = MentoringRequestLiteSerializer.new(mentoring_request, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(mentoring_request.id)
     expect(serializer.serializable_hash[:status]).to eq(mentoring_request.status)
