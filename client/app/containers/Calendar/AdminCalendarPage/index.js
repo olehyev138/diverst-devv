@@ -72,8 +72,7 @@ export function AdminCalendarPage(props) {
 
   return (
     <DiverstCalendar
-      events={props.events}
-      calendarEvents={props.calendarEvents}
+      events={props.calendarEvents}
       groupLegend
       groupFilter
       groupFilterCallback={handleGroupFilter}

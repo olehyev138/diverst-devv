@@ -34,7 +34,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles } from '@material-ui/core/styles';
-import useClickPreventionOnDoubleClick from 'utils/doubleClickHelper';
+import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper';
 
 const styles = theme => ({
   errorButton: {
@@ -146,7 +146,7 @@ const GroupSelectorItem = (props) => {
             </CardContent>
           </ButtonBase>
         </Grid>
-        {group.children && group.children.length > 0 && (
+        {!props.dialogNoChildren && group.children && group.children.length > 0 && (
           <Grid item className={classes.expandActionAreaContainer}>
             <CardActionArea
               className={classes.expandActionArea}
@@ -187,6 +187,7 @@ GroupSelectorItem.propTypes = {
     children: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
 
+  dialogNoChildren: PropTypes.bool,
   inputCallback: PropTypes.func,
   addGroup: PropTypes.func,
   removeGroup: PropTypes.func,

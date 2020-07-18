@@ -1,18 +1,16 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { CircularProgress, Grid, Card, CardContent, Box, CardActions } from '@material-ui/core';
+import { Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { formatDate } from '@fullcalendar/core';
 import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
-
-import 'stylesheets/main.scss';
-import { Formik, Form } from 'formik';
+import ReactTooltip from 'react-tooltip';
+import { Form, Formik } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Calendar/messages';
 import GroupSelector from 'components/Shared/GroupSelector';
@@ -37,7 +35,16 @@ const styles = theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  legend: {
+    float: 'right',
+    backgroundColor: theme.palette.primary.main,
+    marginLeft: 5,
+  },
 });
+
+function addDays(date, numberOfDays) {
+  return new Date(date.getTime() + 24 * 60 * 60 * 1000 * numberOfDays);
+}
 
 export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
@@ -85,9 +92,9 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
                 <Grid item xs={12} md={6}>
                   <GroupSelector
                     groupField='group_ids'
+                    dialogSelector
                     label={<DiverstFormattedMessage {...messages.groups} />}
                     isMulti
-                    inputCallback={(props, searchKey = '') => searchKey}
                     {...formikProps}
                   />
                 </Grid>
@@ -112,6 +119,27 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
     </Formik>
   );
 
+  const legend = (
+    <Grid container>
+      <Grid item xs={12}>
+        <Card className={classes.legend}>
+          <Box mb={1} mt={1} ml={1} mr={1}>
+            <Typography variant='h6'>
+              Legend
+            </Typography>
+            <Divider />
+            <Typography style={{ color: 'black' }}>
+              Participating
+            </Typography>
+            <Typography style={{ color: 'white' }}>
+              Not Participating
+            </Typography>
+          </Box>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+
   return (
     <React.Fragment>
       {dialog}
@@ -122,19 +150,48 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
         </React.Fragment>
       )}
       {rest.groupLegend && <DiverstGroupLegend />}
+      <ReactTooltip />
       <div className={classes.wrapper}>
         <FullCalendar
           ref={calendarRef}
-          defaultView='dayGridMonth'
+          initialView='dayGridMonth'
           plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-          header={{
+          contentHeight={600}
+          headerToolbar={{
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
-          events={calendarEvents}
+          events={events}
+          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(addDays(view.currentStart, -14), addDays(view.currentEnd, 14)))}
           eventClick={clickEvent}
-          datesRender={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(view.currentStart, view.currentEnd))}
+          eventDisplay='block'
+          dayMaxEvents={5}
+          dayMaxEventRows={5}
+          eventDidMount={(info) => {
+            const { event } = info;
+            const xProps = event.extendedProps;
+
+            info.el.setAttribute('data-tip',
+              `${xProps.group.name}${xProps.description.length > 0 ? `<br>${xProps.description}` : ''}`);
+            // eslint-disable-next-line func-names
+            info.el.setAttribute('data-place', (function () {
+              switch (dig(calendarRef, 'current', cal => cal.getApi().view.type)) {
+                case 'dayGridMonth':
+                  return 'top';
+                case 'timeGridWeek':
+                  return 'left';
+                case 'listWeek':
+                  return 'right';
+                default:
+                  return 'top';
+              }
+            }()));
+            info.el.setAttribute('data-effect', 'solid');
+            info.el.setAttribute('data-delay-show', '200');
+            info.el.setAttribute('data-multiline', 'true');
+            ReactTooltip.rebuild();
+          }}
           {...rest}
         />
         {isLoading && (

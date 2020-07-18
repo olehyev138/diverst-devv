@@ -50,7 +50,6 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               disabled={props.isCommitting}
               value={values.field_id}
               options={props.fields}
-              onMenuOpen={fieldSelectAction}
               onChange={value => setFieldValue('field_id', value)}
               onInputChange={value => fieldSelectAction(value)}
               onBlur={() => setFieldTouched('field_id', true)}
@@ -65,7 +64,6 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               disabled={props.isCommitting}
               value={values.aggregation_id}
               options={props.fields}
-              onMenuOpen={fieldSelectAction}
               onChange={value => setFieldValue('aggregation_id', value)}
               onInputChange={value => fieldSelectAction(value)}
               onBlur={() => setFieldTouched('aggregation_id', true)}

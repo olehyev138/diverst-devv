@@ -28,6 +28,7 @@ export const initialState = {
 function fieldsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_FIELDS_BEGIN:
         draft.isLoading = true;
