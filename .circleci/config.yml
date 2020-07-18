@@ -76,7 +76,7 @@ jobs:
       - run:
           name: Run linter
           command: |
-            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
+            export PRONTO_GITHUB_ACCESS_TOKEN=75daf2120af91bae1bf7078de9e33b72d50b04bc
             export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
             bundle exec pronto run -f github_status github_pr -c origin/react_update
           no_output_timeout: 60m
