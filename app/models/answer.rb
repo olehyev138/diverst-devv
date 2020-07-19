@@ -1,6 +1,8 @@
 class Answer < BaseClass
   include PublicActivity::Common
 
+  enum benefit_type: { revenue: '0', cost_savings: '1' }
+
   belongs_to :question, inverse_of: :answers, counter_cache: true
   belongs_to :author, class_name: 'User', inverse_of: :answers
 

@@ -29,7 +29,7 @@ module ResourcesHelper
   end
 
   def thumbnail_for_answer(answer)
-    return answer.supporting_document.url if answer.supporting_document_content_type.start_with?('image')
+    return answer.supporting_document.url if answer.supporting_document_content_type&.start_with?('image')
 
     image_url("icons/filetypes/#{thumbnail_for_answer_extension(answer)}")
   end
@@ -49,7 +49,7 @@ module ResourcesHelper
       'archive.png'
     else
       # Look for MIME types
-      return 'video.png' if res.supporting_document_content_type.start_with?('video')
+      return 'video.png' if res.supporting_document_content_type&.start_with?('video')
 
       'other.png'
     end

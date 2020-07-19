@@ -6,7 +6,10 @@ class User::UserCampaignsController < ApplicationController
   layout 'user'
 
   def index
-    @campaigns = current_user.campaigns.where(status: [0, 2, 3]).order(created_at: :desc)
+    @campaigns = current_user.enterprise.campaigns
+                             .where(status: [0, 2, 3])
+                             .order(created_at: :desc)
+                             .select{ |c| c.targeted_users.include? current_user }
   end
 
   # MISSING TEMPLATE

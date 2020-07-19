@@ -31,8 +31,8 @@
             <h4>Financials</h4>
             <label class="field__label">Benefit type</label>
             <div class="segmented-control">
-              <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 0 %>" data-value="0">Revenue</a>
-              <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 1 %>" data-value="1">Cost saving</a>
+              <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 0 %>" data-value=0 >Revenue</a>
+              <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 1 %>" data-value=1>Cost saving</a>
               <%= a.input :benefit_type, as: :hidden %>
             </div>
             <%= a.input :value, wrapper: :currency, label: "Base amount" %>

@@ -22,9 +22,13 @@ class User::UserAnswerCommentsController < ApplicationController
 
   protected
 
+  def author_of_campaign_or_idea
+    current_user.enterprise.campaigns.where(owner: current_user).count > 1 || @answer.author == current_user
+  end
+
   def set_answer
     @answer = Answer.find(params[:user_answer_id])
-    return head 403 if @answer.question.campaign.users.where(id: current_user.id).count < 1
+    return head 403 if author_of_campaign_or_idea
   end
 
   def comment_params
