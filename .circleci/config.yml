@@ -5,12 +5,13 @@ workflows:
   lint-test-deploy:
     jobs:
       - lint
-      - backend-test:
-          requires:
-            - lint
       - frontend-test:
           requires:
             - lint
+      - backend-test:
+          requires:
+            - lint
+            - frontend-test
       - deploy-testing:
           context: aws-context
           requires:
