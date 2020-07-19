@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CustomTextSerializer, type: :serializer do
   it 'returns custom text' do
     custom_text = create(:custom_text)
-    serializer = CustomTextSerializer.new(custom_text, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = CustomTextSerializer.new(custom_text, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq custom_text.id
     expect(serializer.serializable_hash[:erg]).to eq custom_text.erg
