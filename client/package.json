@@ -31,7 +31,7 @@
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "rubyRoutes": "node ./internals/scripts/backendRoutes.js",
-    "test": "cross-env NODE_ENV=test NODE_ICU_DATA=node_modules/full-icu jest",
+    "test": "cross-env-shell NODE_ENV=test NODE_ICU_DATA=node_modules/full-icu jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write"
