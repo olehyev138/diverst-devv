@@ -81,6 +81,51 @@ jobs:
             export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
             bundle exec pronto run -f github_status github_pr -c origin/react_update
           no_output_timeout: 60m
+  frontend-test:
+    working_directory: ~/TeamDiverst/diverst-development/
+    parallelism: 2
+    docker:
+      - image: awsdiverst/cci-primary:0.0.3
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit/js-test-results.xml
+    steps:
+      - checkout
+      - run:
+          name: Create artifact directories
+          command: mkdir -p /tmp/circleci-test-results/junit
+      #
+      ## Install node modules
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Run frontend tests
+      #
+      - run:
+          name: Run frontend tests
+          command: cd client/ && npm test -- $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize) --ci --runInBand --reporters=default --reporters=jest-junit
+      #
+      ## Store artifacts
+      #
+      - store_artifacts:
+          path: /tmp/circleci-test-results/junit
+      - store_test_results:
+          path: /tmp/circleci-test-results/junit
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
     parallelism: 2
@@ -158,51 +203,6 @@ jobs:
           path: /tmp/circleci-test-results/rspec
       - store_artifacts:
           path: /tmp/circleci-test-results/rspec
-  frontend-test:
-    working_directory: ~/TeamDiverst/diverst-development/
-    parallelism: 2
-    docker:
-      - image: awsdiverst/cci-primary:0.0.3
-        environment:
-          RAILS_ENV: test
-          RACK_ENV: test
-    shell: /bin/bash --login
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit/js-test-results.xml
-    steps:
-      - checkout
-      - run:
-          name: Create artifact directories
-          command: mkdir -p /tmp/circleci-test-results/junit
-      #
-      ## Install node modules
-      #
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
-      - run:
-          name: Install node modules
-          command: cd client && npm install
-      - save_cache:
-          paths:
-            - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-      #
-      ## Run frontend tests
-      #
-      - run:
-          name: Run frontend tests
-          command: cd client/ && npm test -- --ci --runInBand --reporters=default --reporters=jest-junit $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize)
-      #
-      ## Store artifacts
-      #
-      - store_artifacts:
-          path: /tmp/circleci-test-results/junit
-      - store_test_results:
-          path: /tmp/circleci-test-results/junit
   #
   ## Deploy job for testing environment
   #
