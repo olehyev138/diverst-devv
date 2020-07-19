@@ -8,7 +8,7 @@ RSpec.describe BudgetSerializer, type: :serializer do
     annual_budget = create(:annual_budget, group: group)
     budget = create(:budget, requester: requester, approver: approver, annual_budget: annual_budget)
 
-    serializer = BudgetSerializer.new(budget, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = BudgetSerializer.new(budget, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(budget.id)
     expect(serializer.serializable_hash[:approver]).to_not be nil

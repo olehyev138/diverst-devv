@@ -16,12 +16,12 @@ class MentoringSessionSerializer < ApplicationRecordSerializer
   end
 
   def creator
-    UserMentorshipSerializer.new(object.creator, scope: scope, scope_name: :scope).as_json
+    UserMentorshipSerializer.new(object.creator, scope: scope).as_json
   end
 
   def users
     object.users.map do |user|
-      UserMentorshipLiteSerializer.new(user, scope: scope, scope_name: :scope).as_json
+      UserMentorshipLiteSerializer.new(user, scope: scope).as_json
     end
   end
 

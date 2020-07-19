@@ -7,7 +7,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
 
     news_feed_link.reload
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to_not be_nil
@@ -25,7 +25,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
 
     news_feed_link.reload
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to be_nil
@@ -43,7 +43,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
 
     news_feed_link.reload
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to be_nil

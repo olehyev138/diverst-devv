@@ -11,24 +11,47 @@ class GroupSerializer < ApplicationRecordSerializer
                              :current_user_is_member, :banner, :banner_file_name, :banner_data, :banner_content_type,
                              :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
 
+  attributes_with_permission :id, :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
+                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, :permissions, if: :budgets?
+
+  def budgets?
+    instance_options[:budgets]
+  end
+
   def family?
     instance_options[:family]
   end
 
   def show?
-    policy&.show? && !family?
+    policy&.show? && !family? && !budgets?
+  end
+
+  # **instance_options
+
+  def currency
+    object.annual_budget_currency
   end
 
   def children
-    object.children.map { |child| GroupSerializer.new(child, scope: scope, scope_name: :scope, family: true).as_json }
+    if budgets?
+      if instance_options[:with_children]
+        object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
+      end
+    else
+      object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
+    end
   end
 
   def parent
-    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, scope_name: :scope, family: true) : nil
+    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, family: true) : nil
   end
 
   def policies
-    [
+    budgets? ? [
+        :annual_budgets_manage?,
+        :carryover_annual_budget?,
+        :reset_annual_budget?,
+    ] : [
         :show?,
         :destroy?,
         :update?,
@@ -60,7 +83,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,
-        :is_a_leader?
+        :is_a_leader?,
     ]
   end
 
