@@ -191,10 +191,10 @@ jobs:
           key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       - run:
           name: Echo test globbing
-          command: cd client/ && echo $(circleci tests glob "app/**.test.*")
+          command: cd client/ && echo $(circleci tests glob "app/**/*.test.*")
       - run:
           name: Test splitting
-          command: cd client/ && circleci tests glob "app/**.test.*" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+          command: cd client/ && circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize > /tmp/tests-to-run
       #
       ## Run frontend tests
       #
