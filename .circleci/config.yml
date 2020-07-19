@@ -190,18 +190,12 @@ jobs:
           paths:
             - ./client/node_modules
           key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-      - run:
-          name: Echo test globbing
-          command: cd client/ && echo $(circleci tests glob "app/**/*.test.*")
-      - run:
-          name: Test splitting
-          command: cd client/ && circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize > /tmp/tests-to-run
       #
       ## Run frontend tests
       #
       - run:
           name: Run frontend tests
-          command: cd client/ && npm test -- $(cat /tmp/tests-to-run) --ci --runInBand --reporters=default --reporters=jest-junit
+          command: cd client/ && npm test -- --ci --runInBand --reporters=default --reporters=jest-junit $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize)
       #
       ## Store artifacts
       #
