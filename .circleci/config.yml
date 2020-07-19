@@ -146,7 +146,7 @@ jobs:
       #
       - run:
           name: Run backend tests
-          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+          command: rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
