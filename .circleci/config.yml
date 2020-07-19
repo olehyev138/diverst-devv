@@ -200,7 +200,7 @@ jobs:
       #
       - run:
           name: Run frontend tests
-          command: cd client/ && npm test -- --ci --runInBand --reporters=default --reporters=jest-junit --runTestsByPath $(circleci tests glob "app/**.test.*" | circleci tests split --split-by=filesize)
+          command: cd client/ && npm test -- $(cat /tmp/tests-to-run) --ci --runInBand --reporters=default --reporters=jest-junit
       #
       ## Store artifacts
       #
