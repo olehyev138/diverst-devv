@@ -71,6 +71,16 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
 
     super(object, options)
+    if @scope.nil?
+      def self.scope
+        if Rails.env.test?
+          raise SerializerScopeNotDefinedException
+        else
+          Rollbar.error(SerializerScopeNotDefinedException.new)
+          nil
+        end
+      end
+    end
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
@@ -92,7 +102,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   # then instead return a pseudo policy which will return false on any method call
   def policy
     @policy ||= begin
-                  # User provided policy, or find an instantiate a new policy based on the serialized object
+                  # User provided policy, or find and instantiate a new policy based on the serialized object
                   @instance_options[:policy].presence || Pundit::PolicyFinder.new(object).policy.new(
                         scope&.dig(:current_user),
                         object,

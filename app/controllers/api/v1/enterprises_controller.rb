@@ -56,7 +56,8 @@ class Api::V1::EnterprisesController < DiverstController
 
     enterprise.update(params[:enterprise])
     track_activity(enterprise)
-    render status: 200, json: enterprise
+
+    render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     case e
     when InvalidInputException
