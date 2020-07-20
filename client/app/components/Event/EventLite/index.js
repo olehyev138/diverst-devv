@@ -23,6 +23,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   padding: {
@@ -127,15 +128,12 @@ export function EventLite(props) {
                 <Typography className={classes.dataHeaders}>
                   <DiverstFormattedMessage {...messages.inputs.description} />
                 </Typography>
-                <Typography
-                  style={{
-                    whiteSpace: 'pre-line'
+                <DiverstHTMLEmbedder
+                  html={event.description}
+                  gridProps={{
+                    alignItems: 'flex-start',
                   }}
-                  color='textSecondary'
-                  className={classes.data}
-                >
-                  {event.description}
-                </Typography>
+                />
               </React.Fragment>
             )}
             <Typography className={classes.dataHeaders}>
