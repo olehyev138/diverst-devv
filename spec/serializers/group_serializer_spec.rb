@@ -14,12 +14,29 @@ RSpec.describe GroupSerializer, type: :serializer do
     @group.reload
   end
 
-  it 'returns associations' do
-    serializer = GroupSerializer.new(
+  let :basic_serializer do
+    GroupSerializer.new(
         @group,
         scope: serializer_scopes(create(:user)),
         scope_name: :scope
-      )
+    )
+  end
+
+  let :budget_serializer do
+    GroupSerializer.new(
+        @group,
+        scope: serializer_scopes(create(:user)),
+        scope_name: :scope,
+        budgets: true,
+        with_children: true
+    )
+  end
+
+  include_examples 'permission container', :basic_serializer
+  include_examples 'permission container', :budget_serializer
+
+  it 'returns associations' do
+    serializer = basic_serializer
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(@enterprise.id)
     expect(serializer.serializable_hash[:group_category]).to_not be nil
@@ -33,13 +50,7 @@ RSpec.describe GroupSerializer, type: :serializer do
   end
 
   it 'returns associations for budgets and children' do
-    serializer = GroupSerializer.new(
-        @group,
-        scope: serializer_scopes(create(:user)),
-        scope_name: :scope,
-        budgets: true,
-        with_children: true
-      )
+    serializer = budget_serializer
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(@enterprise.id)
     expect(serializer.serializable_hash[:group_category]).to be nil
