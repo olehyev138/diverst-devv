@@ -62,7 +62,8 @@ export function SponsorCard(props) {
                 <Grid item xs={12}>
                   <DiverstImg
                     data={sponsor.sponsor_media_data}
-                    contentType={sponsor.sponsor_media_content_type}maxWidth='100%'
+                    contentType={sponsor.sponsor_media_content_type}
+                    maxWidth='100%'
                     maxHeight='100px'
                     height='auto'
                   />
