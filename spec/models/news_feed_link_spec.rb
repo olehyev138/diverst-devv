@@ -160,7 +160,7 @@ RSpec.describe NewsFeedLink, type: :model do
       let!(:news_feed_link_segment) { create(:news_feed_link_segment) }
       # create 3 group message for group with 3 news_feed_link
       let!(:group_message) { create_list(:group_message, 3, group_id: group.id) }
-      i = 1
+      segment_id = 1
       before do
         # the first group message shared with group2
         create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
@@ -168,8 +168,8 @@ RSpec.describe NewsFeedLink, type: :model do
           # update news_feed_links created by news_feed_link_segment to group2
           n.update(news_feed_id: group2.id)
           # update news_feed_links created by news_feed_link_segment to segment_id 1,2,3
-          n.update(segment_id: i)
-          i = i + 1
+          n.update(segment_id: segment_id)
+          segment_id = segment_id + 1
         end
       end
 
