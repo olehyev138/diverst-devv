@@ -12,7 +12,7 @@ RSpec.describe CampaignSerializer, type: :serializer do
             io: File.open('spec/fixtures/files/verizon_logo.png'),
             filename: 'file.png'
         }
-    )
+      )
   end
   let(:serializer) { CampaignSerializer.new(campaign, scope: serializer_scopes(create(:user))) }
 

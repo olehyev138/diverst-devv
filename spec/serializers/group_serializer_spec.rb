@@ -19,7 +19,7 @@ RSpec.describe GroupSerializer, type: :serializer do
         @group,
         scope: serializer_scopes(create(:user)),
         scope_name: :scope
-    )
+      )
   end
 
   let :budget_serializer do
@@ -29,7 +29,7 @@ RSpec.describe GroupSerializer, type: :serializer do
         scope_name: :scope,
         budgets: true,
         with_children: true
-    )
+      )
   end
 
   include_examples 'permission container', :basic_serializer
