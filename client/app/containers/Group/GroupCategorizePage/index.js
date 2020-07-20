@@ -15,7 +15,6 @@ import groupReducer from 'containers/Group/reducer';
 import { getGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
 import { groupCategorizeUnmount, groupCategorizeBegin, getGroupBegin } from 'containers/Group/actions';
 import {
-  selectPaginatedSelectGroups,
   selectCategorizeGroup,
   selectGroupIsFormLoading
 } from 'containers/Group/selectors';

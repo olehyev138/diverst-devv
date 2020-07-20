@@ -1,6 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
   attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
-             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :permissions, :available_roles,
+             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type, :permissions, :available_roles,
              :name_with_status
 
   has_many :field_data
@@ -24,6 +24,10 @@ class UserSerializer < ApplicationRecordSerializer
 
   def avatar_data
     AttachmentHelper.attachment_data_string(object.avatar)
+  end
+
+  def avatar_content_type
+    AttachmentHelper.attachment_content_type(object.avatar)
   end
 
   def excluded_keys
