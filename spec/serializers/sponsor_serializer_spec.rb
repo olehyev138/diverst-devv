@@ -2,11 +2,23 @@ require 'rails_helper'
 
 RSpec.describe SponsorSerializer, type: :serializer do
   let(:group) { create(:group) }
-  let(:group_sponsor) { create(:sponsor, sponsorable_id: group.id, sponsorable_type: 'Group', sponsor_media: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }) }
+  let(:group_sponsor) { create(
+      :sponsor,
+      sponsorable_id: group.id,
+      sponsorable_type: 'Group',
+      sponsor_media: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }
+    )
+  }
   let(:group_sponsor_serializer) { SponsorSerializer.new(group_sponsor, scope: serializer_scopes(create(:user))) }
 
   let(:enterprise) { create(:enterprise) }
-  let(:enterprise_sponsor) { create(:sponsor, sponsorable_id: enterprise.id, sponsorable_type: 'Enterprise', sponsor_media: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }) }
+  let(:enterprise_sponsor) { create(
+      :sponsor,
+      sponsorable_id: enterprise.id,
+      sponsorable_type: 'Enterprise',
+      sponsor_media: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }
+    )
+  }
   let(:enterprise_sponsor_serializer) { SponsorSerializer.new(enterprise_sponsor, scope: serializer_scopes(create(:user))) }
 
   include_examples 'permission container', :group_sponsor_serializer
