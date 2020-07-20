@@ -90,13 +90,14 @@ export function PolicyFormInner({
           />
         )}
         label={underToSpace(key)}
+        key={key}
       />
     ));
   }
 
   function policiesRender(policies) {
     return Object.keys(policies).map(key => (
-      <Grid item xs={12} sm={6} md={3}>
+      <Grid item xs={12} sm={6} md={3} key={key}>
         <FormLabel component='legend'>{underToSpace(key)}</FormLabel>
         <FormGroup>
           {policyRender(policies[key])}
@@ -127,7 +128,7 @@ export function PolicyFormInner({
       Manage: 'diversity_manage',
     },
     Branding: {
-      View: 'branding_manage',
+      Manage: 'branding_manage',
     },
     Metrics_Dashboards: {
       View: 'metrics_dashboards_index',
@@ -185,7 +186,7 @@ export function PolicyFormInner({
       Create_Message: 'group_messages_create',
       Create_News_Link: 'news_links_create',
       Create_Social_Link: 'social_links_create',
-      Manage: 'posts_manage',
+      Manage: 'manage_posts',
     },
     Budgets: {
       View: 'groups_budgets_index',
@@ -325,6 +326,7 @@ export function PolicyForm(props) {
     group_posts_index: { default: false },
     mentorship_manage: { default: false },
     auto_archive_manage: { default: false },
+    branding_manage: { default: false },
   });
 
   const [open, setOpen] = React.useState(false);

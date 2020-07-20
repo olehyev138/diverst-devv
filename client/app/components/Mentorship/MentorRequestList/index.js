@@ -163,7 +163,7 @@ export function MentorRequestList(props, context) {
         dataTotal={props.requestsTotal}
         columns={columns}
         actions={actions}
-        my_options={{
+        tableOptions={{
           rowStyle: (rowData) => {
             let colour;
             switch (rowData.status) {

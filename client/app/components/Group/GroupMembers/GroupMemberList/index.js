@@ -358,6 +358,7 @@ export function GroupMemberList(props) {
       <DiverstTable
         title={intl.formatMessage(messages.members)}
         handlePagination={props.handlePagination}
+        handleSearching={props.handleSearching}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}
         dataArray={props.memberList}
@@ -365,7 +366,7 @@ export function GroupMemberList(props) {
         columns={columns}
         rowsPerPage={props.params.count}
         actions={actions}
-        my_options={{
+        tableOptions={{
           exportButton: true,
           exportCsv: (columns, data) => {
             handleDialogOpen();
@@ -423,6 +424,7 @@ GroupMemberList.propTypes = {
   groupId: PropTypes.string,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
+  handleSearching: PropTypes.func,
 
   memberType: PropTypes.string.isRequired,
   MemberTypes: PropTypes.array.isRequired,
