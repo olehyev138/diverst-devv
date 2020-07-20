@@ -180,7 +180,7 @@ export function EventsList(props) {
         <DiverstCalendar
           calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          events={props.events}
+          events={props.calendarEvents}
           joinEventBegin={props.joinEventBegin}
           leaveEventBegin={props.leaveEventBegin}
           calendarDateCallback={props.calendarDateCallback}

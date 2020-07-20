@@ -33,7 +33,7 @@ class Api::V1::GroupsController < DiverstController
   def current_annual_budgets
     base_authorize(klass)
     params[:parent_id] = nil
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetSerializer, with_children: true
+    render status: 200, json: klass.index(self.diverst_request, params.permit!), budgets: true, with_children: true
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -43,7 +43,7 @@ class Api::V1::GroupsController < DiverstController
     base_authorize(item)
     updated_item = item.carryover_annual_budget(self.diverst_request)
     track_activity(updated_item)
-    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
+    render status: 200, json: updated_item, budgets: true
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -54,7 +54,7 @@ class Api::V1::GroupsController < DiverstController
 
     updated_item = item.reset_annual_budget(self.diverst_request)
     track_activity(updated_item)
-    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
+    render status: 200, json: updated_item, budgets: true
   rescue => e
     raise BadRequestException.new(e.message)
   end

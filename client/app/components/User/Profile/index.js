@@ -96,6 +96,7 @@ export function Profile(props) {
                   { user.avatar ? (
                     <DiverstImg
                       data={user.avatar_data}
+                      contentType={user.avatar_content_type}
                       maxWidth='100%'
                       maxHeight='240px'
                     />
