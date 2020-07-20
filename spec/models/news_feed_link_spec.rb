@@ -156,18 +156,27 @@ RSpec.describe NewsFeedLink, type: :model do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:group2) { create(:group, enterprise_id: enterprise.id) }
-      let!(:social_links) { create_list(:social_link, 4, group_id: group.id) }
-
+      # create news_feed_link_segment, meanwhile it creates 3 news_feed_link
+      let!(:news_feed_link_segment) { create(:news_feed_link_segment) }
+      # create 3 group message for group with 3 news_feed_link
+      let!(:group_message) { create_list(:group_message, 3, group_id: group.id) }
+      segment_id = 1
       before do
-        create_list(:group_message, 2, group_id: group.id)
-        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: social_links[0].news_feed_link.id)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[1].news_feed_link.id, segment_id: 1)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[2].news_feed_link.id, segment_id: 2)
-        create(:news_feed_link_segment, news_feed_link_id: social_links[3].news_feed_link.id, segment_id: 2)
+        # the first group message shared with group2
+        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
+        news_feed_link_segment.news_feed_link do |n|
+          # update news_feed_links created by news_feed_link_segment to group2
+          n.update(news_feed_id: group2.id)
+          # update news_feed_links created by news_feed_link_segment to segment_id 1,2,3
+          n.update(segment_id: segment_id)
+          segment_id = segment_id + 1
+        end
       end
 
       it 'returns news_feed_links combined_news_links_with_segments' do
-        expect(NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, [1]).count).to eq(6)
+        # news_feed_link for group(group_messages) and segment_id 1 will be 4
+        expect(NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, [1]).count).to eq(4)
+        # news_feed_link for group2(included one shared) and segment_id 1 will be 4
         expect(NewsFeedLink.combined_news_links_with_segments(group2.news_feed.id, [1]).count).to eq(4)
       end
     end
@@ -213,9 +222,6 @@ RSpec.describe NewsFeedLink, type: :model do
       it 'returns combined news links of a particular news feed' do
         expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(2)
       end
-    end
-
-    describe '.combined_news_links_with_segments' do
     end
   end
 
