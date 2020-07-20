@@ -1,9 +1,9 @@
 class GroupSerializer < ApplicationRecordSerializer
   attributes :id, :permissions
 
-  attributes_with_permission :id, :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :family?
+  attributes_with_permission :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :family?
 
-  attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
+  attributes_with_permission :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                              :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
                              :annual_budget, :annual_budget_leftover, :active,
                              :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
@@ -11,8 +11,8 @@ class GroupSerializer < ApplicationRecordSerializer
                              :current_user_is_member, :banner, :banner_file_name, :banner_data, :banner_content_type,
                              :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
 
-  attributes_with_permission :id, :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
-                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, :permissions, if: :budgets?
+  attributes_with_permission :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
+                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
 
   def budgets?
     instance_options[:budgets]

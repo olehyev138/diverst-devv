@@ -45,6 +45,7 @@ export function EventListItem(props) {
             <Grid item xs='auto'>
               <DiverstImg
                 data={item.picture_data}
+                contentType={item.picture_content_type}
                 maxWidth='90px'
                 maxHeight='90px'
                 minWidth='90px'
