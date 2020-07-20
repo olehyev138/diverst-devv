@@ -12,7 +12,7 @@ class GroupSerializer < ApplicationRecordSerializer
                              :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
 
   attributes_with_permission :id, :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
-                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, :permissions, if: :budgets?
+                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
 
   def budgets?
     instance_options[:budgets]
