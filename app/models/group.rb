@@ -290,6 +290,14 @@ class Group < ApplicationRecord
     true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
   end
 
+  def archive_switch
+    if auto_archive?
+      update(auto_archive: false)
+    else
+      update(auto_archive: true)
+    end
+  end
+
   def layout_values
     {
       'layout_0' => 'Default layout',
