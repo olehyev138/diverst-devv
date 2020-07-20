@@ -20,9 +20,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import Logo from 'components/Shared/Logo/index';
-import { logoutBegin } from 'containers/Shared/App/actions';
+import { logoutBegin, toggleAdminDrawer } from 'containers/Shared/App/actions';
 
-import { selectEnterprise, selectUser, selectPermissions } from 'containers/Shared/App/selectors';
+import {
+  selectEnterprise,
+  selectUser,
+  selectPermissions,
+} from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -100,12 +104,7 @@ export function ApplicationHeader(props) {
 
   const isAdmin = !!useRouteMatch(ROUTES.admin.pathPrefix);
 
-  const [state, setState] = useState({
-    drawerOpen: props.drawerOpen,
-    menuAnchor: null,
-  });
-
-  const { menuAnchor } = state;
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const isMenuOpen = Boolean(menuAnchor);
 
@@ -113,11 +112,11 @@ export function ApplicationHeader(props) {
 
   const logoutBegin = () => props.logoutBegin();
 
-  const handleProfileMenuOpen = event => setState({ menuAnchor: event.currentTarget });
+  const handleProfileMenuOpen = event => setMenuAnchor(event.currentTarget);
 
-  const handleProfileMenuClose = () => setState({ menuAnchor: null });
+  const handleProfileMenuClose = () => setMenuAnchor(null);
 
-  const handleDrawerToggle = () => setState(state => ({ drawerOpen: !state.drawerOpen }), () => (props.drawerToggleCallback(state.drawerOpen)));
+  const handleDrawerToggle = () => props.toggleAdminDrawer();
 
   const renderMenu = (
     <Menu
@@ -252,6 +251,7 @@ export function ApplicationHeader(props) {
                     <Avatar>
                       <DiverstImg
                         data={user.avatar_data}
+                        contentType={user.avatar_content_type}
                         maxWidth='100%'
                         maxHeight='240px'
                       />
@@ -274,16 +274,17 @@ ApplicationHeader.propTypes = {
   user: PropTypes.object,
   group: PropTypes.object,
   permissions: PropTypes.object,
-  drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
   logoutBegin: PropTypes.func,
   handleVisitAdmin: PropTypes.func,
   handleVisitHome: PropTypes.func,
+  toggleAdminDrawer: PropTypes.func,
 };
 
 const mapDispatchToProps = {
   logoutBegin,
+  toggleAdminDrawer,
 };
 
 const mapStateToProps = createStructuredSelector({

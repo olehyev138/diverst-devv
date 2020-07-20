@@ -22,6 +22,7 @@ export function SharedOwner(props) {
               { activity.owner.avatar ? (
                 <DiverstImg
                   data={activity.owner.avatar_data}
+                  contentType={activity.owner.avatar_content_type}
                   maxWidth='100%'
                   maxHeight='240px'
                 />

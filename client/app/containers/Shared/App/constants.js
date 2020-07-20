@@ -18,3 +18,5 @@ export const SET_USER_DATA = 'app/App/SET_USER_DATA';
 
 export const SSO_LOGIN_BEGIN = 'app/App/SSO_LOGIN_BEGIN';
 export const SSO_LINK_BEGIN = 'app/App/SSO_LINK_BEGIN';
+
+export const TOGGLE_ADMIN_DRAWER = 'app/App/TOGGLE_ADMIN_DRAWER';

@@ -81,10 +81,16 @@ const selectFindEnterpriseError = () => createSelector(
   globalState => globalState.findEnterpriseError
 );
 
+const selectAdminDrawerOpen = () => createSelector(
+  selectGlobal,
+  globalState => globalState.adminDrawerOpen
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
   selectUser, selectIsFetchingUserData, selectFetchUserDataError,
   selectCustomText, selectMentoringInterests, selectMentoringTypes,
-  selectFindEnterpriseError, selectPermissions, selectEnterprisePrivacyMessage
+  selectFindEnterpriseError, selectPermissions, selectEnterprisePrivacyMessage,
+  selectAdminDrawerOpen,
 };

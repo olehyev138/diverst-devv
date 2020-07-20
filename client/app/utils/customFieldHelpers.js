@@ -83,7 +83,7 @@ function deserializeDatum(fieldDatum) {
       /* TODO: change this to use Moment.js */
       return new Date(parsed).toISOString().split('T')[0];
     default:
-      return datum;
+      return datum || '';
   }
 }
 

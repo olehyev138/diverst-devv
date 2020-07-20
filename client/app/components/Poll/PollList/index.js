@@ -137,6 +137,7 @@ export function PollList(props, context) {
           <DiverstTable
             title={intl.formatMessage(messages.list.title)}
             handlePagination={props.handlePagination}
+            handleSearching={props.handleSearching}
             onOrderChange={handleOrderChange}
             isLoading={props.isLoading}
             rowsPerPage={10}
@@ -161,6 +162,7 @@ PollList.propTypes = {
   deletePollBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
+  handleSearching: PropTypes.func,
   handlePollEdit: PropTypes.func,
   handlePollShow: PropTypes.func,
   handleChangeScope: PropTypes.func,
