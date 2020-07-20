@@ -186,7 +186,7 @@ export function LogList(props, context) {
             dataArray={props.logs}
             dataTotal={props.logTotal}
             columns={columns}
-            my_options={{
+            tableOptions={{
               exportButton: true,
               exportCsv: (columns, data) => {
                 props.exportLogsBegin();

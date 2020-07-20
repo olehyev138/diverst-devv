@@ -101,7 +101,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
         dataArray={initiatives || []}
         dataTotal={initiativeCount || 0}
         columns={columns}
-        my_options={{
+        tableOptions={{
           search: false
         }}
       />
