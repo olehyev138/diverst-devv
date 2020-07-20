@@ -47,8 +47,11 @@ import {
   UPDATE_GROUP_POSITION_SUCCESS,
   UPDATE_GROUP_POSITION_ERROR,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR,
   JOIN_SUBGROUPS_BEGIN,
+  JOIN_SUBGROUPS_ERROR,
+  GET_COLORS_BEGIN,
+  GET_COLORS_SUCCESS,
+  GET_COLORS_ERROR,
 
 } from './constants';
 
@@ -57,6 +60,7 @@ export const initialState = {
   isFormLoading: true,
   isCommitting: false,
   groupList: [],
+  groupColorList: [],
   groupTotal: null,
   currentGroup: null,
   hasChanged: false,
@@ -66,6 +70,7 @@ export const initialState = {
 function groupsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_GROUP_BEGIN:
         draft.isFormLoading = true;
@@ -81,6 +86,7 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_BEGIN:
+      case GET_COLORS_BEGIN:
       case GET_ANNUAL_BUDGETS_BEGIN:
         draft.isLoading = true;
         break;
@@ -91,13 +97,19 @@ function groupsReducer(state = initialState, action) {
         draft.isLoading = false;
         break;
 
+      case GET_COLORS_SUCCESS:
+        draft.groupColorList = action.payload.items;
+        draft.isLoading = false;
+        break;
+
       case GET_ANNUAL_BUDGETS_SUCCESS:
-        draft.groupList = action.payload.items;
+        draft.groupList = flattenChildrenGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
 
       case GET_GROUPS_ERROR:
+      case GET_COLORS_ERROR:
       case GET_ANNUAL_BUDGETS_ERROR:
         draft.isLoading = false;
         break;
@@ -170,10 +182,6 @@ function formatGroups(groups) {
 
 function flattenChildrenGroups(groups) {
   /* eslint-disable no-return-assign */
-
-  /* Format groups to hash by id:
-   *   { <id>: { name: group_01, ... } }
-   */
   return groups.reduce((map, group) => {
     map.push(group);
     const con = map.concat(flattenChildrenGroups(group.children || []));

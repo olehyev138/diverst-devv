@@ -1,10 +1,11 @@
 import React, {
-  memo, useEffect, useState, useContext
+  memo, useEffect
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,7 +13,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/GlobalSettings/Email/Event/reducer';
 import saga from 'containers/GlobalSettings/Email/Event/saga';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectFormEvent, selectIsCommitting, selectIsFetchingEvent } from 'containers/GlobalSettings/Email/Event/selectors';
@@ -34,10 +34,10 @@ export function EventEditPage(props) {
   useInjectReducer({ key: 'mailEvents', reducer });
   useInjectSaga({ key: 'mailEvents', saga });
 
-  const rs = new RouteService(useContext);
+  const { event_id: eventId } = useParams();
   const links = {
-    eventsIndex: ROUTES.admin.system.globalSettings.mailEvents.index.path(),
-    eventEdit: ROUTES.admin.system.globalSettings.mailEvents.edit.path(rs.params('event_id')),
+    eventsIndex: ROUTES.admin.system.globalSettings.emails.events.index.path(),
+    eventEdit: ROUTES.admin.system.globalSettings.emails.events.edit.path(eventId),
   };
 
   const { currentEvent, intl } = props;
@@ -52,7 +52,6 @@ export function EventEditPage(props) {
   };
 
   useEffect(() => {
-    const eventId = rs.params('event_id');
     props.getEventBegin({ id: eventId });
 
     return () => props.eventsUnmount();
@@ -110,6 +109,6 @@ export default compose(
 )(Conditional(
   EventEditPage,
   ['permissions.emails_manage'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.globalSettings.email.event.editPage
 ));

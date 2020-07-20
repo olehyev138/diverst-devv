@@ -1,6 +1,6 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import { compose } from 'redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -13,8 +13,6 @@ import { findEnterpriseBegin } from 'containers/Shared/App/actions';
 
 import { selectEnterprise, selectFindEnterpriseError } from 'containers/Shared/App/selectors';
 
-import ApplicationLayout from '../ApplicationLayout';
-
 import AuthService from 'utils/authService';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -22,9 +20,15 @@ import messages from 'containers/Shared/App/messages';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
+import { renderChildrenWithProps } from 'utils/componentHelpers';
+
 const styles = theme => ({
   container: {
     height: '100%',
+  },
+  containerWithColor: {
+    height: '100%',
+    backgroundColor: theme.palette.primary.main,
   },
   content: {
     height: '100%',
@@ -42,72 +46,77 @@ const styles = theme => ({
   },
 });
 
-const SessionLayout = ({ component: Component, ...props }) => {
-  const { classes, ...other } = props;
+const SessionLayout = (props) => {
+  const { classes, children, enterprise, noRedirect, maxWidth, ...other } = props;
+
+  const location = useLocation();
 
   const authenticated = !!AuthService.getJwt();
 
   useEffect(() => {
-    if (authenticated) return;
+    if (authenticated && !noRedirect) return;
 
-    const query = new URLSearchParams(props.location.search);
+    const query = new URLSearchParams(location.search);
     const enterpriseId = query.get('enterpriseId');
 
     props.findEnterpriseBegin(enterpriseId ? { enterprise_id: enterpriseId } : {});
   }, []);
 
-  if (authenticated) return <Redirect to={ROUTES.user.home.path()} />;
+  if (authenticated && !noRedirect) return <Redirect to={ROUTES.user.home.path()} />;
+
+  const container = noRedirect ? classes.containerWithColor : classes.container;
 
   return (
-    <ApplicationLayout
-      {...other}
-      component={matchProps => (
-        <React.Fragment>
-          <Backdrop open={!props.enterprise}>
-            {!props.findEnterpriseError && (
-              <CircularProgress
-                color='secondary'
-                size={60}
-                thickness={1}
-              />
-            )}
-            {props.findEnterpriseError && (
-              <Fade in appear>
-                <Card elevation={24}>
-                  <CardContent className={classes.connectFailedCardContent}>
-                    <ConnectionFailedIcon color='primary' className={classes.connectFailedIcon} />
-                    <br />
-                    <br />
-                    <Typography variant='h6' color='primary'>
-                      <DiverstFormattedMessage {...messages.errors.findEnterprise} />
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Fade>
-            )}
-          </Backdrop>
-          {props.enterprise && (
-            <Container maxWidth='sm' className={classes.container}>
-              <Fade in appear>
-                <div className={classes.content}>
-                  <Component {...other} enterprise={props.enterprise} />
-                </div>
-              </Fade>
-            </Container>
-          )}
-        </React.Fragment>
+    <React.Fragment>
+      <Backdrop open={!props.enterprise}>
+        {!props.findEnterpriseError && (
+          <CircularProgress
+            color='secondary'
+            size={60}
+            thickness={1}
+          />
+        )}
+        {props.findEnterpriseError && (
+          <Fade in appear>
+            <Card elevation={24}>
+              <CardContent className={classes.connectFailedCardContent}>
+                <ConnectionFailedIcon color='primary' className={classes.connectFailedIcon} />
+                <br />
+                <br />
+                <Typography variant='h6' color='primary'>
+                  <DiverstFormattedMessage {...messages.errors.findEnterprise} />
+                </Typography>
+              </CardContent>
+            </Card>
+          </Fade>
+        )}
+      </Backdrop>
+      {props.enterprise && (
+        <Container maxWidth={maxWidth} className={container}>
+          <Fade in appear>
+            <div className={classes.content}>
+              {renderChildrenWithProps(children, { ...other, enterprise })}
+            </div>
+          </Fade>
+        </Container>
       )}
-    />
+    </React.Fragment>
   );
 };
 
 SessionLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
+  children: PropTypes.any,
   enterprise: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   location: PropTypes.object,
   findEnterpriseError: PropTypes.bool,
+  noRedirect: PropTypes.bool,
+  maxWidth: PropTypes.string,
+};
+
+SessionLayout.defaultProps = {
+  maxWidth: 'sm',
 };
 
 const mapStateToProps = createStructuredSelector({

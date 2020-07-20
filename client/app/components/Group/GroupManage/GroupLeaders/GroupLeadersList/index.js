@@ -96,7 +96,7 @@ export function GroupLeadersList(props) {
 }
 
 GroupLeadersList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   group: PropTypes.object,
   deleteGroupLeaderBegin: PropTypes.func,

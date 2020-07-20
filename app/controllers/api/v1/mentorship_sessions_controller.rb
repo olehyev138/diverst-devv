@@ -1,8 +1,7 @@
 class Api::V1::MentorshipSessionsController < DiverstController
   def accept
-    item = get_item(params[:user_id], params[:session_id])
+    item = get_item(params[:mentorship_session][:user_id], params[:mentorship_session][:mentoring_session_id])
     base_authorize(item)
-
     render status: 200, json: item.accept!
   rescue => e
     case e
@@ -14,9 +13,8 @@ class Api::V1::MentorshipSessionsController < DiverstController
   end
 
   def decline
-    item = get_item(params[:user_id], params[:session_id])
+    item = get_item(params[:mentorship_session][:user_id], params[:mentorship_session][:mentoring_session_id])
     base_authorize(item)
-
     render status: 200, json: item.decline!
   rescue => e
     case e

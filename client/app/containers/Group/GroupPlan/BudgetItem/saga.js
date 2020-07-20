@@ -48,7 +48,7 @@ export function* closeBudgetItems(action) {
   try {
     const response = yield call(api.budgetItems.closeBudget.bind(api.budgetItems), action.payload.id);
 
-    yield put(closeBudgetItemsSuccess({}));
+    yield put(closeBudgetItemsSuccess());
     yield put(showSnackbar({ message: 'Successfully closed budget item', options: { variant: 'success' } }));
   } catch (err) {
     yield put(closeBudgetItemsError(err));

@@ -68,7 +68,6 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
               disabled={props.isCommitting}
               value={values.group_ids}
               options={props.groups}
-              onMenuOpen={groupSelectAction}
               onChange={value => setFieldValue('group_ids', value)}
               onInputChange={value => groupSelectAction(value)}
               onBlur={() => setFieldTouched('group_ids', true)}
@@ -84,7 +83,6 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
               disabled={props.isCommitting}
               value={values.segment_ids}
               options={props.segments}
-              onMenuOpen={segmentSelectAction}
               onChange={value => setFieldValue('segment_ids', value)}
               onInputChange={value => groupSelectAction(value)}
               onBlur={() => setFieldTouched('segment_ids', true)}

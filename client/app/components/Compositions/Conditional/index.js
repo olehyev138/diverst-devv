@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { push, goBack } from 'connected-react-router';
+import { useParams, useLocation } from 'react-router-dom';
 import dig from 'object-dig';
 import NotAuthorizedPage from 'containers/Shared/NotAuthorizedPage';
 
 import PropTypes from 'prop-types';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-import RouteService from 'utils/routeHelpers';
 import { injectIntl, intlShape } from 'react-intl';
-import messages from 'containers/Shared/Permissions/messages';
 import { redirectAction } from 'utils/reduxPushHelper';
 import config from 'app.config';
 
@@ -57,11 +54,10 @@ export default function Conditional(
   const WrappedComponent = (props) => {
     const [first, setFirst] = useState(true);
     const show = valid(props, conditions, reducer);
-    const rs = props.computedMatch
-      ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
-      : new RouteService(useContext);
+    const params = useParams();
+    const location = useLocation();
 
-    const path = redirect && redirect(props, rs);
+    const path = redirect && redirect(props, params, location);
 
     useEffect(() => {
       if (!show && wait && first)
@@ -87,7 +83,7 @@ export default function Conditional(
   };
 
   WrappedComponent.propTypes = {
-    intl: intlShape,
+    intl: intlShape.isRequired,
     showSnackbar: PropTypes.func,
     redirectAction: PropTypes.func,
     computedMatch: PropTypes.object,
@@ -100,7 +96,7 @@ export default function Conditional(
   };
 
   const withConnect = connect(
-    createStructuredSelector({}),
+    undefined,
     mapDispatchToProps,
   );
 

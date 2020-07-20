@@ -41,6 +41,8 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
   const handleDialogClose = () => setImportGroup(0);
   const handleDialogOpen = id => setImportGroup(id);
 
+  const children = (group.children ? group.children : []);
+
   const cardContent = (
     <CardContent>
       <Grid container spacing={2} alignItems='center'>
@@ -50,6 +52,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               <Grid item xs='auto'>
                 <DiverstImg
                   data={group.logo_data}
+                  contentType={group.logo_content_type}
                   maxWidth='70px'
                   maxHeight='70px'
                   minWidth='70px'
@@ -150,7 +153,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   <DiverstFormattedMessage {...messages.delete} />
                 </Button>
               </Permission>
-              {group.children.length > 0 && (
+              {children.length > 0 && (
                 <React.Fragment>
                   <Button
                     size='small'
@@ -221,7 +224,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   <DiverstFormattedMessage {...messages.delete} />
                 </Button>
               </Permission>
-              {group.children.length > 0 && (
+              {children.length > 0 && (
                 <React.Fragment>
                   <Button
                     size='small'
@@ -263,7 +266,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
       <Collapse in={expandedGroups[`${group.id}`]}>
         <Box mt={1} />
         <Grid container spacing={2} justify='flex-end'>
-          {group.children && group.children.map((childGroup, i) => (
+          {children && children.map((childGroup, i) => (
             /* eslint-disable-next-line react/jsx-wrap-multilines */
             <Grid item key={childGroup.id} xs={12}>
               <Card className={classes.childGroupCard}>
@@ -275,6 +278,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                           <Grid item xs='auto'>
                             <DiverstImg
                               data={childGroup.logo_data}
+                              contentType={childGroup.logo_content_type}
                               maxWidth='60px'
                               maxHeight='60px'
                               minWidth='60px'
@@ -354,5 +358,5 @@ DraggableGroupAdminCard.propTypes = {
   classes: PropTypes.object,
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };

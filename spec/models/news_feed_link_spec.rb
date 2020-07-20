@@ -13,11 +13,13 @@ RSpec.describe NewsFeedLink, type: :model do
     it { expect(news_feed_link).to have_many(:news_feed_link_segments).dependent(:destroy) }
     it { expect(news_feed_link).to have_many(:segments).through(:news_feed_link_segments) }
     it { expect(news_feed_link).to have_many(:shared_news_feed_links).class_name('SharedNewsFeedLink').dependent(:destroy) }
-    it { expect(news_feed_link).to have_many(:shared_news_feeds).through(:shared_news_feed_links) }
+    it { expect(news_feed_link).to have_many(:shared_news_feeds).through(:shared_news_feed_links).source(:news_feed) }
+    it { expect(news_feed_link).to have_many(:shared_groups).through(:shared_news_feeds).source(:group) }
     it { expect(news_feed_link).to have_many(:views).dependent(:destroy) }
     it { expect(news_feed_link).to have_many(:likes).dependent(:destroy) }
-    it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
-    it { expect(news_feed_link).to validate_presence_of(:news_feed_id) }
+    it { expect(news_feed_link).to have_many(:news_feed_link_tags) }
+    it { expect(news_feed_link).to have_many(:news_tags).through(:news_feed_link_tags) }
+    it { expect(news_feed_link).to have_one(:group).through(:news_feed) }
   end
 
   describe 'test scopes' do
@@ -31,7 +33,7 @@ RSpec.describe NewsFeedLink, type: :model do
       end
     end
 
-    describe '.not_approved' do
+    describe '.not_approved & .pending' do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:group2) { create(:group, enterprise_id: enterprise.id) }
@@ -46,8 +48,154 @@ RSpec.describe NewsFeedLink, type: :model do
         expect(NewsFeedLink.not_approved.count).to eq(6)
       end
 
+      it 'returns pending news_feed_links' do
+        expect(NewsFeedLink.pending.count).to eq(6)
+      end
+
       it 'returns not_approved for particular feed news_feed_links' do
         expect(NewsFeedLink.not_approved(group.news_feed.id).count).to eq(3)
+      end
+    end
+
+    describe '.active' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before { create_list(:group_message, 2, group_id: group.id) }
+
+      it 'returns active news_feed_links' do
+        expect(NewsFeedLink.active.count).to eq(2)
+      end
+    end
+
+    describe '.select_source' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      let!(:group2) { create(:group, enterprise_id: enterprise.id) }
+      let!(:social_link) { create(:social_link, group_id: group.id) }
+
+      before do
+        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: social_link.news_feed_link.id)
+        create(:group_message, group_id: group.id)
+      end
+
+      it 'returns news_feed_links select_source self' do
+        expect(NewsFeedLink.select_source(group.news_feed.id)[0]['source']).to eq('self')
+        expect(NewsFeedLink.select_source(group.news_feed.id)[1]['source']).to eq('self')
+      end
+      it 'returns news_feed_links select_source shared' do
+        expect(NewsFeedLink.select_source(group2.news_feed.id)[0]['source']).to eq('shared')
+      end
+      it 'returns news_feed_links select_source unknown' do
+        expect(NewsFeedLink.select_source(group2.news_feed.id)[1]['source']).to eq('unknown')
+      end
+    end
+
+    describe '.include_posts' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create(:group_message, group_id: group.id)
+        create(:news_link, group_id: group.id)
+        create(:social_link, group_id: group.id)
+      end
+
+      it 'returns news_feed_links filter_posts' do
+        expect(NewsFeedLink.include_posts.count).to eq(3)
+      end
+    end
+
+    describe '.not_archived' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before { create_list(:group_message, 2, group_id: group.id) }
+
+      it 'returns not_archived news_feed_links' do
+        expect(NewsFeedLink.not_archived.count).to eq(2)
+      end
+    end
+
+    describe '.archived' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create_list(:group_message, 2, group_id: group.id)
+        NewsFeedLink.update_all(archived_at: Time.now)
+      end
+
+      it 'returns archived news_feed_links' do
+        expect(NewsFeedLink.archived.count).to eq(2)
+      end
+    end
+
+    describe '.not_pinned' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create_list(:group_message, 2, group_id: group.id)
+      end
+
+      it 'returns not pinned news_feed_links' do
+        expect(NewsFeedLink.not_pinned.count).to eq(2)
+      end
+    end
+
+    describe '.pinned' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create_list(:group_message, 2, group_id: group.id)
+        NewsFeedLink.update_all(is_pinned: true)
+      end
+
+      it 'returns pinned news_feed_links' do
+        expect(NewsFeedLink.pinned.count).to eq(2)
+      end
+    end
+
+    describe '.combined_news_links_with_segments' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      let!(:group2) { create(:group, enterprise_id: enterprise.id) }
+      # create news_feed_link_segment, meanwhile it creates 3 news_feed_link
+      let!(:news_feed_link_segment) { create(:news_feed_link_segment) }
+      # create 3 group message for group with 3 news_feed_link
+      let!(:group_message) { create_list(:group_message, 3, group_id: group.id) }
+      segment_id = 1
+      before do
+        # the first group message shared with group2
+        create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
+        news_feed_link_segment.news_feed_link do |n|
+          # update news_feed_links created by news_feed_link_segment to group2
+          n.update(news_feed_id: group2.id)
+          # update news_feed_links created by news_feed_link_segment to segment_id 1,2,3
+          n.update(segment_id: segment_id)
+          segment_id = segment_id + 1
+        end
+      end
+
+      it 'returns news_feed_links combined_news_links_with_segments' do
+        # news_feed_link for group(group_messages) and segment_id 1 will be 4
+        expect(NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, [1]).count).to eq(4)
+        # news_feed_link for group2(included one shared) and segment_id 1 will be 4
+        expect(NewsFeedLink.combined_news_links_with_segments(group2.news_feed.id, [1]).count).to eq(4)
+      end
+    end
+
+    describe '.filter_posts' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create(:group_message, group_id: group.id)
+        create(:news_link, group_id: group.id)
+        create(:social_link, group_id: group.id)
+      end
+
+      it 'returns news_feed_links filter_posts' do
+        expect(NewsFeedLink.filter_posts(social_enabled: false).count).to eq(2)
+      end
+
+      it 'returns news_feed_links filter_posts social enabled' do
+        expect(NewsFeedLink.filter_posts(social_enabled: true).count).to eq(3)
       end
     end
 

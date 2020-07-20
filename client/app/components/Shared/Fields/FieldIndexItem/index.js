@@ -101,7 +101,7 @@ export function FieldList(props, context) {
 }
 
 FieldList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   field: PropTypes.object,
   isLoading: PropTypes.bool,

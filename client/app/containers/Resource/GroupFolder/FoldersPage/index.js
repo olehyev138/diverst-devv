@@ -1,5 +1,5 @@
 import React, {
-  memo, useContext, useEffect, useState
+  memo, useEffect, useState
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,22 +10,22 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading } from 'containers/Resource/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
-import RouteService from 'utils/routeHelpers';
-
 import FoldersList from 'components/Resource/Folder/FoldersList';
 import {
-  getFolderEditPath, getFolderIndexPath,
+  getFolderEditPath,
   getFolderNewPath,
   getFolderShowPath
 } from 'utils/resourceHelpers';
+
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import Folder from 'components/Resource/Folder/Folder';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
@@ -39,13 +39,14 @@ export function FoldersPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const rs = new RouteService(useContext);
+  const { group_id: groupId } = useParams();
+  const path = useLocation().pathname;
 
-  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
+  const type = path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
     folderShow: folder => getFolderShowPath(folder),
-    folderNew: getFolderNewPath(type, rs.params('group_id')),
+    folderNew: getFolderNewPath(type, groupId),
     folderEdit: folder => getFolderEditPath(folder),
   };
 
@@ -92,16 +93,19 @@ export function FoldersPage(props) {
   };
 
   return (
-    <FoldersList
-      folders={props.folders}
-      foldersTotal={props.foldersTotal}
-      deleteFolderBegin={props.deleteFolderBegin}
-      handlePagination={handlePagination}
-      isLoading={props.isLoading}
-      links={links}
-      type='group'
-      currentGroup={props.currentGroup}
-    />
+    <React.Fragment>
+      <DiverstBreadcrumbs />
+      <FoldersList
+        folders={props.folders}
+        foldersTotal={props.foldersTotal}
+        deleteFolderBegin={props.deleteFolderBegin}
+        handlePagination={handlePagination}
+        isLoading={props.isLoading}
+        links={links}
+        type='group'
+        currentGroup={props.currentGroup}
+      />
+    </React.Fragment>
   );
 }
 
@@ -145,6 +149,6 @@ export default compose(
 )(Conditional(
   FoldersPage,
   ['currentGroup.permissions.resources_view?'],
-  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.home.path(params.group_id),
   permissionMessages.resource.groupFolder.foldersPage
 ));

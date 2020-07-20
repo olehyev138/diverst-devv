@@ -3,7 +3,7 @@
 #     - Blacklist:
 #         The quickest method of implementing a serializer.
 #
-#         Simply creating the serializer class with no content will default to serializing all the fields of a model.
+#         Simply creating the serializer class with no content will serialize nothing
 #
 #         Define an `excluded_keys` method in your class that returns an array of symbols representing the keys
 #         of the fields you want to exclude. Ex: `[:enterprise_id]`
@@ -21,35 +21,40 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
-  def self.permission_module
-    @@module ||= begin
-                   temp = Module.new do
-                     def self.attr_conditions
-                       @@attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+  def self.inherited(subclass)
+    super
+    class << subclass
+      def permission_module
+        @module ||= begin
+                       temp = Module.new do
+                         def self.attr_conditions
+                           @attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+                         end
+                       end
+                       prepend(temp)
+                       temp
                      end
-                   end
-                   self.prepend(temp)
-                   temp
-                 end
-  end
+      end
 
-  def self.attributes_with_permission(*attribute_names, **options)
-    raise RuntimeError.new('No Attributes') if attribute_names.blank?
+      def attributes_with_permission(*attribute_names, **options)
+        raise RuntimeError.new('No Attributes') if attribute_names.blank?
 
-    attribute_names.each do |attr|
-      self.attributes attr unless _attributes.include? attr
-      ifs = permission_module.attr_conditions[attr] << options[:if]
+        attribute_names.each do |attr|
+          attributes attr unless _attributes.include? attr
+          ifs = permission_module.attr_conditions[attr] << options[:if]
 
-      unless permission_module.instance_methods(false).include? attr
-        permission_module.define_method(attr) do
-          if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
-            if defined?(super)
-              super() rescue nil
-            else
-              object&.send(attr) rescue nil
+          unless permission_module.instance_methods(false).include? attr
+            permission_module.define_method(attr) do
+              if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+                if defined?(super)
+                  super() rescue nil
+                else
+                  object&.send(attr)
+                end
+              else
+                nil
+              end
             end
-          else
-            nil
           end
         end
       end
@@ -66,6 +71,16 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
 
     super(object, options)
+    if @scope.nil?
+      def self.scope
+        if Rails.env.test?
+          raise SerializerScopeNotDefinedException
+        else
+          Rollbar.error(SerializerScopeNotDefinedException.new)
+          nil
+        end
+      end
+    end
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
@@ -79,15 +94,28 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     false
   end
 
+  # Finds the policy for a particular object
+  # If a policy is provided, use that
+  # Otherwise, find the policy based on the object being serialized
+  #
+  # If a policy can't be found, or if current user isn't defined in the scope
+  # then instead return a pseudo policy which will return false on any method call
   def policy
-    @policy ||= (
-    @instance_options[:policy] ||
-            Pundit::PolicyFinder.new(object).policy&.new(
-                scope&.dig(:current_user) || (Rails.env.development? && @@test_user ||= User.first),
-                object,
-                scope&.dig(:params) || @instance_options[:params] || {}
-              )
-  )
+    @policy ||= begin
+                  # Use provided Policy or Find and instantiate Policy based on the serialized object
+                  @instance_options[:policy].presence || Pundit::PolicyFinder.new(object).policy.new(
+                        scope&.dig(:current_user),
+                        object,
+                        scope&.dig(:params) || @instance_options[:params] || {}
+                      )
+                rescue Pundit::NotAuthorizedError, NoMethodError
+                  # If the user isn't defined, return the pseudo policy
+                  Class.new do
+                    def method_missing(m, *args, &block)
+                      false
+                    end
+                  end.new
+                end
   end
 
   def policies

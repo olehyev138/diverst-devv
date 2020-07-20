@@ -20,16 +20,22 @@ import { selectCustomText } from 'containers/Shared/App/selectors';
 import GlobalLanguageProvider from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import LocaleService from 'utils/localeService';
+import { getLocaleObjectFromLocaleString, getLanguageStringFromLocaleObject, getLocaleStringFromLocaleObject } from 'utils/localeHelpers';
 
 import { Settings, DateTime } from 'luxon';
 
 export function LanguageProvider(props) {
-  const messages = { ...props.messages[props.locale] };
-
+  // Gets the browser locale
   const defaultBrowserLocale = DateTime.local() && DateTime.local().resolvedLocaleOpts() && DateTime.local().resolvedLocaleOpts().locale;
-  const userLocale = LocaleService.getLocale() || defaultBrowserLocale || 'en';
+  // Get the Intl.Locale object using the current set locale, the browser locale if the locale isn't set, or falls back to en-US
+  const userLocaleObject = getLocaleObjectFromLocaleString(LocaleService.getLocale() || defaultBrowserLocale || 'en-US');
+  // Get the language string (Ex. 'en') from the locale object
+  const userLanguage = getLanguageStringFromLocaleObject(userLocaleObject);
+  // Get the locale string (Ex. 'en-US') from the locale object
+  const userLocale = getLocaleStringFromLocaleObject(userLocaleObject);
 
-  // If no locale has been manually set, default to the browser locale
+  const messages = { ...props.messages[userLanguage] };
+
   useEffect(() => {
     // Set user locale
     if (userLocale && props.changeLocale) {
@@ -45,8 +51,8 @@ export function LanguageProvider(props) {
 
   return (
     <IntlProvider
-      locale={props.locale}
-      key={props.locale}
+      locale={userLanguage}
+      key={userLanguage}
       messages={messages}
     >
       <GlobalLanguageProvider>

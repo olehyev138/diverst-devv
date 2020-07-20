@@ -123,9 +123,10 @@ export function AnnualBudgetList(props, context) {
             title={intl.formatMessage(listMessages.title)}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
+            handleSearching={props.handleSearching}
             isLoading={props.isFetchingAnnualBudgets}
             rowsPerPage={10}
-            dataArray={Object.values(props.annualBudgets)}
+            dataArray={props.annualBudgets}
             dataTotal={props.annualBudgetTotal}
             columns={columns}
             actions={actions}
@@ -146,6 +147,7 @@ AnnualBudgetList.propTypes = {
   deleteAnnualBudgetBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
+  handleSearching: PropTypes.func,
   handleVisitAnnualBudgetEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
   carryBudget: PropTypes.func,

@@ -28,6 +28,7 @@ import {
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import GroupSelector from 'components/Shared/GroupSelector';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -36,7 +37,8 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   const childrenSelectAction = (searchKey = '') => {
     props.getGroupsSuccess({ items: [] });
     props.getGroupsBegin({
@@ -127,39 +129,33 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
-              component={Select}
-              fullWidth
-              id='child_ids'
-              name='child_ids'
+            <GroupSelector
+              groupField='child_ids'
+
+              dialogSelector
+              dialogNoChildren
+              forceReload
+
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
-              margin='normal'
               disabled={props.isCommitting}
-              value={values.child_ids}
-              options={props.selectGroups}
-              onMenuOpen={childrenSelectAction}
-              onChange={value => setFieldValue('child_ids', value)}
-              onInputChange={value => childrenSelectAction(value)}
-              onBlur={() => setFieldTouched('child_ids', true)}
+              queryScopes={['all_parents', 'no_children']}
+              {...formikProps}
             />
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
-              component={Select}
-              fullWidth
-              id='parent_id'
-              name='parent_id'
+            <GroupSelector
+              groupField='parent_id'
+
+              dialogSelector
+              dialogNoChildren
+              forceReload
+
               label={<DiverstFormattedMessage {...messages.parent} />}
-              margin='normal'
               disabled={props.isCommitting}
-              value={values.parent_id}
-              options={props.selectGroups}
-              onMenuOpen={parentSelectAction}
-              onChange={value => setFieldValue('parent_id', value)}
-              onInputChange={value => parentSelectAction(value)}
-              onBlur={() => setFieldTouched('parent_id', true)}
+              queryScopes={['all_parents']}
+              {...formikProps}
             />
           </CardContent>
           <Divider />
@@ -202,7 +198,7 @@ export function GroupForm(props) {
         props.groupAction(mapFields(values, ['child_ids', 'parent_id']));
       }}
     >
-      {formikProps => <GroupFormInner {...props} {...formikProps} />}
+      {formikProps => <GroupFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -216,18 +212,20 @@ GroupForm.propTypes = {
 };
 
 GroupFormInner.propTypes = {
+  formikProps: PropTypes.shape({
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleBlur: PropTypes.func,
+    values: PropTypes.object,
+    setFieldValue: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+  }),
   edit: PropTypes.bool,
   group: PropTypes.object,
   classes: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
   buttonText: PropTypes.string,
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   getGroupsSuccess: PropTypes.func,

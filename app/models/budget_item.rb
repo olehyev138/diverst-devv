@@ -13,8 +13,6 @@ class BudgetItem < ApplicationRecord
   validates_presence_of :budget
   validates :title, presence: true, length: { minimum: 2 }
   validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: 'number of digits must not exceed 6' }
-  validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount },
-                               allow_nil: true, unless: -> { estimated_amount.blank? }
 
   scope :available, -> { joins(:budget).where(is_done: false).where('budgets.is_approved = TRUE') }
   scope :allocated, -> { where(is_done: true) }

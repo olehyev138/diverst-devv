@@ -1,10 +1,11 @@
 import React, {
-  memo, useEffect, useContext, useState
+  memo, useEffect, useState
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -20,13 +21,13 @@ import {
   selectIsFetchingMembers
 } from 'containers/Group/GroupMembers/selectors';
 
-import RouteService from 'utils/routeHelpers';
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import dig from 'object-dig';
 
 const MemberTypes = Object.freeze([
   'active',
@@ -49,8 +50,7 @@ export function GroupMemberListPage(props) {
   useInjectReducer({ key: 'members', reducer });
   useInjectSaga({ key: 'members', saga });
 
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
+  const { group_id: groupId } = useParams();
 
   const defaultParams = {
     group_id: groupId, count: 10, page: 0,
@@ -155,6 +155,12 @@ export function GroupMemberListPage(props) {
     getMembers(getScopes({}), newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    getMembers(getScopes({}), newParams);
+  };
+
   useEffect(() => {
     props.getMembersBegin(params);
 
@@ -178,6 +184,7 @@ export function GroupMemberListPage(props) {
 
   return (
     <React.Fragment>
+      <DiverstBreadcrumbs />
       <GroupMemberList
         memberList={props.memberList}
         memberTotal={props.memberTotal}
@@ -193,6 +200,7 @@ export function GroupMemberListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleSearching={handleSearching}
 
         memberType={type}
         MemberTypes={MemberTypes}
@@ -242,6 +250,6 @@ export default compose(
 )(Conditional(
   GroupMemberListPage,
   ['currentGroup.permissions.members_view?'],
-  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.home.path(params.group_id),
   permissionMessages.group.groupMembers.listPage
 ));

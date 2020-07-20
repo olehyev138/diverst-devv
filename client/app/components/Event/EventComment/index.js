@@ -38,6 +38,7 @@ export function EventComment(props) {
             { comment.user.avatar ? (
               <DiverstImg
                 data={comment.user.avatar_data}
+                contentType={comment.user.avatar_content_type}
               />
             ) : (
               comment.user.first_name[0]
@@ -85,11 +86,10 @@ export function EventComment(props) {
 }
 
 EventComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
-  event: PropTypes.object,
   currentUserId: PropTypes.number,
 };
 

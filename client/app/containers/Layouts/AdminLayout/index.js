@@ -5,10 +5,11 @@ import Container from '@material-ui/core/Container';
 import Fade from '@material-ui/core/Fade';
 import AdminLinks from 'components/Admin/AdminLinks';
 import { withStyles } from '@material-ui/core/styles';
-import AuthenticatedLayout from '../AuthenticatedLayout';
 import PropTypes from 'prop-types';
 
 import Scrollbar from 'components/Shared/Scrollbar';
+
+import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({
   flex: {
@@ -38,67 +39,31 @@ const styles = theme => ({
 });
 
 export class AdminLayout extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawerOpen: false,
-    };
-  }
-
-  drawerToggleCallback = (drawerStatus) => {
-    this.setState({ drawerOpen: drawerStatus });
-  };
-
-  componentDidUpdate(prevProps) {
-    // Navigated
-    if (this.props.location !== prevProps.location)
-      /* eslint-disable-next-line react/no-did-update-set-state */
-      this.setState({ drawerOpen: false });
-  }
-
   render() {
-    const { classes, ...other } = this.props;
-    const Component = this.props.component;
+    const { classes, ...rest } = this.props;
 
     return (
-      <AuthenticatedLayout
-        drawerToggleCallback={this.drawerToggleCallback}
-        drawerOpen={this.state.drawerOpen}
-        position='relative'
-        isAdmin
-        {...other}
-        component={matchProps => (
-          <React.Fragment>
-            <div className={classes.flex}>
-              <AdminLinks
-                drawerToggleCallback={this.drawerToggleCallback}
-                drawerOpen={this.state.drawerOpen}
-                location={other.location}
-                {...matchProps}
-              />
-              <div className={classes.scrollbarContentContainer}>
-                <Scrollbar>
-                  <Fade in appear>
-                    <Container maxWidth='xl' className={classes.container}>
-                      <div className={classes.content}>
-                        <Component {...other} />
-                      </div>
-                    </Container>
-                  </Fade>
-                </Scrollbar>
-              </div>
-            </div>
-          </React.Fragment>
-        )}
-      />
+      <div className={classes.flex}>
+        <AdminLinks />
+        <div className={classes.scrollbarContentContainer}>
+          <Scrollbar>
+            <Fade in appear>
+              <Container maxWidth='xl' className={classes.container}>
+                <div className={classes.content}>
+                  {renderChildrenWithProps(this.props.children, { ...rest })}
+                </div>
+              </Container>
+            </Fade>
+          </Scrollbar>
+        </div>
+      </div>
     );
   }
 }
 
 AdminLayout.propTypes = {
   classes: PropTypes.object,
-  component: PropTypes.elementType,
-  location: PropTypes.object,
+  children: PropTypes.any,
 };
 
 export default compose(

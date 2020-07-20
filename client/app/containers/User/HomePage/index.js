@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import dig from 'object-dig';
 
 import messages from './messages';
 
@@ -17,7 +18,7 @@ import News from '../UserNewsFeedPage';
 import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
 
 import {
-  Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
+  Typography, Grid, CardContent, Paper,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -56,14 +57,13 @@ export class HomePage extends React.PureComponent {
     };
   }
 
-handleClickOpen = () => {
-  this.setState({ open: true });
-};
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
   handleClose = () => {
     this.setState({ open: false });
   };
-
 
   render() {
     const { classes } = this.props;
@@ -143,6 +143,7 @@ handleClickOpen = () => {
     const enterpriseImage = this.props.enterprise ? this.props.enterprise.banner_data && (
       <DiverstImg
         data={this.props.enterprise.banner_data}
+        contentType={dig(this.props.enterprise, 'banner_content_type')}
         alt=''
         maxWidth='100%'
         minWidth='100%'
@@ -191,7 +192,7 @@ const withConnect = connect(
 HomePage.propTypes = {
   classes: PropTypes.object,
   enterprise: PropTypes.object,
-  intl: intlShape,
+  intl: intlShape.isRequired,
 };
 
 export default compose(

@@ -1,34 +1,57 @@
 class GroupSerializer < ApplicationRecordSerializer
-  attributes :id
+  attributes :id, :permissions
 
-  attributes_with_permission :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data, :group_category, if: :family?
+  attributes_with_permission :name, :private, :current_user_is_member, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, if: :family?
 
-  attributes_with_permission :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
+  attributes_with_permission :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                              :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
                              :annual_budget, :annual_budget_leftover, :active,
                              :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
-                             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
-                             :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
-                             :logo, :logo_file_name, :logo_data, :children, :parent, :annual_budget_currency, if: :show?
+                             :enterprise_id, :event_attendance_visibility, :get_calendar_color, :auto_archive,
+                             :current_user_is_member, :banner, :banner_file_name, :banner_data, :banner_content_type,
+                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent, :annual_budget_currency, if: :show?
+
+  attributes_with_permission :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
+                             :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
+
+  def budgets?
+    instance_options[:budgets]
+  end
 
   def family?
     instance_options[:family]
   end
 
   def show?
-    policy&.show? && !family?
+    policy&.show? && !family? && !budgets?
+  end
+
+  # **instance_options
+
+  def currency
+    object.annual_budget_currency
   end
 
   def children
-    object.children.map { |child| GroupSerializer.new(child, scope: scope, scope_name: :scope, family: true).as_json }
+    if budgets?
+      if instance_options[:with_children]
+        object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
+      end
+    else
+      object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
+    end
   end
 
   def parent
-    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, scope_name: :scope, family: true) : nil
+    object.parent.present? ? GroupSerializer.new(object.parent, scope: scope, family: true) : nil
   end
 
   def policies
-    [
+    budgets? ? [
+        :annual_budgets_manage?,
+        :carryover_annual_budget?,
+        :reset_annual_budget?,
+    ] : [
         :show?,
         :destroy?,
         :update?,
@@ -60,7 +83,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,
-        :is_a_leader?
+        :is_a_leader?,
     ]
   end
 
@@ -80,6 +103,10 @@ class GroupSerializer < ApplicationRecordSerializer
     AttachmentHelper.attachment_data_string(object.banner)
   end
 
+  def banner_content_type
+    AttachmentHelper.attachment_content_type(object.banner)
+  end
+
   def logo
     AttachmentHelper.attachment_signed_id(object.logo)
   end
@@ -90,6 +117,10 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def logo_data
     AttachmentHelper.attachment_data_string(object.logo)
+  end
+
+  def logo_content_type
+    AttachmentHelper.attachment_content_type(object.logo)
   end
 
   def current_user_is_member

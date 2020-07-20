@@ -4,21 +4,22 @@
  *
  */
 
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 import { DateTime } from 'luxon';
+import { useParams } from 'react-router-dom';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Typography, Box
+  Divider, Box
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { buildValues, mapFields } from 'utils/formHelpers';
+import { buildValues } from 'utils/formHelpers';
 import messages from 'containers/Shared/Update/messages';
 
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
@@ -27,12 +28,12 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import RouteService from 'utils/routeHelpers';
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
 
   return (
     <React.Fragment>
@@ -72,7 +73,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 
               messages={messages}
               formikProps={formikProps}
-              link={ROUTES.group.plan.kpi.fields.path(rs.params('group_id'))}
+              link={ROUTES.group.plan.kpi.fields.path(groupId)}
 
               join
               noCard

@@ -1,15 +1,14 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
-
-import RouteService from 'utils/routeHelpers';
 
 import { selectFormGroup, selectGroupIsCommitting, selectPaginatedSelectGroups, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import {
@@ -29,10 +28,11 @@ export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const { intl } = props;
-  const rs = new RouteService(useContext);
+
+  const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    props.getGroupBegin({ id: rs.params('group_id') });
+    props.getGroupBegin({ id: groupId });
 
     return () => {
       props.groupFormUnmount();
@@ -57,7 +57,7 @@ export function GroupEditPage(props) {
 }
 
 GroupEditPage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   group: PropTypes.object,
   groups: PropTypes.array,
   getGroupBegin: PropTypes.func,
@@ -96,6 +96,6 @@ export default compose(
 )(Conditional(
   GroupEditPage,
   ['group.permissions.update?', 'isFormLoading'],
-  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  (props, params) => ROUTES.admin.manage.groups.index.path(),
   permissionMessages.group.editPage
 ));

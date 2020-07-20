@@ -4,21 +4,17 @@
  *
  */
 
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { push } from 'connected-react-router';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import {
-  selectPaginatedBudgets,
-  selectBudgetsTotal,
-  selectIsFetchingBudgets,
-  selectHasChanged
-} from 'containers/Group/GroupPlan/Budget/selectors';
-import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
 
 import saga from 'containers/Group/GroupPlan/Budget/saga';
 import reducer from 'containers/Group/GroupPlan/Budget/reducer';
@@ -27,16 +23,20 @@ import annualReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 
 import { getBudgetsBegin, budgetsUnmount, deleteBudgetBegin } from 'containers/Group/GroupPlan/Budget/actions';
 import { getAnnualBudgetBegin, getAnnualBudgetSuccess } from 'containers/Group/GroupPlan/AnnualBudget/actions';
-import { Button } from '@material-ui/core';
-import RouteService from 'utils/routeHelpers';
 
-import BudgetList from 'components/Group/GroupPlan/BudgetList';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectGroup } from 'containers/Group/selectors';
-import { push } from 'connected-react-router';
-import Conditional from 'components/Compositions/Conditional';
-import { BudgetCreatePage } from 'containers/Group/GroupPlan/Budget/BudgetCreatePage';
+import {
+  selectPaginatedBudgets,
+  selectBudgetsTotal,
+  selectIsFetchingBudgets,
+  selectHasChanged
+} from 'containers/Group/GroupPlan/Budget/selectors';
+import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
+
+import Conditional from 'components/Compositions/Conditional';
+import BudgetList from 'components/Group/GroupPlan/BudgetList';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -46,31 +46,28 @@ export function BudgetsPage(props) {
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
-  const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id');
-  const annualId = rs.params('annual_budget_id');
+  const { group_id: groupId, annual_budget_id: annualBudgetId } = useParams();
+  const location = useLocation();
 
-  const { location } = rs;
   const annualBudget = props.currentAnnualBudget || location.update;
 
   const getBudget = (params) => {
     props.getBudgetsBegin({
       ...params,
-      annual_budget_id: annualId,
+      annual_budget_id: annualBudgetId,
       group_id: groupId
     });
   };
 
   const links = {
     annualBudgetOverview: ROUTES.group.plan.budget.overview.path(groupId),
-    newRequest: ROUTES.group.plan.budget.budgets.new.path(groupId, annualId),
-    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupId, annualId, id)
+    newRequest: ROUTES.group.plan.budget.budgets.new.path(groupId, annualBudgetId),
+    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId, id)
   };
 
   useEffect(() => {
-    // eslint-disable-next-line eqeqeq
-    if (!annualBudget || annualBudget.id != annualId)
-      props.getAnnualBudgetBegin({ id: annualId });
+    if (!annualBudget || annualBudget.id !== annualBudgetId)
+      props.getAnnualBudgetBegin({ id: annualBudgetId });
     else
       props.getAnnualBudgetSuccess({ annual_budget: annualBudget });
     getBudget(params);
@@ -159,6 +156,6 @@ export default compose(
 )(Conditional(
   BudgetsPage,
   ['currentGroup.permissions.budgets_view?'],
-  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  (props, params) => ROUTES.group.plan.budget.index.path(params.group_id),
   permissionMessages.group.groupPlan.budget.indexPage
 ));

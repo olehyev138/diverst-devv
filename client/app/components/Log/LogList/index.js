@@ -119,6 +119,7 @@ export function LogList(props, context) {
                     groupField='groupLabels'
                     label=''
                     isMulti
+                    dialogSelector
                     {...formikProps}
                   />
                 </Grid>
@@ -185,7 +186,7 @@ export function LogList(props, context) {
             dataArray={props.logs}
             dataTotal={props.logTotal}
             columns={columns}
-            my_options={{
+            tableOptions={{
               exportButton: true,
               exportCsv: (columns, data) => {
                 props.exportLogsBegin();
@@ -200,7 +201,7 @@ export function LogList(props, context) {
   );
 }
 LogList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   logs: PropTypes.array,
   logTotal: PropTypes.number,

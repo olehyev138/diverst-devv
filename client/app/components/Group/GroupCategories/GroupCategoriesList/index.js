@@ -170,7 +170,7 @@ export function GroupCategoriesList(props, context) {
 }
 
 GroupCategoriesList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
   isLoading: PropTypes.bool,

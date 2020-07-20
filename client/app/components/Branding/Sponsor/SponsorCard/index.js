@@ -10,7 +10,6 @@ import { compose } from 'redux';
 
 import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box, CardHeader, Grid, Hidden } from '@material-ui/core';
 import Carousel from 'react-material-ui-carousel';
-import { injectIntl } from 'react-intl';
 
 import {
   getSponsorsBegin, deleteSponsorBegin,
@@ -67,6 +66,7 @@ export function SponsorCard(props) {
                       <Grid item xs={12}>
                         <DiverstImg
                           data={sponsor.sponsor_media_data}
+                          contentType={sponsor.sponsor_media_content_type}
                           maxWidth='100%'
                           maxHeight='100px'
                           height='auto'
@@ -125,5 +125,4 @@ const withConnect = connect(
 export default compose(
   memo,
   withConnect,
-  injectIntl,
 )(SponsorCard);

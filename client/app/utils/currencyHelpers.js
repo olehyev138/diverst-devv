@@ -1,15 +1,17 @@
-import caseHelper from 'utils/caseHelper';
 import dig from 'object-dig';
 import { floatRound } from 'utils/floatRound';
 
 // List of Currency value label pairs for select fields
 export const currencyOptions = Object.freeze([
   { value: 'USD', label: '$ (USD)' },
+  { value: 'CAD', label: '$ (CAD)' },
+  { value: 'MXN', label: '$ (MXN)' },
+  { value: 'EUR', label: '€ (EUR)' },
   { value: 'GBP', label: '£ (GBP)' },
 ]);
 
 // Used to cache the props used by react-number-format
-export const currencyLocaleProps = {};
+const currencyLocaleProps = {};
 
 // Used to get the Select Field format from a currency code
 export const getCurrency = code => currencyOptions.find(curr => curr.value === code) || { value: code, label: code };
@@ -30,36 +32,34 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   if (currencyLocaleProps[key])
     return currencyLocaleProps[key];
 
-  const prototype = toCurrencyString(intl, 123456.7812, currency, localeOverride);
+  const prototype = toCurrencyString(intl, 123456.4444, currency, localeOverride);
 
   // decimalSeparator
-  const decimalSeparator = prototype.match(/56(.*)78/)[1];
+  const [, decimalSeparator] = prototype.match(/56([^0-9]*)44/) || [];
 
   // decimalPrecision
-  const lastDigits = prototype.match(/56.+78(1?2?)/)[1];
-  const decimalScale = lastDigits.length + 2;
+  const [, lastDigits] = prototype.match(/56[^0-9]*(4?4?4?4?)/) || [];
+  const decimalScale = lastDigits.length;
 
   // groupingStyle
-  const lahkCounting = prototype.match(/1(.*)2/)[1].length > 0;
-  const wanCounting = prototype.match(/2(.*)3/)[1].length > 0;
-  const thousandCounting = prototype.match(/123/) != null;
-  const thousandsGroupStyle = caseHelper(
-    true,
-    [lahkCounting, 'lahk'],
-    [wanCounting, 'wan'],
-    [thousandCounting, 'thousand'],
-  );
+  function thousandsPicker() {
+    // 1,23,456
+    if (prototype.match(/1([^0-9]*)2/)[1].length > 0)
+      return ['lakh', dig(prototype.match(/1([^0-9]+)2/), 1)];
+    // 12,3456
+    if (prototype.match(/2([^0-9]*)3/)[1].length > 0)
+      return ['wan', dig(prototype.match(/2([^0-9]+)3/), 1)];
+    // 123,456
+    if (prototype.match(/123/) != null)
+      return ['thousand', dig(prototype.match(/3([^0-9]+)4/), 1)];
+    return ['thousand', ','];
+  }
 
-  // group seperator
-  const thousandSeparator = caseHelper(
-    thousandsGroupStyle,
-    [['lahk', 'thousand'], () => dig(prototype.match(/3(.+)4/), 1)],
-    ['wan', () => dig(prototype.match(/2(.+)3/), 1)],
-  );
+  const [thousandsGroupStyle, thousandSeparator] = thousandsPicker();
 
   // prefix/suffix
-  const prefix = prototype.match(/^([^\d]*)[\d]/)[1];
-  const suffix = prototype.match(/[\d]([^\d]*)$/)[1];
+  const [, prefix] = prototype.match(/^([^\d]*)[\d]/) || [];
+  const [, suffix] = prototype.match(/[\d]([^\d]*)$/) || [];
 
   const numberProps = Object.freeze({ decimalSeparator, decimalScale, thousandsGroupStyle, prefix, suffix, thousandSeparator });
   currencyLocaleProps[key] = numberProps;
@@ -69,4 +69,4 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
 // simple wrapper for `intl`'s getNumberFormat method used to format currency values
 export const toCurrencyString = (intl, amount, currency = 'USD', localeOverride = null) => intl
   ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
-  : `$ ${floatRound(amount, 2)}`;
+  : new Intl.NumberFormat(localeOverride, { style: 'currency', currency }).format(amount);

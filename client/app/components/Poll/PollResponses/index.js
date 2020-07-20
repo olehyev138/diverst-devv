@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  CardContent, Grid, Divider,
+  CardContent, Grid, Divider, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -21,6 +21,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import { permission } from 'utils/permissionsHelpers';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field';
+import dig from 'object-dig';
+import DiverstSelect from 'components/Shared/DiverstSelect';
 
 const styles = theme => ({
   PollResponsesItem: {
@@ -36,9 +38,10 @@ const styles = theme => ({
 
 export function PollResponses(props, context) {
   const { classes } = props;
-  const { links, intl } = props;
+  const { links, intl, field, poll, fieldOptions } = props;
+  const { value: fieldId, label: fieldLabel } = field;
 
-  const columns = [
+  const responsesColumns = [
     {
       title: <DiverstFormattedMessage {...messages.responses.respondent} />,
       field: 'respondent',
@@ -48,6 +51,24 @@ export function PollResponses(props, context) {
       title: <DiverstFormattedMessage {...messages.responses.date} />,
       query_field: 'poll_responses.created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
+    },
+  ];
+
+  const textColumns = [
+    {
+      title: <DiverstFormattedMessage {...messages.textual.answer} />,
+      render: rowData => dig(rowData, 'field_data', fd => fd.find(fd => fd.field_id === fieldId), 'data'),
+      sorting: false,
+    },
+    {
+      title: <DiverstFormattedMessage {...messages.textual.respondent} />,
+      field: 'respondent',
+      sorting: false
+    },
+    {
+      title: <DiverstFormattedMessage {...messages.textual.date} />,
+      render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL),
+      query_field: 'poll_responses.created_at',
     },
   ];
 
@@ -70,13 +91,29 @@ export function PollResponses(props, context) {
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderBy: (columnId === -1) ? 'id' : `${responsesColumns[columnId].query_field}`,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
 
   return (
     <React.Fragment>
+      {fieldOptions.length > 0 && (
+        <Grid container justify='flex-end'>
+          <Grid item xs={6}>
+            <DiverstSelect
+              fullWidth
+              label={<DiverstFormattedMessage {...messages.textual.question} />}
+              options={fieldOptions}
+              value={field}
+              onChange={v => props.setField(v)}
+              hideHelperText
+              isClearable
+            />
+          </Grid>
+        </Grid>
+      )}
+      <Box mb={2} />
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
@@ -87,10 +124,10 @@ export function PollResponses(props, context) {
             rowsPerPage={10}
             dataArray={props.responses}
             dataTotal={props.responsesTotal}
-            columns={columns}
+            columns={fieldId ? textColumns : responsesColumns}
             detailPanel={detailPanel}
             onRowClick={(event, rowData, togglePanel) => togglePanel()}
-            my_options={{
+            tableOptions={{
               search: false
             }}
           />
@@ -100,12 +137,18 @@ export function PollResponses(props, context) {
   );
 }
 PollResponses.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   responses: PropTypes.array,
   responsesTotal: PropTypes.number,
   responsesLoading: PropTypes.bool,
-  deletePollBegin: PropTypes.func,
+  poll: PropTypes.object,
+  field: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.number,
+  }),
+  fieldOptions: PropTypes.array,
+  setField: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handlePollEdit: PropTypes.func,
@@ -115,6 +158,12 @@ PollResponses.propTypes = {
     pollEdit: PropTypes.func
   })
 };
+
+PollResponses.defaultProps = {
+  field: {},
+  fieldOptions: [],
+};
+
 export default compose(
   injectIntl,
   memo,

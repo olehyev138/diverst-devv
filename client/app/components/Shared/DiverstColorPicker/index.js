@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import { Popover, FormControl, InputLabel, Input, InputAdornment, IconButton, Box } from '@material-ui/core';
 import PaletteIcon from '@material-ui/icons/Palette';
+import { formatColor } from 'utils/selectorHelpers';
 
 import { TwitterPicker } from 'react-color';
 
@@ -70,7 +71,7 @@ export function DiverstColorPicker(props) {
           id={props.id}
           name={props.name}
           type='text'
-          value={`#${props.value}`}
+          value={formatColor(props.value)}
           onChange={handleInputChange}
           endAdornment={(
             <InputAdornment position='end'>
@@ -84,7 +85,7 @@ export function DiverstColorPicker(props) {
           )}
           startAdornment={(
             <InputAdornment position='start'>
-              <Box className={classes.colorPreviewBox} bgcolor={`#${color}`} />
+              <Box className={classes.colorPreviewBox} bgcolor={formatColor(color)} />
             </InputAdornment>
           )}
           {...props.InputProps}

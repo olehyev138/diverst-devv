@@ -4,10 +4,9 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
@@ -82,12 +81,11 @@ const styles = theme => ({
   },
 });
 
-export function EventsList(props, context) {
+export function EventsList(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
   const { classes, intl } = props;
 
-  const routeContext = useContext(RouteContext);
   const [eventId, setEvent] = useState(null);
 
   const clickEvent = (info) => {
@@ -114,7 +112,6 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      {dialog}
       {!props.readonly && (
         <React.Fragment>
           <Permission show={permission(props.currentGroup, 'events_create?')}>
@@ -134,54 +131,59 @@ export function EventsList(props, context) {
         </React.Fragment>
       )}
       <Paper>
-        <Grid container justify='center'>
-          <Grid item xs={1} />
-          {props.currentPTab != null && (
-            <Grid item xs={10}>
-              <ResponsiveTabs
-                value={props.currentPTab}
-                onChange={props.handleChangePTab}
-                indicatorColor='primary'
-                textColor='primary'
+        <React.Fragment>
+          <Grid container justify='center'>
+            <Grid item xs={1} />
+            {props.currentPTab != null && (
+              <Grid item xs={10}>
+                <ResponsiveTabs
+                  value={props.currentPTab}
+                  onChange={props.handleChangePTab}
+                  indicatorColor='primary'
+                  textColor='primary'
+                >
+                  <Tab label={intl.formatMessage(messages.index.participating)} />
+                  <Tab label={intl.formatMessage(messages.index.all)} />
+                </ResponsiveTabs>
+              </Grid>
+            )}
+            <Grid item xs>
+              <Tooltip
+                title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
+                placement='top'
               >
-                <Tab label={intl.formatMessage(messages.index.participating)} />
-                <Tab label={intl.formatMessage(messages.index.all)} />
-              </ResponsiveTabs>
+                <IconButton
+                  onClick={props.handleCalendarChange}
+                  className={classes.buttons}
+                >
+                  {props.calendar ? <ListAltIcon /> : <TodayIcon />}
+                </IconButton>
+              </Tooltip>
             </Grid>
-          )}
-          <Grid item xs>
-            <Tooltip
-              title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
-              placement='top'
-            >
-              <IconButton
-                onClick={props.handleCalendarChange}
-                className={classes.buttons}
-              >
-                {props.calendar ? <ListAltIcon /> : <TodayIcon />}
-              </IconButton>
-            </Tooltip>
           </Grid>
-        </Grid>
-        {props.onlyUpcoming || props.calendar || (
-          <ResponsiveTabs
-            value={props.currentTab}
-            onChange={props.handleChangeTab}
-            indicatorColor='primary'
-            textColor='primary'
-          >
-            <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
-          </ResponsiveTabs>
-        )}
+          {props.onlyUpcoming || props.calendar || (
+            <ResponsiveTabs
+              value={props.currentTab}
+              onChange={props.handleChangeTab}
+              indicatorColor='primary'
+              textColor='primary'
+            >
+              <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
+              <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+              <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+            </ResponsiveTabs>
+          )}
+        </React.Fragment>
       </Paper>
       <br />
       { props.calendar ? (
         <DiverstCalendar
-          events={props.calendarEvents}
+          calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          eventClick={clickEvent}
+          events={props.calendarEvents}
+          joinEventBegin={props.joinEventBegin}
+          leaveEventBegin={props.leaveEventBegin}
+          calendarDateCallback={props.calendarDateCallback}
         />
       ) : (
         <React.Fragment>
@@ -258,6 +260,8 @@ EventsList.propTypes = {
   currentGroup: PropTypes.object,
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
+  currentGroupID: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({

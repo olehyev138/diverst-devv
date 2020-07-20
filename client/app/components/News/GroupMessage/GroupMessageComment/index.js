@@ -39,6 +39,7 @@ export function GroupMessageComment(props) {
             { comment.author.avatar ? (
               <DiverstImg
                 data={comment.author.avatar_data}
+                contentType={comment.author.avatar_content_type}
               />
             ) : (
               comment.author.first_name[0]
@@ -70,7 +71,7 @@ export function GroupMessageComment(props) {
 }
 
 GroupMessageComment.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteGroupMessageCommentBegin: PropTypes.func,

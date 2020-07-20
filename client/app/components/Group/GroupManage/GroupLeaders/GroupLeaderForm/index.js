@@ -112,7 +112,7 @@ export function GroupLeaderForm(props) {
   );
 }
 GroupLeaderForm.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   getGroupLeaderBegin: PropTypes.func,
   createGroupLeaderBegin: PropTypes.func,

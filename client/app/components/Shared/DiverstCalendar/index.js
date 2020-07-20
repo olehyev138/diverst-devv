@@ -1,15 +1,27 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-
-import 'stylesheets/main.scss';
+import DiverstGroupLegend from 'components/Shared/DiverstCalendar/DiverstGroupLegend';
+import ReactTooltip from 'react-tooltip';
+import { Form, Formik } from 'formik';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Calendar/messages';
+import GroupSelector from 'components/Shared/GroupSelector';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import { mapFields } from 'utils/formHelpers';
+import { toNumber } from 'utils/floatRound';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import EventLite from 'components/Event/EventLite';
+import SegmentSelector from 'components/Shared/SegmentSelector';
+import dig from 'object-dig';
 
 const styles = theme => ({
   wrapper: {
@@ -23,40 +35,185 @@ const styles = theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  legend: {
+    float: 'right',
+    backgroundColor: theme.palette.primary.main,
+    marginLeft: 5,
+  },
 });
 
-export function DiverstCalendar({ events, isLoading, classes, ...rest }) {
+function addDays(date, numberOfDays) {
+  return new Date(date.getTime() + 24 * 60 * 60 * 1000 * numberOfDays);
+}
+
+export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ...rest }) {
   const calendarRef = React.createRef();
+  const [eventId, setEvent] = useState(null);
+
+  const clickEvent = (info) => {
+    const { event } = info;
+    // const extra = event.extendedProps;
+    setEvent(toNumber(event.id));
+  };
+
+  const dialog = (
+    <Dialog
+      open={!!eventId}
+      onClose={() => setEvent(null)}
+    >
+      <DialogContent>
+        <EventLite
+          event={events.find(event => event.id === eventId)}
+          isCommiting={rest.isCommitting}
+          joinEventBegin={rest.joinEventBegin}
+          leaveEventBegin={rest.leaveEventBegin}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+
+  const groupFilter = (
+    <Formik
+      initialValues={{
+        group_ids: [],
+        segment_ids: [],
+      }}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        if (rest.groupFilterCallback)
+          rest.groupFilterCallback(mapFields(values, ['group_ids', 'segment_ids']));
+      }}
+    >
+      {formikProps => (
+        <Form>
+          <Card>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <GroupSelector
+                    groupField='group_ids'
+                    dialogSelector
+                    label={<DiverstFormattedMessage {...messages.groups} />}
+                    isMulti
+                    {...formikProps}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <SegmentSelector
+                    segmentField='segment_ids'
+                    label={<DiverstFormattedMessage {...messages.segments} />}
+                    isMulti
+                    {...formikProps}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <DiverstSubmit>
+                <DiverstFormattedMessage {...messages.filter} />
+              </DiverstSubmit>
+            </CardActions>
+          </Card>
+        </Form>
+      )}
+    </Formik>
+  );
+
+  const legend = (
+    <Grid container>
+      <Grid item xs={12}>
+        <Card className={classes.legend}>
+          <Box mb={1} mt={1} ml={1} mr={1}>
+            <Typography variant='h6'>
+              Legend
+            </Typography>
+            <Divider />
+            <Typography style={{ color: 'black' }}>
+              Participating
+            </Typography>
+            <Typography style={{ color: 'white' }}>
+              Not Participating
+            </Typography>
+          </Box>
+        </Card>
+      </Grid>
+    </Grid>
+  );
 
   return (
-    <div className={classes.wrapper}>
-      <FullCalendar
-        ref={calendarRef}
-        defaultView='dayGridMonth'
-        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-        header={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek'
-        }}
-        events={events}
-        {...rest}
-      />
-      {isLoading && (
-        <Grid container justify='center' alignContent='center'>
-          <Grid item>
-            <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
-          </Grid>
-        </Grid>
+    <React.Fragment>
+      {dialog}
+      {rest.groupLegend && (
+        <React.Fragment>
+          {groupFilter}
+          <Box mb={1} />
+        </React.Fragment>
       )}
-    </div>
+      {rest.groupLegend && <DiverstGroupLegend />}
+      <ReactTooltip />
+      <div className={classes.wrapper}>
+        <FullCalendar
+          ref={calendarRef}
+          initialView='dayGridMonth'
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+          contentHeight={600}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+          }}
+          events={events}
+          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(addDays(view.currentStart, -14), addDays(view.currentEnd, 14)))}
+          eventClick={clickEvent}
+          eventDisplay='block'
+          dayMaxEvents={5}
+          dayMaxEventRows={5}
+          eventDidMount={(info) => {
+            const { event } = info;
+            const xProps = event.extendedProps;
+
+            info.el.setAttribute('data-tip',
+              `${xProps.group.name}${xProps.description.length > 0 ? `<br>${xProps.description}` : ''}`);
+            // eslint-disable-next-line func-names
+            info.el.setAttribute('data-place', (function () {
+              switch (dig(calendarRef, 'current', cal => cal.getApi().view.type)) {
+                case 'dayGridMonth':
+                  return 'top';
+                case 'timeGridWeek':
+                  return 'left';
+                case 'listWeek':
+                  return 'right';
+                default:
+                  return 'top';
+              }
+            }()));
+            info.el.setAttribute('data-effect', 'solid');
+            info.el.setAttribute('data-delay-show', '200');
+            info.el.setAttribute('data-multiline', 'true');
+            ReactTooltip.rebuild();
+          }}
+          {...rest}
+        />
+        {isLoading && (
+          <Grid container justify='center' alignContent='center'>
+            <Grid item>
+              <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+            </Grid>
+          </Grid>
+        )}
+      </div>
+    </React.Fragment>
   );
 }
 
 DiverstCalendar.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
-  events: PropTypes.arrayOf(PropTypes.shape({
+  groupLegend: PropTypes.bool,
+  groupFilter: PropTypes.bool,
+  groupFilterCallback: PropTypes.func,
+  events: PropTypes.array,
+  calendarEvents: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     groupId: PropTypes.number,
     start: PropTypes.string,
@@ -64,6 +221,14 @@ DiverstCalendar.propTypes = {
     title: PropTypes.string,
     color: PropTypes.string,
   })),
+  isCommitting: PropTypes.bool,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
+  calendarDateCallback: PropTypes.func,
+};
+
+DiverstCalendar.defaultProps = {
+  events: []
 };
 
 export default compose(

@@ -4,9 +4,7 @@
  *
  */
 
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -18,7 +16,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Poll/saga';
 import reducer from 'containers/Poll/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -31,7 +28,6 @@ import { getPollsBegin, pollsUnmount, deletePollBegin } from 'containers/Poll/ac
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import PollList from 'components/Poll/PollList/Loadable';
-import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createRedirectAction } from 'utils/reduxPushHelper';
@@ -45,7 +41,6 @@ export function PollListPage(props) {
 
   const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
 
-  const rs = new RouteService(useContext);
   const links = {
     pollNew: ROUTES.admin.include.polls.new.path(),
   };
@@ -81,6 +76,13 @@ export function PollListPage(props) {
     setParams(newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getPollsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <PollList
@@ -92,6 +94,7 @@ export function PollListPage(props) {
         handlePollShow={props.handlePollShow}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleSearching={handleSearching}
         links={links}
         currentEnterprise={props.currentEnterprise}
         permissions={props.permissions}
@@ -145,6 +148,6 @@ export default compose(
 )(Conditional(
   PollListPage,
   ['permissions.polls_view'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.poll.listPage
 ));
