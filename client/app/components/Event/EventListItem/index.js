@@ -18,6 +18,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import ShareIcon from '@material-ui/icons/Share';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   arrowRight: {
@@ -45,6 +46,7 @@ export function EventListItem(props) {
             <Grid item xs='auto'>
               <DiverstImg
                 data={item.picture_data}
+                contentType={item.picture_content_type}
                 maxWidth='90px'
                 maxHeight='90px'
                 minWidth='90px'
@@ -63,9 +65,12 @@ export function EventListItem(props) {
         <hr className={classes.divider} />
         {item.description && (
           <React.Fragment>
-            <Typography color='textSecondary'>
-              {item.description}
-            </Typography>
+            <DiverstHTMLEmbedder
+              html={item.description}
+              gridProps={{
+                alignItems: 'flex-start',
+              }}
+            />
             <Box pb={1} />
           </React.Fragment>
         )}

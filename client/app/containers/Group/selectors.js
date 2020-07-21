@@ -26,6 +26,11 @@ const selectPaginatedSelectGroups = () => createSelector(
   )
 );
 
+const selectColorGroups = () => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.groupColorList
+);
+
 const selectGroupTotal = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.groupTotal
@@ -96,6 +101,7 @@ export {
   selectGroupsDomain,
   selectPaginatedSelectGroups,
   selectPaginatedGroups,
+  selectColorGroups,
   selectGroupTotal,
   selectGroup,
   selectFormGroup,

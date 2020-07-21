@@ -8,7 +8,7 @@ RSpec.describe InitiativeSerializer, type: :serializer do
                         budget_item_id: budget_item.id,
                         picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
                         qr_code: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
-    serializer = InitiativeSerializer.new(initiative, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = InitiativeSerializer.new(initiative, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:pillar]).to_not be nil
     expect(serializer.serializable_hash[:owner]).to_not be nil
