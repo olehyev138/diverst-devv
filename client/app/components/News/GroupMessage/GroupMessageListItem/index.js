@@ -73,6 +73,7 @@ export function GroupMessageListItem(props) {
             { groupMessage.owner.avatar ? (
               <DiverstImg
                 data={groupMessage.owner.avatar_data}
+                contentType={groupMessage.owner.avatar_content_type}
                 maxWidth='100%'
                 maxHeight='240px'
               />

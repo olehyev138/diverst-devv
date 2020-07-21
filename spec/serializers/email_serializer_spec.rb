@@ -5,7 +5,7 @@ RSpec.describe EmailSerializer, type: :serializer do
     email = create(:email)
     enterprise_email_variable = create(:enterprise_email_variable)
     email_variables = create_list(:email_variable, 3, email_id: email.id, enterprise_email_variable_id: enterprise_email_variable.id)
-    serializer = EmailSerializer.new(email, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = EmailSerializer.new(email, scope: serializer_scopes(create(:user)))
 
     variables = email_variables.reduce({}) do |sum, var|
       join_vars = EmailVariableSerializer.new(var).as_json

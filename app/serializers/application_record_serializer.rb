@@ -71,6 +71,16 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     end
 
     super(object, options)
+    if @scope.nil?
+      def self.scope
+        if Rails.env.test?
+          raise SerializerScopeNotDefinedException
+        else
+          Rollbar.error(SerializerScopeNotDefinedException.new)
+          nil
+        end
+      end
+    end
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
@@ -84,15 +94,28 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     false
   end
 
+  # Finds the policy for a particular object
+  # If a policy is provided, use that
+  # Otherwise, find the policy based on the object being serialized
+  #
+  # If a policy can't be found, or if current user isn't defined in the scope
+  # then instead return a pseudo policy which will return false on any method call
   def policy
-    @policy ||= (
-    @instance_options[:policy] ||
-            Pundit::PolicyFinder.new(object).policy&.new(
-                scope&.dig(:current_user) || (Rails.env.development? && @@test_user ||= User.first),
-                object,
-                scope&.dig(:params) || @instance_options[:params] || {}
-              )
-  )
+    @policy ||= begin
+                  # Use provided Policy or Find and instantiate Policy based on the serialized object
+                  @instance_options[:policy].presence || Pundit::PolicyFinder.new(object).policy.new(
+                        scope&.dig(:current_user),
+                        object,
+                        scope&.dig(:params) || @instance_options[:params] || {}
+                      )
+                rescue Pundit::NotAuthorizedError, NoMethodError
+                  # If the user isn't defined, return the pseudo policy
+                  Class.new do
+                    def method_missing(m, *args, &block)
+                      false
+                    end
+                  end.new
+                end
   end
 
   def policies
