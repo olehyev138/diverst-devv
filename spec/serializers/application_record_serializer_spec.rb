@@ -60,7 +60,6 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
         end
 
         it 'has :a and :b as attributes on first instantiation' do
-          pp @serializer1.object_id
           expect(@serializer1._attributes).to     be_empty
 
           serializer = @serializer1.new(model.new({a: 1, b: 2, c: 3}))
@@ -79,7 +78,6 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
 
       context 'serialize_all_fields is false, nothing is defined' do
         it 'has :a and :b as attributes on first instantiation' do
-          pp @serializer1.object_id
           expect(@serializer1._attributes).to     be_empty
 
           serializer = @serializer1.new(model.new({a: 1, b: 2, c: 3}))
