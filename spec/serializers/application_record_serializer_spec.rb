@@ -51,51 +51,53 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
       expect(@permission_module1).to_not be @permission_module2
     end
 
-    context 'serialize_all_fields is true' do
-      before :each do
-        @serializer1.define_method :serialize_all_fields do true end
+    describe 'Attributes' do
+      context 'serialize_all_fields is true' do
+        before :each do
+          @serializer1.define_method :serialize_all_fields do true end
+        end
+
+        it 'has :a and :b as attributes on first instantiation' do
+          pp @serializer1.object_id
+          expect(@serializer1._attributes).to     be_empty
+
+          @serializer1.new(model.new)
+
+          expect(@serializer1._attributes).to     include :a
+          expect(@serializer1._attributes).to     include :b
+          expect(@serializer1._attributes).to_not include :c
+          expect(@serializer1._attributes).to_not include :d
+          expect(@serializer1._attributes).to_not include :e
+          expect(@serializer1._attributes).to_not include :f
+        end
       end
 
-      it 'has :a and :b as attributes on first instantiation' do
-        pp @serializer1.object_id
-        expect(@serializer1._attributes).to     be_empty
+      context 'serialize_all_fields is false, nothing is defined' do
+        it 'has :a and :b as attributes on first instantiation' do
+          pp @serializer1.object_id
+          expect(@serializer1._attributes).to     be_empty
 
-        @serializer1.new(model.new)
+          a = @serializer1.new(model.new)
 
-        expect(@serializer1._attributes).to     include :a
-        expect(@serializer1._attributes).to     include :b
-        expect(@serializer1._attributes).to_not include :c
-        expect(@serializer1._attributes).to_not include :d
-        expect(@serializer1._attributes).to_not include :e
-        expect(@serializer1._attributes).to_not include :f
-      end
-    end
-
-    context 'serialize_all_fields is false, nothing is defined' do
-      it 'has :a and :b as attributes on first instantiation' do
-        pp @serializer1.object_id
-        expect(@serializer1._attributes).to     be_empty
-
-        a = @serializer1.new(model.new)
-
-        expect(@serializer1._attributes).to     be_empty
-      end
-    end
-
-    context 'with extra fields' do
-      before :each do
-        @serializer1.attributes :d, :e
-        @serializer1.define_method :d do 2 * object.a end
-        @serializer1.define_method :e do 2 * object.b end
+          expect(@serializer1._attributes).to     be_empty
+        end
       end
 
-      it 'it serializes all the fields' do
-        expect(@serializer1._attributes).to_not include :a
-        expect(@serializer1._attributes).to_not include :b
-        expect(@serializer1._attributes).to_not include :c
-        expect(@serializer1._attributes).to     include :d
-        expect(@serializer1._attributes).to     include :e
-        expect(@serializer1._attributes).to_not include :f
+      context 'with extra fields' do
+        before :each do
+          @serializer1.attributes :d, :e
+          @serializer1.define_method :d do 2 * object.a end
+          @serializer1.define_method :e do 2 * object.b end
+        end
+
+        it 'it serializes all the fields' do
+          expect(@serializer1._attributes).to_not include :a
+          expect(@serializer1._attributes).to_not include :b
+          expect(@serializer1._attributes).to_not include :c
+          expect(@serializer1._attributes).to     include :d
+          expect(@serializer1._attributes).to     include :e
+          expect(@serializer1._attributes).to_not include :f
+        end
       end
     end
   end
