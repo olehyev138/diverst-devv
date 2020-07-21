@@ -6,5 +6,6 @@ RSpec.describe ThemeSerializer, type: :serializer do
     serializer = ThemeSerializer.new(theme, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:primary_color]).to eq(theme.primary_color)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

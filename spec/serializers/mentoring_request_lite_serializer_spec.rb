@@ -10,5 +10,6 @@ RSpec.describe MentoringRequestLiteSerializer, type: :serializer do
     expect(serializer.serializable_hash[:status]).to eq(mentoring_request.status)
     expect(serializer.serializable_hash[:sender_id]).to eq(mentoring_request.sender_id)
     expect(serializer.serializable_hash[:receiver_id]).to eq(mentoring_request.receiver_id)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

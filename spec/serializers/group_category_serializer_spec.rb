@@ -14,5 +14,6 @@ RSpec.describe GroupCategorySerializer, type: :serializer do
     expect(serializer.serializable_hash[:enterprise_id]).to_not be_nil
     expect(serializer.serializable_hash[:group_category_type_id]).to_not be_nil
     expect(serializer.serializable_hash[:group_category_type]).to_not be_nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

@@ -9,5 +9,6 @@ RSpec.describe SegmentOrderRuleSerializer, type: :serializer do
     expect(serializer.serializable_hash[:segment_id]).to eq(segment_order_rule.segment_id)
     expect(serializer.serializable_hash[:field]).to eq(segment_order_rule.field)
     expect(serializer.serializable_hash[:operator]).to eq(segment_order_rule.operator)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
