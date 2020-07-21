@@ -312,7 +312,7 @@ RSpec.describe NewsFeedLink, type: :model do
     end
 
     it '#create_view_if_none' do
-      expect { news_feed_link.create_view_if_none(user) }.to change{ View.count }.by(1)
+      expect { news_feed_link.create_view_if_none(user) }.to change { View.count }.by(1)
     end
   end
 
