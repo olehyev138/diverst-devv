@@ -24,6 +24,7 @@ export const initialState = {
 /* eslint-disable default-case, no-param-reassign, consistent-return  */
 function groupLeadersReducer(state = initialState, action) {
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_GROUP_LEADERS_BEGIN:
         draft.isFetchingGroupLeaders = true;

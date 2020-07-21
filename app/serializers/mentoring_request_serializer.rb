@@ -6,10 +6,10 @@ class MentoringRequestSerializer < ApplicationRecordSerializer
   end
 
   def sender
-    UserMentorshipSerializer.new(object.sender, scope: scope, scope_name: :scope).as_json
+    UserMentorshipSerializer.new(object.sender, scope: scope).as_json
   end
 
   def receiver
-    UserMentorshipSerializer.new(object.receiver, scope: scope, scope_name: :scope).as_json
+    UserMentorshipSerializer.new(object.receiver, scope: scope).as_json
   end
 end

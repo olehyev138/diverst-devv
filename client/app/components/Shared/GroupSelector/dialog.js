@@ -11,6 +11,7 @@ import { DiverstCSSCell, DiverstCSSGrid } from 'components/Shared/DiverstCSSGrid
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import ClearIcon from '@material-ui/icons/Clear';
 import { difference, union } from 'utils/arrayHelpers';
+import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 const styles = {
   bottom: {
@@ -30,10 +31,10 @@ const styles = {
 };
 
 const GroupListSelector = (props) => {
-  const { groups, ...rest } = props;
+  const { groups, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
-  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, ['all_parents']) });
   const [searchKey, setSearchKey] = useState('');
   const [expandedGroups, setExpandedGroups] = useState({});
   const [selectedGroups, setSelectedGroup] = useState({});
@@ -49,6 +50,7 @@ const GroupListSelector = (props) => {
   }
 
   const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, params);
+  const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
     if (props.open)
@@ -70,16 +72,12 @@ const GroupListSelector = (props) => {
           id='search key'
           fullWidth
           type='text'
-          onChange={e => setSearchKey(e.target.value)}
+          onChange={(e) => {
+            setSearchKey(e.target.value);
+            delayedSearchAction(e.target.value, params);
+          }}
           value={searchKey}
         />
-      </Grid>
-      <Grid item>
-        <Button
-          onClick={() => groupSearchAction(searchKey, params)}
-        >
-          <DiverstFormattedMessage {...messages.selectorDialog.search} />
-        </Button>
       </Grid>
       <Grid item>
         <IconButton
@@ -103,6 +101,7 @@ const GroupListSelector = (props) => {
           group={group}
           expandedGroups={expandedGroups}
           setExpandedGroups={setExpandedGroups}
+          dialogNoChildren={props.dialogNoChildren}
         />
       ))}
     </DiverstLoader>
@@ -124,14 +123,14 @@ const GroupListSelector = (props) => {
 
   return (
     <React.Fragment>
-      {header}
-      <div className={props.classes.search}>
+      {props.isMulti && !props.dialogNoChildren && header}
+      <div className={classes.search}>
         {searchBar}
       </div>
-      <div className={props.classes.list}>
+      <div className={classes.list}>
         {list}
       </div>
-      <div className={props.classes.bottom}>
+      <div className={classes.bottom}>
         {paginator}
       </div>
     </React.Fragment>
@@ -142,10 +141,11 @@ GroupListSelector.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   isMulti: PropTypes.bool,
+  dialogNoChildren: PropTypes.bool,
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-
+  queryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
 
   open: PropTypes.bool,
@@ -156,6 +156,10 @@ GroupListSelector.propTypes = {
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
   ]),
+};
+
+GroupListSelector.defaultProps = {
+  queryScopes: [],
 };
 
 export default compose(

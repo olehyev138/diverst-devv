@@ -3,7 +3,7 @@ class UserGroupSerializer < ApplicationRecordSerializer
              :created_at, :updated_at, :status
 
   def user
-    UserSerializer.new(object.user, scope: scope, scope_name: :scope).attributes
+    UserSerializer.new(object.user, scope: scope).attributes
   end
 
   def status

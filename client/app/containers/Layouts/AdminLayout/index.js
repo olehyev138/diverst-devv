@@ -39,34 +39,12 @@ const styles = theme => ({
 });
 
 export class AdminLayout extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawerOpen: false,
-    };
-  }
-
-  drawerToggleCallback = (drawerStatus) => {
-    this.setState({ drawerOpen: drawerStatus });
-  };
-
-  componentDidUpdate(prevProps) {
-    // Navigated
-    if (this.props.location !== prevProps.location)
-      /* eslint-disable-next-line react/no-did-update-set-state */
-      this.setState({ drawerOpen: false });
-  }
-
   render() {
     const { classes, ...rest } = this.props;
 
     return (
       <div className={classes.flex}>
-        <AdminLinks
-          drawerToggleCallback={this.drawerToggleCallback}
-          drawerOpen={this.state.drawerOpen}
-          location={rest.location}
-        />
+        <AdminLinks />
         <div className={classes.scrollbarContentContainer}>
           <Scrollbar>
             <Fade in appear>
@@ -86,7 +64,6 @@ export class AdminLayout extends React.PureComponent {
 AdminLayout.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
-  location: PropTypes.object,
 };
 
 export default compose(
