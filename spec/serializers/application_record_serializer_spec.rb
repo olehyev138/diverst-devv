@@ -1,6 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationRecordSerializer, type: :serializer do
+  # MODEL VARIABLES
+  # a: To test basic serialization of Model Methods
+  # b: To test with_permissions of Model Methods
+  # c: To test exclude_keys of Model Methods
+  #
+  # d: To test basic serialization of Serializer Methods
+  # e: To test with_permissions of Serializer Methods
+  # f: To test exclude_keys of Serializer Methods
+
   context 'Inheriting from ApplicationRecordSerializer' do
     let(:model1) {
       class ModelOne < ApplicationRecord
