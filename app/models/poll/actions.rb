@@ -13,6 +13,10 @@ module Poll::Actions
   end
 
   module ClassMethods
+    def base_query
+      "LOWER(#{self.table_name}.title) LIKE :search"
+    end
+
     def base_preloads
       [:fields, :groups, :segments, :enterprise]
     end

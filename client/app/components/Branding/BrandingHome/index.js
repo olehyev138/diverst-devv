@@ -93,6 +93,46 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
           </Grid>
         </CardContent>
         <Divider />
+        <CardContent>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12}>
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='end'
+                  label={intl.formatMessage(messages.Home.consent_message)}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={handleChange}
+                      color='primary'
+                      id='onboarding_consent_enabled'
+                      name='onboarding_consent_enabled'
+                      margin='normal'
+                      checked={values.onboarding_consent_enabled}
+                      value={values.onboarding_consent_enabled}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid>
+            { values.onboarding_consent_enabled && (
+              <Grid item xs={12}>
+                <Field
+                  component={DiverstRichTextInput}
+                  required
+                  onChange={value => setFieldValue('onboarding_consent_message', value)}
+                  fullWidth
+                  id='onboarding_consent_message'
+                  name='onboarding_consent_message'
+                  margin='normal'
+                  value={values.onboarding_consent_message}
+                />
+              </Grid>
+            )
+            }
+          </Grid>
+        </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -111,6 +151,8 @@ export function BrandingHome(props) {
     id: { default: '' },
     home_message: { default: '' },
     privacy_statement: { default: '' },
+    onboarding_consent_enabled: { default: false },
+    onboarding_consent_message: { default: '' },
     banner: { default: null },
   });
 

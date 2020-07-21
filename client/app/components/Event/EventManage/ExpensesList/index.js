@@ -160,7 +160,7 @@ export function ExpenseList(props, context) {
               dataTotal={props.expenseTotal}
               columns={columns}
               actions={actions}
-              my_options={{
+              tableOptions={{
                 search: false,
               }}
             />
