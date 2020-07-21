@@ -317,6 +317,11 @@ class Api::V1::UsersController < DiverstController
       )
   end
 
+  def sample_csv
+    authorize User, :index?
+    send_data current_user.enterprise.users_csv(5), filename: 'diverst_import.csv'
+  end
+
   private
 
   def model_map(model)

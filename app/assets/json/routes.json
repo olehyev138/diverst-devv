@@ -5,6 +5,9 @@
     "forgotPassword": "/forgot",
     "passwordReset": "/password_reset/:token"
   },
+  "anonymous": {
+    "pollResponse": "/poll_response/:token"
+  },
   "user": {
     "root": "/",
     "home": "/",
@@ -135,7 +138,7 @@
     }
   },
   "admin": {
-    "root": "/admin/analyze",
+    "root": "/admin/manage/groups",
     "analyze": {
       "overview": "/admin/analyze",
       "users": "/admin/analyze/users",
@@ -184,6 +187,9 @@
       },
       "archived": {
         "index": "/admin/manage/archived"
+      },
+      "calendar": {
+        "index": "/admin/manage/calendar"
       }
     },
     "plan": {

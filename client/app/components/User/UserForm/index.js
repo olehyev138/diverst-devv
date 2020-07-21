@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Box, FormControl, FormControlLabel, Switch
+  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper
 } from '@material-ui/core';
 
 import Select from 'components/Shared/DiverstSelect';
@@ -25,137 +25,169 @@ import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const [tab, setTab] = useState('general');
+
+  const generalForm = (
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              required
+              margin='normal'
+              id='email'
+              name='email'
+              value={values.email}
+              label={<DiverstFormattedMessage {...messages.email} />}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              margin='normal'
+              id='first_name'
+              name='first_name'
+              value={values.first_name}
+              label={<DiverstFormattedMessage {...messages.first_name} />}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              margin='normal'
+              id='last_name'
+              name='last_name'
+              value={values.last_name}
+              label={<DiverstFormattedMessage {...messages.last_name} />}
+            />
+            <Field
+              component={DiverstFileInput}
+              id='avatar'
+              name='avatar'
+              margin='normal'
+              fileName={props.user && props.user.avatar_file_name}
+              fullWidth
+              label={<DiverstFormattedMessage {...messages.avatar} />}
+              disabled={props.isCommitting}
+              value={values.avatar}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              margin='normal'
+              multiline
+              rows={4}
+              variant='outlined'
+              id='biography'
+              name='biography'
+              value={values.biography}
+              label={<DiverstFormattedMessage {...messages.biography} />}
+            />
+            <Field
+              component={Select}
+              fullWidth
+              disabled={props.isCommitting}
+              id='time_zone'
+              name='time_zone'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.time_zone} />}
+              value={values.time_zone}
+              options={dig(props, 'user', 'timezones') || []}
+              onChange={value => setFieldValue('time_zone', value)}
+              onBlur={() => setFieldTouched('time_zone', true)}
+            />
+            <FormControl>
+              <FormControlLabel
+                labelPlacement='end'
+                label={<DiverstFormattedMessage {...messages.active} />}
+                control={(
+                  <Field
+                    component={Switch}
+                    onChange={handleChange}
+                    color='primary'
+                    id='active'
+                    name='active'
+                    margin='normal'
+                    checked={values.active}
+                    value={values.active}
+                  />
+                )}
+              />
+            </FormControl>
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
+  );
+
+  const fieldForm = (
+    <React.Fragment>
+      <Box mb={2} />
+      <UserFieldInputForm
+        edit
+        user={props.user}
+        fieldData={props.fieldData}
+        updateFieldDataBegin={props.updateFieldDataBegin}
+        admin={props.admin}
+        isCommitting={props.isCommitting}
+        isFormLoading={props.isFormLoading}
+        messages={messages}
+      />
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
-      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
-        <Card>
-          <Form>
-            <CardContent>
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                required
-                margin='normal'
-                id='email'
-                name='email'
-                value={values.email}
-                label={<DiverstFormattedMessage {...messages.email} />}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                id='first_name'
-                name='first_name'
-                value={values.first_name}
-                label={<DiverstFormattedMessage {...messages.first_name} />}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                id='last_name'
-                name='last_name'
-                value={values.last_name}
-                label={<DiverstFormattedMessage {...messages.last_name} />}
-              />
-              <Field
-                component={DiverstFileInput}
-                id='avatar'
-                name='avatar'
-                margin='normal'
-                fileName={props.user && props.user.avatar_file_name}
-                fullWidth
-                label={<DiverstFormattedMessage {...messages.avatar} />}
-                disabled={props.isCommitting}
-                value={values.avatar}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                fullWidth
-                disabled={props.isCommitting}
-                margin='normal'
-                multiline
-                rows={4}
-                variant='outlined'
-                id='biography'
-                name='biography'
-                value={values.biography}
-                label={<DiverstFormattedMessage {...messages.biography} />}
-              />
-              <Field
-                component={Select}
-                fullWidth
-                disabled={props.isCommitting}
-                id='time_zone'
-                name='time_zone'
-                margin='normal'
-                label={<DiverstFormattedMessage {...messages.time_zone} />}
-                value={values.time_zone}
-                options={dig(props, 'user', 'timezones') || []}
-                onChange={value => setFieldValue('time_zone', value)}
-                onBlur={() => setFieldTouched('time_zone', true)}
-              />
-              <FormControl>
-                <FormControlLabel
-                  labelPlacement='right'
-                  label={<DiverstFormattedMessage {...messages.active} />}
-                  control={(
-                    <Field
-                      component={Switch}
-                      onChange={handleChange}
-                      color='primary'
-                      id='active'
-                      name='active'
-                      margin='normal'
-                      checked={values.active}
-                      value={values.active}
-                    />
-                  )}
-                />
-              </FormControl>
-            </CardContent>
-            <Divider />
-            <CardActions>
-              <DiverstSubmit isCommitting={props.isCommitting}>
-                {buttonText}
-              </DiverstSubmit>
-              <Button
-                disabled={props.isCommitting}
-                to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.cancel} />
-              </Button>
-            </CardActions>
-          </Form>
-        </Card>
-      </DiverstFormLoader>
       {props.edit && (
         <React.Fragment>
+          <Paper>
+            <ResponsiveTabs
+              value={tab}
+              indicatorColor='primary'
+              textColor='primary'
+            >
+              <Tab
+                onClick={() => setTab('general')}
+                label={<DiverstFormattedMessage {...messages.generalTab} />}
+                value='general'
+              />
+              <Tab
+                onClick={() => setTab('fields')}
+                label={<DiverstFormattedMessage {...messages.fieldTab} />}
+                value='fields'
+              />
+            </ResponsiveTabs>
+          </Paper>
           <Box mb={2} />
-          <UserFieldInputForm
-            edit
-            user={props.user}
-            fieldData={props.fieldData}
-            updateFieldDataBegin={props.updateFieldDataBegin}
-            admin={props.admin}
-            isCommitting={props.isCommitting}
-            isFormLoading={props.isFormLoading}
-            messages={messages}
-          />
         </React.Fragment>
       )}
+      {tab === 'general' && generalForm}
+      {tab === 'fields' && fieldForm}
     </React.Fragment>
   );
 }

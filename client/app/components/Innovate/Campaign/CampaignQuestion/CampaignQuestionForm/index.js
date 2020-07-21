@@ -119,7 +119,7 @@ CampaignQuestionForm.propTypes = {
 };
 
 CampaignQuestionFormInner.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   question: PropTypes.object,
   createQuestionBegin: PropTypes.func,

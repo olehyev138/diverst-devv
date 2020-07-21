@@ -11,6 +11,7 @@ import {
   GroupLayout,
   AdminLayout,
   SessionLayout,
+  AnonymousLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
@@ -114,6 +115,7 @@ import {
   PollCreatePage,
   PollEditPage,
   PollShowPage,
+  PollResponsePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -149,6 +151,7 @@ import {
   SocialLinkEditPage,
   UserDownloadsPage,
   ArchivesPage,
+  AdminCalendarPage,
   LogListPage,
   GroupSponsorsListPage,
   GroupSponsorsCreatePage,
@@ -181,6 +184,16 @@ export default function Routes(props) {
               <RouteWithProps path={ROUTES.session.signUp.path()}><SignUpPage /></RouteWithProps>
             </SwitchWithProps>
           </SessionLayout>
+        </Route>
+
+        {/* Anonymous */}
+        <Route path={expandRouteIntoPathArray(ROUTES.anonymous)}>
+          <AnonymousLayout>
+            <SwitchWithProps>
+              {/* Poll Response */}
+              <RouteWithProps path={ROUTES.anonymous.pollResponse.path()}><PollResponsePage /></RouteWithProps>
+            </SwitchWithProps>
+          </AnonymousLayout>
         </Route>
 
         {/* Authenticated */}
@@ -476,6 +489,8 @@ export default function Routes(props) {
                     <RouteWithProps path={ROUTES.admin.manage.resources.folders.edit.path()}><EFolderEditPage /></RouteWithProps>
                     { /* Manage - Folder Show */ }
                     <RouteWithProps path={ROUTES.admin.manage.resources.folders.show.path()}><EFolderPage /></RouteWithProps>
+                    { /* Manage - Calendar */ }
+                    <RouteWithProps path={ROUTES.admin.manage.calendar.index.path()}><AdminCalendarPage /></RouteWithProps>
 
                     { /* Plan - Budget */ }
                     <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>

@@ -9,7 +9,8 @@ RSpec.describe SegmentFieldRule, type: :model do
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
-    # it { is_expected.to validate_presence_of(:data) }
+    it { is_expected.to validate_presence_of(:field_id) }
+    it { is_expected.to validate_presence_of(:data) }
   end
 
   describe '#data' do

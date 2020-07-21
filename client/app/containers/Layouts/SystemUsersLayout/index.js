@@ -24,8 +24,8 @@ const styles = theme => ({
 const SystemUsersPages = Object.freeze([
   'users',
   'roles',
-  'import',
   'templates',
+  'import',
 ]);
 
 const SystemUsersLayout = (props) => {
@@ -43,7 +43,7 @@ const SystemUsersLayout = (props) => {
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path() }))
     currentPage = 'users';
 
-  const [tab, setTab] = useState(SystemUsersPages[currentPage]);
+  const [tab, setTab] = useState(SystemUsersPages[currentPage] || SystemUsersPages[0]);
 
   useEffect(() => {
     if (tab !== currentPage)
@@ -54,6 +54,7 @@ const SystemUsersLayout = (props) => {
     <React.Fragment>
       <SystemUsersLinks
         currentTab={tab}
+        permissions={permissions}
         {...rest}
       />
       <Fade in appear>

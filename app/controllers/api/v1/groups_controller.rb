@@ -2,16 +2,38 @@ class Api::V1::GroupsController < DiverstController
   include Api::V1::Concerns::DefinesFields
   include Api::V1::Concerns::Updatable
 
+  def assign_leaders
+    params[klass.symbol] = payload
+    item = klass.find(params[:id])
+    base_authorize(item)
+    render status: 200, json: klass.update(self.diverst_request, params)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def create_field
     params[:field][:field_type] = 'regular'
     super
   end
 
+  def current_annual_budget
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.current_annual_budget!
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def current_annual_budgets
     base_authorize(klass)
     params[:parent_id] = nil
-    params[:preload] = 'budget'
-    render status: 200, json: klass.budget_index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetSerializer
+    render status: 200, json: klass.index(self.diverst_request, params.permit!), budgets: true, with_children: true
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -19,10 +41,9 @@ class Api::V1::GroupsController < DiverstController
   def carryover_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
-
     updated_item = item.carryover_annual_budget(self.diverst_request)
     track_activity(updated_item)
-    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
+    render status: 200, json: updated_item, budgets: true
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -33,16 +54,7 @@ class Api::V1::GroupsController < DiverstController
 
     updated_item = item.reset_annual_budget(self.diverst_request)
     track_activity(updated_item)
-    render status: 200, json: updated_item, serializer: GroupWithBudgetSerializer
-  rescue => e
-    raise BadRequestException.new(e.message)
-  end
-
-  def current_annual_budget
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: item.current_annual_budget!
+    render status: 200, json: updated_item, budgets: true
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -73,26 +85,34 @@ class Api::V1::GroupsController < DiverstController
     end
   end
 
+  def calendar_colors
+    base_authorize(klass)
+
+    render status: 200, json: {
+        items: GroupPolicy::Scope.new(current_user, Group).resolve
+                   .select(:id, :name, :calendar_color, :enterprise_id)
+                   .preload(:enterprise, enterprise: [:theme])
+                   .distinct
+                   .map do |g|
+                 {
+                     id: g.id,
+                     name: g.name,
+                     calendar_color: g.get_calendar_color,
+                 }
+               end
+    }
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   private
 
   def load_sums(result)
     result.items = result.items.load_sums
     result
-  end
-
-  def assign_leaders
-    params[klass.symbol] = payload
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: klass.update(self.diverst_request, params)
-  rescue => e
-    case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
-    end
   end
 
   def leaders_payload

@@ -23,7 +23,7 @@ import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
-export function PollCreatePage(props) {
+export function PollEditPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
 
@@ -59,8 +59,8 @@ export function PollCreatePage(props) {
   );
 }
 
-PollCreatePage.propTypes = {
-  intl: intlShape,
+PollEditPage.propTypes = {
+  intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   getPollBegin: PropTypes.func,
@@ -91,7 +91,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  PollCreatePage,
+  PollEditPage,
   ['poll.permissions.update?', 'isFormLoading'],
   (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.editPage

@@ -45,6 +45,7 @@ export function GroupHome({ classes, ...props }) {
   const groupImage = props.currentGroup.banner_data && (
     <DiverstImg
       data={props.currentGroup.banner_data}
+      contentType={props.currentGroup.banner_content_type}
       alt=''
       maxWidth='100%'
       minWidth='100%'

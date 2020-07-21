@@ -12,25 +12,30 @@ import PropTypes from 'prop-types';
 import { connect, Field, getIn } from 'formik';
 import dig from 'object-dig';
 
-import { TextField } from '@material-ui/core';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const CustomDateField = (props) => {
   const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-
   const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
-    <TextField
-      name={dataLocation}
-      id={dataLocation}
-      type='date'
-      margin='normal'
-      required={fieldDatum.field.required}
-      label={fieldDatum.field.title}
-      value={getIn(formik.values, dataLocation)}
-      onChange={formik.handleChange}
-      {...rest}
-    />
+    <React.Fragment>
+      <KeyboardDatePicker
+        format='yyyy/MM/dd'
+        mask='____/__/__'
+        fullWidth
+        name={dataLocation}
+        id={dataLocation}
+        margin='normal'
+        required={fieldDatum.field.required}
+        label={fieldDatum.field.title}
+        value={getIn(formik.values, dataLocation)}
+        onChange={v => formik.setFieldValue(dataLocation, v)}
+        autoOk
+        strictCompareDates
+        {...rest}
+      />
+    </React.Fragment>
   );
 };
 

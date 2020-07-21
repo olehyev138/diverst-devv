@@ -29,4 +29,5 @@ module.exports = {
   testRegex: 'tests/.*\\.test\\.js$',
   snapshotSerializers: [ 'enzyme-to-json/serializer'],
   reporters: ["default", "jest-junit"],
+  transformIgnorePatterns: ['/node_modules/(?!@fullcalendar/)']
 };

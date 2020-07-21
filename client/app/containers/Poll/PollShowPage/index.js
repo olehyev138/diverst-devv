@@ -36,7 +36,6 @@ import {
 import responseReducer from 'containers/Poll/Response/reducer';
 import responseSaga from 'containers/Poll/Response/saga';
 import PollShowHeader from 'components/Poll/PollShowHeader';
-import PollTestAnswers from 'components/Poll/PollTextAnswers';
 
 const defaultParams = Object.freeze({
   count: 10,
@@ -45,7 +44,7 @@ const defaultParams = Object.freeze({
   orderBy: 'poll_responses.id',
 });
 
-export function PollCreatePage(props) {
+export function PollShowPage(props) {
   useInjectReducer({ key: 'polls', reducer });
   useInjectSaga({ key: 'polls', saga });
   useInjectReducer({ key: 'responses', reducer: responseReducer });
@@ -53,6 +52,7 @@ export function PollCreatePage(props) {
 
   const [tab, setTab] = useState('responses');
   const [textField, setTextField] = useState(null);
+  const [textFieldOptions, setTextFieldOptions] = useState([]);
   const [responseParams, setResponseParams] = useState(defaultParams);
 
   const { poll_id: pollId } = useParams();
@@ -92,7 +92,7 @@ export function PollCreatePage(props) {
 
   useEffect(() => {
     if (props.poll)
-      setTextField(dig(poll, 'fields', fd => fd.find(f => f.type === 'TextField')) || -1);
+      setTextFieldOptions(dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField')));
 
     return () => null;
   }, [dig(props, 'poll', 'id')]);
@@ -112,22 +112,15 @@ export function PollCreatePage(props) {
       return (
         <PollResponses
           {...componentProps}
+          field={textField || {}}
+          setField={setTextField}
+          fieldOptions={textFieldOptions}
           handlePagination={handlePagination(responseParams, setResponseParams)}
           handleOrdering={handleOrdering(responseParams, setResponseParams)}
         />
       );
     if (tab === 'graphs')
       return <PollGraphs {...componentProps} />;
-    if (tab === 'text')
-      return (
-        <PollTestAnswers
-          {...componentProps}
-          field={textField}
-          setField={setTextField}
-          handlePagination={handlePagination(responseParams, setResponseParams)}
-          handleOrdering={handleOrdering(responseParams, setResponseParams)}
-        />
-      );
     return <React.Fragment />;
   };
 
@@ -156,12 +149,6 @@ export function PollCreatePage(props) {
               label='Graphs'
               value='graphs'
             />
-            { textField && (
-              <Tab
-                label='Textual answers'
-                value='texts'
-              />
-            )}
           </ResponsiveTabs>
         </Card>
         <Box mb={2} />
@@ -171,8 +158,8 @@ export function PollCreatePage(props) {
   );
 }
 
-PollCreatePage.propTypes = {
-  intl: intlShape,
+PollShowPage.propTypes = {
+  intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
   getPollBegin: PropTypes.func,
@@ -213,7 +200,7 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  PollCreatePage,
+  PollShowPage,
   ['poll.permissions.show?', 'isFormLoading'],
   (props, params) => ROUTES.admin.include.polls.index.path(),
   permissionMessages.poll.showPage

@@ -113,7 +113,7 @@ export function MetricsDashboardsList(props, context) {
 }
 
 MetricsDashboardsList.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,

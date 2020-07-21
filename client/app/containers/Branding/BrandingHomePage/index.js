@@ -39,7 +39,7 @@ export function BrandingHomePage(props) {
 }
 
 BrandingHomePage.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   enterprise: PropTypes.object,
   updateEnterpriseBegin: PropTypes.func,
 };

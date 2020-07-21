@@ -215,6 +215,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/calendar"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.calendar"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
             </WithStyles(ForwardRef(List))>
           </WithStyles(ForwardRef(Collapse))>
           <WrappedComponent
@@ -453,25 +471,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <WithStyles(ForwardRef(ListItemText))>
                   <Memo(Connect(DiverstFormattedMessage))
                     id="diverst.containers.Routes.admin.system.logs"
-                  />
-                </WithStyles(ForwardRef(ListItemText))>
-              </WrappedComponent>
-              <WrappedComponent
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "render": [Function],
-                  }
-                }
-                isActive={[Function]}
-                to="#"
-              >
-                <WithStyles(ForwardRef(ListItemIcon))>
-                  <ListIcon />
-                </WithStyles(ForwardRef(ListItemIcon))>
-                <WithStyles(ForwardRef(ListItemText))>
-                  <Memo(Connect(DiverstFormattedMessage))
-                    id="diverst.containers.Routes.admin.system.diversity"
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
@@ -689,6 +688,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/manage/calendar"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <ListIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.manage.calendar"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
             </WithStyles(ForwardRef(List))>
           </WithStyles(ForwardRef(Collapse))>
           <WrappedComponent
@@ -927,25 +944,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <WithStyles(ForwardRef(ListItemText))>
                   <Memo(Connect(DiverstFormattedMessage))
                     id="diverst.containers.Routes.admin.system.logs"
-                  />
-                </WithStyles(ForwardRef(ListItemText))>
-              </WrappedComponent>
-              <WrappedComponent
-                component={
-                  Object {
-                    "$$typeof": Symbol(react.forward_ref),
-                    "render": [Function],
-                  }
-                }
-                isActive={[Function]}
-                to="#"
-              >
-                <WithStyles(ForwardRef(ListItemIcon))>
-                  <ListIcon />
-                </WithStyles(ForwardRef(ListItemIcon))>
-                <WithStyles(ForwardRef(ListItemText))>
-                  <Memo(Connect(DiverstFormattedMessage))
-                    id="diverst.containers.Routes.admin.system.diversity"
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>

@@ -66,6 +66,12 @@ export default defineMessages({
   user_role: {
     id: `${scope}.form.input.user_role`,
   },
+  generalTab: {
+    id: `${scope}.form.tab.general`,
+  },
+  fieldTab: {
+    id: `${scope}.form.tab.field`,
+  },
   fields: {
     id: `${scope}.profile.fields`
   },
@@ -87,6 +93,35 @@ export default defineMessages({
     },
     saml: {
       id: `${scope}.scope.saml`
+    },
+  },
+  imports: {
+    title: {
+      id: `${scope}.import.title`,
+    },
+    importInstructionsTitle: {
+      id: `${scope}.import.importInstructionsTitle`,
+    },
+    importInstructions: {
+      id: `${scope}.import.importInstructions`,
+    },
+    columnInstructionsTitle: {
+      id: `${scope}.import.columnInstructionsTitle`,
+    },
+    columnInstructions: {
+      id: `${scope}.import.columnInstructions`,
+    },
+    rowsInstructionsTitle: {
+      id: `${scope}.import.rowsInstructionsTitle`,
+    },
+    rowsInstructions: {
+      id: `${scope}.import.rowsInstructions`,
+    },
+    SampleInstructionsTitle: {
+      id: `${scope}.import.SampleInstructionsTitle`,
+    },
+    SampleInstructions: {
+      id: `${scope}.import.SampleInstructions`,
     },
   },
   downloads: {

@@ -23,14 +23,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
 
-export function GroupSponsorCreatePage(props) {
+export function GroupSponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
   const { group_sponsor_id: groupSponsorId } = useParams();
+  const { group_id: groupId } = useParams();
 
   const links = {
-    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupSponsorId),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(groupId),
   };
   const { intl } = props;
 
@@ -50,14 +51,14 @@ export function GroupSponsorCreatePage(props) {
         sponsorAction={props.updateSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={groupSponsorId}
+        sponsorableId={groupId}
       />
     </React.Fragment>
   );
 }
 
-GroupSponsorCreatePage.propTypes = {
-  intl: intlShape,
+GroupSponsorEditPage.propTypes = {
+  intl: intlShape.isRequired,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
   updateSponsorBegin: PropTypes.func,
@@ -83,4 +84,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupSponsorCreatePage);
+)(GroupSponsorEditPage);

@@ -113,7 +113,7 @@ CampaignQuestionClose.propTypes = {
 };
 
 CampaignQuestionCloseInner.propTypes = {
-  intl: intlShape,
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   question: PropTypes.object,
   handleSubmit: PropTypes.func,

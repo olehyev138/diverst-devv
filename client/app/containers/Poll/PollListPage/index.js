@@ -76,6 +76,13 @@ export function PollListPage(props) {
     setParams(newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getPollsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <PollList
@@ -87,6 +94,7 @@ export function PollListPage(props) {
         handlePollShow={props.handlePollShow}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleSearching={handleSearching}
         links={links}
         currentEnterprise={props.currentEnterprise}
         permissions={props.permissions}

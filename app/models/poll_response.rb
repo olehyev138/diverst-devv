@@ -10,6 +10,7 @@ class PollResponse < ApplicationRecord
   has_many :user_reward_actions, dependent: :destroy
 
   validates_length_of :data, maximum: 65535
+  validates_uniqueness_of :user_id, scope: :poll_id, allow_blank: true
 
   def group
     poll&.initiative&.group

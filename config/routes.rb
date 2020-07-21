@@ -80,12 +80,12 @@ Diverst::Application.routes.draw do
       resources :groups do
         collection do
           get '/annual_budgets', to: 'groups#current_annual_budgets'
+          get '/calendar_colors', to: 'groups#calendar_colors'
         end
         member do
           get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
-          get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
@@ -204,7 +204,11 @@ Diverst::Application.routes.draw do
         get  '/fields',       to: 'polls#fields'
         post '/create_field', to: 'polls#create_field'
       end
-      resources :poll_responses
+      resources :poll_responses, except: [:destroy, :update] do
+        collection do
+          get 'questionnaire', to: 'poll_responses#questionnaire'
+        end
+      end
       resources :polls_segments
       resources :questions
       resources :resources do
@@ -263,6 +267,7 @@ Diverst::Application.routes.draw do
           post '/reset_password_token', to: 'users#reset_password_token'
           post '/password_reset', to: 'users#password_reset'
           get 'prototype'
+          get 'sample_csv'
         end
       end
       resources :user_groups do

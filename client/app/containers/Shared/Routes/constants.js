@@ -18,6 +18,14 @@ const ROUTES = {
     },
   },
 
+  // Anonymous
+  anonymous: {
+    // Poll Response
+    pollResponse: {
+      path: (token = ':token') => `/poll_response/${token}`,
+    },
+  },
+
   // User
   user: {
     get root() { return this.home; },
@@ -558,7 +566,7 @@ const ROUTES = {
 
   // Admin
   admin: {
-    get root() { return this.analyze.overview; },
+    get root() { return this.manage.groups.index; },
     pathPrefix: '/admin',
     analyze: {
       index: {
@@ -719,6 +727,14 @@ const ROUTES = {
           path: () => '/admin/manage/archived',
           data: {
             titleMessage: messages.admin.manage.archived,
+          }
+        }
+      },
+      calendar: {
+        index: {
+          path: () => '/admin/manage/calendar',
+          data: {
+            titleMessage: messages.admin.manage.calendar,
           }
         }
       },

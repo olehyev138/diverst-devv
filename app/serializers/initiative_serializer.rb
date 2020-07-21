@@ -11,12 +11,12 @@ class InitiativeSerializer < ApplicationRecordSerializer
     {
         id: object.group.id,
         name: object.group.name,
-        calendar_color: object.group.color_hash,
+        calendar_color: object.group.get_calendar_color,
     }
   end
 
   def budget_item
-    BudgetItemSerializer.new(object.budget_item, scope: scope, scope_name: :scope, event: object).as_json if object.budget_item.present?
+    BudgetItemSerializer.new(object.budget_item, scope: scope, event: object).as_json if object.budget_item.present?
   end
 
   def serialize_all_fields

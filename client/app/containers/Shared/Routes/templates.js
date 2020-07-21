@@ -5,6 +5,7 @@ import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
+import AnonymousLayout from 'containers/Layouts/AnonymousLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
@@ -71,11 +72,15 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 /* Admin - Manage - Archive */
 import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
 
+/* Admin - Manage - Calendar */
+import AdminCalendarPage from 'containers/Calendar/AdminCalendarPage';
+
 /* Admin - Include - Polls */
 import PollsList from 'containers/Poll/PollListPage/Loadable';
 import PollCreatePage from 'containers/Poll/PollCreatePage/Loadable';
 import PollEditPage from 'containers/Poll/PollEditPage/Loadable';
 import PollShowPage from 'containers/Poll/PollShowPage/Loadable';
+import PollResponsePage from 'containers/Poll/PollResponsePage/Loadable';
 
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
@@ -214,6 +219,7 @@ export {
   GroupLayout,
   AdminLayout,
   SessionLayout,
+  AnonymousLayout,
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
@@ -321,6 +327,7 @@ export {
   PollCreatePage,
   PollEditPage,
   PollShowPage,
+  PollResponsePage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -355,5 +362,6 @@ export {
   NewsLinkPage,
   UserDownloadsPage,
   ArchivesPage,
+  AdminCalendarPage,
   LogListPage
 };

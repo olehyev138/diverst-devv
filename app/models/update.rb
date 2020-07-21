@@ -21,7 +21,7 @@ class Update < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_presence_of :report_date
   validates_presence_of :updatable
-  validates_uniqueness_of :report_date, scope: :updatable
+  validates_uniqueness_of :report_date, scope: :updatable_id
 
   def reported_for_date
     report_date || created_at

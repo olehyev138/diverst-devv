@@ -40,6 +40,7 @@ import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
@@ -90,20 +91,23 @@ export function EventFormInner({
               label={<DiverstFormattedMessage {...messages.inputs.name} />}
               value={values.name}
             />
+          </CardContent>
+          <Divider />
+          <CardContent>
             <Field
-              component={TextField}
-              onChange={handleChange}
-              disabled={props.isCommitting}
+              component={DiverstRichTextInput}
+              required
+              onChange={value => setFieldValue('description', value)}
               fullWidth
               id='description'
               name='description'
-              multiline
-              rows={4}
-              variant='outlined'
               margin='normal'
               label={<DiverstFormattedMessage {...messages.inputs.description} />}
               value={values.description}
             />
+          </CardContent>
+          <Divider />
+          <CardContent>
             <Field
               component={TextField}
               onChange={handleChange}
@@ -129,7 +133,6 @@ export function EventFormInner({
               disabled={props.isCommitting}
               value={values.pillar_id}
               options={props.pillars}
-              onMenuOpen={pillarSelectAction}
               onChange={value => setFieldValue('pillar_id', value)}
               onInputChange={value => pillarSelectAction(value)}
               onBlur={() => setFieldTouched('pillar_id', true)}
@@ -155,7 +158,6 @@ export function EventFormInner({
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
                   options={[freeEvent, ...props.budgetItems]}
-                  onMenuOpen={budgetSelectAction}
                   onChange={(value) => {
                     setFieldValue('budget_item_id', value);
                     setFieldValue('estimated_funding', value.available);

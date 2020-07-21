@@ -4,7 +4,7 @@ ssh_key_name        = "key_devops"
 az_count            = 2
 nat_gateway_enabled = false
 
-backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.4 running Ruby 2.6 (Puma)"
+backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.7 running Ruby 2.6 (Puma)"
 rails_master_key        = "0cd095760c9ff9a780b97332b683bc3a"
 backend_asg_min         = 1
 backend_asg_max         = 2

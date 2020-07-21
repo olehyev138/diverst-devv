@@ -8,7 +8,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MockGroupSelector from './mock';
+import GroupSelector from '../index';
+import configureStore from 'redux-mock-store';
+const mockStore = configureStore([]);
 
 const props = {
   groupField: '',
@@ -21,10 +23,10 @@ const props = {
   groupListUnmount: jest.fn(),
   groups: [],
 };
-describe('<MockGroupSelector />', () => {
+describe('<GroupSelector />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<MockGroupSelector classes={{}} {...props} />);
+    const wrapper = shallow(<GroupSelector classes={{}} {...props} store={mockStore()} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

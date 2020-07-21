@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_18_202924) do
+ActiveRecord::Schema.define(version: 2020_07_14_140553) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -411,7 +411,7 @@ ActiveRecord::Schema.define(version: 2020_06_18_202924) do
     t.integer "users_count"
     t.boolean "onboarding_consent_enabled", default: false
     t.boolean "enable_outlook", default: false
-    t.text "onboarding_pop_up_content"
+    t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
   end
 
@@ -1026,10 +1026,6 @@ ActiveRecord::Schema.define(version: 2020_06_18_202924) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
-    t.bigint "author_id_id"
-    t.bigint "author_id"
-    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
-    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1589,6 +1585,19 @@ ActiveRecord::Schema.define(version: 2020_06_18_202924) do
     t.text "data"
     t.index ["group_id"], name: "index_user_groups_on_group_id"
     t.index ["user_id"], name: "index_user_groups_on_user_id"
+  end
+
+  create_table "user_poll_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "poll_id"
+    t.string "token"
+    t.boolean "submitted", default: false
+    t.boolean "cancelled", default: false
+    t.boolean "email_sent", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_user_poll_tokens_on_poll_id"
+    t.index ["user_id"], name: "index_user_poll_tokens_on_user_id"
   end
 
   create_table "user_reward_actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
