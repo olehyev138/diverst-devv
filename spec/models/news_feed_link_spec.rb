@@ -357,7 +357,7 @@ RSpec.describe NewsFeedLink, type: :model do
       expect(news_feed_link.to_label).to eq news_link.to_s
     end
 
-    it'return group message' do
+    it'return social link' do
       social_link = create(:social_link)
       news_feed_link = social_link.news_feed_link
       expect(news_feed_link.to_label).to eq social_link.to_s
