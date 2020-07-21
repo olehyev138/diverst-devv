@@ -27,6 +27,7 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
 
+
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -63,6 +64,20 @@ export function UserGroupListPage(props) {
     setDisplayMyGroups(false);
   };
 
+  const filterGroups = (groupList) => {
+    const parentGroups = [];
+
+    groupList.forEach(parentGroup => (
+      parentGroup.children.length > 0 ? (
+        parentGroups.push(Object.assign(parentGroup, { children: parentGroup.children.filter(child => child.current_user_is_member && child) }))
+      ) : (
+        parentGroups.push(parentGroup)
+      )
+    ));
+    return parentGroups;
+  };
+
+
   return (
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>
@@ -92,7 +107,7 @@ export function UserGroupListPage(props) {
         <Grid item xs={12}>
           <GroupList
             isLoading={props.isLoading}
-            groups={props.groups}
+            groups={!displayMyGroups ? props.groups : filterGroups(props.groups)}
             groupTotal={props.groupTotal}
             defaultParams={params}
             deleteGroupBegin={props.deleteGroupBegin}
