@@ -8,11 +8,13 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
   #
   # d: To test basic serialization of Serializer Methods
   # e: To test with_permissions of Serializer Methods
+  # f: To test exclusive with_permissions of Serializer Methods
 
   context 'Inheriting from ApplicationRecordSerializer' do
     let(:model) {
       Class.new do
         include ActiveModel::Model
+        include ActiveModel::Serialization
         attr_accessor :a, :b, :c
         validates :a, :b, :c, presence: true
         def attributes; { a: a, b: b, c: c } end
@@ -61,7 +63,7 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           pp @serializer1.object_id
           expect(@serializer1._attributes).to     be_empty
 
-          @serializer1.new(model.new)
+          serializer = @serializer1.new(model.new({a: 1, b: 2, c: 3}))
 
           expect(@serializer1._attributes).to     include :a
           expect(@serializer1._attributes).to     include :b
@@ -69,6 +71,9 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           expect(@serializer1._attributes).to_not include :d
           expect(@serializer1._attributes).to_not include :e
           expect(@serializer1._attributes).to_not include :f
+
+          expect(serializer.serializable_hash[:a]).to eq 1
+          expect(serializer.serializable_hash[:b]).to eq 2
         end
       end
 
@@ -77,7 +82,7 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           pp @serializer1.object_id
           expect(@serializer1._attributes).to     be_empty
 
-          a = @serializer1.new(model.new)
+          serializer = @serializer1.new(model.new({a: 1, b: 2, c: 3}))
 
           expect(@serializer1._attributes).to     be_empty
         end
@@ -90,9 +95,32 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           @serializer1.define_method :e do 2 * object.b end
         end
 
-        it 'it serializes all the fields' do
+        it 'it will serializes d and e' do
           expect(@serializer1._attributes).to_not include :a
           expect(@serializer1._attributes).to_not include :b
+          expect(@serializer1._attributes).to_not include :c
+          expect(@serializer1._attributes).to     include :d
+          expect(@serializer1._attributes).to     include :e
+          expect(@serializer1._attributes).to_not include :f
+
+          a = model.new({a: 1, b: 2, c: 3})
+          serializer = @serializer1.new(a)
+
+          expect(serializer.serializable_hash[:d]).to eq 2
+          expect(serializer.serializable_hash[:e]).to eq 4
+        end
+      end
+
+      context 'all fields' do
+        before :each do
+          @serializer1.attributes :a, :b, :d, :e
+          @serializer1.define_method :d do 2 * object.a end
+          @serializer1.define_method :e do 2 * object.b end
+        end
+
+        it 'it serializes all the fields' do
+          expect(@serializer1._attributes).to     include :a
+          expect(@serializer1._attributes).to     include :b
           expect(@serializer1._attributes).to_not include :c
           expect(@serializer1._attributes).to     include :d
           expect(@serializer1._attributes).to     include :e
