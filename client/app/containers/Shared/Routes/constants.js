@@ -563,7 +563,7 @@ const ROUTES = {
 
   // Admin
   admin: {
-    get root() { return this.analyze.overview; },
+    get root() { return this.manage.groups.index; },
     pathPrefix: '/admin',
     analyze: {
       index: {

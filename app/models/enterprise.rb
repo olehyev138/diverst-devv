@@ -106,6 +106,7 @@ class Enterprise < ApplicationRecord
   validates_length_of :sp_entity_id, maximum: 191
   validates_length_of :name, maximum: 191
   validates :idp_sso_target_url, url: { allow_blank: true }
+  validates_length_of :onboarding_consent_message, maximum: 65535
 
   # ActiveStorage
   has_one_attached :banner

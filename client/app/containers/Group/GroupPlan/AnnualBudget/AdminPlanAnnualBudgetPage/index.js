@@ -41,6 +41,20 @@ export function AdminAnnualBudgetPage(props) {
     setParams(newParams);
   };
 
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getAnnualBudgetsBegin(newParams);
+    setParams(newParams);
+  };
+
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getAnnualBudgetsBegin(newParams);
+    setParams(newParams);
+  };
+
 
   useEffect(() => {
     props.getAnnualBudgetsBegin(params);
@@ -55,13 +69,6 @@ export function AdminAnnualBudgetPage(props) {
     return () => props.groupListUnmount();
   }, [props.hasChanged]);
 
-  const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
-
-    props.getAnnualBudgetsBegin(newParams);
-    setParams(newParams);
-  };
-
   return (
     <AnnualBudgetList
       isFetchingAnnualBudgets={props.isFetchingAnnualBudgets}
@@ -70,6 +77,7 @@ export function AdminAnnualBudgetPage(props) {
       defaultParams={params}
       handlePagination={handlePagination}
       handleOrdering={handleOrdering}
+      handleSearching={handleSearching}
       carryBudget={props.carryBudgetBegin}
       resetBudget={props.resetBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
@@ -117,6 +125,6 @@ export default compose(
 )(Conditional(
   AdminAnnualBudgetPage,
   ['permissions.manage_all_budgets'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.group.groupPlan.annualBudget.adminPlanPage
 ));
