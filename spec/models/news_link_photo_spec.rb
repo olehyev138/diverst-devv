@@ -12,6 +12,13 @@ RSpec.describe NewsLinkPhoto, type: :model do
     it { expect(news_link_photo).to validate_attachment_content_type(:file, AttachmentHelper.common_image_types) }
   end
 
+  describe 'file_location' do
+    it 'return file location' do
+      news_link_photo = create(:news_link_photo)
+      expect(news_link_photo.file_location).to_not be nil
+    end
+  end
+
   describe '#group' do
     it 'returns the group the news_link belongs to' do
       group = create(:group)
