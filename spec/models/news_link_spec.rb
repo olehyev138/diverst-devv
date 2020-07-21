@@ -115,6 +115,17 @@ RSpec.describe NewsLink, type: :model do
     end
   end
 
+  describe 'picture_location' do
+    it 'with no picture' do
+      news_link = create(:news_link)
+      expect(news_link.picture_location).to be nil
+    end
+    it 'return picture location' do
+      news_link = create(:news_link_with_picture)
+      expect(news_link.picture_location).to_not be nil
+    end
+  end
+
   describe '#news_feed_link' do
     it 'has default news_feed_link' do
       user = create(:user)
@@ -161,6 +172,26 @@ RSpec.describe NewsLink, type: :model do
       it 'returns comments count' do
         expect(news_link.comments_count).to eq(3)
       end
+    end
+  end
+
+  describe 'url_protocol' do
+    it 'return url with protocol' do
+      news_link = create(:news_link, url: 'google.com')
+      expect(news_link.url).to eq 'http://google.com'
+    end
+
+    it 'have protocol' do
+      news_link = build(:news_link, url: 'http://google.com')
+      expect(news_link.have_protocol?).to_not be nil
+    end
+  end
+
+  describe 'remove_news_feed_link' do
+    it 'news_feed_link removed' do
+      news_link = create(:news_link)
+      news_link.remove_news_feed_link
+      expect(NewsFeedLink.count).to eq 0
     end
   end
 
