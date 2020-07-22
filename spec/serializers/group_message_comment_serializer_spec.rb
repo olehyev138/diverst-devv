@@ -9,5 +9,6 @@ RSpec.describe GroupMessageCommentSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq(group_message_comment.id)
     expect(serializer.serializable_hash[:author_id]).to eq(group_message_comment.author_id)
     expect(serializer.serializable_hash[:message_id]).to eq(group_message_comment.message_id)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
