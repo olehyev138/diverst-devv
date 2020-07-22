@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Group::Actions, type: :model do
   describe 'base_query' do
-    it { expect(Group.base_query).to eq 'LOWER(groups.name) LIKE :search' }
+    it { expect(Group.base_query).to eq 'LOWER(groups.name) LIKE :search OR LOWER(children_groups.name) LIKE :search' }
   end
 
   describe 'valid_scopes' do
@@ -78,14 +78,14 @@ RSpec.describe Group::Actions, type: :model do
     let!(:group_category_type) { create(:group_category_type) }
     let!(:group_category) { create(:group_category, group_category_type_id: group_category_type.id) }
 
-    it 'ID required' do
+    it 'raises exception if ID is missing' do
       expect { Group.update_child_categories(Request.create_request(create(:user)), {}) }.to raise_error(BadRequestException)
     end
-    it 'symbol required' do
+    it 'raises exception if symbol is missing' do
       expect { Group.update_child_categories(Request.create_request(create(:user)), { id: parent_group.id }) }.to raise_error(BadRequestException)
     end
 
-    it 'update categories' do
+    it 'updates categories' do
       params = { id: parent_group.id,
                  name: parent_group.name,
                  group_category_type_id: group_category_type.id,
@@ -96,50 +96,50 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'carryover_annual_budget' do
-    it 'missing id' do
+    it 'raises exception if id is missing ' do
       group_without_id = build(:group, id: nil)
       expect { group_without_id.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
-    it 'no annual budget' do
+    it 'raises exception if annual budget is missing' do
       group_without_budget = build(:group)
       expect { group_without_budget.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
     let!(:annual_budget) { create(:annual_budget, amount: 100) }
 
-    it 'can not be reset' do
+    it 'raises exception if budget can not be reset' do
       group = annual_budget.group
       create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
       expect { group.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 
-    it 'carryover success' do
+    it 'carries over successfully' do
       group = annual_budget.group
       expect(group.carryover_annual_budget(Request.create_request(create(:user))).annual_budget).to eq 100
     end
   end
 
   describe 'reset_annual_budget' do
-    it 'missing id' do
+    it 'raises exception if id is missing' do
       group_without_id = build(:group, id: nil)
       expect { group_without_id.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
-    it 'no annual budget' do
+    it 'raises exception if annual budget is missing' do
       group_without_budget = build(:group)
       expect { group_without_budget.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
     let!(:annual_budget) { create(:annual_budget, amount: 100) }
 
-    it 'can not be reset' do
+    it 'raises exception if budgetcan not be reset' do
       group = annual_budget.group
       create(:budget, annual_budget_id: annual_budget.id, is_approved: true)
       expect { group.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 
-    it 'carryover success' do
+    it 'resets successfully' do
       group = annual_budget.group
       expect(group.reset_annual_budget(Request.create_request(create(:user))).annual_budget).to eq 100
     end
