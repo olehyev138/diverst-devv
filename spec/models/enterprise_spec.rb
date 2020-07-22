@@ -156,6 +156,11 @@ RSpec.describe Enterprise, type: :model do
       enterprise = build_stubbed(:enterprise, company_video_url: 'https://www.youtube.com/watch?v=Y2VF8tmLFHw')
       expect(enterprise.company_video_url).to_not be(nil)
     end
+
+    it 'rejects the url' do
+      enterprise = build_stubbed(:enterprise, company_video_url: 'https://www.youtube.com/watch?v=AREALLYLONGLINKTHATISOVER191CHARACTERSONCEUPONATIMETHEREWASADOGTHATCROSSEDTHESTREETHESAWACATANDWASNTHAPPYSOHEBARKEDATTHECATANDTHECATRANAWAYTHECATWASBIGANDORANGEANDLOOKEDLIKEGARFIELD')
+      expect(enterprise).to_not be_valid
+    end
   end
 
   describe '#banner_location' do
@@ -196,14 +201,18 @@ RSpec.describe Enterprise, type: :model do
   end
 
   describe '#default_time_zone' do
-    it 'returns UTC' do
-      enterprise = build_stubbed(:enterprise, time_zone: nil)
-      expect(enterprise.default_time_zone).to eq ActiveSupport::TimeZone.find_tzinfo('UTC').name
+    context 'when timezone is not set' do
+      it 'returns UTC' do
+        enterprise = build_stubbed(:enterprise, time_zone: nil)
+        expect(enterprise.default_time_zone).to eq ActiveSupport::TimeZone.find_tzinfo('UTC').name
+      end
     end
 
-    it 'returns EST' do
-      enterprise = build_stubbed(:enterprise, time_zone: 'America/New_York')
-      expect(enterprise.default_time_zone).to eq 'America/New_York'
+    context 'when timezone is set ' do
+      it 'returns the value of timezone' do
+        enterprise = build_stubbed(:enterprise, time_zone: 'America/New_York')
+        expect(enterprise.default_time_zone).to eq 'America/New_York'
+      end
     end
   end
 
