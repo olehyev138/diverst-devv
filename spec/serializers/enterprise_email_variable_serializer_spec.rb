@@ -8,5 +8,6 @@ RSpec.describe EnterpriseEmailVariableSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq enterprise_email_variable.id
     expect(serializer.serializable_hash[:enterprise_id]).to eq enterprise_email_variable.enterprise_id
     expect(serializer.serializable_hash[:key]).to eq enterprise_email_variable.key
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

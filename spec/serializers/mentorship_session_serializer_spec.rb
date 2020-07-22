@@ -9,5 +9,6 @@ RSpec.describe MentorshipSessionSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq(mentorship_session.id)
     expect(serializer.serializable_hash[:user_id]).to eq(mentorship_session.user_id)
     expect(serializer.serializable_hash[:mentoring_session_id]).to eq(mentorship_session.mentoring_session_id)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

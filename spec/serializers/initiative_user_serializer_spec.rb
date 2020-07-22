@@ -10,5 +10,6 @@ RSpec.describe InitiativeUserSerializer, type: :serializer do
     expect(serializer.serializable_hash[:user]).to_not be nil
     expect(serializer.serializable_hash[:initiative]).to_not be nil
     expect(serializer.serializable_hash[:initiative].key?(:picture_data)).to be true
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

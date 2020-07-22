@@ -8,5 +8,6 @@ RSpec.describe GroupLeaderSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to_not be_nil
     expect(serializer.serializable_hash[:user]).to_not be_nil
     expect(serializer.serializable_hash[:user_role]).to_not be_nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
