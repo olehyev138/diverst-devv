@@ -53,8 +53,6 @@ class Enterprise < ApplicationRecord
   has_many :custom_emails, -> { where custom: true }, class_name: 'Email', dependent: :destroy
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
 
-  belongs_to :theme
-
   has_many :expenses, dependent: :destroy
   has_many :expense_categories, dependent: :destroy
   has_many :clockwork_database_events, dependent: :destroy
@@ -76,6 +74,8 @@ class Enterprise < ApplicationRecord
 
   has_one :custom_text, dependent: :destroy
 
+  belongs_to :theme
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
@@ -92,7 +92,6 @@ class Enterprise < ApplicationRecord
   validates_length_of :default_from_email_display_name, maximum: 191
   validates_length_of :default_from_email_address, maximum: 191
   validates_length_of :company_video_url, maximum: 191
-
   validates_length_of :privacy_statement, maximum: 65535
   validates_length_of :home_message, maximum: 65535
   validates_length_of :cdo_message, maximum: 65535
@@ -105,8 +104,10 @@ class Enterprise < ApplicationRecord
   validates_length_of :idp_entity_id, maximum: 191
   validates_length_of :sp_entity_id, maximum: 191
   validates_length_of :name, maximum: 191
-  validates :idp_sso_target_url, url: { allow_blank: true }
   validates_length_of :onboarding_consent_message, maximum: 65535
+
+  validates :idp_sso_target_url, url: { allow_blank: true }
+  validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # ActiveStorage
   has_one_attached :banner
@@ -124,8 +125,6 @@ class Enterprise < ApplicationRecord
   has_attached_file :xml_sso_config_paperclip
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
   has_attached_file :onboarding_sponsor_media_paperclip, s3_permissions: 'private'
-
-  validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   def banner_location
     return nil unless banner.attached?

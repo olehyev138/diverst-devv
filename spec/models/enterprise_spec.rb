@@ -30,24 +30,34 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:resources).dependent(:destroy) }
     it { expect(enterprise).to have_many(:yammer_field_mappings).dependent(:destroy) }
     it { expect(enterprise).to have_many(:emails).dependent(:destroy) }
-    it { expect(enterprise).to belong_to(:theme) }
+    it { expect(enterprise).to have_many(:custom_emails).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:email_variables).dependent(:destroy) }
     it { expect(enterprise).to have_many(:expenses).dependent(:destroy) }
     it { expect(enterprise).to have_many(:expense_categories).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:clockwork_database_events).dependent(:destroy) }
     it { expect(enterprise).to have_many(:rewards).dependent(:destroy) }
     it { expect(enterprise).to have_many(:reward_actions).dependent(:destroy) }
     it { expect(enterprise).to have_many(:badges).dependent(:destroy) }
     it { expect(enterprise).to have_many(:group_categories).dependent(:destroy) }
     it { expect(enterprise).to have_many(:group_category_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:sponsors).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:clockwork_database_events).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_interests).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_requests).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_sessions).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:sponsors).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:rewards).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:reward_actions).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:badges).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:group_categories).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:group_category_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy).through(:groups) }
 
     it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
+
+    it { expect(enterprise).to belong_to(:theme) }
 
     [:fields, :mobile_fields, :yammer_field_mappings, :theme, :reward_actions, :sponsors].each do |attribute|
       it { expect(enterprise).to accept_nested_attributes_for(attribute).allow_destroy(true) }
@@ -66,6 +76,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:redirect_email_contact).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:default_from_email_display_name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:default_from_email_address).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:company_video_url).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:privacy_statement).is_at_most(65535) }
     it { expect(enterprise).to validate_length_of(:home_message).is_at_most(65535) }
     it { expect(enterprise).to validate_length_of(:cdo_message).is_at_most(65535) }
@@ -75,11 +86,13 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:idp_cert).is_at_most(65535) }
     it { expect(enterprise).to validate_length_of(:idp_slo_target_url).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:idp_sso_target_url).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:idp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:onboarding_consent_message).is_at_most(65535) }
 
     it { expect(enterprise).to allow_value('').for(:idp_sso_target_url) }
+    it { expect(enterprise).to allow_value('').for(:redirect_email_contact) }
     it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
     it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
   end
