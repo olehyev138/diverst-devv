@@ -8,5 +8,6 @@ RSpec.describe CsvFileSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq csv_file.id
     expect(serializer.serializable_hash[:import_file]).to_not be nil
     expect(serializer.serializable_hash[:import_file_file_name]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

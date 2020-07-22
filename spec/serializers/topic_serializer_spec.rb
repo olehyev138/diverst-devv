@@ -7,5 +7,6 @@ RSpec.describe TopicSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq(topic.id)
     expect(serializer.serializable_hash[:statement]).to eq(topic.statement)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

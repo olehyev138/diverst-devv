@@ -9,5 +9,6 @@ RSpec.describe PolicyGroupSerializer, type: :serializer do
     expect(serializer.serializable_hash.key?('id')).to be false
     expect(serializer.serializable_hash.key?('user_id')).to be false
     expect(serializer.serializable_hash[:groups_index]).to eq(policy_group.groups_index)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

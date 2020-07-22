@@ -10,6 +10,7 @@ RSpec.describe PollResponseSerializer, type: :serializer do
     expect(serializer.serializable_hash[:field_data].blank?).to be false
     expect(serializer.serializable_hash[:user]).to_not be_nil
     expect(serializer.serializable_hash[:poll]).to_not be_nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 
   xit 'returns associations except for user for anonymous responses' do
@@ -21,5 +22,6 @@ RSpec.describe PollResponseSerializer, type: :serializer do
     expect(serializer.serializable_hash[:field_data].blank?).to be false
     expect(serializer.serializable_hash[:user]).to be_nil
     expect(serializer.serializable_hash[:poll]).to be_nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

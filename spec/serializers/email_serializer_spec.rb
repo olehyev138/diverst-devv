@@ -16,5 +16,6 @@ RSpec.describe EmailSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq email.id
     expect(serializer.serializable_hash[:variables]).to eq variables
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
