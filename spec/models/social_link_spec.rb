@@ -30,7 +30,121 @@ RSpec.describe SocialLink, type: :model do
           expect(SocialLink.unapproved).to eq([unapproved_social_link])
         end
       end
+
+      describe '.of_segments' do
+        it 'returns 0 social links' do
+          user = create(:user)
+          social_link_1 = build(:social_link)
+          social_link_2 = build(:social_link)
+          segment = create(:segment)
+
+          social_link_1.segment_ids = [segment.id]
+          social_link_1.save
+
+          social_link_2.segment_ids = [segment.id]
+          social_link_2.save
+
+          expect(user.segments.length).to eq(0)
+
+          expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(0)
+        end
+
+        it 'returns 1 social link' do
+          user = create(:user)
+          social_link = build(:social_link, author: user)
+          segment = create(:segment)
+
+          expect(social_link.segments.length).to eq(0)
+          expect(social_link.social_link_segments.length).to eq(0)
+
+          social_link.segment_ids = [segment.id]
+          social_link.save
+
+          expect(social_link.segments.length).to eq(1)
+          expect(social_link.social_link_segments.length).to eq(1)
+
+          expect(user.segments.length).to eq(0)
+
+          user.segments << segment
+
+          expect(user.segments.length).to eq(1)
+
+          expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(1)
+        end
+
+        it 'returns 1 social link when user is member of group' do
+          user = create(:user)
+          group = create(:group)
+          social_link = build(:social_link, author: user, group: group)
+          segment = create(:segment)
+
+          expect(social_link.segments.length).to eq(0)
+          expect(social_link.social_link_segments.length).to eq(0)
+
+          social_link.segment_ids = [segment.id]
+          social_link.save
+
+          expect(social_link.segments.length).to eq(1)
+          expect(social_link.social_link_segments.length).to eq(1)
+
+          expect(user.segments.length).to eq(0)
+
+          user.segments << segment
+
+          expect(user.segments.length).to eq(1)
+
+          user.groups << group
+
+          expect(user.groups.length).to eq(1)
+
+          expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(1)
+        end
+
+        it 'returns 0 social link even when user is member of group' do
+          user = create(:user)
+          group = create(:group)
+          social_link = build(:social_link, author: user, group: group)
+          segment = create(:segment)
+
+          expect(social_link.segments.length).to eq(0)
+          expect(social_link.social_link_segments.length).to eq(0)
+
+          social_link.segment_ids = [segment.id]
+          social_link.save
+
+          expect(social_link.segments.length).to eq(1)
+          expect(social_link.social_link_segments.length).to eq(1)
+
+          expect(user.segments.length).to eq(0)
+
+          user.groups << group
+
+          expect(user.groups.length).to eq(1)
+
+          expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(0)
+        end
+
+        it 'returns 2 social links' do
+          user = create(:user)
+          social_link_1 = build(:social_link, author: user)
+          social_link_2 = build(:social_link, author: user)
+          segment = create(:segment)
+
+          social_link_1.segment_ids = [segment.id]
+          social_link_1.save
+
+          social_link_2.segment_ids = [segment.id]
+          social_link_2.save
+
+          user.segments << segment
+
+          expect(user.segments.length).to eq(1)
+
+          expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(2)
+        end
+      end
     end
+
     describe 'url population' do
       let(:social_link) { build :social_link, :without_embed_code }
 
@@ -82,7 +196,6 @@ RSpec.describe SocialLink, type: :model do
     end
   end
 
-
   describe '#after_create' do # NOTE: after_create callback doesn't exist in social_link.rb
     it 'calls callbacks and creates attributes/association' do
       social_link = build(:social_link)
@@ -91,6 +204,12 @@ RSpec.describe SocialLink, type: :model do
       expect(social_link.embed_code).to_not be(nil)
       expect(social_link.news_feed_link).to_not be(nil)
       expect(social_link.url[-1]).to eq('/')
+    end
+  end
+
+  describe 'symbol' do
+    it 'returns symbol' do
+      expect(SocialLink.symbol).to eq(:social_link)
     end
   end
 
@@ -122,116 +241,21 @@ RSpec.describe SocialLink, type: :model do
     end
   end
 
-  describe '.of_segments' do
-    it 'returns 0 social links' do
-      user = create(:user)
-      social_link_1 = build(:social_link)
-      social_link_2 = build(:social_link)
-      segment = create(:segment)
-
-      social_link_1.segment_ids = [segment.id]
-      social_link_1.save
-
-      social_link_2.segment_ids = [segment.id]
-      social_link_2.save
-
-      expect(user.segments.length).to eq(0)
-
-      expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(0)
+  describe 're_populate_embed_code' do
+    let!(:social_link) { create(:social_link, :without_embed_code) }
+    it 'populates embed_code' do
+      expect { social_link.re_populate_embed_code }.to change(social_link, :embed_code)
     end
 
-    it 'returns 1 social link' do
-      user = create(:user)
-      social_link = build(:social_link, author: user)
-      segment = create(:segment)
-
-      expect(social_link.segments.length).to eq(0)
-      expect(social_link.social_link_segments.length).to eq(0)
-
-      social_link.segment_ids = [segment.id]
-      social_link.save
-
-      expect(social_link.segments.length).to eq(1)
-      expect(social_link.social_link_segments.length).to eq(1)
-
-      expect(user.segments.length).to eq(0)
-
-      user.segments << segment
-
-      expect(user.segments.length).to eq(1)
-
-      expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(1)
+    it 'populates small_embed_code' do
+      expect { social_link.re_populate_embed_code(small: true) }.to change(social_link, :small_embed_code)
     end
+  end
 
-    it 'returns 1 social link when user is member of group' do
-      user = create(:user)
-      group = create(:group)
-      social_link = build(:social_link, author: user, group: group)
-      segment = create(:segment)
-
-      expect(social_link.segments.length).to eq(0)
-      expect(social_link.social_link_segments.length).to eq(0)
-
-      social_link.segment_ids = [segment.id]
-      social_link.save
-
-      expect(social_link.segments.length).to eq(1)
-      expect(social_link.social_link_segments.length).to eq(1)
-
-      expect(user.segments.length).to eq(0)
-
-      user.segments << segment
-
-      expect(user.segments.length).to eq(1)
-
-      user.groups << group
-
-      expect(user.groups.length).to eq(1)
-
-      expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(1)
-    end
-
-    it 'returns 0 social link even when user is member of group' do
-      user = create(:user)
-      group = create(:group)
-      social_link = build(:social_link, author: user, group: group)
-      segment = create(:segment)
-
-      expect(social_link.segments.length).to eq(0)
-      expect(social_link.social_link_segments.length).to eq(0)
-
-      social_link.segment_ids = [segment.id]
-      social_link.save
-
-      expect(social_link.segments.length).to eq(1)
-      expect(social_link.social_link_segments.length).to eq(1)
-
-      expect(user.segments.length).to eq(0)
-
-      user.groups << group
-
-      expect(user.groups.length).to eq(1)
-
-      expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(0)
-    end
-
-    it 'returns 2 social links' do
-      user = create(:user)
-      social_link_1 = build(:social_link, author: user)
-      social_link_2 = build(:social_link, author: user)
-      segment = create(:segment)
-
-      social_link_1.segment_ids = [segment.id]
-      social_link_1.save
-
-      social_link_2.segment_ids = [segment.id]
-      social_link_2.save
-
-      user.segments << segment
-
-      expect(user.segments.length).to eq(1)
-
-      expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(2)
+  describe 're_populate_both_embed_code' do
+    let!(:social_link) { create(:social_link, :without_embed_code) }
+    it 'populates embed_code and small_embed_code' do
+      expect { social_link.re_populate_both_embed_code }.to change(social_link, :embed_code).and change(social_link, :small_embed_code)
     end
   end
 end
