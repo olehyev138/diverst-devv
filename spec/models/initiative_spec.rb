@@ -231,6 +231,19 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#ended?' do
+    let!(:initiative) { create(:initiative, end: DateTime.tomorrow) }
+
+    it 'returns false' do
+      expect(initiative.ended?).to eq(false)
+    end
+
+    it 'returns true' do
+      initiative.update(end: DateTime.yesterday)
+      expect(initiative.ended?).to eq(true)
+    end
+  end
+
   describe '#archived?' do
     let!(:initiative) { create(:initiative) }
 
@@ -270,6 +283,34 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#total_comments' do
+    let!(:initiative) { create(:initiative) }
+    let!(:initiative_comment) { create_list(:initiative_comment, 5, initiative_id: initiative.id) }
+    it 'returns total comments' do
+      expect(initiative.total_comments).to eq 5
+    end
+  end
+
+  describe '#total_attendees' do
+    let!(:initiative) { create(:initiative) }
+    before do
+      users = create_list(:user, 5)
+      users.each do |u|
+        create(:initiative_user, initiative: initiative, user: u)
+      end
+    end
+    it 'returns total attendees' do
+      expect(initiative.total_attendees).to eq 5
+    end
+  end
+
+  describe 'annual_budget_id' do
+    let!(:initiative) { create(:initiative, :with_budget_item) }
+    it do
+      expect(initiative.annual_budget_id).to eq initiative.annual_budget.id
+    end
+  end
+
   describe '#description' do
     let(:initiative) { build(:initiative, description: nil) }
 
@@ -288,6 +329,131 @@ RSpec.describe Initiative, type: :model do
 
     it 'returns Not attached' do
       expect(initiative.budget_status).to eq('Not attached')
+    end
+  end
+
+  describe '#expenses_status' do
+    it 'returns Expenses in progress' do
+      initiative = build(:initiative)
+      expect(initiative.expenses_status).to eq('Expenses in progress')
+    end
+
+    it 'returns Expenses in progress' do
+      initiative = build(:initiative, finished_expenses: true)
+      expect(initiative.expenses_status).to eq('Expenses finished')
+    end
+  end
+
+  describe '#approved?' do
+    it 'returns true if no budget exists' do
+      initiative = create(:initiative)
+
+      expect(initiative.approved?).to eq(true)
+    end
+
+    it 'returns true' do
+      budget = build(:budget, is_approved: true)
+      budget_item = create(:budget_item, budget: budget)
+      initiative = create(:initiative, budget_item_id: budget_item.id)
+
+      expect(initiative.approved?).to eq(true)
+    end
+
+    it 'returns false' do
+      budget = build(:budget, is_approved: false)
+      budget_item = create(:budget_item, budget: budget)
+      initiative = build(:initiative, budget_item_id: budget_item.id)
+
+      expect(initiative.approved?).to eq(false)
+    end
+  end
+
+  describe '#pending?' do
+    it 'returns false' do
+      initiative = create(:initiative)
+      expect(initiative.pending?).to eq(false)
+    end
+
+    it 'returns false' do
+      budget = build(:budget, is_approved: true)
+      budget_item = create(:budget_item, budget: budget)
+      initiative = create(:initiative, budget_item_id: budget_item.id)
+
+      expect(initiative.pending?).to eq(false)
+    end
+
+    it 'returns false' do
+      budget = build(:budget, is_approved: false)
+      budget_item = create(:budget_item, budget: budget)
+      initiative = build(:initiative, budget_item_id: budget_item.id)
+
+      expect(initiative.pending?).to eq(true)
+    end
+  end
+
+  describe '#finish_expenses!' do
+    let!(:initiative) { create(:initiative, finished_expenses: true) }
+
+    it 'returns false' do
+      expect(initiative.finish_expenses!).to eq(false)
+    end
+
+    it 'returns true' do
+      enterprise = create(:enterprise)
+      group = create(:group, enterprise: enterprise, annual_budget: 10000)
+      annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
+      budget = create(:approved_budget, annual_budget: annual_budget)
+      initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
+
+      expect(initiative1.finish_expenses!).to eq(true)
+    end
+  end
+
+  describe '#unfinished_expenses?' do
+    let!(:initiative) { create(:initiative, start: 2.days.ago, end: Date.yesterday) }
+    it 'returns false' do
+      expect(initiative.unfinished_expenses?).to eq(false)
+    end
+
+    it 'returns true' do
+      initiative.update(end: Date.tomorrow, finished_expenses: false)
+      expect(initiative.unfinished_expenses?).to eq(true)
+    end
+
+    it 'returns false' do
+      initiative.update(finished_expenses: true)
+      expect(initiative.unfinished_expenses?).to eq(false)
+    end
+  end
+
+  describe '#current_expenses_sum' do
+    it 'return 0' do
+      annual_budget = create(:annual_budget)
+      budget = create(:approved_budget, annual_budget: annual_budget)
+      initiative = create(:initiative, budget_item_id: budget.budget_item_ids.first)
+      expect(initiative.current_expenses_sum).to eq(0)
+    end
+  end
+
+  describe '#has_no_estimated_funding?' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns true' do
+      expect(initiative.has_no_estimated_funding?).to eq(true)
+    end
+  end
+
+  describe '#leftover' do
+    it 'returns 0' do
+      initiative = build(:initiative, :with_budget_item)
+      expect(initiative.leftover).to eq(0)
+    end
+  end
+
+  describe '#title' do
+    it 'returns name of initiative' do
+      initiative = build(:initiative)
+      expect(initiative.title).to eq(initiative.name)
     end
   end
 
@@ -436,90 +602,6 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#expenses_status' do
-    it 'returns Expenses in progress' do
-      initiative = build(:initiative)
-      expect(initiative.expenses_status).to eq('Expenses in progress')
-    end
-
-    it 'returns Expenses in progress' do
-      initiative = build(:initiative, finished_expenses: true)
-      expect(initiative.expenses_status).to eq('Expenses finished')
-    end
-  end
-
-  describe '#approved?', skip: 'Now Validated' do
-    it 'returns false' do
-      budget = build(:budget, is_approved: true)
-      budget_item = create(:budget_item, budget: budget)
-      initiative = create(:initiative, budget_item_id: budget_item.id)
-
-      expect(initiative.approved?).to eq(false)
-    end
-
-    it 'returns true' do
-      budget = build(:budget)
-      budget_item = create(:budget_item, budget: budget)
-      initiative = create(:initiative, budget_item_id: budget_item.id)
-
-      expect(initiative.approved?).to eq(true)
-    end
-
-    it 'returns true' do
-      initiative = build(:initiative)
-      expect(initiative.approved?).to eq(true)
-    end
-  end
-
-  describe '#finish_expenses!' do
-    let!(:initiative) { create(:initiative, finished_expenses: true) }
-
-    it 'returns false' do
-      expect(initiative.finish_expenses!).to eq(false)
-    end
-
-    it 'returns true' do
-      enterprise = create(:enterprise)
-      group = create(:group, enterprise: enterprise, annual_budget: 10000)
-      annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
-      budget = create(:approved_budget, annual_budget: annual_budget)
-      initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
-
-      expect(initiative1.finish_expenses!).to eq(true)
-    end
-  end
-
-  describe '#current_expenses_sum' do
-    it 'return 0' do
-      annual_budget = create(:annual_budget)
-      budget = create(:approved_budget, annual_budget: annual_budget)
-      initiative = create(:initiative, budget_item_id: budget.budget_item_ids.first)
-      expect(initiative.current_expenses_sum).to eq(0)
-    end
-  end
-
-  describe '#has_no_estimated_funding?' do
-    let(:initiative) { build(:initiative) }
-
-    it 'returns true' do
-      expect(initiative.has_no_estimated_funding?).to eq(true)
-    end
-  end
-
-  describe '#leftover' do
-    it 'returns 0' do
-      initiative = build(:initiative, :with_budget_item)
-      expect(initiative.leftover).to eq(0)
-    end
-  end
-
-  describe '#title' do
-    it 'returns name of initiative' do
-      initiative = build(:initiative)
-      expect(initiative.title).to eq(initiative.name)
-    end
-  end
-
   describe '#time_string' do
     # TODO: timestring doesnt exist
     it 'returns day and start/end time' do
@@ -623,16 +705,6 @@ RSpec.describe Initiative, type: :model do
       expect { InitiativeInvitee.find(initiative_invitee.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeComment.find(initiative_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeUser.find(initiative_user.id) }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
-  describe '#unfinished_expenses?' do
-    let!(:initiative) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
-                                            finished_expenses: false)
-    }
-
-    it 'returns true for #unfinished_expenses?' do
-      expect(initiative.unfinished_expenses?).to eq true
     end
   end
 

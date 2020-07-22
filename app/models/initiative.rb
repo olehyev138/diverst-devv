@@ -300,7 +300,7 @@ class Initiative < ApplicationRecord
   end
 
   def unfinished_expenses?
-    (self.end < Time.current) && !finished_expenses?
+    (self.end > Time.current) && !finished_expenses?
   end
 
   def current_expenses_sum
