@@ -282,15 +282,15 @@ class Initiative < ApplicationRecord
   end
 
   def approved?
-    !pending?
-  end
-
-  def pending?
-    # If there is no budget for event then it needs no money and no approval
-    return false if budget.nil?
+    # If there is no budget for event then it is considered approved
+    return true if budget.nil?
 
     # Check if budget is approved
     budget.is_approved
+  end
+
+  def pending?
+    !approved?
   end
 
   def finish_expenses!
