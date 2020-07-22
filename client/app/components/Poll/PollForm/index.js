@@ -75,6 +75,7 @@ export function PollFormInner({ formikProps, buttonText, header, ...props }) {
             <Divider />
             <GroupSelector
               groupField='group_ids'
+              dialogSelector
               label={<DiverstFormattedMessage {...messages.form.groups} />}
               isMulti
               {...formikProps}

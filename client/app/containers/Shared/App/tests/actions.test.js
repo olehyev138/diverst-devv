@@ -11,6 +11,7 @@ import {
   SSO_LOGIN_BEGIN,
   FIND_ENTERPRISE_SUCCESS,
   SET_USER_DATA,
+  TOGGLE_ADMIN_DRAWER,
 }
   from 'containers/Shared/App/constants';
 
@@ -27,6 +28,7 @@ import {
   ssoLoginBegin,
   findEnterpriseSuccess,
   setUserData,
+  toggleAdminDrawer,
 }
   from 'containers/Shared/App/actions';
 
@@ -179,6 +181,26 @@ describe('App actions', () => {
       };
 
       expect(setUserData({ foo: 'bar' }, true)).toEqual(expected);
+    });
+  });
+
+  describe('toggleAdminDrawer', () => {
+    it('it has a type of TOGGLE_ADMIN_DRAWER and setTo is undefined with no argument', () => {
+      const expected = {
+        type: TOGGLE_ADMIN_DRAWER,
+        setTo: undefined,
+      };
+
+      expect(toggleAdminDrawer()).toEqual(expected);
+    });
+
+    it('it has a type of TOGGLE_ADMIN_DRAWER and setTo is equal to the passed argument', () => {
+      const expected = {
+        type: TOGGLE_ADMIN_DRAWER,
+        setTo: false,
+      };
+
+      expect(toggleAdminDrawer(false)).toEqual(expected);
     });
   });
 });

@@ -93,6 +93,7 @@ export function SegmentList(props, context) {
           <DiverstTable
             title={intl.formatMessage(messages.list.title)}
             handlePagination={props.handlePagination}
+            handleSearching={props.handleSearching}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingSegments}
             rowsPerPage={5}
@@ -136,6 +137,7 @@ SegmentList.propTypes = {
   handleOrdering: PropTypes.func,
   handleSegmentEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
+  handleSearching: PropTypes.func,
   links: PropTypes.shape({
     segmentNew: PropTypes.string,
     segmentEdit: PropTypes.func

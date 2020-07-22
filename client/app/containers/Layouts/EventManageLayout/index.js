@@ -69,6 +69,7 @@ const EventManageLayout = (props) => {
       <React.Fragment>
         <EventManageLinks
           currentTab={tab}
+          event={props.event}
         />
         <Box mb={3} />
         <Fade in appear>

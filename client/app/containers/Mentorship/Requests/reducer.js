@@ -36,6 +36,7 @@ export const initialState = {
 function requestReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case GET_REQUESTS_BEGIN:
       case GET_PROPOSALS_BEGIN:

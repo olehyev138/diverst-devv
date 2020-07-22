@@ -12,7 +12,7 @@ import 'utils/mockReactRouterHooks';
 import { EventManageLinks } from '../index';
 
 const props = {
-  event: {},
+  event: { owner_group_id: 1 }
 };
 
 describe('<EventManageLinks />', () => {

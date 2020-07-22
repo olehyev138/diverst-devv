@@ -3,7 +3,10 @@ class PollMailer < ApplicationMailer
     @user = user
     @poll = poll
     @enterprise = @user.enterprise
+    @uer_poll_token = poll.user_poll_tokens.find_by(user: user)
+    @token = PollTokenService.email_jwt_token(@uer_poll_token)
     return if @enterprise.disable_emails?
+    return if @uer_poll_token.blank?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email_for_notification
@@ -24,6 +27,6 @@ class PollMailer < ApplicationMailer
   end
 
   def url
-    ReactRoutes.user.home
+    ReactRoutes.anonymous.pollResponse(@token)
   end
 end

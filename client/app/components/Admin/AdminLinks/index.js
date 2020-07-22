@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { matchPath } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 
 import {
   Collapse, Divider, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, MenuItem,
@@ -24,12 +24,14 @@ import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import UsersCircleIcon from '@material-ui/icons/GroupWork';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectAdminDrawerOpen, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import WithPermission from 'components/Compositions/WithPermission';
 import { permission } from 'utils/permissionsHelpers';
 import dig from 'object-dig';
 
 import Scrollbar from 'components/Shared/Scrollbar';
+
+import { toggleAdminDrawer } from 'containers/Shared/App/actions';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -73,14 +75,16 @@ const styles = theme => ({
   },
 });
 
-const ListPermission = WithPermission(ListItem);
-const MenuPermission = WithPermission(MenuItem);
-
 export function AdminLinks(props) {
-  const { classes } = props;
+  const { classes, toggleAdminDrawer } = props;
+
+  const ListPermission = WithPermission(ListItem);
+  // Close admin drawer when you choose a navigation option
+  const MenuPermission = WithPermission(props => <MenuItem onClick={() => toggleAdminDrawer(false)} {...props} />);
+
+  const location = useLocation();
 
   const [state, setState] = useState({
-    drawerOpen: props.drawerOpen,
     analyze: {
       open: !!matchPath(location.pathname, {
         path: ROUTES.admin.analyze.index.data.pathPrefix,
@@ -117,11 +121,6 @@ export function AdminLinks(props) {
       }),
     }
   });
-
-  const handleDrawerToggle = () => {
-    props.drawerToggleCallback(!state.drawerOpen);
-    setState({ ...state, drawerOpen: !state.drawerOpen });
-  };
 
   const handleAnalyzeClick = () => {
     setState({ ...state, analyze: { open: !state.analyze.open } });
@@ -521,24 +520,24 @@ export function AdminLinks(props) {
                   <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
                 </ListItemText>
               </MenuPermission>
-              <MenuPermission
-                component={WrappedNavLink}
-                to='#'
-                className={classes.nested}
-                activeClassName={classes.navLinkActive}
-                isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time
-                show={
-                  permission(props, 'integrations_manage')
-                  || permission(props, 'rewards_manage')
-                }
-              >
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText>
-                  <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
-                </ListItemText>
-              </MenuPermission>
+              {/* <MenuPermission */}
+              {/*  component={WrappedNavLink} */}
+              {/*  to='#' */}
+              {/*  className={classes.nested} */}
+              {/*  activeClassName={classes.navLinkActive} */}
+              {/*  isActive={() => false} // Disable while there's no actual pages/paths so it doesn't show as active all the time */}
+              {/*  show={ */}
+              {/*    permission(props, 'integrations_manage') */}
+              {/*    || permission(props, 'rewards_manage') */}
+              {/*  } */}
+              {/* > */}
+              {/*  <ListItemIcon> */}
+              {/*    <ListIcon /> */}
+              {/*  </ListItemIcon> */}
+              {/*  <ListItemText> */}
+              {/*    <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} /> */}
+              {/*  </ListItemText> */}
+              {/* </MenuPermission> */}
             </List>
           </Collapse>
 
@@ -553,8 +552,8 @@ export function AdminLinks(props) {
       <Hidden mdUp>
         <Drawer
           variant='temporary'
-          open={state.drawerOpen}
-          onClose={handleDrawerToggle}
+          open={props.drawerOpen}
+          onClose={() => toggleAdminDrawer(false)}
           classes={{
             paper: classes.drawerPaper,
           }}
@@ -582,20 +581,26 @@ export function AdminLinks(props) {
 
 AdminLinks.propTypes = {
   classes: PropTypes.object,
-  drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   permissions: PropTypes.object,
   enterprise: PropTypes.object,
+  drawerOpen: PropTypes.bool,
+  toggleAdminDrawer: PropTypes.func,
+};
+
+const mapDispatchToProps = {
+  toggleAdminDrawer,
 };
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
   enterprise: selectEnterprise(),
+  drawerOpen: selectAdminDrawerOpen(),
 });
 
 const withConnect = connect(
   mapStateToProps,
-  undefined
+  mapDispatchToProps
 );
 
 // styled & unconnected

@@ -4,6 +4,9 @@
     "login": "/login",
     "forgotPassword": "/forgot"
   },
+  "anonymous": {
+    "pollResponse": "/poll_response/:token"
+  },
   "user": {
     "root": "/",
     "home": "/",
@@ -134,7 +137,7 @@
     }
   },
   "admin": {
-    "root": "/admin/analyze",
+    "root": "/admin/manage/groups",
     "analyze": {
       "overview": "/admin/analyze",
       "users": "/admin/analyze/users",

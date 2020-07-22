@@ -5,15 +5,6 @@ import {
   GET_RESPONSES_BEGIN,
   GET_RESPONSES_SUCCESS,
   GET_RESPONSES_ERROR,
-  CREATE_RESPONSE_BEGIN,
-  CREATE_RESPONSE_SUCCESS,
-  CREATE_RESPONSE_ERROR,
-  UPDATE_RESPONSE_BEGIN,
-  UPDATE_RESPONSE_SUCCESS,
-  UPDATE_RESPONSE_ERROR,
-  DELETE_RESPONSE_BEGIN,
-  DELETE_RESPONSE_SUCCESS,
-  DELETE_RESPONSE_ERROR,
   RESPONSES_UNMOUNT,
 } from '../constants';
 
@@ -24,15 +15,6 @@ import {
   getResponsesBegin,
   getResponsesError,
   getResponsesSuccess,
-  createResponseBegin,
-  createResponseError,
-  createResponseSuccess,
-  updateResponseBegin,
-  updateResponseError,
-  updateResponseSuccess,
-  deleteResponseBegin,
-  deleteResponseError,
-  deleteResponseSuccess,
   responsesUnmount
 } from '../actions';
 
@@ -100,105 +82,6 @@ describe('response actions', () => {
       };
 
       expect(getResponsesError({ value: 709 })).toEqual(expected);
-    });
-  });
-
-  describe('createResponseBegin', () => {
-    it('has a type of CREATE_RESPONSE_BEGIN and sets a given payload', () => {
-      const expected = {
-        type: CREATE_RESPONSE_BEGIN,
-        payload: { value: 118 }
-      };
-
-      expect(createResponseBegin({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('createResponseSuccess', () => {
-    it('has a type of CREATE_RESPONSE_SUCCESS and sets a given payload', () => {
-      const expected = {
-        type: CREATE_RESPONSE_SUCCESS,
-        payload: { value: 118 }
-      };
-
-      expect(createResponseSuccess({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('createResponseError', () => {
-    it('has a type of CREATE_RESPONSE_ERROR and sets a given error', () => {
-      const expected = {
-        type: CREATE_RESPONSE_ERROR,
-        error: { value: 709 }
-      };
-
-      expect(createResponseError({ value: 709 })).toEqual(expected);
-    });
-  });
-
-  describe('updateResponseBegin', () => {
-    it('has a type of UPDATE_RESPONSE_BEGIN and sets a given payload', () => {
-      const expected = {
-        type: UPDATE_RESPONSE_BEGIN,
-        payload: { value: 118 }
-      };
-
-      expect(updateResponseBegin({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('updateResponseSuccess', () => {
-    it('has a type of UPDATE_RESPONSE_SUCCESS and sets a given payload', () => {
-      const expected = {
-        type: UPDATE_RESPONSE_SUCCESS,
-        payload: { value: 118 }
-      };
-
-      expect(updateResponseSuccess({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('updateResponseError', () => {
-    it('has a type of UPDATE_RESPONSE_ERROR and sets a given error', () => {
-      const expected = {
-        type: UPDATE_RESPONSE_ERROR,
-        error: { value: 709 }
-      };
-
-      expect(updateResponseError({ value: 709 })).toEqual(expected);
-    });
-  });
-
-  describe('deleteResponseBegin', () => {
-    it('has a type of DELETE_RESPONSE_BEGIN and sets a given payload', () => {
-      const expected = {
-        type: DELETE_RESPONSE_BEGIN,
-        payload: { value: 118 }
-      };
-
-      expect(deleteResponseBegin({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('deleteResponseSuccess', () => {
-    it('has a type of DELETE_RESPONSE_SUCCESS and sets a given payload', () => {
-      const expected = {
-        type: DELETE_RESPONSE_SUCCESS,
-        payload: { value: 118 }
-      };
-
-      expect(deleteResponseSuccess({ value: 118 })).toEqual(expected);
-    });
-  });
-
-  describe('deleteResponseError', () => {
-    it('has a type of DELETE_RESPONSE_ERROR and sets a given error', () => {
-      const expected = {
-        type: DELETE_RESPONSE_ERROR,
-        error: { value: 709 }
-      };
-
-      expect(deleteResponseError({ value: 709 })).toEqual(expected);
     });
   });
 

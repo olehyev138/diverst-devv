@@ -14,6 +14,7 @@ export const initialState = {
 
 function loginPageReducer(state = initialState, action) {
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case LOGIN_BEGIN:
         draft.isLoggingIn = true;

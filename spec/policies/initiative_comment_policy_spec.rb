@@ -4,10 +4,10 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
-  let(:initiative_comment) { create(:initiative_comment) }
+  let(:initiative_comment) { create(:initiative_comment, user: user) }
   let!(:group) { initiative_comment.initiative.owner_group }
 
-  subject { described_class.new(user, initiative_comment) }
+  subject { described_class.new(user.reload, initiative_comment) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -32,15 +32,29 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
 
         it { is_expected.to permit_actions([:destroy]) }
       end
+
+      context '#update?' do
+        context 'when manage_comments is true' do
+          before { user.policy_group.update manage_posts: true }
+
+          it 'returns true for #index?' do
+            expect(subject.update?).to eq true
+          end
+        end
+
+        context 'when user is the creator' do
+          before { create(:initiative_comment, user_id: user.id) }
+
+          it 'returns true for #index?' do
+            expect(subject.update?).to eq true
+          end
+        end
+      end
     end
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
       it { is_expected.to permit_actions([:destroy]) }
     end
-  end
-
-  context 'for users with no access' do
-    it { is_expected.to forbid_actions([:destroy]) }
   end
 end

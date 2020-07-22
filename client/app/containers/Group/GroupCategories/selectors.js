@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect/lib/index';
+import { createSelector } from 'reselect';
 import { initialState } from 'containers/Group/GroupCategories/reducer';
 
 const selectGroupCategoriesDomain = state => state.groupCategories || initialState;

@@ -8,6 +8,7 @@ export const initialState = {
 
 function notifierReducer(state = initialState, action) {
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case SHOW_SNACKBAR:
         draft.notifications.push({

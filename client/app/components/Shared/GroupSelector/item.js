@@ -127,6 +127,7 @@ const GroupSelectorItem = (props) => {
                   <Grid item xs='auto'>
                     <DiverstImg
                       data={group.logo_data}
+                      contentType={group.logo_content_type}
                       maxWidth='30px'
                       maxHeight='30px'
                       minWidth='30px'
@@ -146,7 +147,7 @@ const GroupSelectorItem = (props) => {
             </CardContent>
           </ButtonBase>
         </Grid>
-        {group.children && group.children.length > 0 && (
+        {!props.dialogNoChildren && group.children && group.children.length > 0 && (
           <Grid item className={classes.expandActionAreaContainer}>
             <CardActionArea
               className={classes.expandActionArea}
@@ -187,6 +188,7 @@ GroupSelectorItem.propTypes = {
     children: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
 
+  dialogNoChildren: PropTypes.bool,
   inputCallback: PropTypes.func,
   addGroup: PropTypes.func,
   removeGroup: PropTypes.func,

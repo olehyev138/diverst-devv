@@ -19,6 +19,7 @@ export const initialState = {
 function fieldDataReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case UPDATE_FIELD_DATA_BEGIN:
         draft.isCommitting = true;

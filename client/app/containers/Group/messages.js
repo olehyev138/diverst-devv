@@ -125,7 +125,6 @@ export default defineMessages({
   allGroups: {
     id: `${scope}.index.button.all_groups`
   },
-
   selectorDialog: {
     title: {
       id: `${scope}.selectorDialog.title`,

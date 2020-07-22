@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import api from 'api/api';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
@@ -11,6 +11,9 @@ import {
   updateCustomTextSuccess, updateCustomTextError,
 } from 'containers/GlobalSettings/CustomText/actions';
 
+import { setUserData } from 'containers/Shared/App/actions';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
+
 
 export function* updateCustomText(action) {
   try {
@@ -20,6 +23,10 @@ export function* updateCustomText(action) {
     const response = yield call(api.customText.update.bind(api.customText), payload.custom_text.id, payload);
 
     yield put(updateCustomTextSuccess());
+
+    // Replace `custom_text` property in local enterprise object with updated custom text response
+    const enterprise = yield select(selectEnterprise());
+    yield put(setUserData({ enterprise: { ...enterprise, custom_text: response.data.custom_text } }, true));
 
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
   } catch (err) {

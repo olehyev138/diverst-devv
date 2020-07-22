@@ -6,6 +6,10 @@ module UserGroup::Actions
   end
 
   module ClassMethods
+    def base_query
+      'LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
+    end
+
     def csv_attributes(current_user = nil, params = {})
       group = params[:group_id].present? ? Group.find(params[:group_id]) : nil
       user_fields = current_user.present? ? current_user.fields.where(add_to_member_list: true) : Field.none

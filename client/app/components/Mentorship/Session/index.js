@@ -316,7 +316,7 @@ export function Session(props) {
                   dataTotal={props.usersTotal}
                   columns={columns}
                   actions={actions}
-                  my_options={{
+                  tableOptions={{
                     rowStyle: (rowData) => {
                       let colour;
                       switch (rowData.status) {

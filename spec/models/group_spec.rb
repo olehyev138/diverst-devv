@@ -472,13 +472,18 @@ RSpec.describe Group, type: :model do
       end
     end
 
-    context 'Group::joined_groups' do
+    describe 'Group::joined_groups' do
       let!(:user_with_no_groups) { create(:user) }
       let!(:user_with_groups) { create(:user) }
       let!(:group_with_member) { create(:group) }
       let!(:user_group) { create(:user_group, user: user_with_groups, group: group_with_member) }
+
       it 'returns nothing when the user hasnt joined any groups' do
         expect(Group.joined_groups(user_with_no_groups.id).ids).to eq([])
+      end
+
+      it 'returns list of groups that a user has joined' do
+        expect(Group.joined_groups(user_with_groups.id)).to eq([group_with_member])
       end
     end
 

@@ -20,6 +20,7 @@ export const initialState = {
 function csvfileReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
+    // eslint-disable-next-line default-case
     switch (action.type) {
       case CREATE_CSV_FILE_BEGIN:
         draft.isCommitting = true;

@@ -91,6 +91,16 @@ export function AdminGroupList(props, context) {
           >
             <DiverstFormattedMessage {...messages.new} />
           </Button>
+          <Button
+            variant='contained'
+            to={ROUTES.admin.manage.groups.categories.index.path()}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            className={classes.optionButton}
+          >
+            <DiverstFormattedMessage {...messages.allcategories} />
+          </Button>
           { order ? (
             <Button
               variant='contained'

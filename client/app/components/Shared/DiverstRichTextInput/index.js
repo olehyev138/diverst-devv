@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Typography, TextField, FormLabel } from '@material-ui/core';
+import { FormControl, FormLabel, Box } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -52,16 +52,18 @@ export function DiverstRichTextInput(props) {
   };
 
   return (
-    <React.Fragment>
-      <FormLabel>
+    <FormControl {...props}>
+      <Box pt={2} />
+      <FormLabel {...props}>
         {label}
       </FormLabel>
+      <Box mb={1} />
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperStyle={wrapperStyle}
       />
-    </React.Fragment>
+    </FormControl>
   );
 }
 

@@ -63,6 +63,20 @@ export function UserGroupListPage(props) {
     setDisplayMyGroups(false);
   };
 
+  // Filter Groups to only contain children who have been joined
+  const filterJoinedGroups = (groupList) => {
+    const parentGroups = [];
+
+    groupList.forEach(parentGroup => (
+      parentGroup.children.length > 0 ? (
+        parentGroups.push(Object.assign(parentGroup, { children: parentGroup.children.filter(child => child.current_user_is_member) }))
+      ) : (
+        parentGroups.push(parentGroup)
+      )
+    ));
+    return parentGroups;
+  };
+  
   return (
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>
@@ -92,7 +106,7 @@ export function UserGroupListPage(props) {
         <Grid item xs={12}>
           <GroupList
             isLoading={props.isLoading}
-            groups={props.groups}
+            groups={!displayMyGroups ? props.groups : filterJoinedGroups(props.groups)}
             groupTotal={props.groupTotal}
             defaultParams={params}
             deleteGroupBegin={props.deleteGroupBegin}

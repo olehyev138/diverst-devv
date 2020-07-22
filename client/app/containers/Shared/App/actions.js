@@ -10,7 +10,11 @@ import {
   FIND_ENTERPRISE_ERROR,
   SET_USER_DATA,
   SSO_LOGIN_BEGIN,
-  SSO_LINK_BEGIN, FETCH_USER_DATA_BEGIN, FETCH_USER_DATA_SUCCESS, FETCH_USER_DATA_ERROR
+  SSO_LINK_BEGIN,
+  FETCH_USER_DATA_BEGIN,
+  FETCH_USER_DATA_SUCCESS,
+  FETCH_USER_DATA_ERROR,
+  TOGGLE_ADMIN_DRAWER
 }
   from './constants';
 
@@ -113,5 +117,12 @@ export function setUserData(payload, append = false) {
     type: SET_USER_DATA,
     payload,
     append,
+  };
+}
+
+export function toggleAdminDrawer(setTo = undefined) {
+  return {
+    type: TOGGLE_ADMIN_DRAWER,
+    setTo,
   };
 }

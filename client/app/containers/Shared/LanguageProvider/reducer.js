@@ -13,6 +13,7 @@ export const initialState = {
 };
 
 const languageProviderReducer = (state = initialState, action) => produce(state, (draft) => {
+// eslint-disable-next-line default-case
   switch (action.type) {
     case CHANGE_LOCALE:
       draft.locale = action.locale;

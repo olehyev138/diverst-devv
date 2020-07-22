@@ -102,6 +102,13 @@ export function UserListPage(props) {
     setParams(newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getUsersBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <UserList
@@ -113,6 +120,7 @@ export function UserListPage(props) {
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
         handleChangeScope={handleChangeScope}
+        handleSearching={handleSearching}
         exportUsers={exportUsers}
         links={links}
         userType={type}

@@ -7,7 +7,7 @@ import { CircularProgress, Grid, Card, CardContent, Typography } from '@material
 
 import 'stylesheets/main.scss';
 import { createStructuredSelector } from 'reselect';
-import { selectGroupIsLoading, selectPaginatedGroups } from 'containers/Group/selectors';
+import { selectGroupIsLoading, selectColorGroups } from 'containers/Group/selectors';
 import { getColorsBegin, groupListUnmount } from 'containers/Group/actions';
 import { connect } from 'react-redux';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -70,18 +70,18 @@ DiverstGroupLegend.propTypes = {
   isLoading: PropTypes.bool,
   groupListUnmount: PropTypes.func,
   getColorsBegin: PropTypes.func,
-  groups: PropTypes.shape({
-    id: PropTypes.shape({
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
       calendar_color: PropTypes.string,
     })
-  }),
+  ),
 };
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
-  groups: selectPaginatedGroups(),
+  groups: selectColorGroups(),
 });
 
 const mapDispatchToProps = {

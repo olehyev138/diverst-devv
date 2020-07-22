@@ -26,6 +26,10 @@ const styles = theme => ({
   container: {
     height: '100%',
   },
+  containerWithColor: {
+    height: '100%',
+    backgroundColor: theme.palette.primary.main,
+  },
   content: {
     height: '100%',
     display: 'flex',
@@ -43,14 +47,14 @@ const styles = theme => ({
 });
 
 const SessionLayout = (props) => {
-  const { classes, children, enterprise, ...other } = props;
+  const { classes, children, enterprise, noRedirect, maxWidth, ...other } = props;
 
   const location = useLocation();
 
   const authenticated = !!AuthService.getJwt();
 
   useEffect(() => {
-    if (authenticated) return;
+    if (authenticated && !noRedirect) return;
 
     const query = new URLSearchParams(location.search);
     const enterpriseId = query.get('enterpriseId');
@@ -58,7 +62,9 @@ const SessionLayout = (props) => {
     props.findEnterpriseBegin(enterpriseId ? { enterprise_id: enterpriseId } : {});
   }, []);
 
-  if (authenticated) return <Redirect to={ROUTES.user.home.path()} />;
+  if (authenticated && !noRedirect) return <Redirect to={ROUTES.user.home.path()} />;
+
+  const container = noRedirect ? classes.containerWithColor : classes.container;
 
   return (
     <React.Fragment>
@@ -86,7 +92,7 @@ const SessionLayout = (props) => {
         )}
       </Backdrop>
       {props.enterprise && (
-        <Container maxWidth='sm' className={classes.container}>
+        <Container maxWidth={maxWidth} className={container}>
           <Fade in appear>
             <div className={classes.content}>
               {renderChildrenWithProps(children, { ...other, enterprise })}
@@ -105,6 +111,12 @@ SessionLayout.propTypes = {
   findEnterpriseBegin: PropTypes.func,
   location: PropTypes.object,
   findEnterpriseError: PropTypes.bool,
+  noRedirect: PropTypes.bool,
+  maxWidth: PropTypes.string,
+};
+
+SessionLayout.defaultProps = {
+  maxWidth: 'sm',
 };
 
 const mapStateToProps = createStructuredSelector({
