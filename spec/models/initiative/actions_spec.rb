@@ -29,7 +29,7 @@ RSpec.describe Initiative::Actions, type: :model do
   end
 
   describe 'generate_qr_code' do
-    it 'generate_qr_code' do
+    it 'generates qr_code' do
       item = create(:initiative)
       Initiative.generate_qr_code(Request.create_request(create(:user)), { id: item.id })
       expect(item.qr_code).to_not be nil
@@ -37,17 +37,17 @@ RSpec.describe Initiative::Actions, type: :model do
   end
 
   describe 'finalize_expenses' do
-    it 'missing id' do
+    it 'raises exception if id is missing' do
       item = build(:initiative, id: nil)
       expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
-    it 'finished expense' do
+    it 'raises exception if expense is finished' do
       item = create(:initiative, finished_expenses: true)
       expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 
-    it 'finalize expense' do
+    it 'finalizes expense' do
       item = create(:initiative, finished_expenses: false)
       expect(item.finalize_expenses(Request.create_request(create(:user))).finished_expenses).to eq true
     end

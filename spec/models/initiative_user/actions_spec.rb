@@ -9,11 +9,11 @@ RSpec.describe InitiativeUser::Actions, type: :model do
   end
 
   describe 'file_name' do
-    it 'event id not valid' do
+    it 'raises exception if event id is not valid' do
       expect { InitiativeUser.file_name({}) }.to raise_error(ArgumentError)
     end
 
-    it 'file name' do
+    it 'returns file name' do
       event = create(:initiative, name: 'test event name')
       expect(InitiativeUser.file_name({ initiative_id: event.id })).to eq 'Attendees_of_test_event_name'
     end
