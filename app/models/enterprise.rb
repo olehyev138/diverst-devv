@@ -84,7 +84,7 @@ class Enterprise < ApplicationRecord
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
-  before_validation :smart_add_url_protocol
+  after_validation :smart_add_url_protocol
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -151,6 +151,10 @@ class Enterprise < ApplicationRecord
 
   def custom_text
     super || create_custom_text
+  end
+
+  def create_custom_text
+    # todo : implement
   end
 
   def default_time_zone
@@ -752,24 +756,6 @@ class Enterprise < ApplicationRecord
     categories = news_links.map { |r| r.title }
 
     strategy = Reports::GraphStatsGeneric.new(title: 'Number of view per news link', categories: categories, data: data)
-    report = Reports::Generator.new(strategy)
-
-    report.to_csv
-  end
-
-  def users_date_histogram_csv
-    g = DateHistogramGraph.new(
-      # index: User.es_index_name(enterprise: self),
-      field: 'created_at',
-      interval: 'month'
-    )
-
-    data = g.query_elasticsearch
-
-    strategy = Reports::GraphTimeseriesGeneric.new(
-      title: 'Number of employees',
-      data: data['aggregations']['my_date_histogram']['buckets'].collect { |d| [d['key'], d['doc_count']] }
-    )
     report = Reports::Generator.new(strategy)
 
     report.to_csv
