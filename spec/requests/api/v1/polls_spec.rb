@@ -44,6 +44,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       attributes['fields_attributes'] = [{ type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7" }]
       post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
       expect(response).to have_http_status(201)
+      expect(Poll.last.status).to eq 'draft'
     end
 
     it 'captures the error when BadRequestException' do
@@ -53,6 +54,22 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     include_examples 'InvalidInputException when creating', model
+  end
+
+  describe '#create and publish' do
+    it 'creates an item' do
+      attributes = build(route.singularize.to_sym).attributes
+      attributes['fields_attributes'] = [{ type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7" }]
+      post "/api/v1/#{route}/publish", params: { "#{route.singularize}" => attributes }, headers: headers
+      expect(response).to have_http_status(201)
+      expect(Poll.last.status).to eq 'published'
+    end
+
+    it 'captures the error when BadRequestException' do
+      allow(model.constantize).to receive(:build).and_raise(BadRequestException)
+      post "/api/v1/#{route}/publish", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 
   describe '#update' do
@@ -68,6 +85,20 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     include_examples 'InvalidInputException when updating', model
+  end
+
+  describe '#update and publish' do
+    it 'updates an item' do
+      patch "/api/v1/#{route}/#{item.id}/publish", params: { "#{route.singularize}" => item.attributes }, headers: headers
+      expect(response).to have_http_status(:ok)
+      expect(item.reload.status).to eq 'published'
+    end
+
+    it 'captures the error when BadRequestException' do
+      allow(model.constantize).to receive(:update).and_raise(BadRequestException)
+      patch "/api/v1/#{route}/#{item.id}/publish", params: { "#{route.singularize}" => item.attributes }, headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 
   describe '#destroy' do
