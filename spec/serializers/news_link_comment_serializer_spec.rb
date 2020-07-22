@@ -7,5 +7,6 @@ RSpec.describe NewsLinkCommentSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq(news_link_comment.id)
     expect(serializer.serializable_hash[:author_id]).to eq(news_link_comment.author_id)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
