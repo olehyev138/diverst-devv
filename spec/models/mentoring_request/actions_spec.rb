@@ -13,7 +13,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'accept' do
-    it 'raises exception if request is invalid' do
+    it 'raises an exception if request is invalid' do
       sender = create(:user)
       receiver = create(:user)
       create(:mentoring_request, sender: sender, receiver: receiver)
@@ -49,7 +49,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'reject' do
-    it 'raises exception if request is invalid' do
+    it 'raises an exception if request is invalid' do
       sender = create(:user)
       receiver = create(:user)
       create(:mentoring_request, sender: sender, receiver: receiver)

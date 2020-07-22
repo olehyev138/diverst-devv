@@ -34,7 +34,7 @@ RSpec.describe Budget::Actions, type: :model do
     let!(:approver) { create(:user) }
     let!(:budget) { create(:budget, requester: create(:user)) }
 
-    it 'raises exception' do
+    it 'raises an exception' do
       expect { budget.approve(approver) }.to raise_error(InvalidInputException)
     end
 

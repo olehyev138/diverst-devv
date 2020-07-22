@@ -8,7 +8,7 @@ RSpec.describe User::Actions, type: :model do
   let(:user_role) { create(:user_role, role_name: 'test role') }
   let(:group) { create(:group, name: 'test group') }
   describe 'parameter_name' do
-    it 'raises a exception if scope is missing' do
+    it 'raises an exception if scope is missing' do
       expect { User.parameter_name({}) }.to raise_error(ArgumentError)
     end
     it { expect(User.parameter_name(['of_role', [user_role.id]])).to eq user_role.role_name }

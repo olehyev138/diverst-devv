@@ -14,22 +14,22 @@ RSpec.describe BudgetItem::Actions, type: :model do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
 
-    it 'has no id' do
+    it 'raises an exception if id is missing' do
       expect { item_without_id.close(Request.create_request(user)) }.to raise_error(BadRequestException)
     end
 
-    it 'is already closed' do
+    it 'raises an exception if budget is already closed' do
       item = create(:budget_item, is_done: true)
       expect { item.close(Request.create_request(user)) }.to raise_error(InvalidInputException)
     end
 
-    it 'is still using' do
+    it 'raises an exception if budget is still using' do
       item = create(:budget_item, is_done: true)
       create(:initiative, budget_item_id: item.id)
       expect { item.close(Request.create_request(user)) }.to raise_error(InvalidInputException)
     end
 
-    it 'is successfully closed' do
+    it 'closes successfully' do
       item = create(:budget_item, is_done: false)
       expect(item.close(Request.create_request(user)).is_done).to be true
     end

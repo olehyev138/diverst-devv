@@ -12,15 +12,15 @@ RSpec.describe Folder::Actions, type: :model do
   describe 'validate_password' do
     let!(:folder) { create(:folder, password_protected: true, password: 'testPassword') }
 
-    it 'raises exception if Folder ID and password are missing' do
+    it 'raises an exception if Folder ID and password are missing' do
       expect { Folder.validate_password(Request.create_request(create(:user)), {}) }.to raise_error(BadRequestException, 'Folder ID and password required')
     end
 
-    it 'raises exception if folder does not exist' do
+    it 'raises an exception if folder does not exist' do
       expect { Folder.validate_password(Request.create_request(create(:user)), { id: folder.id + 1, password: 'test' }) }.to raise_error(BadRequestException, 'Folder does not exist')
     end
 
-    it 'raises exception if password is incorrect' do
+    it 'raises an exception if password is incorrect' do
       expect { Folder.validate_password(Request.create_request(create(:user)), { id: folder.id, password: 'test' }) }.to raise_error(BadRequestException, 'Incorrect password')
     end
 

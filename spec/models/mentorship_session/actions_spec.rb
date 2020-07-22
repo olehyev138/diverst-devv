@@ -36,7 +36,7 @@ RSpec.describe MentorshipSession::Actions, type: :model do
     let!(:mentoring_session) { create(:mentoring_session) }
     let!(:mentorship_session) { create(:mentorship_session, user: user, mentoring_session: mentoring_session) }
 
-    it 'raises exception if input is invalid' do
+    it 'raises an exception if input is invalid' do
       mentorship_session_invalidate = create(:mentorship_session_skips_validate, user: user, mentoring_session: mentoring_session)
       expect { mentorship_session_invalidate.accept! }.to raise_error(InvalidInputException)
     end
@@ -52,7 +52,7 @@ RSpec.describe MentorshipSession::Actions, type: :model do
     let!(:mentoring_session) { create(:mentoring_session) }
     let!(:mentorship_session) { create(:mentorship_session, user: user, mentoring_session: mentoring_session) }
 
-    it 'raises exception if input is invalid' do
+    it 'raises an exception if input is invalid' do
       mentorship_session_invalidate = create(:mentorship_session_skips_validate, user: user, mentoring_session: mentoring_session)
       expect { mentorship_session_invalidate.decline! }.to raise_error(InvalidInputException)
     end

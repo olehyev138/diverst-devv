@@ -37,12 +37,12 @@ RSpec.describe Initiative::Actions, type: :model do
   end
 
   describe 'finalize_expenses' do
-    it 'raises exception if id is missing' do
+    it 'raises an exception if id is missing' do
       item = build(:initiative, id: nil)
       expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
     end
 
-    it 'raises exception if expense is finished' do
+    it 'raises an exception if expense is finished' do
       item = create(:initiative, finished_expenses: true)
       expect { item.finalize_expenses(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
