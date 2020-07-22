@@ -8,22 +8,22 @@ RSpec.describe Budget::Actions, type: :model do
   describe 'approval_blocker' do
     let!(:budget) { create(:budget) }
 
-    it 'annual_budget_set?' do
+    it 'returns error message if annual_budget is not set' do
       expect(budget.approval_blocker).to eq 'Please set an annual budget for this group'
     end
 
-    it 'annual_budget_open?' do
+    it 'returns error message if annual_budget is closed' do
       budget.annual_budget.update(amount: 100, closed: true)
       expect(budget.approval_blocker).to eq 'Annual Budget is Closed'
     end
 
-    it 'request_surplus?' do
+    it 'it returns error message if budget exceeds the annual budget' do
       budget.annual_budget.update(amount: 100, closed: false)
       budget.budget_items[0].update(estimated_amount: 101)
       expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
     end
 
-    it 'return nil' do
+    it 'returns nil' do
       budget.annual_budget.update(amount: 100, closed: false)
       budget.budget_items.update_all(estimated_amount: 0)
       expect(budget.approval_blocker).to eq nil
@@ -34,17 +34,17 @@ RSpec.describe Budget::Actions, type: :model do
     let!(:approver) { create(:user) }
     let!(:budget) { create(:budget, requester: create(:user)) }
 
-    it 'blocker' do
+    it 'raises exception' do
       expect { budget.approve(approver) }.to raise_error(InvalidInputException)
     end
 
-    it 'approve' do
+    it 'approves budget' do
       budget.annual_budget.update(amount: 100, closed: false)
       budget.budget_items.update_all(estimated_amount: 0)
       expect(budget.approve(approver).is_approved).to eq true
     end
 
-    it 'BudgetMailer' do
+    it 'sends email' do
       ActiveJob::Base.queue_adapter = :test
       expect {
         BudgetMailer.budget_approved(budget).deliver_later
@@ -59,17 +59,17 @@ RSpec.describe Budget::Actions, type: :model do
       budget.decline(approver)
     end
 
-    it 'budget' do
+    it 'declines the budget' do
       expect(budget.is_approved).to eq false
     end
 
-    it 'budget_items' do
+    it 'declines budget_items' do
       budget.budget_items.each do | item |
         expect(item.is_done).to eq true
       end
     end
 
-    it 'BudgetMailer' do
+    it 'sends email' do
       ActiveJob::Base.queue_adapter = :test
       expect {
         BudgetMailer.budget_declined(budget).deliver_later
