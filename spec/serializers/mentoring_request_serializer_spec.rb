@@ -11,5 +11,6 @@ RSpec.describe MentoringRequestSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq(mentoring_request.id)
     expect(serializer.serializable_hash[:sender]).to_not be nil
     expect(serializer.serializable_hash[:receiver]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

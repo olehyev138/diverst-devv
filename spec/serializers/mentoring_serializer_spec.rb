@@ -10,5 +10,6 @@ RSpec.describe MentoringSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:mentee]).to_not be nil
     expect(serializer.serializable_hash[:mentor]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

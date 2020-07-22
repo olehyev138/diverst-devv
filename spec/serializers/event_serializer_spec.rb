@@ -6,5 +6,6 @@ RSpec.describe EventSerializer, type: :serializer do
     serializer = EventSerializer.new(event, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq event.id
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

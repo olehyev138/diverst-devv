@@ -8,5 +8,6 @@ RSpec.describe DeviceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq device.id
     expect(serializer.serializable_hash[:token]).to_not be nil
     expect(serializer.serializable_hash[:user_id]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
