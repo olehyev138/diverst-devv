@@ -70,7 +70,7 @@ export function UserGroupListPage(props) {
 
     groupList.forEach(parentGroup => (
       parentGroup.children.length > 0 ? (
-        parentGroups.push(Object.assign(parentGroup, { children: parentGroup.children.filter(child => child.current_user_is_member && child) }))
+        parentGroups.push(Object.assign(parentGroup, { children: parentGroup.children.filter(child => child.current_user_is_member) }))
       ) : (
         parentGroups.push(parentGroup)
       )
