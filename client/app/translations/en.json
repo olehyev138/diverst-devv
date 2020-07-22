@@ -662,6 +662,8 @@
   "diverst.containers.User.form.input.active": "Active user of Diverst",
   "diverst.containers.User.form.input.time_zone": "Time Zone",
   "diverst.containers.User.form.input.user_role": "User Role",
+  "diverst.containers.User.form.tab.general": "General Fields",
+  "diverst.containers.User.form.tab.field": "Hidden Fields",
   "diverst.containers.User.profile.fields": "Hidden info",
   "diverst.containers.User.profile.privacy": "Only D&I Management can see hidden fields",
   "diverst.containers.User.profile.fields.form.save": "Save",
