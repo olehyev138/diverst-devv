@@ -5,7 +5,7 @@ RSpec.describe MetricsDashboard::Actions, type: :model do
     let!(:user) { create(:user) }
     let!(:group) { create(:group) }
 
-    it 'build' do
+    it 'builds' do
       params = { metrics_dashboard: { name: 'test', group_ids: [group.id] } }
       expect(MetricsDashboard.build(Request.create_request(user), params).owner_id).to eq user.id
     end

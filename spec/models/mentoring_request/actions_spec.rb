@@ -13,7 +13,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'accept' do
-    it 'InvalidInputException' do
+    it 'raises exception if request is invalid' do
       sender = create(:user)
       receiver = create(:user)
       create(:mentoring_request, sender: sender, receiver: receiver)
@@ -21,7 +21,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
       expect { invalid_mentoring_request.accept(Request.create_request(create(:user))) }.to raise_error(InvalidInputException)
     end
 
-    it 'mentor' do
+    it 'accepts if mentoring type is mentor' do
       mentoring_request_mentor = create(:mentoring_request, mentoring_type: 'mentor')
       mentoring_request_mentor.accept(Request.create_request(create(:user)))
 
@@ -34,7 +34,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
       }.to have_enqueued_job.on_queue('mailers')
     end
 
-    it 'mentee' do
+    it 'accepts if mentoring type is mentee' do
       mentoring_request_mentee = create(:mentoring_request, mentoring_type: 'mentee')
       mentoring_request_mentee.accept(Request.create_request(create(:user)))
 
@@ -49,7 +49,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
   end
 
   describe 'reject' do
-    it 'InvalidInputException' do
+    it 'raises exception if request is invalid' do
       sender = create(:user)
       receiver = create(:user)
       create(:mentoring_request, sender: sender, receiver: receiver)
@@ -57,7 +57,7 @@ RSpec.describe MentoringRequest::Actions, type: :model do
       expect { invalid_mentoring_request.reject }.to raise_error(InvalidInputException)
     end
 
-    it do
+    it 'rejects' do
       mentoring_request_mentor = create(:mentoring_request)
       mentoring_request_mentor.reject
 
