@@ -13,7 +13,7 @@ RSpec.describe NewsLinkPhoto, type: :model do
   end
 
   describe 'file_location' do
-    it 'return file location' do
+    it 'returns file location' do
       news_link_photo = create(:news_link_photo)
       expect(news_link_photo.file_location).to_not be nil
     end
