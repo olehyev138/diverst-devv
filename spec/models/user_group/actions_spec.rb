@@ -33,7 +33,7 @@ RSpec.describe UserGroup::Actions, type: :model do
   let(:segment) { create(:segment, name: 'test segment') }
   let(:group) { create(:group, name: 'test group') }
   describe 'parameter_name' do
-    it 'scope error' do
+    it 'raises an exception' do
       expect { UserGroup.parameter_name({}) }.to raise_error(ArgumentError)
     end
     it { expect(UserGroup.parameter_name(['for_segment_ids', [segment.id]])).to eq "of segments #{segment.name}" }
@@ -47,23 +47,18 @@ RSpec.describe UserGroup::Actions, type: :model do
   end
 
   describe 'file_name' do
-    it 'missing group id' do
+    it 'raises an exception if group id is missing' do
       expect { UserGroup.file_name({}) }.to raise_error(ArgumentError)
     end
-    it { expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['all', ['joined_from', Date.yesterday], ['joined_to', Date.tomorrow], ['for_segment_ids', [segment.id]]] })).to\
+    it 'returns file name' do
+      expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['all', ['joined_from', Date.yesterday], ['joined_to', Date.tomorrow], ['for_segment_ids', [segment.id]]] })).to\
       eq "all_members_of_test_group_from_#{Date.yesterday.strftime('%Y-%m-%d')}_to_#{Date.tomorrow.strftime('%Y-%m-%d')}_of_segments_test_segment"
-    }
-
-    it { expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['accepted_users', ['joined_from', Date.yesterday], ['for_segment_ids', [segment.id]]] })).to\
+      expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['accepted_users', ['joined_from', Date.yesterday], ['for_segment_ids', [segment.id]]] })).to\
       eq "accepted_members_of_test_group_from_#{Date.yesterday.strftime('%Y-%m-%d')}_of_segments_test_segment"
-    }
-
-    it { expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['active', ['joined_to', Date.tomorrow], ['for_segment_ids', [segment.id]]] })).to\
+      expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['active', ['joined_to', Date.tomorrow], ['for_segment_ids', [segment.id]]] })).to\
       eq "active_members_of_test_group_to_#{Date.tomorrow.strftime('%Y-%m-%d')}_of_segments_test_segment"
-    }
-
-    it { expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['pending', ['joined_from', Date.yesterday], ['joined_to', Date.tomorrow]] })).to\
+      expect(UserGroup.file_name({ group_id: group.id, query_scopes: ['pending', ['joined_from', Date.yesterday], ['joined_to', Date.tomorrow]] })).to\
       eq "pending_members_of_test_group_from_#{Date.yesterday.strftime('%Y-%m-%d')}_to_#{Date.tomorrow.strftime('%Y-%m-%d')}"
-    }
+    end
   end
 end

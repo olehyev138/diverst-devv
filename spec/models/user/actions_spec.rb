@@ -8,7 +8,7 @@ RSpec.describe User::Actions, type: :model do
   let(:user_role) { create(:user_role, role_name: 'test role') }
   let(:group) { create(:group, name: 'test group') }
   describe 'parameter_name' do
-    it 'scope error' do
+    it 'raises a exception if scope is missing' do
       expect { User.parameter_name({}) }.to raise_error(ArgumentError)
     end
     it { expect(User.parameter_name(['of_role', [user_role.id]])).to eq user_role.role_name }
@@ -81,20 +81,20 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'signin' do
-    it 'missing email or password' do
+    it 'raises an exception if email or password is missing' do
       expect { User.signin(nil, nil) }.to raise_error(BadRequestException, 'Email and password required')
     end
 
-    it 'user does not exist' do
+    it 'raises an exception if user does not exist' do
       expect { User.signin('test@gmail.com', 'testPassword') }.to raise_error(BadRequestException, 'User does not exist')
     end
 
-    it 'Incorrect password' do
+    it 'raises an exception if password is incorrect' do
       create(:user, email: 'test@gmail.com')
       expect { User.signin('test@gmail.com', 'testPassword') }.to raise_error(BadRequestException, 'Incorrect password')
     end
 
-    it 'signin success' do
+    it 'signs in successfully' do
       create(:user, email: 'test@gmail.com', password: 'testPassword')
       expect(User.signin('test@gmail.com', 'testPassword').sign_in_count).to eq 1
     end
@@ -103,11 +103,11 @@ RSpec.describe User::Actions, type: :model do
   describe 'find_user_by_email' do
     let!(:user) { create(:user, email: 'test@gmail.com') }
 
-    it 'user does not exist' do
+    it 'raises an exception if user does not exist' do
       expect { User.find_user_by_email(Request.create_request(user), { email: 'wrong@gmail.com' }) }.to raise_error(BadRequestException, 'User does not exist')
     end
 
-    it 'user is found' do
+    it 'finds the user' do
       expect(User.find_user_by_email(Request.create_request(user), { email: user.email })).to eq user
     end
   end
@@ -115,12 +115,12 @@ RSpec.describe User::Actions, type: :model do
   describe 'send_reset_password_instructions' do
     let!(:user) { create(:user) }
 
-    it 'BadRequestException' do
+    it 'raises an exception' do
       user.update(reset_password_token: 'test')
       expect { user.send_reset_password_instructions }.to raise_error(BadRequestException)
     end
 
-    it 'reset password token updated' do
+    it 'resets password' do
       user.send_reset_password_instructions
       expect(user.reset_password_sent_at).to_not be nil
       expect(user.reset_password_token).to_not be nil
@@ -130,21 +130,21 @@ RSpec.describe User::Actions, type: :model do
   describe 'valid_reset_password_token?' do
     let!(:user) { create(:user) }
 
-    it 'token is blank' do
+    it 'returns false if token is blank' do
       expect(user.valid_reset_password_token?('')).to be false
     end
 
-    it 'reset_password_sent_at is blank' do
+    it 'returns false if reset_password_sent_at is blank' do
       expect(user.valid_reset_password_token?('test')).to be false
     end
 
-    it 'token expired' do
+    it 'returns false if token is expired' do
       valid_time = Time.now - Rails.configuration.password_reset_time_frame.hours
       user.update(reset_password_sent_at: valid_time - 1.hour)
       expect(user.valid_reset_password_token?('test')).to be false
     end
 
-    it 'valid token' do
+    it 'returns true' do
       token = user.send_reset_password_instructions
       expect(user.valid_reset_password_token?(token)).to be true
     end
@@ -152,7 +152,7 @@ RSpec.describe User::Actions, type: :model do
 
   describe 'reset_password_by_token' do
     let!(:user) { create(:user) }
-    it 'reset password' do
+    it 'resets password' do
       params = {
           password: 'testPassword',
           password_confirmation: 'testPassword',
@@ -170,10 +170,10 @@ RSpec.describe User::Actions, type: :model do
     let!(:user_exist) { create(:user, email: 'test@gmail.com') }
     let!(:user) { create(:user, invitation_accepted_at: nil) }
 
-    it 'invalid input' do
+    it 'raises an exception' do
       expect { user.sign_up({ email: 'test@gmail.com' }) }.to raise_error(InvalidInputException)
     end
-    it 'sign up success' do
+    it 'signs up successfully' do
       params = {
           first_name: 'first',
           last_name: 'last',
@@ -212,7 +212,7 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'downloads' do
-    it do
+    it 'gets download files' do
       user = create(:user)
       csv_files = create_list(:csv_file_download, 3, user: user)
       downloads = Request.create_request(user).user.downloads({})
@@ -221,7 +221,7 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'index_except_self' do
-    it do
+    it 'gets users except itself' do
       users = create_list(:user, 10)
       index_except_self = User.first.index_except_self({ order_by: 'id', order: 'asc' })
       expect(index_except_self.total).to eq users.count - 1
