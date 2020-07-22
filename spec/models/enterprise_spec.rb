@@ -182,13 +182,6 @@ RSpec.describe Enterprise, type: :model do
   end
 
   describe '#custom_text' do
-    context 'when enterprise does not have a custom_text' do
-      let!(:enterprise) { build(:enterprise, custom_text: nil) }
-
-      it 'when enterprise doesnt have a custom_text' do
-        expect(enterprise.custom_text).to be(nil)
-      end
-    end
 
     context 'when enterprise have a custom_text' do
       let!(:custom_text) { build_stubbed(:custom_text) }

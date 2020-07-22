@@ -153,9 +153,6 @@ class Enterprise < ApplicationRecord
     super || create_custom_text
   end
 
-  def create_custom_text
-    # todo : implement
-  end
 
   def default_time_zone
     return time_zone if time_zone.present?
