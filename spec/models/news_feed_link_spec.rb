@@ -166,7 +166,7 @@ RSpec.describe NewsFeedLink, type: :model do
         create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
         news_feed_link_segment.news_feed_link do |n|
           # update news_feed_links created by news_feed_link_segment to group2
-          n.update(news_feed_id: group2.id)
+          n.update(news_feed_id: group2.news_feed.id)
           # update news_feed_links created by news_feed_link_segment to segment_id 1,2,3
           n.update(segment_id: segment_id)
           segment_id = segment_id + 1
@@ -401,10 +401,10 @@ RSpec.describe NewsFeedLink, type: :model do
 
   describe 'search' do
     it 'returns search result' do
-      create(:group_message, subject: 'Test')
-      create(:group_message, subject: 'NotIncluded')
-      create(:news_link, title: 'Test')
-      news_link = create(:news_link, title: 'withTag')
+      create(:group_message, subject: 'Test', content: 'content')
+      create(:group_message, subject: 'NotIncluded', content: 'content')
+      create(:news_link, title: 'Test', description: 'description')
+      news_link = create(:news_link, title: 'withTag', description: 'description')
       news_tag = create(:news_tag, name: 'test')
       create(:news_feed_link_tag, news_tag: news_tag, news_feed_link: news_link.news_feed_link)
       expect(NewsFeedLink.search(['test']).count).to eq 3
