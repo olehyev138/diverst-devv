@@ -237,17 +237,17 @@ RSpec.describe NewsFeedLink, type: :model do
   describe '#author' do
     let!(:user) { create(:user) }
 
-    it 'group_message' do
+    it 'returns author of group_message' do
       create(:group_message, owner: user)
       expect(NewsFeedLink.first.author).to eq user
     end
 
-    it 'news_link' do
+    it 'returns author of news_link' do
       create(:news_link, author: user)
       expect(NewsFeedLink.first.author).to eq user
     end
 
-    it 'social_link' do
+    it 'returns author of social_link' do
       create(:social_link, author: user)
       expect(NewsFeedLink.first.author).to eq user
     end
@@ -321,7 +321,7 @@ RSpec.describe NewsFeedLink, type: :model do
     let!(:user1) { create(:user, enterprise: enterprise) }
     let!(:user2) { create(:user, enterprise: enterprise) }
     let!(:group_message) { create(:group_message) }
-    it'return total likes' do
+    it'returns total likes' do
       news_feed_link = group_message.news_feed_link
       create(:like, news_feed_link: news_feed_link, user: user1, enterprise: enterprise)
       create(:like, news_feed_link: news_feed_link, user: user2, enterprise: enterprise)
@@ -333,11 +333,11 @@ RSpec.describe NewsFeedLink, type: :model do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
     let!(:group_message) { create(:group_message) }
-    it'return total likes' do
+    it'returns false if user has no likes ' do
       news_feed_link = group_message.news_feed_link
       expect(news_feed_link.user_like(user.id)).to be false
     end
-    it'return total likes' do
+    it'returns true if user likes it' do
       news_feed_link = group_message.news_feed_link
       create(:like, news_feed_link: news_feed_link, user: user, enterprise: enterprise)
       expect(news_feed_link.user_like(user.id)).to be true
@@ -345,19 +345,19 @@ RSpec.describe NewsFeedLink, type: :model do
   end
 
   describe 'to_label' do
-    it'return group message' do
+    it'returns group message' do
       group_message = create(:group_message)
       news_feed_link = group_message.news_feed_link
       expect(news_feed_link.to_label).to eq group_message.to_s
     end
 
-    it'return news link' do
+    it'returns news link' do
       news_link = create(:news_link)
       news_feed_link = news_link.news_feed_link
       expect(news_feed_link.to_label).to eq news_link.to_s
     end
 
-    it'return social link' do
+    it'returns social link' do
       social_link = create(:social_link)
       news_feed_link = social_link.news_feed_link
       expect(news_feed_link.to_label).to eq social_link.to_s
@@ -400,7 +400,7 @@ RSpec.describe NewsFeedLink, type: :model do
   end
 
   describe 'search' do
-    it 'return result' do
+    it 'returns search result' do
       create(:group_message, subject: 'Test')
       create(:group_message, subject: 'NotIncluded')
       create(:news_link, title: 'Test')
