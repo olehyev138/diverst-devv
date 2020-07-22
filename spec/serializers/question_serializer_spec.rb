@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionSerializer, type: :serializer do
   it 'returns questions' do
     question = create(:question)
-    serializer = QuestionSerializer.new(question, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = QuestionSerializer.new(question, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(question.id)
     expect(serializer.serializable_hash[:title]).to eq(question.title)

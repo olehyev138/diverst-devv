@@ -56,7 +56,8 @@ class Api::V1::EnterprisesController < DiverstController
 
     enterprise.update(params[:enterprise])
     track_activity(enterprise)
-    render status: 200, json: enterprise
+
+    render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     case e
     when InvalidInputException
@@ -121,6 +122,8 @@ class Api::V1::EnterprisesController < DiverstController
       :expiry_age_for_resources,
       :unit_of_expiry_age,
       :auto_archive,
+      :onboarding_consent_enabled,
+      :onboarding_consent_message,
       theme_attributes: [
         :primary_color,
         :secondary_color,

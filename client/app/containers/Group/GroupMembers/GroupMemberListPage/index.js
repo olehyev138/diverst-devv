@@ -155,6 +155,12 @@ export function GroupMemberListPage(props) {
     getMembers(getScopes({}), newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    getMembers(getScopes({}), newParams);
+  };
+
   useEffect(() => {
     props.getMembersBegin(params);
 
@@ -194,6 +200,7 @@ export function GroupMemberListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleSearching={handleSearching}
 
         memberType={type}
         MemberTypes={MemberTypes}

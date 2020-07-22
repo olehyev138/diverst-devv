@@ -6,7 +6,7 @@ RSpec.describe UserMentorshipSerializer, type: :serializer do
   let!(:mentoring) { create(:mentoring, mentor: mentor, mentee: mentee) }
   it 'returns mentorship mentees' do
     create_list(:mentorship_interest, 3, user_id: mentor.id)
-    serializer = UserMentorshipSerializer.new(mentor, scope: serializer_scopes(mentor), scope_name: :scope)
+    serializer = UserMentorshipSerializer.new(mentor, scope: serializer_scopes(mentor))
 
     expect(serializer.serializable_hash[:id]).to eq mentor.id
     expect(serializer.serializable_hash[:mentees]).to_not eq []
@@ -15,7 +15,7 @@ RSpec.describe UserMentorshipSerializer, type: :serializer do
   end
   it 'returns mentorship monters' do
     create_list(:mentorship_interest, 3, user_id: mentee.id)
-    serializer = UserMentorshipSerializer.new(mentee, scope: serializer_scopes(mentee), scope_name: :scope)
+    serializer = UserMentorshipSerializer.new(mentee, scope: serializer_scopes(mentee))
 
     expect(serializer.serializable_hash[:id]).to_not be nil
     expect(serializer.serializable_hash[:mentees]).to eq []

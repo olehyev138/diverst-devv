@@ -5,7 +5,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     enterprise = create(:enterprise)
     resource = create(:resource_with_file, enterprise: enterprise, folder: nil, group: nil, initiative: nil, mentoring_session: nil)
 
-    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(resource.id)
     expect(serializer.serializable_hash[:enterprise]).to_not be nil
@@ -20,7 +20,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     folder = create(:folder)
     resource = create(:resource_with_file, enterprise: nil, folder: folder, group: nil, initiative: nil, mentoring_session: nil)
 
-    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(resource.id)
     expect(serializer.serializable_hash[:enterprise]).to be nil
@@ -35,7 +35,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     group = create(:group)
     resource = create(:resource_with_file, enterprise: nil, folder: nil, group: group, initiative: nil, mentoring_session: nil)
 
-    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(resource.id)
     expect(serializer.serializable_hash[:enterprise]).to be nil
@@ -50,7 +50,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     initiative = create(:initiative)
     resource = create(:resource_with_file, enterprise: nil, folder: nil, group: nil, initiative: initiative, mentoring_session: nil)
 
-    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(resource.id)
     expect(serializer.serializable_hash[:enterprise]).to be nil
@@ -65,7 +65,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     mentoring_session = create(:mentoring_session)
     resource = create(:resource_with_file, enterprise: nil, folder: nil, group: nil, initiative: nil, mentoring_session: mentoring_session)
 
-    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)), scope_name: :scope)
+    serializer = ResourceSerializer.new(resource, scope: serializer_scopes(create(:user)))
 
     expect(serializer.serializable_hash[:id]).to eq(resource.id)
     expect(serializer.serializable_hash[:enterprise]).to be nil
