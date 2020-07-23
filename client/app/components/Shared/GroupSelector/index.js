@@ -33,7 +33,7 @@ const GroupSelector = (props) => {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
-  const [dialogSelectedGroups, setDialogSelectedGroups] = useState({});
+  const [dialogSelectedGroups, setDialogSelectedGroups] = useState([]);
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
 

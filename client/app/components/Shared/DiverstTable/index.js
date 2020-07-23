@@ -1,13 +1,12 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import MaterialTable, { MTableHeader } from 'material-table';
+import MaterialTable from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
-import buildDataFunction from 'utils/dataTableHelper';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstTable/messages';
 
@@ -26,60 +25,55 @@ const styles = theme => ({
 });
 
 export function DiverstTable(props) {
-  const { classes, params, ...rest } = props;
+  const { classes, params, dataArray, dataTotal, page, rowsPerPage, title, columns, actions, isStatic, tableOptions, ...rest } = props;
 
-  const [pageState, setPage] = useState(props.page || 0);
-  const [rowsPerPageState, setRowsPerPage] = useState(props.rowsPerPage || 10);
+  const [pageState, setPage] = useState(page || 0);
+  const [rowsPerPageState, setRowsPerPage] = useState(rowsPerPage || 10);
 
-  const page = () => params ? params.page : pageState;
-  const rowsPerPage = () => params ? params.count : rowsPerPageState;
+  const currentPage = () => params ? params.page : pageState;
+  const currentRowsPerPage = () => params ? params.count : rowsPerPageState;
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    props.handlePagination({ count: rowsPerPage(), page: newPage });
+    props.handlePagination({ count: currentRowsPerPage(), page: newPage });
   };
 
   const handleChangeRowsPerPage = (pageSize) => {
     setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page: page() });
+    props.handlePagination({ count: +pageSize, page: currentPage() });
   };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : props.columns[columnId].field,
+      orderBy: (columnId === -1) ? 'id' : columns[columnId].field,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
 
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => {
-    if (ref.current && !props.static)
-      ref.current.onQueryChange({ page: page(), pageSize: rowsPerPage() });
-  }, [props.dataArray]);
-
-  const dataResolver = () => props.static
-    ? props.dataArray
-    : buildDataFunction(props.dataArray, page() || 0, props.dataTotal || 0);
+  const handleSearchChange = searchText => props.handleSearching && props.handleSearching(searchText);
 
   return (
     <div className={classes.materialTableContainer}>
       <MaterialTable
-        tableRef={ref}
-        page={page()}
+        data={dataArray || []}
+        totalCount={dataTotal || 0}
+        page={currentPage()}
         icons={tableIcons}
-        title={props.title || <DiverstFormattedMessage {...messages.title} />}
+        title={title || <DiverstFormattedMessage {...messages.title} />}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
+        onSearchChange={handleSearchChange}
         onRowClick={props.handleRowClick}
-        data={dataResolver()}
-        columns={props.columns}
-        actions={props.actions}
+        columns={columns}
+        actions={actions}
         options={{
-          ...props.my_options,
+          search: !!props.handleSearching, // Disable searching when callback isn't passed
           actionsColumnIndex: -1,
-          pageSize: rowsPerPage(),
+          pageSize: currentRowsPerPage(),
+          emptyRowsWhenPaging: false,
+          debounceInterval: 1000,
+          ...tableOptions,
         }}
         {...rest}
       />
@@ -95,13 +89,14 @@ DiverstTable.propTypes = {
   actions: PropTypes.array,
   handlePagination: PropTypes.func.isRequired,
   handleOrdering: PropTypes.func,
+  handleSearching: PropTypes.func,
   handleRowClick: PropTypes.func,
   title: PropTypes.string,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   params: PropTypes.object,
-  static: PropTypes.bool,
-  my_options: PropTypes.object,
+  isStatic: PropTypes.bool,
+  tableOptions: PropTypes.object,
 };
 
 export default compose(

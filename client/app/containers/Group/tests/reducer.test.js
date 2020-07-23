@@ -13,6 +13,7 @@ describe('groupsReducer', () => {
       isLoading: true,
       isFormLoading: true,
       isCommitting: false,
+      groupColorList: [],
       groupList: [],
       groupTotal: null,
       currentGroup: null,

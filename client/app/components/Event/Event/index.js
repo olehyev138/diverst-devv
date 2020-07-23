@@ -32,6 +32,7 @@ import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   padding: {
@@ -177,6 +178,7 @@ export function Event(props) {
                 {event.picture_data && (
                   <DiverstImg
                     data={event.picture_data}
+                    contentType={event.picture_content_type}
                     maxWidth='100%'
                     maxHeight='240px'
                   />
@@ -187,15 +189,12 @@ export function Event(props) {
                     <Typography className={classes.dataHeaders}>
                       <DiverstFormattedMessage {...messages.inputs.description} />
                     </Typography>
-                    <Typography
-                      style={{
-                        whiteSpace: 'pre-line'
+                    <DiverstHTMLEmbedder
+                      html={event.description}
+                      gridProps={{
+                        alignItems: 'flex-start',
                       }}
-                      color='textSecondary'
-                      className={classes.data}
-                    >
-                      {event.description}
-                    </Typography>
+                    />
                   </React.Fragment>
                 )}
                 <Typography className={classes.dataHeaders}>

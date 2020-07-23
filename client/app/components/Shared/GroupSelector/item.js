@@ -127,6 +127,7 @@ const GroupSelectorItem = (props) => {
                   <Grid item xs='auto'>
                     <DiverstImg
                       data={group.logo_data}
+                      contentType={group.logo_content_type}
                       maxWidth='30px'
                       maxHeight='30px'
                       minWidth='30px'

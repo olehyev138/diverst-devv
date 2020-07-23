@@ -60,6 +60,7 @@ export const initialState = {
   isFormLoading: true,
   isCommitting: false,
   groupList: [],
+  groupColorList: [],
   groupTotal: null,
   currentGroup: null,
   hasChanged: false,
@@ -91,14 +92,18 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_SUCCESS:
-      case GET_COLORS_SUCCESS:
         draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
 
+      case GET_COLORS_SUCCESS:
+        draft.groupColorList = action.payload.items;
+        draft.isLoading = false;
+        break;
+
       case GET_ANNUAL_BUDGETS_SUCCESS:
-        draft.groupList = action.payload.items;
+        draft.groupList = flattenChildrenGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -177,10 +182,6 @@ function formatGroups(groups) {
 
 function flattenChildrenGroups(groups) {
   /* eslint-disable no-return-assign */
-
-  /* Format groups to hash by id:
-   *   { <id>: { name: group_01, ... } }
-   */
   return groups.reduce((map, group) => {
     map.push(group);
     const con = map.concat(flattenChildrenGroups(group.children || []));

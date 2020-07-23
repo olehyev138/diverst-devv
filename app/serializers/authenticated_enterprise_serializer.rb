@@ -9,7 +9,7 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :default_from_email_address, :default_from_email_display_name, :enable_social_media,
              :redirect_all_emails, :redirect_email_contact, :disable_emails, :expiry_age_for_resources,
              :unit_of_expiry_age, :auto_archive, :theme, :timezones, :time_zone,
-             :banner, :banner_file_name, :banner_data, :banner_content_type
+             :banner, :banner_file_name, :banner_data, :banner_content_type, :onboarding_consent_enabled, :onboarding_consent_message
 
   has_one :custom_text
   has_many :mentoring_interests

@@ -23,7 +23,7 @@ class GroupEventsPolicy < GroupBasePolicy
     return true if user.policy_group.manage_all?
 
     case group.event_attendance_visibility
-    when 'global'
+    when 'public'
       return true if user.policy_group.initiatives_manage?
       return true if basic_group_leader_permission?('initiatives_manage')
 
@@ -34,7 +34,7 @@ class GroupEventsPolicy < GroupBasePolicy
       return true if basic_group_leader_permission?('initiatives_manage')
 
       is_an_accepted_member?
-    when 'managers_only'
+    when 'leaders_only'
       manage_group_resource('initiatives_manage')
     else
       false
@@ -67,11 +67,7 @@ class GroupEventsPolicy < GroupBasePolicy
     when 'group'
       index?
     when 'leaders_only'
-      # to join a group event user must have leaders permission defined below.
-      return true if is_a_manager?('initiatives_manage')
-      return true if is_a_manager?('initiatives_create')
-
-      is_a_manager?('initiatives_index')
+      is_a_manager?
     else
       return false
     end

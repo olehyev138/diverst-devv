@@ -348,5 +348,35 @@ RSpec.describe GroupBasePolicy, type: :policy do
         end
       end
     end
+
+    describe '#manage_comments' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.manage_comments?).to be(true)
+        end
+      end
+
+      context 'when manage_posts is true' do
+        before { user.policy_group.update manage_posts: true }
+
+        it 'returns true' do
+          expect(subject.manage_comments?).to be(true)
+        end
+      end
+
+      context 'when is_a_leader? is true' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update groups_manage: true, group_settings_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader', user_role_id: user_role.id)
+        end
+
+        it 'returns true' do
+          expect(subject.manage_comments?).to be(true)
+        end
+      end
+    end
   end
 end
