@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_173224) do
+ActiveRecord::Schema.define(version: 2020_07_14_140553) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -411,7 +411,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_173224) do
     t.integer "users_count"
     t.boolean "onboarding_consent_enabled", default: false
     t.boolean "enable_outlook", default: false
-    t.text "onboarding_pop_up_content"
+    t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
   end
 

@@ -48,7 +48,7 @@ module User::Actions
     order_by = params[:order_by].to_sym rescue :created_at
 
     # get the news_feed_ids
-    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public', 'global', 'non-members'] }).ids
+    news_feed_ids = NewsFeed.joins(:group).where(group_id: groups.ids, groups: { latest_news_visibility: ['group', 'public'] }).ids
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
@@ -169,7 +169,7 @@ module User::Actions
         scope_map[scope.to_sym] || scope
       when Array
         case scope.first
-        when 'of_role' then UserRole.find(scope.second).role_name.downcase
+        when 'of_role' then UserRole.find(scope.second).first.role_name.downcase
         else scope.first
         end
       else
@@ -178,8 +178,8 @@ module User::Actions
     end
 
     def base_query
-      "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search
-      OR LOWER(#{ self.table_name }.email) LIKE :search"
+      "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search"\
+      " OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
 
     def valid_scopes
