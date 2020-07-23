@@ -369,6 +369,7 @@ class Initiative < ApplicationRecord
 
   # ENDOF port from Event
 
+  # POSSIBLY DEPRECATED
   def all_updates_fields
     updates_fields = self.updates.map { |update| update.info.keys }
     updates_fields.inject([], :|)
@@ -381,7 +382,7 @@ class Initiative < ApplicationRecord
     .order(created_at: :asc)
     .map do |update|
       [
-        update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.reported_for_date.to_time.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
         update[field]
       ]
     end
@@ -392,7 +393,7 @@ class Initiative < ApplicationRecord
     fields.each do |field|
       values = self.updates.where('report_date >= ?', from).where('report_date <= ?', to).order(created_at: :asc).map do |update|
         {
-          x: update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+          x: update.reported_for_date.to_time.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
           y: update[field],
           children: {}
         }
@@ -414,12 +415,10 @@ class Initiative < ApplicationRecord
     .order(created_at: :asc)
     .map do |expense|
       [
-        expense.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        expense.created_at.to_time.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
         expense.amount
       ]
     end
-
-    expenses_sum = 0
 
     highcharts_expenses.each_with_index do |hc_expense, i|
       next if i == 0
