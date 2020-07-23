@@ -46,13 +46,6 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:mentoring_sessions).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:sponsors).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:rewards).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:reward_actions).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:badges).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:group_categories).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:group_category_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy).through(:groups) }
 
     it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
