@@ -27,7 +27,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
 
-
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -77,8 +76,7 @@ export function UserGroupListPage(props) {
     ));
     return parentGroups;
   };
-
-
+  
   return (
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>

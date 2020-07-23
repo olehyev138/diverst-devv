@@ -222,8 +222,6 @@ class Group < ApplicationRecord
   validates_length_of :name, maximum: 191
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
-  # contact_email is not an attribute
-  validates_format_of :contact_email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
 
@@ -321,11 +319,6 @@ class Group < ApplicationRecord
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
-  end
-
-  def contact_email
-    group_leader = group_leaders.find_by(default_group_contact: true)&.user
-    group_leader&.email
   end
 
   def managers
