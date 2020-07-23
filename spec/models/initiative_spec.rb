@@ -387,7 +387,7 @@ RSpec.describe Initiative, type: :model do
 
   describe 'annual_budget_id' do
     let!(:initiative) { create(:initiative, :with_budget_item) }
-    it do
+    it 'returns annual_budget_id' do
       expect(initiative.annual_budget_id).to eq initiative.annual_budget.id
     end
   end
