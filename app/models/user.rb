@@ -99,7 +99,6 @@ class User < ApplicationRecord
 
   # ActiveStorage
   has_one_attached :avatar
-  validates :avatar, content_type: AttachmentHelper.common_image_types
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :avatar_paperclip, s3_permissions: 'private'
@@ -126,32 +125,35 @@ class User < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
+  validates_length_of :password, within: 8..128, allow_blank: true
 
   # TODO: Devise has been removed
   # validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :email, presence: true
+  validates :time_zone, presence: true
+  validates :points, presence: true
+  validates :credits, presence: true
+
+  validates :avatar, content_type: AttachmentHelper.common_image_types
 
   validates :password, confirmation: true
-  validates_confirmation_of :password
 
-  validates_presence_of   :email
-  validates_uniqueness_of :email, allow_blank: false
+  validates :email, uniqueness: true, allow_blank: false
+
   validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
-  validates_length_of     :password, within: 8..128, allow_blank: true
-
   validate :user_role_presence
-  validates :points, numericality: { only_integer: true }, presence: true
-  validates :credits, numericality: { only_integer: true }, presence: true
   validate :group_leader_role
   validate :policy_group
-  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
-  validates_presence_of :time_zone
+  validates :points, numericality: { only_integer: true }
+  validates :credits, numericality: { only_integer: true }
 
+  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
@@ -161,9 +163,10 @@ class User < ApplicationRecord
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
   after_save :set_default_policy_group, if: :user_role_id_changed?
-  accepts_nested_attributes_for :policy_group
-
   after_update :add_to_default_mentor_group
+
+  accepts_nested_attributes_for :policy_group
+  accepts_nested_attributes_for :availabilities, allow_destroy: true
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -175,8 +178,6 @@ class User < ApplicationRecord
   scope :mentees, -> { where(mentee: true) }
   scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
-
-  accepts_nested_attributes_for :availabilities, allow_destroy: true
 
   def as_json(options = {})
     super.merge({ name: name })

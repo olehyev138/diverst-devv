@@ -7,8 +7,8 @@ RSpec.describe User do
   describe 'when validating' do
     let(:user) { build(:user) }
 
-    it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
-    it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
+    it { expect(user).to define_enum_for(:groups_notifications_frequency).with_values([:hourly, :daily, :weekly, :disabled]) }
+    it { expect(user).to define_enum_for(:groups_notifications_date).with_values([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
 
     it 'validates password presence' do
       pending 'Need to find alternate solution for validating users'
@@ -95,9 +95,13 @@ RSpec.describe User do
       it { expect(user).to validate_length_of(:data).is_at_most(65535) }
       it { expect(user).to validate_length_of(:last_name).is_at_most(191) }
       it { expect(user).to validate_length_of(:first_name).is_at_most(191) }
-      it { expect(user).to validate_confirmation_of(:password) }
       it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128), allow_value('', nil) }
+
       it { expect(user).to validate_presence_of(:email) }
+      it { expect(user).to validate_presence_of(:first_name) }
+      it { expect(user).to validate_presence_of(:last_name) }
+
+      it { expect(user).to validate_confirmation_of(:password) }
       it { expect(user).to validate_uniqueness_of(:email) }
       it { expect(user).to allow_value('email@addresse.foo').for(:email) }
       it { expect(user).to_not allow_value('foo').for(:email) }
