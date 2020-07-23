@@ -507,7 +507,7 @@
   "diverst.containers.News.index.button.edit": "Edit",
   "diverst.containers.News.index.button.archive": "Archive",
   "diverst.containers.News.index.button.delete": "Delete",
-  "diverst.containers.News.index.button.group.delete_confirm": "Delete group message?",
+  "diverst.containers.News.index.button.group.delete_confirm": "Delete comment?",
   "diverst.containers.News.index.button.news.delete_confirm": "Delete news link?",
   "diverst.containers.News.index.button.social.delete_confirm": "Delete social link?",
   "diverst.containers.News.index.button.group_message.new": "New Group Message",

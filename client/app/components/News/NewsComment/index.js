@@ -68,7 +68,7 @@ export function NewsComment(props) {
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm(intl.formatMessage(messages.group_delete_confirm)))
-                props.deleteCommentAction({ group_id: newsItem.group_message.group_id, id: comment.id });
+                props.deleteCommentAction({ news_id: newsItem.id, id: comment.id });
             }}
           >
             {<DiverstFormattedMessage {...messages.delete} />}
