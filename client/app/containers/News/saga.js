@@ -167,7 +167,7 @@ export function* deleteGroupMessageComment(action) {
   try {
     yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
     yield put(deleteGroupMessageCommentSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(getNewsItemBegin({ id: action.payload.news_id }));
     yield put(showSnackbar({ message: 'Group message comment deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupMessageCommentError(err));
@@ -263,7 +263,7 @@ export function* deleteNewsLinkComment(action) {
   try {
     yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload.id);
     yield put(deleteNewsLinkCommentSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(getNewsItemBegin({ id: action.payload.news_id }));
     yield put(showSnackbar({ message: 'News link comment deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteNewsLinkCommentError(err));
