@@ -77,6 +77,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:idp_sso_target_url).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:onboarding_consent_message).is_at_most(65535) }
 
     it { expect(enterprise).to validate_numericality_of(:expiry_age_for_resources).is_greater_than_or_equal_to(0) }
 

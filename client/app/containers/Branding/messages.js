@@ -59,6 +59,9 @@ export default defineMessages({
     banner: {
       id: `${scope}.Home.input.banner`,
     },
+    consent_message: {
+      id: `${scope}.Home.input.consent_message`,
+    },
   },
   Sponsors: {
     name: {

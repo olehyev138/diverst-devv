@@ -127,7 +127,7 @@ export function PollResponses(props, context) {
             columns={fieldId ? textColumns : responsesColumns}
             detailPanel={detailPanel}
             onRowClick={(event, rowData, togglePanel) => togglePanel()}
-            my_options={{
+            tableOptions={{
               search: false
             }}
           />
