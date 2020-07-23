@@ -101,6 +101,10 @@ RSpec.describe Group, type: :model do
     it { expect(group).to validate_length_of(:description).is_at_most(65535) }
     it { expect(group).to validate_length_of(:name).is_at_most(191) }
 
+    it { expect(group).to validate_numericality_of(:expiry_age_for_resources).is_greater_than_or_equal_to(0) }
+    it { expect(group).to validate_numericality_of(:expiry_age_for_news).is_greater_than_or_equal_to(0) }
+    it { expect(group).to validate_numericality_of(:expiry_age_for_events).is_greater_than_or_equal_to(0) }
+
     describe 'validate uniqueness mentor group' do
       let!(:mentor_group) { build(:group, default_mentor_group: true) }
       it { expect(mentor_group).to validate_uniqueness_of(:default_mentor_group).scoped_to(:enterprise_id) }

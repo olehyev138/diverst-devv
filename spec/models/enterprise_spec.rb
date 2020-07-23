@@ -78,6 +78,8 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
 
+    it { expect(enterprise).to validate_numericality_of(:expiry_age_for_resources).is_greater_than_or_equal_to(0) }
+
     it { expect(enterprise).to allow_value('').for(:idp_sso_target_url) }
     it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
     it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
