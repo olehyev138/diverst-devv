@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 // This component is intended for rendering images from a base64 string,
 // likely image data encoded in base64 received from a serializer.
 export function DiverstImg(props) {
-  const { className, data, contentType, maxWidth, maxHeight, minWidth, minHeight, width, height, alt, styles, imgProps, naturalSrc, ...rest } = props;
+  const { className, data, contentType, maxWidth, maxHeight, minWidth, minHeight,
+    width, height, alt, styles, imgProps, naturalSrc, emptyVariant, ...rest } = props;
 
-  return (
-    <React.Fragment>
-      {data ? (
+  function image() {
+    if (data)
+      return (
         <img
           className={className}
           src={naturalSrc ? data : `data:${contentType};base64,${data}`}
@@ -24,11 +25,19 @@ export function DiverstImg(props) {
             ...styles,
           }}
         />
-      ) : (
+      );
+    if (emptyVariant === 'placeholder' || emptyVariant === 'reserve')
+      return (
         <svg width={maxWidth} height={maxHeight} viewBox='0 0 100 100'>
-          <rect width='100' height='100' rx='10' ry='10' fill='#EEE' />
+          {emptyVariant === 'placeholder' && <rect width='100' height='100' rx='10' ry='10' fill='#EEE' />}
         </svg>
-      )}
+      );
+    return <React.Fragment />;
+  }
+
+  return (
+    <React.Fragment>
+      {image()}
     </React.Fragment>
   );
 }
@@ -51,6 +60,11 @@ DiverstImg.propTypes = {
   alt: PropTypes.string,
   styles: PropTypes.object,
   imgProps: PropTypes.object,
+  emptyVariant: PropTypes.oneOf(['placeholder', 'reserve', 'ignore']),
+};
+
+DiverstImg.defaultProps = {
+  emptyVariant: 'ignore'
 };
 
 export default compose(
