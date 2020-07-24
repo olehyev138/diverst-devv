@@ -153,7 +153,6 @@ class Enterprise < ApplicationRecord
     super || create_custom_text
   end
 
-
   def default_time_zone
     return time_zone if time_zone.present?
 
@@ -768,14 +767,14 @@ class Enterprise < ApplicationRecord
         # index: User.es_index_name(enterprise: self),
         field: 'created_at',
         interval: 'month'
-    )
+      )
 
     data = g.query_elasticsearch
 
     strategy = Reports::GraphTimeseriesGeneric.new(
         title: 'Number of employees',
         data: data['aggregations']['my_date_histogram']['buckets'].collect { |d| [d['key'], d['doc_count']] }
-    )
+      )
     report = Reports::Generator.new(strategy)
 
     report.to_csv

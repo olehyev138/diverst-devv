@@ -175,7 +175,6 @@ RSpec.describe Enterprise, type: :model do
   end
 
   describe '#custom_text' do
-
     context 'when enterprise have a custom_text' do
       let!(:custom_text) { build_stubbed(:custom_text) }
       let!(:enterprise) { build_stubbed(:enterprise, custom_text: custom_text) }

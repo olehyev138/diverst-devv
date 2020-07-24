@@ -13,15 +13,6 @@ class User < ApplicationRecord
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
-  scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
-  scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
-  scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
-
-  scope :active,                  -> { where(active: true).distinct }
-  scope :inactive,                -> { where(active: false).distinct }
-  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
-  scope :saml,                    -> { where(auth_source: 'saml').distinct }
-
   belongs_to :user_role
 
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
@@ -143,7 +134,7 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true, allow_blank: false
 
-  validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
+  validates_format_of :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
   validate :user_role_presence
   validate :group_leader_role
@@ -158,6 +149,7 @@ class User < ApplicationRecord
   before_validation :set_provider
   before_validation :set_uid
   before_validation :set_timezone
+
   before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
@@ -168,16 +160,23 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :policy_group
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  scope :active,                  -> { where(active: true).distinct }
+  scope :inactive,                -> { where(active: false).distinct }
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
+  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :of_role, -> (role_id) { where(user_role_id: role_id) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
+  scope :saml,                    -> { where(auth_source: 'saml').distinct }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
   scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
+  scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
+  scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
+  scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
 
   def as_json(options = {})
     super.merge({ name: name })
@@ -272,18 +271,18 @@ class User < ApplicationRecord
   end
 
   def is_participating_in?(session)
-    session.mentorship_sessions.pluck(:user_id).include? id
+    mentorship_sessions.pluck(:user_id).include? id
   end
 
   def get_mentorship_session(session)
     # If the association is already loaded, we don't need to re-query the database
     # Otherwise it will be faster to use the find_by query
-    if session.mentorship_sessions.loaded?
-      session.mentorship_sessions.find do |ms|
+    if mentorship_sessions.loaded?
+      mentorship_sessions.find do |ms|
         ms.user_id == id
       end
     else
-      session.mentorship_sessions.find_by(user_id: id)
+      mentorship_sessions.find_by(user_id: id)
     end
   end
 
