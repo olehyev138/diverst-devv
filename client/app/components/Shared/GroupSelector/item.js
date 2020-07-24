@@ -149,6 +149,7 @@ const GroupSelectorItem = (props) => {
                       maxHeight={imageDimensions}
                       minWidth={imageDimensions}
                       minHeight={imageDimensions}
+                      emptyVariant='placeholder'
                     />
                   </Grid>
                 </Hidden>
