@@ -674,7 +674,7 @@ RSpec.describe Group, type: :model do
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
-      expense = create(:initiative_expense, initiative_id: initiative.id, amount: 10)
+      create(:initiative_expense, initiative_id: initiative.id, amount: 10)
       initiative.finish_expenses!
 
       expect(group.annual_budget_expenses).to eq 10
@@ -1052,7 +1052,7 @@ RSpec.describe Group, type: :model do
 
       group_2.default_mentor_group = true
       expect(group_2.valid?).to be false
-      expect(group_2.errors.full_messages.first).to eq ('Default mentor group has already been taken')
+      expect(group_2.errors.full_messages.first).to eq 'Default mentor group has already been taken'
 
       group_3.default_mentor_group = true
       group_3.save!
@@ -1129,6 +1129,61 @@ RSpec.describe Group, type: :model do
       group = create(:group, enterprise: enterprise)
       csv = group.membership_list_csv(group.members)
       expect(csv).to eq("first_name,last_name,email_address,mentor,mentee\ntotal,,0\n")
+    end
+  end
+
+  describe 'create_annual_budget' do
+    it 'returns annual budget' do
+      group = create(:group)
+      expect(group.create_annual_budget).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_annual_budget' do
+    it 'returns current annual budget ' do
+      group = create(:group)
+      group.create_annual_budget
+
+      expect(group.current_annual_budget).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_annual_budget' do
+    it 'returns current annual budget' do
+      group = create(:group)
+      expect(group.current_annual_budget!).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_budget_items' do
+    it 'returns budget items' do
+      group = create(:group)
+      group.create_annual_budget
+      create(:budget, annual_budget: AnnualBudget.first)
+      expect(group.current_budget_items.count).to eq 3
+    end
+  end
+
+  describe 'reload' do
+    it 'returns new amount' do
+      group = create(:group, :with_annual_budget)
+      AnnualBudget.first.update(amount: 10)
+      group.reload
+      expect(group.annual_budget).to eq 10
+    end
+  end
+
+  describe 'annual_budget' do
+    it 'returns annual budget' do
+      group = create(:group)
+      expect(group.annual_budget).to eq 0
+    end
+
+    it 'returns new budget' do
+      group = create(:group, :with_annual_budget)
+      group.annual_budget = 100
+      group.reload
+      expect(group.annual_budget).to eq 100
     end
   end
 end
