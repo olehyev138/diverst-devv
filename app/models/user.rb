@@ -616,6 +616,16 @@ class User < BaseClass
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
+  def campaign_engagement_points(campaign)
+    # filter UserRewardAction based on the 3 campaign engagement actions 
+    # which are campaign_answers, campaign_comment, campaign_vote scoped to a particular campaign
+    answer_ids = campaign.answers.where(author_id: self.id).ids
+    answer_comment_ids = campaign.answer_comments.where(author_id: self.id).ids
+    answer_upvote_ids = campaign.answer_upvotes.where(author_id: self.id).ids
+
+    UserRewardAction.where('answer_id IN (?) OR answer_comment_id IN (?) OR answer_upvote_id IN (?)', answer_ids, answer_comment_ids, answer_upvote_ids).sum(:points)
+  end
+
   def delete_linkedin_info
     self.update(
       linkedin_profile_url: nil,

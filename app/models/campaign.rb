@@ -14,6 +14,7 @@ class Campaign < BaseClass
   has_many :users, through: :invitations
   has_many :answers, through: :questions
   has_many :answer_comments, through: :questions
+  has_many :answer_upvotes, through: :questions
   has_many :campaigns_managers, dependent: :destroy
   has_many :managers, through: :campaigns_managers, source: :user
   has_many :sponsors, dependent: :destroy
