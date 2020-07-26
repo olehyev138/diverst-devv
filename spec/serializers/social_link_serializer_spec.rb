@@ -8,5 +8,6 @@ RSpec.describe SocialLinkSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be_nil
     expect(serializer.serializable_hash[:group_id]).to_not be_nil
     expect(serializer.serializable_hash[:author]).to_not be_nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
