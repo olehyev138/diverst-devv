@@ -56,9 +56,57 @@ class Campaign < BaseClass
     engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq
     engaged_users.select { |u| u.campaign_engagement_points(self) > 0 }
                  .map { |u| [u.name, u.campaign_engagement_points(self)] }
-                 .inject({}) { |hash, (u, p)| hash.merge( u => p) }
+                 .inject({}) { |hash, (u, p)| hash.merge(u => p) }
   end
-  
+
+  def percentage_engagement
+    # unique count of engaged users/number of invitations
+    no_of_engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq.size
+    no_of_invitations = self.invitations.size.to_f
+
+    (no_of_engaged_users / no_of_invitations) * 100
+  end
+
+  def engagement_activity_level
+    # total number of answers, upvotes and comments across all questions for a campaign
+    self.answers.size + self.answer_upvotes.size + self.answer_comments.size
+  end
+
+  def chosen_ideas
+    self.answers.where(chosen: true)
+  end
+
+  def total_roi
+    self.answers.where.not(value: nil).sum(:value)
+  end
+
+  def self.total_roi_for_all_campaigns(enterprise_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    enterprise.answers.where.not(value: nil).sum(:value)
+  end
+
+  def self.roi_distribution(enterprise_id, campaign_id)
+    campaign = Campaign.find_by(id: campaign_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    campaigns = enterprise.campaigns
+    campaigns = campaigns.select { |c| c.total_roi > 0 }
+             .map { |c| [c.title, c.total_roi] }
+             .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
+
+    campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
+  end
+
+  def self.engagement_activity_distribution(enterprise_id, campaign_id)
+    campaign = Campaign.find_by(id: campaign_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    campaigns = enterprise.campaigns
+    campaigns = campaigns.select { |c| c.engagement_activity_level > 0 }
+                          .map { |c| [c.title, c.engagement_activity_level] }
+                          .inject({}) { |hash, (c, eal)| hash.merge(c => eal) }
+
+    campaign.engagement_activity_level > 0 ? campaigns = { campaign.title => campaign.engagement_activity_level }.merge(campaigns) : campaigns                      
+  end
+
   def closed?
     self.end < Time.current
   end
