@@ -73,7 +73,8 @@
           <div class="card__action">
             <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
           </div>
-          <%= bar_chart @campaign.top_campaign_performers, id: 'top-performers', colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
+          <%= bar_chart @campaign.top_campaign_performers, id: 'top-performers',
+                                                            colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
         </div>
       </div>
     </div>
