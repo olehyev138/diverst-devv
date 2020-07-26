@@ -78,5 +78,25 @@
         </div>
       </div>
     </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Campaign ROI Distribution</h3>
+          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id), id: 'campaign-roi-distribution', 
+                                                                               prefix: '$',
+                                                                               thousands: ',',
+                                                                               colors: @campaign.total_roi > 0 ? [current_user.enterprise&.theme&.primary_color || '#7B77C9'] : nil %>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Engagement Activity Distribution</h3>
+          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id), id: 'engagement-activity-distribution',
+                                                                               colors: @campaign.engagement_activity_level > 0 ? [current_user.enterprise&.theme&.primary_color || '#7B77C9'] : nil %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

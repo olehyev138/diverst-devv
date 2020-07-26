@@ -1,0 +1,25 @@
+<div class="content__header">
+  <h1>Graphical Representation of Campaign Metrics</h1>
+  <%= link_to "View Stats", campaign_stats_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
+</div>
+
+<div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Engagement Activity Distribution</h3>
+          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, nil), id: 'engagement-activity-distribution' %>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Campaign ROI Distribution</h3>
+          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, nil), id: 'campaign-roi-distribution', 
+                                                                               prefix: '$',
+                                                                               thousands: ',' %>
+        </div>
+      </div>
+    </div>
+  </div>

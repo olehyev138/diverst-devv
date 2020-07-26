@@ -33,6 +33,7 @@
 <div class="menu menu--desktop">
   <%= active_link_to "Campaigns", campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'questions', 'answers'], []] %>
   <%= active_link_to "Financials", expenses_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['expenses', 'expense_categories'], []] %>
+  <%= active_link_to "Campaign Stats", campaign_stats_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'stats'], []] %>
 </div>
 <% end %>
 

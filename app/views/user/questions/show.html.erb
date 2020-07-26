@@ -9,7 +9,7 @@ video#recorded-video {
 </style>
 <div class="content__header">
   <h1>
-    <%= link_to "My Campaigns", user_user_campaign_path %> /
+    <%= link_to "My Campaigns", user_user_campaigns_path %> /
     <%= link_to @question.campaign.title, user_user_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
   </h1>
