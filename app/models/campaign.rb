@@ -51,6 +51,14 @@ class Campaign < BaseClass
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
   scope :closed, -> { where('end < :current_time', current_time: Time.current) }
 
+  # users with the most campaign engagement points
+  def top_campaign_performers
+    engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq
+    engaged_users.select { |u| u.campaign_engagement_points(self) > 0 }
+                 .map { |u| [u.name, u.campaign_engagement_points(self)] }
+                 .inject({}) { |hash, (u, p)| hash.merge( u => p) }
+  end
+  
   def closed?
     self.end < Time.current
   end

@@ -28,7 +28,7 @@ class User::UserAnswerCommentsController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:user_answer_id])
-    return head 403 if author_of_campaign_or_idea
+    # return head 403 if author_of_campaign_or_idea
   end
 
   def comment_params

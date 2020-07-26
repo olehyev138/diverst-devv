@@ -623,7 +623,7 @@ class User < BaseClass
     answer_comment_ids = campaign.answer_comments.where(author_id: self.id).ids
     answer_upvote_ids = campaign.answer_upvotes.where(author_id: self.id).ids
 
-    UserRewardAction.where('answer_id IN (?) OR answer_comment_id IN (?) OR answer_upvote_id IN (?)', answer_ids, answer_comment_ids, answer_upvote_ids).sum(:points)
+    self.user_reward_actions.where('answer_id IN (?) OR answer_comment_id IN (?) OR answer_upvote_id IN (?)', answer_ids, answer_comment_ids, answer_upvote_ids).sum(:points)
   end
 
   def delete_linkedin_info
