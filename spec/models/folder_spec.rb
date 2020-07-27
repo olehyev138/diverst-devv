@@ -64,7 +64,7 @@ RSpec.describe Folder, type: :model do
 
     it 'when folder doesnt belong to anything ' do
       folder.update(enterprise_id: nil)
-      expect{folder.policy_class}.to raise_error(StandardError, 'Folder is without parent')
+      expect { folder.policy_class }.to raise_error(StandardError, 'Folder is without parent')
     end
   end
 
