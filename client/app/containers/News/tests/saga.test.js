@@ -486,7 +486,7 @@ describe('Delete group message comment', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [deleteGroupMessageCommentSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const results = [deleteGroupMessageCommentSuccess(), getNewsItemBegin({ id: undefined }), notified];
     const initialAction = { payload: { groupMessageComment } };
     const dispatched = await recordSaga(
       deleteGroupMessageComment,
@@ -719,7 +719,7 @@ describe('Delete news link comment', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [deleteNewsLinkCommentSuccess(), push(ROUTES.group.news.index.path(':group_id')), notified];
+    const results = [deleteNewsLinkCommentSuccess(), getNewsItemBegin({ id: undefined }), notified];
     const initialAction = { payload: { newsLinkComment } };
     const dispatched = await recordSaga(
       deleteNewsLinkComment,
