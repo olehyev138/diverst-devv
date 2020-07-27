@@ -1,8 +1,8 @@
 class CreateDepartments < ActiveRecord::Migration
   def change
     create_table :departments do |t|
-      t.integer :enterprise_id, null: false
-      t.string  :name
+      t.string :name
+      t.references :enterprise, index: true, foreign_key: true
 
       t.timestamps null: false
     end

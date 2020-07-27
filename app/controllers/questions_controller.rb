@@ -87,6 +87,7 @@ class QuestionsController < ApplicationController
         :title,
         :conclusion,
         :description,
+        :department_id,
         answers_attributes: [
           :id,
           :outcome,

@@ -1,0 +1,39 @@
+<div class="content__header">
+  <h1>Departments</h1>
+  <%= link_to "New department", new_department_path, class: "btn btn--primary" if DepartmentPolicy.new(current_user, Department).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @departments.empty? %>
+        <p>There are no departments yet. <%= link_to "Create one", new_department_path %> to start tracking your campaigns' ROI more efficiently.</p>
+      <% else %>
+        <table class="table--has-border" class="js-departments-table">
+          <thead>
+            <th>Name</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @departments.each do |department| %>
+              <tr>
+                <td><%= department.name %></td>
+                <td><%= link_to "Edit", edit_department_path(department) if DepartmentPolicy.new(current_user, department).edit? %> - <%= link_to "Delete", department_path(department), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if DepartmentPolicy.new(current_user, department).destroy? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('.js-departments-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

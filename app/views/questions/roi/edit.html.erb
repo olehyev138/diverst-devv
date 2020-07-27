@@ -11,6 +11,15 @@
     </div>
   <% else %>
     <%= simple_form_for @question do |f| %>
+      <div class="card">
+        <div class="card__section">
+          <div class="row">
+            <div class="col sm-6">
+             <%= f.association :department, label: 'What departments need to be involved?', collection: @departments.map { |department| [department.name, department.id] } %>
+            </div>
+          </div> 
+        </div>
+      </div>     
       <%= f.simple_fields_for :answers, @answers do |a| %>
         <div class="card">
           <div class="card__section card__section--border">

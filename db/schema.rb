@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200619080434) do
+ActiveRecord::Schema.define(version: 20200727164222) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -71,22 +71,32 @@ ActiveRecord::Schema.define(version: 20200619080434) do
   end
 
   create_table "answers", force: :cascade do |t|
-    t.integer  "question_id",                      limit: 4
-    t.integer  "author_id",                        limit: 4
-    t.text     "content",                          limit: 65535
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.integer  "question_id",                                   limit: 4
+    t.integer  "author_id",                                     limit: 4
+    t.text     "content",                                       limit: 65535
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
     t.boolean  "chosen"
-    t.integer  "upvote_count",                     limit: 4,     default: 0
-    t.text     "outcome",                          limit: 65535
-    t.integer  "value",                            limit: 4
-    t.integer  "benefit_type",                     limit: 4
-    t.string   "supporting_document_file_name",    limit: 191
-    t.string   "supporting_document_content_type", limit: 191
-    t.integer  "supporting_document_file_size",    limit: 4
+    t.integer  "upvote_count",                                  limit: 4,     default: 0
+    t.text     "outcome",                                       limit: 65535
+    t.integer  "value",                                         limit: 4
+    t.string   "benefit_type",                                  limit: 191
+    t.string   "supporting_document_file_name",                 limit: 191
+    t.string   "supporting_document_content_type",              limit: 191
+    t.integer  "supporting_document_file_size",                 limit: 4
     t.datetime "supporting_document_updated_at"
-    t.integer  "contributing_group_id",            limit: 4
-    t.integer  "likes_count",                      limit: 4
+    t.integer  "contributing_group_id",                         limit: 4
+    t.integer  "likes_count",                                   limit: 4
+    t.string   "title",                                         limit: 191
+    t.integer  "idea_category_id",                              limit: 4
+    t.string   "video_upload_file_name",                        limit: 191
+    t.string   "video_upload_content_type",                     limit: 191
+    t.integer  "video_upload_file_size",                        limit: 4
+    t.datetime "video_upload_updated_at"
+    t.string   "supporting_document_from_sponsor_file_name",    limit: 191
+    t.string   "supporting_document_from_sponsor_content_type", limit: 191
+    t.integer  "supporting_document_from_sponsor_file_size",    limit: 4
+    t.datetime "supporting_document_from_sponsor_updated_at"
   end
 
   add_index "answers", ["contributing_group_id"], name: "index_answers_on_contributing_group_id", using: :btree
@@ -263,6 +273,15 @@ ActiveRecord::Schema.define(version: 20200619080434) do
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
+
+  create_table "departments", force: :cascade do |t|
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "departments", ["enterprise_id"], name: "index_departments_on_enterprise_id", using: :btree
 
   create_table "email_variables", force: :cascade do |t|
     t.integer  "email_id",                     limit: 4
@@ -617,6 +636,15 @@ ActiveRecord::Schema.define(version: 20200619080434) do
     t.integer "poll_id",  limit: 4
   end
 
+  create_table "idea_categories", force: :cascade do |t|
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "idea_categories", ["enterprise_id"], name: "index_idea_categories_on_enterprise_id", using: :btree
+
   create_table "initiative_comments", force: :cascade do |t|
     t.integer  "initiative_id", limit: 4
     t.integer  "user_id",       limit: 4
@@ -706,6 +734,7 @@ ActiveRecord::Schema.define(version: 20200619080434) do
     t.integer  "video_file_size",      limit: 4
     t.datetime "video_updated_at"
     t.boolean  "virtual",                                                    default: false
+    t.string   "stripe_id",            limit: 191
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -1175,6 +1204,7 @@ ActiveRecord::Schema.define(version: 20200619080434) do
     t.datetime "solved_at"
     t.text     "conclusion",    limit: 65535
     t.integer  "answers_count", limit: 4
+    t.integer  "department_id", limit: 4
   end
 
   create_table "resources", force: :cascade do |t|
@@ -1513,6 +1543,7 @@ ActiveRecord::Schema.define(version: 20200619080434) do
     t.integer  "news_link_comments_count",       limit: 4
     t.integer  "mentors_count",                  limit: 4
     t.integer  "mentees_count",                  limit: 4
+    t.string   "stripe_id",                      limit: 191
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1533,10 +1564,13 @@ ActiveRecord::Schema.define(version: 20200619080434) do
   create_table "video_participants", force: :cascade do |t|
     t.datetime "timestamp"
     t.string   "identity",      limit: 191
-    t.integer  "duration",      limit: 4
+    t.integer  "duration",      limit: 4,   default: 0
     t.integer  "video_room_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "account_sid",   limit: 191
+    t.string   "sid",           limit: 191
+    t.string   "room_sid",      limit: 191
   end
 
   add_index "video_participants", ["video_room_id"], name: "index_video_participants_on_video_room_id", using: :btree
@@ -1546,13 +1580,13 @@ ActiveRecord::Schema.define(version: 20200619080434) do
     t.string   "room_type",     limit: 191
     t.string   "name",          limit: 191
     t.string   "status",        limit: 191
-    t.integer  "duration",      limit: 4
+    t.integer  "duration",      limit: 4,   default: 0
     t.datetime "start_date"
     t.datetime "end_date"
-    t.integer  "participants",  limit: 4
+    t.integer  "participants",  limit: 4,   default: 0
     t.integer  "enterprise_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.integer  "initiative_id", limit: 4
     t.string   "event_name",    limit: 191
   end
@@ -1585,6 +1619,8 @@ ActiveRecord::Schema.define(version: 20200619080434) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "departments", "enterprises"
+  add_foreign_key "idea_categories", "enterprises"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"

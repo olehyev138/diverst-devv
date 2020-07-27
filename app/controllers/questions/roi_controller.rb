@@ -5,6 +5,10 @@ class Questions::RoiController < ApplicationController
 
   layout 'collaborate'
 
+  def edit
+    @departments = current_user.enterprise.departments
+  end
+
   protected
 
   def set_question
