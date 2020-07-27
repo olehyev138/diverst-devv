@@ -35,12 +35,36 @@ RSpec.describe Folder, type: :model do
     it { expect(folder_enterprise).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
   end
 
-  describe 'test that' do
+  describe 'test callbacks' do
     let!(:new_folder) { build(:folder) }
 
     it 'set_password callback runs before object is saved' do
       expect(new_folder).to receive(:set_password)
       new_folder.save
+    end
+
+    it 'unset_enterprise callback runs before object is saved' do
+      expect(new_folder).to receive(:unset_enterprise)
+      new_folder.save
+    end
+  end
+
+  describe 'policy test' do
+    let!(:folder) { create(:folder) }
+
+    it 'when the folder belongs to a group' do
+      folder.update(group_id: 2)
+      expect(folder.policy_class).to be GroupFolderPolicy
+    end
+
+    it 'when the folder belongs to an enterprise' do
+      folder.update(enterprise_id: 2)
+      expect(folder.policy_class).to be EnterpriseFolderPolicy
+    end
+
+    it 'when folder doesnt belong to anything ' do
+      folder.update(enterprise_id: nil)
+      expect{folder.policy_class}.to raise_error(StandardError, 'Folder is without parent')
     end
   end
 
@@ -150,6 +174,20 @@ RSpec.describe Folder, type: :model do
     it 'raises an error when password is invalid' do
       folder = create(:folder, password_protected: true, password: 'password')
       expect { Folder.validate_password({}, { id: folder.id, password: 'fake' }) }.to raise_error(BadRequestException, 'Incorrect password')
+    end
+  end
+
+  describe '#set_password' do
+    it 'when password_protected is false' do
+      folder = create(:folder, password_protected: false, password: 'password')
+      folder.set_password
+      expect(folder.password_digest).to eq nil
+    end
+
+    it 'when password_protected is true' do
+      folder = create(:folder, password_protected: true, password: 'password')
+      folder.set_password
+      expect(folder.password_digest).to_not eq nil
     end
   end
 end
