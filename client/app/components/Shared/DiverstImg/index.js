@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // This component is intended for rendering images from a base64 string,
 // likely image data encoded in base64 received from a serializer.
 export function DiverstImg(props) {
-  const { className, data, contentType, maxWidth, maxHeight, minWidth, minHeight,
+  const { className, data, contentType, maxWidth, maxHeight, minWidth, minHeight, placeholderComponent,
     width, height, alt, styles, imgProps, naturalSrc, emptyVariant, ...rest } = props;
 
   function image() {
@@ -26,6 +26,8 @@ export function DiverstImg(props) {
           }}
         />
       );
+    if (placeholderComponent && emptyVariant === 'placeholder')
+      return placeholderComponent;
     if (emptyVariant === 'placeholder' || emptyVariant === 'reserve')
       return (
         <svg width={maxWidth} height={maxHeight} viewBox='0 0 100 100'>
@@ -61,10 +63,11 @@ DiverstImg.propTypes = {
   styles: PropTypes.object,
   imgProps: PropTypes.object,
   emptyVariant: PropTypes.oneOf(['placeholder', 'reserve', 'ignore']),
+  placeholderComponent: PropTypes.element,
 };
 
 DiverstImg.defaultProps = {
-  emptyVariant: 'ignore'
+  emptyVariant: 'ignore',
 };
 
 export default compose(
