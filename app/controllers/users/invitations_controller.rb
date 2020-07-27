@@ -41,6 +41,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
+    resource.user_groups.update_all(accepted_member: true)
     resource.save
     resource
   end

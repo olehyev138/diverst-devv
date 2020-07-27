@@ -173,7 +173,7 @@
 
               <% group.children.where(private: false).each do |child| %>
                 <div class="children_<%= group.id%>" style="display:none;">
-                  <div class="media-object">
+                  <div class="media-object" data-group-id=<%= child.id %>>
                     <div class="flex-row">
                       <div class="flex-row__cell">
                         <%= image_tag child.logo.expiring_url(3600, :thumb) %>
@@ -194,9 +194,9 @@
             <% end %>
           <br>
           <% if resource.enterprise.onboarding_consent_enabled? %>
-            <button class="btn--secondary btn--large btn--full" 
+            <button class="btn btn--primary btn--secondary btn--large btn--full" 
             data-toggle="modal" data-target="consentModal" id="consentModalPop">
-              <p>CREATE MY ACCOUNT</p>
+              CREATE MY ACCOUNT
             </button>
           <% end %>  
         </div>
