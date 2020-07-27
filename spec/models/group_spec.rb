@@ -1214,10 +1214,84 @@ RSpec.describe Group, type: :model do
   end
 
   describe 'has_survey?' do
-    it do
+    it 'returns true' do
       field = build(:field, field_type: 'group_survey')
       group = create(:group, survey_fields: [field])
       expect(group.has_survey?).to eq true
+    end
+  end
+
+  describe 'protected' do
+    before do
+      Group.send(:public, *Group.protected_instance_methods)
+    end
+
+    describe 'url_protocol' do
+      it 'returns url with protocol' do
+        group = build(:group, company_video_url: 'google.com')
+        expect(group.smart_add_url_protocol).to eq 'http://google.com'
+      end
+
+      it 'has protocol' do
+        group = build(:group, company_video_url: 'http://google.com')
+        expect(group.have_protocol?).to_not be nil
+      end
+    end
+  end
+
+  describe 'private' do
+    before do
+      Group.send(:public, *Group.private_instance_methods)
+    end
+
+    describe 'should_create_yammer_group?' do
+      it 'returns false' do
+        group = create(:group)
+        expect(group.should_create_yammer_group?).to eq false
+      end
+      it 'returns true' do
+        enterprise = build(:enterprise, yammer_token: 'token')
+        group = create(:group, enterprise: enterprise, yammer_create_group: true, yammer_group_created: false)
+        expect(group.should_create_yammer_group?).to eq true
+      end
+    end
+
+    describe 'filter_by_membership' do
+      let!(:group) { create :group }
+      let!(:members) { create_list :user, 3 }
+      before do
+        members.each do |m|
+          create(:user_group, user: m, group: group, accepted_member: true)
+        end
+        UserGroup.first.update(accepted_member: false)
+      end
+      it 'returns member' do
+        expect(group.filter_by_membership(true).count).to eq 2
+      end
+
+      it 'returns not member' do
+        expect(group.filter_by_membership(false).count).to eq 1
+      end
+    end
+
+    describe 'avg_members_per_group' do
+      let!(:enterprise) { create :enterprise }
+      let!(:group1) { create :group, enterprise: enterprise }
+      let!(:group2) { create :group, enterprise: enterprise }
+      let!(:members1) { create_list :user, 2 }
+      let!(:members2) { create_list :user, 4 }
+      before do
+        members1.each do |m|
+          create(:user_group, user: m, group: group1, accepted_member: true)
+        end
+        members2.each do |m|
+          create(:user_group, user: m, group: group2, accepted_member: true)
+        end
+      end
+      it 'returns avg_members_per_group' do
+        expect(Group.avg_members_per_group(enterprise: enterprise)).to eq 3
+      end
+
     end
   end
 end
