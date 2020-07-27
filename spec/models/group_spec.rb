@@ -106,6 +106,7 @@ RSpec.describe Group, type: :model do
       let!(:mentor_group) { build(:group, default_mentor_group: true) }
       it { expect(mentor_group).to validate_uniqueness_of(:default_mentor_group).scoped_to(:enterprise_id) }
     end
+
     describe '#perform_check_for_consistency_in_category' do
       let!(:category_type1) { create(:group_category_type, name: 'New Category1') }
       let!(:categories_of_category_type1) { create_list(:group_category, 2, group_category_type_id: category_type1.id) }
@@ -655,7 +656,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-
   describe '#expenses' do
     it 'returns 0 with annual expenses' do
       group = build(:group)
@@ -820,7 +820,6 @@ RSpec.describe Group, type: :model do
       budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
       initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
       build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT)
-
 
       expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
     end
