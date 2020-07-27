@@ -506,6 +506,7 @@ Rails.application.routes.draw do
 
   resources :expenses
   resources :expense_categories
+  resources :idea_categories
 
   devise_scope :user do
     namespace :user do
