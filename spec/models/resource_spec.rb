@@ -97,19 +97,19 @@ RSpec.describe Resource, type: :model do
 
     it 'when resource doesnt belong to anything and the parent folder belongs to groups' do
       resource.update(enterprise_id: nil)
-      resource.folder.update(enterprise_id: nil, group_id: 2 )
+      resource.folder.update(enterprise_id: nil, group_id: 2)
       expect(resource.policy_class).to be GroupResourcePolicy
     end
 
     it 'when resource doesnt belong to anything and the parent folder belongs to enterprises' do
       resource.update(enterprise_id: nil)
-      resource.folder.update(enterprise_id: 1, group_id: nil )
+      resource.folder.update(enterprise_id: 1, group_id: nil)
       expect(resource.policy_class).to be EnterpriseResourcePolicy
     end
 
     it 'when resource doesnt belong to anything and the parent folder doesnt belong to anything' do
       resource.update(enterprise_id: nil)
-      resource.folder.update(enterprise_id: nil, group_id: nil )
+      resource.folder.update(enterprise_id: nil, group_id: nil)
       expect { resource.policy_class }.to raise_error(StandardError, 'Folder is without parent')
     end
   end
@@ -154,7 +154,7 @@ RSpec.describe Resource, type: :model do
     end
 
     it 'when the resource belongs to a initiative' do
-      resource.update(initiative: initiative, folder: nil )
+      resource.update(initiative: initiative, folder: nil)
       expect(resource.container).to be initiative
     end
 
@@ -164,7 +164,7 @@ RSpec.describe Resource, type: :model do
     end
 
     it 'when the resource belongs to an enterprise' do
-      resource.update(enterprise: enterprise, folder: nil )
+      resource.update(enterprise: enterprise, folder: nil)
       expect(resource.container).to be enterprise
     end
 
