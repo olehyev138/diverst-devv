@@ -514,7 +514,7 @@ class User < ApplicationRecord
     false
   end
 
-  # Raw hash of usery info needed when the FieldData Hash[] overrides are an annoyance
+  # Raw hash of user info needed when the FieldData Hash[] overrides are an annoyance
   def info_hash
     return {} if data.nil?
 
