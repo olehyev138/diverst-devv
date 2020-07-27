@@ -3,6 +3,7 @@ class Question < BaseClass
 
   belongs_to :campaign, counter_cache: true
   belongs_to :department
+  belongs_to :business_impact
   has_many :answers, inverse_of: :question, dependent: :destroy
   has_many :answer_comments, through: :answers, source: :comments
   has_many :answer_upvotes, through: :answers, source: :votes

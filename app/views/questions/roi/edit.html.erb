@@ -17,6 +17,9 @@
             <div class="col sm-6">
              <%= f.association :department, label: 'What departments need to be involved?', collection: @departments.map { |department| [department.name, department.id] } %>
             </div>
+            <div class="col sm-6">
+             <%= f.association :business_impact, label: 'What is the businees impact?', collection: @business_impacts.map { |business_impact| [business_impact.name, business_impact.id] } %>
+            </div>
           </div> 
         </div>
       </div>     

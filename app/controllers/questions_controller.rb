@@ -88,6 +88,7 @@ class QuestionsController < ApplicationController
         :conclusion,
         :description,
         :department_id,
+        :business_impact_id,
         answers_attributes: [
           :id,
           :outcome,

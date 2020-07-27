@@ -64,6 +64,7 @@ class Enterprise < BaseClass
   has_many :annual_budgets, dependent: :destroy
   has_many :idea_categories, dependent: :destroy
   has_many :departments, dependent: :destroy
+  has_many :business_impacts, dependent: :destroy
 
   has_one :custom_text, dependent: :destroy
 

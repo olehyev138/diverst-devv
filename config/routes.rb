@@ -508,6 +508,7 @@ Rails.application.routes.draw do
   resources :expense_categories
   resources :idea_categories
   resources :departments
+  resources :business_impacts
 
   devise_scope :user do
     namespace :user do

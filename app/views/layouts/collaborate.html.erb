@@ -44,6 +44,9 @@
       <li>
         <%= active_link_to 'Manage Departments', departments_path if CampaignPolicy.new(current_user, Campaign).new? %>
       </li>
+      <li>
+        <%= active_link_to 'Manage Business Impacts', business_impacts_path if CampaignPolicy.new(current_user, Campaign).new? %>
+      </li>
     </ul>
   </nav>
 </div>

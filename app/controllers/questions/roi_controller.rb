@@ -7,6 +7,7 @@ class Questions::RoiController < ApplicationController
 
   def edit
     @departments = current_user.enterprise.departments
+    @business_impacts = current_user.enterprise.business_impacts
   end
 
   protected
