@@ -1291,7 +1291,6 @@ RSpec.describe Group, type: :model do
       it 'returns avg_members_per_group' do
         expect(Group.avg_members_per_group(enterprise: enterprise)).to eq 3
       end
-
     end
   end
 end
