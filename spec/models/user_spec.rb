@@ -839,11 +839,11 @@ RSpec.describe User do
     let!(:users) { create_list(:user, 3) }
     let!(:fields) { create_list(:field, 3) }
     it 'returns csv' do
+      headers = 'First name,Last name,Email,Biography,Active,Group Membership,' + fields[0].title + ',' + fields[1].title + ',' + fields[2].title
       enterprise = create(:enterprise)
       segment = create(:segment)
       members = enterprise.users.joins(:segments).where(segments: { id: segment.id }).distinct
-      expect(User.to_csv_with_fields users: members, fields: fields).to
-      include('First name,Last name,Email,Biography,Active,Group Membership,' + fields[0].title + ',' + fields[1].title + ',' + fields[2].title)
+      expect(User.to_csv_with_fields users: members, fields: fields).to include(headers)
     end
   end
 
