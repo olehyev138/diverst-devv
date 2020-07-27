@@ -186,7 +186,7 @@ class Group < ApplicationRecord
 
   def self.load_sums
     select(
-        '`groups`.`*`,'\
+        'groups.*,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
         ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
@@ -383,7 +383,7 @@ class Group < ApplicationRecord
   def possible_participating_groups
     # return groups list without current group
     group_id = self.id
-    self.enterprise.groups.select { |g| g.id != group_id }
+    self.enterprise.groups.to_a.select { |g| g.id != group_id }
   end
 
   def sync_yammer_users
@@ -446,25 +446,6 @@ class Group < ApplicationRecord
 
         csv << user_group_row
       end
-    end
-  end
-
-  def membership_list_csv(group_members)
-    total_nb_of_members = group_members.count
-    CSV.generate do |csv|
-      csv << %w(first_name last_name email_address mentor mentee)
-
-      group_members.each do |member|
-        membership_list_row = [ member.first_name,
-                                member.last_name,
-                                member.email,
-                                member.mentor,
-                                member.mentee
-                              ]
-        csv << membership_list_row
-      end
-
-      csv << ['total', nil, "#{total_nb_of_members}"]
     end
   end
 

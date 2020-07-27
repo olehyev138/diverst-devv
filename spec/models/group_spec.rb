@@ -4,6 +4,7 @@ ANNUAL_BUDGET = 10000
 BUDGET_ITEM_AMOUNT = 5000
 INITIATIVE_ESTIMATE = 2500
 EXPENSE_AMOUNT = 1250
+INITIATIVE_EXPENSE = 1000
 
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
@@ -1184,6 +1185,39 @@ RSpec.describe Group, type: :model do
       group.annual_budget = 100
       group.reload
       expect(group.annual_budget).to eq 100
+    end
+  end
+
+  describe 'load_sums' do
+    it 'returns load sums' do
+      group = create(:group)
+      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
+      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
+      budget_item = budget.budget_items.first
+      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
+      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
+      create(:initiative_expense, initiative: initiative, amount: INITIATIVE_EXPENSE)
+      sum = Group.load_sums.first
+      expect(sum.expenses_sum).to eq INITIATIVE_EXPENSE
+      expect(sum.approved_sum).to eq BUDGET_ITEM_AMOUNT
+      expect(sum.reserved_sum).to eq INITIATIVE_ESTIMATE
+    end
+  end
+
+  describe 'layout_values' do
+    it 'returns layout values' do
+      group = create(:group)
+      expect(group.layout_values['layout_0']).to eq 'Default layout'
+      expect(group.layout_values['layout_1']).to eq 'Layout without leader boards for Most Active Members'
+      expect(group.layout_values['layout_2']).to eq 'Layout with Sub-Groups on top of group leaders'
+    end
+  end
+
+  describe 'has_survey?' do
+    it do
+      field = build(:field, field_type: 'group_survey')
+      group = create(:group, survey_fields: [field])
+      expect(group.has_survey?).to eq true
     end
   end
 end
