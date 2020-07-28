@@ -104,7 +104,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   onChange={handleChange}
                   fullWidth
                   required
-                  disabled={props.isCommitting}
+                  disabled
                   margin='normal'
                   id='email'
                   name='email'
