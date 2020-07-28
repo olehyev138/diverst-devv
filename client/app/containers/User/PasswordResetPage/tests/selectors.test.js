@@ -11,7 +11,7 @@ import {
   selectErrors
 } from '../selectors';
 
-describe('Selectors.test.js selectors', () => {
+describe('PasswordResetPage selectors', () => {
   describe('selectForgotPasswordDomain', () => {
     it('should select the ForgotPasswordDomain', () => {
       const mockedState = {

@@ -24,7 +24,7 @@ import {
   SIGN_UP_UNMOUNT
 } from '../constants';
 
-describe('Actions.test.js actions', () => {
+describe('PasswordResetPage actions', () => {
   describe('password reset requesting actions', () => {
     describe('requestPasswordResetBegin', () => {
       it('has a type of REQUEST_PASSWORD_RESET_BEGIN and sets a given payload', () => {
