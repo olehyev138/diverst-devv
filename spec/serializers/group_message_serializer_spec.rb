@@ -10,5 +10,6 @@ RSpec.describe GroupMessageSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group_id]).to_not be_nil
     expect(serializer.serializable_hash[:owner]).to_not be_nil
     expect(serializer.serializable_hash[:comments_count]).to eq 1
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
