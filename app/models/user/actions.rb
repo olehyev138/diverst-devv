@@ -5,6 +5,7 @@ module User::Actions
     klass.extend ClassMethods
   end
 
+  # @deprecated
   def send_reset_password_instructions
     raise BadRequestException.new 'Your password has already been reset. Please check your email for a link to update your password.' if self.reset_password_token.present?
 
@@ -16,6 +17,7 @@ module User::Actions
     token
   end
 
+  # @deprecated
   def valid_reset_password_token?(token)
     return false if token.blank?
     return false if reset_password_sent_at.blank?
@@ -24,6 +26,7 @@ module User::Actions
     BCrypt::Password.new(reset_password_token) == token
   end
 
+  # @deprecated
   def reset_password_by_token(user)
     self.password = user[:password]
     self.password_confirmation = user[:password_confirmation]
@@ -42,8 +45,7 @@ module User::Actions
   end
 
   def reset_password(params)
-    if update_attributes(params)
-      update(reset_password_token: nil)
+    if update_attributes(reset_password_token: nil, reset_password_sent_at: nil, **params)
       self
     else
       raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })

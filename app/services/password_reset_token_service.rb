@@ -1,7 +1,7 @@
 require 'jwt'
 
 class PasswordResetTokenService < TokenService
-  TOKEN_EXPIRATION = 30.minutes
+  TOKEN_EXPIRATION = Rails.configuration.password_reset_time_frame.hours
   FORM_EXPIRATION = 15.hours
 
   def self.request_token(user, params = {})

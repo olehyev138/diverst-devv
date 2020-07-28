@@ -127,7 +127,7 @@ RSpec.describe User::Actions, type: :model do
     end
   end
 
-  describe 'valid_reset_password_token?' do
+  describe 'valid_reset_password_token?', skip: 'Deprecated' do
     let!(:user) { create(:user) }
 
     it 'returns false if token is blank' do
