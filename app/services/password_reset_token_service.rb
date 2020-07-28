@@ -4,7 +4,7 @@ class PasswordResetTokenService < TokenService
   TOKEN_EXPIRATION = 30.minutes
   FORM_EXPIRATION = 15.hours
 
-  def self.first_jwt(user, params = {})
+  def self.request_token(user, params = {})
     token = user.reset_password_token
 
     payload = {
@@ -17,7 +17,7 @@ class PasswordResetTokenService < TokenService
     create_jwt_token(payload)
   end
 
-  def self.second_jwt(token)
+  def self.form_token(token)
     user = verify_jwt_token(token, 'reset_password')
 
     [

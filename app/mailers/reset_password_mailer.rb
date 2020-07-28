@@ -3,7 +3,7 @@ class ResetPasswordMailer < ApplicationMailer
 
   def reset_password_instructions(user, token)
     @user = user
-    @token = PasswordResetTokenService.first_jwt(user)
+    @token = PasswordResetTokenService.request_token(user)
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
@@ -11,20 +11,6 @@ class ResetPasswordMailer < ApplicationMailer
 
     mail(from: @from_address, to: @user.email, subject: @subject)
   end
-
-  # def headers_for(action, opts)
-  #   headers = {
-  #     subject: @subject || subject_for(action),
-  #     to: @email || resource.email_for_notification,
-  #     from: @from_address, # TODO: devise
-  #     reply_to: @from_address, # TODO: devise
-  #     template_path: template_paths,
-  #     template_name: action
-  #   }.merge(opts)
-  #
-  #   @email = headers[:to]
-  #   headers
-  # end
 
   def variables
     {

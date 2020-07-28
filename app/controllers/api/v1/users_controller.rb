@@ -117,7 +117,7 @@ class Api::V1::UsersController < DiverstController
   # ===============================================
 
   private def token(token_service)
-    token, user = token_service.second_jwt(params[:token])
+    token, user = token_service.form_token(params[:token])
 
     render status: 200, json: {
         token: token,
