@@ -8,6 +8,7 @@ class Group < ApplicationRecord
 
   @@field_users = [:user_groups, :updates]
   mattr_reader :field_users
+
   attr_accessor :skip_label_consistency_check
 
   enumerize :layout, default: :layout_0, in: [
@@ -67,6 +68,8 @@ class Group < ApplicationRecord
 
   has_one :news_feed, dependent: :destroy
 
+  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
 
@@ -77,37 +80,46 @@ class Group < ApplicationRecord
   has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id', dependent: :destroy
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
+
   has_many :invitation_segments_groups, dependent: :destroy
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
+
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
   has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
   has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
   has_many :social_links, dependent: :destroy
+
   has_many :resources, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :folder_shares, dependent: :destroy
   has_many :shared_folders, through: :folder_shares, source: 'folder'
+
   has_many :campaigns_groups, dependent: :destroy
   has_many :campaigns, through: :campaigns_groups
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
+
   has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
+
   has_many :updates, as: :updatable, dependent: :destroy
   has_many :views, dependent: :destroy
   has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
+
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
+
   has_many :sponsors, as: :sponsorable, dependent: :destroy
-  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
   has_many :annual_budgets, dependent: :destroy
   has_many :budgets, dependent: :destroy, through: :annual_budgets
   has_many :budget_items, dependent: :destroy, through: :budgets
   has_many :initiative_expenses, through: :annual_budgets
+
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
            dependent: :destroy,
@@ -134,10 +146,8 @@ class Group < ApplicationRecord
   delegate :expenses, BUDGET_DELEGATE_OPTIONS
   delegate :available, BUDGET_DELEGATE_OPTIONS
   delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
-
   delegate :carryover!, BUDGET_DELEGATE_OPTIONS
   delegate :reset!, BUDGET_DELEGATE_OPTIONS
-
   delegate :currency, BUDGET_DELEGATE_OPTIONS
 
   # TODO Remove after Paperclip to ActiveStorage migration
@@ -183,6 +193,7 @@ class Group < ApplicationRecord
   before_save :create_yammer_group, if: :should_create_yammer_group?
 
   after_create :create_news_feed
+
   after_update :accept_pending_members, unless: :pending_members_enabled?
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
@@ -190,9 +201,11 @@ class Group < ApplicationRecord
   scope :by_enterprise, -> (e) { where(enterprise_id: e) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :joined_groups, -> (u) { joins(:user_groups).where(user_groups: { user_id: u }) }
+
   # Active Record already has a defined a class method with the name private so we use is_private.
   scope :is_private,        -> { where(private: true) }
   scope :non_private,       -> { where(private: false) }
+
   # parents/children
   scope :all_parents,     -> { where(parent_id: nil) }
   scope :all_children,    -> { where.not(parent_id: nil) }
