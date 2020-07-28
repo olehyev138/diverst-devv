@@ -1,14 +1,12 @@
 /**
- *
- * Group Message Comment Component
- *
+ * Shared component to display comments for news items
  */
 
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -17,6 +15,8 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
+
 const styles = theme => ({
   cardHeader: {
     paddingBottom: 0,
@@ -24,12 +24,14 @@ const styles = theme => ({
   margin: {
     marginTop: 16,
     marginBottom: 16,
-  }
+  },
+  centerVertically: {
+    padding: 3,
+  },
 });
 
-export function GroupMessageComment(props) {
+export function NewsComment(props) {
   const { classes, comment, newsItem, intl } = props;
-
   return (
     <Card className={classes.margin}>
       <CardHeader
@@ -51,15 +53,22 @@ export function GroupMessageComment(props) {
       />
       <CardContent>
         <Typography variant='body1'>{comment.content}</Typography>
+        <Grid container justify='space-between'>
+          <Grid item>
+          </Grid>
+          <Grid item>
+            <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>{formatDateTimeString(comment.created_at)}</Typography>
+          </Grid>
+        </Grid>
       </CardContent>
-      <Permission show={permission(props.comment)}>
+      <Permission show={permission(comment, 'destroy?')}>
         <CardActions>
           <Button
             size='small'
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.group_delete_confirm)))
-                props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
+              if (confirm(intl.formatMessage(messages.group_comment_delete_confirm)))
+                props.deleteCommentAction({ news_id: newsItem.id, id: comment.id });
             }}
           >
             {<DiverstFormattedMessage {...messages.delete} />}
@@ -70,11 +79,11 @@ export function GroupMessageComment(props) {
   );
 }
 
-GroupMessageComment.propTypes = {
+NewsComment.propTypes = {
   intl: intlShape.isRequired,
   classes: PropTypes.object,
   comment: PropTypes.object,
-  deleteGroupMessageCommentBegin: PropTypes.func,
+  deleteCommentAction: PropTypes.func,
   newsItem: PropTypes.object,
 };
 
@@ -82,4 +91,4 @@ export default compose(
   injectIntl,
   memo,
   withStyles(styles)
-)(GroupMessageComment);
+)(NewsComment);

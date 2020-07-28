@@ -11,5 +11,6 @@ RSpec.describe AnnualBudgetSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group_id]).to_not be nil
     expect(serializer.serializable_hash[:enterprise]).to be nil
     expect(serializer.serializable_hash[:group]).to be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

@@ -1,5 +1,5 @@
 class Sponsor < ApplicationRecord
-  include Sponsors::Actions
+  include Sponsor::Actions
 
   belongs_to :sponsorable, polymorphic: true
 

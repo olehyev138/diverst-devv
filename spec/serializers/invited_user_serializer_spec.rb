@@ -10,5 +10,6 @@ RSpec.describe InvitedUserSerializer, type: :serializer do
     expect(serializer.serializable_hash[:email]).to eq(invited_user.email)
     expect(serializer.serializable_hash[:name]).to eq(invited_user.name)
     expect(serializer.serializable_hash[:enterprise]).to eq(EnterpriseSerializer.new(enterprise).attributes)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

@@ -8,5 +8,6 @@ RSpec.describe NewsLinkPhotoSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:file_file_name]).to eq(news_link_photo.file_file_name)
     expect(serializer.serializable_hash[:file_location]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
