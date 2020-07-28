@@ -47,8 +47,6 @@ function forgotPasswordReducer(state = initialState, action) {
         draft.isCommitting = true;
         break;
       case SUBMIT_PASSWORD_SUCCESS:
-        draft.isCommitting = false;
-        break;
       case SUBMIT_PASSWORD_ERROR:
         draft.isCommitting = false;
         break;
