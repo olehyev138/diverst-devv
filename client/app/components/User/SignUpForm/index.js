@@ -33,6 +33,7 @@ import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { union, difference, intersection } from 'utils/arrayHelpers';
 import GroupSelectorItem from 'components/Shared/GroupSelector/item';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow'
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
@@ -232,9 +233,18 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   />
                 ))}
               </CardContent>
-              <Divider />
+            </Card>
+            <Box mb={2} />
+            <Card>
               <CardActions>
-                <DiverstSubmit isCommitting={props.isCommitting}>
+                <DiverstSubmit
+                  isCommitting={props.isCommitting}
+                  size='large'
+                  variant='contained'
+                  wrapperStyle={{ width: '100%' }}
+                  fullWidth
+                  endIcon={<DoubleArrowIcon />}
+                >
                   {<DiverstFormattedMessage {...signUpMessages.activate} />}
                 </DiverstSubmit>
               </CardActions>
