@@ -272,8 +272,6 @@ export function SignUpForm(props) {
     group_ids: { default: {}, customKey: 'groupIds' },
   });
 
-  // const [formGroupIds, setFormGroupIds] = useState({});
-
   return (
     <Formik
       initialValues={initialValues}
@@ -292,8 +290,6 @@ export function SignUpForm(props) {
           {...props}
           formikProps={formikProps}
           errors={props.errors}
-          // formGroupIds={formGroupIds}
-          // setFormGroupIds={setFormGroupIds}
         />
       )}
     </Formik>
