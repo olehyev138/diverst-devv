@@ -50,6 +50,7 @@ class Campaign < BaseClass
 
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
   scope :closed, -> { where('end < :current_time', current_time: Time.current) }
+  scope :valid_campaigns, -> { where(status: [0, 2, 3]) }
 
   # users with the most campaign engagement points
   def top_campaign_performers

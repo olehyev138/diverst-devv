@@ -7,7 +7,7 @@ class User::UserCampaignsController < ApplicationController
 
   def index
     @campaigns = current_user.enterprise.campaigns
-                             .where(status: [0, 2, 3])
+                             .valid_campaigns
                              .order(created_at: :desc)
                              .select{ |c| c.targeted_users.include? current_user }
   end
