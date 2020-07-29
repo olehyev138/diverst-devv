@@ -112,7 +112,7 @@ RSpec.describe User::Actions, type: :model do
     end
   end
 
-  describe 'send_reset_password_instructions' do
+  describe 'send_reset_password_instructions', skip: 'Deprecated' do
     let!(:user) { create(:user) }
 
     it 'raises an exception' do
@@ -127,7 +127,7 @@ RSpec.describe User::Actions, type: :model do
     end
   end
 
-  describe 'valid_reset_password_token?' do
+  describe 'valid_reset_password_token?', skip: 'Deprecated' do
     let!(:user) { create(:user) }
 
     it 'returns false if token is blank' do
@@ -150,7 +150,7 @@ RSpec.describe User::Actions, type: :model do
     end
   end
 
-  describe 'reset_password_by_token' do
+  describe 'reset_password_by_token', skip: 'Deprecated' do
     let!(:user) { create(:user) }
     it 'resets password' do
       params = {
@@ -162,6 +162,33 @@ RSpec.describe User::Actions, type: :model do
       expect(reset_user.reset_password_token).to be nil
       expect(reset_user.reset_password_sent_at).to be nil
       expect(reset_user.password).to eq 'testPassword'
+    end
+  end
+
+  describe 'request_password_reset!' do
+    let!(:user) { create(:user) }
+    it 'creates resets password request' do
+      mailer = double('mailer')
+      expect(ResetPasswordMailer).to receive(:reset_password_instructions) { mailer }
+      expect(mailer).to receive(:deliver_later)
+
+      user.request_password_reset!
+      expect(user.reset_password_sent_at).to_not be nil
+      expect(user.reset_password_token).to_not be nil
+    end
+  end
+
+  describe 'invite!' do
+    let!(:user) { create(:user) }
+    it 'invites the user' do
+      mailer = double('mailer')
+      expect(DiverstMailer).to receive(:invitation_instructions) { mailer }
+      expect(mailer).to receive(:deliver_later)
+
+      user.invite!
+      expect(user.invitation_sent_at).to_not be nil
+      expect(user.invitation_created_at).to_not be nil
+      expect(user.invitation_token).to_not be nil
     end
   end
 
@@ -188,6 +215,28 @@ RSpec.describe User::Actions, type: :model do
       expect(signed_up_user.last_name).to eq 'last'
       expect(signed_up_user.biography).to eq 'test'
       expect(signed_up_user.time_zone).to eq 'Etc/UTC'
+    end
+  end
+
+  describe 'reset_password' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:user_exist) { create(:user, email: 'test@gmail.com') }
+    let!(:user) { create(:user, invitation_accepted_at: nil) }
+
+    it 'raises an exception' do
+      expect { user.sign_up({
+                                password: 'testPassword',
+                                password_confirmation: 'testPassword2'
+                            })
+      }.to raise_error(InvalidInputException)
+    end
+    it 'signs up successfully' do
+      params = {
+          password: 'testPassword',
+          password_confirmation: 'testPassword',
+      }
+      password_reset_user = user.reset_password(params)
+      expect(password_reset_user.valid_password?('testPassword')).to be true
     end
   end
 
