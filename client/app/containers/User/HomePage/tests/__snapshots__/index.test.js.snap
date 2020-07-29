@@ -6,9 +6,9 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
     Array [
       "header header  header  header  header  header  header  header  header  header",
       "message message  message  message  message  message  message  message  message  message",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
-      "events events  events  events  news   news    news    news    sponsor  sponsor",
+      "news   news    news    news  news  events  events  events  events  events",
+      "news   news    news    news  news  events  events  events  events  events",
+      "news   news    news    news  news  events  events  events  events  events",
       "privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy",
     ]
   }
