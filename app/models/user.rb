@@ -205,24 +205,6 @@ class User < ApplicationRecord
     end
   end
 
-  def generate_invitation_token
-    regenerate_invitation_token
-    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
-    invitation_token
-  end
-
-  def invite!(manager = nil, skip: false)
-    regenerate_invitation_token
-
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
-  end
-
-  def request_password!(manager = nil, skip: false)
-    regenerate_reset_password_token
-
-    ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
-  end
-
   def valid_password?(password)
     authenticate(password) == self
   end

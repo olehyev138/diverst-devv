@@ -35,6 +35,30 @@ module User::Actions
     self
   end
 
+  def generate_invitation_token
+    regenerate_invitation_token
+    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
+    invitation_token
+  end
+
+  def generate_password_token
+    regenerate_reset_password_token
+    update(reset_password_sent_at: Time.now)
+    reset_password_token
+  end
+
+  def invite!(manager = nil, skip: false)
+    regenerate_invitation_token
+
+    DiverstMailer.invitation_instructions(manager, invitation_token).deliver_later unless skip
+  end
+
+  def request_password_reset!(manager = nil, skip: false)
+    generate_password_token
+
+    ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
+  end
+
   def sign_up(params)
     if update_attributes(params)
       update(invitation_token: nil, invitation_accepted_at: Time.now)
