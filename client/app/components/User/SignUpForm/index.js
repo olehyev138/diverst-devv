@@ -246,7 +246,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   endIcon={<DoubleArrowIcon />}
                 >
                   <Typography variant='h6'>
-                    {<DiverstFormattedMessage {...signUpMessages.activate} />}
+                    <DiverstFormattedMessage {...signUpMessages.activate} />
                   </Typography>
                 </DiverstSubmit>
               </CardActions>
