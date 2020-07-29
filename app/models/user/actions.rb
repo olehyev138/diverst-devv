@@ -47,13 +47,13 @@ module User::Actions
     reset_password_token
   end
 
-  def invite!(manager = nil, skip: false)
+  def invite!(skip: false)
     regenerate_invitation_token
 
-    DiverstMailer.invitation_instructions(manager, invitation_token).deliver_later unless skip
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
-  def request_password_reset!(manager = nil, skip: false)
+  def request_password_reset!(skip: false)
     generate_password_token
 
     ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
