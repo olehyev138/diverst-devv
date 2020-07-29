@@ -16,6 +16,7 @@ import messages from './messages';
 import Events from '../UserEventsPage';
 import News from '../UserNewsFeedPage';
 import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
+import { selectSponsorTotal } from 'containers/Shared/Sponsors/selectors';
 
 import {
   Typography, Grid, CardContent, Paper,
@@ -150,18 +151,29 @@ export class HomePage extends React.PureComponent {
       />
     ) : null;
 
+    const grid = this.props.sponsorTotal > 0 ? [
+      'header header  header  header  header  header  header  header  header  header',
+      'message message  message  message  message  message  message  message  message  message',
+      'news   news    news    news    events  events  events  events  sponsor sponsor',
+      'news   news    news    news    events  events  events  events  sponsor sponsor',
+      'news   news    news    news    events  events  events  events  sponsor sponsor',
+      'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+
+    ] : [
+      'header header  header  header  header  header  header  header  header  header',
+      'message message  message  message  message  message  message  message  message  message',
+      'news   news    news    news  news  events  events  events  events  events',
+      'news   news    news    news  news  events  events  events  events  events',
+      'news   news    news    news  news  events  events  events  events  events',
+      'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+
+    ];
+
     return (
       <DiverstCSSGrid
         columns={10}
         rows='auto auto auto auto 1fr'
-        areas={[
-          'header header  header  header  header  header  header  header  header  header',
-          'message message  message  message  message  message  message  message  message  message',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
-        ]}
+        areas={grid}
         rowGap='16px'
         columnGap='24px'
       >
@@ -181,7 +193,8 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise()
+  enterprise: selectEnterprise(),
+  sponsorTotal: selectSponsorTotal(),
 });
 
 const withConnect = connect(
@@ -193,6 +206,7 @@ HomePage.propTypes = {
   classes: PropTypes.object,
   enterprise: PropTypes.object,
   intl: intlShape.isRequired,
+  sponsorTotal: PropTypes.number,
 };
 
 export default compose(
