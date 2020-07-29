@@ -70,6 +70,7 @@
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findEnterprise": "Find my Community",
   "diverst.containers.SignUp.activate": "Activate Account",
+  "diverst.containers.SignUp.group_select": "Below is a list of available groups that you can join to be able to participate in events, post messages, receive news and much more. Select which group(s) you wish to join by clicking on them once.",
   "diverst.containers.SignUp.password": "Password",
   "diverst.containers.SignUp.passwordConfirmation": "Password Confirmation",
   "diverst.containers.ForgotPassword.button.resetPassword": "Reset Password",

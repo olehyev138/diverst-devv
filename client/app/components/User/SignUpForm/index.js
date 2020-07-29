@@ -96,8 +96,8 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
           </React.Fragment>
         )}
         <DiverstFormLoader isLoading={props.isLoading} isError={!props.user}>
-          <Card>
-            <Form>
+          <Form>
+            <Card>
               <CardContent>
                 <FastField
                   component={TextField}
@@ -194,6 +194,11 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   onChange={value => setFieldValue('time_zone', value)}
                   onBlur={() => setFieldTouched('time_zone', true)}
                 />
+              </CardContent>
+            </Card>
+            <Box mb={2} />
+            <Card>
+              <CardContent>
                 <FieldInputForm
                   fieldData={dig(props, 'user', 'field_data') || []}
                   updateFieldDataBegin={props.updateFieldDataBegin}
@@ -205,11 +210,14 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   formikProps={formikProps}
                 />
               </CardContent>
-              <Divider />
+            </Card>
+            <Box mb={2} />
+            <Card>
               <CardContent>
-                <Typography variant='h6'>
-                  Explore your groups
+                <Typography variant='body1'>
+                  <DiverstFormattedMessage {...signUpMessages.group_select} />
                 </Typography>
+                <Box mb={2} />
                 {(props.groups || []).map(group => (
                   <GroupSelectorItem
                     key={group.id}
@@ -230,8 +238,8 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   {<DiverstFormattedMessage {...signUpMessages.activate} />}
                 </DiverstSubmit>
               </CardActions>
-            </Form>
-          </Card>
+            </Card>
+          </Form>
         </DiverstFormLoader>
         <Box mb={4} />
       </Container>
