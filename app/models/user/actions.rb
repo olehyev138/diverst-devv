@@ -5,6 +5,7 @@ module User::Actions
     klass.extend ClassMethods
   end
 
+  # @deprecated
   def send_reset_password_instructions
     raise BadRequestException.new 'Your password has already been reset. Please check your email for a link to update your password.' if self.reset_password_token.present?
 
@@ -16,6 +17,7 @@ module User::Actions
     token
   end
 
+  # @deprecated
   def valid_reset_password_token?(token)
     return false if token.blank?
     return false if reset_password_sent_at.blank?
@@ -24,6 +26,7 @@ module User::Actions
     BCrypt::Password.new(reset_password_token) == token
   end
 
+  # @deprecated
   def reset_password_by_token(user)
     self.password = user[:password]
     self.password_confirmation = user[:password_confirmation]
@@ -32,9 +35,41 @@ module User::Actions
     self
   end
 
+  def generate_invitation_token
+    regenerate_invitation_token
+    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
+    invitation_token
+  end
+
+  def generate_password_token
+    regenerate_reset_password_token
+    update(reset_password_sent_at: Time.now)
+    reset_password_token
+  end
+
+  def invite!(manager = nil, skip: false)
+    regenerate_invitation_token
+
+    DiverstMailer.invitation_instructions(manager, invitation_token).deliver_later unless skip
+  end
+
+  def request_password_reset!(manager = nil, skip: false)
+    generate_password_token
+
+    ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
+  end
+
   def sign_up(params)
     if update_attributes(params)
       update(invitation_token: nil, invitation_accepted_at: Time.now)
+      self
+    else
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
+    end
+  end
+
+  def reset_password(params)
+    if update_attributes(reset_password_token: nil, reset_password_sent_at: nil, **params)
       self
     else
       raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
