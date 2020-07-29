@@ -119,9 +119,7 @@
           chosen: !isStarred
         }
       },
-      // error: function(data){
-      //   setState(star.data('last-known-state'));
-      // },
+    
       success: function(data){
         setState(data.chosen);
         star.data('last-known-state', data.chosen);
