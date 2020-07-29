@@ -33,7 +33,7 @@ import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { union, difference, intersection } from 'utils/arrayHelpers';
 import GroupSelectorItem from 'components/Shared/GroupSelector/item';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow'
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
