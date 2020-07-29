@@ -157,9 +157,9 @@ export class HomePage extends React.PureComponent {
         areas={[
           'header header  header  header  header  header  header  header  header  header',
           'message message  message  message  message  message  message  message  message  message',
-          'news   news    news    news    events  events  events  events  sponsor sponsor',
-          'news   news    news    news    events  events  events  events  sponsor sponsor',
-          'news   news    news    news    events  events  events  events  sponsor sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
+          'events events  events  events  news   news    news    news    sponsor  sponsor',
           'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
         ]}
         rowGap='16px'
