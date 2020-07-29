@@ -18,13 +18,13 @@ RSpec.describe Group, type: :model do
     it { expect(group).to belong_to(:enterprise).counter_cache(:true) }
     it { expect(group).to belong_to(:lead_manager).class_name('User') }
     it { expect(group).to belong_to(:owner).class_name('User') }
-    it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id).inverse_of(:children) }
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }
 
-    it { expect(group).to have_one(:news_feed).dependent(:destroy) }
-
+    it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id).inverse_of(:children) }
     it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy).inverse_of(:parent) }
+
+    it { expect(group).to have_one(:news_feed).dependent(:destroy) }
 
     it { expect(group).to have_many(:user_groups).dependent(:destroy) }
     it { expect(group).to have_many(:members).through(:user_groups).class_name('User').source(:user) }
@@ -62,14 +62,8 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:pillars).through(:outcomes) }
     it { expect(group).to have_many(:initiatives).through(:pillars) }
 
-    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
-    it { expect(group).to have_many(:views).dependent(:destroy) }
-    it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
-
     it { expect(group).to have_many(:group_leaders).dependent(:destroy) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
-
-    it { expect(group).to have_many(:sponsors).dependent(:destroy) }
 
     it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
     it { expect(group).to have_many(:budgets).dependent(:destroy).through(:annual_budgets) }
@@ -78,6 +72,10 @@ RSpec.describe Group, type: :model do
 
     it { expect(group).to have_many(:fields).dependent(:destroy) }
     it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
+    it { expect(group).to have_many(:views).dependent(:destroy) }
+    it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
+    it { expect(group).to have_many(:sponsors).dependent(:destroy) }
 
     # ActiveStorage
     [:logo, :banner].each do |attribute|

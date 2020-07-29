@@ -62,13 +62,20 @@ class Group < ApplicationRecord
   belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
-  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
+
   belongs_to :group_category
   belongs_to :group_category_type
 
+  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
+  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
   has_one :news_feed, dependent: :destroy
 
-  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+  has_many :messages, class_name: 'GroupMessage', dependent: :destroy
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
+  has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
+  has_many :social_links, dependent: :destroy
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
@@ -83,12 +90,6 @@ class Group < ApplicationRecord
 
   has_many :invitation_segments_groups, dependent: :destroy
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
-
-  has_many :messages, class_name: 'GroupMessage', dependent: :destroy
-  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
-  has_many :news_links, dependent: :destroy
-  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
-  has_many :social_links, dependent: :destroy
 
   has_many :resources, dependent: :destroy
   has_many :folders, dependent: :destroy
@@ -106,14 +107,8 @@ class Group < ApplicationRecord
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
 
-  has_many :updates, as: :updatable, dependent: :destroy
-  has_many :views, dependent: :destroy
-  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
-
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
-
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :annual_budgets, dependent: :destroy
   has_many :budgets, dependent: :destroy, through: :annual_budgets
@@ -129,6 +124,11 @@ class Group < ApplicationRecord
            class_name: 'Field',
            dependent: :destroy,
            after_add: :add_missing_field_background_job
+  has_many :updates, as: :updatable, dependent: :destroy
+
+  has_many :views, dependent: :destroy
+  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
+  has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   # ActiveStorage
   has_one_attached :logo
@@ -136,6 +136,12 @@ class Group < ApplicationRecord
   has_one_attached :banner
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :logo_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
 
   delegate :news_feed_links,        to: :news_feed
   delegate :shared_news_feed_links, to: :news_feed
@@ -149,12 +155,6 @@ class Group < ApplicationRecord
   delegate :carryover!, BUDGET_DELEGATE_OPTIONS
   delegate :reset!, BUDGET_DELEGATE_OPTIONS
   delegate :currency, BUDGET_DELEGATE_OPTIONS
-
-  # TODO Remove after Paperclip to ActiveStorage migration
-  has_attached_file :logo_paperclip, s3_permissions: 'private'
-  has_attached_file :banner_paperclip
-  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
-  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -196,7 +196,6 @@ class Group < ApplicationRecord
 
   after_update :accept_pending_members, unless: :pending_members_enabled?
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
-
 
   scope :by_enterprise, -> (e) { where(enterprise_id: e) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
