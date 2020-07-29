@@ -178,8 +178,14 @@ const GroupSelectorItem = (props) => {
                   <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
                     {group.label || group.name}
                   </Typography>
+                  {props.large && (
+                    <Typography variant='body1' component='h3' className={classes.groupCardTitle} color='secondary'>
+                      {group.short_description}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
+
             </CardContent>
           </ButtonBase>
         </Grid>

@@ -1,5 +1,5 @@
 class GroupOnboardingSerializer < ApplicationRecordSerializer
-  attributes :id, :name, :private, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, :children
+  attributes :id, :name, :private, :short_description, :logo, :logo_file_name, :logo_data, :logo_content_type, :group_category, :children
 
   def children
     object.children.map { |child| GroupSerializer.new(child, scope: scope, scope_name: :scope, family: true).as_json }
