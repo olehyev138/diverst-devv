@@ -1,9 +1,9 @@
-class DiverstMailer < ApplicationMailer
+class ResetPasswordMailer < ApplicationMailer
   include MailHelper
 
-  def invitation_instructions(user, token)
+  def reset_password_instructions(user, token)
     @user = user
-    @token = InviteTokenService.request_token(user)
+    @token = PasswordResetTokenService.request_token(user)
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
@@ -17,7 +17,7 @@ class DiverstMailer < ApplicationMailer
       user: @user,
       enterprise: @enterprise,
       custom_text: @enterprise.custom_text,
-      click_here: "<a href=\"#{ReactRoutes.anonymous.signUp(@token)}\" target=\"_blank\">Click Here</a>",
+      click_here: "<a href=\"#{ReactRoutes.session.passwordReset(@token)}\" target=\"_blank\">Click Here</a>",
     }
   end
 

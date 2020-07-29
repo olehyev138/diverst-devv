@@ -1,7 +1,8 @@
 {
   "session": {
     "login": "/login",
-    "forgotPassword": "/forgot"
+    "forgotPassword": "/forgot",
+    "passwordReset": "/password_reset/:token"
   },
   "anonymous": {
     "signUp": "/sign_up/:token",
