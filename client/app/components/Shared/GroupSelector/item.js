@@ -33,7 +33,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, lighten } from '@material-ui/core/styles';
 import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper';
 
 const styles = theme => ({
@@ -72,13 +72,22 @@ const styles = theme => ({
     borderLeftWidth: 2,
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.secondary.main,
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.palette.secondary.main,
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
   },
   expandActionAreaContainer: {
-    borderLeftWidth: 1,
-    borderLeftStyle: 'solid',
-    borderLeftColor: theme.custom.colors.lightGrey,
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.custom.colors.lightGrey,
+  },
+  expandActionAreaContainerSelected: {
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.custom.colors.lightGrey,
+    background: lighten(theme.palette.primary.main, 0.85),
   },
   expandActionArea: {
     padding: '4px 12px',
@@ -96,6 +105,10 @@ const styles = theme => ({
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.primary.main,
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.custom.colors.lightGrey,
+    background: lighten(theme.palette.primary.main, 0.85),
   },
   cardContentNotSelected: {
     paddingTop: 10,
@@ -103,6 +116,9 @@ const styles = theme => ({
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.secondary.main,
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.custom.colors.lightGrey,
   }
 });
 
@@ -168,7 +184,7 @@ const GroupSelectorItem = (props) => {
           </ButtonBase>
         </Grid>
         {!props.dialogNoChildren && group.children && group.children.length > 0 && (
-          <Grid item className={classes.expandActionAreaContainer}>
+          <Grid item className={props.isSelected(props.group) ? classes.expandActionAreaContainerSelected : classes.expandActionAreaContainer}>
             <CardActionArea
               className={classes.expandActionArea}
               onClick={() => {
@@ -189,11 +205,16 @@ const GroupSelectorItem = (props) => {
       </Grid>
       <Divider />
       <Collapse in={expandedGroups[`${group.value || group.id}`]}>
-        {group.children && group.children.map((childGroup, i) => (
-          <React.Fragment key={childGroup.value || childGroup.id}>
-            <GroupSelectorItem {...props} group={childGroup} child />
-          </React.Fragment>
-        ))}
+        <Grid container>
+          <Grid item xs={1} />
+          <Grid item xs={11}>
+            {group.children && group.children.map((childGroup, i) => (
+              <React.Fragment key={childGroup.value || childGroup.id}>
+                <GroupSelectorItem {...props} group={childGroup} child />
+              </React.Fragment>
+            ))}
+          </Grid>
+        </Grid>
       </Collapse>
       {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
     </React.Fragment>
