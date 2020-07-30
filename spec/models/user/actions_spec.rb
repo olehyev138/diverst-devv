@@ -35,6 +35,7 @@ RSpec.describe User::Actions, type: :model do
     it { expect(User.valid_scopes.include?('saml')).to eq true }
     it { expect(User.valid_scopes.include?('invitation_sent')).to eq true }
     it { expect(User.valid_scopes.include?('of_role')).to eq true }
+    it { expect(User.valid_scopes.include?('not_member_of_groups')).to eq true }
   end
 
   describe 'preload_attachments' do
