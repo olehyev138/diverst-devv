@@ -29,7 +29,7 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
@@ -68,37 +68,47 @@ export class HomePage extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
-    const events = (
-      <Paper>
-        <CardContent>
-          <Typography variant='h5' className={classes.title}>
-            <DiverstFormattedMessage {...messages.events} />
-          </Typography>
-          <Events
-            listComponent={EventsList}
-            readonly
-            loaderProps={{
-              transitionProps: {
-                direction: 'right',
-              },
-            }}
-          />
-        </CardContent>
-      </Paper>
-    );
 
-    const news = (
-      <Paper>
-        <CardContent>
-          <Typography variant='h5' className={classes.title}>
-            <DiverstFormattedMessage {...messages.news} />
-          </Typography>
-          <News
-            listComponent={NewsFeed}
-            readonly
-          />
-        </CardContent>
-      </Paper>
+    const content = (
+      <Grid container spacing={2} direction='row'>
+        {this.props.permissions && this.props.permissions.news_view && (
+          <Grid item xs>
+            <Paper>
+              <CardContent>
+                <Typography variant='h5' className={classes.title}>
+                  <DiverstFormattedMessage {...messages.news} />
+                </Typography>
+                <News
+                  listComponent={NewsFeed}
+                  readonly
+                />
+              </CardContent>
+            </Paper>
+          </Grid>
+        )
+        }
+        {this.props.permissions && this.props.permissions.events_view && (
+          <Grid item xs>
+            <Paper>
+              <CardContent>
+                <Typography variant='h5' className={classes.title}>
+                  <DiverstFormattedMessage {...messages.events} />
+                </Typography>
+                <Events
+                  listComponent={EventsList}
+                  readonly
+                  loaderProps={{
+                    transitionProps: {
+                      direction: 'right',
+                    },
+                  }}
+                />
+              </CardContent>
+            </Paper>
+          </Grid>
+        )
+        }
+      </Grid>
     );
 
     const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
@@ -125,10 +135,12 @@ export class HomePage extends React.PureComponent {
     ) : null;
 
     const sponsor = (
-      <SponsorCard
-        type='enterprise'
-        currentGroup={null}
-      />
+      <Grid item xs>
+        <SponsorCard
+          type='enterprise'
+          currentGroup={null}
+        />
+      </Grid>
     );
 
     const enterpriseMessage = (
@@ -151,20 +163,21 @@ export class HomePage extends React.PureComponent {
       />
     ) : null;
 
+
     const grid = this.props.sponsorTotal > 0 ? [
       'header header  header  header  header  header  header  header  header  header',
       'message message  message  message  message  message  message  message  message  message',
-      'news   news    news    news    events  events  events  events  sponsor sponsor',
-      'news   news    news    news    events  events  events  events  sponsor sponsor',
-      'news   news    news    news    events  events  events  events  sponsor sponsor',
+      'content content content content content content content content  sponsor sponsor',
+      'content content content content content content content content  sponsor sponsor',
+      'content content content content content content content content  sponsor sponsor',
       'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
 
     ] : [
       'header header  header  header  header  header  header  header  header  header',
       'message message  message  message  message  message  message  message  message  message',
-      'news   news    news    news  news  events  events  events  events  events',
-      'news   news    news    news  news  events  events  events  events  events',
-      'news   news    news    news  news  events  events  events  events  events',
+      'content content content content content content content content content content',
+      'content content content content content content content content content content',
+      'content content content content content content content content content content',
       'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
 
     ];
@@ -179,11 +192,9 @@ export class HomePage extends React.PureComponent {
       >
         <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
         <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
-        <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
+        <DiverstCSSCell area='content'>{content}</DiverstCSSCell>
         <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
         <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
       </DiverstCSSGrid>
     );
   }
@@ -194,7 +205,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = createStructuredSelector({
   sponsorTotal: selectSponsorTotal(),
-  enterprise: selectEnterprise()
+  enterprise: selectEnterprise(),
+  permissions: selectPermissions()
 });
 
 const withConnect = connect(
@@ -207,6 +219,7 @@ HomePage.propTypes = {
   enterprise: PropTypes.object,
   intl: intlShape.isRequired,
   sponsorTotal: PropTypes.number,
+  permissions: PropTypes.object
 };
 
 export default compose(
