@@ -6,9 +6,9 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
     Array [
       "header header  header  header  header  header  header  header  header  header",
       "message message  message  message  message  message  message  message  message  message",
-      "news   news    news    news  news  events  events  events  events  events",
-      "news   news    news    news  news  events  events  events  events  events",
-      "news   news    news    news  news  events  events  events  events  events",
+      "content content content content content content content content content content",
+      "content content content content content content content content content content",
+      "content content content content content content content content content content",
       "privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy",
     ]
   }
@@ -28,63 +28,26 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
     />
   </DiverstCSSCell>
   <DiverstCSSCell
-    area="events"
+    area="content"
   >
-    <WithStyles(ForwardRef(Paper))>
-      <WithStyles(ForwardRef(CardContent))>
-        <WithStyles(ForwardRef(Typography))
-          variant="h5"
-        >
-          <Memo(Connect(DiverstFormattedMessage))
-            id="diverst.containers.HomePage.events"
-          />
-        </WithStyles(ForwardRef(Typography))>
-        <Connect(Component)
-          listComponent={[Function]}
-          loaderProps={
-            Object {
-              "transitionProps": Object {
-                "direction": "right",
-              },
-            }
-          }
-          readonly={true}
-        />
-      </WithStyles(ForwardRef(CardContent))>
-    </WithStyles(ForwardRef(Paper))>
-  </DiverstCSSCell>
-  <DiverstCSSCell
-    area="news"
-  >
-    <WithStyles(ForwardRef(Paper))>
-      <WithStyles(ForwardRef(CardContent))>
-        <WithStyles(ForwardRef(Typography))
-          variant="h5"
-        >
-          <Memo(Connect(DiverstFormattedMessage))
-            id="diverst.containers.HomePage.news"
-          />
-        </WithStyles(ForwardRef(Typography))>
-        <Connect(Component)
-          listComponent={
-            Object {
-              "$$typeof": Symbol(react.memo),
-              "compare": null,
-              "type": [Function],
-            }
-          }
-          readonly={true}
-        />
-      </WithStyles(ForwardRef(CardContent))>
-    </WithStyles(ForwardRef(Paper))>
+    <WithStyles(ForwardRef(Grid))
+      container={true}
+      direction="row"
+      spacing={2}
+    />
   </DiverstCSSCell>
   <DiverstCSSCell
     area="sponsor"
   >
-    <Memo(Connect(SponsorCard))
-      currentGroup={null}
-      type="enterprise"
-    />
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+      xs={true}
+    >
+      <Memo(Connect(SponsorCard))
+        currentGroup={null}
+        type="enterprise"
+      />
+    </WithStyles(ForwardRef(Grid))>
   </DiverstCSSCell>
   <DiverstCSSCell
     area="privacy"
