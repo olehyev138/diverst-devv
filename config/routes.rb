@@ -549,7 +549,10 @@ Rails.application.routes.draw do
       resources :user_campaigns, shallow: true do
         resources :questions, shallow: true do
           resources :user_answers, shallow: true do
-            resources :user_answer_comments, shallow: true, path: 'comments'
+            resources :user_answer_comments, shallow: true, path: 'comments' do 
+              member { put 'approve' }
+            end
+
             member do
               put 'vote'
             end

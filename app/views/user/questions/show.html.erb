@@ -66,7 +66,7 @@ video#recorded-video {
                       <%= comment.content %> &mdash;
                       <span class="accent"><%= comment.author.name_with_status %></span>
                       <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
-                      <span class="pull-right"><%= link_to "Approve", answer_comment_path(comment, answer_comment: {approved: true}), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and CampaignPolicy.new(current_user, Campaign).manage? %></span>
+                      <span class="pull-right"><%= link_to "Approve", approve_user_user_answer_comment_path(comment), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and CampaignPolicy.new(current_user, Campaign).manage? %></span>
                     </p>
                   </div>
                 <% end %>
