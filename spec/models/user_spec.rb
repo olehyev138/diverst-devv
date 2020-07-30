@@ -433,16 +433,16 @@ RSpec.describe User do
       let(:group1) { create(:group, name: 'groupA') }
       let(:group2) { create(:group, name: 'groupB') }
 
-      let(:user1) { create(:user, first_name: 'No Group', groups: [])}
-      let(:user2) { create(:user, first_name: 'Group A', group_ids: [group1.id])}
-      let(:user3) { create(:user, first_name: 'Group B', group_ids: [group2.id])}
-      let(:user4) { create(:user, first_name: 'Group A and Group B', group_ids: [group1.id, group2.id])}
+      let(:user1) { create(:user, first_name: 'No Group', groups: []) }
+      let(:user2) { create(:user, first_name: 'Group A', group_ids: [group1.id]) }
+      let(:user3) { create(:user, first_name: 'Group B', group_ids: [group2.id]) }
+      let(:user4) { create(:user, first_name: 'Group A and Group B', group_ids: [group1.id, group2.id]) }
 
       it 'returns users whome are not a member of a group' do
         not_a = User.not_member_of_group(group1.id).pluck(&:first_name)
         not_b = User.not_member_of_group(group2.id).pluck(&:first_name)
-        expect(not_a).not_to include( include 'Group A' )
-        expect(not_b).not_to include( include 'Group B' )
+        expect(not_a).not_to include(include 'Group A')
+        expect(not_b).not_to include(include 'Group B')
         expect(not_a.size).to be 2
         expect(not_a.size).to be 2
       end
