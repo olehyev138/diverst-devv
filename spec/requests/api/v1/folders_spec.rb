@@ -43,6 +43,10 @@ RSpec.describe 'Folders', type: :request do
       expect(response).to have_http_status(:created)
     end
 
+    it 'inserts item in the database' do
+      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers }.to change(model.constantize, :count).by(1)
+    end
+
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:build).and_raise(BadRequestException)
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
@@ -58,6 +62,11 @@ RSpec.describe 'Folders', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it 'item has been updated' do
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'name' => 'Asian Blue Communitya' } }, headers: headers
+      expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
+    end
+
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:update).and_raise(BadRequestException)
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
@@ -69,6 +78,10 @@ RSpec.describe 'Folders', type: :request do
     it 'deletes an item' do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:no_content)
+    end
+
+    it 'destroys item in the database' do
+      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change(model.constantize, :count).by(-1)
     end
 
     it 'captures the error' do
