@@ -6,7 +6,7 @@ RSpec.describe 'Folders', type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:password) { SecureRandom.hex(8) }
-  let(:item) { create(:folder, password: password, password_protected: true) }
+  let!(:item) { create(:folder, password: password, password_protected: true) }
   let(:route) { 'folders' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }

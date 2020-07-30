@@ -62,7 +62,7 @@ RSpec.describe 'Resources', type: :request do
     end
 
     it 'item has been updated' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'name' => 'Asian Blue Communitya' } }, headers: headers
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'title' => 'Asian Blue Communitya' } }, headers: headers
       expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
     end
 
@@ -98,8 +98,8 @@ RSpec.describe 'Resources', type: :request do
     end
 
     it 'item has been archived' do
-      put "/api/v1/#{route}/#{item.id}/un_archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(model.constantize.find(item.id).attributes.archived_at).to_not eq nil
+      post "/api/v1/#{route}/#{item.id}/archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(model.constantize.find(item.id).attributes['archived_at']).to_not eq nil
     end
 
     it 'captures the error' do
@@ -122,8 +122,11 @@ RSpec.describe 'Resources', type: :request do
     end
 
     it 'item has been unarchived' do
-      put "/api/v1/#{route}/#{item.id}/un_archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(model.constantize.find(item.id).attributes.archived_at).to eq nil
+      resource = build(route.singularize.to_sym)
+      resource.update(archived_at: Time.now)
+      expect(model.constantize.find(resource.id).attributes['archived_at']).to_not eq nil
+      put "/api/v1/#{route}/#{resource.id}/un_archive", params: { "#{route.singularize}" => resource.attributes }, headers: headers
+      expect(model.constantize.find(resource.id).attributes['archived_at']).to eq nil
     end
 
     it 'captures the error' do
