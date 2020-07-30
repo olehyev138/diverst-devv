@@ -162,6 +162,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:created)
     end
 
+    # TODO : Fix bug, only one update should be inserted not 2
     xit 'inserts an update in the database' do
       expect { post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update': update.attributes }, headers: headers }.to change(Update, :count).by(1)
     end
