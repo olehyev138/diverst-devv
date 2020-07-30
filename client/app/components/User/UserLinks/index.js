@@ -340,6 +340,8 @@ export class UserLinks extends React.PureComponent {
             classes={classes}
             mobileNavAnchor={mobileNavAnchor}
             isMobileNavOpen={isMobileNavOpen}
+            enterprise={this.props.enterprise}
+            permissions={this.props.permissions}
             handleMobileNavClose={this.handleMobileNavClose}
             user={user}
           />

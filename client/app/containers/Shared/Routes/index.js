@@ -6,6 +6,7 @@ import {
   ApplicationLayout,
   AuthenticatedLayout,
   SignUpPage,
+  PasswordResetPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -177,6 +178,8 @@ export default function Routes(props) {
               <RouteWithProps path={ROUTES.session.login.path()}><LoginPage /></RouteWithProps>
               {/* Forgot password */}
               <RouteWithProps path={ROUTES.session.forgotPassword.path()}><ForgotPasswordPage /></RouteWithProps>
+              {/* Password Reset */}
+              <RouteWithProps path={ROUTES.session.passwordReset.path()}><PasswordResetPage /></RouteWithProps>
               {/* Sign up */}
               <RouteWithProps path={ROUTES.session.signUp.path()}><SignUpPage /></RouteWithProps>
             </SwitchWithProps>
