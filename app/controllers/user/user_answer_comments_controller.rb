@@ -2,7 +2,7 @@ class User::UserAnswerCommentsController < ApplicationController
   include Rewardable
 
   before_action :authenticate_user!
-  before_action :set_answer
+  before_action :set_answer, only: [:create]
 
   layout 'user'
 
@@ -20,22 +20,26 @@ class User::UserAnswerCommentsController < ApplicationController
     redirect_to [:user, @answer.question]
   end
 
-  protected
-
-  def author_of_campaign_or_idea
-    current_user.enterprise.campaigns.where(owner: current_user).count > 1 || @answer.author == current_user
+  def approve
+    @comment = AnswerComment.find(params[:id])
+    @comment.update(approved: true)
+    flash[:notice] = 'You approved a comment'
+    
+    redirect_to :back
   end
+
+  protected
 
   def set_answer
     @answer = Answer.find(params[:user_answer_id])
-    # return head 403 if author_of_campaign_or_idea
   end
 
   def comment_params
     params
         .require(:answer_comment)
         .permit(
-          :content
+          :content,
+          :approved
         )
   end
 end
