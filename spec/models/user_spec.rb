@@ -438,16 +438,23 @@ RSpec.describe User do
       let(:user3) { create(:user, group_ids: [group2.id]) }
       let(:user4) { create(:user, group_ids: [group1.id, group2.id]) }
 
-      let(:not_a_users) { User.not_member_of_group(group1.id).pluck(:first_name) }
+      let!(:not_A_users) do
+        # FORCE THE EXECUTING OF THE LET BLOCKS BEFORE THE SCOPE RUNS
+        user1
+        user2
+        user3
+        user4
+        User.not_member_of_group(group1.id).pluck(:first_name)
+      end
 
       it 'does not include members of a group' do
-        expect(not_a_users).not_to include(user2.first_name)
-        expect(not_a_users).not_to include(user4.first_name)
+        expect(not_A_users).not_to include(user2.first_name)
+        expect(not_A_users).not_to include(user4.first_name)
       end
 
       it 'returns all users who are not a member of a group' do
-        expect(not_a_users).to include(user1.first_name)
-        expect(not_a_users).to include(user3.first_name)
+        expect(not_A_users).to include(user1.first_name)
+        expect(not_A_users).to include(user3.first_name)
       end
     end
 
