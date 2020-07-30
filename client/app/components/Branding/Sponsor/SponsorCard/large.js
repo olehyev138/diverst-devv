@@ -28,13 +28,14 @@ import reducer from 'containers/Shared/Sponsors/reducer';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import DiverstImg from 'components/Shared/DiverstImg';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const SponsorType = Object.freeze({
   Group: 'group',
   Enterprise: 'enterprise',
 });
 
-export function SponsorCard(props) {
+export function LargeSponsorCard(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
@@ -55,34 +56,39 @@ export function SponsorCard(props) {
   const individualSponsor = sponsor => (
     <Card key={sponsor.id}>
       <CardContent>
-        <Grid container spacing={2} direction='column'>
+        <Grid
+          container
+          spacing={2}
+          alignContent='center'
+          alignItems='center'
+          justify='space-evenly'
+        >
           {sponsor.sponsor_media_data && (
             <React.Fragment>
-              <Hidden xsDown>
-                <Grid item xs={12}>
-                  <DiverstImg
-                    data={sponsor.sponsor_media_data}
-                    contentType={sponsor.sponsor_media_content_type}
-                    maxWidth='100%'
-                    maxHeight='100px'
-                    height='auto'
-                  />
-                </Grid>
-              </Hidden>
+              <Grid item>
+                <DiverstImg
+                  data={sponsor.sponsor_media_data}
+                  maxWidth='100%'
+                  maxHeight='300px'
+                  height='auto'
+                />
+              </Grid>
             </React.Fragment>
           )}
-          <Grid item>
-            <Typography variant='h6'>
-              {sponsor.sponsor_name}
-            </Typography>
-            <Typography>
-              {sponsor.sponsor_title}
-            </Typography>
+          <Grid item xs={6}>
+            <ScrollBar>
+              <Typography variant='h5'>
+                {sponsor.sponsor_name}
+              </Typography>
+              <Typography variant='h6'>
+                {sponsor.sponsor_title}
+              </Typography>
+              <Typography variant='body1'>
+                {sponsor.sponsor_message}
+              </Typography>
+            </ScrollBar>
           </Grid>
         </Grid>
-      </CardContent>
-      <CardContent>
-        { sponsor.sponsor_message}
       </CardContent>
     </Card>
   );
@@ -104,7 +110,7 @@ export function SponsorCard(props) {
   );
 }
 
-SponsorCard.propTypes = {
+LargeSponsorCard.propTypes = {
   getSponsorsBegin: PropTypes.func,
   type: PropTypes.string,
   currentGroup: PropTypes.object,
@@ -133,4 +139,4 @@ const withConnect = connect(
 export default compose(
   memo,
   withConnect,
-)(SponsorCard);
+)(LargeSponsorCard);

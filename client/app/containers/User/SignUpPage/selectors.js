@@ -4,8 +4,7 @@ import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from './reducer';
-import { timezoneMap } from 'utils/selectorHelpers';
-import { mapFieldData } from 'utils/customFieldHelpers';
+import { deserializeFields, timezoneMap } from 'utils/selectorHelpers';
 
 const selectSignUpDomain = state => state.signUp || initialState;
 
@@ -22,11 +21,20 @@ const selectUser = () => createSelector(
       const timezoneArray = user.timezones;
       return produce(user, (draft) => {
         draft.timezones = timezoneMap(timezoneArray, user, draft);
-        draft.field_data = mapFieldData(user.field_data);
+        draft.field_data = deserializeFields(user.field_data);
+        draft.group_ids = user.group_ids.reduce((sum, groupId) => {
+          sum[groupId] = true;
+          return sum;
+        }, {});
       });
     }
     return null;
   }
+);
+
+const selectGroups = () => createSelector(
+  selectSignUpDomain,
+  usersState => usersState.groups
 );
 
 const selectIsLoading = () => createSelector(
@@ -47,5 +55,5 @@ const selectFormErrors = () => createSelector(
 export {
   selectSignUpDomain, selectToken,
   selectIsLoading, selectUser, selectFormErrors,
-  selectIsCommitting,
+  selectIsCommitting, selectGroups
 };
