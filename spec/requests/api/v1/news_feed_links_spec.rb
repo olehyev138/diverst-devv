@@ -10,7 +10,6 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
-  let(:newsFeedLinks) { create(:news_feed_link, :not_approved) }
 
   describe '#index' do
     it 'gets all items' do
@@ -81,16 +80,16 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
   end
 
-  # TODO : Cannot get a news feed link with approved as false
   describe '#approve' do
-    xit 'approve a request' do
-      post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}": newsFeedLinks.attributes }, headers: headers
+    it 'approve a request' do
+      item.update(approved: false)
+      post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}": item.attributes }, headers: headers
+      post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end
