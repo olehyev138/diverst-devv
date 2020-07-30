@@ -50,7 +50,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       attributes = build(route.singularize.to_sym).attributes
       attributes['user_role_id'] = user.user_role_id
       attributes['password'] = 'password'
-      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers }.to change(User, :count).by(1)
+      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers }.to change(model.constantize, :count).by(1)
     end
 
     it 'captures the error when BadRequestException' do
@@ -70,7 +70,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'user has been updated' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'first_name' => 'abc' } }, headers: headers
-      expect(item.attributes).to_not eq User.find(item.id).attributes
+      expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
     end
 
     it 'captures the error when BadRequestException' do
@@ -89,7 +89,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'destroys a user in the database' do
-      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change(User, :count).by(-1)
+      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change(model.constantize, :count).by(-1)
     end
 
     it 'captures the error' do

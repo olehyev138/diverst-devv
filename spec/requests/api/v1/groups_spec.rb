@@ -51,7 +51,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'inserts a group in the database' do
-      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers }.to change(Group, :count).by(1)
+      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers }.to change(model.constantize, :count).by(1)
     end
 
     it 'captures the error when BadRequestException' do
@@ -71,7 +71,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'group has been updated' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'name' => 'Asian Blue Communitya' } }, headers: headers
-      expect(item.attributes).to_not eq Group.find(item.id).attributes
+      expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
     end
 
     it 'captures the error when BadRequestException' do
@@ -89,7 +89,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'destroys a group in the database' do
-      expect { delete "/api/v1/#{route}/#{group.id}", headers: headers }.to change(Group, :count).by(-1)
+      expect { delete "/api/v1/#{route}/#{group.id}", headers: headers }.to change(model.constantize, :count).by(-1)
     end
 
     it 'captures the error' do
@@ -212,7 +212,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       children = [{ 'id' => subgroup.id, 'name' => subgroup.name, 'group_category_id' => group_cateogry.id, 'group_category_type_id' => nil, 'category' => { 'value' => 1, 'label' => 'fdsd' } }]
       group = { 'id' => item.id, 'children' => children, 'group' => { 'id' => '14', 'name' => 'Asian Blue Communitya' } }
       post "/api/v1/#{route}/#{item.id}/update_categories", params: group, headers: headers
-      expect(item.children[0].group_category_id).to_not eq Group.find(item.id).children[0].group_category_id
+      expect(item.children[0].group_category_id).to_not eq model.constantize.find(item.id).children[0].group_category_id
     end
 
     it 'captures the error when params are invalid, ie: no children' do
