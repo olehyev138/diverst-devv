@@ -184,7 +184,7 @@ module User::Actions
 
     def valid_scopes
       %w( enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests
-          all active inactive saml invitation_sent of_role not_member_of_groups )
+          all active inactive saml invitation_sent of_role not_member_of_group )
     end
 
     def preload_attachments

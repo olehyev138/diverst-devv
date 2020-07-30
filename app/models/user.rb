@@ -167,7 +167,7 @@ class User < ApplicationRecord
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
-  scope :not_member_of_groups, -> (group_id) {
+  scope :not_member_of_group, -> (group_id) {
     where.not(id: (
       UserGroup.where(group_id: group_id).pluck(:user_id)
     ))
