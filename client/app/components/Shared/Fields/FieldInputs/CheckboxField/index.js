@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dig from 'object-dig';
-import { connect, Field, getIn } from 'formik';
+import { connect, FastField, Field, getIn } from 'formik';
 
 import Select from 'components/Shared/DiverstSelect';
 
@@ -20,7 +20,8 @@ const CustomCheckboxField = (props) => {
 
   return (
     <React.Fragment>
-      <Select
+      <FastField
+        component={Select}
         name={dataLocation}
         id={dataLocation}
         isMulti
