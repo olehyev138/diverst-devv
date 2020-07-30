@@ -135,12 +135,10 @@ export class HomePage extends React.PureComponent {
     ) : null;
 
     const sponsor = (
-      <Grid item xs>
-        <SponsorCard
-          type='enterprise'
-          currentGroup={null}
-        />
-      </Grid>
+      <SponsorCard
+        type='enterprise'
+        currentGroup={null}
+      />
     );
 
     const enterpriseMessage = (

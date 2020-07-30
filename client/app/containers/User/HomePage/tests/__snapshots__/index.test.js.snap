@@ -39,21 +39,13 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
   <DiverstCSSCell
     area="sponsor"
   >
-    <WithStyles(ForwardRef(Grid))
-      item={true}
-      xs={true}
-    >
-      <Memo(Connect(SponsorCard))
-        currentGroup={null}
-        type="enterprise"
-      />
-    </WithStyles(ForwardRef(Grid))>
+    <Memo(Connect(SponsorCard))
+      currentGroup={null}
+      type="enterprise"
+    />
   </DiverstCSSCell>
   <DiverstCSSCell
     area="privacy"
-  />
-  <DiverstCSSCell
-    area="null"
   />
 </WithStyles(Grid__Grid)>
 `;
