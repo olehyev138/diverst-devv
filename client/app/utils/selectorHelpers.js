@@ -15,7 +15,7 @@ export const deserializeFields = fieldData => produce(fieldData, (draft) => {
   if (fieldData)
     draft.forEach((datum) => {
       datum.data = deserializeDatum(datum);
-      datum.field.options_text = deserializeOptionsText(datum.field);
+      datum.field.options = deserializeOptionsText(datum.field);
     });
 });
 

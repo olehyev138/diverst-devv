@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_secure_password validations: false
   has_secure_token :invitation_token
+  has_secure_token :reset_password_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -207,18 +208,6 @@ class User < ApplicationRecord
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
       break token unless Session.find_by(token: token)
     end
-  end
-
-  def generate_invitation_token
-    regenerate_invitation_token
-    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
-    invitation_token
-  end
-
-  def invite!(manager = nil, skip: false)
-    regenerate_invitation_token
-
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
   def valid_password?(password)

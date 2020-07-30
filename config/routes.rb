@@ -201,8 +201,15 @@ Diverst::Application.routes.draw do
       resources :policy_groups
       resources :policy_group_templates
       resources :polls do
-        get  '/fields',       to: 'polls#fields'
-        post '/create_field', to: 'polls#create_field'
+        collection do
+          post '/publish', to: 'polls#create_and_publish'
+        end
+        member do
+          get  '/fields',       to: 'polls#fields'
+          post '/create_field', to: 'polls#create_field'
+          put '/publish', to: 'polls#update_and_publish'
+          patch '/publish', to: 'polls#update_and_publish'
+        end
       end
       resources :poll_responses, except: [:destroy, :update] do
         collection do
@@ -263,6 +270,9 @@ Diverst::Application.routes.draw do
           post '/email', to: 'users#find_user_enterprise_by_email'
           post '/sign_up_token', to: 'users#sign_up_token'
           post '/sign_up', to: 'users#sign_up'
+          post '/reset_password_request', to: 'users#reset_password_request'
+          post '/reset_password_token', to: 'users#reset_password_token'
+          post '/password_reset', to: 'users#password_reset'
           get 'prototype'
           get 'sample_csv'
         end
