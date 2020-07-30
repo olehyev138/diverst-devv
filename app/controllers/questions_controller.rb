@@ -87,12 +87,14 @@ class QuestionsController < ApplicationController
         :title,
         :conclusion,
         :description,
+        :department_id,
+        :business_impact_id,
         answers_attributes: [
           :id,
           :outcome,
           :value,
           :benefit_type,
-          :supporting_document,
+          :supporting_document_from_sponsor,
           expenses_attributes: [
             :id,
             :_destroy,

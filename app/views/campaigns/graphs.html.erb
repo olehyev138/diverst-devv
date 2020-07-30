@@ -1,0 +1,52 @@
+<div class="content__header">
+    <h1><%= @campaign.title %></h1>
+    <%= link_to "View Stats", campaign_stats_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
+</div>
+
+<div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+        <div class="card">
+            <div class="card__section">
+                <h3>Contributions per <%= c_t(:erg) %></h3>
+                <div class="card__action">
+                    <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
+                </div>
+                <div id="contributions_group" class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>">
+                    <svg></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col sm-12 md-6">
+        <div class="card">
+            <div class="card__section">
+                <h3>Campaign Engagement Per User</h3>
+                <div class="card__action">
+                    <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
+                </div>
+                <%= bar_chart @campaign.top_campaign_performers, id: 'top-performers',
+                                                            colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
+            </div>
+        </div>
+    </div>
+    <div class="col sm-12 md-6">
+        <div class="card">
+            <div class="card__section">
+                <h3>Campaign ROI Distribution</h3>
+                <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id), id: 'campaign-roi-distribution', 
+                                                                               prefix: '$',
+                                                                               thousands: ',',
+                                                                               colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
+            </div>
+        </div>
+    </div>
+    <div class="col sm-12 md-6">
+        <div class="card">
+            <div class="card__section">
+                <h3>Engagement Activity Distribution</h3>
+                <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id), id: 'engagement-activity-distribution',
+                                                                               colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
+            </div>
+        </div>
+    </div>
+</div>

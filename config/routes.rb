@@ -475,6 +475,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'campaigns/stats', to: 'campaigns#stats', as: :campaign_stats
+  get 'campaigns/view_all_graphs', to: 'campaigns#view_all_graphs', as: :view_all_campaign_graphs
+  get 'campaigns/:id/graphs', to: 'campaigns#graphs', as: :campaign_graphs
+
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
@@ -502,6 +506,9 @@ Rails.application.routes.draw do
 
   resources :expenses
   resources :expense_categories
+  resources :idea_categories
+  resources :departments
+  resources :business_impacts
 
   devise_scope :user do
     namespace :user do

@@ -1,6 +1,8 @@
 class Answer < BaseClass
   include PublicActivity::Common
 
+  enum benefit_type: { revenue: '0', cost_savings: '1' }
+
   belongs_to :question, inverse_of: :answers, counter_cache: true
   belongs_to :author, class_name: 'User', inverse_of: :answers
 
@@ -12,11 +14,27 @@ class Answer < BaseClass
   has_many :likes, dependent: :destroy
 
   belongs_to :contributing_group, class_name: 'Group'
+  belongs_to :idea_category
 
   has_attached_file :supporting_document, s3_permissions: 'private'
-  do_not_validate_attachment_file_type :supporting_document
+  validates_attachment_content_type :supporting_document,
+                                    content_type: ['text/plain', 'application/pdf'],
+                                    message: 'This format is not supported', if: Proc.new { |a| a.content.blank? && a.video_upload.blank? }
+
+  has_attached_file :video_upload, s3_permissions: 'private'
+  validates_attachment_content_type :video_upload,
+                                    content_type: ['video/mp4', 'video/webm'],
+                                    message: 'This format is not supported', if: Proc.new { |a| a.content.blank? && a.supporting_document.blank? }
+  
+  has_attached_file :supporting_document_from_sponsor, s3_permissions: 'private'
+  validates_attachment_content_type :supporting_document_from_sponsor,
+                                    content_type: ['text/plain', 'application/pdf'],
+                                    message: 'This format is not supported'                                
 
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
+
+  validates_length_of :video_upload_content_type, maximum: 191
+  validates_length_of :video_upload_file_name, maximum: 191
 
   validates_length_of :supporting_document_content_type, maximum: 191
   validates_length_of :supporting_document_file_name, maximum: 191
@@ -24,8 +42,12 @@ class Answer < BaseClass
   validates_length_of :content, maximum: 65535
   validates :question, presence: true
   validates :author, presence: true
-  validates :content, presence: true
-  validates :contributing_group, presence: true
+  validates :content, presence: true, if: Proc.new { |a| a.supporting_document.blank? && a.video_upload.blank? }
+  validates :title, presence: true
+  validates :idea_category, presence: true
+
+  after_create :send_email_notification
+
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase
@@ -68,5 +90,12 @@ class Answer < BaseClass
         methods: [:total_votes]
       )
     )
+  end
+
+
+  private
+
+  def send_email_notification
+    CampaignResponseNotifierJob.perform_later(self.id, self.question.campaign_id)
   end
 end

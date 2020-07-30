@@ -16,6 +16,7 @@ class User::QuestionsController < ApplicationController
       .includes(:author, comments: :author)
       .order(chosen: :desc)
       .order(upvote_count: :desc)
+    @categories = IdeaCategory.where(enterprise_id: current_user.enterprise_id)  
     @answer = @question.answers.new
   end
 

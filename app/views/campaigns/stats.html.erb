@@ -1,0 +1,45 @@
+<div class="content__header">
+  <h1>Campaign Stats</h1>
+  <%= link_to "View Graphs", view_all_campaign_graphs_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @campaigns.empty? %>
+        <p>There are no campaigns yet. <%= link_to "Create one", new_campaign_path %> and start collaborate with your team's diverse opinions.</p>
+      <% else %>
+        <table class="table--has-border" id="campaigns-stats-table">
+          <thead>
+            <th style="width: 40%;">Title</th>
+            <th>Engagement Level</th>
+            <th>Response Percentage(%)</th>
+            <th>Total ROI</th>
+            <th>Status</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @campaigns.each do |campaign| %>
+              <tr>
+                <td><%= link_to campaign.title, campaign_questions_path(campaign) %></td>
+                <td><%= campaign.engagement_activity_level %></td>
+                <td><%= campaign.response_percentage %></td>
+                <td><%= number_to_currency(campaign.total_roi, precision: 0) %></td>
+                <td><%= campaign.status.capitalize %></td>
+                <td><%= link_to 'Graphs', campaign_graphs_path(campaign) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#campaigns-stats-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[3, "desc"]]
+    }));
+  });
+</script>

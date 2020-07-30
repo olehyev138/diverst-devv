@@ -33,6 +33,22 @@
 <div class="menu menu--desktop">
   <%= active_link_to "Campaigns", campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'questions', 'answers'], []] %>
   <%= active_link_to "Financials", expenses_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['expenses', 'expense_categories'], []] %>
+  <%= active_link_to "Campaign Stats", campaign_stats_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['stats'], []] %>
+  
+  <%= active_link_to 'Categories&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Logs", "aria-control": "navigation", "data-jq-dropdown": "#categories", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  <nav id="categories" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li>
+        <%= active_link_to "Manage Idea Categories", idea_categories_path if CampaignPolicy.new(current_user, Campaign).new? %>
+      </li>
+      <li>
+        <%= active_link_to 'Manage Departments', departments_path if CampaignPolicy.new(current_user, Campaign).new? %>
+      </li>
+      <li>
+        <%= active_link_to 'Manage Business Impacts', business_impacts_path if CampaignPolicy.new(current_user, Campaign).new? %>
+      </li>
+    </ul>
+  </nav>
 </div>
 <% end %>
 

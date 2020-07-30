@@ -1,13 +1,21 @@
+<style>
+#recording-controls {
+  display: none;
+}
+video#recorded-video {
+  width: 500px;
+  height: 300px;
+}
+</style>
 <div class="content__header">
   <h1>
-    <%= link_to "My Campaigns", user_user_campaign_path %> /
+    <%= link_to "My Campaigns", user_user_campaigns_path %> /
     <%= link_to @question.campaign.title, user_user_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
   </h1>
 </div>
 
 <div class="content__main">
-
   <% if !@question.solved_at.nil? %>
     <div class="card">
       <div class="card__section card__section--border">
@@ -45,8 +53,11 @@
               <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
             </div>
             <div class="answer__content">
-              <p><%= answer.content %></p>
-
+              <h3><%= answer.title %></h3>
+              <p><%= answer.content if answer.content.present? %></p>
+              <p><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></p>                
+              <p><%= link_to answer.supporting_document_file_name, answer.supporting_document.expiring_url(3600) unless answer.supporting_document.blank? %></p>
+  
               <% answer.comments.each do |comment| %>
                 <%# only show comment if its been approved OR pending comments are not enabled OR if user is an erg leader %>
                 <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (CampaignPolicy.new(current_user, Campaign).manage?) %>
@@ -61,13 +72,15 @@
                 <% end %>
               <% end %>
 
-              <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>
-                <%= f.input :content,
-                      label: false,
-                      placeholder: "Enter a comment...",
-                      input_html: { rows: 2, class: "comment__input submit-on-return" } %>
-                <%= f.button :submit, value: "Submit" %>
-              <% end %>
+              <% if @question.solved_at.nil? %>
+                <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>
+                  <%= f.input :content,
+                        label: false,
+                        placeholder: "Enter a comment...",
+                        input_html: { rows: 2, class: "comment__input submit-on-return" } %>
+                  <%= f.button :submit, value: "Submit" %>
+                <% end %>
+              <% end %>  
             </div>
           </div>
         </div>
@@ -75,19 +88,107 @@
     <% end %>
   </div>
 
-  <div class="card">
-    <div class="card__section">
-    <% if @question.solved_at.nil? %>
-      <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
-        <%= f.input :content, label: "<h3>Write an answer</h3>".html_safe, placeholder: "Type an answer here..." %>
-        <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
-        <%= f.button :submit, value: "Submit" %>
-      <% end %>
-    <% else %>
-      <p>This question is closed and doesn't take additional answers.</p>
-    <% end %>
+  <% if @question.solved_at.nil? %>
+    <div class="card">
+      <div class="card__section">
+      <h2>Choose How You Want to Submit Your Idea</h2>
+
+      <div class="row">
+        <div class="col-xs-4">
+          <h5>Text</h5>
+          <img src="https://s3.amazonaws.com/diverst-demo/text.svg" alt="" style="cursor: pointer;" id="text-submit-picture" width="50px" height="50px">
+        </div>
+        
+
+        <div class="col-xs-4">
+          <h5>Video</h5>
+          <img src="https://s3.amazonaws.com/diverst-demo/camera.svg" alt="" id="video-contribution" style="cursor: pointer;" width="50px" height="50px">
+          <div id="video-upload-options" style="display:none">
+            <button id="record-video" class="btn btn-danger btn--small">
+              Record Video
+            </button>
+            <button id="upload-video" class="btn  btn--primary btn--small">
+              Upload Video
+            </button>
+          </div>  
+        </div>
+      </div>
+      <br>
+      
+      <div class="row">
+          <% if @question.solved_at.nil? %>
+            <br>
+            <div class="col-sm-12" id="answer_content_wrapper" style="display: none;">
+              <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
+                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
+                <%= f.input :title, label: 'Name/Title of idea' %>
+                <%= f.input :content, label: "<h3>Write out your idea</h3>".html_safe, placeholder: "Type an answer here..." %>
+                <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
+                <%= f.button :submit, value: "Submit" %>
+              <% end %>
+            </div>
+
+            <div id="video-controls" style="display: none;" class="col-sm-12">
+              <br>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="field select optional answer_idea_category">
+                    <label class="field__label select optional" for="answer_idea_category_id">Idea category</label>
+                    <div class="field__input-wrapper">
+                      <span class="field__add-on field__add-on--right">
+                      <span class="icon icon--chevron-down"></span></span>
+                      <select class="field__input field__input--right-add-on select optional " name="answer[idea_category_id]" id="answer_video_category_id"><option value=""></option>
+                          <option value="1">Product</option>
+                          <option value="2">Technical</option>
+                          <option value="3">Business Model</option>
+                          <option value="4">Process</option></select>
+                    </div>
+                  </div>
+
+                  <label class="field__label text optional" for="answer_content"><h3>Idea name/title</h3></label>
+                  <div class="field__input-wrapper">
+                    <input class="field__input string optional " 
+                    type="text" name="answer[title]" id="answer_title_video">
+                  </div>
+                  <label class="field__label text optional" for="answer_content"><h3>Attach Supporting Document</h3></label>
+                  <div class="field__input-wrapper">
+                    <input class="field__input attachment_preview optional " type="file" name="answer[supporting_document]" 
+                    id="answer_supporting_document_video">
+                  </div>
+                  <video id="recorded-video" autoplay muted></video>
+                </div>  
+              </div>
+
+              <div id="recording-controls">
+                <button id="start-recording" class="btn btn--small btn--danger">
+                  start recording
+                </button>
+                <button id="stop-recording" disabled=true class="btn btn--small btn--secondary">
+                  stop recording
+                </button>
+                <button id="save-recording" disabled=true class="btn btn--small btn--primary">
+                  save recording
+                </button>
+              </div>  
+            </div>  
+            
+            <div class="col-sm-6" id="answer_supporting_video" style="display: none;">
+              <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
+                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] }, input_html: { id: 'answer_idea_category_id_video_upload' } %>
+                <%= f.input :title, label: 'Name/Title of idea', input_html: { id: 'answer_title_video_upload' } %>
+                <%= f.input :video_upload, as: :attachment_preview %>
+                <%= f.input :supporting_document, as: :attachment_preview %>
+                <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
+                <%= f.button :submit, value: "Submit" %>
+              <% end %>
+            </div>
+          <% else %>
+            <p>This question is closed and doesn't take additional answers.</p>
+          <% end %>
+      </div>  
+      </div>
     </div>
-  </div>
+  <% end %>  
 </div>
 
 <script>
@@ -115,4 +216,228 @@
 
   // Submit comments using the return key
   Utility.submitOnReturn($('.submit-on-return'));
+
+  var validateTextSubmitForm = function() {
+    var idea_category = $('#answer_idea_category_id').val();
+    var answer_title = $('#answer_title').val();
+    var answer_content = $('#answer_content').val();
+    
+    if(idea_category.length==0 || answer_title.length==0 || answer_content.length==0) {
+      $('#new_answer > input[type="submit"]').prop('disabled', true);
+    }else if(idea_category.length!=0 || answer_title.length!=0 || answer_content.length!=0){
+      $('#new_answer > input[type="submit"]').prop('disabled', false);
+    }
+  }
+
+
+  $('#text-submit-picture').click(function(){
+      $('#answer_content_wrapper').slideToggle();
+      $('#answer_supporting_video').hide();
+      $('#video-controls').hide();
+      $('#video-upload-options').hide();
+      var stream = video.srcObject;
+      if(stream) {
+        stream.getTracks().forEach(function(track){
+          track.stop();
+        });
+      }
+      video.srcObject = null;
+
+      validateTextSubmitForm();
+    }); //endof click
+
+  $('#answer_title, #answer_content, #answer_idea_category_id').on('keyup change', function(e){
+    validateTextSubmitForm();
+  });
+
+  $('#video-contribution').on('click', function(){
+    $('#video-upload-options').slideToggle();
+    $('#answer_content_wrapper').hide();
+    $('#answer_supporting_video').hide();
+    $('#video-controls').hide();
+    var stream = video.srcObject;
+      if(stream) {
+        stream.getTracks().forEach(function(track){
+          track.stop();
+        });
+      }
+      video.srcObject = null;
+  });
+
+  $('#record-video').on('click', function(){
+    $('#recording-controls').show();
+    $('#video-controls').show();
+    $('#video-upload-options').hide();
+
+    navigator.mediaDevices.getUserMedia(constraints).
+    then(getMediaStream)
+    .catch(e => { console.error('getUserMedia() failed: ' + e); });
+  });
+
+  var validateVideoUploadForm = function() {
+    var idea_category = $('#answer_idea_category_id_video_upload').val();
+    var answer_title = $('#answer_title_video_upload').val();
+    var video_upload = $('#answer_video_upload').val();
+    var supporting_document = $('#answer_supporting_document').val();
+
+    if(idea_category.length==0 || answer_title.length==0 || (video_upload.length==0 && supporting_document.length==0)) {
+      $('#new_answer > input[type="submit"]').prop('disabled', true);
+    } else if(idea_category.length!=0 && answer_title.length!=0 && video_upload.length!=0) {
+      $('#new_answer > input[type="submit"]').prop('disabled', false);
+    }
+  }
+
+  $('#upload-video').on('click', function(){
+    $('#answer_supporting_video').show();
+    $('#video-upload-options').hide();
+
+    validateVideoUploadForm();
+  });
+
+  $('#answer_idea_category_id_video_upload, #answer_title_video_upload, #answer_video_upload, #answer_supporting_document').on('keyup change', function(){
+    validateVideoUploadForm();
+  });
+
+  var recordedChunks = [];
+  var constraints = {
+    video: { width: 1280 , height: 720 }, 
+    audio: true
+  };
+  var video = document.querySelector('video#recorded-video');
+  var startRecordingButton = document.querySelector('#start-recording');
+  var theMediaRecorder;
+
+
+  function getMediaStream(stream) {
+    video.srcObject = stream;
+
+    let options = {mimeType: 'video/webm;codecs=vp9,opus'};
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      console.error(`${options.mimeType} is not supported`);
+      options = {mimeType: 'video/webm;codecs=vp8,opus'};
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.error(`${options.mimeType} is not supported`);
+        options = {mimeType: 'video/webm'};
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          console.error(`${options.mimeType} is not supported`);
+          options = {mimeType: ''};
+        }
+      }
+    }
+
+    var mediaRecorder = null;
+    try {
+      mediaRecorder = new MediaRecorder(stream, options);
+    } catch (e) {
+      console.error('Exception while creating MediaRecorder: ' + e);
+      return;
+    }
+
+    theMediaRecorder = mediaRecorder;
+  }
+
+  function startRecording() {
+    theMediaRecorder.onstart = function() {
+      if(this.state == 'active'){
+        throw new Error('InvalidStateError')
+      }
+      recordedChunks = [];
+    }
+
+    theMediaRecorder.ondataavailable = function(event) {
+      if(theMediaRecorder.state == 'recording'){
+        recordedChunks.push(event.data);
+      }
+    };
+
+    try {
+      theMediaRecorder.start(100);
+    } catch (e) {
+      console.error('Exception while trying to start MediaRecorder: ' + e);
+      return;
+    }
+    startRecordingButton.disabled = true;
+    saveRecordingButton.disabled = true;
+    stopRecordingButton.disabled = false;
+  }
+
+  startRecordingButton.addEventListener('click', startRecording);
+    
+  function stopRecording() {
+    try {
+      theMediaRecorder.stop();
+    } catch (e) {
+      console.error('Exception while trying to stop MediaRecord: ' + e);
+      return;
+    }
+
+    stopRecordingButton.disabled = true;
+    startRecordingButton.disabled = false;
+
+    if($('#answer_video_category_id').val().length!=0 && $('#answer_title_video').val().length!=0){
+      saveRecordingButton.disabled = false;
+    }
+
+    var stream = video.srcObject;
+      if(stream) {
+        stream.getTracks().forEach(function(track){
+          track.stop();
+        });
+      }
+      video.srcObject = null;
+  }
+
+  $('#answer_video_category_id, #answer_title_video').on('keyup change', function() {
+    if($('#answer_video_category_id').val().length!=0 && $('#answer_title_video').val().length!=0 && recordedChunks.length!=0){
+      saveRecordingButton.disabled = false;
+    }
+  });
+
+  var stopRecordingButton = document.querySelector('#stop-recording');
+  stopRecordingButton.addEventListener('click', stopRecording);
+
+
+  function saveRecording() {
+    console.log('save mediaRecorder', recordedChunks);
+    if(theMediaRecorder.state == 'recording') {
+      theMediaRecorder.stop();
+    }
+    
+    var blob = new Blob(recordedChunks, {
+      type: 'video/webm'
+    });
+
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+  
+    var formData = new FormData();
+    var supporting_document = document.querySelector('#answer_supporting_document_video').files[0];
+    formData.append('answer[video_upload]', blob, 'recording.webm');
+    
+    if(supporting_document != undefined) {
+      formData.append('answer[supporting_document]', supporting_document, supporting_document.name.split('\\')[2]);
+    }
+    formData.append('answer[title]', $('#answer_title_video').val());
+    formData.append('answer[idea_category_id]', $('#answer_video_category_id').val());
+    
+    $.ajax({
+      url: '<%= user_question_user_answers_path(@question) %>',
+      type: 'POST',
+      enctype: 'multipart/form-data',
+      contentType: false, 
+      processData: false,
+      cache: false,
+      data: formData,
+
+      success: function() {
+        location.reload();
+      }
+    });
+  }
+
+  var saveRecordingButton = document.querySelector('#save-recording');
+  saveRecordingButton.addEventListener('click', saveRecording);
 </script>
