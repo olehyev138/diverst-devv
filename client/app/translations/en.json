@@ -534,7 +534,7 @@
   "diverst.containers.News.form.news.input.link_url": "Link URL",
   "diverst.containers.News.form.news.input.title": "Title",
   "diverst.containers.News.form.news.input.description": "Description",
-  "diverst.containers.News.home.emptySection": "There are no news in this section.",
+  "diverst.containers.News.home.emptySection": "There is no news in this section.",
   "diverst.containers.Poll.index.button.new": "New Survey",
   "diverst.containers.Poll.index.button.edit": "Edit",
   "diverst.containers.Poll.index.button.delete": "Delete",
