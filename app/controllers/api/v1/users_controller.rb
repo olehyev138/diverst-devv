@@ -1,5 +1,12 @@
 class Api::V1::UsersController < DiverstController
-  skip_before_action :verify_jwt_token, only: [:find_user_enterprise_by_email, :sign_up_token, :sign_up]
+  skip_before_action :verify_jwt_token, only: [
+      :find_user_enterprise_by_email,
+      :sign_up_token,
+      :sign_up,
+      :reset_password_request,
+      :reset_password_token,
+      :password_reset,
+  ]
 
   def find_user_enterprise_by_email
     render json: User.find_user_by_email(self.diverst_request.user, params).enterprise
@@ -17,7 +24,7 @@ class Api::V1::UsersController < DiverstController
     params[klass.symbol] = admin_payload
     base_authorize(klass)
     user = klass.build(self.diverst_request, params)
-    user.invite!(current_user)
+    user.invite!
 
     render status: 201, json: user
   rescue => e
@@ -105,15 +112,28 @@ class Api::V1::UsersController < DiverstController
     end
   end
 
-  def sign_up_token
-    token, user = InviteTokenService.second_jwt(params[:token])
+  # ===============================================
+  # TOKEN CODE
+  # ===============================================
+
+  private def token(token_service)
+    token, user = token_service.form_token(params[:token])
 
     render status: 200, json: {
         token: token,
         user: InvitedUserSerializer.new(user).as_json,
+        groups: Group.where(parent_id: nil, private: false, enterprise_id: user.enterprise_id).map { |group| GroupOnboardingSerializer.new(group).as_json }
     }
   rescue => e
     raise BadRequestException.new(e.message)
+  end
+
+  # ================================================
+  # SIGN IN CODE
+  # ================================================
+
+  def sign_up_token
+    token(InviteTokenService)
   end
 
   def sign_up
@@ -139,9 +159,50 @@ class Api::V1::UsersController < DiverstController
             :last_name,
             :biography,
             :time_zone,
+            group_ids: [],
             field_data_attributes: [
-                :data
+                :id,
+                :data,
             ]
+          )
+  end
+
+  # ================================================
+  # PASSWORD RESET CODE
+  # ================================================
+
+  def reset_password_request
+    user = User.find_user_by_email(self.diverst_request.user, params)
+    raise RuntimeException.new('User not initialized') unless user&.invitation_accepted_at
+
+    user.request_password_reset!
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def reset_password_token
+    token(PasswordResetTokenService)
+  end
+
+  def password_reset
+    user = PasswordResetTokenService.verify_jwt_token(params[:token], 'set_new_password')
+
+    render status: 200, json: user.reset_password(sign_up_payload)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
+  def new_password_payload
+    params
+        .require(:user)
+        .permit(
+            :password,
+            :password_confirmation,
           )
   end
 
