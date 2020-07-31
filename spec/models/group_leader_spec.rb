@@ -61,4 +61,77 @@ RSpec.describe GroupLeader, type: :model do
       expect(group_leader.valid?).to be(true)
     end
   end
+
+  describe 'set_admin_permissions' do
+    let!(:user) { create(:user) }
+    let!(:group_leader) { create(:group_leader, user: user) }
+
+    it 'returns budgets permission' do
+      expect(group_leader.groups_budgets_index).to eq group_leader.user.user_role.policy_group_template.groups_budgets_index
+      expect(group_leader.groups_budgets_request).to eq group_leader.user.user_role.policy_group_template.groups_budgets_request
+      expect(group_leader.budget_approval).to eq group_leader.user.user_role.policy_group_template.budget_approval
+      expect(group_leader.groups_budgets_manage).to eq group_leader.user.user_role.policy_group_template.groups_budgets_manage
+    end
+
+    it 'returns events permission' do
+      expect(group_leader.initiatives_index).to eq group_leader.user.user_role.policy_group_template.initiatives_index
+      expect(group_leader.initiatives_manage).to eq group_leader.user.user_role.policy_group_template.initiatives_manage
+      expect(group_leader.initiatives_create).to eq group_leader.user.user_role.policy_group_template.initiatives_create
+    end
+
+    it 'returns groups manage permission' do
+      expect(group_leader.groups_manage).to eq group_leader.user.user_role.policy_group_template.groups_manage
+    end
+
+    it 'returns members permission' do
+      expect(group_leader.groups_members_index).to eq group_leader.user.user_role.policy_group_template.groups_members_index
+      expect(group_leader.groups_members_manage).to eq group_leader.user.user_role.policy_group_template.groups_members_manage
+    end
+
+    it 'returns leaders permission' do
+      expect(group_leader.group_leader_index).to eq group_leader.user.user_role.policy_group_template.group_leader_index
+      expect(group_leader.group_leader_manage).to eq group_leader.user.user_role.policy_group_template.group_leader_manage
+    end
+
+    it 'returns insights permission' do
+      expect(group_leader.groups_insights_manage).to eq group_leader.user.user_role.policy_group_template.groups_insights_manage
+    end
+
+    it 'returns layouts permission' do
+      expect(group_leader.groups_layouts_manage).to eq group_leader.user.user_role.policy_group_template.groups_layouts_manage
+    end
+
+    it 'returns settings permission' do
+      expect(group_leader.group_settings_manage).to eq group_leader.user.user_role.policy_group_template.group_settings_manage
+    end
+
+    it 'returns news permission' do
+      expect(group_leader.news_links_index).to eq group_leader.user.user_role.policy_group_template.news_links_index
+      expect(group_leader.news_links_create).to eq group_leader.user.user_role.policy_group_template.news_links_create
+      expect(group_leader.news_links_manage).to eq group_leader.user.user_role.policy_group_template.news_links_manage
+    end
+
+    it 'returns messages permission' do
+      expect(group_leader.group_messages_manage).to eq group_leader.user.user_role.policy_group_template.group_messages_manage
+      expect(group_leader.group_messages_index).to eq group_leader.user.user_role.policy_group_template.group_messages_index
+      expect(group_leader.group_messages_create).to eq group_leader.user.user_role.policy_group_template.group_messages_create
+    end
+
+    it 'returns social links permission' do
+      expect(group_leader.social_links_manage).to eq group_leader.user.user_role.policy_group_template.social_links_manage
+      expect(group_leader.social_links_index).to eq group_leader.user.user_role.policy_group_template.social_links_index
+      expect(group_leader.social_links_create).to eq group_leader.user.user_role.policy_group_template.social_links_create
+    end
+
+    it 'returns resources permission' do
+      expect(group_leader.group_resources_manage).to eq group_leader.user.user_role.policy_group_template.group_resources_manage
+      expect(group_leader.group_resources_index).to eq group_leader.user.user_role.policy_group_template.group_resources_index
+      expect(group_leader.group_resources_create).to eq group_leader.user.user_role.policy_group_template.group_resources_create
+    end
+
+    it 'returns posts permission' do
+      expect(group_leader.group_posts_index).to eq group_leader.user.user_role.policy_group_template.group_posts_index
+      expect(group_leader.manage_posts).to eq group_leader.user.user_role.policy_group_template.manage_posts
+    end
+  end
 end

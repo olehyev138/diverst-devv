@@ -12,6 +12,9 @@ export default defineMessages({
   activate: {
     id: `${scope}.activate`
   },
+  group_select: {
+    id: `${scope}.group_select`
+  },
   password: {
     id: `${scope}.password`
   },

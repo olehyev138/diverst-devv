@@ -42,4 +42,17 @@ RSpec.describe InitiativeComment, type: :model do
       end
     end
   end
+
+  describe 'private' do
+    before do
+      InitiativeComment.send(:public, *InitiativeComment.private_instance_methods)
+    end
+    describe 'approve_comment' do
+      it 'approves comment' do
+        initiative_comment = create(:initiative_comment, approved: false)
+        initiative_comment.approve_comment
+        expect(initiative_comment.approved).to eq true
+      end
+    end
+  end
 end

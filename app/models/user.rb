@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_secure_password validations: false
   has_secure_token :invitation_token
+  has_secure_token :reset_password_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -164,6 +165,11 @@ class User < ApplicationRecord
   scope :inactive,                -> { where(active: false).distinct }
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
+  scope :not_member_of_group, -> (group_id) {
+    where.not(id: (
+      UserGroup.where(group_id: group_id).pluck(:user_id)
+    ))
+  }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
@@ -202,18 +208,6 @@ class User < ApplicationRecord
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
       break token unless Session.find_by(token: token)
     end
-  end
-
-  def generate_invitation_token
-    regenerate_invitation_token
-    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
-    invitation_token
-  end
-
-  def invite!(manager = nil, skip: false)
-    regenerate_invitation_token
-
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
   def valid_password?(password)
