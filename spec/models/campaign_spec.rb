@@ -4,7 +4,7 @@ RSpec.describe Campaign, type: :model do
   describe 'when validating' do
     let(:campaign) { build(:campaign) }
 
-    it { expect(campaign).to define_enum_for(:status).with([:published, :draft]) }
+    it { expect(campaign).to define_enum_for(:status).with_values([:published, :draft]) }
     it { expect(campaign).to belong_to(:enterprise) }
     it { expect(campaign).to belong_to(:owner).class_name('User') }
     it { expect(campaign).to have_many(:questions).dependent(:destroy) }
