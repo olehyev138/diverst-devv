@@ -6,48 +6,98 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'valid_scopes' do
-    let!(:valid_scopes) { %w(all_children all_parents no_children is_private joined_groups) }
+    let(:valid_scopes) {
+      %w(
+          all_children
+          all_parents
+          no_children
+          is_private
+          joined_groups
+      )
+    }
+
     it { expect(Group.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_preloads' do
-    let!(:base_preloads) { [:news_feed, :annual_budgets, :logo_attachment, :banner_attachment, { enterprise: [ :theme ] }, :user_groups, :group_leaders, :children, :parent, :enterprise,
-                            { children: [:news_feed,
-                                         :annual_budgets,
-                                         :logo_attachment,
-                                         :banner_attachment,
-                                         { enterprise: [:theme] },
-                                         :user_groups,
-                                         :group_leaders,
-                                         :children,
-                                         :parent,
-                                         :enterprise],
-                              parent: [:news_feed,
-                                       :annual_budgets,
-                                       :logo_attachment,
-                                       :banner_attachment,
-                                       { enterprise: [:theme] },
-                                       :user_groups,
-                                       :group_leaders,
-                                       :children,
-                                       :parent,
-                                       :enterprise] }]
+    let(:base_preloads) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          { enterprise: [ :theme ] },
+          :user_groups,
+          :group_leaders,
+          :children,
+          :parent,
+          :enterprise,
+          children: [
+              :news_feed,
+              :annual_budgets,
+              :logo_attachment,
+              :banner_attachment,
+              { enterprise: [:theme] },
+              :user_groups,
+              :group_leaders,
+              :children,
+              :parent,
+              :enterprise
+          ],
+          parent: [
+              :news_feed,
+              :annual_budgets,
+              :logo_attachment,
+              :banner_attachment,
+              { enterprise: [:theme] },
+              :user_groups,
+              :group_leaders,
+              :children,
+              :parent,
+              :enterprise
+          ]
+      ]
     }
+
     it { expect(Group.base_preloads).to eq base_preloads }
   end
 
   describe 'base_preloads_budget' do
-    let!(:base_preloads_budget) { [:annual_budgets] }
+    let(:base_preloads_budget) { [:annual_budgets] }
+
     it { expect(Group.base_preloads_budget).to eq base_preloads_budget }
   end
 
   describe 'base_preload_no_recursion' do
-    let!(:base_preload_no_recursion) { [:news_feed, :annual_budgets, :logo_attachment, :banner_attachment, { enterprise: [ :theme ] }, :user_groups, :group_leaders, :children, :parent, :enterprise] }
+    let(:base_preload_no_recursion) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          { enterprise: [ :theme ] },
+          :user_groups,
+          :group_leaders,
+          :children,
+          :parent,
+          :enterprise
+      ]
+    }
+
     it { expect(Group.base_preload_no_recursion).to eq base_preload_no_recursion }
   end
 
   describe 'base_attributes_preloads' do
-    let!(:base_attributes_preloads) { [:news_feed, :annual_budgets, :logo_attachment, :banner_attachment, { enterprise: [ :theme ] }] }
+    let(:base_attributes_preloads) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          { enterprise: [ :theme ] }
+      ]
+    }
+
     it { expect(Group.base_attributes_preloads).to eq base_attributes_preloads }
   end
 

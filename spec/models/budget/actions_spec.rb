@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Budget::Actions, type: :model do
   describe 'base_includes' do
-    let!(:base_includes) { [:budget_items] }
+    let(:base_includes) { [:budget_items] }
     it { expect(Budget.base_includes).to eq base_includes }
   end
 

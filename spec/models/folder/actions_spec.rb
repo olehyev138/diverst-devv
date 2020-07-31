@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Folder::Actions, type: :model do
   describe 'base_preloads' do
-    let!(:base_preloads) { [:parent] }
+    let(:base_preloads) { [:parent] }
+
     it { expect(Folder.base_preloads).to eq base_preloads }
   end
 

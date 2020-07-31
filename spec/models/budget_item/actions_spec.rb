@@ -2,19 +2,21 @@ require 'rails_helper'
 
 RSpec.describe BudgetItem::Actions, type: :model do
   describe 'valid_scopes' do
-    let!(:valid_scopes) { ['approved'] }
+    let(:valid_scopes) { ['approved'] }
+
     it { expect(BudgetItem.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_includes' do
-    let!(:base_includes) { [:budget] }
+    let(:base_includes) { [:budget] }
+
     it { expect(BudgetItem.base_includes).to eq base_includes }
   end
 
   describe 'close' do
     let(:item_without_id) { build :budget_item, id: nil }
-    let!(:enterprise) { create(:enterprise) }
-    let!(:user) { create(:user, enterprise: enterprise) }
+    let(:enterprise) { create(:enterprise) }
+    let(:user) { create(:user, enterprise: enterprise) }
 
     it 'raises an exception if id is missing' do
       expect { item_without_id.close(Request.create_request(user)) }.to raise_error(BadRequestException)
