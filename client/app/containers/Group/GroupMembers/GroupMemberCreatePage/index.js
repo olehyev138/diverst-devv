@@ -41,9 +41,10 @@ export function GroupMemberCreatePage(props) {
     <GroupMemberForm
       groupId={groupId}
       createMembersBegin={props.createMembersBegin}
-      getMembersBegin={props.getUsersBegin}
+      getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       isCommitting={props.isCommitting}
+      currentGroup={props.currentGroup}
       links={links}
     />
   );
@@ -55,6 +56,7 @@ GroupMemberCreatePage.propTypes = {
   groupMembersUnmount: PropTypes.func,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
