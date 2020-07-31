@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe BudgetItem::Actions, type: :model do
   describe 'valid_scopes' do
-    it { expect(BudgetItem.valid_scopes.include?('approved')).to eq true }
+    let!(:valid_scopes) { ['approved'] }
+    it { expect(BudgetItem.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_includes' do
-    it { expect(BudgetItem.base_includes.include?(:budget)).to eq true }
+    let!(:base_includes) { [:budget] }
+    it { expect(BudgetItem.base_includes).to eq base_includes }
   end
 
   describe 'close' do
