@@ -110,9 +110,12 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
             </DiverstSubmit>
             {dig(poll, 'status') === 'published' || (
               <Button
-                to={props.poll ? props.links.pollShow : props.links.pollsIndex}
-                component={WrappedNavLink}
                 disabled={props.isCommitting}
+                onClick={() => {
+                  setSubmitting(true);
+                  props.pollAction(mapFields({ ...values }, ['group_ids', 'segment_ids']));
+                  setSubmitting(false);
+                }}
               >
                 {draftButtonText}
               </Button>
