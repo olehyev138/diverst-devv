@@ -2,32 +2,70 @@ require 'rails_helper'
 
 RSpec.describe UserGroup::Actions, type: :model do
   describe 'base_preloads' do
-    it { expect(UserGroup.base_preloads.include?(:group)).to eq true }
-    it { expect(UserGroup.base_preloads.include?(:user)).to eq true }
-    it { expect(UserGroup.base_preloads.include?({ group: [:news_feed, :annual_budgets, :logo_attachment, :banner_attachment, { enterprise: [:theme] }],
-                                                   user: [:user_role, :enterprise, :news_links, :avatar_attachment, { enterprise: [:theme, :mobile_fields] }] })).to eq true
+    let(:base_preloads) {
+      [
+          :group,
+          :user,
+          group: [:news_feed,
+                  :annual_budgets,
+                  :logo_attachment,
+                  :banner_attachment,
+                  enterprise: [:theme]
+          ],
+          user: [:user_role,
+                 :enterprise,
+                 :news_links,
+                 :avatar_attachment,
+                 enterprise: [:theme,
+                              :mobile_fields
+                 ]
+          ]
+      ]
     }
+
+    it { expect(UserGroup.base_preloads).to eq base_preloads }
   end
 
   describe 'base_includes' do
-    it { expect(UserGroup.base_includes.include?(:user)).to eq true }
-    it { expect(UserGroup.base_includes.include?(:group)).to eq true }
+    let(:base_includes) {
+      [
+          :user,
+          :group
+      ]
+    }
+
+    it { expect(UserGroup.base_includes).to eq base_includes }
   end
 
   describe 'valid_scopes' do
-    it { expect(UserGroup.valid_scopes.include?('active')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('pending')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('inactive')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('accepted_users')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('all')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('joined_from')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('joined_to')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('for_segment_ids')).to eq true }
-    it { expect(UserGroup.valid_scopes.include?('user_search')).to eq true }
+    let(:valid_scopes) {
+      %w(
+          active
+          pending
+          inactive
+          accepted_users
+          all
+          joined_from
+          joined_to
+          for_segment_ids
+          user_search
+      )
+    }
+
+    it { expect(UserGroup.valid_scopes).to eq valid_scopes }
   end
 
   describe 'csv_attributes' do
-    it { expect(UserGroup.csv_attributes.dig(:titles)).to eq ['First name', 'Last name', 'Email', 'Accepted', 'Biography', 'Active'] }
+    let(:csv_attributes) {
+      [
+          'First name',
+          'Last name',
+          'Email',
+          'Accepted',
+          'Biography',
+          'Active']
+    }
+    it { expect(UserGroup.csv_attributes.dig(:titles)).to eq csv_attributes }
   end
 
   let(:segment) { create(:segment, name: 'test segment') }
