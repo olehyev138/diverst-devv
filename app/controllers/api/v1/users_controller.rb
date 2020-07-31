@@ -24,7 +24,7 @@ class Api::V1::UsersController < DiverstController
     params[klass.symbol] = admin_payload
     base_authorize(klass)
     user = klass.build(self.diverst_request, params)
-    user.invite!(current_user)
+    user.invite!
 
     render status: 201, json: user
   rescue => e
@@ -122,6 +122,7 @@ class Api::V1::UsersController < DiverstController
     render status: 200, json: {
         token: token,
         user: InvitedUserSerializer.new(user).as_json,
+        groups: Group.where(parent_id: nil, private: false, enterprise_id: user.enterprise_id).map { |group| GroupOnboardingSerializer.new(group).as_json }
     }
   rescue => e
     raise BadRequestException.new(e.message)
@@ -158,8 +159,10 @@ class Api::V1::UsersController < DiverstController
             :last_name,
             :biography,
             :time_zone,
+            group_ids: [],
             field_data_attributes: [
-                :data
+                :id,
+                :data,
             ]
           )
   end
