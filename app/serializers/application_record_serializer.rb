@@ -102,14 +102,14 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   # then instead return a pseudo policy which will return false on any method call
   def policy
     @policy ||= begin
-                  # Use provided Policy or Find and instantiate Policy based on the serialized object
+                  # User provided policy, or find and instantiate a new policy based on the serialized object
                   @instance_options[:policy].presence || Pundit::PolicyFinder.new(object).policy.new(
                         scope&.dig(:current_user),
                         object,
                         scope&.dig(:params) || @instance_options[:params] || {}
                       )
                 rescue Pundit::NotAuthorizedError, NoMethodError
-                  # If the user isn't defined, return the pseudo policy
+                  # If the user isn't defined, or the policy not found, return the pseudo policy
                   Class.new do
                     def method_missing(m, *args, &block)
                       false

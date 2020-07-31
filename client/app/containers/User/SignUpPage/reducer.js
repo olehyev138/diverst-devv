@@ -19,6 +19,7 @@ export const initialState = {
   isLoading: true,
   isCommitting: false,
   user: null,
+  groups: [],
   errors: null,
 };
 
@@ -33,6 +34,7 @@ function signUpReducer(state = initialState, action) {
       case GET_USER_BY_TOKEN_SUCCESS:
         draft.isLoading = false;
         draft.user = action.payload.user;
+        draft.groups = action.payload.groups;
         draft.token = action.payload.token;
         break;
       case GET_USER_BY_TOKEN_ERROR:
@@ -46,7 +48,7 @@ function signUpReducer(state = initialState, action) {
         break;
       case SUBMIT_PASSWORD_ERROR:
         draft.isCommitting = false;
-        draft.errors = action.errors.errors;
+        draft.errors = action.error.errors;
         break;
       case SIGN_UP_UNMOUNT:
         return initialState;

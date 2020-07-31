@@ -47,13 +47,13 @@ module User::Actions
     reset_password_token
   end
 
-  def invite!(manager = nil, skip: false)
+  def invite!(skip: false)
     regenerate_invitation_token
 
-    DiverstMailer.invitation_instructions(manager, invitation_token).deliver_later unless skip
+    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
-  def request_password_reset!(manager = nil, skip: false)
+  def request_password_reset!(skip: false)
     generate_password_token
 
     ResetPasswordMailer.reset_password_instructions(self, reset_password_token).deliver_later unless skip
@@ -219,7 +219,7 @@ module User::Actions
 
     def valid_scopes
       %w( enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests
-          all active inactive saml invitation_sent of_role)
+          all active inactive saml invitation_sent of_role not_member_of_group )
     end
 
     def preload_attachments
