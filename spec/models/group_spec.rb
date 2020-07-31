@@ -476,6 +476,21 @@ RSpec.describe Group, type: :model do
       end
     end
 
+    describe 'Group::joined_groups' do
+      let!(:user_with_no_groups) { create(:user) }
+      let!(:user_with_groups) { create(:user) }
+      let!(:group_with_member) { create(:group) }
+      let!(:user_group) { create(:user_group, user: user_with_groups, group: group_with_member) }
+
+      it 'returns nothing when the user hasnt joined any groups' do
+        expect(Group.joined_groups(user_with_no_groups.id).ids).to eq([])
+      end
+
+      it 'returns list of groups that a user has joined' do
+        expect(Group.joined_groups(user_with_groups.id)).to eq([group_with_member])
+      end
+    end
+
     context 'Group::top_participants' do
       before do
         groups.first.update(total_weekly_points: 10)
@@ -959,30 +974,6 @@ RSpec.describe Group, type: :model do
         group.name = 'testing elasticsearch'
         group.save!
       end
-    end
-  end
-
-  describe '#set_default_group_contact' do
-    it 'updates contact email if group leader is default_group_contact' do
-      user = create(:user)
-      group = create(:group, enterprise: user.enterprise)
-      create(:user_group, user: user, group: group, accepted_member: true)
-
-      group_leader = create(:group_leader, group: group, user: user, default_group_contact: true)
-      group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-
-
-      expect(group.contact_email).to eq group_leader&.email
-    end
-
-    it 'sets contact email to nil if group leader is not set.' do
-      user = create(:user)
-      group = create(:group, enterprise: user.enterprise)
-      create(:user_group, user: user, group: group, accepted_member: true)
-
-      create(:group_leader, group: group, user: user, default_group_contact: false)
-
-      expect(group.contact_email).to eq nil
     end
   end
 

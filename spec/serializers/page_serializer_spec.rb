@@ -8,5 +8,6 @@ RSpec.describe PageSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:total]).to eq  6
     expect(serializer.serializable_hash[:items]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
