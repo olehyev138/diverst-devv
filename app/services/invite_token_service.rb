@@ -4,7 +4,7 @@ class InviteTokenService < TokenService
   TOKEN_EXPIRATION = 1.day
   FORM_EXPIRATION = 2.hours
 
-  def self.first_jwt(user, params = {})
+  def self.request_token(user, params = {})
     token = user.generate_invitation_token
 
     payload = {
@@ -17,7 +17,7 @@ class InviteTokenService < TokenService
     create_jwt_token(payload)
   end
 
-  def self.second_jwt(token)
+  def self.form_token(token)
     user = verify_jwt_token(token, 'invite')
 
     [

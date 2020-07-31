@@ -1292,7 +1292,7 @@ ActiveRecord::Schema.define(version: 2020_07_14_140553) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "owner_id"
-    t.integer "status", default: 0, null: false
+    t.integer "status", default: 1, null: false
     t.boolean "email_sent", default: false, null: false
     t.bigint "initiative_id"
     t.integer "responses_count", default: 0
