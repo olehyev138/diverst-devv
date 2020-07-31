@@ -2,11 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Sponsor::Actions, type: :model do
   describe 'valid_scopes' do
-    it { expect(Sponsor.valid_scopes.include?('group_sponsor')).to eq true }
-    it { expect(Sponsor.valid_scopes.include?('enterprise_sponsor')).to eq true }
+    let(:valid_scopes) { %w(
+                                    group_sponsor
+                                    enterprise_sponsor
+                                )
+    }
+
+    it { expect(Sponsor.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_attributes_preloads' do
-    it { expect(Sponsor.base_attributes_preloads.include?(:sponsor_media_attachment)).to eq true }
+    let(:base_attributes_preloads) { [:sponsor_media_attachment] }
+
+    it { expect(Sponsor.base_attributes_preloads).to eq base_attributes_preloads }
   end
 end
