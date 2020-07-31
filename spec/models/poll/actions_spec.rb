@@ -2,9 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Poll::Actions, type: :model do
   describe 'base_preloads' do
-    it { expect(Poll.base_preloads.include?(:fields)).to eq true }
-    it { expect(Poll.base_preloads.include?(:groups)).to eq true }
-    it { expect(Poll.base_preloads.include?(:segments)).to eq true }
-    it { expect(Poll.base_preloads.include?(:enterprise)).to eq true }
+    let!(:base_preloads) { [:fields, :groups, :segments, :enterprise] }
+    it { expect(Poll.base_preloads).to eq base_preloads }
   end
 end
