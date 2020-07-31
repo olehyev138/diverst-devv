@@ -7,8 +7,8 @@ RSpec.describe User do
   describe 'when validating' do
     let(:user) { build(:user) }
 
-    it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
-    it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
+    it { expect(user).to define_enum_for(:groups_notifications_frequency).with_values([:hourly, :daily, :weekly, :disabled]) }
+    it { expect(user).to define_enum_for(:groups_notifications_date).with_values([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
 
     it 'validates password presence' do
       pending 'Need to find alternate solution for validating users'
