@@ -30,7 +30,7 @@ class Poll < ApplicationRecord
   belongs_to :initiative
 
   after_create :create_default_graphs
-  after_commit :schedule_users_notification, on: [:create, :update]
+  after_commit :schedule_users_notification, on: [:create, :update], unless: :draft?
 
   before_destroy :remove_associated_fields, prepend: true
 

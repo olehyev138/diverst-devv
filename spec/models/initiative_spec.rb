@@ -419,7 +419,7 @@ RSpec.describe Initiative, type: :model do
       expect(initiative.expenses_status).to eq('Expenses in progress')
     end
 
-    it 'returns Expenses in progress' do
+    it 'returns Expenses finished' do
       initiative = build(:initiative, finished_expenses: true)
       expect(initiative.expenses_status).to eq('Expenses finished')
     end

@@ -428,6 +428,31 @@ RSpec.describe User do
       end
     end
 
+    describe 'not_member_of_group' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group1) { create(:group, name: 'groupA', enterprise: enterprise) }
+      let!(:group2) { create(:group, name: 'groupB', enterprise: enterprise) }
+
+      let!(:user1) { create(:user, groups: [], enterprise: enterprise) }
+      let!(:user2) { create(:user, group_ids: [group1.id], enterprise: enterprise) }
+      let!(:user3) { create(:user, group_ids: [group2.id], enterprise: enterprise) }
+      let!(:user4) { create(:user, group_ids: [group1.id, group2.id], enterprise: enterprise) }
+
+      let(:not_A_users) do
+        User.not_member_of_group(group1.id).pluck(:first_name)
+      end
+
+      it 'does not include members of a group' do
+        expect(not_A_users).not_to include(user2.first_name)
+        expect(not_A_users).not_to include(user4.first_name)
+      end
+
+      it 'returns all users who are not a member of a group' do
+        expect(not_A_users).to include(user1.first_name)
+        expect(not_A_users).to include(user3.first_name)
+      end
+    end
+
     describe 'mentees' do
       let!(:mentees) { create_list(:user, 3, mentee: true) }
 

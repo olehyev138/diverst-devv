@@ -178,6 +178,9 @@ class Group < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
   validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
+  validates :expiry_age_for_news, numericality: { greater_than_or_equal_to: 0 }
+  validates :expiry_age_for_events, numericality: { greater_than_or_equal_to: 0 }
+  validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
 
   validate :valid_yammer_group_link?
   validate :ensure_one_level_nesting
