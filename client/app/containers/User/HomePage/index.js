@@ -34,6 +34,9 @@ import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
+
 const styles = theme => ({
   title: {
     textAlign: 'center',
@@ -71,7 +74,7 @@ export class HomePage extends React.PureComponent {
 
     const content = (
       <Grid container spacing={2} direction='row'>
-        {this.props.permissions && this.props.permissions.news_view && (
+        <Permission show={permission(this.props, 'news_view')}>
           <Grid item xs>
             <Paper>
               <CardContent>
@@ -85,9 +88,8 @@ export class HomePage extends React.PureComponent {
               </CardContent>
             </Paper>
           </Grid>
-        )
-        }
-        {this.props.permissions && this.props.permissions.events_view && (
+        </Permission>
+        <Permission show={permission(this.props, 'events_view')}>
           <Grid item xs>
             <Paper>
               <CardContent>
@@ -106,8 +108,7 @@ export class HomePage extends React.PureComponent {
               </CardContent>
             </Paper>
           </Grid>
-        )
-        }
+        </Permission>
       </Grid>
     );
 

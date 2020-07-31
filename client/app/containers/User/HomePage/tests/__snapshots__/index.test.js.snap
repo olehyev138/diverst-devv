@@ -34,7 +34,65 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       container={true}
       direction="row"
       spacing={2}
-    />
+    >
+      <Permission>
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+          xs={true}
+        >
+          <WithStyles(ForwardRef(Paper))>
+            <WithStyles(ForwardRef(CardContent))>
+              <WithStyles(ForwardRef(Typography))
+                variant="h5"
+              >
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.HomePage.news"
+                />
+              </WithStyles(ForwardRef(Typography))>
+              <Connect(Component)
+                listComponent={
+                  Object {
+                    "$$typeof": Symbol(react.memo),
+                    "compare": null,
+                    "type": [Function],
+                  }
+                }
+                readonly={true}
+              />
+            </WithStyles(ForwardRef(CardContent))>
+          </WithStyles(ForwardRef(Paper))>
+        </WithStyles(ForwardRef(Grid))>
+      </Permission>
+      <Permission>
+        <WithStyles(ForwardRef(Grid))
+          item={true}
+          xs={true}
+        >
+          <WithStyles(ForwardRef(Paper))>
+            <WithStyles(ForwardRef(CardContent))>
+              <WithStyles(ForwardRef(Typography))
+                variant="h5"
+              >
+                <Memo(Connect(DiverstFormattedMessage))
+                  id="diverst.containers.HomePage.events"
+                />
+              </WithStyles(ForwardRef(Typography))>
+              <Connect(Component)
+                listComponent={[Function]}
+                loaderProps={
+                  Object {
+                    "transitionProps": Object {
+                      "direction": "right",
+                    },
+                  }
+                }
+                readonly={true}
+              />
+            </WithStyles(ForwardRef(CardContent))>
+          </WithStyles(ForwardRef(Paper))>
+        </WithStyles(ForwardRef(Grid))>
+      </Permission>
+    </WithStyles(ForwardRef(Grid))>
   </DiverstCSSCell>
   <DiverstCSSCell
     area="sponsor"
