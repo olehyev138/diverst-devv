@@ -31,7 +31,7 @@ RSpec.describe Poll, type: :model do
       it { expect(poll).to validate_length_of(:title).is_at_most(191) }
     end
 
-    it { expect(poll).to define_enum_for(:status).with([:published, :draft]) }
+    it { expect(poll).to define_enum_for(:status).with_values([:published, :draft]) }
 
     context 'enterprise_id of groups' do
       let(:poll) { build(:poll) }
@@ -274,7 +274,7 @@ RSpec.describe Poll, type: :model do
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       poll = create(:poll)
-      field = create(:field, field_definer: poll)
+      create(:field, field_definer: poll)
       response = create(:poll_response, poll: poll)
       graph = create(:graph, poll: poll)
       polls_segment = create(:polls_segment, poll: poll)

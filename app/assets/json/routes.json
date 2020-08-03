@@ -1,11 +1,11 @@
 {
   "session": {
-    "signUp": "/sign_up/:token",
     "login": "/login",
     "forgotPassword": "/forgot",
     "passwordReset": "/password_reset/:token"
   },
   "anonymous": {
+    "signUp": "/sign_up/:token",
     "pollResponse": "/poll_response/:token"
   },
   "user": {
