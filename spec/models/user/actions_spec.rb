@@ -73,7 +73,7 @@ RSpec.describe User::Actions, type: :model do
           :avatar_blob,
           field_data: [
               :field,
-              { field: Field.base_preloads }
+              field: Field.base_preloads
           ],
           enterprise: [
               :theme,
@@ -123,13 +123,15 @@ RSpec.describe User::Actions, type: :model do
           :mentees,
           :mentorship_ratings,
           :availabilities,
-          mentors: [:mentoring_interests,
-                    :mentoring_types,
-                    :availabilities
+          mentors: [
+              :mentoring_interests,
+              :mentoring_types,
+              :availabilities
           ],
-          mentees: [:mentoring_interests,
-                    :mentoring_types,
-                    :availabilities
+          mentees: [
+              :mentoring_interests,
+              :mentoring_types,
+              :availabilities
           ]
       ]
     }

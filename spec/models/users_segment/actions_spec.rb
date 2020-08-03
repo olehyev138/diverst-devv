@@ -7,8 +7,9 @@ RSpec.describe UsersSegment::Actions, type: :model do
           segment: [:field_rules,
                     :order_rules,
                     :group_rules,
-                    field_rules: [:field,
-                                  field: [:field_definer]
+                    field_rules: [
+                        :field,
+                        field: [:field_definer]
                     ]
           ],
           user: [:field_data,
@@ -18,10 +19,12 @@ RSpec.describe UsersSegment::Actions, type: :model do
                  :news_links,
                  :avatar_attachment,
                  :avatar_blob,
-                 enterprise: [:theme,
-                              :mobile_fields],
-                 field_data: [:field,
-                              field: [:field_definer]
+                 enterprise: [
+                     :theme,
+                     :mobile_fields],
+                 field_data: [
+                     :field,
+                     field: [:field_definer]
                  ]
           ]
       ]

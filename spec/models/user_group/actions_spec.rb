@@ -6,19 +6,24 @@ RSpec.describe UserGroup::Actions, type: :model do
       [
           :group,
           :user,
-          group: [:news_feed,
-                  :annual_budgets,
-                  :logo_attachment,
-                  :banner_attachment,
-                  enterprise: [:theme]
+          group: [
+              :news_feed,
+              :annual_budgets,
+              :logo_attachment,
+              :banner_attachment,
+              enterprise: [
+                  :theme
+              ]
           ],
-          user: [:user_role,
-                 :enterprise,
-                 :news_links,
-                 :avatar_attachment,
-                 enterprise: [:theme,
-                              :mobile_fields
-                 ]
+          user: [
+              :user_role,
+              :enterprise,
+              :news_links,
+              :avatar_attachment,
+              enterprise: [
+                  :theme,
+                  :mobile_fields
+              ]
           ]
       ]
     }
@@ -65,6 +70,7 @@ RSpec.describe UserGroup::Actions, type: :model do
           'Biography',
           'Active']
     }
+
     it { expect(UserGroup.csv_attributes.dig(:titles)).to eq csv_attributes }
   end
 
