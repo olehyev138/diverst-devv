@@ -166,7 +166,7 @@ RSpec.describe NewsFeedLink, type: :model do
         create(:shared_news_feed_link, news_feed_id: group2.news_feed.id, news_feed_link_id: group_message[0].news_feed_link.id)
         news_feed_link_segment.news_feed_link do |n|
           # update news_feed_links created by news_feed_link_segment to group2
-          n.update(news_feed_id: group2.id)
+          n.update(news_feed_id: group2.news_feed.id)
           # update news_feed_links created by news_feed_link_segment to segment_id 1,2,3
           n.update(segment_id: segment_id)
           segment_id = segment_id + 1
@@ -234,6 +234,25 @@ RSpec.describe NewsFeedLink, type: :model do
     end
   end
 
+  describe '#author' do
+    let!(:user) { create(:user) }
+
+    it 'returns author of group_message' do
+      create(:group_message, owner: user)
+      expect(NewsFeedLink.first.author).to eq user
+    end
+
+    it 'returns author of news_link' do
+      create(:news_link, author: user)
+      expect(NewsFeedLink.first.author).to eq user
+    end
+
+    it 'returns author of social_link' do
+      create(:social_link, author: user)
+      expect(NewsFeedLink.first.author).to eq user
+    end
+  end
+
   describe '#approve_link' do
     it 'approves the link' do
       # ensure the job is performed and that
@@ -244,6 +263,23 @@ RSpec.describe NewsFeedLink, type: :model do
 
         expect(news_feed_link.approved).to eq(true)
       end
+    end
+  end
+
+  describe '#link' do
+    it 'returns group_message' do
+      group_message = create(:group_message)
+      expect(NewsFeedLink.first.link).to eq(group_message)
+    end
+
+    it 'returns news_link' do
+      news_link = create(:news_link)
+      expect(NewsFeedLink.first.link).to eq(news_link)
+    end
+
+    it 'returns social link' do
+      social_link = create(:social_link)
+      expect(NewsFeedLink.first.link).to eq(social_link)
     end
   end
 
@@ -276,27 +312,55 @@ RSpec.describe NewsFeedLink, type: :model do
     end
 
     it '#create_view_if_none' do
-      expect { news_feed_link.create_view_if_none(user) }.to change(View, :count).by(1)
+      expect { news_feed_link.create_view_if_none(user) }.to change { View.count }.by(1)
     end
   end
 
-  describe '#link' do
-    it 'returns group_message' do
+  describe 'total likes' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:user1) { create(:user, enterprise: enterprise) }
+    let!(:user2) { create(:user, enterprise: enterprise) }
+    let!(:group_message) { create(:group_message) }
+    it 'returns total likes' do
+      news_feed_link = group_message.news_feed_link
+      create(:like, news_feed_link: news_feed_link, user: user1, enterprise: enterprise)
+      create(:like, news_feed_link: news_feed_link, user: user2, enterprise: enterprise)
+      expect(news_feed_link.total_likes).to eq 2
+    end
+  end
+
+  describe 'user like' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:user) { create(:user, enterprise: enterprise) }
+    let!(:group_message) { create(:group_message) }
+    it 'returns false if user has no likes ' do
+      news_feed_link = group_message.news_feed_link
+      expect(news_feed_link.user_like(user.id)).to be false
+    end
+    it 'returns true if user likes it' do
+      news_feed_link = group_message.news_feed_link
+      create(:like, news_feed_link: news_feed_link, user: user, enterprise: enterprise)
+      expect(news_feed_link.user_like(user.id)).to be true
+    end
+  end
+
+  describe 'to_label' do
+    it 'returns group message' do
       group_message = create(:group_message)
       news_feed_link = group_message.news_feed_link
-      expect(news_feed_link.link).to eq(group_message)
+      expect(news_feed_link.to_label).to eq group_message.to_s
     end
 
-    it 'returns news_link' do
+    it 'returns news link' do
       news_link = create(:news_link)
       news_feed_link = news_link.news_feed_link
-      expect(news_feed_link.link).to eq(news_link)
+      expect(news_feed_link.to_label).to eq news_link.to_s
     end
 
     it 'returns social link' do
       social_link = create(:social_link)
       news_feed_link = social_link.news_feed_link
-      expect(news_feed_link.link).to eq(social_link)
+      expect(news_feed_link.to_label).to eq social_link.to_s
     end
   end
 
@@ -332,6 +396,18 @@ RSpec.describe NewsFeedLink, type: :model do
     it 'archives expired news items when auto_archive is on' do
       group.update(unit_of_expiry_age: 'weeks', expiry_age_for_news: 1, auto_archive: true)
       expect { NewsFeedLink.archive_expired_news(group) }.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(2)
+    end
+  end
+
+  describe 'search' do
+    it 'returns search result' do
+      create(:group_message, subject: 'Test', content: 'content')
+      create(:group_message, subject: 'NotIncluded', content: 'content')
+      create(:news_link, title: 'Test', description: 'description')
+      news_link = create(:news_link, title: 'withTag', description: 'description')
+      news_tag = create(:news_tag, name: 'test')
+      create(:news_feed_link_tag, news_tag: news_tag, news_feed_link: news_link.news_feed_link)
+      expect(NewsFeedLink.search(['test']).count).to eq 3
     end
   end
 end

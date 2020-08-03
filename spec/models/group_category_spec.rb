@@ -21,4 +21,13 @@ RSpec.describe GroupCategory, type: :model do
       expect("#{group_category}").to eq('red')
     end
   end
+
+  describe 'total_groups' do
+    let!(:groups) { create_list(:group, 3) }
+    let!(:group_category) { create(:group_category) }
+    it 'returns total groups' do
+      Group.update_all(group_category_id: group_category.id)
+      expect(group_category.total_groups).to eq 3
+    end
+  end
 end

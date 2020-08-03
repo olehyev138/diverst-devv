@@ -30,5 +30,16 @@ RSpec.describe InitiativeUpdate, type: :model do
         expect(update.previous).to eq previous_update
       end
     end
+
+    context 'reported_for_date' do
+      it 'returns report_date' do
+        expect(update.reported_for_date).to eq update.report_date
+      end
+
+      it 'returns created_at' do
+        update.update(report_date: nil)
+        expect(update.reported_for_date).to eq update.created_at
+      end
+    end
   end
 end
