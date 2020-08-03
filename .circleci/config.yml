@@ -118,7 +118,7 @@ jobs:
       #
       - run:
           name: Run frontend tests
-          command: cd client/ && npm test -- $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize) --ci --runInBand --reporters=default --reporters=jest-junit
+          command: cd client/ && npm test -- $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=timings) --ci --runInBand --reporters=default --reporters=jest-junit
       #
       ## Store artifacts
       #
@@ -192,7 +192,7 @@ jobs:
       #
       - run:
           name: Run backend tests
-          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
