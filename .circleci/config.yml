@@ -126,6 +126,8 @@ jobs:
       #
       - store_test_results:
           path: /tmp/circleci-test-results/junit/
+      - store_artifacts:
+          path: /tmp/circleci-test-results/junit/
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
     parallelism: 4
@@ -200,6 +202,8 @@ jobs:
       ## Store test results
       #
       - store_test_results:
+          path: /tmp/circleci-test-results/rspec/
+      - store_artifacts:
           path: /tmp/circleci-test-results/rspec/
   #
   ## Deploy job for testing environment
