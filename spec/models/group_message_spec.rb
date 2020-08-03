@@ -31,7 +31,6 @@ RSpec.describe GroupMessage, type: :model do
   describe 'test scopes' do
     context 'group_message::approved' do
       let!(:approved_group_message) { create(:group_message, id: 1) }
-      # let!(:news_feed_link) { create(:news_feed_link, group_message_id: 1, approved: true) }
 
       it 'returns budget approved' do
         expect(GroupMessage.approved).to eq([approved_group_message])
@@ -99,6 +98,18 @@ RSpec.describe GroupMessage, type: :model do
         expect { GroupMessagesSegment.find(group_messages_segment.id) }.to raise_error(ActiveRecord::RecordNotFound)
         expect { GroupMessageComment.find(group_message_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
+    end
+  end
+
+  describe 'approve_link' do
+    let!(:group_message) { create(:group_message) }
+    it 'returns approve link' do
+      expect(group_message.approve_link).to eq group_message.news_feed_link.approve_link
+    end
+
+    it 'returns true' do
+      NewsFeedLink.destroy_all
+      expect(group_message.approve_link).to eq true
     end
   end
 
