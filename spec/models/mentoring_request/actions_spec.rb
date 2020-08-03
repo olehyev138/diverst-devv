@@ -2,12 +2,25 @@ require 'rails_helper'
 
 RSpec.describe MentoringRequest::Actions, type: :model do
   describe 'valid_includes' do
-    let!(:valid_includes) { %w(sender receiver) }
+    let(:valid_includes) {
+      %w(
+          sender
+          receiver
+      )
+    }
+
     it { expect(MentoringRequest.valid_includes).to eq valid_includes }
   end
 
   describe 'valid_scopes' do
-    let!(:valid_scopes) { %w(pending accepted rejected) }
+    let(:valid_scopes) {
+      %w(
+          pending
+          accepted
+          rejected
+       )
+    }
+
     it { expect(MentoringRequest.valid_scopes).to eq valid_scopes }
   end
 
