@@ -152,6 +152,31 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
       end
     end
 
+    describe 'Scope Exception' do
+      let(:serializer_class) { Class.new(ApplicationRecordSerializer) }
+      context 'scope given' do
+        let(:serializer_instance) { serializer_class.new(model.new, scope: {}) }
+        it 'returns the scope' do
+          expect(serializer_instance.scope).to eql({})
+        end
+      end
+      context 'scope not given' do
+        context 'while in testing env' do
+          let(:serializer_instance) { serializer_class.new(model.new) }
+          it 'raises ScopeNotDefinedException' do
+            expect { serializer_instance.scope }.to raise_error(SerializerScopeNotDefinedException)
+          end
+        end
+        context 'while not in testing env' do
+          let(:serializer_instance) { serializer_class.new(model.new) }
+          it 'returns nil' do
+            allow(Rails.env).to receive(:test?).and_return(false)
+            expect(serializer_instance.scope).to be(nil)
+          end
+        end
+      end
+    end
+
     describe 'Policy' do
       context 'with default policies' do
         let(:serializer) do
