@@ -28,6 +28,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'gets a item' do
       get "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include(item.id.to_s)
     end
 
     it 'captures the error' do
@@ -39,8 +40,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      new_item = build(route.singularize.to_sym)
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
       expect(response).to have_http_status(201)
+      expect(response.body).to include(new_item.news_feed_id.to_s)
     end
 
     it 'captures the error when BadRequestException' do
@@ -54,8 +57,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     it 'updates an item' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
+      new_params = {
+          id: item.id,
+          news_feed_id: 0,
+      }
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('news_feed_id' => 0)
     end
 
     it 'captures the error when BadRequestException' do
@@ -69,8 +77,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#destroy' do
     it 'deletes an item' do
-      delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:no_content)
+      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change { model.constantize.count }.by(-1)
     end
 
     it 'captures the error' do
@@ -85,6 +92,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       item.update(approved: false)
       post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('approved' => true)
     end
 
     it 'captures the error when BadRequestException' do
@@ -98,6 +106,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'archives an item' do
       post "/api/v1/#{route}/#{item.id}/archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(model.constantize.find(item.id).archived_at).to_not be nil
     end
 
     it 'captures the error' do
@@ -117,6 +126,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'unarchives an item' do
       put "/api/v1/#{route}/#{item.id}/un_archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(model.constantize.find(item.id).archived_at).to be nil
     end
 
     it 'captures the error' do
@@ -136,6 +146,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'pin an item' do
       post "/api/v1/#{route}/#{item.id}/pin", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('is_pinned' => true)
     end
 
     it 'captures the error' do
@@ -155,6 +166,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'unpin an item' do
       put "/api/v1/#{route}/#{item.id}/un_pin", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('is_pinned' => false)
     end
 
     it 'captures the error' do
