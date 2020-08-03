@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Department, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let!(:department) { build_stubbed(:department) }
+
+  it { expect(department).to belong_to(:enterprise) }
+  it { expect(department).to validate_presence_of(:name) }
 end

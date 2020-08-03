@@ -277,6 +277,35 @@ RSpec.describe User do
     end
   end
 
+  describe '#campaign_engagement_points' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:user) { create(:user, enterprise: enterprise) }
+    let!(:campaign) { create(:campaign, enterprise: enterprise) }
+    let!(:question) { create(:question, campaign_id: campaign.id) }
+    let!(:answers) { create_list(:answer, 3, question_id: question.id,
+                                             author_id: user.id,
+                                             idea_category_id: create(:idea_category, enterprise_id: campaign.enterprise_id).id)
+    }
+    let!(:reward_action) { create(:reward_action, label: 'Campaign answer',
+                                                  points: 10,
+                                                  key: 'campaign_answer',
+                                                  enterprise: campaign.enterprise)
+    }
+    let!(:campaign_engagement_points) { answers.size * reward_action.points }
+    before do
+      answers.each do |answer|
+        create(:user_reward_action, user_id: user.id,
+                                    answer_id: answer.id,
+                                    points: 10,
+                                    reward_action_id: reward_action.id)
+      end
+    end
+
+    it 'return campaign engagements' do
+      expect(user.campaign_engagement_points(campaign)).to eq(campaign_engagement_points)
+    end
+  end
+
   describe '#pending_rewards' do
     let!(:user) { create(:user) }
     let!(:reward) { create(:reward, enterprise: user.enterprise, points: 10) }
