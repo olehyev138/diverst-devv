@@ -43,7 +43,6 @@ jobs:
       #
       ## Install gems
       #
-      - run: bundle clean --force
       - restore_cache:
           keys:
             - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -51,7 +50,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-
       - run:
           name: Install gems
-          command: bundle install --path=vendor/bundle --jobs=4 --retry=3
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
@@ -151,7 +150,6 @@ jobs:
       #
       ## Install gems
       #
-      - run: bundle clean --force
       - restore_cache:
           keys:
             - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -159,7 +157,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-
       - run:
           name: Install gems
-          command: bundle install --path=vendor/bundle --jobs=4 --retry=3
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
