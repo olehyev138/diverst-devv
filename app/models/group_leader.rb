@@ -52,7 +52,7 @@ class GroupLeader < ApplicationRecord
     # layouts
     self.groups_layouts_manage = policy_group_template.groups_layouts_manage
 
-    # setings
+    # settings
     self.group_settings_manage = policy_group_template.group_settings_manage
 
     # news
