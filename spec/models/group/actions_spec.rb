@@ -80,7 +80,7 @@ RSpec.describe Group::Actions, type: :model do
           :group_leaders,
           :children,
           :parent,
-          :enterprise
+          :enterprise,
       ]
     }
 
@@ -94,7 +94,7 @@ RSpec.describe Group::Actions, type: :model do
           :annual_budgets,
           :logo_attachment,
           :banner_attachment,
-          { enterprise: [ :theme ] }
+          enterprise: [ :theme ]
       ]
     }
 
