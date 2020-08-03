@@ -62,16 +62,16 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Run linter
       #
@@ -104,16 +104,16 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Run frontend tests
       #
@@ -233,16 +233,16 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Build & deploy frontend
       #
