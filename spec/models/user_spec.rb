@@ -95,9 +95,13 @@ RSpec.describe User do
       it { expect(user).to validate_length_of(:data).is_at_most(65535) }
       it { expect(user).to validate_length_of(:last_name).is_at_most(191) }
       it { expect(user).to validate_length_of(:first_name).is_at_most(191) }
-      it { expect(user).to validate_confirmation_of(:password) }
       it { expect(user).to validate_length_of(:password).is_at_least(8).is_at_most(128), allow_value('', nil) }
+
       it { expect(user).to validate_presence_of(:email) }
+      it { expect(user).to validate_presence_of(:first_name) }
+      it { expect(user).to validate_presence_of(:last_name) }
+
+      it { expect(user).to validate_confirmation_of(:password) }
       it { expect(user).to validate_uniqueness_of(:email) }
       it { expect(user).to allow_value('email@addresse.foo').for(:email) }
       it { expect(user).to_not allow_value('foo').for(:email) }
@@ -187,6 +191,9 @@ RSpec.describe User do
     describe 'test callbacks' do
       let!(:new_enterprise) { create(:enterprise) }
       let!(:new_user) { build(:user, enterprise: new_enterprise) }
+      let!(:created_user) { create(:user) }
+      let!(:user_with_linkedin) { build(:user, enterprise: new_enterprise, linkedin_profile_url: 'linkedin.com/public/in/linusupson?trk=org-k&challengeId=AQHOBon8J8')
+      }
 
       describe 'before_validation callbacks' do
         context '#generate_password_if_saml' do
@@ -223,29 +230,73 @@ RSpec.describe User do
             expect(new_user.present?).to eq true
           end
         end
-      end
 
-      describe 'before_save callbacks' do
-        #        context '#assign_firebase_token' do
-        #          it 'should be called after user object is created' do
-        #            new_user.run_callbacks :create
-        #            expect(new_user.firebase_token.present?).to eq true
-        #          end
-        #        end
-      end
-    end
+        context '#set_timezone' do
+          it 'should be called before validation is triggered' do
+            expect(new_user).to receive(:set_timezone)
+            new_user.valid?
+          end
 
-    describe 'before_destroy_callbacks' do
-      context '#check_lifespan_of_user' do
-        let!(:user1) { create :user }
-        let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
-
-        it 'deletes user younger than 14 days' do
-          expect { user1.destroy }.to change(User.all, :count).by(-1)
+          it 'sets timezone on before_validation callback for a new user object' do
+            new_user.send(:set_timezone)
+            expect(new_user.present?).to eq true
+          end
         end
 
-        it 'does not delete user older than 14 days' do
-          expect { user2.destroy }.to change(User.all, :count).by(0)
+        context '#add_linked_in_http' do
+          it 'should not be called before validation is triggered when linkedin is null' do
+            expect(new_user).to_not receive(:add_linkedin_http)
+            new_user.valid?
+          end
+
+          it 'sets linkedin on before_validation callback for a new user object' do
+            user_with_linkedin.send(:add_linkedin_http)
+            expect(user_with_linkedin.present?).to eq true
+          end
+        end
+      end
+
+      describe 'before_destroy callbacks' do
+        context '#check_lifespan_of_user' do
+          let!(:user1) { create :user }
+          let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
+
+          it 'deletes user younger than 14 days' do
+            expect { user1.destroy }.to change(User.all, :count).by(-1)
+          end
+
+          it 'does not delete user older than 14 days' do
+            expect { user2.destroy }.to change(User.all, :count).by(0)
+          end
+        end
+      end
+
+      describe 'after_save callbacks' do
+        context 'set_default_policy_group' do
+          it 'create policy_group when policy_group is not set' do
+            new_user.save
+            expect(new_user.policy_group.present?).to eq true
+          end
+        end
+      end
+
+      describe 'after_create callbacks' do
+        context 'set_default_policy_group' do
+          it 'create policy_group' do
+            expect(created_user.policy_group.present?).to eq true
+          end
+        end
+      end
+
+      describe 'after_update callbacks' do
+        context 'add_to_default_mentor_group' do
+          it 'when saved_change_to_mentor? and saved_change_to_mentee? are false' do
+            expect { created_user.update(first_name: 'abc') }.to_not have_enqueued_job(DefaultMentorGroupMemberUpdateJob)
+          end
+
+          it 'when saved_change_to_mentor or mentee is true' do
+            expect { created_user.update(mentor: true) }.to have_enqueued_job(DefaultMentorGroupMemberUpdateJob)
+          end
         end
       end
     end
@@ -312,14 +363,6 @@ RSpec.describe User do
         )
         user.destroy
       end
-    end
-  end
-
-  describe '#avatar_location' do
-    it 'returns the actual avatar location' do
-      user = create(:user, avatar: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
-
-      expect(user.avatar_location).to_not be nil
     end
   end
 
@@ -535,6 +578,95 @@ RSpec.describe User do
     end
   end
 
+  describe '#avatar_location' do
+    it 'returns the actual avatar location' do
+      user = create(:user, avatar: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
+
+      expect(user.avatar_location).to_not be nil
+    end
+  end
+
+  describe '#generate_authentication_token' do
+    it 'generates a random token which doesnt already exist' do
+      user = create(:user)
+      expect(user.generate_authentication_token).to_not be nil
+      expect(user.generate_authentication_token.length).to be 20
+      expect(Session.find_by(token: user.generate_authentication_token)).to be nil
+    end
+  end
+
+  describe '#generate_invitation_token' do
+    it 'generates an invitation token' do
+      user = create(:user)
+      expect(user.generate_invitation_token).to_not be nil
+      # TODO : check if the update has been completed
+    end
+  end
+
+  describe '#invite' do
+    # TODO : Fix
+    xit 'expects mailing to have been enqueued' do
+      user = create(:user)
+      user.invite!
+      expect(DiverstMailer).to have_been_enqueued
+      # expect{user.invite!}.to have_enqueued_job(ActionMailer)
+    end
+  end
+
+  describe '#valid_password?' do
+    it 'when the password is valid' do
+      user = create(:user)
+      expect(user.valid_password?(user.password)).to eq true
+    end
+
+    it 'when the password is invalid ' do
+      user = create(:user)
+      expect(user.valid_password?('a')).to eq false
+    end
+  end
+
+  describe '#policy_user_group' do
+    it 'when there is no matching policy for the provided group' do
+      user = create(:user)
+      expect(user.policy_user_group(-1)).to eq nil
+    end
+
+    it 'when there is a matching policy for the provided group' do
+      user = create(:user)
+      group = create(:group)
+      user_groups = create(:user_group, user: user, group: group)
+      expect(user.policy_user_group(group.id)).to eq user_groups
+    end
+  end
+
+  describe '#policy_group_leader' do
+    it 'when there is no matching policy for the provided group' do
+      user = create(:user)
+      expect(user.policy_group_leader(-1)).to eq nil
+    end
+
+    it 'when there is a matching policy for the provided group' do
+      user = create(:user)
+      group = create(:group)
+      group_leader = create(:group_leader, user: user, group: group)
+      expect(user.policy_group_leader(group.id)).to eq group_leader
+    end
+  end
+
+  describe '#policy_initiative_user' do
+    it 'when there is no matching policy for the provided event' do
+      user = create(:user)
+      expect(user.policy_initiative_user(-1)).to eq nil
+    end
+
+    it 'when there is a matching policy for the provided event' do
+      user = create(:user)
+      initiative = create(:initiative)
+      initiative_user = create(:initiative_user, user: user, initiative: initiative)
+      expect(user.policy_initiative_user(initiative.id)).to eq initiative_user
+    end
+  end
+
   describe '#pending_rewards' do
     let!(:user) { create(:user) }
     let!(:reward) { create(:reward, enterprise: user.enterprise, points: 10) }
@@ -570,6 +702,284 @@ RSpec.describe User do
       it 'returns default email' do
         expect(user1.email_for_notification).to eq(user1.email)
       end
+    end
+  end
+
+  describe '#last_notified_date' do
+    it 'returns nil when last_group_notification_date is not set' do
+      user = create(:user)
+      expect(user.last_notified_date).to eq nil
+    end
+
+    it 'returns in date format last_group_notification_date when set' do
+      user = create(:user)
+      user.update(last_group_notification_date: Time.now)
+      expect(user.last_notified_date).to eq user.last_group_notification_date&.to_date
+    end
+  end
+
+  describe '#is_group_leader_of?' do
+    it 'when user is not a leader of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      expect(user.is_group_leader_of?(group)).to eq false
+    end
+
+    it 'when user is a leader of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      group_leader = create(:group_leader, group: group, user: user)
+      expect(user.is_group_leader_of?(group)).to eq true
+    end
+  end
+
+  describe '#is_member_of?' do
+    it 'when user is not a member of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      expect(user.is_member_of?(group)).to eq false
+    end
+
+    it 'when user is a member of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      user_groups = create(:user_group, group: group, user: user)
+      expect(user.is_member_of?(group)).to eq true
+    end
+  end
+
+  describe '#is_attending?' do
+    it 'when user is not a member of the provided group' do
+      user = create(:user)
+      event = create(:initiative)
+      expect(user.is_attending?(event)).to eq false
+    end
+
+    it 'when user is a member of the provided group' do
+      user = create(:user)
+      initiative = create(:initiative)
+      initiative_users = create(:initiative_user, user: user, initiative: initiative)
+      expect(user.is_attending?(initiative)).to eq true
+    end
+  end
+
+  describe '#is_participating_in?' do
+    it 'when user is not participating in the session' do
+      user = create(:user)
+      session = create(:session)
+      expect(user.is_participating_in?(session)).to eq false
+    end
+
+    it 'when user is participating in the session' do
+      user = create(:user)
+      session = create(:session)
+      mentorship_session = create(:mentorship_session)
+      mentorship_session.update(user_id: user.id)
+      expect(user.is_participating_in?(session)).to eq true
+    end
+  end
+
+  describe '#is_not_member_of' do
+    it 'when user is not a member of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      expect(user.is_not_member_of?(group)).to eq true
+    end
+
+    it 'when user is a member of the provided group' do
+      user = create(:user)
+      group = create(:group)
+      user_groups = create(:user_group, group: group, user: user)
+      expect(user.is_not_member_of?(group)).to eq false
+    end
+  end
+
+  describe '#last_initial' do
+    it 'returns the initial of the last_name capitalized followed by a dot' do
+      user = create(:user, last_name: 'abc')
+      expect(user.last_initial).to eq 'A.'
+    end
+  end
+
+  describe '#default_time_zone' do
+    context 'when timezone is not set' do
+      it 'returns the timezone of the enterprise' do
+        enterprise = create(:enterprise)
+        user = build_stubbed(:user, time_zone: nil, enterprise: enterprise)
+        expect(user.default_time_zone).to eq enterprise.time_zone
+      end
+    end
+
+    context 'when timezone is set ' do
+      it 'returns the value of timezone' do
+        user = build_stubbed(:user, time_zone: 'America/New_York')
+        expect(user.default_time_zone).to eq 'America/New_York'
+      end
+    end
+  end
+
+  describe '#match_score_with' do
+    it 'when the user and other_user dont have any matches' do
+      user = create(:user, last_name: 'abc')
+      other_user = create(:user, last_name: 'abc')
+      expect(user.match_score_with(other_user)).to eq 0
+    end
+
+    xit 'when both users have matches' do
+      # TODO : Test involving matches needed
+    end
+  end
+
+  describe '#matches' do
+    # TODO : Testing to be done
+  end
+
+  describe '#active_matches' do
+    # TODO : Testing to be done
+  end
+
+  describe '#top_matches' do
+    # TODO : Testing to be done
+  end
+
+  describe 'is_part_of_segment?' do
+    it 'when segment.general_rules_followed_by user is false' do
+      user = create(:user)
+      segment = create(:segment)
+      expect(user.is_part_of_segment?(segment)).to eq true
+    end
+
+    context 'when segment.general_rules_followed_by user is true' do
+      xit 'returns true when field_rules are followed by the user' do
+        # TODO : Testing to be done
+      end
+
+      it 'returns false when field_rules are not follower by the user' do
+        # TODO: Testing to be done
+      end
+    end
+  end
+
+  describe '#to_csv_with_fields' do
+    let!(:users) { create_list(:user, 3) }
+    let!(:fields) { create_list(:field, 3) }
+    it 'returns csv' do
+      headers = 'First name,Last name,Email,Biography,Active,Group Membership,' + fields[0].title + ',' + fields[1].title + ',' + fields[2].title
+      enterprise = create(:enterprise)
+      segment = create(:segment)
+      members = enterprise.users.joins(:segments).where(segments: { id: segment.id }).distinct
+      expect(User.to_csv_with_fields users: members, fields: fields).to include(headers)
+    end
+  end
+
+  describe '#basic_info_to_csv' do
+    let!(:users) { create_list(:user, 3) }
+    let!(:fields) { create_list(:field, 3) }
+    it 'returns csv' do
+      enterprise = create(:enterprise)
+      segment = create(:segment)
+      members = enterprise.users.joins(:segments).where(segments: { id: segment.id }).distinct
+      expect(User.basic_info_to_csv users: members).to include('First name,Last name,Email')
+    end
+  end
+
+  describe '#aggregate_sign_ins' do
+    # TODO : Testing to be done
+  end
+
+  describe '#group_member?' do
+    it 'when user is member of the group' do
+      enterprise = create(:enterprise)
+      user = create(:user)
+      group = create(:group, enterprise: enterprise)
+      user_group = create(:user_group, user: user, group: group)
+      expect(user.group_member?(group.id)).to eq true
+    end
+
+    it 'when user is not a member of the group' do
+      enterprise = create(:enterprise)
+      user = create(:user)
+      group = create(:group, enterprise: enterprise)
+      expect(user.group_member?(group.id)).to eq false
+    end
+  end
+
+  describe '#pending_group_member?' do
+    context 'when user is member of the group' do
+      it 'when user is not a pending member' do
+        enterprise = create(:enterprise)
+        user = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise)
+        user_group = create(:user_group, user: user, group: group)
+        expect(user.pending_group_member?(group.id)).to eq false
+      end
+
+      it 'when user is a pending member' do
+        enterprise = create(:enterprise)
+        user = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise)
+        user_group = create(:user_group, user: user, group: group)
+        group.update(pending_users: true)
+        user_group.update(accepted_member: false)
+        expect(user.pending_group_member?(group.id)).to eq false
+      end
+    end
+
+    it 'when user is not a member of the group' do
+      user = create(:user)
+      group = create(:group)
+      expect(user.pending_group_member?(group.id)).to eq false
+    end
+  end
+
+  describe '#active_group_member?' do
+    context 'when user is member of the group' do
+      it 'when user is an active member' do
+        enterprise = create(:enterprise)
+        user = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise)
+        user_group = create(:user_group, user: user, group: group)
+        expect(user.active_group_member?(group.id)).to eq true
+      end
+
+      it 'when user is an active member' do
+        enterprise = create(:enterprise)
+        user = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise)
+        user_group = create(:user_group, user: user, group: group)
+        group.update(pending_users: true)
+        user_group.update(accepted_member: false)
+        expect(user.active_group_member?(group.id)).to eq true
+      end
+    end
+
+    it 'when user is not a member of the group' do
+      user = create(:user)
+      group = create(:group)
+      expect(user.active_group_member?(group.id)).to eq false
+    end
+  end
+
+  describe '#set_provider' do
+    xit 'when uid is nil' do
+      user = create(:user)
+      user.update(uid: nil)
+      expect(user.set_provider).to eq 'email'
+    end
+  end
+
+  describe '#set_uid' do
+    it 'when uid is blank' do
+      user = create(:user)
+      user.update(uid: '')
+      expect(user.set_uid).to eq nil
+    end
+  end
+
+  describe '#set_timezone' do
+    it 'time_zone is already set' do
+      user = create(:user)
+      expect(user.set_timezone).to eq user.time_zone
     end
   end
 
