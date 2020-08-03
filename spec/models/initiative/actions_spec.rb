@@ -2,24 +2,41 @@ require 'rails_helper'
 
 RSpec.describe Initiative::Actions, type: :model do
   describe 'base_preloads' do
-    let!(:base_preloads) { [
-        :pillar,
-        :owner,
-        :budget,
-        :outcome,
-        :group,
-        :expenses,
-        :picture_attachment,
-        :qr_code_attachment,
-        :initiative_users,
-        :comments
-    ]
+    let(:base_preloads) {
+      [
+          :pillar,
+          :owner,
+          :budget,
+          :outcome,
+          :group,
+          :expenses,
+          :picture_attachment,
+          :qr_code_attachment,
+          :initiative_users,
+          :comments
+      ]
     }
+
     it { expect(Initiative.base_preloads).to eq base_preloads }
   end
 
   describe 'valid_scopes' do
-    let!(:valid_scopes) { %w(upcoming ongoing past not_archived archived of_annual_budget joined_events_for_user available_events_for_user for_groups for_segments date_range) }
+    let(:valid_scopes) {
+      %w(
+          upcoming
+          ongoing
+          past
+          not_archived
+          archived
+          of_annual_budget
+          joined_events_for_user
+          available_events_for_user
+          for_groups
+          for_segments
+          date_range
+      )
+    }
+
     it { expect(Initiative.valid_scopes).to eq valid_scopes }
   end
 
