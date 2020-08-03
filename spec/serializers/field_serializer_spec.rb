@@ -7,5 +7,6 @@ RSpec.describe FieldSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq field.id
     expect(serializer.serializable_hash[:title]).to eq field.title
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end
