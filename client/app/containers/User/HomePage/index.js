@@ -16,6 +16,7 @@ import messages from './messages';
 import Events from '../UserEventsPage';
 import News from '../UserNewsFeedPage';
 import SponsorCard from 'components/Branding/Sponsor/SponsorCard';
+import { selectSponsorTotal } from 'containers/Shared/Sponsors/selectors';
 
 import {
   Typography, Grid, CardContent, Paper,
@@ -28,10 +29,13 @@ import EventsList from 'components/Event/HomeEventsList';
 import NewsFeed from 'components/News/HomeNewsList';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import DiverstImg from 'components/Shared/DiverstImg';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
+
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   title: {
@@ -67,37 +71,45 @@ export class HomePage extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
-    const events = (
-      <Paper>
-        <CardContent>
-          <Typography variant='h5' className={classes.title}>
-            <DiverstFormattedMessage {...messages.events} />
-          </Typography>
-          <Events
-            listComponent={EventsList}
-            readonly
-            loaderProps={{
-              transitionProps: {
-                direction: 'right',
-              },
-            }}
-          />
-        </CardContent>
-      </Paper>
-    );
 
-    const news = (
-      <Paper>
-        <CardContent>
-          <Typography variant='h5' className={classes.title}>
-            <DiverstFormattedMessage {...messages.news} />
-          </Typography>
-          <News
-            listComponent={NewsFeed}
-            readonly
-          />
-        </CardContent>
-      </Paper>
+    const content = (
+      <Grid container spacing={2} direction='row'>
+        <Permission show={permission(this.props, 'news_view')}>
+          <Grid item xs>
+            <Paper>
+              <CardContent>
+                <Typography variant='h5' className={classes.title}>
+                  <DiverstFormattedMessage {...messages.news} />
+                </Typography>
+                <News
+                  listComponent={NewsFeed}
+                  readonly
+                />
+              </CardContent>
+            </Paper>
+          </Grid>
+        </Permission>
+        <Permission show={permission(this.props, 'events_view')}>
+          <Grid item xs>
+            <Paper>
+              <CardContent>
+                <Typography variant='h5' className={classes.title}>
+                  <DiverstFormattedMessage {...messages.events} />
+                </Typography>
+                <Events
+                  listComponent={EventsList}
+                  readonly
+                  loaderProps={{
+                    transitionProps: {
+                      direction: 'right',
+                    },
+                  }}
+                />
+              </CardContent>
+            </Paper>
+          </Grid>
+        </Permission>
+      </Grid>
     );
 
     const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
@@ -150,28 +162,38 @@ export class HomePage extends React.PureComponent {
       />
     ) : null;
 
+
+    const grid = this.props.sponsorTotal > 0 ? [
+      'header header  header  header  header  header  header  header  header  header',
+      'message message  message  message  message  message  message  message  message  message',
+      'content content content content content content content content  sponsor sponsor',
+      'content content content content content content content content  sponsor sponsor',
+      'content content content content content content content content  sponsor sponsor',
+      'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+
+    ] : [
+      'header header  header  header  header  header  header  header  header  header',
+      'message message  message  message  message  message  message  message  message  message',
+      'content content content content content content content content content content',
+      'content content content content content content content content content content',
+      'content content content content content content content content content content',
+      'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
+
+    ];
+
     return (
       <DiverstCSSGrid
         columns={10}
         rows='auto auto auto auto 1fr'
-        areas={[
-          'header header  header  header  header  header  header  header  header  header',
-          'message message  message  message  message  message  message  message  message  message',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'events events  events  events  news   news    news    news    sponsor  sponsor',
-          'privacy privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy  privacy',
-        ]}
+        areas={grid}
         rowGap='16px'
         columnGap='24px'
       >
         <DiverstCSSCell area='header'>{enterpriseImage}</DiverstCSSCell>
         <DiverstCSSCell area='message'>{enterpriseMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
-        <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
+        <DiverstCSSCell area='content'>{content}</DiverstCSSCell>
         <DiverstCSSCell area='sponsor'>{sponsor}</DiverstCSSCell>
         <DiverstCSSCell area='privacy'>{privacyMessage}</DiverstCSSCell>
-        <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
       </DiverstCSSGrid>
     );
   }
@@ -181,7 +203,9 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise()
+  sponsorTotal: selectSponsorTotal(),
+  enterprise: selectEnterprise(),
+  permissions: selectPermissions()
 });
 
 const withConnect = connect(
@@ -193,6 +217,8 @@ HomePage.propTypes = {
   classes: PropTypes.object,
   enterprise: PropTypes.object,
   intl: intlShape.isRequired,
+  sponsorTotal: PropTypes.number,
+  permissions: PropTypes.object
 };
 
 export default compose(
