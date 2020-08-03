@@ -7,23 +7,24 @@ RSpec.describe GroupMessage::Actions, type: :model do
           :owner,
           :group,
           :comments,
-          comments: [:author,
-                     author: [:field_data,
-                              :enterprise,
-                              :user_groups,
-                              :user_role,
-                              :news_links,
-                              :avatar_attachment,
-                              :avatar_blob,
-                              enterprise: [
-                                  :theme,
-                                  :mobile_fields
-                              ],
-                              field_data: [
-                                  :field,
-                                  field: [:field_definer]
-                              ]
-                     ]
+          comments: [
+              :author,
+              author: [:field_data,
+                       :enterprise,
+                       :user_groups,
+                       :user_role,
+                       :news_links,
+                       :avatar_attachment,
+                       :avatar_blob,
+                       enterprise: [
+                           :theme,
+                           :mobile_fields
+                       ],
+                       field_data: [
+                           :field,
+                           field: [:field_definer]
+                       ]
+              ]
           ],
           group: [:enterprise],
           owner: [
