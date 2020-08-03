@@ -7,16 +7,17 @@ RSpec.describe Update::Actions, type: :model do
           :field_data,
           :previous,
           :next,
-          field_data:
-              [:field,
-               field: [:field_definer]
-              ],
-          previous:
-              [:field_data,
-               field_data: [:field,
-                            field: [:field_definer]
-               ]
+          field_data: [
+              :field,
+              field: [:field_definer]
+          ],
+          previous: [
+              :field_data,
+              field_data: [
+                  :field,
+                  field: [:field_definer]
               ]
+          ]
       ]
     }
 
@@ -27,9 +28,10 @@ RSpec.describe Update::Actions, type: :model do
     let(:lesser_preloads) {
       [
           :field_data,
-          field_data: [:field,
-                       field: [:field_definer]
-                      ]
+          field_data: [
+              :field,
+              field: [:field_definer]
+          ]
       ]
     }
 
