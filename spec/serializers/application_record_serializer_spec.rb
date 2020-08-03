@@ -82,7 +82,7 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
 
           serializer = @serializer1.new(model.new({a: 1, b: 2, c: 3}))
 
-          expect(@serializer1._attributes).to     be_empty
+          expect(serializer.attributes).to        be_empty
         end
       end
 
