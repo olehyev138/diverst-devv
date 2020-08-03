@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Sponsor::Actions, type: :model do
   describe 'valid_scopes' do
-    let(:valid_scopes) { %w(
-                                    group_sponsor
-                                    enterprise_sponsor
-                                )
+    let(:valid_scopes) {
+      %w(
+          group_sponsor
+          enterprise_sponsor
+      )
     }
 
     it { expect(Sponsor.valid_scopes).to eq valid_scopes }
