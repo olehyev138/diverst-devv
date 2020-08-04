@@ -11,7 +11,7 @@ import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form } from 'formik';
+import { Field, Formik, Form, FastField } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Grid, Divider,
 } from '@material-ui/core';
@@ -78,7 +78,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
       <Card>
         <Form>
           <CardContent>
-            <Field
+            <FastField
               component={TextField}
               onChange={handleChange}
               disabled={props.isCommitting}
@@ -93,7 +93,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={DiverstRichTextInput}
               required
               onChange={value => setFieldValue('description', value)}
@@ -106,7 +106,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={TextField}
               onChange={handleChange}
               disabled={props.isCommitting}
@@ -120,7 +120,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={Select}
               fullWidth
               required
@@ -159,7 +159,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               alignItems='center'
             >
               <Grid item xs={12} md={6}>
-                <Field
+                <FastField
                   component={Select}
                   fullWidth
                   required
@@ -233,7 +233,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={DiverstFileInput}
               fileName={props.event && props.event.picture_file_name}
               disabled={props.isCommitting}
