@@ -195,19 +195,19 @@ class Initiative < ApplicationRecord
     archived_at.present?
   end
 
-  def as_indexed_json(options = {})
-    self.as_json(
-      options.merge(
-        only: [:name, :created_at],
-        include: { pillar: { include: { outcome: { include: { group: {
-          only: [:id, :enterprise_id, :parent_id, :name],
-          include: { parent: { only: [:name] } }
-        } },
-                                                   only: [] }, },
-                             only: [] } }
-      )
-    ).merge({ 'created_at' => self.created_at.beginning_of_hour })
-  end
+  # def as_indexed_json(options = {})
+  #   self.as_json(
+  #     options.merge(
+  #       only: [:name, :created_at],
+  #       include: { pillar: { include: { outcome: { include: { group: {
+  #         only: [:id, :enterprise_id, :parent_id, :name],
+  #         include: { parent: { only: [:name] } }
+  #       } },
+  #                                                  only: [] }, },
+  #                            only: [] } }
+  #     )
+  #   ).merge({ 'created_at' => self.created_at.beginning_of_hour })
+  # end
 
   def picture_location(expires_in: 3600, default_style: :medium)
     return nil unless picture.attached?

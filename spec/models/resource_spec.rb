@@ -151,26 +151,26 @@ RSpec.describe Resource, type: :model do
     end
   end
 
-  describe 'elasticsearch methods' do
-    context '#as_indexed_json' do
-      let!(:object) { create(:resource) }
-
-      it 'serializes the correct fields with the correct data' do
-        hash = {
-          'created_at' => object.created_at.beginning_of_hour,
-          'owner_id' => object.owner_id,
-          'folder' => {
-            'id' => object.folder_id,
-            'group_id' => object.folder.group_id,
-            'group' => {
-              'enterprise_id' => object.folder.group.enterprise_id
-            }
-          }
-        }
-        expect(object.as_indexed_json).to eq(hash)
-      end
-    end
-  end
+  # describe 'elasticsearch methods' do
+  #   context '#as_indexed_json' do
+  #     let!(:object) { create(:resource) }
+  #
+  #     it 'serializes the correct fields with the correct data' do
+  #       hash = {
+  #         'created_at' => object.created_at.beginning_of_hour,
+  #         'owner_id' => object.owner_id,
+  #         'folder' => {
+  #           'id' => object.folder_id,
+  #           'group_id' => object.folder.group_id,
+  #           'group' => {
+  #             'enterprise_id' => object.folder.group.enterprise_id
+  #           }
+  #         }
+  #       }
+  #       expect(object.as_indexed_json).to eq(hash)
+  #     end
+  #   end
+  # end
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
