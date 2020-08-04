@@ -98,4 +98,7 @@ export default defineMessages({
       id: `${scope}.index.no_news.pending`,
     },
   },
+  emptySection: {
+    id: `${scope}.home.emptySection`,
+  },
 });
