@@ -28,7 +28,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'gets a item' do
       get "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include(item.id.to_s)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('id' => item.id)
     end
 
     it 'captures the error' do
@@ -43,7 +43,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       new_item = build(route.singularize.to_sym)
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
       expect(response).to have_http_status(201)
-      expect(response.body).to include(new_item.news_feed_id.to_s)
+      expect(JSON.parse(response.body)['news_feed_link']).to include('news_feed_id' => new_item.news_feed_id)
     end
 
     it 'captures the error when BadRequestException' do
