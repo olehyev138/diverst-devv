@@ -24,18 +24,6 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
       },
     };
 
-  const onChange = useCallback((date) => {
-    // If you are using custom validation schema you probably want to pass `true` as third argument
-    form.setFieldValue(field.name, date, false);
-    form.setFieldTouched(field.name, true, false);
-  }, []);
-
-  const onError = useCallback((error) => {
-    // Handle as a side effect
-    if (error !== form.errors[field.name])
-      form.setFieldError(field.name, error);
-  }, [form.errors]);
-
   const pickerProps = {
     variant,
     autoOk: true,
@@ -46,8 +34,16 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
     value: field.value,
     helperText: form.errors[field.name],
     error: !!form.errors[field.name],
-    onError,
-    onChange,
+    onError: (error) => {
+      // Handle as a side effect
+      if (error !== form.errors[field.name])
+        form.setFieldError(field.name, error);
+    },
+    onChange: (date) => {
+      // If you are using custom validation schema you probably want to pass `true` as third argument
+      form.setFieldValue(field.name, date, false);
+      form.setFieldTouched(field.name, true, false);
+    },
     ...inlineProps,
     ...props
   };
