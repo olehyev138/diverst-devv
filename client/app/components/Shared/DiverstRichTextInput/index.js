@@ -6,6 +6,8 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
+import useArgumentRemembering from 'utils/customHooks/rememberArguments';
 
 export function DiverstRichTextInput(props) {
   const { label, value, ...rest } = props;
@@ -26,26 +28,36 @@ export function DiverstRichTextInput(props) {
   );
   const [initialValue, setInitialValue] = useState(true);
 
+  const setEditorStateFromValue = (value) => {
+    setEditorState(EditorState.createWithContent(
+      ContentState.createFromBlockArray(
+        htmlToDraft(value)
+      )
+    ));
+  };
+
   useEffect(() => {
     if (value !== '' && initialValue) {
-      setEditorState(EditorState.createWithContent(
-        ContentState.createFromBlockArray(
-          htmlToDraft(value)
-        )
-      ));
-      setInitialValue(false);
+      setEditorStateFromValue(value);
+      if (initialValue)
+        setInitialValue(false);
     }
   }, [value]);
 
+  const delayedOnChange = useDelayedTextInputCallback(
+    () => props.onChange(
+      draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    )
+  );
+
   const onEditorStateChange = (newEditorState) => {
-    setInitialValue(false);
+    if (initialValue)
+      setInitialValue(false);
     setEditorState(newEditorState);
 
     if (props.onChange)
       if (editorState.getCurrentContent().getPlainText().trim() !== '') {
-        props.onChange(
-          draftToHtml(convertToRaw(editorState.getCurrentContent()))
-        );
+        delayedOnChange();
       } else {
         props.onChange('');
       }
