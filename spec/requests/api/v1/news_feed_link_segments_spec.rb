@@ -25,9 +25,16 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#show' do
-    it 'gets a item' do
+    before do
       get "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'gets a item' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes', skip: 'no serializer' do
+      expect(JSON.parse(response.body)['news_feed_link_segment']).to include('id' => item.id)
     end
 
     it 'captures the error' do
@@ -38,9 +45,18 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
+    let!(:new_item) { build(route.singularize.to_sym) }
+    before do
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
+    end
+
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(201)
+    end
+
+    it 'contains expected attributes', skip: 'no serializer' do
+      id = JSON.parse(response.body)['news_feed_link_segment']['id']
+      expect(model.constantize.find(id).news_feed_link_id).to eq new_item.news_feed_link_id
     end
 
     it 'captures the error when BadRequestException' do
@@ -53,10 +69,19 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
+    let!(:new_params) { { id: item.id, segment_id: -1 } }
+    before do
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
+    end
+
     it 'updates an item' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
     end
+
+    it 'contains expected attributes' do
+      expect(model.constantize.find(item.id).segment_id).to eq new_params[:segment_id]
+    end
+
 
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:update).and_raise(BadRequestException)
@@ -69,8 +94,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#destroy' do
     it 'deletes an item' do
+      total = model.constantize.count
       delete "/api/v1/#{route}/#{item.id}", headers: headers
       expect(response).to have_http_status(:no_content)
+      expect(model.constantize.count).to eq total - 1
     end
 
     it 'captures the error' do

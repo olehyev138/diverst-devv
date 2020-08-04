@@ -25,9 +25,15 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#show' do
-    it 'gets a item' do
+    before do
       get "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'gets a item' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes' do
       expect(JSON.parse(response.body)['news_feed_link']).to include('id' => item.id)
     end
 
@@ -39,11 +45,18 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
-    it 'creates an item' do
-      new_item = build(route.singularize.to_sym)
+    let!(:new_item) { build(route.singularize.to_sym) }
+    before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
+    end
+
+    it 'creates an item' do
       expect(response).to have_http_status(201)
-      expect(JSON.parse(response.body)['news_feed_link']).to include('news_feed_id' => new_item.news_feed_id)
+    end
+
+    it 'contains expected attributes' do
+      id = JSON.parse(response.body)['news_feed_link']['id']
+      expect(model.constantize.find(id).news_feed_id).to eq new_item.news_feed_id
     end
 
     it 'captures the error when BadRequestException' do
@@ -56,14 +69,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
-    it 'updates an item' do
-      new_params = {
-          id: item.id,
-          news_feed_id: 0,
-      }
+    let!(:new_params) { { id: item.id, news_feed_id: -1 } }
+    before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
+    end
+
+    it 'updates an item' do
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['news_feed_link']).to include('news_feed_id' => 0)
+    end
+
+    it 'contains expected attributes' do
+      expect(model.constantize.find(item.id).news_feed_id).to eq new_params[:news_feed_id]
     end
 
     it 'captures the error when BadRequestException' do
@@ -76,11 +92,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#destroy' do
-    it 'deletes an item' do
-      total = model.constantize.count
+    before do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'deletes an item' do
       expect(response).to have_http_status(:no_content)
-      expect(model.constantize.count).to eq total - 1
+    end
+
+    it 'returns nil' do
+      record = model.constantize.find(item.id) rescue nil
+      expect(record).to eq nil
     end
 
     it 'captures the error' do
@@ -95,7 +117,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       item.update(approved: false)
       post "/api/v1/#{route}/#{item.id}/approve", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['news_feed_link']).to include('approved' => true)
+      expect(model.constantize.find(item.id).approved).to eq true
     end
 
     it 'captures the error when BadRequestException' do
@@ -149,7 +171,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'pin an item' do
       post "/api/v1/#{route}/#{item.id}/pin", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['news_feed_link']).to include('is_pinned' => true)
+      expect(model.constantize.find(item.id).is_pinned).to be true
     end
 
     it 'captures the error' do
@@ -169,7 +191,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'unpin an item' do
       put "/api/v1/#{route}/#{item.id}/un_pin", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['news_feed_link']).to include('is_pinned' => false)
+      expect(model.constantize.find(item.id).is_pinned).to be false
     end
 
     it 'captures the error' do
