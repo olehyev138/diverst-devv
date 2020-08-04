@@ -73,12 +73,9 @@ export function DiverstRichTextInput(props) {
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperStyle={wrapperStyle}
-        // toolbarOnFocus
         editorStyle={{
           height: `${props.height}px`
         }}
-        // wrapperClassName="demo-wrapper"
-        // editorClassName="demo-editor"
       />
     </FormControl>
   );
