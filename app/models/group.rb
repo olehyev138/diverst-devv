@@ -6,9 +6,10 @@ class Group < ApplicationRecord
   extend Enumerize
   BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: 'annual_budget' }
 
-
   @@field_users = [:user_groups, :updates]
   mattr_reader :field_users
+
+  attr_accessor :skip_label_consistency_check
 
   enumerize :layout, default: :layout_0, in: [
     :layout_0,
@@ -62,13 +63,23 @@ class Group < ApplicationRecord
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
+  belongs_to :group_category
+  belongs_to :group_category_type
+
+  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
+  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
+
   has_one :news_feed, dependent: :destroy
 
-  delegate :news_feed_links,        to: :news_feed
-  delegate :shared_news_feed_links, to: :news_feed
+  has_many :messages, class_name: 'GroupMessage', dependent: :destroy
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
+  has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
+  has_many :social_links, dependent: :destroy
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
+
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
@@ -77,29 +88,32 @@ class Group < ApplicationRecord
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
-  has_many :messages, class_name: 'GroupMessage', dependent: :destroy
-  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
-  has_many :news_links, dependent: :destroy
-  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
-  has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups, dependent: :destroy
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
+
   has_many :resources, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :folder_shares, dependent: :destroy
   has_many :shared_folders, through: :folder_shares, source: 'folder'
+
   has_many :campaigns_groups, dependent: :destroy
   has_many :campaigns, through: :campaigns_groups
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
+
   has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
-  has_many :updates, as: :updatable, dependent: :destroy
-  has_many :views, dependent: :destroy
-  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
+
+  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
+  has_many :leaders, through: :group_leaders, source: :user
+
+  has_many :annual_budgets, dependent: :destroy
+  has_many :budgets, dependent: :destroy, through: :annual_budgets
+  has_many :budget_items, dependent: :destroy, through: :budgets
+  has_many :initiative_expenses, through: :annual_budgets
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
@@ -110,20 +124,11 @@ class Group < ApplicationRecord
            class_name: 'Field',
            dependent: :destroy,
            after_add: :add_missing_field_background_job
+  has_many :updates, as: :updatable, dependent: :destroy
 
-  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
-  has_many :leaders, through: :group_leaders, source: :user
+  has_many :views, dependent: :destroy
+  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
   has_many :sponsors, as: :sponsorable, dependent: :destroy
-
-  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
-  has_many :annual_budgets, dependent: :destroy
-  has_many :budgets, dependent: :destroy, through: :annual_budgets
-  has_many :budget_items, dependent: :destroy, through: :budgets
-  has_many :initiative_expenses, through: :annual_budgets
-
-  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
-  belongs_to :group_category
-  belongs_to :group_category_type
 
   # ActiveStorage
   has_one_attached :logo
@@ -132,9 +137,87 @@ class Group < ApplicationRecord
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :logo_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
+
+  delegate :news_feed_links,        to: :news_feed
+  delegate :shared_news_feed_links, to: :news_feed
+
+  delegate :leftover, BUDGET_DELEGATE_OPTIONS
+  delegate :remaining, BUDGET_DELEGATE_OPTIONS
+  delegate :approved, BUDGET_DELEGATE_OPTIONS
+  delegate :expenses, BUDGET_DELEGATE_OPTIONS
+  delegate :available, BUDGET_DELEGATE_OPTIONS
+  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
+  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
+  delegate :reset!, BUDGET_DELEGATE_OPTIONS
+  delegate :currency, BUDGET_DELEGATE_OPTIONS
+
+  validates_length_of :event_attendance_visibility, maximum: 191
+  validates_length_of :unit_of_expiry_age, maximum: 191
+  validates_length_of :home_message, maximum: 65535
+  validates_length_of :layout, maximum: 191
+  validates_length_of :short_description, maximum: 65535
+  validates_length_of :upcoming_events_visibility, maximum: 191
+  validates_length_of :latest_news_visibility, maximum: 191
+  validates_length_of :company_video_url, maximum: 191
+  validates_length_of :calendar_color, maximum: 191
+  validates_length_of :messages_visibility, maximum: 191
+  validates_length_of :members_visibility, maximum: 191
+  validates_length_of :pending_users, maximum: 191
+  validates_length_of :yammer_group_link, maximum: 191
+  validates_length_of :yammer_group_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :name, maximum: 191
+
+  # only allow one default_mentor_group per enterprise
+  validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
+
+  validates :name, presence: true, uniqueness: { scope: :enterprise_id }
+  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
   validates :expiry_age_for_news, numericality: { greater_than_or_equal_to: 0 }
   validates :expiry_age_for_events, numericality: { greater_than_or_equal_to: 0 }
   validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
+
+  validate :valid_yammer_group_link?
+  validate :ensure_one_level_nesting
+  validate :ensure_not_own_parent
+  validate :ensure_not_own_child
+  validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
+  validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
+
+  before_validation -> (group) { group.calendar_color = group.calendar_color.presence&.gsub('#', '') }
+  before_validation :smart_add_url_protocol
+
+  before_save :send_invitation_emails, if: :send_invitations?
+  before_save :create_yammer_group, if: :should_create_yammer_group?
+
+  after_create :create_news_feed
+
+  after_update :accept_pending_members, unless: :pending_members_enabled?
+  after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
+
+  scope :by_enterprise, -> (e) { where(enterprise_id: e) }
+  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :joined_groups, -> (u) { joins(:user_groups).where(user_groups: { user_id: u }) }
+
+  # Active Record already has a defined a class method with the name private so we use is_private.
+  scope :is_private,        -> { where(private: true) }
+  scope :non_private,       -> { where(private: false) }
+
+  # parents/children
+  scope :all_parents,     -> { where(parent_id: nil) }
+  scope :all_children,    -> { where.not(parent_id: nil) }
+  scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
+
+  accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   def create_annual_budget
     AnnualBudget.create(group: self, closed: false)
@@ -166,18 +249,6 @@ class Group < ApplicationRecord
     super
   end
 
-  delegate :leftover, BUDGET_DELEGATE_OPTIONS
-  delegate :remaining, BUDGET_DELEGATE_OPTIONS
-  delegate :approved, BUDGET_DELEGATE_OPTIONS
-  delegate :expenses, BUDGET_DELEGATE_OPTIONS
-  delegate :available, BUDGET_DELEGATE_OPTIONS
-  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
-
-  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
-  delegate :reset!, BUDGET_DELEGATE_OPTIONS
-
-  delegate :currency, BUDGET_DELEGATE_OPTIONS
-
   def annual_budget
     current_annual_budget!.amount
   end
@@ -190,7 +261,7 @@ class Group < ApplicationRecord
 
   def self.load_sums
     select(
-        '`groups`.`*`,'\
+        'groups.*,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
         ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
@@ -201,70 +272,6 @@ class Group < ApplicationRecord
       g.current_annual_budget.instance_variable_set(:@reserved, g.reserved_sum)
     end
   end
-
-  # TODO Remove after Paperclip to ActiveStorage migration
-  has_attached_file :logo_paperclip, s3_permissions: 'private'
-  has_attached_file :banner_paperclip
-  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
-  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
-
-  validates_length_of :event_attendance_visibility, maximum: 191
-  validates_length_of :unit_of_expiry_age, maximum: 191
-  validates_length_of :home_message, maximum: 65535
-  validates_length_of :layout, maximum: 191
-  validates_length_of :short_description, maximum: 65535
-  validates_length_of :upcoming_events_visibility, maximum: 191
-  validates_length_of :latest_news_visibility, maximum: 191
-  validates_length_of :company_video_url, maximum: 191
-  validates_length_of :calendar_color, maximum: 191
-  validates_length_of :messages_visibility, maximum: 191
-  validates_length_of :members_visibility, maximum: 191
-  validates_length_of :pending_users, maximum: 191
-  validates_length_of :yammer_group_link, maximum: 191
-  validates_length_of :yammer_group_name, maximum: 191
-  validates_length_of :description, maximum: 65535
-  validates_length_of :name, maximum: 191
-
-  validates :name, presence: true, uniqueness: { scope: :enterprise_id }
-  # only allow one default_mentor_group per enterprise
-  validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
-
-  validate :valid_yammer_group_link?
-
-  validate :ensure_one_level_nesting
-  validate :ensure_not_own_parent
-  validate :ensure_not_own_child
-
-  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
-  before_validation -> (group) { group.calendar_color = group.calendar_color.presence&.gsub('#', '') }
-
-  before_save :send_invitation_emails, if: :send_invitations?
-  before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_validation :smart_add_url_protocol
-  after_create :create_news_feed
-  after_update :accept_pending_members, unless: :pending_members_enabled?
-  after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
-
-  attr_accessor :skip_label_consistency_check
-  validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
-  validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
-
-  scope :by_enterprise, -> (e) { where(enterprise_id: e) }
-  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
-  scope :joined_groups, -> (u) { joins(:user_groups).where(user_groups: { user_id: u }) }
-  # Active Record already has a defined a class method with the name private so we use is_private.
-  scope :is_private,        -> { where(private: true) }
-  scope :non_private,       -> { where(private: false) }
-  # parents/children
-  scope :all_parents,     -> { where(parent_id: nil) }
-  scope :all_children,    -> { where.not(parent_id: nil) }
-  scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
-
-  accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
@@ -387,7 +394,7 @@ class Group < ApplicationRecord
   def possible_participating_groups
     # return groups list without current group
     group_id = self.id
-    self.enterprise.groups.select { |g| g.id != group_id }
+    self.enterprise.groups.to_a.select { |g| g.id != group_id }
   end
 
   def sync_yammer_users
@@ -450,25 +457,6 @@ class Group < ApplicationRecord
 
         csv << user_group_row
       end
-    end
-  end
-
-  def membership_list_csv(group_members)
-    total_nb_of_members = group_members.count
-    CSV.generate do |csv|
-      csv << %w(first_name last_name email_address mentor mentee)
-
-      group_members.each do |member|
-        membership_list_row = [ member.first_name,
-                                member.last_name,
-                                member.email,
-                                member.mentor,
-                                member.mentee
-                              ]
-        csv << membership_list_row
-      end
-
-      csv << ['total', nil, "#{total_nb_of_members}"]
     end
   end
 

@@ -9,15 +9,15 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import {
-  Box, Divider,
-  Grid,
-} from '@material-ui/core';
+import { Box, Divider, Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import { injectIntl, intlShape } from 'react-intl';
 import { addScript } from 'utils/domHelper';
 import renderNewsItem from 'utils/newsItemRender';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 const styles = theme => ({
   newsItem: {
@@ -90,6 +90,16 @@ export function NewsFeed(props) {
               </Grid>
             );
           })}
+          {props.newsItems && props.newsItems.length <= 0 && (
+            <React.Fragment>
+              <Grid item sm>
+                <Box mt={3} />
+                <Typography variant='h6' align='center' color='textSecondary'>
+                  <DiverstFormattedMessage {...messages.emptySection} />
+                </Typography>
+              </Grid>
+            </React.Fragment>
+          )}
         </Grid>
       </DiverstLoader>
     </React.Fragment>
