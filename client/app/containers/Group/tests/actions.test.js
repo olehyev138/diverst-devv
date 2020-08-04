@@ -40,7 +40,8 @@ import {
   GROUP_CATEGORIZE_ERROR,
   JOIN_SUBGROUPS_BEGIN,
   JOIN_SUBGROUPS_SUCCESS,
-  JOIN_SUBGROUPS_ERROR
+  JOIN_SUBGROUPS_ERROR,
+  GROUP_ALL_UNMOUNT
 } from '../constants';
 
 import {
@@ -71,6 +72,7 @@ import {
   carryBudgetBegin,
   carryBudgetError,
   carryBudgetSuccess,
+  groupListUnmount,
   groupAllUnmount,
   groupFormUnmount,
   joinGroupBegin,
@@ -546,12 +548,22 @@ describe('group actions', () => {
 
   describe('State cleaning actions', () => {
     describe('groupAllUnmount', () => {
+      it('has a type of GROUP_ALL_UNMOUNT', () => {
+        const expected = {
+          type: GROUP_ALL_UNMOUNT,
+        };
+
+        expect(groupAllUnmount()).toEqual(expected);
+      });
+    });
+
+    describe('groupListUnmount', () => {
       it('has a type of GROUP_LIST_UNMOUNT', () => {
         const expected = {
           type: GROUP_LIST_UNMOUNT,
         };
 
-        expect(groupAllUnmount()).toEqual(expected);
+        expect(groupListUnmount()).toEqual(expected);
       });
     });
 
