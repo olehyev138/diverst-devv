@@ -160,7 +160,7 @@ const GroupSelector = (props) => {
 
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
-  dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
+  dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogNoChildren: PropTypes.bool,
   forceReload: PropTypes.bool,
 
@@ -169,7 +169,7 @@ GroupSelector.propTypes = {
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
-  queryScopes: PropTypes.arrayOf(PropTypes.string),
+  queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   isLoading: PropTypes.bool,
 
   getGroupsBegin: PropTypes.func.isRequired,

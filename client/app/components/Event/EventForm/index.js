@@ -97,7 +97,6 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               component={DiverstRichTextInput}
               required
               onChange={value => setFieldValue('description', value)}
-              fullWidth
               id='description'
               name='description'
               margin='normal'
