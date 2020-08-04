@@ -77,7 +77,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#destroy' do
     it 'deletes an item' do
-      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change { model.constantize.count }.by(-1)
+      total = model.constantize.count
+      delete "/api/v1/#{route}/#{item.id}", headers: headers
+      expect(response).to have_http_status(:no_content)
+      expect(model.constantize.count).to eq total - 1
     end
 
     it 'captures the error' do
