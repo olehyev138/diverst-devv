@@ -17,6 +17,11 @@ RSpec.describe LikesController, type: :controller do
           .to change(Like, :count).by(1)
       end
 
+      it 'increases AnswerUpvote count' do
+        expect { post :create, answer_id: answer.id }
+          .to change(AnswerUpvote, :count).by(1)
+      end
+
       it 'unlikes a post' do
         post :create, news_feed_link_id: news_link.news_feed_link.id
 
@@ -28,14 +33,26 @@ RSpec.describe LikesController, type: :controller do
         expect { post :create, answer_id: answer.id }
           .to change(Like, :count).by(1)
       end
+    end
 
-      it 'unlikes an answer' do
-        post :create, answer_id: answer.id
+    describe 'DELETE #unlike' do
+      context 'with logged in user' do
+        let!(:like) { create(:like, answer_id: answer.id, user_id: user.id, enterprise: enterprise) }
 
-        expect { post :unlike, answer_id: answer.id }
-          .to change(Like, :count).by(-1)
+        login_user_from_let
+
+        it 'decreases AnswerUpvote count' do
+          create(:answer_upvote, answer_id: answer.id, author_id: user.id)
+          expect { delete :unlike, answer_id: answer.id }.to change(AnswerUpvote, :count).by(-1)
+        end
+
+        it 'unlikes an answer' do
+          expect { delete :unlike, answer_id: answer.id }
+            .to change(Like, :count).by(-1)
+        end
       end
     end
+
 
     context 'with logged out user' do
       it 'doesnt like the post' do

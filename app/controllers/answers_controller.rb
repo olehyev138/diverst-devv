@@ -18,7 +18,7 @@ class AnswersController < ApplicationController
   private
 
   def set_answer
-    @answer = Answer.find(params[:id])
+    @answer = current_user.enterprise.answers.find(params[:id])
   end
 
   def answer_params

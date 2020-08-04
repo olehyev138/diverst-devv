@@ -748,7 +748,7 @@ Rails.application.routes.draw do
 
   resources :custom_texts, only: [:edit, :update]
 
-  resources :likes, only: [:create, :unlike]
+  resources :likes, only: [:create]
   match '/likes/unlike' => 'likes#unlike', :via => :delete
 
   scope :views, controller: 'views' do

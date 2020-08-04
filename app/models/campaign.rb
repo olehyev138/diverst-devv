@@ -93,12 +93,14 @@ class Campaign < BaseClass
     enterprise = Enterprise.find_by(id: enterprise_id)
     campaigns = enterprise.campaigns
     campaigns = campaigns.select { |c| c.total_roi > 0 }
-             .map { |c| [c.title, c.total_roi] }
-             .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
+                         .map { |c| [c.title, c.total_roi] }
+                         .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
 
     return campaigns if campaign.nil?
+
     return if campaign.total_roi < 1
 
+    # this ensures a particular order of hash elements for graphical representation
     campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
   end
 
@@ -113,6 +115,8 @@ class Campaign < BaseClass
     return campaigns if campaign.nil?
 
     return if campaign if campaign.engagement_activity_level < 1
+
+    # this ensures a particular order of hash elements for graphical representation
     campaign.engagement_activity_level > 0 ? campaigns = { campaign.title => campaign.engagement_activity_level }.merge(campaigns) : campaigns
   end
 

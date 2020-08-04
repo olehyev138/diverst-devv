@@ -9,7 +9,7 @@ class User::UserCampaignsController < ApplicationController
     @campaigns = current_user.enterprise.campaigns
                              .valid_campaigns
                              .order(created_at: :desc)
-                             .select{ |c| c.targeted_users.include? current_user }
+                             .select { |c| c.targeted_users.include? current_user }
   end
 
   # MISSING TEMPLATE
