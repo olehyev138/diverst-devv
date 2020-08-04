@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -31,7 +31,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectPaginatedSelectPillars } from 'containers/Group/Pillar/selectors';
 import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/BudgetItem/selectors';
-import Select from 'components/Shared/DiverstSelect';
+import DiverstSelect from 'components/Shared/DiverstSelect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import pillarReducer from 'containers/Group/Pillar/reducer';
@@ -121,7 +121,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           <Divider />
           <CardContent>
             <Field
-              component={Select}
+              component={DiverstSelect}
               fullWidth
               required
               id='pillar_id'
@@ -147,7 +147,9 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               disabled={props.isCommitting}
               queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
               dialogQueryScopes={[['replace_with_children', dig(props, 'currentGroup', 'id')]]}
-              {...formikProps}
+              handleChange={handleChange}
+              values={values}
+              setFieldValue={setFieldValue}
             />
           </CardContent>
           <Divider />
@@ -159,8 +161,8 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               alignItems='center'
             >
               <Grid item xs={12} md={6}>
-                <Field
-                  component={Select}
+                <FastField
+                  component={DiverstSelect}
                   fullWidth
                   required
                   id='budget_item_id'
@@ -267,15 +269,12 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
 export function EventForm(props) {
   const event = dig(props, 'event');
 
-  const [start, setStart] = useState(DateTime.local().plus({ hour: 1 }));
-  const [end, setEnd] = useState(DateTime.local().plus({ hour: 2 }));
-
   const initialValues = buildValues(event, {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: start },
-    end: { default: end },
+    start: { default: null },
+    end: { default: null },
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },

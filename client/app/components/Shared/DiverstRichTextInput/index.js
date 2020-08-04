@@ -7,7 +7,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
-import useArgumentRemembering from 'utils/customHooks/rememberArguments';
 
 export function DiverstRichTextInput(props) {
   const { label, value, ...rest } = props;
@@ -74,6 +73,12 @@ export function DiverstRichTextInput(props) {
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperStyle={wrapperStyle}
+        // toolbarOnFocus
+        editorStyle={{
+          height: `${props.height}px`
+        }}
+        // wrapperClassName="demo-wrapper"
+        // editorClassName="demo-editor"
       />
     </FormControl>
   );
@@ -83,7 +88,12 @@ DiverstRichTextInput.propTypes = {
   classes: PropTypes.object,
   onChange: PropTypes.func,
   value: PropTypes.string,
+  height: PropTypes.number,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+};
+
+DiverstRichTextInput.defaultProps = {
+  height: 200,
 };
 
 export default DiverstRichTextInput;

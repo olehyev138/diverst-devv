@@ -26,7 +26,7 @@ import { Grid, Button } from '@material-ui/core';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
-import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
   const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
