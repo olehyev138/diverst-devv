@@ -2,7 +2,7 @@ import produce from 'immer';
 import groupsReducer from 'containers/Group/reducer';
 import {
   getGroupsSuccess, getGroupSuccess,
-  groupListUnmount, groupFormUnmount
+  groupAllUnmount, groupFormUnmount
 } from 'containers/Group/actions';
 
 /* eslint-disable default-case, no-param-reassign */
@@ -58,10 +58,10 @@ describe('groupsReducer', () => {
     ).toEqual(expected);
   });
 
-  it('handles the groupListUnmount action correctly', () => {
+  it('handles the groupAllUnmount action correctly', () => {
     const expected = state;
 
-    expect(groupsReducer(state, groupListUnmount())).toEqual(expected);
+    expect(groupsReducer(state, groupAllUnmount())).toEqual(expected);
   });
 
   it('handles the groupFormUnmount action correctly', () => {

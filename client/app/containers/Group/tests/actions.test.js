@@ -71,7 +71,7 @@ import {
   carryBudgetBegin,
   carryBudgetError,
   carryBudgetSuccess,
-  groupListUnmount,
+  groupAllUnmount,
   groupFormUnmount,
   joinGroupBegin,
   joinGroupSuccess,
@@ -545,13 +545,13 @@ describe('group actions', () => {
   });
 
   describe('State cleaning actions', () => {
-    describe('groupListUnmount', () => {
+    describe('groupAllUnmount', () => {
       it('has a type of GROUP_LIST_UNMOUNT', () => {
         const expected = {
           type: GROUP_LIST_UNMOUNT,
         };
 
-        expect(groupListUnmount()).toEqual(expected);
+        expect(groupAllUnmount()).toEqual(expected);
       });
     });
 
