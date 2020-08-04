@@ -120,7 +120,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           </CardContent>
           <Divider />
           <CardContent>
-            <FastField
+            <Field
               component={Select}
               fullWidth
               required
@@ -159,7 +159,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               alignItems='center'
             >
               <Grid item xs={12} md={6}>
-                <FastField
+                <Field
                   component={Select}
                   fullWidth
                   required
