@@ -5,15 +5,23 @@ RSpec.describe 'NewsFeeds', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym) }
+  let(:group) { create(:group, enterprise: enterprise) }
+  let!(:item) { group.news_feed }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   describe '#index' do
-    it 'gets all items' do
+    before do
       get "/api/v1/#{route}", headers: headers
+    end
+
+    it 'gets all items' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes', skip: 'no serializer' do
+      expect(JSON.parse(response.body)['page']['items'].first).to include('id' => item.id)
     end
 
     it 'captures the error' do
@@ -55,7 +63,7 @@ RSpec.describe 'NewsFeeds', type: :request do
 
     it 'contains expected attributes', skip: 'no serializer' do
       id = JSON.parse(response.body)['news_feed_link']['id']
-      expect(model.constantize.find(id).news_feed_id).to eq new_item.news_feed_id
+      expect(model.constantize.find(id).group_id).to eq new_item.group_id
     end
 
     it 'captures the error when BadRequestException' do
