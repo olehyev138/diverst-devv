@@ -6,15 +6,22 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym, news_feed: group.news_feed) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   describe '#index' do
-    it 'gets all items' do
+    before do
       get "/api/v1/#{route}", headers: headers
+    end
+
+    it 'gets all items' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes' do
+      expect(JSON.parse(response.body)['page']['items'].first).to include('id' => item.id)
     end
 
     it 'captures the error' do
