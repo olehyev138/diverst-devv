@@ -9,7 +9,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:news_link) { create(:news_link, author: user, group: group) }
   let(:segment) { create(:segment, enterprise: enterprise) }
   let(:news_link_segment) { create(:news_link_segment, segment: segment, news_link: news_link) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym, news_link_segment:news_link_segment, news_feed_link: news_link.news_feed_link) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym, news_link_segment: news_link_segment, news_feed_link: news_link.news_feed_link) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
