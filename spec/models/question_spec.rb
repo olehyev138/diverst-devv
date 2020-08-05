@@ -5,8 +5,14 @@ RSpec.describe Question, type: :model do
     let(:question) { build_stubbed(:question) }
 
     it { expect(question).to belong_to(:campaign).counter_cache(true) }
+    it { expect(question).to belong_to(:department) }
+    it { expect(question).to belong_to(:business_impact) }
     it { expect(question).to have_many(:answer_comments).through(:answers).source(:comments) }
     it { expect(question).to have_many(:answers).inverse_of(:question).dependent(:destroy) }
+    it { expect(question).to have_many(:answer_upvotes).through(:answers).source(:votes) }
+
+    it { expect(question).to belong_to(:department) }
+    it { expect(question).to belong_to(:business_impact) }
 
     it { expect(question).to accept_nested_attributes_for(:answers).allow_destroy(true) }
 

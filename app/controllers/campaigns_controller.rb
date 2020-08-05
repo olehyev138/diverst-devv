@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers, :graphs]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit]
 
@@ -103,6 +103,25 @@ class CampaignsController < ApplicationController
         redirect_to :back
       }
     end
+  end
+
+  def stats
+    authorize Campaign
+    @campaigns = policy_scope(Campaign)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { data: @campaigns.limit(10).map { |c| [c.id, c.title ] } } }
+    end
+  end
+
+  def graphs
+    authorize @campaign, :show? 
+  end
+
+  def view_all_graphs
+    authorize Campaign
+    @campaigns = policy_scope(Campaign)
   end
 
 

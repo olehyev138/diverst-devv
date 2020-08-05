@@ -37,6 +37,14 @@ class CampaignPolicy < ApplicationPolicy
     update?
   end
 
+  def stats?
+    index?
+  end
+
+  def view_all_graphs?
+    index?
+  end
+
   class Scope < Scope
     def index?
       CampaignPolicy.new(user, nil).index?

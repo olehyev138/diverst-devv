@@ -9,14 +9,16 @@ RSpec.describe User::UserCampaignsController, type: :controller do
 
   describe 'GET #index' do
     context 'with logged user' do
-      let!(:published_campaign1) { create(:campaign, status: Campaign.statuses[:published], enterprise: user.enterprise, owner: user, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
+      let!(:published_campaign1) { create(:campaign, status: Campaign.statuses[:published], enterprise: user.enterprise, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
       let!(:campaign_invitation1) { create(:campaign_invitation, campaign: published_campaign1, user: user) }
+      let!(:group_membership) { create(:user_group, group_id: published_campaign1.groups.first.id, user_id: user.id, accepted_member: true) }
+
       login_user_from_let
 
       before { get :index }
 
-      it 'assign to campaigns only published campaigns' do
-        expect(assigns(:campaigns)).to match_array [published_campaign, published_campaign1]
+      it 'assign to campaigns only published campaigns for which current_user is a targeted user' do
+        expect(assigns(:campaigns)).to match_array [published_campaign1]
       end
 
       it 'render index template' do

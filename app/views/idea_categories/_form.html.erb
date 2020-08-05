@@ -1,0 +1,15 @@
+<div class="content__main">
+  <%= simple_form_for @idea_category do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.input :name,
+              label: "Give your category a <strong>name</strong>".html_safe,
+              placeholder: "Business Model",
+              input_html: { autofocus: true } %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

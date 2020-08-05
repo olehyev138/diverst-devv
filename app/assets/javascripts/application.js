@@ -39,6 +39,8 @@
 //= require bootstrap-timepicker/js/bootstrap-timepicker.min
 //= require d3/d3.min
 //= require nvd3/build/nv.d3.min
+//= require chartkick
+//= require Chart.bundle
 //= require_tree .
 
 var Utility = (function() {

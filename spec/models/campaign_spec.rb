@@ -4,7 +4,7 @@ RSpec.describe Campaign, type: :model do
   describe 'when validating' do
     let(:campaign) { build_stubbed(:campaign) }
 
-    it { expect(campaign).to define_enum_for(:status).with([:published, :draft]) }
+    it { expect(campaign).to define_enum_for(:status).with([:published, :draft, :closed, :reopened]) }
     it { expect(campaign).to belong_to(:enterprise) }
     it { expect(campaign).to belong_to(:owner).class_name('User') }
     it { expect(campaign).to have_many(:questions) }
@@ -16,6 +16,7 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to have_many(:users).through(:invitations) }
     it { expect(campaign).to have_many(:answers).through(:questions) }
     it { expect(campaign).to have_many(:answer_comments).through(:questions) }
+    it { expect(campaign).to have_many(:answer_upvotes).through(:questions) }
     it { expect(campaign).to have_many(:campaigns_managers).dependent(:destroy) }
     it { expect(campaign).to have_many(:managers).through(:campaigns_managers).source(:user) }
     it { expect(campaign).to have_many(:sponsors).dependent(:destroy) }
@@ -47,6 +48,141 @@ RSpec.describe Campaign, type: :model do
     end
     it 'is valid' do
       expect(campaign).to be_valid
+    end
+  end
+
+  describe '#top_campaign_performers' do
+    let!(:campaign) { create(:campaign) }
+    let!(:author) { create(:user, enterprise: campaign.enterprise) }
+    let!(:question) { create(:question, campaign_id: campaign.id) }
+    let!(:answers) { create_list(:answer, 3, author_id: author.id, question_id: question.id,
+                                             idea_category_id: create(:idea_category, enterprise_id: campaign.enterprise_id).id)
+    }
+    let!(:reward_action) { create(:reward_action, label: 'Campaign answer',
+                                                  points: 10,
+                                                  key: 'campaign_answer',
+                                                  enterprise: campaign.enterprise)
+    }
+    before do
+      answers.each do |answer|
+        create(:user_reward_action, user_id: author.id,
+                                    answer_id: answer.id,
+                                    points: 10,
+                                    reward_action_id: reward_action.id)
+      end
+    end
+
+    it 'get top campaign performers in hash' do
+      expect(campaign.top_campaign_performers).to eq({ author.name => author.campaign_engagement_points(campaign) })
+    end
+  end
+
+  describe '#engagement_activity_level' do
+    let!(:campaign) { create(:campaign) }
+    let!(:question) { create(:question, campaign_id: campaign.id) }
+    let!(:answers) { create_list(:answer, 3, question_id: question.id,
+                                             idea_category_id: create(:idea_category, enterprise_id: campaign.enterprise_id).id)
+    }
+
+    let!(:engagement_activity_level) { campaign.answers.size + campaign.answer_upvotes.size + campaign.answer_comments.size }
+
+    it 'get engagement activity level' do
+      expect(campaign.engagement_activity_level).to eq(engagement_activity_level)
+    end
+  end
+
+  describe '#chosen ideas' do
+    let!(:campaign) { create(:campaign) }
+    let!(:question) { create(:question, campaign_id: campaign.id) }
+    let!(:answers) { create_list(:answer, 3, question_id: question.id,
+                                             chosen: true,
+                                             idea_category_id: create(:idea_category, enterprise_id: campaign.enterprise_id).id)
+    }
+
+    it 'get chosen ideas' do
+      expect(campaign.chosen_ideas).to eq(answers)
+    end
+  end
+
+  describe '#total_roi' do
+    let!(:campaign) { create(:campaign) }
+    let!(:question) { create(:question, campaign_id: campaign.id) }
+    let!(:answers) { create_list(:answer, 3, question_id: question.id,
+                                             value: 10,
+                                             idea_category_id: create(:idea_category, enterprise_id: campaign.enterprise_id).id)
+    }
+    let!(:total_roi) { answers.map(&:value).sum }
+
+    it 'get total roi' do
+      expect(campaign.total_roi).to eq(total_roi)
+    end
+  end
+
+  describe '.total_roi_for_all_campaigns' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:campaigns) { create_list(:campaign, 2, enterprise: enterprise) }
+    let!(:question1) { create(:question, campaign_id: campaigns[0].id) }
+    let!(:answers1) { create_list(:answer, 3, question_id: question1.id,
+                                              value: 10,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[0].enterprise_id).id)
+    }
+    let!(:question2) { create(:question, campaign_id: campaigns[1].id) }
+    let!(:answers2) { create_list(:answer, 4, question_id: question2.id,
+                                              value: 10,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[1].enterprise_id).id)
+    }
+    let!(:total_roi_for_all_campaigns) { enterprise.answers.map(&:value).sum }
+
+    it 'get total roi for all campaigns' do
+      expect(Campaign.total_roi_for_all_campaigns(enterprise)).to eq(total_roi_for_all_campaigns)
+    end
+  end
+
+  describe '.roi_distribution' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:campaigns) { create_list(:campaign, 2, enterprise: enterprise) }
+    let!(:question1) { create(:question, campaign_id: campaigns[0].id) }
+    let!(:answers1) { create_list(:answer, 3, question_id: question1.id,
+                                              value: 10,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[0].enterprise_id).id)
+    }
+    let!(:question2) { create(:question, campaign_id: campaigns[1].id) }
+    let!(:answers2) { create_list(:answer, 4, question_id: question2.id,
+                                              value: 10,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[1].enterprise_id).id)
+    }
+
+    it 'get roi distribution across campaigns, start with campaign[1]' do
+      expect(Campaign.roi_distribution(enterprise.id, campaigns[1].id)).to eq({ campaigns[1].title => campaigns[1].total_roi,
+                                                                                campaigns[0].title => campaigns[0].total_roi })
+    end
+
+    it 'get roi distribution across campaigns, start with campaign[0]' do
+      expect(Campaign.roi_distribution(enterprise.id, campaigns[0].id)).to eq({ campaigns[0].title => campaigns[0].total_roi,
+                                                                                campaigns[1].title => campaigns[1].total_roi })
+    end
+  end
+
+  describe '.engagement_activity_distribution' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:campaigns) { create_list(:campaign, 2, enterprise: enterprise) }
+    let!(:question1) { create(:question, campaign_id: campaigns[0].id) }
+    let!(:answers1) { create_list(:answer, 3, question_id: question1.id,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[0].enterprise_id).id)
+    }
+    let!(:question2) { create(:question, campaign_id: campaigns[1].id) }
+    let!(:answers2) { create_list(:answer, 4, question_id: question2.id,
+                                              idea_category_id: create(:idea_category, enterprise_id: campaigns[1].enterprise_id).id)
+    }
+
+    it 'get engagement activity level across campaigns, start with campaign[1]' do
+      expect(Campaign.engagement_activity_distribution(enterprise.id, campaigns[1].id)).to eq({ campaigns[1].title => campaigns[1].engagement_activity_level,
+                                                                                                campaigns[0].title => campaigns[0].engagement_activity_level })
+    end
+
+    it 'get engagement activity level across campaigns, start with campaign[0]' do
+      expect(Campaign.engagement_activity_distribution(enterprise.id, campaigns[0].id)).to eq({ campaigns[0].title => campaigns[0].engagement_activity_level,
+                                                                                                campaigns[1].title => campaigns[1].engagement_activity_level })
     end
   end
 

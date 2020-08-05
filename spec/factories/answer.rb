@@ -1,7 +1,9 @@
 FactoryBot.define do
   factory :answer do
+    title { Faker::Lorem.sentence }
     content { Faker::Lorem.paragraph(2) }
     question
+    idea_category
     association :author, factory: :user
     association :contributing_group, factory: :group
     chosen false
