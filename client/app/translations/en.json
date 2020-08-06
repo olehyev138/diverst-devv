@@ -1188,5 +1188,10 @@
   "diverst.snackbars.Event.success.delete.event_comment": "Event comment deleted",
   "diverst.snackbars.Event.success.create.event_comment": "Event comment created",
   "diverst.snackbars.Event.success.finalize_expense": "Successfully finalized expenses",
-  "diverst.snackbars.Event.success.export_attendees": "Successfully exported attendees"
+  "diverst.snackbars.Event.success.export_attendees": "Successfully exported attendees",
+  "diverst.snackbars.GlobalSettings.CustomText.errors.update": "Failed to update custom text",
+  "diverst.snackbars.GlobalSettings.CustomText.success.update": "Custom text updated",
+  "diverst.snackbars.GlobalSettings.EnterpriseConfiguration.errors.load": "Failed to load enterprise",
+  "diverst.snackbars.GlobalSettings.EnterpriseConfiguration.errors.update": "Failed to update enterprise",
+  "diverst.snackbars.GlobalSettings.EnterpriseConfiguration.success.update": "Enterprise updated"
 }
