@@ -11,9 +11,16 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   describe '#index' do
-    it 'gets all items' do
+    before do
       get "/api/v1/#{route}", headers: headers
+    end
+
+    it 'gets all items' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes', skip: 'no serializer' do
+      expect(JSON.parse(response.body)['page']['items'].first).to include('id' => item.id)
     end
 
     it 'captures the error' do
@@ -24,9 +31,16 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#show' do
-    it 'gets a item' do
+    before do
       get "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'gets a item' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes', skip: 'no serializer' do
+      expect(JSON.parse(response.body)['initiative_group']).to include('id' => item.id)
     end
 
     it 'captures the error' do
@@ -37,9 +51,18 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
+    let!(:new_item) { build(route.singularize.to_sym) }
+    before do
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
+    end
+
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(201)
+    end
+
+    it 'contains expected attributes', skip: 'no serializer' do
+      id = JSON.parse(response.body)['initiative_group']['id']
+      expect(model.constantize.find(id).group_id).to eq new_item.group_id
     end
 
     it 'captures the error when BadRequestException' do
@@ -52,9 +75,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
+    let!(:new_params) { { id: item.id, group_id: 0 } }
+    before do
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
+    end
+
     it 'updates an item' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'contains expected attributes' do
+      expect(model.constantize.find(item.id).group_id).to eq new_params[:group_id]
     end
 
     it 'captures the error when BadRequestException' do
@@ -67,9 +98,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#destroy' do
-    it 'deletes an item' do
+    before do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'deletes an item' do
       expect(response).to have_http_status(:no_content)
+    end
+
+    it 'returns nil' do
+      record = model.constantize.find(item.id) rescue nil
+      expect(record).to eq nil
     end
 
     it 'captures the error' do
