@@ -23,8 +23,8 @@ const styles = theme => ({
 });
 
 const PlanPages = Object.freeze([
-  'events',
   'kpi',
+  'events',
   'budgeting',
 ]);
 
