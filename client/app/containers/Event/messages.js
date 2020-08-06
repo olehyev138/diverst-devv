@@ -160,5 +160,14 @@ export default defineMessages({
     until: {
       id: `${scope}.show.until`
     },
+    participating_groups: {
+      id: `${scope}.show.participating_groups`
+    },
+    hosted_by: {
+      id: `${scope}.show.hosted_by`
+    },
+    hosted_by_group: {
+      id: `${scope}.show.hosted_by_group`
+    },
   },
 });
