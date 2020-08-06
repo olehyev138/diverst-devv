@@ -103,11 +103,17 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#destroy' do
-    it 'deletes an item' do
-      total = model.constantize.count
+    before do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
+    end
+
+    it 'deletes an item' do
       expect(response).to have_http_status(:no_content)
-      expect(model.constantize.count).to eq total - 1
+    end
+
+    it 'returns nil' do
+      record = model.constantize.find(item.id) rescue nil
+      expect(record).to eq nil
     end
 
     it 'captures the error' do
