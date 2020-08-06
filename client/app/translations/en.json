@@ -1155,5 +1155,16 @@
   "diverst.containers.Permissions.poll.pollShowPage": "You don't have permission to view this poll",
   "diverst.components.DiverstLogoutDialog.later": "Later",
   "diverst.components.DiverstLogoutDialog.logout": "Log out",
-  "diverst.components.DiverstLogoutDialog.logoutmessage": "Please log out to view any changes that have been made to your enterprise settings."
+  "diverst.components.DiverstLogoutDialog.logoutmessage": "Please log out to view any changes that have been made to your enterprise settings.",
+  "diverst.snackbars.Analyze.errors.load.group_overview": "Failed to load group metrics",
+  "diverst.snackbars.Analyze.errors.load.population" : "Failed to load group population graph",
+  "diverst.snackbars.Analyze.errors.load.group.initiatives" : "Failed to load initiatives per group graph",
+  "diverst.snackbars.Analyze.errors.load.group.news" : "Failed to load news per group graph",
+  "diverst.snackbars.Analyze.errors.load.views.group" : "Failed to load views per group graph",
+  "diverst.snackbars.Analyze.errors.load.views.news_link" : "Failed to load views per news link graph",
+  "diverst.snackbars.Analyze.errors.load.views.folder" : "Failed to load views per folder graph",
+  "diverst.snackbars.Analyze.errors.load.views.resource" : "Failed to load views per resource graph",
+  "diverst.snackbars.Analyze.errors.load.growth.groups" : "Failed to load growth of groups graph",
+  "diverst.snackbars.Analyze.errors.load.growth.resources" : "Failed to load growth of resources graph",
+  "diverst.snackbars.Analyze.errors.load.growth.users" : "Failed to load growth of users graph"
 }

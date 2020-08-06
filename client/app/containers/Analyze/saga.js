@@ -27,7 +27,7 @@ import {
   getGrowthOfUsersSuccess, getGrowthOfUsersError
 } from 'containers/Analyze/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import messages from "./messages";
 
 export function* getGroupOverviewMetrics(action) {
   try {
@@ -78,19 +78,6 @@ export function* getViewsPerGroup(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to load views per group graph', options: { variant: 'warning' } }));
-  }
-}
-
-export function* getGrowthOfGroups(action) {
-  try {
-    const response = yield call(api.metrics.groupGraphs.growthOfGroups.bind(api.metrics.groupGraphs), action.payload);
-
-    yield put(getGrowthOfGroupsSuccess(response.data));
-  } catch (err) {
-    yield put(getGrowthOfGroupsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load growth of groups graph', options: { variant: 'warning' } }));
   }
 }
 
@@ -156,6 +143,19 @@ export function* getViewsPerResource(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to load views per resource graph', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getGrowthOfGroups(action) {
+  try {
+    const response = yield call(api.metrics.groupGraphs.growthOfGroups.bind(api.metrics.groupGraphs), action.payload);
+
+    yield put(getGrowthOfGroupsSuccess(response.data));
+  } catch (err) {
+    yield put(getGrowthOfGroupsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load growth of groups graph', options: { variant: 'warning' } }));
   }
 }
 

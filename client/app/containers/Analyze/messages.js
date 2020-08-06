@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Group';
+export const snackbar = 'diverst.snackbars.Analyze'
 
 export default defineMessages({
   new: {
@@ -85,5 +86,46 @@ export default defineMessages({
     to: {
       id: `${scope}.selector.text.to`,
     },
-  }
+  },
+  snackbars: {
+    group_overview: {
+      id: `${snackbar}.errors.load.group_overview`,
+    },
+    population: {
+      id: `${snackbar}.errors.load.population`,
+    },
+    group: {
+      initiatives: {
+        id: `${snackbar}.errors.load.group.initiatives`,
+      },
+      news: {
+        id: `${snackbar}.errors.load.group.news`,
+      },
+    },
+    views: {
+      group: {
+        id: `${snackbar}.errors.load.views.group`,
+      },
+      news_link: {
+        id: `${snackbar}.errors.load.views.news_link`,
+      },
+      folders: {
+        id: `${snackbar}.errors.load.views.folder`,
+      },
+      resources: {
+        id: `${snackbar}.errors.load.views.resource`,
+      },
+    },
+    growth: {
+      groups: {
+        id: `${snackbar}.errors.load.growth.groups`,
+      },
+      resources: {
+        id: `${snackbar}.errors.load.growth.resources`,
+      },
+      users: {
+        id: `${snackbar}.errors.load.growth.users`,
+      },
+    }
+  },
 });
