@@ -5,6 +5,7 @@
  */
 
 import { defineMessages } from 'react-intl';
+import {snackbar} from "../../GroupMembers/messages";
 
 export const scope = 'diverst.containers.AnnualBudget';
 
@@ -130,4 +131,31 @@ export default defineMessages({
       id: `${scope}.adminList.notSet`,
     },
   },
+  snackbars: {
+    errors: {
+      currentAnnualBudget: {
+        id: `${snackbar}.errors.load.currentBudget`
+      },
+      annualBudget: {
+        id: `${snackbar}.errors.load.annualBudget`
+      },
+      annualBudgets: {
+        id: `${snackbar}.errors.load.annualBudgets`
+      },
+      create: {
+        id: `${snackbar}.errors.create.annualBudget`
+      },
+      update: {
+        id: `${snackbar}.errors.update.annualBudget`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.annualBudget`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.annualBudget`
+      },
+    },
+  }
 });
