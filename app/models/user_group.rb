@@ -14,6 +14,7 @@ class UserGroup < BaseClass
 
   scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
   scope :with_answered_survey, -> { where.not(data: nil) }
+  scope :invited_users, -> { where.not(invitation_sent_at: nil) }
 
   before_destroy :remove_leader_role
 
