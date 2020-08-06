@@ -27,24 +27,24 @@ export function KPILinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          {/* NOT IMPLEMENTED YET */}
-          {/* <Tab */}
-          {/*  component={WrappedNavLink} */}
-          {/*  to={ROUTES.group.plan.kpi.metrics.path(props.currentGroup.id)} */}
-          {/*  label={<DiverstFormattedMessage {...messages.links.metrics} />} */}
-          {/* /> */}
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.fields.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.fields} />}
-            value='fields'
-          />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.updates} />}
             value='updates'
           />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.group.plan.kpi.fields.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.fields} />}
+            value='fields'
+          />
+          {/* NOT IMPLEMENTED YET */}
+          {/* <Tab */}
+          {/*  component={WrappedNavLink} */}
+          {/*  to={ROUTES.group.plan.kpi.metrics.path(props.currentGroup.id)} */}
+          {/*  label={<DiverstFormattedMessage {...messages.links.metrics} />} */}
+          {/* /> */}
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>
