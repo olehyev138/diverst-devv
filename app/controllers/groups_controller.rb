@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!, except: [:calendar_data]
-  before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups, :get_paginated_groups]
+  before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, 
+                                     :close_budgets_export_csv, :sort, :get_all_groups, :get_paginated_groups]
   before_action :set_groups, only: [:index, :get_all_groups]
   skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
   after_action :verify_authorized, except: [:calendar_data]
@@ -161,6 +162,9 @@ class GroupsController < ApplicationController
     authorize @group
     @group_sponsors = @group.sponsors
     @show_events = should_show_event?(@group)
+
+    # get users except members of this group and current_user to avoid sending invites to users with group membership already
+    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - UserGroup.where(group_id: @group.id).pluck(:user_id)).uniq)
 
     if GroupPolicy.new(current_user, @group).manage?
       base_show
@@ -402,6 +406,25 @@ class GroupsController < ApplicationController
     redirect_to :back
   end
 
+  def users_to_invite_to_group
+    authorize @group, :show? 
+
+    # get users except members of this group and current_user to avoid sending invites to users with group membership already
+    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - UserGroup.where(group_id: @group.id).pluck(:user_id)).uniq)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UsersToInviteToGroupDatatable.new(view_context, @group, @users_to_invite) }
+    end
+  end
+
+  def invite_users
+    authorize @group, :show?
+    # InviteUsersToGroupJob
+
+    render nothing: true, status: :ok
+  end
+
   protected
 
   def should_show_event?(group)
@@ -471,6 +494,8 @@ class GroupsController < ApplicationController
   def search_params
     params.permit(:page, :limit, :term, ids: [])
   end
+
+  def 
 
   def group_params
     params
