@@ -19,8 +19,8 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import ShareIcon from '@material-ui/icons/Share';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
-import {DiverstFormattedMessage} from "components/Shared/DiverstFormattedMessage";
-import messages from "containers/Event/messages";
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/messages';
 
 const styles = theme => ({
   arrowRight: {
