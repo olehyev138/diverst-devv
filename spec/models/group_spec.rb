@@ -1242,37 +1242,29 @@ RSpec.describe Group, type: :model do
   end
 
   describe 'protected' do
-    before do
-      Group.send(:public, *Group.protected_instance_methods)
-    end
-
     describe 'url_protocol' do
       it 'returns url with protocol' do
         group = build(:group, company_video_url: 'google.com')
-        expect(group.smart_add_url_protocol).to eq 'http://google.com'
+        expect(group.send(:smart_add_url_protocol)).to eq 'http://google.com'
       end
 
       it 'has protocol' do
         group = build(:group, company_video_url: 'http://google.com')
-        expect(group.have_protocol?).to_not be nil
+        expect(group.send(:have_protocol?)).to_not be nil
       end
     end
   end
 
   describe 'private' do
-    before do
-      Group.send(:public, *Group.private_instance_methods)
-    end
-
     describe 'should_create_yammer_group?' do
       it 'returns false' do
         group = create(:group)
-        expect(group.should_create_yammer_group?).to eq false
+        expect(group.send(:should_create_yammer_group?)).to eq false
       end
       it 'returns true' do
         enterprise = build(:enterprise, yammer_token: 'token')
         group = create(:group, enterprise: enterprise, yammer_create_group: true, yammer_group_created: false)
-        expect(group.should_create_yammer_group?).to eq true
+        expect(group.send(:should_create_yammer_group?)).to eq true
       end
     end
 
@@ -1286,11 +1278,11 @@ RSpec.describe Group, type: :model do
         UserGroup.first.update(accepted_member: false)
       end
       it 'returns member' do
-        expect(group.filter_by_membership(true).count).to eq 2
+        expect(group.send(:filter_by_membership, true).count).to eq 2
       end
 
       it 'returns not member' do
-        expect(group.filter_by_membership(false).count).to eq 1
+        expect(group.send(:filter_by_membership, false).count).to eq 1
       end
     end
 
