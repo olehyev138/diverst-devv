@@ -5,7 +5,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import {snackbar} from "../../GroupMembers/messages";
+import { snackbar } from '../../GroupMembers/messages';
 
 export const scope = 'diverst.containers.AnnualBudget';
 

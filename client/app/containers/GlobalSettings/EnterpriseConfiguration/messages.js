@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.GlobalSettings.Configurations';
-export const snackbar = 'diverst.snackbars.GlobalSettings.EnterpriseConfiguration'
+export const snackbar = 'diverst.snackbars.GlobalSettings.EnterpriseConfiguration';
 export default defineMessages({
   update: {
     id: `${scope}.button.update`,

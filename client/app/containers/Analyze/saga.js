@@ -27,7 +27,7 @@ import {
   getGrowthOfUsersSuccess, getGrowthOfUsersError
 } from 'containers/Analyze/actions';
 
-import messages from "./messages";
+import messages from './messages';
 
 export function* getGroupOverviewMetrics(action) {
   try {
