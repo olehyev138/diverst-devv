@@ -16,10 +16,6 @@ RSpec.describe GroupsField, type: :model do
   end
 
   describe 'private' do
-    before do
-      GroupsField.send(:public, *GroupsField.private_instance_methods)
-    end
-
     it 'does init' do
       groups_field = GroupsField.create(attributes_for(:groups_field))
       expect(groups_field.title).to eq('ERGs')

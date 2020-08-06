@@ -34,17 +34,17 @@ export function GroupPlanLinks(props) {
         >
           <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.event} />}
-            value='events'
-            show={permission(props.currentGroup, 'events_manage?')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.KPI} />}
             value='kpi'
             show={permission(props.currentGroup, 'kpi_manage?')}
+          />
+          <PermissionTabs
+            component={WrappedNavLink}
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.event} />}
+            value='events'
+            show={permission(props.currentGroup, 'events_manage?')}
           />
           <PermissionTabs
             component={WrappedNavLink}
