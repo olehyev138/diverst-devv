@@ -83,7 +83,7 @@ jobs:
           no_output_timeout: 60m
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
-    parallelism: 4
+    parallelism: 2
     docker:
       - image: awsdiverst/cci-primary:0.0.3
         environment:
