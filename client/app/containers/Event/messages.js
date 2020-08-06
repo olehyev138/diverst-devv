@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Event';
+export const snackbar = 'diverst.snackbars.Event';
 
 export default defineMessages({
   comment: {
@@ -158,4 +159,70 @@ export default defineMessages({
       id: `${scope}.show.until`
     },
   },
+  snackbars: {
+    errors: {
+      create_event: {
+        id: `${snackbar}.errors.create.event`
+      },
+      update_event: {
+        id: `${snackbar}.errors.update.event`
+      },
+      delete_event: {
+        id: `${snackbar}.errors.delete.event`
+      },
+      load_events_no_permission: {
+        id: `${snackbar}.errors.load.events.no_permission`
+      },
+      load_events: {
+        id: `${snackbar}.errors.load.events`
+      },
+      load_event: {
+        id: `${snackbar}.errors.load.event`
+      },
+      create_event_comment: {
+        id: `${snackbar}.errors.create.event_comment`
+      },
+      delete_event_comment: {
+        id: `${snackbar}.errors.delete.event_comment`
+      },
+      archive: {
+        id: `${snackbar}.errors.archive`
+      },
+      join: {
+        id: `${snackbar}.errors.join`
+      },
+      leave: {
+        id: `${snackbar}.errors.leave`
+      },
+      finalize_expense: {
+        id: `${snackbar}.errors.finalize_expense`
+      },
+      export_attendees: {
+        id: `${snackbar}.errors.export_attendees`
+      },
+    },
+    success: {
+      create_event: {
+        id: `${snackbar}.success.create.event`
+      },
+      update_event: {
+        id: `${snackbar}.success.update.event`
+      },
+      delete_event: {
+        id: `${snackbar}.success.delete.event`
+      },
+      create_event_comment: {
+        id: `${snackbar}.success.create.event_comment`
+      },
+      delete_event_comment: {
+        id: `${snackbar}.success.delete.event_comment`
+      },
+      finalize_expense: {
+        id: `${snackbar}.success.finalize_expense`
+      },
+      export_attendees: {
+        id: `${snackbar}.success.export_attendees`
+      },
+    }
+  }
 });
