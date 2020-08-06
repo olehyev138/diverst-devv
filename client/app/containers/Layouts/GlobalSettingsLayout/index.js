@@ -22,9 +22,9 @@ const styles = theme => ({});
 const redirectAction = path => push(path);
 
 const GlobalSettingsPages = Object.freeze([
+  'configuration',
   'fields',
   'custom_texts',
-  'configuration',
   'sso',
   'email',
   'policy_templates',
