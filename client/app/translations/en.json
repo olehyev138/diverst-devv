@@ -1166,5 +1166,7 @@
   "diverst.snackbars.Analyze.errors.load.views.resource" : "Failed to load views per resource graph",
   "diverst.snackbars.Analyze.errors.load.growth.groups" : "Failed to load growth of groups graph",
   "diverst.snackbars.Analyze.errors.load.growth.resources" : "Failed to load growth of resources graph",
-  "diverst.snackbars.Analyze.errors.load.growth.users" : "Failed to load growth of users graph"
+  "diverst.snackbars.Analyze.errors.load.growth.users" : "Failed to load growth of users graph",
+  "diverst.snackbars.Archive.errors.load.archives" : "Failed to load archives",
+  "diverst.snackbars.Archive.errors.restore.archives" : "Failed to restore archived item"
 }
