@@ -75,7 +75,8 @@ RSpec.describe 'InitiativeFields', type: :request do
   end
 
   describe '#update' do
-    let!(:new_params) { { id: item.id, field_id: 0 } }
+    let!(:new_field) { create(:field) }
+    let!(:new_params) { { id: item.id, field_id: new_field.id } }
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end

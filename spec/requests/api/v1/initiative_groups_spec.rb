@@ -75,7 +75,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
-    let!(:new_params) { { id: item.id, group_id: 0 } }
+    let!(:new_group) { create(:group) }
+    let!(:new_params) { { id: item.id, group_id: new_group.id } }
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end
