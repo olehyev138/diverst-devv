@@ -68,17 +68,17 @@ class Resource < ApplicationRecord
     end
   end
 
-  # def as_indexed_json(options = {})
-  #   self.as_json(
-  #     options.merge(
-  #       only: [:owner_id, :created_at],
-  #       include: { folder: {
-  #         only: [:id, :group_id],
-  #         include: { group: { only: [:enterprise_id] } }
-  #       } }
-  #     )
-  #   ).merge({ 'created_at' => self.created_at.beginning_of_hour })
-  # end
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:owner_id, :created_at],
+        include: { folder: {
+          only: [:id, :group_id],
+          include: { group: { only: [:enterprise_id] } }
+        } }
+      )
+    ).merge({ 'created_at' => self.created_at.beginning_of_hour })
+  end
 
   def tag_tokens=(tokens)
     return if tokens.nil?

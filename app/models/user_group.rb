@@ -85,29 +85,29 @@ class UserGroup < ApplicationRecord
     group.pending_users == 'disabled' || accepted_member
   end
 
-  # def as_indexed_json(options = {})
-  #   self.as_json(
-  #     options.merge(
-  #       only: [:user_id, :group_id, :created_at],
-  #       include: {
-  #         group: {
-  #           only: [:enterprise_id, :parent_id, :name],
-  #           include: { parent: { only: [:name] } },
-  #         },
-  #         user: {
-  #           only: [:enterprise_id, :created_at, :mentor, :mentee, :active],
-  #         }
-  #       },
-  #       methods: [:field_data]
-  #     )
-  #   )
-  #   .deep_merge({
-  #     'created_at' => self.created_at.beginning_of_hour,
-  #     'user' => {
-  #       'created_at' => self.user.created_at.beginning_of_hour,
-  #     }
-  #   })
-  # end
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:user_id, :group_id, :created_at],
+        include: {
+          group: {
+            only: [:enterprise_id, :parent_id, :name],
+            include: { parent: { only: [:name] } },
+          },
+          user: {
+            only: [:enterprise_id, :created_at, :mentor, :mentee, :active],
+          }
+        },
+        methods: [:field_data]
+      )
+    )
+    .deep_merge({
+      'created_at' => self.created_at.beginning_of_hour,
+      'user' => {
+        'created_at' => self.user.created_at.beginning_of_hour,
+      }
+    })
+  end
 
   # For use by ES indexing - method has to be defined in same class
   def user_field_data

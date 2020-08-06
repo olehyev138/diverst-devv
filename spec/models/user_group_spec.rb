@@ -238,31 +238,31 @@ RSpec.describe UserGroup do
     end
   end
 
-  # describe 'elasticsearch methods' do
-  #   context '#as_indexed_json' do
-  #     let!(:object) { create(:user_group) }
-  #
-  #     it 'serializes the correct fields with the correct data' do
-  #       hash = {
-  #         'user_id' => object.user_id,
-  #         'group_id' => object.group_id,
-  #         'created_at' => object.created_at.beginning_of_hour,
-  #         'group' => {
-  #           'enterprise_id' => object.group.enterprise_id,
-  #           'name' => object.group.name,
-  #           'parent_id' => object.group.parent_id
-  #         },
-  #         'user' => {
-  #           'created_at' => object.user.created_at.beginning_of_hour,
-  #           'enterprise_id' => object.user.enterprise_id,
-  #           'mentor' => object.user.mentor,
-  #           'mentee' => object.user.mentee,
-  #           'active' => object.user.active
-  #         },
-  #         'field_data' => object.field_data
-  #       }
-  #       expect(object.as_indexed_json).to eq(hash)
-  #     end
-  #   end
-  # end
+  describe 'elasticsearch methods' do
+    context '#as_indexed_json' do
+      let!(:object) { create(:user_group) }
+
+      it 'serializes the correct fields with the correct data' do
+        hash = {
+          'user_id' => object.user_id,
+          'group_id' => object.group_id,
+          'created_at' => object.created_at.beginning_of_hour,
+          'group' => {
+            'enterprise_id' => object.group.enterprise_id,
+            'name' => object.group.name,
+            'parent_id' => object.group.parent_id
+          },
+          'user' => {
+            'created_at' => object.user.created_at.beginning_of_hour,
+            'enterprise_id' => object.user.enterprise_id,
+            'mentor' => object.user.mentor,
+            'mentee' => object.user.mentee,
+            'active' => object.user.active
+          },
+          'field_data' => object.field_data
+        }
+        expect(object.as_indexed_json).to eq(hash)
+      end
+    end
+  end
 end

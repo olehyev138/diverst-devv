@@ -11,9 +11,16 @@ RSpec.describe 'InitiativeComments', type: :request do
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   describe '#index' do
-    it 'gets all items' do
+    before do
       get "/api/v1/#{route}", headers: headers
+    end
+
+    it 'gets all items' do
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'JSON body response contains expected attributes' do
+      expect(JSON.parse(response.body)['page']['items'].first).to include('id' => item.id)
     end
 
     it 'captures the error' do
