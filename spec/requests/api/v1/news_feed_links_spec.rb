@@ -76,7 +76,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
-    let!(:new_params) { { id: item.id, news_feed_id: 0 } }
+    let!(:new_params) { { id: item.id, approved: true } }
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end
@@ -86,7 +86,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'contains expected attributes' do
-      expect(model.constantize.find(item.id).news_feed_id).to eq new_params[:news_feed_id]
+      expect(model.constantize.find(item.id).approved).to eq new_params[:approved]
     end
 
     it 'captures the error when BadRequestException' do
