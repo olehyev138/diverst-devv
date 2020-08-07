@@ -420,7 +420,7 @@ class GroupsController < ApplicationController
 
   def invite_users
     authorize @group, :show?
-
+    
     InviteUsersToGroupJob.perform_later(@group.id, params[:user_id].to_i, current_user.id)
 
     render nothing: true, status: :ok

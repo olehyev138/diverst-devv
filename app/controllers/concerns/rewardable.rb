@@ -1,8 +1,8 @@
 module Rewardable
   extend ActiveSupport::Concern
 
-  def user_rewarder(action_key)
-    Rewards::Points::Manager.new(current_user, action_key)
+  def user_rewarder(user = current_user, action_key)
+    Rewards::Points::Manager.new(user, action_key)
   end
 
   def flash_reward(message)
