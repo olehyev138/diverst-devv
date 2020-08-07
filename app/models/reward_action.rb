@@ -6,4 +6,5 @@ class RewardAction < BaseClass
   validates :label, presence: true
   validates :key, presence: true
   validates :points, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :key, uniqueness: { scope: :enterprise_id }
 end
