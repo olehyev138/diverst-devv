@@ -77,7 +77,7 @@ after 'development:enterprise' do
             :name => "Survey Mailer", 
             :mailer_name => "poll_mailer",
             :mailer_method => "invitation",
-            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to participate in the following online in Diverst: %{survey.title}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to participate in the following online survey in Diverst: %{survey.title}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
             :subject => "You are Invited to participate in a '%{survey.title}' survey", 
             :description => "Email that goes out to users invited to participate in a survey/poll",
             :template => ""
