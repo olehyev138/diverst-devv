@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Segment';
+export const snackbar = 'diverst.snackbars.Segments'
 
 export default defineMessages({
   new: {
@@ -129,5 +130,38 @@ export default defineMessages({
         id: `${scope}.rule.group.operator`,
       },
     }
-  }
+  },
+  snackbars: {
+    errors: {
+      segments: {
+        id: `${snackbar}.errors.load.segments`
+      },
+      segment: {
+        id: `${snackbar}.errors.load.segment`
+      },
+      create: {
+        id: `${snackbar}.errors.create.segment`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.segment`
+      },
+      update: {
+        id: `${snackbar}.errors.update.segment`
+      },
+      members: {
+        id: `${snackbar}.errors.load.members`
+      }
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.segment`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.segment`
+      },
+      update: {
+        id: `${snackbar}.success.update.segment`
+      },
+    },
+  },
 });
