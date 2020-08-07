@@ -35,7 +35,7 @@ RSpec.describe 'InitiativeComments', type: :request do
       get "/api/v1/#{route}/#{item.id}", headers: headers
     end
 
-    it 'gets a item' do
+    it 'gets an item' do
       expect(response).to have_http_status(:ok)
     end
 
