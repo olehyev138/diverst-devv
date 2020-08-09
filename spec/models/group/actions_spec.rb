@@ -6,69 +6,99 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'valid_scopes' do
-    it { expect(Group.valid_scopes.include?('all_children')).to eq true }
-    it { expect(Group.valid_scopes.include?('all_parents')).to eq true }
-    it { expect(Group.valid_scopes.include?('no_children')).to eq true }
-    it { expect(Group.valid_scopes.include?('is_private')).to eq true }
+    let(:valid_scopes) {
+      %w(
+          all_children
+          all_parents
+          no_children
+          is_private
+          joined_groups
+      )
+    }
+
+    it { expect(Group.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_preloads' do
-    it { expect(Group.base_preloads.include?(:news_feed)).to eq true }
-    it { expect(Group.base_preloads.include?(:annual_budgets)).to eq true }
-    it { expect(Group.base_preloads.include?(:logo_attachment)).to eq true }
-    it { expect(Group.base_preloads.include?(:banner_attachment)).to eq true }
-    it { expect(Group.base_preloads.include?({ enterprise: [:theme] })).to eq true }
-    it { expect(Group.base_preloads.include?(:user_groups)).to eq true }
-    it { expect(Group.base_preloads.include?(:group_leaders)).to eq true }
-    it { expect(Group.base_preloads.include?(:children)).to eq true }
-    it { expect(Group.base_preloads.include?(:parent)).to eq true }
-    it { expect(Group.base_preloads.include?(:enterprise)).to eq true }
-    it { expect(Group.base_preloads.include?({ children: [:news_feed,
-                                                          :annual_budgets,
-                                                          :logo_attachment,
-                                                          :banner_attachment,
-                                                          { enterprise: [:theme] },
-                                                          :user_groups,
-                                                          :group_leaders,
-                                                          :children,
-                                                          :parent,
-                                                          :enterprise],
-                                               parent: [:news_feed,
-                                                        :annual_budgets,
-                                                        :logo_attachment,
-                                                        :banner_attachment,
-                                                        { enterprise: [:theme] },
-                                                        :user_groups,
-                                                        :group_leaders,
-                                                        :children,
-                                                        :parent,
-                                                        :enterprise] })).to eq true
+    let(:base_preloads) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          { enterprise: [ :theme ] },
+          :user_groups,
+          :group_leaders,
+          :children,
+          :parent,
+          :enterprise,
+          children: [
+              :news_feed,
+              :annual_budgets,
+              :logo_attachment,
+              :banner_attachment,
+              { enterprise: [:theme] },
+              :user_groups,
+              :group_leaders,
+              :children,
+              :parent,
+              :enterprise
+          ],
+          parent: [
+              :news_feed,
+              :annual_budgets,
+              :logo_attachment,
+              :banner_attachment,
+              { enterprise: [:theme] },
+              :user_groups,
+              :group_leaders,
+              :children,
+              :parent,
+              :enterprise
+          ]
+      ]
     }
+
+    it { expect(Group.base_preloads).to eq base_preloads }
   end
 
   describe 'base_preloads_budget' do
-    it { expect(Group.base_preloads_budget.include?(:annual_budgets)).to eq true }
+    let(:base_preloads_budget) { [:annual_budgets] }
+
+    it { expect(Group.base_preloads_budget).to eq base_preloads_budget }
   end
 
   describe 'base_preload_no_recursion' do
-    it { expect(Group.base_preload_no_recursion.include?(:news_feed)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:annual_budgets)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:logo_attachment)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:banner_attachment)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?({ enterprise: [:theme] })).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:user_groups)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:group_leaders)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:children)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:parent)).to eq true }
-    it { expect(Group.base_preload_no_recursion.include?(:enterprise)).to eq true }
+    let(:base_preload_no_recursion) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          { enterprise: [ :theme ] },
+          :user_groups,
+          :group_leaders,
+          :children,
+          :parent,
+          :enterprise,
+      ]
+    }
+
+    it { expect(Group.base_preload_no_recursion).to eq base_preload_no_recursion }
   end
 
   describe 'base_attributes_preloads' do
-    it { expect(Group.base_attributes_preloads.include?(:news_feed)).to eq true }
-    it { expect(Group.base_attributes_preloads.include?(:annual_budgets)).to eq true }
-    it { expect(Group.base_attributes_preloads.include?(:logo_attachment)).to eq true }
-    it { expect(Group.base_attributes_preloads.include?(:banner_attachment)).to eq true }
-    it { expect(Group.base_attributes_preloads.include?({ enterprise: [:theme] })).to eq true }
+    let(:base_attributes_preloads) {
+      [
+          :news_feed,
+          :annual_budgets,
+          :logo_attachment,
+          :banner_attachment,
+          enterprise: [ :theme ]
+      ]
+    }
+
+    it { expect(Group.base_attributes_preloads).to eq base_attributes_preloads }
   end
 
   describe 'update_child_categories' do
