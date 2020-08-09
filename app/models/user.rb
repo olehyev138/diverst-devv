@@ -89,6 +89,7 @@ class User < BaseClass
   has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :suggested_hires, dependent: :destroy
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535

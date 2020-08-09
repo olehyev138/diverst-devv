@@ -407,7 +407,7 @@ class GroupsController < ApplicationController
   end
 
   def users_to_invite_to_group
-    authorize @group, :show? 
+    authorize @group, :show?
 
     # get users except members of this group and current_user to avoid sending invites to users with group membership already
     @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id)).uniq)

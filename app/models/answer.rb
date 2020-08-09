@@ -25,7 +25,7 @@ class Answer < BaseClass
   validates_attachment_content_type :video_upload,
                                     content_type: ['video/mp4', 'video/webm'],
                                     message: 'This format is not supported', if: Proc.new { |a| a.content.blank? && a.supporting_document.blank? }
-  
+
   has_attached_file :supporting_document_from_sponsor, s3_permissions: 'private'
   validates_attachment_content_type :supporting_document_from_sponsor,
                                     content_type: ['text/plain', 'application/pdf'],

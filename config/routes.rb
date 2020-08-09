@@ -511,6 +511,7 @@ Rails.application.routes.draw do
   resources :idea_categories
   resources :departments
   resources :business_impacts
+  resources :suggested_hires, only: [:create, :edit, :update, :destroy]
 
   devise_scope :user do
     namespace :user do
