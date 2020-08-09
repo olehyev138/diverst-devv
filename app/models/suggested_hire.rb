@@ -7,4 +7,18 @@ class SuggestedHire < ActiveRecord::Base
   validates_attachment_content_type :resume,
                                     content_type: ['text/plain', 'application/pdf'],
                                     message: 'This format is not supported'
+
+  def avatar
+    suggested_hire.avatar unless suggested_hire.nil?
+  end
+
+  def name 
+    suggested_hire.name unless suggested_hire.nil?
+  end
+
+  def resume_extension
+    File.extname(resume_file_name)[1..-1].downcase
+  rescue
+    ''
+  end
 end

@@ -1,2 +1,25 @@
-<h1>SuggestedHires#index</h1>
-<p>Find me in app/views/suggested_hires/index.html.erb</p>
+<div class="content__header">
+  <h1><%= pluralize(@suggested_hires.size, 'Suggested Hire') %></h1>
+</div>
+<div class="content__main">
+  <div class="card">
+    <% @suggested_hires.each do |suggested_hire| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell">
+            <%= image_tag suggested_hire.avatar.expiring_url(3600, :thumb), height: 100 %>
+          </div>
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4><%= suggested_hire.name %></h4>
+            <p><% if suggested_hire.resume.exists? %> (<a href="<%= suggested_hire.resume.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_suggested_hire(suggested_hire) %>)"></a> <%= link_to "resume", suggested_hire.resume.expiring_url(3600) %>)<% end %></p>
+          </div>
+          <div style="float: right;">
+            <%= link_to 'Edit', edit_suggested_hire_path(suggested_hire, group_id: @group.id) %>
+            <%= link_to 'Delete', suggested_hire_path(suggested_hire, group_id: @group.id), method: :delete,
+                                                                      data: { confirm: 'Are you sure?' }, class: 'error' %> 
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
