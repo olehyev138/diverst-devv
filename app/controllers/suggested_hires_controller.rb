@@ -3,7 +3,7 @@ class SuggestedHiresController < ApplicationController
   before_action :set_group, only: [:create]
 
   layout 'erg'
-  
+
   def index
   end
 
@@ -16,10 +16,11 @@ class SuggestedHiresController < ApplicationController
     suggested_hire = SuggestedHire.new(suggested_hire_params)
 
     if suggested_hire.save
+      track_activity(@group, :suggest_a_hire)
       flash[:notice] = 'You just suggested a hire'
       redirect_to group_path(@group)
     else
-      flash[:alert] = "Something went wrong."
+      flash[:alert] = 'Something went wrong'
       redirect_to group_path(@group)
     end
   end
@@ -31,8 +32,8 @@ class SuggestedHiresController < ApplicationController
   private
 
   def suggested_hire_params
-    params.require(:suggested_hire).permit(:user_id, 
-                                           :group_id, 
+    params.require(:suggested_hire).permit(:user_id,
+                                           :group_id,
                                            :suggested_hire_id,
                                            :resume)
   end
