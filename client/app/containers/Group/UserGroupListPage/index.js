@@ -14,7 +14,7 @@ import { Button, Grid } from '@material-ui/core';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
+import { getGroupsBegin, groupAllUnmount, deleteGroupBegin } from 'containers/Group/actions';
 import reducer from 'containers/Group/reducer';
 
 import saga from 'containers/Group/saga';
@@ -37,7 +37,7 @@ export function UserGroupListPage(props) {
   useEffect(() => {
     props.getGroupsBegin(params);
 
-    return () => props.groupListUnmount();
+    return () => props.groupAllUnmount();
   }, []);
 
   const handlePagination = (payload) => {
@@ -76,7 +76,7 @@ export function UserGroupListPage(props) {
     ));
     return parentGroups;
   };
-  
+
   return (
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>
@@ -121,7 +121,7 @@ export function UserGroupListPage(props) {
 
 UserGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
+  groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   groups: PropTypes.array,
   user: PropTypes.object,
@@ -140,7 +140,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
-    groupListUnmount: () => dispatch(groupListUnmount()),
+    groupAllUnmount: () => dispatch(groupAllUnmount()),
     deleteGroupBegin: payload => dispatch(deleteGroupBegin(payload))
   };
 }

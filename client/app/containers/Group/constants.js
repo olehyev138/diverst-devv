@@ -49,6 +49,7 @@ export const RESET_BUDGET_SUCCESS = 'app/Group/RESET_BUDGET_SUCCESS';
 export const RESET_BUDGET_ERROR = 'app/Group/RESET_BUDGET_ERROR';
 
 export const GROUP_LIST_UNMOUNT = 'app/Group/GROUP_LIST_UNMOUNT';
+export const GROUP_ALL_UNMOUNT = 'app/Group/GROUP_ALL_UNMOUNT';
 export const GROUP_FORM_UNMOUNT = 'app/Group/GROUP_FORM_UNMOUNT';
 
 export const JOIN_GROUP_BEGIN = 'app/Group/JOIN_GROUP_BEGIN';

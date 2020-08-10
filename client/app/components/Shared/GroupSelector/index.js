@@ -26,7 +26,7 @@ import { Grid, Button } from '@material-ui/core';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
-import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const GroupSelector = (props) => {
   const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
@@ -149,6 +149,7 @@ const GroupSelector = (props) => {
             selected={values[groupField]}
             dialogNoChildren={props.dialogNoChildren}
             queryScopes={props.queryScopes}
+            dialogQueryScopes={props.dialogQueryScopes}
           />
         )}
       />
@@ -159,6 +160,7 @@ const GroupSelector = (props) => {
 
 GroupSelector.propTypes = {
   dialogSelector: PropTypes.bool,
+  dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogNoChildren: PropTypes.bool,
   forceReload: PropTypes.bool,
 
@@ -167,13 +169,14 @@ GroupSelector.propTypes = {
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
-  queryScopes: PropTypes.arrayOf(PropTypes.string),
+  queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   isLoading: PropTypes.bool,
 
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
+  extraParams: PropTypes.object,
 
   inputCallback: PropTypes.func,
 };
@@ -184,9 +187,11 @@ GroupSelector.defaultProps = {
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       query_scopes: props.queryScopes || [],
+      ...props.extraParams,
       ...params,
     });
   },
+  extraParams: {},
 };
 
 const mapStateToProps = createStructuredSelector({

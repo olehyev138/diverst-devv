@@ -213,6 +213,10 @@ class Group < ApplicationRecord
   scope :all_children,    -> { where.not(parent_id: nil) }
   scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
 
+  # This scope acts as an alternative to `all_parents` which ignore a given list of groups, while getting the
+  # children of said groups and adding them to the result of the query
+  scope :replace_with_children, -> (*args) { where.not(id: args).where(parent_id: [nil] + args) }
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
