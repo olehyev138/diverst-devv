@@ -58,16 +58,14 @@ const GroupLayout = (props) => {
   return (
     <React.Fragment>
       <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !currentGroup}>
-        { currentGroup && <GroupLinks currentGroup={currentGroup} permission={permission} {...rest} /> }
+        <GroupLinks currentGroup={currentGroup} permission={permission} {...rest} />
         <Scrollbar>
           <Fade in appear>
             <Container maxWidth='lg'>
               <div className={classes.content}>
-                {currentGroup && (
-                  <React.Fragment>
-                    {renderChildrenWithProps(props.children, { currentGroup, permission, ...rest })}
-                  </React.Fragment>
-                )}
+                <React.Fragment>
+                  {renderChildrenWithProps(props.children, { currentGroup, permission, ...rest })}
+                </React.Fragment>
               </div>
             </Container>
           </Fade>
