@@ -6,6 +6,9 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   GET_EVENT_BEGIN,
   GET_EVENTS_BEGIN,
@@ -26,8 +29,7 @@ export function* getEvent(action) {
   } catch (err) {
     yield put(getEventError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get mailing event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.email), options: { variant: 'warning' } }));
   }
 }
 
@@ -39,8 +41,7 @@ export function* getEvents(action) {
   } catch (err) {
     yield put(getEventsError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get mailing event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.emails), options: { variant: 'warning' } }));
   }
 }
 
@@ -51,12 +52,11 @@ export function* updateEvent(action) {
 
     yield put(updateEventSuccess({}));
     yield put(push(ROUTES.admin.system.globalSettings.mailEvents.index.path()));
-    yield put(showSnackbar({ message: 'Successfully updated mailing event', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEventError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update mailing event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 

@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_GROUPS_BEGIN,
@@ -102,7 +104,7 @@ export function* createGroup(action) {
 
     yield put(createGroupSuccess());
     yield put(push(ROUTES.group.home.path(response.data.group.id)));
-    yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
     yield put(push(ROUTES.admin.manage.groups.index.path()));

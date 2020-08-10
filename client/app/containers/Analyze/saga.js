@@ -27,6 +27,7 @@ import {
   getGrowthOfUsersSuccess, getGrowthOfUsersError
 } from 'containers/Analyze/actions';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import messages from './messages';
 
 export function* getGroupOverviewMetrics(action) {
@@ -37,8 +38,7 @@ export function* getGroupOverviewMetrics(action) {
   } catch (err) {
     yield put(getGroupOverviewMetricsError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load group metrics', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group_overview), options: { variant: 'warning' } }));
   }
 }
 
@@ -50,8 +50,7 @@ export function* getGroupSpecificMetrics(action) {
   } catch (err) {
     yield put(getGroupSpecificMetricsError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load group metrics', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group_overview), options: { variant: 'warning' } }));
   }
 }
 
@@ -63,8 +62,7 @@ export function* getGroupPopulation(action) {
   } catch (err) {
     yield put(getGroupPopulationError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load group population graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.population), options: { variant: 'warning' } }));
   }
 }
 
@@ -76,8 +74,7 @@ export function* getViewsPerGroup(action) {
   } catch (err) {
     yield put(getViewsPerGroupError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load views per group graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.group), options: { variant: 'warning' } }));
   }
 }
 
@@ -89,8 +86,7 @@ export function* getInitiativesPerGroup(action) {
   } catch (err) {
     yield put(getInitiativesPerGroupError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load initiatives per group graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group.initiatives), options: { variant: 'warning' } }));
   }
 }
 
@@ -102,8 +98,7 @@ export function* getNewsPerGroup(action) {
   } catch (err) {
     yield put(getNewsPerGroupError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load news per group graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group.news), options: { variant: 'warning' } }));
   }
 }
 
@@ -115,8 +110,7 @@ export function* getViewsPerNewsLink(action) {
   } catch (err) {
     yield put(getViewsPerNewsLinkError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load views per news link graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.news_link), options: { variant: 'warning' } }));
   }
 }
 
@@ -128,8 +122,7 @@ export function* getViewsPerFolder(action) {
   } catch (err) {
     yield put(getViewsPerFolderError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load views per folder graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.folders), options: { variant: 'warning' } }));
   }
 }
 
@@ -141,8 +134,7 @@ export function* getViewsPerResource(action) {
   } catch (err) {
     yield put(getViewsPerResourceError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load views per resource graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.resources), options: { variant: 'warning' } }));
   }
 }
 
@@ -154,8 +146,7 @@ export function* getGrowthOfGroups(action) {
   } catch (err) {
     yield put(getGrowthOfGroupsError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load growth of groups graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.groups), options: { variant: 'warning' } }));
   }
 }
 
@@ -167,8 +158,7 @@ export function* getGrowthOfResources(action) {
   } catch (err) {
     yield put(getGrowthOfResourcesError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load growth of resources graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.resources), options: { variant: 'warning' } }));
   }
 }
 
@@ -180,8 +170,7 @@ export function* getGrowthOfUsers(action) {
   } catch (err) {
     yield put(getGrowthOfUsersError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load growth of users graph', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.users), options: { variant: 'warning' } }));
   }
 }
 

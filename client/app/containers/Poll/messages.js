@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Poll';
-export const snackbar = 'diverst,snackbars.Poll'
+export const snackbar = 'diverst,snackbars.Poll';
 
 export default defineMessages({
   new: {

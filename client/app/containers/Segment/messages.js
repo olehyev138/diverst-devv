@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Segment';
-export const snackbar = 'diverst.snackbars.Segments'
+export const snackbar = 'diverst.snackbars.Segments';
 
 export default defineMessages({
   new: {
