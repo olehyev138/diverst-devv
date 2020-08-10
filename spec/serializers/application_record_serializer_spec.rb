@@ -15,9 +15,9 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
       Class.new do
         include ActiveModel::Model
         include ActiveModel::Serialization
-        attr_accessor :a, :b, :c
+        attr_accessor :a, :b, :c, :d, :e, :f, :g, :h, :j
         validates :a, :b, :c, presence: true
-        def attributes; { a: a, b: b, c: c } end
+        def attributes; { a: a, b: b, c: c, d: d, f: f, e: e, g: g, h: h, j: j } end
       end
     }
     let(:policy) {
@@ -92,9 +92,10 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           expect(@serializer1._attributes).to     include :a
           expect(@serializer1._attributes).to     include :b
           expect(@serializer1._attributes).to_not include :c
-          expect(@serializer1._attributes).to_not include :d
-          expect(@serializer1._attributes).to_not include :e
+          expect(@serializer1._attributes).to include :d
+          expect(@serializer1._attributes).to include :e
           expect(@serializer1._attributes).to_not include :f
+          expect(@serializer1._attributes).to_not include :z
 
           expect(serializer.serializable_hash[:a]).to eq 1
           expect(serializer.serializable_hash[:b]).to eq 2
@@ -322,6 +323,85 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
                                                         })
             end
           end
+        end
+      end
+    end
+
+    describe 'Conditional Attributes' do
+      let!(:serializer_class) do
+        Class.new(ApplicationRecordSerializer) do
+          attributes :a, :b, :c
+          attributes_with_permission :c, :d, :e, :f, :g, if: :false?
+          attributes_with_permission :f, :g, :h, :j, if: :true?
+
+          def b; object.b ** 2 end
+          def e; object.e ** 2 end
+          def g; object.g ** 2 end
+          def j; object.j ** 2 end
+
+          def true?; true end
+          def false?; false end
+        end
+      end
+
+      let!(:serializer) do
+        serializer_class.new(model.new(
+          {
+              a: 1,
+              b: 2,
+              c: 3,
+              d: 4,
+              e: 5,
+              f: 6,
+              g: 7,
+              h: 8,
+              j: 9,
+          }
+        ))
+      end
+
+      context 'class side' do
+        it 'has conditional attributes' do
+          expect(serializer_class._attributes).to include :a
+          expect(serializer_class._attributes).to include :b
+          expect(serializer_class._attributes).to include :c
+          expect(serializer_class._attributes).to include :d
+          expect(serializer_class._attributes).to include :e
+          expect(serializer_class._attributes).to include :f
+          expect(serializer_class._attributes).to include :g
+          expect(serializer_class._attributes).to include :h
+          expect(serializer_class._attributes).to include :j
+        end
+      end
+      context 'permission module' do
+        let(:permission_module) { serializer_class.permission_module }
+        let(:defined_method) { permission_module.instance_methods(false) }
+
+        it 'has proper attr_conditions for condition attributes' do
+          expect(permission_module[:c]).to eq [:false?]
+          expect(permission_module[:d]).to eq [:false?]
+          expect(permission_module[:e]).to eq [:false?]
+          expect(permission_module[:f]).to eq [:false?, :true?]
+          expect(permission_module[:g]).to eq [:false?, :true?]
+          expect(permission_module[:h]).to eq [:true?]
+          expect(permission_module[:j]).to eq [:true?]
+        end
+        it 'has empty attr_conditions for regular attributes' do
+          expect(permission_module[:a]).to eq []
+          expect(permission_module[:b]).to eq []
+        end
+        it 'defines the method for the permission' do
+          expect(defined_method).to include :c
+          expect(defined_method).to include :d
+          expect(defined_method).to include :e
+          expect(defined_method).to include :f
+          expect(defined_method).to include :g
+          expect(defined_method).to include :h
+          expect(defined_method).to include :j
+        end
+        it "doesn't define methods for regular attributes" do
+          expect(defined_method).to_not include :a
+          expect(defined_method).to_not include :b
         end
       end
     end
