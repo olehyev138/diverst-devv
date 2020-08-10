@@ -33,8 +33,8 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                            end
                          end
 
-                         def self.[](key)
-                           attr_conditions[key]
+                         class << self
+                           delegate :[], to: :attr_conditions
                          end
                        end
                        prepend(temp)
