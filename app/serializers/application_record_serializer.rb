@@ -32,6 +32,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                              hash[key] = []
                            end
                          end
+
                          def self.[](key)
                            attr_conditions[key]
                          end

@@ -334,12 +334,16 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
           attributes_with_permission :c, :d, :e, :f, :g, if: :false?
           attributes_with_permission :f, :g, :h, :j, if: :true?
 
-          def b; object.b ** 2 end
-          def e; object.e ** 2 end
-          def g; object.g ** 2 end
-          def j; object.j ** 2 end
+          def b; object.b**2 end
+
+          def e; object.e**2 end
+
+          def g; object.g**2 end
+
+          def j; object.j**2 end
 
           def true?; true end
+
           def false?; false end
         end
       end
