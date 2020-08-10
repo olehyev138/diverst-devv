@@ -53,8 +53,6 @@ class Enterprise < ApplicationRecord
   has_many :custom_emails, -> { where custom: true }, class_name: 'Email', dependent: :destroy
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
 
-  belongs_to :theme
-
   has_many :expenses, dependent: :destroy
   has_many :expense_categories, dependent: :destroy
   has_many :clockwork_database_events, dependent: :destroy
@@ -76,6 +74,8 @@ class Enterprise < ApplicationRecord
 
   has_one :custom_text, dependent: :destroy
 
+  belongs_to :theme
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
@@ -84,7 +84,7 @@ class Enterprise < ApplicationRecord
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
-  before_validation :smart_add_url_protocol
+  after_validation :smart_add_url_protocol
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -92,7 +92,6 @@ class Enterprise < ApplicationRecord
   validates_length_of :default_from_email_display_name, maximum: 191
   validates_length_of :default_from_email_address, maximum: 191
   validates_length_of :company_video_url, maximum: 191
-
   validates_length_of :privacy_statement, maximum: 65535
   validates_length_of :home_message, maximum: 65535
   validates_length_of :cdo_message, maximum: 65535
@@ -105,7 +104,10 @@ class Enterprise < ApplicationRecord
   validates_length_of :idp_entity_id, maximum: 191
   validates_length_of :sp_entity_id, maximum: 191
   validates_length_of :name, maximum: 191
+  validates_length_of :onboarding_consent_message, maximum: 65535
+
   validates :idp_sso_target_url, url: { allow_blank: true }
+  validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # ActiveStorage
   has_one_attached :banner
@@ -117,14 +119,14 @@ class Enterprise < ApplicationRecord
   has_one_attached :sponsor_media
   has_one_attached :onboarding_sponsor_media
 
+  validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
+
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :banner_paperclip
   has_attached_file :cdo_picture_paperclip, s3_permissions: 'private'
   has_attached_file :xml_sso_config_paperclip
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
   has_attached_file :onboarding_sponsor_media_paperclip, s3_permissions: 'private'
-
-  validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   def banner_location
     return nil unless banner.attached?
@@ -757,27 +759,27 @@ class Enterprise < ApplicationRecord
     report.to_csv
   end
 
+  def logs_csv
+    logs = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: self).order(created_at: :desc)
+    LogCsv.build(logs)
+  end
+
   def users_date_histogram_csv
     g = DateHistogramGraph.new(
-      # index: User.es_index_name(enterprise: self),
-      field: 'created_at',
-      interval: 'month'
-    )
+        # index: User.es_index_name(enterprise: self),
+        field: 'created_at',
+        interval: 'month'
+      )
 
     data = g.query_elasticsearch
 
     strategy = Reports::GraphTimeseriesGeneric.new(
-      title: 'Number of employees',
-      data: data['aggregations']['my_date_histogram']['buckets'].collect { |d| [d['key'], d['doc_count']] }
-    )
+        title: 'Number of employees',
+        data: data['aggregations']['my_date_histogram']['buckets'].collect { |d| [d['key'], d['doc_count']] }
+      )
     report = Reports::Generator.new(strategy)
 
     report.to_csv
-  end
-
-  def logs_csv
-    logs = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: self).order(created_at: :desc)
-    LogCsv.build(logs)
   end
 
   protected

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -148,7 +148,7 @@ export function UserGroupList(props, context) {
                       </CardActionArea>
                     </Link>
                   </Grid>
-                  {group.children && group.children.length > 0 && (
+                  {props.viewChildren && group.children && group.children.length > 0 && (
                     <Grid item className={classes.expandActionAreaContainer}>
                       <CardActionArea
                         className={classes.expandActionArea}
@@ -235,6 +235,7 @@ export function UserGroupList(props, context) {
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
         handlePagination={props.handlePagination}
+        page={defaultParams.page}
       />
     </React.Fragment>
   );
@@ -247,7 +248,8 @@ UserGroupList.propTypes = {
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  viewChildren: PropTypes.bool,
 };
 
 export default compose(

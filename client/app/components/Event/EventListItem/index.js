@@ -18,6 +18,9 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import ShareIcon from '@material-ui/icons/Share';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/messages';
 
 const styles = theme => ({
   arrowRight: {
@@ -45,6 +48,7 @@ export function EventListItem(props) {
             <Grid item xs='auto'>
               <DiverstImg
                 data={item.picture_data}
+                contentType={item.picture_content_type}
                 maxWidth='90px'
                 maxHeight='90px'
                 minWidth='90px'
@@ -55,17 +59,29 @@ export function EventListItem(props) {
         </React.Fragment>
       )}
       <Grid item xs>
-        <Typography color='primary' variant='h6' component='h2'>
-          {item.name}
-          &ensp;
-          {currentGroupID && item.group_id !== currentGroupID && <ShareIcon />}
-        </Typography>
+        <Grid container justify='space-between'>
+          <Grid item>
+            <Typography color='primary' variant='h6' component='h2'>
+              {item.name}
+            </Typography>
+          </Grid>
+          {item.group_id !== currentGroupID && (
+            <Grid item>
+              <Typography color='secondary' variant='h6' component='h2'>
+                <DiverstFormattedMessage {...messages.show.hosted_by_group} values={{ group_name: item.group.name }} />
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
         <hr className={classes.divider} />
         {item.description && (
           <React.Fragment>
-            <Typography color='textSecondary'>
-              {item.description}
-            </Typography>
+            <DiverstHTMLEmbedder
+              html={item.description}
+              gridProps={{
+                alignItems: 'flex-start',
+              }}
+            />
             <Box pb={1} />
           </React.Fragment>
         )}

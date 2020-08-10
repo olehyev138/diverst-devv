@@ -17,7 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHa
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
+import { getAnnualBudgetsBegin, groupAllUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
 
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
@@ -41,26 +41,33 @@ export function AdminAnnualBudgetPage(props) {
     setParams(newParams);
   };
 
-
-  useEffect(() => {
-    props.getAnnualBudgetsBegin(params);
-
-    return () => props.groupListUnmount();
-  }, []);
-
-  useEffect(() => {
-    if (props.hasChanged)
-      props.getAnnualBudgetsBegin(params);
-
-    return () => props.groupListUnmount();
-  }, [props.hasChanged]);
-
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
     props.getAnnualBudgetsBegin(newParams);
     setParams(newParams);
   };
+
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getAnnualBudgetsBegin(newParams);
+    setParams(newParams);
+  };
+
+
+  useEffect(() => {
+    props.getAnnualBudgetsBegin(params);
+
+    return () => props.groupAllUnmount();
+  }, []);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getAnnualBudgetsBegin(params);
+
+    return () => props.groupAllUnmount();
+  }, [props.hasChanged]);
 
   return (
     <AnnualBudgetList
@@ -70,6 +77,7 @@ export function AdminAnnualBudgetPage(props) {
       defaultParams={params}
       handlePagination={handlePagination}
       handleOrdering={handleOrdering}
+      handleSearching={handleSearching}
       carryBudget={props.carryBudgetBegin}
       resetBudget={props.resetBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
@@ -79,7 +87,7 @@ export function AdminAnnualBudgetPage(props) {
 
 AdminAnnualBudgetPage.propTypes = {
   getAnnualBudgetsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
+  groupAllUnmount: PropTypes.func.isRequired,
   carryBudgetBegin: PropTypes.func.isRequired,
   resetBudgetBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
@@ -102,7 +110,7 @@ const mapDispatchToProps = {
   getAnnualBudgetsBegin,
   carryBudgetBegin,
   resetBudgetBegin,
-  groupListUnmount,
+  groupAllUnmount,
   handleVisitEditPage,
 };
 
@@ -117,6 +125,6 @@ export default compose(
 )(Conditional(
   AdminAnnualBudgetPage,
   ['permissions.manage_all_budgets'],
-  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.group.groupPlan.annualBudget.adminPlanPage
 ));

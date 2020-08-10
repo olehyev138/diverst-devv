@@ -121,6 +121,7 @@ export function UserList(props, context) {
             title={intl.formatMessage(messages.members)}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
+            handleSearching={props.handleSearching}
             isLoading={props.isFetchingUsers}
             rowsPerPage={5}
             dataArray={Object.values(props.users)}
@@ -146,7 +147,7 @@ export function UserList(props, context) {
                 disabled: !permission(rowData, 'destroy?')
               })
             ]}
-            my_options={{
+            tableOptions={{
               exportButton: true,
               exportCsv: (columns, data) => {
                 props.exportUsers();
@@ -200,6 +201,7 @@ UserList.propTypes = {
   handleOrdering: PropTypes.func,
   handleVisitUserEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
+  handleSearching: PropTypes.func,
   userType: PropTypes.string,
   links: PropTypes.shape({
     userNew: PropTypes.string,

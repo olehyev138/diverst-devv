@@ -66,7 +66,7 @@ const GroupManageLayout = (props) => {
       />
       <Fade in appear>
         <div className={classes.content}>
-          {renderChildrenWithProps(children, { ...rest })}
+          {renderChildrenWithProps(children, { currentGroup, ...rest })}
         </div>
       </Fade>
     </React.Fragment>

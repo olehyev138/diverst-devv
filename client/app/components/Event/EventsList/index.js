@@ -131,54 +131,56 @@ export function EventsList(props) {
         </React.Fragment>
       )}
       <Paper>
-        <Grid container justify='center'>
-          <Grid item xs={1} />
-          {props.currentPTab != null && (
-            <Grid item xs={10}>
-              <ResponsiveTabs
-                value={props.currentPTab}
-                onChange={props.handleChangePTab}
-                indicatorColor='primary'
-                textColor='primary'
+        <React.Fragment>
+          <Grid container justify='center'>
+            <Grid item xs={1} />
+            {props.currentPTab != null && (
+              <Grid item xs={10}>
+                <ResponsiveTabs
+                  value={props.currentPTab}
+                  onChange={props.handleChangePTab}
+                  indicatorColor='primary'
+                  textColor='primary'
+                >
+                  <Tab label={intl.formatMessage(messages.index.participating)} />
+                  <Tab label={intl.formatMessage(messages.index.all)} />
+                </ResponsiveTabs>
+              </Grid>
+            )}
+            <Grid item xs>
+              <Tooltip
+                title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
+                placement='top'
               >
-                <Tab label={intl.formatMessage(messages.index.participating)} />
-                <Tab label={intl.formatMessage(messages.index.all)} />
-              </ResponsiveTabs>
+                <IconButton
+                  onClick={props.handleCalendarChange}
+                  className={classes.buttons}
+                >
+                  {props.calendar ? <ListAltIcon /> : <TodayIcon />}
+                </IconButton>
+              </Tooltip>
             </Grid>
-          )}
-          <Grid item xs>
-            <Tooltip
-              title={<DiverstFormattedMessage {...messages[props.calendar ? 'list' : 'calendar']} />}
-              placement='top'
-            >
-              <IconButton
-                onClick={props.handleCalendarChange}
-                className={classes.buttons}
-              >
-                {props.calendar ? <ListAltIcon /> : <TodayIcon />}
-              </IconButton>
-            </Tooltip>
           </Grid>
-        </Grid>
-        {props.onlyUpcoming || props.calendar || (
-          <ResponsiveTabs
-            value={props.currentTab}
-            onChange={props.handleChangeTab}
-            indicatorColor='primary'
-            textColor='primary'
-          >
-            <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
-          </ResponsiveTabs>
-        )}
+          {props.onlyUpcoming || props.calendar || (
+            <ResponsiveTabs
+              value={props.currentTab}
+              onChange={props.handleChangeTab}
+              indicatorColor='primary'
+              textColor='primary'
+            >
+              <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
+              <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+              <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+            </ResponsiveTabs>
+          )}
+        </React.Fragment>
       </Paper>
       <br />
       { props.calendar ? (
         <DiverstCalendar
           calendarEvents={props.calendarEvents}
           isLoading={props.isLoading}
-          events={props.events}
+          events={props.calendarEvents}
           joinEventBegin={props.joinEventBegin}
           leaveEventBegin={props.leaveEventBegin}
           calendarDateCallback={props.calendarDateCallback}
@@ -197,7 +199,22 @@ export function EventsList(props) {
                         className={classes.eventLink}
                         component={WrappedNavLink}
                         to={{
-                          pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                          pathname: ROUTES.group.events.show.path(
+                            (() => {
+                              if (props.currentGroup)
+                                return props.currentGroup.id;
+                              if (item.group.current_user_is_member)
+                                return item.group.id;
+                              let usersGroup;
+                              // eslint-disable-next-line no-cond-assign
+                              if ((usersGroup = item.participating_groups.find(g => g.current_user_is_member)))
+                                return usersGroup.id;
+                              // eslint-disable-next-line no-console
+                              console.error('Not in any participating groups');
+                              return item.group.id;
+                            })(),
+                            item.id
+                          ),
                           state: { id: item.id }
                         }}
                       >

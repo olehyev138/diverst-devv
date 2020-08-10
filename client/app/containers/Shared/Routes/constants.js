@@ -4,19 +4,22 @@ const messages = require('./messages');
 const ROUTES = {
   // Session
   session: {
-    signUp: {
-      path: (token = ':token') => `/sign_up/${token}`,
-    },
     login: {
       path: () => '/login',
     },
     forgotPassword: {
       path: () => '/forgot',
     },
+    passwordReset: {
+      path: (token = ':token') => `/password_reset/${token}`,
+    },
   },
 
   // Anonymous
   anonymous: {
+    signUp: {
+      path: (token = ':token') => `/sign_up/${token}`,
+    },
     // Poll Response
     pollResponse: {
       path: (token = ':token') => `/poll_response/${token}`,
@@ -563,7 +566,7 @@ const ROUTES = {
 
   // Admin
   admin: {
-    get root() { return this.analyze.overview; },
+    get root() { return this.manage.groups.index; },
     pathPrefix: '/admin',
     analyze: {
       index: {

@@ -38,6 +38,7 @@ export function EventComment(props) {
             { comment.user.avatar ? (
               <DiverstImg
                 data={comment.user.avatar_data}
+                contentType={comment.user.avatar_content_type}
               />
             ) : (
               comment.user.first_name[0]

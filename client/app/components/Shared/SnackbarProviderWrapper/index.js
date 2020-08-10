@@ -16,6 +16,9 @@ import Slide from '@material-ui/core/Slide';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
+  root: {
+    marginBottom: 20,
+  },
   snackbarSuccess: {
     backgroundColor: theme.palette.success.main,
   },
@@ -41,6 +44,7 @@ function SnackbarProviderWrapper(props) {
       preventDuplicate
       ref={notistackRef}
       classes={{
+        root: props.classes.root,
         variantSuccess: props.classes.snackbarSuccess,
         variantInfo: props.classes.snackbarInfo,
         variantWarning: props.classes.snackbarWarning,

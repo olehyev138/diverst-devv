@@ -7,8 +7,8 @@ import { CircularProgress, Grid, Card, CardContent, Typography } from '@material
 
 import 'stylesheets/main.scss';
 import { createStructuredSelector } from 'reselect';
-import { selectGroupIsLoading, selectPaginatedGroups } from 'containers/Group/selectors';
-import { getColorsBegin, groupListUnmount } from 'containers/Group/actions';
+import { selectGroupIsLoading, selectColorGroups } from 'containers/Group/selectors';
+import { getColorsBegin, groupAllUnmount } from 'containers/Group/actions';
 import { connect } from 'react-redux';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
@@ -36,7 +36,7 @@ export function DiverstGroupLegend({ groups, isLoading, classes, ...rest }) {
 
   useEffect(() => {
     rest.getColorsBegin();
-    return () => rest.groupListUnmount();
+    return () => rest.groupAllUnmount();
   }, []);
 
   return (
@@ -68,7 +68,7 @@ export function DiverstGroupLegend({ groups, isLoading, classes, ...rest }) {
 DiverstGroupLegend.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
-  groupListUnmount: PropTypes.func,
+  groupAllUnmount: PropTypes.func,
   getColorsBegin: PropTypes.func,
   groups: PropTypes.arrayOf(
     PropTypes.shape({
@@ -81,12 +81,12 @@ DiverstGroupLegend.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
-  groups: selectPaginatedGroups(),
+  groups: selectColorGroups(),
 });
 
 const mapDispatchToProps = {
   getColorsBegin,
-  groupListUnmount,
+  groupAllUnmount,
 };
 
 const withConnect = connect(

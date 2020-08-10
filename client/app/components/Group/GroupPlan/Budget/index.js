@@ -282,7 +282,7 @@ export function Budget(props) {
           handleOrdering={() => null}
           rowsPerPage={Math.min((budgetItems || []).length, 5)}
           static
-          my_options={{
+          tableOptions={{
             search: false
           }}
         />

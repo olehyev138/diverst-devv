@@ -22,6 +22,7 @@ export function SharedUser(props) {
               { activity.trackable.avatar ? (
                 <DiverstImg
                   data={activity.trackable.avatar_data}
+                  contentType={activity.trackable.avatar_content_type}
                   maxWidth='100%'
                   maxHeight='240px'
                 />

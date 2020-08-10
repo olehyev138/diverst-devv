@@ -16,6 +16,7 @@ import {
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   arrowRight: {
@@ -43,9 +44,12 @@ export function EventListItem(props) {
         </Typography>
         {item.description && (
           <React.Fragment>
-            <Typography color='textSecondary'>
-              {item.description}
-            </Typography>
+            <DiverstHTMLEmbedder
+              html={item.description}
+              gridProps={{
+                alignItems: 'flex-start',
+              }}
+            />
             <Box pb={1} />
           </React.Fragment>
         )}

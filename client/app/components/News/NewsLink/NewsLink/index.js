@@ -7,7 +7,7 @@ import dig from 'object-dig';
 import { Box, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import NewsLinkComment from 'components/News/NewsLink/NewsLinkComment';
+import NewsComment from 'components/News/NewsComment';
 import NewsLinkCommentForm from 'components/News/NewsLink/NewsLinkCommentForm';
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 
@@ -17,7 +17,6 @@ const styles = theme => ({});
 
 export function NewsLink(props) {
   /* Render a NewsLink, its comments & a comment form */
-
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const newsLink = dig(newsItem, 'news_link');
@@ -42,10 +41,10 @@ export function NewsLink(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(newsLink, 'comments') && newsLink.comments.map((comment, i) => {
             return (
-              <NewsLinkComment
+              <NewsComment
                 key={comment.id}
                 comment={comment}
-                deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
+                deleteCommentAction={props.deleteNewsLinkCommentBegin}
                 newsItem={props.newsItem}
               />
             );

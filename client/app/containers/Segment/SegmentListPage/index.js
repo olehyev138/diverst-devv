@@ -60,6 +60,13 @@ export function SegmentListPage(props) {
     setParams(newParams);
   };
 
+  const handleSearching = (searchText) => {
+    const newParams = { ...params, search: searchText };
+
+    props.getSegmentsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <SegmentList
@@ -70,6 +77,7 @@ export function SegmentListPage(props) {
         handleSegmentEdit={props.handleSegmentEdit}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleSearching={handleSearching}
         links={links}
         currentEnterprise={props.currentEnterprise}
       />

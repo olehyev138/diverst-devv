@@ -86,4 +86,16 @@ RSpec.describe InitiativeExpense, type: :model do
       expect(annual_budget1.reload.expenses).to eq 0
     end
   end
+
+  describe 'initiative_is_not_finalized' do
+    let!(:initiative_expense) { create(:initiative_expense) }
+    it 'returns nil' do
+      expect(initiative_expense.initiative_is_not_finalized).to be nil
+    end
+
+    it 'returns errors' do
+      initiative_expense.initiative.update(finished_expenses: true)
+      expect(initiative_expense.initiative_is_not_finalized).to_not be nil
+    end
+  end
 end

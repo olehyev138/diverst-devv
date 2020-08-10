@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_secure_password validations: false
   has_secure_token :invitation_token
+  has_secure_token :reset_password_token
   include PublicActivity::Common
   include User::Actions
   include ContainsFieldData
@@ -12,15 +13,6 @@ class User < ApplicationRecord
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
-
-  scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
-  scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
-  scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
-
-  scope :active,                  -> { where(active: true).distinct }
-  scope :inactive,                -> { where(active: false).distinct }
-  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
-  scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
   belongs_to :user_role
 
@@ -99,7 +91,6 @@ class User < ApplicationRecord
 
   # ActiveStorage
   has_one_attached :avatar
-  validates :avatar, content_type: AttachmentHelper.common_image_types
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :avatar_paperclip, s3_permissions: 'private'
@@ -126,57 +117,72 @@ class User < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
+  validates_length_of :password, within: 8..128, allow_blank: true
 
   # TODO: Devise has been removed
   # validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :email, presence: true
+  validates :time_zone, presence: true
+  validates :points, presence: true
+  validates :credits, presence: true
+
+  validates :avatar, content_type: AttachmentHelper.common_image_types
 
   validates :password, confirmation: true
-  validates_confirmation_of :password
 
-  validates_presence_of   :email
-  validates_uniqueness_of :email, allow_blank: false
-  validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
+  validates :email, uniqueness: true, allow_blank: false
 
-  validates_length_of     :password, within: 8..128, allow_blank: true
+  validates_format_of :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
   validate :user_role_presence
-  validates :points, numericality: { only_integer: true }, presence: true
-  validates :credits, numericality: { only_integer: true }, presence: true
   validate :group_leader_role
   validate :policy_group
-  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
-  validates_presence_of :time_zone
+  validates :points, numericality: { only_integer: true }
+  validates :credits, numericality: { only_integer: true }
 
+  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
   before_validation :set_timezone
+
   before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
   after_save :set_default_policy_group, if: :user_role_id_changed?
-  accepts_nested_attributes_for :policy_group
-
   after_update :add_to_default_mentor_group
 
+  accepts_nested_attributes_for :policy_group
+  accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  scope :active,                  -> { where(active: true).distinct }
+  scope :inactive,                -> { where(active: false).distinct }
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.ids).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
+  scope :not_member_of_group, -> (group_id) {
+    where.not(id: (
+      UserGroup.where(group_id: group_id).pluck(:user_id)
+    ))
+  }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
+  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :of_role, -> (role_id) { where(user_role_id: role_id) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
+  scope :saml,                    -> { where(auth_source: 'saml').distinct }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
   scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
-
-  accepts_nested_attributes_for :availabilities, allow_destroy: true
+  scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
+  scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
+  scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
 
   def as_json(options = {})
     super.merge({ name: name })
@@ -202,18 +208,6 @@ class User < ApplicationRecord
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
       break token unless Session.find_by(token: token)
     end
-  end
-
-  def generate_invitation_token
-    regenerate_invitation_token
-    update(invitation_created_at: Time.now, invitation_sent_at: Time.now)
-    invitation_token
-  end
-
-  def invite!(manager = nil, skip: false)
-    regenerate_invitation_token
-
-    DiverstMailer.invitation_instructions(self, invitation_token).deliver_later unless skip
   end
 
   def valid_password?(password)
@@ -271,18 +265,18 @@ class User < ApplicationRecord
   end
 
   def is_participating_in?(session)
-    session.mentorship_sessions.pluck(:user_id).include? id
+    mentorship_sessions.pluck(:user_id).include? id
   end
 
   def get_mentorship_session(session)
     # If the association is already loaded, we don't need to re-query the database
     # Otherwise it will be faster to use the find_by query
-    if session.mentorship_sessions.loaded?
-      session.mentorship_sessions.find do |ms|
+    if mentorship_sessions.loaded?
+      mentorship_sessions.find do |ms|
         ms.user_id == id
       end
     else
-      session.mentorship_sessions.find_by(user_id: id)
+      mentorship_sessions.find_by(user_id: id)
     end
   end
 

@@ -13,7 +13,7 @@ import { AdminAnnualBudgetPage } from '../index';
 
 const props = {
   getAnnualBudgetsBegin: jest.fn(),
-  groupListUnmount: jest.fn(),
+  groupAllUnmount: jest.fn(),
   carryBudgetBegin: jest.fn(),
   resetBudgetBegin: jest.fn(),
   handleVisitEditPage: jest.fn(),

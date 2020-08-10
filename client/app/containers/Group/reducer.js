@@ -29,6 +29,7 @@ import {
   DELETE_GROUP_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
+  GROUP_ALL_UNMOUNT,
   CARRY_BUDGET_BEGIN,
   RESET_BUDGET_BEGIN,
   CARRY_BUDGET_SUCCESS,
@@ -60,6 +61,7 @@ export const initialState = {
   isFormLoading: true,
   isCommitting: false,
   groupList: [],
+  groupColorList: [],
   groupTotal: null,
   currentGroup: null,
   hasChanged: false,
@@ -91,14 +93,18 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_SUCCESS:
-      case GET_COLORS_SUCCESS:
         draft.groupList = action.payload.items;
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
 
+      case GET_COLORS_SUCCESS:
+        draft.groupColorList = action.payload.items;
+        draft.isLoading = false;
+        break;
+
       case GET_ANNUAL_BUDGETS_SUCCESS:
-        draft.groupList = action.payload.items;
+        draft.groupList = flattenChildrenGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -153,7 +159,13 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GROUP_LIST_UNMOUNT:
+        draft.isLoading = true;
+        draft.groupList = [];
+        draft.groupColorList = [];
+        draft.groupTotal = null;
+        break;
       case GROUP_FORM_UNMOUNT:
+      case GROUP_ALL_UNMOUNT:
       case GROUP_CATEGORIZE_UNMOUNT:
         return initialState;
     }
@@ -177,10 +189,6 @@ function formatGroups(groups) {
 
 function flattenChildrenGroups(groups) {
   /* eslint-disable no-return-assign */
-
-  /* Format groups to hash by id:
-   *   { <id>: { name: group_01, ... } }
-   */
   return groups.reduce((map, group) => {
     map.push(group);
     const con = map.concat(flattenChildrenGroups(group.children || []));
