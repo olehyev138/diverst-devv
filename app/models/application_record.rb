@@ -10,6 +10,8 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseCsvExport
   include ActionView::Helpers::DateHelper
 
+  scope :except_id, -> (id) { where.not(id: id) }
+
   def time_since_creation
     time_ago_in_words created_at
   end

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -39,8 +39,8 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
       if (error !== form.errors[field.name])
         form.setFieldError(field.name, error);
     },
-    // If you are using custom validation schema you probably want to pass `true` as third argument
     onChange: (date) => {
+      // If you are using custom validation schema you probably want to pass `true` as third argument
       form.setFieldValue(field.name, date, false);
       form.setFieldTouched(field.name, true, false);
     },

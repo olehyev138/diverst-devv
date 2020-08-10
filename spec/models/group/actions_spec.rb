@@ -12,6 +12,8 @@ RSpec.describe Group::Actions, type: :model do
           all_parents
           no_children
           is_private
+          replace_with_children
+          except_id
           joined_groups
       )
     }

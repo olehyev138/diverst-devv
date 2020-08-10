@@ -29,6 +29,7 @@ import {
   DELETE_GROUP_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
+  GROUP_ALL_UNMOUNT,
   CARRY_BUDGET_BEGIN,
   RESET_BUDGET_BEGIN,
   CARRY_BUDGET_SUCCESS,
@@ -158,7 +159,13 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GROUP_LIST_UNMOUNT:
+        draft.isLoading = true;
+        draft.groupList = [];
+        draft.groupColorList = [];
+        draft.groupTotal = null;
+        break;
       case GROUP_FORM_UNMOUNT:
+      case GROUP_ALL_UNMOUNT:
       case GROUP_CATEGORIZE_UNMOUNT:
         return initialState;
     }
