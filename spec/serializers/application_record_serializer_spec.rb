@@ -360,7 +360,7 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
         ))
       end
 
-      context 'class side' do
+      context 'class attributes' do
         it 'has conditional attributes' do
           expect(serializer_class._attributes).to include :a
           expect(serializer_class._attributes).to include :b
@@ -402,6 +402,33 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
         it "doesn't define methods for regular attributes" do
           expect(defined_method).to_not include :a
           expect(defined_method).to_not include :b
+        end
+      end
+      context 'serialization' do
+        let(:serialized) { serializer.as_json }
+        it 'serializes regular attributes' do
+          expect(serialized[:a]).to be 1
+          expect(serialized[:b]).to be 4
+        end
+
+        context 'only false predicates' do
+          it 'serializes all to false' do
+            expect(serialized[:c]).to be nil
+            expect(serialized[:d]).to be nil
+            expect(serialized[:e]).to be nil
+          end
+        end
+
+        context 'at least one true predicate' do
+          it 'calls serializer defined methods' do
+            expect(serialized[:g]).to be 49
+            expect(serialized[:j]).to be 81
+          end
+
+          it 'gets the object attribute' do
+            expect(serialized[:f]).to be 6
+            expect(serialized[:h]).to be 8
+          end
         end
       end
     end
