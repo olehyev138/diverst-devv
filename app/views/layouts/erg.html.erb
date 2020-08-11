@@ -186,6 +186,7 @@
             <%= active_link_to "Layouts", layouts_group_path(@group) %>
           </li>
         <% end %>
+        
         <% if SuggestedHirePolicy.new(current_user, [@group]).index? %>
           <li>
             <%= active_link_to "Suggested Hires", suggested_hires_path(group_id: @group.id) %>

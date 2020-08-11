@@ -10,9 +10,6 @@ class SuggestedHiresController < ApplicationController
     @suggested_hires = @group.suggested_hires
   end
 
-  def show
-  end
-
   def create
     authorize [@group, current_user], :create?, policy_class: SuggestedHirePolicy
 
