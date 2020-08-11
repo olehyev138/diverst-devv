@@ -3,6 +3,9 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 
 import {
   GET_QUESTIONS_BEGIN, GET_QUESTION_BEGIN, CREATE_QUESTION_BEGIN,
@@ -24,9 +27,7 @@ export function* getQuestions(action) {
     yield put(getQuestionsSuccess(response.data.page));
   } catch (err) {
     yield put(getQuestionsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load questions', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.questions), options: { variant: 'warning' } }));
   }
 }
 
@@ -37,12 +38,10 @@ export function* createQuestion(action) {
 
     yield put(createQuestionSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
-    yield put(showSnackbar({ message: 'Question created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createQuestionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create question', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -54,15 +53,13 @@ export function* updateQuestion(action) {
     yield put(updateQuestionSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
     yield put(showSnackbar({
-      message: 'Question updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateQuestionError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update question',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }
@@ -74,10 +71,9 @@ export function* getQuestion(action) {
     const response = yield call(api.questions.get.bind(api.questions), action.payload.id);
     yield put(getQuestionSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getQuestionError(err));
     yield put(showSnackbar({
-      message: 'Failed to get question',
+      message: intl.formatMessage(messages.snackbars.errors.question),
       options: { variant: 'warning' }
     }));
   }
@@ -89,12 +85,10 @@ export function* deleteQuestion(action) {
 
     yield put(deleteQuestionSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaignId)));
-    yield put(showSnackbar({ message: 'Question deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteQuestionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove question', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
