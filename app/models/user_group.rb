@@ -4,6 +4,8 @@ class UserGroup < BaseClass
   # associations
   belongs_to :user
   belongs_to :group
+  belongs_to :invited_by, class_name: 'User', foreign_key: :invited_by_id
+
 
   has_many :user_reward_actions
 

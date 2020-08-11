@@ -73,7 +73,7 @@ RSpec.describe UserGroup do
 
     let(:group) { create :group, enterprise: enterprise }
 
-    let(:user_group1) { create :user_group, user: user1, group: group, accepted_member: true, invitation_sent_at: DateTime.now, invited_by: 'Derek' }
+    let(:user_group1) { create :user_group, user: user1, group: group, accepted_member: true, invitation_sent_at: DateTime.now, invited_by: invited_by }
     let(:user_group2) { create :user_group, user: user2, group: group, accepted_member: false }
 
     it 'return invited users' do
