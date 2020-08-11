@@ -1,0 +1,39 @@
+<div class="content__header">
+  <h1>Business Impacts</h1>
+  <%= link_to "New Business Impact", new_business_impact_path, class: "btn btn--primary" if BusinessImpactPolicy.new(current_user, BusinessImpact).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @business_impacts.empty? %>
+        <p>There are no business impacts yet. <%= link_to "Create one", new_business_impact_path %> to start tracking your campaigns' ROI more efficiently.</p>
+      <% else %>
+        <table class="table--has-border" class="js-business-impacts-table">
+          <thead>
+            <th>Name</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @business_impacts.each do |business_impact| %>
+              <tr>
+                <td><%= business_impact.name %></td>
+                <td><%= link_to "Edit", edit_business_impact_path(business_impact) if BusinessImpactPolicy.new(current_user, business_impact).edit? %> - <%= link_to "Delete", business_impact_path(business_impact), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if BusinessImpactPolicy.new(current_user, business_impact).destroy? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('.js-business-impacts-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

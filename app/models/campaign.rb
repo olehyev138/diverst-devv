@@ -1,7 +1,7 @@
 class Campaign < BaseClass
   include PublicActivity::Common
 
-  enum status: [:published, :draft]
+  enum status: [:published, :draft, :closed, :reopened]
 
   belongs_to :enterprise
   belongs_to :owner, class_name: 'User'
@@ -14,6 +14,7 @@ class Campaign < BaseClass
   has_many :users, through: :invitations
   has_many :answers, through: :questions
   has_many :answer_comments, through: :questions
+  has_many :answer_upvotes, through: :questions
   has_many :campaigns_managers, dependent: :destroy
   has_many :managers, through: :campaigns_managers, source: :user
   has_many :sponsors, dependent: :destroy
@@ -48,6 +49,80 @@ class Campaign < BaseClass
   after_create :create_invites, :send_invitation_emails
 
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
+  scope :closed, -> { where('end < :current_time', current_time: Time.current) }
+
+  # values obtained from enum field status defined above
+  scope :valid_campaigns, -> { where(status: [0, 2, 3]) }
+
+  # users with the most campaign engagement points
+  def top_campaign_performers
+    engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq
+    engaged_users.select { |u| u.campaign_engagement_points(self) > 0 }
+                 .map { |u| [u.name, u.campaign_engagement_points(self)] }
+                 .inject({}) { |hash, (u, p)| hash.merge(u => p) }
+  end
+
+  def response_percentage
+    # unique count of engaged users/number of invitations
+    no_of_engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq.size
+    no_of_invitations = self.invitations.size.to_f
+
+    ((no_of_engaged_users / no_of_invitations) * 100).to_i
+  end
+
+  def engagement_activity_level
+    # total number of answers, upvotes and comments across all questions for a campaign
+    self.answers.size + self.answer_upvotes.size + self.answer_comments.size
+  end
+
+  def chosen_ideas
+    self.answers.where(chosen: true)
+  end
+
+  def total_roi
+    self.answers.where.not(value: nil).sum(:value)
+  end
+
+  def self.total_roi_for_all_campaigns(enterprise_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    enterprise.answers.where.not(value: nil).sum(:value)
+  end
+
+  def self.roi_distribution(enterprise_id, campaign_id)
+    campaign = Campaign.find_by(id: campaign_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    campaigns = enterprise.campaigns
+    campaigns = campaigns.select { |c| c.total_roi > 0 }
+                         .map { |c| [c.title, c.total_roi] }
+                         .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
+
+    return campaigns if campaign.nil?
+
+    return if campaign.total_roi < 1
+
+    # this ensures a particular order of hash elements for graphical representation
+    campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
+  end
+
+  def self.engagement_activity_distribution(enterprise_id, campaign_id)
+    campaign = Campaign.find_by(id: campaign_id)
+    enterprise = Enterprise.find_by(id: enterprise_id)
+    campaigns = enterprise.campaigns
+    campaigns = campaigns.select { |c| c.engagement_activity_level > 0 }
+                          .map { |c| [c.title, c.engagement_activity_level] }
+                          .inject({}) { |hash, (c, eal)| hash.merge(c => eal) }
+
+    return campaigns if campaign.nil?
+
+    return if campaign if campaign.engagement_activity_level < 1
+
+    # this ensures a particular order of hash elements for graphical representation
+    campaign.engagement_activity_level > 0 ? campaigns = { campaign.title => campaign.engagement_activity_level }.merge(campaigns) : campaigns
+  end
+
+  def closed?
+    self.end < Time.current
+  end
 
   def create_invites
     return if enterprise.nil?

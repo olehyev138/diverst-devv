@@ -44,6 +44,8 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
     it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
     it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:departments).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:business_impacts).dependent(:destroy) }
 
     it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
 

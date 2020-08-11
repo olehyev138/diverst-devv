@@ -39,6 +39,7 @@ class User::UserAnswersController < ApplicationController
     redirect_to [:user, @campaign, @question]
   end
 
+
   protected
 
   def set_question
@@ -62,8 +63,12 @@ class User::UserAnswersController < ApplicationController
     params
       .require(:answer)
       .permit(
+        :title,
         :content,
-        :contributing_group_id
+        :idea_category_id,
+        :contributing_group_id,
+        :supporting_document,
+        :video_upload
       )
   end
 end

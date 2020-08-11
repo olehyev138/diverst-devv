@@ -169,6 +169,7 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    chartkick (3.3.2)
     chronic (0.10.2)
     ckeditor (4.3.0)
       orm_adapter (~> 0.5.0)
@@ -933,6 +934,7 @@ DEPENDENCIES
   capistrano-yarn (~> 2.0.2)
   capistrano3-puma (~> 3.1.1)
   capybara (~> 2.15.1)
+  chartkick
   ckeditor (~> 4.2, >= 4.2.3)
   clockwork (~> 1.2)
   clockwork-test (~> 0.2.0)
