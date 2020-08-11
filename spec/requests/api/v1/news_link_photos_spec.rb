@@ -56,6 +56,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     let!(:new_item) { build(route.singularize.to_sym).attributes }
+
     before do
       new_item[:file] = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item }, headers: headers
@@ -82,6 +83,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#update' do
     let!(:new_params) { { id: item.id, file: nil } }
     let!(:old_file_location) { model.constantize.find(item.id).file_location }
+
     before do
       new_params[:file] = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers

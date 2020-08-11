@@ -53,6 +53,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     let!(:new_item) { build(route.singularize.to_sym) }
+
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
     end
@@ -77,6 +78,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     let!(:new_params) { { id: item.id, url: 'https://twitter.com/CNN/status/1291758499563700225' } }
+
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end

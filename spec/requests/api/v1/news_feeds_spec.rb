@@ -53,6 +53,7 @@ RSpec.describe 'NewsFeeds', type: :request do
 
   describe '#create' do
     let!(:new_item) { build(route.singularize.to_sym) }
+
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
     end
@@ -77,6 +78,7 @@ RSpec.describe 'NewsFeeds', type: :request do
 
   describe '#update' do
     let!(:new_params) { { id: item.id, group_id: 0 } }
+
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end
