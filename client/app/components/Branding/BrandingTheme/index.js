@@ -109,7 +109,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   margin='normal'
                   value={values.logo}
                   label={<DiverstFormattedMessage {...messages.Theme.logo} />}
-                  fileTypes={['PNG', 'JPG', 'JPEG', 'SVG']}
+                  fileTypes={['.png', '.jpg', '.jpeg', '.svg']}
                 />
               </Grid>
               <Grid item md xs={12}>

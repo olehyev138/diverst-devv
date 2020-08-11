@@ -161,7 +161,7 @@ export function DiverstFileInput(props) {
                 {props.label}
               </FormLabel>
               <input
-                accept='image/*'
+                accept={fileTypes.toString()}
                 id={props.id}
                 type='file'
                 className={classes.fileInput}
