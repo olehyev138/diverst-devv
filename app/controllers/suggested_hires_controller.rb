@@ -2,6 +2,7 @@ class SuggestedHiresController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: [:index, :edit, :create]
   before_action :set_suggested_hire, only: [:edit, :update, :destroy]
+  include Rewardable
 
   layout 'erg'
 
@@ -16,6 +17,7 @@ class SuggestedHiresController < ApplicationController
     suggested_hire = SuggestedHire.new(suggested_hire_params)
 
     if suggested_hire.save
+      user_rewarder(current_user, 'suggest_a_hire').add_points(suggested_hire)
       track_activity(@group, :suggest_a_hire)
       flash[:notice] = 'You just suggested a hire'
       redirect_to group_path(@group)

@@ -13,7 +13,8 @@ class Rewards::Actions::Boilerplate
         'News comment',
         'Message comment',
         'Group invite',
-        'Accept group invitation'
+        'Accept group invitation', 
+        'Suggest a hire'
       ].each do |action|
         enterprise.reward_actions.create(
           label: action,
