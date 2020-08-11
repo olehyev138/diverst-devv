@@ -53,6 +53,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     let!(:new_item) { build(route.singularize.to_sym) }
+
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
     end
@@ -77,6 +78,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     let!(:new_params) { { id: item.id, name: 'test' } }
+
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end
@@ -135,6 +137,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#fields' do
     let!(:field) { create(:field_defined_by_initiative, field_definer: item) }
+
     before do
       get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
     end
@@ -156,6 +159,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create field' do
     let!(:new_item) { build(:field) }
+
     before do
       post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field' => new_item.attributes }, headers: headers
     end
@@ -178,6 +182,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#updates' do
     let!(:update) { create(:initiative_update2, initiative: item) }
+
     before do
       get "/api/v1/#{route}/#{item.id}/updates", params: {}, headers: headers
     end
@@ -199,6 +204,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update_prototype' do
     let!(:update) { create(:initiative_update2, initiative: item) }
+
     before do
       get "/api/v1/#{route}/#{item.id}/update_prototype", params: {}, headers: headers
     end
@@ -220,6 +226,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create_update' do
     let!(:new_item) { build(:initiative_update2) }
+
     before do
       post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update' => new_item.attributes }, headers: headers
     end

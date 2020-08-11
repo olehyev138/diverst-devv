@@ -54,6 +54,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     let!(:new_item) { build(route.singularize.to_sym, initiative: initiative, description: 'create test') }
+
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
     end
@@ -78,6 +79,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     let!(:new_params) { { id: item.id, description: 'update test' } }
+
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
     end
