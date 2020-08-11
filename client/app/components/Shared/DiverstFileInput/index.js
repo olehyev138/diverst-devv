@@ -19,7 +19,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstFileInput/messages';
 
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
   fileInput: {
@@ -299,7 +299,7 @@ export function DiverstFileInput(props) {
                 </Grid>
                 <Grid item>
                   <Tooltip
-                    title={<DiverstFormattedMessage {...messages.fileTypes} values= { { file_types: fileTypes.toString() } } />}
+                    title={<DiverstFormattedMessage {...messages.fileTypes} values={{ file_types: fileTypes.toString() }} />}
                     placement='bottom'
                   >
                     <InfoIcon fontSize='small' color='primary' />
