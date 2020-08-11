@@ -6,6 +6,8 @@ class Groups::GroupMembersController < ApplicationController
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :show]
 
+  include Rewardable
+
   layout 'erg'
 
   def index
@@ -49,13 +51,21 @@ class Groups::GroupMembersController < ApplicationController
 
   def create
     authorize [@group, current_user], :create?, policy_class: GroupMemberPolicy
-    @group_member = @group.user_groups.new(group_member_params)
+
+    # first we want to find if any user group has been created
+    @group_member = @group.user_groups.find_by(user_id: group_member_params[:user_id])
+
+    if @group_member.nil?
+      @group_member = @group.user_groups.new(group_member_params)
+    end
+
     @group_member.accepted_member = @group.pending_users.disabled?
+    @group_member.invitation_accepted_at = DateTime.now unless @group_member.invited_by_id.nil?
 
     if @group_member.save
+      user_rewarder(@group_member.invited_by, 'accept_group_invitation').add_points(@group_member) unless @group_member.invitation_accepted_at.nil?
       WelcomeNotificationJob.perform_later(@group.id, current_user.id)
       flash[:notice] = 'You are now a member'
-
 
       if @group.default_mentor_group?
         redirect_to edit_user_mentorship_url(id: current_user.id)
@@ -265,6 +275,7 @@ class Groups::GroupMembersController < ApplicationController
       :groups_notifications_frequency,
       :groups_notifications_date,
       :custom_policy_group,
+      :invitation_accepted_at,
       policy_group_attributes: [
         :id,
         :campaigns_index,

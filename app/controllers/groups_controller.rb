@@ -410,7 +410,7 @@ class GroupsController < ApplicationController
     authorize @group, :show?
 
     # get users except members of this group and current_user to avoid sending invites to users with group membership already
-    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id)).uniq)
+    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - (UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
 
     respond_to do |format|
       format.html
@@ -423,6 +423,7 @@ class GroupsController < ApplicationController
 
     track_activity(@group, :invite_users)
     InviteUsersToGroupJob.perform_later(@group.id, params[:user_id].to_i, current_user.id)
+    # user_rewarder(invited_by, 'group_invite').add_points(user_group)
 
     render nothing: true, status: :ok
   end

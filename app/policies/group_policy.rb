@@ -87,7 +87,10 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_a_member?
-    UserGroup.where(user_id: user.id, group_id: @record.id).exists?
+    # check first to see if this member has been invited
+    return false if UserGroup.where(user_id: user.id, group_id: @record.id).where(invitation_accepted_at: nil).invited_users.exists?
+    return true if @record.pending_users.enabled? && is_a_pending_member?
+    return true if @record.pending_users.disabled? && is_an_accepted_member?
   end
 
   def is_a_leader?
