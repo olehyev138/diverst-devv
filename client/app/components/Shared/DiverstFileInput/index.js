@@ -83,11 +83,10 @@ const styles = theme => ({
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
-  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, ...rest } = props;
+  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, fileTypes, ...rest } = props;
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const inputRef = useRef();
-
   // Note: the fileName prop is only used for edit forms to show the existing file name
   useEffect(() => {
     if (props.fileName)
@@ -300,7 +299,7 @@ export function DiverstFileInput(props) {
                 </Grid>
                 <Grid item>
                   <Tooltip
-                    title='test message'
+                    title={<DiverstFormattedMessage {...messages.fileTypes} values= { { file_types: fileTypes.toString() } } />}
                     placement='bottom'
                   >
                     <InfoIcon fontSize='small' color='primary' />
@@ -342,6 +341,7 @@ DiverstFileInput.propTypes = {
   fileName: PropTypes.string,
   inputProps: PropTypes.object,
   intl: intlShape.isRequired,
+  fileTypes: PropTypes.array.isRequired
 };
 
 export default compose(
