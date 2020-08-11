@@ -18,6 +18,8 @@ import AuthService from 'utils/authService';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstFileInput/messages';
 
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+
 const styles = theme => ({
   fileInput: {
     display: 'none',
@@ -294,6 +296,9 @@ export function DiverstFileInput(props) {
                       )}
                     </Box>
                   )}
+                </Grid>
+                <Grid item>
+                  <InfoIcon fontSize='small' color='primary' />
                 </Grid>
               </Grid>
               {props.showHelperText && (
