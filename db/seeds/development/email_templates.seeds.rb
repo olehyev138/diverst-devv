@@ -113,6 +113,19 @@ after 'development:enterprise' do
             :subject => "Invitation Instructions", 
             :description => "Email that goes out to users after they've been added.",
             :template => ""
+          },
+          #user_password_reset_mailer
+          {
+              name: 'Password Reset Mailer',
+              subject: 'Password Reset',
+              content: "<h2> Hi %{user.name} </h2>\r\n"+
+                  "<p> You recently requested to have your Diverst password reset. To complete the process please %{click_here} to enter your new password </p>\r\n" +
+                  "<p> If you didn't request a password reset, please ignore this email </p>\r\n" +
+                  "<p> The reset password link will expire in 30 minutes </p>\r\n",
+              mailer_name: 'reset_password_mailer',
+              mailer_method: 'reset_password_instructions',
+              template: '',
+              description: 'Email that goes out when a user requests a password reset',
           }
         ]
       )

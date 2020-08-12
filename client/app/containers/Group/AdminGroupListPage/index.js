@@ -17,7 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'c
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
+import { getGroupsBegin, groupAllUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -42,7 +42,7 @@ export function AdminGroupListPage(props) {
   useEffect(() => {
     props.getGroupsBegin(params);
 
-    return () => props.groupListUnmount();
+    return () => props.groupAllUnmount();
   }, []);
 
   const handlePagination = (payload) => {
@@ -76,7 +76,7 @@ export function AdminGroupListPage(props) {
 
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
+  groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
@@ -95,7 +95,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getGroupsBegin,
-  groupListUnmount,
+  groupAllUnmount,
   deleteGroupBegin,
   createCsvFileBegin,
   updateGroupPositionBegin

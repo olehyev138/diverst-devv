@@ -6,6 +6,7 @@ import {
   ApplicationLayout,
   AuthenticatedLayout,
   SignUpPage,
+  PasswordResetPage,
   UserLayout,
   GroupLayout,
   AdminLayout,
@@ -177,8 +178,8 @@ export default function Routes(props) {
               <RouteWithProps path={ROUTES.session.login.path()}><LoginPage /></RouteWithProps>
               {/* Forgot password */}
               <RouteWithProps path={ROUTES.session.forgotPassword.path()}><ForgotPasswordPage /></RouteWithProps>
-              {/* Sign up */}
-              <RouteWithProps path={ROUTES.session.signUp.path()}><SignUpPage /></RouteWithProps>
+              {/* Password Reset */}
+              <RouteWithProps path={ROUTES.session.passwordReset.path()}><PasswordResetPage /></RouteWithProps>
             </SwitchWithProps>
           </SessionLayout>
         </Route>
@@ -187,6 +188,8 @@ export default function Routes(props) {
         <Route path={expandRouteIntoPathArray(ROUTES.anonymous)}>
           <AnonymousLayout>
             <SwitchWithProps>
+              {/* Sign up */}
+              <RouteWithProps path={ROUTES.anonymous.signUp.path()}><SignUpPage /></RouteWithProps>
               {/* Poll Response */}
               <RouteWithProps path={ROUTES.anonymous.pollResponse.path()}><PollResponsePage /></RouteWithProps>
             </SwitchWithProps>

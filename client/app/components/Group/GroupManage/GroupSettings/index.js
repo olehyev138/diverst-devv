@@ -15,7 +15,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import Select from 'components/Shared/DiverstSelect';
 import {
   Button, Card, CardActions, CardContent, Grid, Checkbox,
-  TextField, FormControl, Divider, Switch, FormControlLabel,
+  TextField, FormControl, Divider, Switch, FormControlLabel, Collapse,
 } from '@material-ui/core';
 import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -66,6 +66,11 @@ const SETTINGS_OPTIONS = Object.freeze({
     { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
     { label: intl.formatMessage(messages.visibility.non_member), value: 'non_member' }
   ],
+  unitsOfExpiration: [
+    { label: intl.formatMessage(messages.units.years), value: 'years' },
+    { label: intl.formatMessage(messages.units.months), value: 'months' },
+    { label: intl.formatMessage(messages.units.weeks), value: 'weeks' },
+  ],
 });
 
 function setHeader(value) {
@@ -82,6 +87,12 @@ function setHeader(value) {
       return intl.formatMessage(messages.visibility.disabled);
     case 'enabled':
       return intl.formatMessage(messages.visibility.enabled);
+    case 'years':
+      return intl.formatMessage(messages.units.years);
+    case 'months':
+      return intl.formatMessage(messages.units.months);
+    case 'weeks':
+      return intl.formatMessage(messages.units.weeks);
     default:
       return '';
   }
@@ -91,6 +102,7 @@ function setHeader(value) {
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
+
   return (
     <Card>
       <Form>
@@ -248,6 +260,79 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 }}
               />
             </Grid>
+            <Grid item xs='auto'>
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='top'
+                  label={intl.formatMessage(messages.settings.auto_archive)}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={value => setFieldValue('auto_archive', !values.auto_archive)}
+                      color='primary'
+                      id='auto_archive'
+                      name='auto_archive'
+                      margin='normal'
+                      checked={values.auto_archive}
+                      value={values.auto_archive}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid>
+            <Collapse in={values.auto_archive}>
+              <Grid container spacing={3} justify='space-around'>
+                <Grid item>
+                  <Field
+                    component={Select}
+                    id='unit_of_expiry_age'
+                    name='unit_of_expiry_age'
+                    margin='normal'
+                    label={intl.formatMessage(messages.settings.expiry_units)}
+                    disabled={props.isCommitting}
+                    options={SETTINGS_OPTIONS.unitsOfExpiration}
+                    value={{ value: values.unit_of_expiry_age, label: setHeader(values.unit_of_expiry_age) }}
+                    onChange={value => setFieldValue('unit_of_expiry_age', value.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id='expiry_age_for_news'
+                    variant='outlined'
+                    name='expiry_age_for_news'
+                    type='number'
+                    margin='normal'
+                    label={intl.formatMessage(messages.settings.expiry_news)}
+                    value={values.expiry_age_for_news}
+                    onChange={value => setFieldValue('expiry_age_for_news', value.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id='expiry_age_for_events'
+                    variant='outlined'
+                    name='expiry_age_for_events'
+                    type='number'
+                    margin='normal'
+                    label={intl.formatMessage(messages.settings.expiry_events)}
+                    value={values.expiry_age_for_events}
+                    onChange={value => setFieldValue('expiry_age_for_events', value.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id='expiry_age_for_resources'
+                    variant='outlined'
+                    name='expiry_age_for_resources'
+                    type='number'
+                    margin='normal'
+                    label={intl.formatMessage(messages.settings.expiry_resources)}
+                    value={values.expiry_age_for_resources}
+                    onChange={value => setFieldValue('expiry_age_for_resources', value.target.value)}
+                  />
+                </Grid>
+              </Grid>
+            </Collapse>
           </Grid>
         </CardContent>
         <Divider />
@@ -274,7 +359,11 @@ export function GroupSettings(props) {
     latest_news_visibility: { default: '' },
     upcoming_events_visibility: { default: '' },
     calendar_color: { default: '' },
-    auto_archive: { default: '' },
+    auto_archive: { default: false },
+    unit_of_expiry_age: { default: '' },
+    expiry_age_for_news: { default: 0 },
+    expiry_age_for_events: { default: 0 },
+    expiry_age_for_resources: { default: 0 },
     banner: { default: null },
     logo: { default: null },
   });

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Box
+  Paper, Typography, Grid, Button, Box, Link
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
@@ -32,6 +32,9 @@ import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import ErrorBoundary from 'containers/Shared/ErrorBoundary';
 
 const styles = theme => ({
   padding: {
@@ -174,6 +177,20 @@ export function Event(props) {
           <Paper className={classes.padding}>
             <Grid container spacing={2}>
               <Grid item xs>
+                {event.group.id !== props.currentGroup.id && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders} variant='h5'>
+                      <DiverstFormattedMessage {...messages.show.hosted_by} />
+                      &nbsp;
+                      <Link
+                        component={WrappedNavLink}
+                        to={ROUTES.group.home.path(event.group.id)}
+                      >
+                        {event.group.name}
+                      </Link>
+                    </Typography>
+                  </React.Fragment>
+                )}
                 {event.picture_data && (
                   <DiverstImg
                     data={event.picture_data}
@@ -188,15 +205,12 @@ export function Event(props) {
                     <Typography className={classes.dataHeaders}>
                       <DiverstFormattedMessage {...messages.inputs.description} />
                     </Typography>
-                    <Typography
-                      style={{
-                        whiteSpace: 'pre-line'
+                    <DiverstHTMLEmbedder
+                      html={event.description}
+                      gridProps={{
+                        alignItems: 'flex-start',
                       }}
-                      color='textSecondary'
-                      className={classes.data}
-                    >
-                      {event.description}
-                    </Typography>
+                    />
                   </React.Fragment>
                 )}
                 <Typography className={classes.dataHeaders}>
@@ -214,7 +228,7 @@ export function Event(props) {
                 {event.participating_groups.length > 0 && (
                   <React.Fragment>
                     <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.participating_groups} />
+                      <DiverstFormattedMessage {...messages.show.participating_groups} />
                     </Typography>
                     {event.participating_groups.map((group, i) => (
                       <Typography color='textSecondary' key={group.id}>
@@ -270,6 +284,7 @@ export function Event(props) {
         </React.Fragment>
       )}
     </DiverstShowLoader>
+
   );
 }
 

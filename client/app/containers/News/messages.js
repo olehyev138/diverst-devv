@@ -27,6 +27,9 @@ export default defineMessages({
   approve: {
     id: `${scope}.index.button.approve`,
   },
+  group_comment_delete_confirm: {
+    id: `${scope}.index.button.group.comment.delete_confirm`,
+  },
   group_delete_confirm: {
     id: `${scope}.index.button.group.delete_confirm`,
   },
@@ -94,5 +97,8 @@ export default defineMessages({
     pending: {
       id: `${scope}.index.no_news.pending`,
     },
+  },
+  emptySection: {
+    id: `${scope}.home.emptySection`,
   },
 });

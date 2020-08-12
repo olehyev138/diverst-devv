@@ -8,5 +8,6 @@ RSpec.describe MentoringTypeSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq(mentoring_type.id)
     expect(serializer.serializable_hash[:name]).to eq(mentoring_type.name)
+    expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

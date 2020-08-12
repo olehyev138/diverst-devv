@@ -199,7 +199,22 @@ export function EventsList(props) {
                         className={classes.eventLink}
                         component={WrappedNavLink}
                         to={{
-                          pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                          pathname: ROUTES.group.events.show.path(
+                            (() => {
+                              if (props.currentGroup)
+                                return props.currentGroup.id;
+                              if (item.group.current_user_is_member)
+                                return item.group.id;
+                              let usersGroup;
+                              // eslint-disable-next-line no-cond-assign
+                              if ((usersGroup = item.participating_groups.find(g => g.current_user_is_member)))
+                                return usersGroup.id;
+                              // eslint-disable-next-line no-console
+                              console.error('Not in any participating groups');
+                              return item.group.id;
+                            })(),
+                            item.id
+                          ),
                           state: { id: item.id }
                         }}
                       >

@@ -411,7 +411,7 @@ ActiveRecord::Schema.define(version: 2020_07_20_215843) do
     t.integer "users_count"
     t.boolean "onboarding_consent_enabled", default: false
     t.boolean "enable_outlook", default: false
-    t.text "onboarding_pop_up_content"
+    t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
   end
 
@@ -1297,7 +1297,7 @@ ActiveRecord::Schema.define(version: 2020_07_20_215843) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "owner_id"
-    t.integer "status", default: 0, null: false
+    t.integer "status", default: 1, null: false
     t.boolean "email_sent", default: false, null: false
     t.bigint "initiative_id"
     t.integer "responses_count", default: 0

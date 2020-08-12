@@ -37,6 +37,7 @@ import {
   RESET_BUDGET_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
+  GROUP_ALL_UNMOUNT,
   JOIN_GROUP_BEGIN,
   JOIN_GROUP_SUCCESS,
   JOIN_GROUP_ERROR,
@@ -282,6 +283,13 @@ export function resetBudgetError(error) {
   return {
     type: RESET_BUDGET_ERROR,
     error,
+  };
+}
+
+export function groupAllUnmount(payload) {
+  return {
+    type: GROUP_ALL_UNMOUNT,
+    payload,
   };
 }
 

@@ -30,6 +30,12 @@ export function GlobalSettingsLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
+            to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
+            label={<DiverstFormattedMessage {...messages.configuration} />}
+            value='configuration'
+          />
+          <Tab
+            component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.fields.index.path()}
             label={<DiverstFormattedMessage {...messages.fields} />}
             value='fields'
@@ -39,12 +45,6 @@ export function GlobalSettingsLinks(props) {
             to={ROUTES.admin.system.globalSettings.customText.edit.path()}
             label={<DiverstFormattedMessage {...messages.customTexts} />}
             value='custom_texts'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
-            label={<DiverstFormattedMessage {...messages.configuration} />}
-            value='configuration'
           />
           <Tab
             component={WrappedNavLink}
