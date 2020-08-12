@@ -36,4 +36,7 @@ export default defineMessages({
   fileTypes: {
     id: `${scope}.fileTypes`
   },
+  notAccepted: {
+    id: `${scope}.notAccepted`
+  },
 });

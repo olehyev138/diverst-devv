@@ -83,7 +83,7 @@ const styles = theme => ({
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
-  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, fileTypes, ...rest } = props;
+  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, fileType, ...rest } = props;
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const inputRef = useRef();
@@ -110,6 +110,26 @@ export function DiverstFileInput(props) {
     multiple,
     inputProps,
   } = rest;
+
+  const acceptFileTypes = fileType === 'image' ? [
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+    'image/svg',
+  ] : [
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+    'image/gif',
+    'image/svg+xml',
+    'application/pdf',
+    'text/csv',
+    'text/xml',
+    'application/json',
+    'application/zip',
+    'text/plain',
+    'text/html',
+  ];
 
   return (
     <React.Fragment>
@@ -161,7 +181,7 @@ export function DiverstFileInput(props) {
                 {props.label}
               </FormLabel>
               <input
-                accept={fileTypes.toString()}
+                accept={acceptFileTypes}
                 id={props.id}
                 type='file'
                 className={classes.fileInput}
@@ -173,7 +193,10 @@ export function DiverstFileInput(props) {
                   if (handleUploadBegin)
                     handleUploadBegin(e);
 
-                  handleUpload(e.currentTarget.files);
+                  if (Object.values(e.currentTarget.files).every(file => acceptFileTypes.includes(file.type)))
+                    handleUpload(e.currentTarget.files);
+                  else
+                    alert(intl.formatMessage(messages.notAccepted));
                 }}
                 {...inputProps}
               />
@@ -299,7 +322,7 @@ export function DiverstFileInput(props) {
                 </Grid>
                 <Grid item>
                   <Tooltip
-                    title={<DiverstFormattedMessage {...messages.fileTypes} values={{ file_types: fileTypes.toString() }} />}
+                    title={<DiverstFormattedMessage {...messages.fileTypes} values={{ file_types: acceptFileTypes.toString() }} />}
                     placement='bottom'
                   >
                     <InfoIcon fontSize='small' color='primary' />
@@ -341,7 +364,7 @@ DiverstFileInput.propTypes = {
   fileName: PropTypes.string,
   inputProps: PropTypes.object,
   intl: intlShape.isRequired,
-  fileTypes: PropTypes.array.isRequired
+  fileType: PropTypes.string
 };
 
 export default compose(
