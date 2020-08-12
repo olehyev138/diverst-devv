@@ -49,7 +49,7 @@ export function* createUserRole(action) {
 
     yield put(createUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.succcess.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserRoleError(err));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));

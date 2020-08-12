@@ -29,7 +29,7 @@ import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
-import messages from "../messages";
+import messages from '../messages';
 
 api.groups.all = jest.fn();
 api.groups.create = jest.fn();
@@ -44,11 +44,6 @@ api.userGroups.join = jest.fn();
 api.userGroups.leave = jest.fn();
 api.userGroups.joinSubgroups = jest.fn();
 
-jest.mock('containers/Shared/LanguageProvider/GlobalLanguageProvider', () => ({
-  intl: {
-    formatMessage: jest.fn(),
-  },
-}));
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -225,7 +220,6 @@ describe('Get annual group budget', () => {
 describe('Create group', () => {
   it('Should create a group', async () => {
     api.groups.create.mockImplementation(() => Promise.resolve({ data: { group } }));
-    intl.formatMessage.mockImplementation(() => 'string');
     const notified = {
       notification: {
         key: 1590092641484,
@@ -278,6 +272,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
   });
 });
 

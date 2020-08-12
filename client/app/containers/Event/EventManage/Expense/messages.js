@@ -81,7 +81,7 @@ export default defineMessages({
   pressure: {
     id: `${scope}.pressure`,
   },
-  snackbar: {
+  snackbars: {
     errors: {
       expense: {
         id: `${snackbar}.errors.load.expense`

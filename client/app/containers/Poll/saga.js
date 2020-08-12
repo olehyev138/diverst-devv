@@ -48,7 +48,7 @@ export function* getPolls(action) {
     yield put(getPollsSuccess(response.data.page));
   } catch (err) {
     yield put(getPollsError(err));
-    yield put(showSnackbar({ message:intl.formatMessage(messages.snackbars.errors.polls)'Failed to get polls', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.polls), options: { variant: 'warning' } }));
   }
 }
 
