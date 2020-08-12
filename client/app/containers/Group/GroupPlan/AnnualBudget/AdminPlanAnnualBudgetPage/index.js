@@ -17,7 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHa
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
+import { getAnnualBudgetsBegin, groupAllUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
 
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
@@ -59,14 +59,14 @@ export function AdminAnnualBudgetPage(props) {
   useEffect(() => {
     props.getAnnualBudgetsBegin(params);
 
-    return () => props.groupListUnmount();
+    return () => props.groupAllUnmount();
   }, []);
 
   useEffect(() => {
     if (props.hasChanged)
       props.getAnnualBudgetsBegin(params);
 
-    return () => props.groupListUnmount();
+    return () => props.groupAllUnmount();
   }, [props.hasChanged]);
 
   return (
@@ -87,7 +87,7 @@ export function AdminAnnualBudgetPage(props) {
 
 AdminAnnualBudgetPage.propTypes = {
   getAnnualBudgetsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
+  groupAllUnmount: PropTypes.func.isRequired,
   carryBudgetBegin: PropTypes.func.isRequired,
   resetBudgetBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
@@ -110,7 +110,7 @@ const mapDispatchToProps = {
   getAnnualBudgetsBegin,
   carryBudgetBegin,
   resetBudgetBegin,
-  groupListUnmount,
+  groupAllUnmount,
   handleVisitEditPage,
 };
 
