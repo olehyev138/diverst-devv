@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_USER_ROLES_BEGIN, CREATE_USER_ROLE_BEGIN,
@@ -25,9 +27,7 @@ export function* getUserRoles(action) {
     yield put(getUserRolesSuccess(response.data.page));
   } catch (err) {
     yield put(getUserRolesError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load user roles', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.roles), options: { variant: 'warning' } }));
   }
 }
 
@@ -36,9 +36,8 @@ export function* getUserRole(action) {
     const response = yield call(api.userRoles.get.bind(api.userRoles), action.payload.id);
     yield put(getUserRoleSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getUserRoleError(err));
-    yield put(showSnackbar({ message: 'Failed to get user role', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.role), options: { variant: 'warning' } }));
   }
 }
 
@@ -50,12 +49,10 @@ export function* createUserRole(action) {
 
     yield put(createUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: 'User role created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.succcess.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserRoleError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create user role', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -66,12 +63,10 @@ export function* updateUserRole(action) {
 
     yield put(updateUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: 'User role updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserRoleError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user role', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -81,12 +76,10 @@ export function* deleteUserRole(action) {
 
     yield put(deleteUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: 'User role deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserRoleError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
