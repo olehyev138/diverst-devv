@@ -297,6 +297,7 @@ export function DiverstFileInput(props) {
                                     aria-label='delete'
                                     size='small'
                                     onClick={() => {
+                                      setNotAcceptedFile(false);
                                       /* eslint-disable-next-line no-alert, no-restricted-globals */
                                       if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
 
