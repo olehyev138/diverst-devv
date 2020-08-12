@@ -111,6 +111,8 @@ export function DiverstFileInput(props) {
     inputProps,
   } = rest;
 
+  const [notAcceptedFile, setNotAcceptedFile] = useState(false);
+
   const acceptFileTypes = fileType === 'image' ? [
     'image/png',
     'image/jpg',
@@ -193,10 +195,11 @@ export function DiverstFileInput(props) {
                   if (handleUploadBegin)
                     handleUploadBegin(e);
 
-                  if (Object.values(e.currentTarget.files).every(file => acceptFileTypes.includes(file.type)))
+                  if (Object.values(e.currentTarget.files).every(file => acceptFileTypes.includes(file.type))) {
+                    setNotAcceptedFile(false);
                     handleUpload(e.currentTarget.files);
-                  else
-                    alert(intl.formatMessage(messages.notAccepted));
+                  } else
+                    setNotAcceptedFile(true);
                 }}
                 {...inputProps}
               />
@@ -339,6 +342,11 @@ export function DiverstFileInput(props) {
                 >
                   {props.helperText}
                 </FormHelperText>
+              )}
+              {notAcceptedFile && (
+                <Typography color='error'>
+                  {intl.formatMessage(messages.notAccepted)}
+                </Typography>
               )}
             </FormControl>
           </React.Fragment>
