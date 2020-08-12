@@ -9,5 +9,4 @@ const mockIntl = jest.mock('containers/Shared/LanguageProvider/GlobalLanguagePro
   },
 }));
 
-global.intl = mockIntl
-
+global.intl = mockIntl;
