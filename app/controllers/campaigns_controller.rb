@@ -4,6 +4,8 @@ class CampaignsController < ApplicationController
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit]
 
+  include Rewardable
+
   layout :resolve_layout
 
   def index

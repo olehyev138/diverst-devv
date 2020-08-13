@@ -73,7 +73,7 @@ class Campaign < BaseClass
 
   def engagement_activity_level
     # total number of answers, upvotes and comments across all questions for a campaign
-    self.answers.size + self.answer_upvotes.size + self.answer_comments.size
+    (self.answers.size * 10) + self.answer_upvotes.size + (self.answer_comments.size * 3)
   end
 
   def chosen_ideas
@@ -146,7 +146,7 @@ class Campaign < BaseClass
     end
 
     campaigns = enterprise.campaigns.where(created_at: date_range)
-    
+
     campaigns = campaigns.select { |c| c.engagement_activity_level > 0 }
                           .map { |c| [c.title, c.engagement_activity_level] }
                           .inject({}) { |hash, (c, eal)| hash.merge(c => eal) }
