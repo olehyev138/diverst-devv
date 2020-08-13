@@ -10,16 +10,17 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import BasicErrorBoundary from 'containers/Shared/BasicErrorBoundary';
 
-export const DiverstFormattedMessage = ({ customText, ...props }) => (
+export const DiverstFormattedMessage = ({ customText, values, ...props }) => (
   <BasicErrorBoundary
     render={({ error, info }) => 'UNDEFINED MESSAGE'}
   >
-    <FormattedMessage {...props} values={customTexts(customText)} />
+    <FormattedMessage {...props} values={{ ...values, ...customTexts(customText) }} />
   </BasicErrorBoundary>
 );
 
 DiverstFormattedMessage.propTypes = {
   customText: PropTypes.object,
+  values: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

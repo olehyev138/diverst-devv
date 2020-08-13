@@ -166,7 +166,7 @@ describe('Get Event Saga', () => {
 
 describe('Create event', () => {
   it('Should create an event', async () => {
-    api.initiatives.create.mockImplementation(() => Promise.resolve({ data: { event } }));
+    api.initiatives.create.mockImplementation(() => Promise.resolve({ data: { initiative: event } }));
     const notified = {
       notification: {
         key: 1590092641484,
@@ -176,7 +176,7 @@ describe('Create event', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [createEventSuccess(), push(ROUTES.group.events.index.path(event.owner_group_id)), notified];
+    const results = [createEventSuccess(), push(ROUTES.group.events.show.path(event.owner_group_id, event.id)), notified];
     const initialAction = { payload: event };
 
     const dispatched = await recordSaga(

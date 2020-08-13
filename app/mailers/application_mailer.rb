@@ -7,4 +7,8 @@ class ApplicationMailer < ActionMailer::Base
   default from: from_address, content_type: 'text/html', 'Content-Transfer-Encoding': '7bit'
 
   layout 'mailer'
+
+  rescue_from(ActiveRecord::RecordNotFound) do |exception|
+    # Skip job when record is not found
+  end
 end

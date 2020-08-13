@@ -13,7 +13,7 @@ import { UserGroupListPage } from '../index';
 
 const props = {
   getGroupsBegin: jest.fn(),
-  groupListUnmount: jest.fn(),
+  groupAllUnmount: jest.fn(),
 };
 describe('<UserGroupListPage />', () => {
   it('Expect to not log errors in console', () => {
