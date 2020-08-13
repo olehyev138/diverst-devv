@@ -311,7 +311,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
-                          label={<DiverstFormattedMessage {...messages.all_emails} />}
+                          label={<Typography color={values.disable_emails ? 'error' : 'black'}><DiverstFormattedMessage {...messages.all_emails} /></Typography>}
                           control={(
                             <Field
                               component={Switch}
