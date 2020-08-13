@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import {scope} from "../../Event/EventManage/Expense/messages";
+import { scope } from '../../Event/EventManage/Expense/messages';
 
 export const snackbar = 'diverst.snackbars.Shared.Like';
 

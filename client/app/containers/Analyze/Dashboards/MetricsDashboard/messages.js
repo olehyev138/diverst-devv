@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.MetricsDashboard';
-export const snackbars = 'diverst.snackbars.Analyze.Dashboards'
+export const snackbar = 'diverst.snackbars.Analyze.Dashboards';
 
 export default defineMessages({
   new: {
@@ -78,54 +78,54 @@ export default defineMessages({
   snackbars: {
     errors: {
       dashboard: {
-        id: `${snackbars}.errors.load.dashboard`
+        id: `${snackbar}.errors.load.dashboard`
       },
       dashboards: {
-        id: `${snackbars}.errors.load.dashboards`
+        id: `${snackbar}.errors.load.dashboards`
       },
       create_dashboard: {
-        id: `${snackbars}.errors.create.dashboard`
+        id: `${snackbar}.errors.create.dashboard`
       },
       update_dashboard: {
-        id: `${snackbars}.errors.update.dashboard`
+        id: `${snackbar}.errors.update.dashboard`
       },
       delete_dashboard: {
-        id: `${snackbars}.errors.delete.dashboard`
+        id: `${snackbar}.errors.delete.dashboard`
       },
       graph: {
-        id: `${snackbars}.errors.load.graph`
+        id: `${snackbar}.errors.load.graph`
       },
       graph_data: {
-        id: `${snackbars}.errors.load.graph_data`
+        id: `${snackbar}.errors.load.graph_data`
       },
       create_graph: {
-        id: `${snackbars}.errors.create.graph`
+        id: `${snackbar}.errors.create.graph`
       },
       update_graph: {
-        id: `${snackbars}.errors.update.graph`
+        id: `${snackbar}.errors.update.graph`
       },
       delete_graph: {
-        id: `${snackbars}.errors.delete.graph`
+        id: `${snackbar}.errors.delete.graph`
       }
     },
     success: {
       create_graph: {
-        id: `${snackbars}.success.create.graph`
+        id: `${snackbar}.success.create.graph`
       },
       update_graph: {
-        id: `${snackbars}.success.update.graph`
+        id: `${snackbar}.success.update.graph`
       },
       delete_graph: {
-        id: `${snackbars}.success.delete.graph`
+        id: `${snackbar}.success.delete.graph`
       },
       create_dashboard: {
-        id: `${snackbars}.success.create.dashboard`
+        id: `${snackbar}.success.create.dashboard`
       },
       update_dashboard: {
-        id: `${snackbars}.success.update.dashboard`
+        id: `${snackbar}.success.update.dashboard`
       },
       delete_dashboard: {
-        id: `${snackbars}.success.delete.dashboard`
+        id: `${snackbar}.success.delete.dashboard`
       },
     }
   }

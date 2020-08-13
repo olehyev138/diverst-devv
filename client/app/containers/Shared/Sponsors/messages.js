@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import {scope} from "../Field/messages";
+import { scope } from '../Field/messages';
 
 export const snackbar = 'diverst.snackbars.Shared.Sponsors';
 
@@ -23,7 +23,7 @@ export default defineMessages({
         id: `${snackbar}.errors.delete.sponsor`
       }
     },
-    success:{
+    success: {
       create: {
         id: `${snackbar}.success.create.sponsor`
       },

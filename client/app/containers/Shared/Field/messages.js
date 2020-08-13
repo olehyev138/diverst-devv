@@ -103,7 +103,7 @@ export default defineMessages({
         id: `${snackbar}.errors.delete.field`
       }
     },
-    success:{
+    success: {
       create: {
         id: `${snackbar}.success.create.field`
       },

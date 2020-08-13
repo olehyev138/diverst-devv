@@ -85,7 +85,7 @@ export default defineMessages({
         id: `${snackbar}.errors.delete.update`
       }
     },
-    success:{
+    success: {
       create: {
         id: `${snackbar}.success.create.update`
       },
