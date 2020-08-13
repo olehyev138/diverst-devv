@@ -38,7 +38,7 @@ const styles = theme => ({
       color: theme.palette.error.main,
     },
     '& .MuiSwitch-track': {
-      backgroundColor: theme.palette.error.main + '!important',
+      backgroundColor: `${theme.palette.error.main}!important`,
     },
   },
 });
