@@ -127,7 +127,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               />
             </Grid>
             <Grid item xs={12} className={classes.noBottomPadding} margin={2}>
-              <Grid container direction='row' justify='space-between' alignment='flex-start' spacing={2}>
+              <Grid container direction='column' justify='space-between' alignment='flex-start' spacing={2}>
                 <Grid item xs>
                   <Card variant='outlined'>
                     <CardContent>
@@ -329,59 +329,60 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                     </CardContent>
                   </Card>
                 </Grid>
+                <Grid item xs>
+                  <Card variant='outlined'>
+                    <CardContent>
+                      <Typography variant='h6' color='primary'>Archive Settings</Typography>
+                      <FormControl>
+                        <FormControlLabel
+                          labelPlacement='right'
+                          label={<DiverstFormattedMessage {...messages.auto_archive} />}
+                          control={(
+                            <Field
+                              component={Switch}
+                              onChange={value => setFieldValue('auto_archive', !values.auto_archive)}
+                              color='primary'
+                              id='auto_archive'
+                              name='auto_archive'
+                              margin='normal'
+                              checked={values.auto_archive}
+                              value={values.auto_archive}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                      <Collapse in={values.auto_archive}>
+                        <Grid container direction='row' justify='flex-start' spacing={2}>
+                          <Grid item>
+                            <Field
+                              component={Select}
+                              id='unit_of_expiry_age'
+                              name='unit_of_expiry_age'
+                              margin='normal'
+                              label={<DiverstFormattedMessage {...messages.expiry_units} />}
+                              options={SETTINGS_OPTIONS.unitsOfExpiration}
+                              value={{ value: values.unit_of_expiry_age, label: setHeader(values.unit_of_expiry_age) }}
+                              onChange={value => setFieldValue('unit_of_expiry_age', value.value)}
+                            />
+                          </Grid>
+                          <Grid item>
+                            <TextField
+                              id='expiry_age_for_resources'
+                              name='expiry_age_for_resources'
+                              type='number'
+                              margin='normal'
+                              label={<DiverstFormattedMessage {...messages.expiry_resources} />}
+                              value={values.expiry_age_for_resources}
+                              onChange={value => setFieldValue('expiry_age_for_resources', value.target.value)}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Collapse>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
               <Grid item xs={12}>
-                <Grid container direction='row' justify='space-between' alignment='flex-start' spacing={3}>
-                  <Grid item xs='auto'>
-                    <FormControl>
-                      <FormControlLabel
-                        labelPlacement='right'
-                        label={<DiverstFormattedMessage {...messages.auto_archive} />}
-                        control={(
-                          <Field
-                            component={Switch}
-                            onChange={value => setFieldValue('auto_archive', !values.auto_archive)}
-                            color='primary'
-                            id='auto_archive'
-                            name='auto_archive'
-                            margin='normal'
-                            checked={values.auto_archive}
-                            value={values.auto_archive}
-                          />
-                        )}
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs>
-                    <Collapse in={values.auto_archive}>
-                      <Grid container direction='row' justify='flex-start' spacing={2}>
-                        <Grid item>
-                          <Field
-                            component={Select}
-                            id='unit_of_expiry_age'
-                            name='unit_of_expiry_age'
-                            margin='normal'
-                            label={<DiverstFormattedMessage {...messages.expiry_units} />}
-                            options={SETTINGS_OPTIONS.unitsOfExpiration}
-                            value={{ value: values.unit_of_expiry_age, label: setHeader(values.unit_of_expiry_age) }}
-                            onChange={value => setFieldValue('unit_of_expiry_age', value.value)}
-                          />
-                        </Grid>
-                        <Grid item>
-                          <TextField
-                            id='expiry_age_for_resources'
-                            name='expiry_age_for_resources'
-                            type='number'
-                            margin='normal'
-                            label={<DiverstFormattedMessage {...messages.expiry_resources} />}
-                            value={values.expiry_age_for_resources}
-                            onChange={value => setFieldValue('expiry_age_for_resources', value.target.value)}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
               </Grid>
             </Grid>
           </Grid>
