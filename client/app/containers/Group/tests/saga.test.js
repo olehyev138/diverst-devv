@@ -134,6 +134,7 @@ describe('Get groups Saga', () => {
 
     expect(api.groups.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.groups);
   });
 });
 
@@ -173,6 +174,7 @@ describe('Get group Saga', () => {
 
     expect(api.groups.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.group);
   });
 });
 
@@ -214,6 +216,7 @@ describe('Get annual group budget', () => {
 
     expect(api.groups.annualBudgets).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.annualBudgets);
   });
 });
 
@@ -303,6 +306,7 @@ describe('Categorize group', () => {
     );
     expect(api.groups.updateCategories).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.group_categorize);
   });
 });
 
@@ -339,6 +343,7 @@ describe('Update group', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
   });
 
   it('Should return error from the API', async () => {
@@ -363,6 +368,7 @@ describe('Update group', () => {
 
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
   });
 });
 
@@ -388,6 +394,7 @@ describe('Update group settings', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_group_settings);
   });
 
   it('Should return error from the API', async () => {
@@ -412,6 +419,8 @@ describe('Update group settings', () => {
 
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_group_settings);
+
   });
 });
 
@@ -441,6 +450,7 @@ describe('Delete group', () => {
     );
     expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
   });
 
   it('Should return error from the API', async () => {
@@ -464,6 +474,7 @@ describe('Delete group', () => {
     );
     expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
   });
 });
 
@@ -494,6 +505,7 @@ describe('Carry budget', () => {
     );
     expect(api.groups.carryOverBudget).toHaveBeenCalledWith(initialAction);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.carry);
   });
 });
 // TODO
@@ -543,6 +555,7 @@ describe('reset budget', () => {
 
     expect(api.groups.resetBudget).toHaveBeenCalledWith(initialAction);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.reset);
   });
 });
 
@@ -580,6 +593,7 @@ describe('Join group', () => {
     );
     expect(api.userGroups.join).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.join);
   });
 });
 
@@ -593,7 +607,7 @@ describe('Leave group', () => {
       leaveGroup,
       initialAction
     );
-    expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initialAction.payload });
+    expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initoutcomesialAction.payload });
     expect(dispatched).toEqual(results);
   });
 
@@ -618,6 +632,7 @@ describe('Leave group', () => {
     );
     expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leave);
   });
 });
 
@@ -656,5 +671,6 @@ describe('Join subgroups', () => {
     );
     expect(api.userGroups.joinSubgroups).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.join_subgroups);
   });
 });
