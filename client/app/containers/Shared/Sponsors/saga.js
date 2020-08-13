@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_SPONSORS_BEGIN, GET_SPONSOR_BEGIN, CREATE_SPONSOR_BEGIN,
@@ -31,9 +33,7 @@ export function* getSponsors(action) {
     yield put(getSponsorsSuccess(response.data.page));
   } catch (err) {
     yield put(getSponsorsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load sponsors', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.sponsors), options: { variant: 'warning' } }));
   }
 }
 
@@ -42,10 +42,9 @@ export function* getSponsor(action) {
     const response = yield call(api.sponsors.get.bind(api.sponsors), action.payload.id);
     yield put(getSponsorSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getSponsorError(err));
     yield put(showSnackbar({
-      message: 'Failed to get sponsor',
+      message: intl.formatMessage(messages.snackbars.errors.sponsor),
       options: { variant: 'warning' }
     }));
   }
@@ -65,12 +64,10 @@ export function* createSponsors(action, sponsorableKey) {
 
     yield put(createSponsorSuccess());
 
-    yield put(showSnackbar({ message: 'Sponsor created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSponsorError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create sponsors', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -84,12 +81,10 @@ export function* deleteSponsors(action) {
       yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
     yield put(deleteSponsorSuccess());
-    yield put(showSnackbar({ message: 'Sponsor deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSponsorError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove sponsors', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -105,15 +100,13 @@ export function* updateSponsor(action, sponsorableType) {
 
     yield put(updateSponsorSuccess());
     yield put(showSnackbar({
-      message: 'Sponsor updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateSponsorError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update sponsor',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }

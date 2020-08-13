@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_METRICS_DASHBOARDS_BEGIN, GET_METRICS_DASHBOARD_BEGIN,
@@ -33,6 +35,8 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+
+
 /* Metrics Dashboard */
 
 export function* getMetricsDashboards(action) {
@@ -42,10 +46,8 @@ export function* getMetricsDashboards(action) {
     yield (put(getMetricsDashboardsSuccess(response.data.page)));
   } catch (err) {
     yield put(getMetricsDashboardsError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load metrics_dashboards',
+      message: intl.formatMessage(messages.snackbars.errors.dashboards),
       options: { variant: 'warning' }
     }));
   }
@@ -56,10 +58,9 @@ export function* getMetricsDashboard(action) {
     const response = yield call(api.metrics.metricsDashboards.get.bind(api.metrics.metricsDashboards), action.payload.id);
     yield put(getMetricsDashboardSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: 'Failed to get metrics_dashboard',
+      message: intl.formatMessage(messages.snackbars.errors.dashboard),
       options: { variant: 'warning' }
     }));
   }
@@ -73,15 +74,13 @@ export function* createMetricsDashboard(action) {
     yield put(createMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: 'Metrics dashboard created',
+      message: intl.formatMessage(messages.snackbars.success.create_dashboard),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createMetricsDashboardError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to create metrics_dashboard',
+      message: intl.formatMessage(messages.snackbars.errors.create_dashboard),
       options: { variant: 'warning' }
     }));
   }
@@ -96,15 +95,13 @@ export function* updateMetricsDashboard(action) {
     yield put(updateMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: 'Metrics dashboard updated',
+      message: intl.formatMessage(messages.snackbars.success.update_dashboard),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateMetricsDashboardError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update metrics dashboard',
+      message: intl.formatMessage(messages.snackbars.errors.update_dashboard),
       options: { variant: 'warning' }
     }));
   }
@@ -117,15 +114,13 @@ export function* deleteMetricsDashboard(action) {
     yield put(deleteMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: 'Metrics dashboard deleted',
+      message: intl.formatMessage(messages.snackbars.success.delete_dashboard),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteMetricsDashboardError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to delete metrics dashboard',
+      message: intl.formatMessage(messages.snackbars.errors.delete_dashboard),
       options: { variant: 'warning' }
     }));
   }
@@ -138,10 +133,9 @@ export function* getCustomGraph(action) {
     const response = yield call(api.metrics.customGraphs.get.bind(api.metrics.customGraphs), action.payload.id);
     yield put(getCustomGraphSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: 'Failed to get graph data',
+      message: intl.formatMessage(messages.snackbars.errors.graph),
       options: { variant: 'warning' }
     }));
   }
@@ -152,10 +146,9 @@ export function* getCustomGraphData(action) {
     const response = yield call(api.metrics.customGraphs.data.bind(api.metrics.customGraphs), { graph: action.payload });
     yield put(getCustomGraphDataSuccess({ id: action.payload.id, data: response.data }));
   } catch (err) {
-    // TODO: intl message
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: 'Failed to get graph',
+      message: intl.formatMessage(messages.snackbars.errors.graph_data),
       options: { variant: 'warning' }
     }));
   }
@@ -169,15 +162,13 @@ export function* createCustomGraph(action) {
     yield put(createCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
-      message: 'Graph created',
+      message: intl.formatMessage(messages.snackbars.success.create_graph),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createCustomGraphError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to create graph',
+      message: intl.formatMessage(messages.snackbars.errors.create_graph),
       options: { variant: 'warning' }
     }));
   }
@@ -192,15 +183,13 @@ export function* updateCustomGraph(action) {
     yield put(updateCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
-      message: 'Graph updated',
+      message: intl.formatMessage(messages.snackbars.success.update_graph),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateCustomGraphError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update graph',
+      message: intl.formatMessage(messages.snackbars.errors.update_graph),
       options: { variant: 'warning' }
     }));
   }
@@ -213,15 +202,13 @@ export function* deleteCustomGraph(action) {
     yield put(deleteCustomGraphSuccess(action.payload));
     yield put(getMetricsDashboardBegin({ id: action.payload.dashboardId }));
     yield put(showSnackbar({
-      message: 'Custom graph deleted',
+      message: intl.formatMessage(messages.snackbars.success.delete_graph),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteCustomGraphError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to delete graph',
+      message: intl.formatMessage(messages.snackbars.errors.delete_graph),
       options: { variant: 'warning' }
     }));
   }
