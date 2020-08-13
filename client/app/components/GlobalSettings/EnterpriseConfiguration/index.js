@@ -33,6 +33,14 @@ const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
   },
+  errorSwitch: {
+    '& .MuiSwitch-switchBase': {
+      color: theme.palette.error.main,
+    },
+    '& .MuiSwitch-track': {
+      backgroundColor: theme.palette.error.main + '!important',
+    },
+  },
 });
 
 const SETTINGS_OPTIONS = Object.freeze({
@@ -311,9 +319,10 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
-                          label={<Typography color={values.disable_emails ? 'error' : 'black'}><DiverstFormattedMessage {...messages.all_emails} /></Typography>}
+                          label={<Typography color='error'><DiverstFormattedMessage {...messages.all_emails} /></Typography>}
                           control={(
                             <Field
+                              className={values.disable_emails ? classes.errorSwitch : undefined}
                               component={Switch}
                               onChange={handleChange}
                               color='primary'
