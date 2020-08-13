@@ -141,6 +141,9 @@ export default defineMessages({
     goal: {
       id: `${scope}.form.input.goal`
     },
+    participatingGroups: {
+      id: `${scope}.form.input.participatingGroups`
+    },
     budgetName: {
       id: `${scope}.form.input.budgetName`
     },
@@ -157,6 +160,15 @@ export default defineMessages({
     },
     until: {
       id: `${scope}.show.until`
+    },
+    participating_groups: {
+      id: `${scope}.show.participating_groups`
+    },
+    hosted_by: {
+      id: `${scope}.show.hosted_by`
+    },
+    hosted_by_group: {
+      id: `${scope}.show.hosted_by_group`
     },
   },
   snackbars: {

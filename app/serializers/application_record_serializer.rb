@@ -28,7 +28,13 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         @module ||= begin
                        temp = Module.new do
                          def self.attr_conditions
-                           @attr_conditions ||= Hash.new { |hash, key| hash[key] = [] }
+                           @attr_conditions ||= Hash.new do |hash, key|
+                             hash[key] = []
+                           end
+                         end
+
+                         class << self
+                           delegate :[], to: :attr_conditions
                          end
                        end
                        prepend(temp)
