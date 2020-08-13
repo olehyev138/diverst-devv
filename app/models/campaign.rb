@@ -18,6 +18,7 @@ class Campaign < BaseClass
   has_many :campaigns_managers, dependent: :destroy
   has_many :managers, through: :campaigns_managers, source: :user
   has_many :sponsors, dependent: :destroy
+  has_many :user_reward_actions, dependent: :destroy
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
@@ -88,10 +89,29 @@ class Campaign < BaseClass
     enterprise.answers.where.not(value: nil).sum(:value)
   end
 
-  def self.roi_distribution(enterprise_id, campaign_id)
+  def self.roi_distribution(enterprise_id, campaign_id, date_range)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
-    campaigns = enterprise.campaigns
+
+    date_range =
+
+    case date_range
+    when '1m'
+      (DateTime.now << 1)..DateTime.now
+    when '3m'
+      (DateTime.now << 3)..DateTime.now
+    when '6m'
+      (DateTime.now << 6)..DateTime.now
+    when '9m'
+      (DateTime.now << 9)..DateTime.now
+    when '1y'
+      (DateTime.now << 12)..DateTime.now
+    else
+      enterprise.created_at..DateTime.now
+    end
+
+    campaigns = enterprise.campaigns.where(created_at: date_range)
+
     campaigns = campaigns.select { |c| c.total_roi > 0 }
                          .map { |c| [c.title, c.total_roi] }
                          .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
@@ -104,10 +124,29 @@ class Campaign < BaseClass
     campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
   end
 
-  def self.engagement_activity_distribution(enterprise_id, campaign_id)
+  def self.engagement_activity_distribution(enterprise_id, campaign_id, date_range)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
-    campaigns = enterprise.campaigns
+
+    date_range =
+
+    case date_range
+    when '1m'
+      (DateTime.now << 1)..DateTime.now
+    when '3m'
+      (DateTime.now << 3)..DateTime.now
+    when '6m'
+      (DateTime.now << 6)..DateTime.now
+    when '9m'
+      (DateTime.now << 9)..DateTime.now
+    when '1y'
+      (DateTime.now << 12)..DateTime.now
+    else
+      enterprise.created_at..DateTime.now
+    end
+
+    campaigns = enterprise.campaigns.where(created_at: date_range)
+    
     campaigns = campaigns.select { |c| c.engagement_activity_level > 0 }
                           .map { |c| [c.title, c.engagement_activity_level] }
                           .inject({}) { |hash, (c, eal)| hash.merge(c => eal) }

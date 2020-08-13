@@ -32,6 +32,7 @@ class CampaignsController < ApplicationController
 
     if @campaign.save
       track_activity(@campaign, :create)
+      user_rewarder('campaign_submission').add_points(@campaign)
       flash[:notice] = 'Your campaign was created'
       redirect_to action: :index
     else
@@ -116,14 +117,24 @@ class CampaignsController < ApplicationController
   end
 
   def graphs
-    authorize @campaign, :show? 
+    authorize @campaign, :show?
   end
 
   def view_all_graphs
     authorize Campaign
-    @campaigns = policy_scope(Campaign)
   end
 
+  def engagement_activity_distribution
+    authorize Campaign
+
+    render json: Campaign.engagement_activity_distribution(current_user.enterprise_id, nil, params[:date_range]).symbolize_keys
+  end
+
+  def roi_distribution
+    authorize Campaign
+
+    render json: Campaign.roi_distribution(current_user.enterprise_id, nil, params[:date_range]).symbolize_keys
+  end
 
   protected
 

@@ -82,7 +82,14 @@
       <div class="card">
         <div class="card__section">
           <h3>Campaign ROI Distribution</h3>
-          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id), id: 'campaign-roi-distribution', 
+          <div class="btn-group" id='roi' role="group" aria-label="Range Selector Buttons">
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="1m">1m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="3m">3m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="6m">6m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="1y">1y</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="all">All</button>
+          </div>
+          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id, nil), id: 'campaign-roi-distribution', 
                                                                                prefix: '$',
                                                                                thousands: ',',
                                                                                colors: @campaign.total_roi > 0 ? [current_user.enterprise&.theme&.primary_color || '#7B77C9'] : nil %>
@@ -93,10 +100,51 @@
       <div class="card">
         <div class="card__section">
           <h3>Engagement Activity Distribution</h3>
-          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id), id: 'engagement-activity-distribution',
+          <div class="btn-group" id='engagement' role="group" aria-label="Range Selector Buttons">
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="1m">1m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="3m">3m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="6m">6m</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="1y">1y</button>
+            <button class="range-btn btn btn--tertiary btn--extra--small" value="all">All</button>
+          </div>
+          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id, nil), id: 'engagement-activity-distribution',
                                                                                colors: @campaign.engagement_activity_level > 0 ? [current_user.enterprise&.theme&.primary_color || '#7B77C9'] : nil %>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+ <script>
+    $('#engagement > .range-btn').on('click', function(){
+      var date_range = this.value;
+     
+      $.ajax({
+        url: '<%= campaigns_engagement_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['engagement-activity-distribution'].updateData(data);
+        }
+      })
+    });
+
+     $('#roi > .range-btn').on('click', function(){
+      var date_range = this.value;
+     
+      $.ajax({
+        url: '<%= campaigns_roi_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['campaign-roi-distribution'].updateData(data);
+        }
+      })
+    });
+  </script>

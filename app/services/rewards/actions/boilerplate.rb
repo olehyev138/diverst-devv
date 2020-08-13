@@ -4,6 +4,7 @@ class Rewards::Actions::Boilerplate
       [
         'Attend event',
         'Feedback on event',
+        'Campaign submission',
         'Campaign answer',
         'Campaign comment',
         'Campaign vote',

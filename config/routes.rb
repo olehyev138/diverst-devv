@@ -477,6 +477,8 @@ Rails.application.routes.draw do
 
   get 'campaigns/stats', to: 'campaigns#stats', as: :campaign_stats
   get 'campaigns/view_all_graphs', to: 'campaigns#view_all_graphs', as: :view_all_campaign_graphs
+  get 'campaigns/engagement_activity_distribution', to: 'campaigns#engagement_activity_distribution', as: :campaigns_engagement_distribution
+  get 'campaigns/roi_distribution', to: 'campaigns#roi_distribution', as: :campaigns_roi_distribution
   get 'campaigns/:id/graphs', to: 'campaigns#graphs', as: :campaign_graphs
 
   resources :campaigns do
