@@ -23,7 +23,7 @@ import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardHeader, CardActions, CardContent, Grid, Paper, Typography,
+  Button, Card, CardActions, CardContent, Grid, Paper, Typography,
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel, Collapse,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
@@ -131,7 +131,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 <Grid item xs>
                   <Card variant='outlined'>
                     <CardContent>
-                      <Typography variant='h6' color='primary'>Module Settings</Typography>
+                      <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.module_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
@@ -210,7 +210,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 <Grid item xs>
                   <Card variant='outlined'>
                     <CardContent>
-                      <Typography variant='h6' color='primary'>Function Settings</Typography>
+                      <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.function_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
@@ -289,7 +289,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 <Grid item xs>
                   <Card variant='outlined'>
                     <CardContent>
-                      <Typography variant='h6' color='primary'>Email Settings</Typography>
+                      <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.email_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
@@ -332,7 +332,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 <Grid item xs>
                   <Card variant='outlined'>
                     <CardContent>
-                      <Typography variant='h6' color='primary'>Archive Settings</Typography>
+                      <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.archive_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='right'
