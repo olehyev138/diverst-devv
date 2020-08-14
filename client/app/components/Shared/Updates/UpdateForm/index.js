@@ -28,6 +28,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
@@ -35,6 +36,8 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 
   const { group_id: groupId } = useParams();
 
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.index;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
@@ -85,7 +88,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
-                to={props.links.index}
+                to={cancelRedirect}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.form.button.cancel} />

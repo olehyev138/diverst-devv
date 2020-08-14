@@ -34,6 +34,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { DiverstTimePicker } from 'components/Shared/Pickers/DiverstTimePicker';
 import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   padding: {
@@ -67,6 +68,8 @@ export function EventFormInner({
 }) {
   const { intl } = props;
 
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.eventsIndex;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={!props.event}>
@@ -159,7 +162,7 @@ export function EventFormInner({
               </DiverstSubmit>
               <Button
                 component={WrappedNavLink}
-                to={props.links.eventsIndex}
+                to={cancelRedirect}
                 variant='contained'
                 size='large'
                 color='primary'

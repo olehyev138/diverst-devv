@@ -27,6 +27,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
 import animateScrollTo from 'animated-scroll-to';
+import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   addItemButtonIcon: {
@@ -61,6 +62,8 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
       });
   });
 
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.outcomesIndex;
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.outcome}>
       <Card>
@@ -185,7 +188,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
               {buttonText}
             </DiverstSubmit>
             <Button
-              to={props.links.outcomesIndex}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

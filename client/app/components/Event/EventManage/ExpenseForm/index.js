@@ -24,11 +24,15 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
+import { useLastLocation } from 'react-router-last-location';
 const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
 export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.index;
 
   return (
     <React.Fragment>
@@ -77,7 +81,7 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
           <Grid item>
             <Button
               component={WrappedNavLink}
-              to={props.links.index}
+              to={cancelRedirect}
               disabled={props.isCommitting}
               variant='contained'
             >

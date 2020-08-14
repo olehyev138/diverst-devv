@@ -23,6 +23,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -46,6 +47,9 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
   useEffect(() => {
     parentSelectAction();
   }, []);
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.cancelPath;
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
@@ -138,7 +142,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={props.links.cancelPath}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

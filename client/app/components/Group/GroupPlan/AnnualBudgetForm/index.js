@@ -16,6 +16,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { floatRound, toNumber } from 'utils/floatRound';
 
+import { useLastLocation } from 'react-router-last-location';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -46,6 +48,9 @@ const styles = theme => ({
 export function AnnualBudgetFormInner(
   { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudget, ...props }
 ) {
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : ROUTES.admin.plan.budgeting.index.path();
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudget}>
       <Card>
@@ -114,7 +119,7 @@ export function AnnualBudgetFormInner(
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={ROUTES.admin.plan.budgeting.index.path()}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...formMessages.cancel} />

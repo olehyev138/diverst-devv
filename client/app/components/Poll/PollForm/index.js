@@ -32,12 +32,16 @@ import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/Bud
 import GroupSelector from 'components/Shared/GroupSelector';
 import SegmentSelector from 'components/Shared/SegmentSelector';
 import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function PollFormInner({ formikProps, buttonText, draftButtonText, header, poll, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
     setFieldValue, setFieldTouched, setFieldError, setSubmitting } = formikProps;
 
+  const lastLocation = useLastLocation();
+  // eslint-disable-next-line no-nested-ternary
+  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.poll ? props.links.pollShow : props.links.pollsIndex);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !poll}>
       <Form>
@@ -121,7 +125,7 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
               </Button>
             )}
             <Button
-              to={props.poll ? props.links.pollShow : props.links.pollsIndex}
+              to={cancelRedirect}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >

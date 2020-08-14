@@ -10,6 +10,8 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
+import { useLastLocation } from 'react-router-last-location';
+
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, FastField } from 'formik';
 import {
@@ -48,6 +50,10 @@ const freeEvent = { label: 'Create new free event ($0.00)', value: null, availab
 /* eslint-disable object-curly-newline */
 export function EventFormInner({ buttonText, formikProps, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors, setFieldValue, setFieldTouched, setFieldError } = formikProps;
+
+  const lastLocation = useLastLocation();
+  // eslint-disable-next-line no-nested-ternary
+  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.event ? props.links.eventShow : props.links.eventsIndex);
 
   useInjectReducer({ key: 'pillars', reducer: pillarReducer });
   useInjectSaga({ key: 'pillars', saga: pillarSaga });
@@ -253,7 +259,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               {buttonText}
             </DiverstSubmit>
             <Button
-              to={props.event ? props.links.eventShow : props.links.eventsIndex}
+              to={cancelRedirect}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >

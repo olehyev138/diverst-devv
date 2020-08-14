@@ -22,6 +22,7 @@ import Select from 'components/Shared/DiverstSelect';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -33,6 +34,9 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
       search: searchKey,
     });
   };
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.metricsDashboardShow;
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.customGraph}>
@@ -76,7 +80,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             </DiverstSubmit>
             <Button
               component={WrappedNavLink}
-              to={props.links.metricsDashboardShow}
+              to={cancelRedirect}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />

@@ -26,9 +26,14 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 
+import { useLastLocation } from 'react-router-last-location';
+
 /* eslint-disable object-curly-newline */
 export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : links.questionsIndex;
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.question}>
@@ -73,7 +78,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={links.questionsIndex}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.question.cancel} />

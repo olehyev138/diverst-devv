@@ -25,6 +25,7 @@ import {
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import AddIcon from '@material-ui/icons/Add';
+import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,6 +39,10 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : ROUTES.admin.manage.groups.categories.index.path();
+
   return (
     // eslint-disable-next-line react/prop-types
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupCategory}>
@@ -119,7 +124,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.categories.index.path()}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

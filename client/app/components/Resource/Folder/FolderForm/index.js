@@ -22,6 +22,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -32,6 +33,9 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
   const enterpriseId = props.type === 'admin' && props.currentEnterprise ? {
     enterprise_id: props.currentEnterprise.id
   } : {};
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.cancelLink;
 
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
@@ -126,7 +130,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={props.links.cancelLink}
+              to={cancelRedirect}
               component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
             >
               <DiverstFormattedMessage {...messages.cancel} />

@@ -18,6 +18,7 @@ import messages from 'containers/Group/GroupManage/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { injectIntl, intlShape } from 'react-intl';
+import { useLastLocation } from 'react-router-last-location';
 
 export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
@@ -29,6 +30,10 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: ['active', ['user_search', searchKey]]
     });
   };
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : links.index;
+
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
@@ -74,7 +79,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={links.index}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

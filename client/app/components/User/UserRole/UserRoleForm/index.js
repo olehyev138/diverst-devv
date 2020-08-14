@@ -23,6 +23,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import Select from 'components/Shared/DiverstSelect';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -33,6 +34,8 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
     { label: <DiverstFormattedMessage {...messages.role.user} />, value: 'user' }
   ];
 
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.userRolesIndex;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.userRole}>
@@ -82,7 +85,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
-                to={props.links.userRolesIndex}
+                to={cancelRedirect}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.cancel} />

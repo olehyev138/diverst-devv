@@ -44,6 +44,7 @@ import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import AddIcon from '@material-ui/icons/Add';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import { getCurrency } from 'utils/currencyHelpers';
+import { useLastLocation } from 'react-router-last-location';
 
 const { form: formMessage } = messages;
 
@@ -182,6 +183,10 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
 /* eslint-disable object-curly-newline */
 export function BudgetFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.index;
+
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
@@ -260,7 +265,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
           <Grid item>
             <Button
               component={WrappedNavLink}
-              to={props.links.index}
+              to={cancelRedirect}
               disabled={props.isCommitting}
               variant='contained'
             >

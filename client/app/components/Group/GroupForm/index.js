@@ -29,6 +29,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 import GroupSelector from 'components/Shared/GroupSelector';
+import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -55,6 +56,9 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
       query_scopes: ['all_parents']
     });
   };
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : ROUTES.admin.manage.groups.index.path();
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
@@ -165,7 +169,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.index.path()}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

@@ -25,6 +25,8 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 
+import { useLastLocation } from 'react-router-last-location';
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -63,6 +65,9 @@ export function EmailFormInner({
   };
 
   const { intl } = props;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.emailsIndex;
 
   return (
     <React.Fragment>
@@ -105,7 +110,7 @@ export function EmailFormInner({
               </DiverstSubmit>
               <Button
                 component={WrappedNavLink}
-                to={props.links.emailsIndex}
+                to={cancelRedirect}
                 variant='contained'
                 size='large'
                 color='primary'

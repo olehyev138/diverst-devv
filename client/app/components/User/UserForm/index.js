@@ -26,11 +26,15 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const [tab, setTab] = useState('general');
 
+  const lastLocation = useLastLocation();
+  // eslint-disable-next-line no-nested-ternary
+  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.admin ? props.links.usersIndex : props.links.usersPath(values.id));
   const generalForm = (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
       <Card>
@@ -134,7 +138,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
+              to={cancelRedirect}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />

@@ -38,6 +38,7 @@ import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
+import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   padding: {
@@ -70,6 +71,9 @@ export function PolicyFormInner({
   ...props
 }) {
   const { intl } = props;
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.policiesIndex;
 
   const underToSpace = string => string.split('_').join(' ');
 
@@ -253,7 +257,7 @@ export function PolicyFormInner({
               </DiverstSubmit>
               <Button
                 component={WrappedNavLink}
-                to={props.links.policiesIndex}
+                to={cancelRedirect}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />

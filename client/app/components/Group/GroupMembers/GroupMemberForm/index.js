@@ -22,6 +22,7 @@ import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
+import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -32,6 +33,9 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: [['not_member_of_group', props.currentGroup.id]]
     });
   };
+
+  const lastLocation = useLastLocation();
+  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.groupMembersIndex;
 
   return (
     <Card>
@@ -60,7 +64,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
           </DiverstSubmit>
           <Button
             disabled={props.isCommitting}
-            to={props.links.groupMembersIndex}
+            to={cancelRedirect}
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.cancel} />
