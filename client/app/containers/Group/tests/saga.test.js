@@ -607,7 +607,7 @@ describe('Leave group', () => {
       leaveGroup,
       initialAction
     );
-    expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initoutcomesialAction.payload });
+    expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
   });
 

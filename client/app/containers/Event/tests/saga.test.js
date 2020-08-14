@@ -417,7 +417,7 @@ describe('Create comment', () => {
     );
     expect(api.initiativeComments.create).toHaveBeenCalledWith({ initiative_comment: initialAction.payload.id });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_event_comment);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_event_comment);
   });
 });
 
