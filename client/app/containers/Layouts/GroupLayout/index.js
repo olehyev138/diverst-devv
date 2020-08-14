@@ -57,7 +57,7 @@ const GroupLayout = (props) => {
 
   return (
     <React.Fragment>
-      <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !currentGroup}>
+      <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !currentGroup} TransitionChildProps={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <GroupLinks currentGroup={currentGroup} permission={permission} {...rest} />
         <Scrollbar>
           <Fade in appear>
