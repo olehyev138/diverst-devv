@@ -53,6 +53,7 @@ class CampaignPolicy < ApplicationPolicy
     index?
   end
 
+
   class Scope < Scope
     def index?
       CampaignPolicy.new(user, nil).index?

@@ -480,6 +480,8 @@ Rails.application.routes.draw do
   get 'campaigns/engagement_activity_distribution', to: 'campaigns#engagement_activity_distribution', as: :campaigns_engagement_distribution
   get 'campaigns/roi_distribution', to: 'campaigns#roi_distribution', as: :campaigns_roi_distribution
   get 'campaigns/:id/graphs', to: 'campaigns#graphs', as: :campaign_graphs
+  post '/campaigns/:id/invite_users', to: 'campaigns#invite_users', as: :invite_users_to_collaborate
+  get 'campaigns/:id/users_to_invite_to_collaborate', to: 'campaigns#users_to_invite_to_collaborate', as: :users_to_invite_to_collaborate
 
   resources :campaigns do
     resources :questions, shallow: true do

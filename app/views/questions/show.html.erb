@@ -18,6 +18,9 @@
               <div class="flex-row__cell">
                 <%= f.button :submit, value: "Reopen" %>
               </div>
+              <button type="button" class="btn btn--primary" data-toggle="modal" data-target="#usersToInviteToCollaborate">
+                Invite Others To Collaborate
+              </button>
               <div class="flex-row__cell">
                 <%= link_to "Business case & ROI", edit_question_roi_path(@question), class: "btn btn--secondary" %>
               </div>
@@ -101,6 +104,36 @@
   <% end %>
 </div>
 
+<div class="modal fade" id="usersToInviteToCollaborate" tabindex="-1" role="dialog" aria-labelledby="usersToInviteToCollaborateTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="usersToInviteToCollaborateTitle">Invite User(s) To Collaborate</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card__section">
+            <table
+                class="table--has-border data-table"
+                data-no-sortable="2"
+                data-source="<%= users_to_invite_to_collaborate_path(@question.campaign, q: params[:q], format: :json) %>">
+                <thead>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Options</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
   $('.star-button').click(function(e) {
     e.preventDefault();
@@ -138,5 +171,13 @@
       star.data('starred', state);
       star.children('svg').attr('class', 'icon-inline' + (state ? ' icon-inline--yellow' : ''));
     }
+  });
+
+  $('#usersToInviteToCollaborate').on('shown.bs.modal', function(){
+      $('a.send-invite').on('ajax:success', function(){
+          $(this).fadeOut('slow', function(){
+              this.replaceWith('Sent Inivite!');
+          })
+      })
   });
 </script>
