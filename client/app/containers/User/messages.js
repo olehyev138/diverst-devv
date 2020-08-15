@@ -72,6 +72,9 @@ export default defineMessages({
   fieldTab: {
     id: `${scope}.form.tab.field`,
   },
+  email_warning: {
+    id: `${scope}.form.email.warning`
+  },
   fields: {
     id: `${scope}.profile.fields`
   },
