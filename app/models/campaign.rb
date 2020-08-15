@@ -63,14 +63,6 @@ class Campaign < BaseClass
                  .inject({}) { |hash, (u, p)| hash.merge(u => p) }
   end
 
-  def response_percentage
-    # unique count of engaged users/number of invitations
-    no_of_engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq.size
-    no_of_invitations = self.invitations.size.to_f
-
-    ((no_of_engaged_users / no_of_invitations) * 100).to_i
-  end
-
   def engagement_activity_level
     # total number of answers, upvotes and comments across all questions for a campaign
     (self.answers.size * 10) + self.answer_upvotes.size + (self.answer_comments.size * 3)

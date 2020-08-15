@@ -1,7 +1,14 @@
 class Answer < BaseClass
   include PublicActivity::Common
 
+  extend Enumerize
+
   enum benefit_type: { revenue: '0', cost_savings: '1' }
+  enumerize :unit_of_duration, default: :months, in: [
+    :weeks,
+    :months,
+    :years
+  ]
 
   belongs_to :question, inverse_of: :answers, counter_cache: true
   belongs_to :author, class_name: 'User', inverse_of: :answers
