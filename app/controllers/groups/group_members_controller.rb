@@ -63,7 +63,10 @@ class Groups::GroupMembersController < ApplicationController
     @group_member.invitation_accepted_at = DateTime.now unless @group_member.invited_by_id.nil?
 
     if @group_member.save
-      user_rewarder(@group_member.invited_by, 'accept_group_invitation').add_points(@group_member) unless @group_member.invitation_accepted_at.nil?
+      if @group_member.invitation_accepted_at.present?
+        user_rewarder(@group_member.invited_by, 'accept_group_invitation').add_points(@group_member)
+      end
+
       WelcomeNotificationJob.perform_later(@group.id, current_user.id)
       flash[:notice] = 'You are now a member'
 

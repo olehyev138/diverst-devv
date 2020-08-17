@@ -163,8 +163,7 @@ class GroupsController < ApplicationController
     @group_sponsors = @group.sponsors
     @show_events = should_show_event?(@group)
 
-    # get users except members of this group and current_user to avoid sending invites to users with group membership already
-    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - (UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
+    @users_to_invite = set_users_to_invite
 
     if GroupPolicy.new(current_user, @group).manage?
       base_show
@@ -409,8 +408,7 @@ class GroupsController < ApplicationController
   def users_to_invite_to_group
     authorize @group, :show?
 
-    # get users except members of this group and current_user to avoid sending invites to users with group membership already
-    @users_to_invite = User.where(id: (UserGroup.where.not(user_id: current_user.id).pluck(:user_id) - (UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
+    @users_to_invite = set_users_to_invite
 
     respond_to do |format|
       format.html
@@ -423,12 +421,17 @@ class GroupsController < ApplicationController
 
     track_activity(@group, :invite_users)
     InviteUsersToGroupJob.perform_later(@group.id, params[:user_id].to_i, current_user.id)
-    # user_rewarder(invited_by, 'group_invite').add_points(user_group)
 
     render nothing: true, status: :ok
   end
 
+
   protected
+
+  def set_users_to_invite
+    # get users except members of this group to avoid sending invites to users with group membership already
+    User.where(id: (UserGroup.where(group_id: current_user.enterprise.groups.ids).pluck(:user_id) - (UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
+  end
 
   def should_show_event?(group)
     group.upcoming_events_visibility == 'public' ||
@@ -497,8 +500,6 @@ class GroupsController < ApplicationController
   def search_params
     params.permit(:page, :limit, :term, ids: [])
   end
-
-  def 
 
   def group_params
     params
