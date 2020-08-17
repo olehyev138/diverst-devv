@@ -51,7 +51,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
-    let!(:new_item) { build(route.singularize.to_sym) }
+    let(:new_item) { build(route.singularize.to_sym) }
 
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
@@ -76,8 +76,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
-    let!(:new_group) { create(:group) }
-    let!(:new_params) { { id: item.id, group_id: new_group.id } }
+    let(:new_group) { create(:group) }
+    let(:new_params) { { id: item.id, group_id: new_group.id } }
 
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers

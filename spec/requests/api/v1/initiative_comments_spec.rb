@@ -51,7 +51,7 @@ RSpec.describe 'InitiativeComments', type: :request do
   end
 
   describe '#create' do
-    let!(:new_item) { build(route.singularize.to_sym, content: 'test') }
+    let(:new_item) { build(route.singularize.to_sym, content: 'test') }
 
     before do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
@@ -76,7 +76,7 @@ RSpec.describe 'InitiativeComments', type: :request do
   end
 
   describe '#update' do
-    let!(:new_params) { { id: item.id, content: 'test content' } }
+    let(:new_params) { { id: item.id, content: 'test content' } }
 
     before do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
