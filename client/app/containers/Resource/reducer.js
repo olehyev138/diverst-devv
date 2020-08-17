@@ -38,6 +38,10 @@ import {
   GET_FILE_DATA_BEGIN,
   GET_FILE_DATA_SUCCESS,
   GET_FILE_DATA_ERROR,
+  DELETE_FOLDER_BEGIN,
+  DELETE_FOLDER_SUCCESS,
+  DELETE_RESOURCE_BEGIN,
+  DELETE_RESOURCE_SUCCESS
 } from './constants';
 
 export const initialState = {
@@ -154,6 +158,14 @@ function resourcesReducer(state = initialState, action) {
         break;
       case GET_FILE_DATA_ERROR:
         draft.isDownloadingFileData = false;
+        break;
+      case DELETE_FOLDER_BEGIN:
+      case DELETE_RESOURCE_BEGIN:
+        draft.hasChanged = false;
+        break;
+      case DELETE_FOLDER_SUCCESS:
+      case DELETE_RESOURCE_SUCCESS:
+        draft.hasChanged = true;
         break;
     }
   });
