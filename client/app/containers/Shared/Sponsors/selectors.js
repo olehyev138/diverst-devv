@@ -33,7 +33,12 @@ const selectIsCommitting = () => createSelector(
   sponsorsState => sponsorsState.isCommitting
 );
 
+const selectHasChanged = () => createSelector(
+  selectSponsorsDomain,
+  sponsorsState => sponsorsState.hasChanged
+);
+
 export {
-  selectSponsorsDomain, selectPaginatedSponsors, selectSponsor,
+  selectSponsorsDomain, selectPaginatedSponsors, selectSponsor, selectHasChanged,
   selectSponsorTotal, selectIsFetchingSponsors, selectIsCommitting, selectSponsors
 };
