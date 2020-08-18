@@ -51,6 +51,13 @@ class Api::V1::UsersController < DiverstController
 
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
+
+    # when the Email has been modified
+    if item.email != updated_item.email
+      DiverstMailer.old_email_update(item).deliver_later
+      DiverstMailer.new_email_update(updated_item).deliver_later
+    end
+
     render status: 200, json: updated_item, serializer: serializer(params)
   rescue => e
     case e
