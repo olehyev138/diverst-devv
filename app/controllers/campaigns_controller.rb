@@ -159,6 +159,15 @@ class CampaignsController < ApplicationController
     render nothing: true, status: :ok
   end
 
+  def engagement_distribution_per_campaign
+    authorize Campaign
+
+    campaign = Campaign.find_by(title: params[:campaign_title])
+
+    render json: campaign&.activities_distribution_per_campaign&.symbolize_keys, status: :ok
+  end
+  
+
   protected
 
   def set_campaign

@@ -482,6 +482,7 @@ Rails.application.routes.draw do
   get 'campaigns/:id/graphs', to: 'campaigns#graphs', as: :campaign_graphs
   post '/campaigns/:id/invite_users', to: 'campaigns#invite_users', as: :invite_users_to_collaborate
   get 'campaigns/:id/users_to_invite_to_collaborate', to: 'campaigns#users_to_invite_to_collaborate', as: :users_to_invite_to_collaborate
+  get 'campaigns/engagement_distribution_per_campaign', to: 'campaigns#engagement_distribution_per_campaign', as: :engagement_per_campaign
 
   resources :campaigns do
     resources :questions, shallow: true do

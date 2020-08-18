@@ -151,6 +151,10 @@ class Campaign < BaseClass
     campaign.engagement_activity_level > 0 ? campaigns = { campaign.title => campaign.engagement_activity_level }.merge(campaigns) : campaigns
   end
 
+  def activities_distribution_per_campaign
+    { 'ideas' => answers.size * 10, 'votes' => answer_upvotes.size, 'comments' => answer_comments.size * 3 }
+  end
+
   def closed?
     self.end < Time.current
   end

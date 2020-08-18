@@ -41,6 +41,25 @@
   </div>
 
   <script>
+    $('#engagement-activity-distribution').on('click', function(event){
+      var pieChart = Chartkick.charts['engagement-activity-distribution'];
+      var label = pieChart.getChartObject().getElementAtEvent(event)[0]._view.label;
+      
+      $.ajax({
+        url: '<%= engagement_per_campaign_path %>',
+        method: 'get',
+        data: {
+          campaign_title: label
+        },
+
+        success: function(data) {
+          if(data) {
+            Chartkick.charts['engagement-activity-distribution'].updateData(data);
+          }
+        }
+      });
+    });
+
     $('#engagement > .range-btn').on('click', function(){
       var date_range = this.value;
      
