@@ -16,8 +16,9 @@ class DiverstMailer < ApplicationMailer
     @user = new_user
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
+
     set_defaults(@enterprise, method_name)
-    mail(from: @from_address, to: user.email, subject: @subject)
+    mail(from: @from_address, to: @user.email, subject: @subject)
   end
 
   def old_email_update(old_user)
@@ -25,7 +26,8 @@ class DiverstMailer < ApplicationMailer
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
-    mail(from: @from_address, to: user.email, subject: @subject)
+    set_defaults(@enterprise, method_name)
+    mail(from: @from_address, to: @user.email, subject: @subject)
   end
 
   def variables

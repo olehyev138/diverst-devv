@@ -134,7 +134,6 @@ export function* createUser(action) {
 
 export function* updateUser(action) {
   try {
-    console.log(action);
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 

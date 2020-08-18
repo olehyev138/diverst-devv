@@ -32,12 +32,16 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const [tab, setTab] = useState('general');
+
+
+  const canEditEmail = props.admin || props.permissions.users_manage;
+
   const generalForm = (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
       <Card>
         <Form>
           <CardContent>
-            {!props.admin
+            {!canEditEmail
               ? (
                 <Grid container justify='space-between' alignItems='center'>
                   <Grid item xs={11}>
@@ -222,6 +226,8 @@ export function UserForm(props) {
   const user = dig(props, 'user');
   const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
+  const canEditEmail = props.admin || props.permissions.users_manage;
+
   const initialValues = buildValues(user, {
     first_name: { default: '' },
     email: { default: '' },
@@ -242,8 +248,7 @@ export function UserForm(props) {
         const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         // eslint-disable-next-line no-unused-expressions
-        !props.admin && delete payload.email;
-        console.log(payload);
+        !canEditEmail && delete payload.email;
         props.userAction(payload);
       }}
     >
@@ -263,7 +268,8 @@ UserForm.propTypes = {
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  permissions: PropTypes.object,
 };
 
 UserFormInner.propTypes = {
@@ -284,7 +290,8 @@ UserFormInner.propTypes = {
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  permissions: PropTypes.object,
 };
 
 export default compose(
