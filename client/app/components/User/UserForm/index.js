@@ -186,7 +186,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
       />
     </React.Fragment>
   );
-  console.log(!props.admin);
+
   return (
     <React.Fragment>
       {props.edit && (
@@ -241,6 +241,9 @@ export function UserForm(props) {
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
+        // eslint-disable-next-line no-unused-expressions
+        !props.admin && delete payload.email;
+        console.log(payload);
         props.userAction(payload);
       }}
     >
