@@ -23,7 +23,6 @@ class Campaign < BaseClass
   has_many :campaigns_managers, dependent: :destroy
   has_many :managers, through: :campaigns_managers, source: :user
   has_many :sponsors, dependent: :destroy
-  has_many :user_reward_actions, dependent: :destroy
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true

@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show, 
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show,
                                       :contributions_per_erg, :top_performers, :graphs,
                                       :users_to_invite_to_collaborate, :invite_users]
   after_action :verify_authorized
@@ -36,7 +36,6 @@ class CampaignsController < ApplicationController
 
     if @campaign.save
       track_activity(@campaign, :create)
-      user_rewarder('campaign_submission').add_points(@campaign)
       flash[:notice] = 'Your campaign was created'
       redirect_to action: :index
     else
@@ -166,7 +165,7 @@ class CampaignsController < ApplicationController
 
     render json: campaign&.activities_distribution_per_campaign&.symbolize_keys, status: :ok
   end
-  
+
 
   protected
 
