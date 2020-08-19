@@ -20,6 +20,7 @@ import messages from 'components/Shared/DiverstFileInput/messages';
 
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
+import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileKeys, getSupportedImageFileKeys } from 'utils/inputFilesHelper';
 
 const styles = theme => ({
   fileInput: {
@@ -113,25 +114,8 @@ export function DiverstFileInput(props) {
 
   const [notAcceptedFile, setNotAcceptedFile] = useState(false);
 
-  const acceptFileTypes = fileType === 'image' ? [
-    'image/png',
-    'image/jpg',
-    'image/jpeg',
-    'image/svg',
-  ] : [
-    'image/png',
-    'image/jpg',
-    'image/jpeg',
-    'image/gif',
-    'image/svg+xml',
-    'application/pdf',
-    'text/csv',
-    'text/xml',
-    'application/json',
-    'application/zip',
-    'text/plain',
-    'text/html',
-  ];
+  const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
+  const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileKeys() : getAllSupportedFileKeys();
 
   return (
     <React.Fragment>
@@ -326,7 +310,7 @@ export function DiverstFileInput(props) {
                 </Grid>
                 <Grid item>
                   <Tooltip
-                    title={<DiverstFormattedMessage {...messages.fileTypes} values={{ file_types: acceptFileTypes.toString() }} />}
+                    title={<DiverstFormattedMessage {...messages.fileTypes} values={{ file_types: acceptFileTypeNames.toString() }} />}
                     placement='bottom'
                   >
                     <InfoIcon fontSize='small' color='primary' />
