@@ -16,7 +16,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectEvent, selectHasChanged, selectIsFormLoading } from 'containers/Event/selectors';
-
+import { redirectAction } from 'utils/reduxPushHelper';
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   archiveEventBegin,
@@ -34,6 +35,8 @@ import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 import Event from 'components/Event/Event';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Shared/App/messages';
 
 export function EventPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -45,6 +48,17 @@ export function EventPage(props) {
     eventsIndex: ROUTES.group.events.index.path(groupId),
     eventEdit: ROUTES.group.events.edit.path(groupId, eventId)
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line eqeqeq
+    if (props.currentEvent && props.currentEvent.group_id != groupId && !props.currentEvent.participating_groups.find(g => g.id == groupId)) {
+      props.redirectAction(links.eventsIndex);
+      props.showSnackbar({
+        message: props.intl.formatMessage(messages.errors.invalidURL),
+        options: { variant: 'warning' }
+      });
+    }
+  }, [props.currentEvent]);
 
   useEffect(() => {
     // get event specified in path
@@ -91,6 +105,9 @@ EventPage.propTypes = {
   deleteEventCommentBegin: PropTypes.func,
   exportAttendeesBegin: PropTypes.func,
   hasChanged: PropTypes.bool,
+  redirectAction: PropTypes.func,
+  showSnackbar: PropTypes.func,
+  intl: intlShape,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -111,6 +128,8 @@ const mapDispatchToProps = {
   joinEventBegin,
   leaveEventBegin,
   exportAttendeesBegin,
+  redirectAction,
+  showSnackbar,
 };
 
 const withConnect = connect(
@@ -120,6 +139,7 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(Conditional(
   EventPage,

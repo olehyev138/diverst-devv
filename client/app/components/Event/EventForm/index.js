@@ -4,14 +4,14 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form } from 'formik';
+import { Field, Formik, Form, FastField } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Grid, Divider,
 } from '@material-ui/core';
@@ -31,7 +31,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectPaginatedSelectPillars } from 'containers/Group/Pillar/selectors';
 import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/BudgetItem/selectors';
-import Select from 'components/Shared/DiverstSelect';
+import DiverstSelect from 'components/Shared/DiverstSelect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import pillarReducer from 'containers/Group/Pillar/reducer';
@@ -40,16 +40,15 @@ import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
 import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
+import GroupSelector from 'components/Shared/GroupSelector';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
 /* eslint-disable object-curly-newline */
-export function EventFormInner({
-  handleSubmit, handleChange, handleBlur, values, touched, errors,
-  buttonText, setFieldValue, setFieldTouched, setFieldError,
-  ...props
-}) {
+export function EventFormInner({ buttonText, formikProps, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, touched, errors, setFieldValue, setFieldTouched, setFieldError } = formikProps;
+
   useInjectReducer({ key: 'pillars', reducer: pillarReducer });
   useInjectSaga({ key: 'pillars', saga: pillarSaga });
   useInjectReducer({ key: 'budgetItems', reducer: budgetItemReducer });
@@ -79,7 +78,7 @@ export function EventFormInner({
       <Card>
         <Form>
           <CardContent>
-            <Field
+            <FastField
               component={TextField}
               onChange={handleChange}
               disabled={props.isCommitting}
@@ -94,11 +93,10 @@ export function EventFormInner({
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={DiverstRichTextInput}
               required
               onChange={value => setFieldValue('description', value)}
-              fullWidth
               id='description'
               name='description'
               margin='normal'
@@ -108,7 +106,7 @@ export function EventFormInner({
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={TextField}
               onChange={handleChange}
               disabled={props.isCommitting}
@@ -123,7 +121,7 @@ export function EventFormInner({
           <Divider />
           <CardContent>
             <Field
-              component={Select}
+              component={DiverstSelect}
               fullWidth
               required
               id='pillar_id'
@@ -140,6 +138,22 @@ export function EventFormInner({
           </CardContent>
           <Divider />
           <CardContent>
+            <GroupSelector
+              groupField='participating_group_ids'
+              dialogSelector
+
+              label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
+              isMulti
+              disabled={props.isCommitting}
+              queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
+              dialogQueryScopes={[['replace_with_children', dig(props, 'currentGroup', 'id')]]}
+              handleChange={handleChange}
+              values={values}
+              setFieldValue={setFieldValue}
+            />
+          </CardContent>
+          <Divider />
+          <CardContent>
             <Grid
               container
               spacing={3}
@@ -147,8 +161,8 @@ export function EventFormInner({
               alignItems='center'
             >
               <Grid item xs={12} md={6}>
-                <Field
-                  component={Select}
+                <FastField
+                  component={DiverstSelect}
                   fullWidth
                   required
                   id='budget_item_id'
@@ -221,7 +235,7 @@ export function EventFormInner({
           </CardContent>
           <Divider />
           <CardContent>
-            <Field
+            <FastField
               component={DiverstFileInput}
               fileName={props.event && props.event.picture_file_name}
               disabled={props.isCommitting}
@@ -255,15 +269,12 @@ export function EventFormInner({
 export function EventForm(props) {
   const event = dig(props, 'event');
 
-  const [start, setStart] = useState(DateTime.local().plus({ hour: 1 }));
-  const [end, setEnd] = useState(DateTime.local().plus({ hour: 2 }));
-
   const initialValues = buildValues(event, {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: start },
-    end: { default: end },
+    start: { default: null },
+    end: { default: null },
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
@@ -273,6 +284,7 @@ export function EventForm(props) {
     finished_expenses: { default: false },
     pillar: { default: props.pillar, customKey: 'pillar_id' },
     owner_id: { default: '' },
+    participating_group: { default: [], customKey: 'participating_group_ids' },
     owner_group_id: { default: props.currentGroup.id }
   });
   return (
@@ -280,11 +292,11 @@ export function EventForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['budget_item_id', 'pillar_id']);
+        const payload = mapFields(values, ['budget_item_id', 'pillar_id', 'participating_group_ids']);
         props.eventAction(payload);
       }}
     >
-      {formikProps => <EventFormInner {...props} {...formikProps} />}
+      {formikProps => <EventFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -302,16 +314,19 @@ EventForm.propTypes = {
 EventFormInner.propTypes = {
   edit: PropTypes.bool,
   event: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
-  touched: PropTypes.object,
-  errors: PropTypes.object,
   buttonText: PropTypes.string,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  setFieldError: PropTypes.func,
+
+  formikProps: PropTypes.shape({
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleBlur: PropTypes.func,
+    values: PropTypes.object,
+    touched: PropTypes.object,
+    errors: PropTypes.object,
+    setFieldValue: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+    setFieldError: PropTypes.func,
+  }),
 
   getPillarsBegin: PropTypes.func.isRequired,
   getBudgetItemsBegin: PropTypes.func.isRequired,
