@@ -18,7 +18,7 @@ const supportedFiles = {
 };
 
 export function getAllSupportedFileTypes() {
-  return Object.values(supportedFiles).map(obj => obj.type);
+  return Object.values(supportedFiles).map(item => item.type);
 }
 
 export function getAllSupportedFileKeys() {
@@ -26,13 +26,13 @@ export function getAllSupportedFileKeys() {
 }
 
 export function getSupportedImageFileTypes() {
-  return Object.values(supportedFiles).filter(item => item.category === 'image').map(obj => obj.type);
+  return Object.values(supportedFiles).filter(item => item.category === 'image').map(item => item.type);
 }
 
 export function getSupportedImageFileKeys() {
   return Object.keys(supportedFiles).filter(key => supportedFiles[key].category === 'image');
 }
 
-export function getFileMessages(fileType) {
-  return supportedFiles[fileType].message;
+export function getFileMessages(fileTypeKey) {
+  return supportedFiles[fileTypeKey].message;
 }

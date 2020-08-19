@@ -88,6 +88,7 @@ export function DiverstFileInput(props) {
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const inputRef = useRef();
+
   // Note: the fileName prop is only used for edit forms to show the existing file name
   useEffect(() => {
     if (props.fileName)
@@ -113,7 +114,6 @@ export function DiverstFileInput(props) {
   } = rest;
 
   const [notAcceptedFile, setNotAcceptedFile] = useState(false);
-
   const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
   const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileKeys() : getAllSupportedFileKeys();
 
@@ -330,7 +330,7 @@ export function DiverstFileInput(props) {
               )}
               {notAcceptedFile && (
                 <Typography color='error'>
-                  {intl.formatMessage(messages.notAccepted)}
+                  <DiverstFormattedMessage {...messages.notAccepted} />
                 </Typography>
               )}
             </FormControl>
