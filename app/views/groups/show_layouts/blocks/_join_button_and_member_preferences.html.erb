@@ -16,7 +16,7 @@
   <% end %>
 <% end %>
 
-<% if !GroupPolicy.new(current_user, @group).is_a_member? && @group.active? %>
+<% if !@group.private && !GroupPolicy.new(current_user, @group).is_a_member? && @group.active? %>
     <% if @group.is_parent_group? %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
