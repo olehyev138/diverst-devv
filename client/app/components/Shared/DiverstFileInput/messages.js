@@ -34,7 +34,43 @@ export default defineMessages({
     id: `${scope}.deleteFileConfirm`
   },
   fileTypes: {
-    id: `${scope}.fileTypes`
+    id: `${scope}.fileTypes`,
+    png: {
+      id: `${scope}.fileTypes.png`,
+    },
+    jpg: {
+      id: `${scope}.fileTypes.jpg`,
+    },
+    jpeg: {
+      id: `${scope}.fileTypes.jpeg`,
+    },
+    svg: {
+      id: `${scope}.fileTypes.svg`,
+    },
+    gif: {
+      id: `${scope}.fileTypes.gif`,
+    },
+    pdf: {
+      id: `${scope}.fileTypes.pdf`,
+    },
+    xml: {
+      id: `${scope}.fileTypes.xml`,
+    },
+    csv: {
+      id: `${scope}.fileTypes.csv`,
+    },
+    json: {
+      id: `${scope}.fileTypes.json`,
+    },
+    zip: {
+      id: `${scope}.fileTypes.zip`,
+    },
+    plain: {
+      id: `${scope}.fileTypes.plain`,
+    },
+    html: {
+      id: `${scope}.fileTypes.html`,
+    },
   },
   notAccepted: {
     id: `${scope}.notAccepted`
