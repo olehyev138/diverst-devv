@@ -164,7 +164,6 @@ export function FolderPage(props) {
     props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
     setParams(newParams);
   };
-
   return (
     <div>
       { valid === false && (
@@ -211,7 +210,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstBreadcrumbs />
+          <DiverstBreadcrumbs title={currentFolder && currentFolder.name} isLoading={props.isLoading} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}

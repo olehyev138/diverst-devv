@@ -38,7 +38,7 @@ export function DiverstBreadcrumbs(props) {
 
   if (pathNames.length <= 1)
     return (<React.Fragment />);
-
+  console.log(props.title);
   return (
     <React.Fragment>
       <Paper elevation={0} className={classes.paper}>
@@ -63,7 +63,7 @@ export function DiverstBreadcrumbs(props) {
                 className={classes.breadcrumbCurrentPageText}
                 key={to}
               >
-                {title}
+                {!props.isLoading && (props.title || title)}
               </Typography>
             ) : (
               <Link
@@ -83,6 +83,8 @@ export function DiverstBreadcrumbs(props) {
 
 DiverstBreadcrumbs.propTypes = {
   classes: PropTypes.object,
+  isLoading: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 export default compose(
