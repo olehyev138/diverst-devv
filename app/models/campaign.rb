@@ -1,5 +1,10 @@
 class Campaign < BaseClass
   include PublicActivity::Common
+  ENGAGEMENT_POINTS_FOR_GRAPH = {
+    comments: 3,
+    ideas: 10,
+    votes: 1
+  }
 
   enum status: [:published, :draft, :closed, :reopened]
 
@@ -65,7 +70,7 @@ class Campaign < BaseClass
 
   def engagement_activity_level
     # total number of answers, upvotes and comments across all questions for a campaign
-    (self.answers.size * 10) + self.answer_upvotes.size + (self.answer_comments.size * 3)
+    (self.answers.size * ENGAGEMENT_POINTS_FOR_GRAPH[:ideas]) + (self.answer_upvotes.size * ENGAGEMENT_POINTS_FOR_GRAPH[:votes]) + (self.answer_comments.size * ENGAGEMENT_POINTS_FOR_GRAPH[:comments])
   end
 
   def chosen_ideas
@@ -81,26 +86,11 @@ class Campaign < BaseClass
     enterprise.answers.where.not(value: nil).sum(:value)
   end
 
-  def self.roi_distribution(enterprise_id, campaign_id, date_range)
+  def self.roi_distribution(enterprise_id, campaign_id, time_frame_value)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
 
-    date_range =
-
-    case date_range
-    when '1m'
-      (DateTime.now << 1)..DateTime.now
-    when '3m'
-      (DateTime.now << 3)..DateTime.now
-    when '6m'
-      (DateTime.now << 6)..DateTime.now
-    when '9m'
-      (DateTime.now << 9)..DateTime.now
-    when '1y'
-      (DateTime.now << 12)..DateTime.now
-    else
-      enterprise.created_at..DateTime.now
-    end
+    date_range = date_range(time_frame_value, enterprise)
 
     campaigns = enterprise.campaigns.where(created_at: date_range)
 
@@ -116,26 +106,13 @@ class Campaign < BaseClass
     campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
   end
 
-  def self.engagement_activity_distribution(enterprise_id, campaign_id, date_range)
+  def self.engagement_activity_distribution(enterprise_id, campaign_id, time_frame_value)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
 
-    date_range =
+    date_range = date_range(time_frame_value, enterprise)
 
-    case date_range
-    when '1m'
-      (DateTime.now << 1)..DateTime.now
-    when '3m'
-      (DateTime.now << 3)..DateTime.now
-    when '6m'
-      (DateTime.now << 6)..DateTime.now
-    when '9m'
-      (DateTime.now << 9)..DateTime.now
-    when '1y'
-      (DateTime.now << 12)..DateTime.now
-    else
-      enterprise.created_at..DateTime.now
-    end
+    
 
     campaigns = enterprise.campaigns.where(created_at: date_range)
 
@@ -152,7 +129,7 @@ class Campaign < BaseClass
   end
 
   def activities_distribution_per_campaign
-    { 'ideas' => answers.size * 10, 'votes' => answer_upvotes.size, 'comments' => answer_comments.size * 3 }
+    { 'ideas' => answers.size * ENGAGEMENT_POINTS_FOR_GRAPH[:ideas], 'votes' => answer_upvotes.size * ENGAGEMENT_POINTS_FOR_GRAPH[:votes], 'comments' => answer_comments.size * ENGAGEMENT_POINTS_FOR_GRAPH[:comments] }
   end
 
   def closed?
@@ -267,5 +244,24 @@ class Campaign < BaseClass
     report = Reports::Generator.new(strategy)
 
     report.to_csv
+  end
+
+  private 
+
+  def self.date_range(time_frame_value, enterprise)
+    case time_frame_value
+    when '1m'
+      (DateTime.now << 1)..DateTime.now
+    when '3m'
+      (DateTime.now << 3)..DateTime.now
+    when '6m'
+      (DateTime.now << 6)..DateTime.now
+    when '9m'
+      (DateTime.now << 9)..DateTime.now
+    when '1y'
+      (DateTime.now << 12)..DateTime.now
+    else
+      enterprise.created_at..DateTime.now
+    end
   end
 end

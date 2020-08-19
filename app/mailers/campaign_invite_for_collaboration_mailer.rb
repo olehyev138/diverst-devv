@@ -1,6 +1,5 @@
 class CampaignInviteForCollaborationMailer < ApplicationMailer
   def invitation_to_collaborate(campaign_id, user_id)
-    byebug
     @campaign = Campaign.find_by(id: campaign_id)
     @user = User.find_by(id: user_id)
     @enterprise = @campaign.enterprise

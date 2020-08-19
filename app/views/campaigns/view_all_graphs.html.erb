@@ -8,13 +8,7 @@
       <div class="card">
         <div class="card__section">
           <h3>Engagement Activity Distribution</h3>
-            <div class="btn-group" id='engagement' role="group" aria-label="Range Selector Buttons">
-              <button class="range-btn btn btn--tertiary btn--extra--small" value="1m">1m</button>
-              <button class="range-btn btn btn--tertiary btn--extra--small" value="3m">3m</button>
-              <button class="range-btn btn btn--tertiary btn--extra--small" value="6m">6m</button>
-              <button class="range-btn btn btn--tertiary btn--extra--small" value="1y">1y</button>
-              <button class="range-btn btn btn--tertiary btn--extra--small" value="all">All</button>
-            </div>
+            <%= render 'date_range_selector', id: 'engagement' %>
           <br>
           <br>
           <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, nil, nil), id: 'engagement-activity-distribution' %>
@@ -25,13 +19,7 @@
       <div class="card">
         <div class="card__section">
           <h3>Campaign ROI Distribution</h3>
-          <div class="btn-group" id='roi' role="group" aria-label="Range Selector Buttons">
-            <button class="range-btn btn btn--tertiary btn--extra--small" value="1m">1m</button>
-            <button class="range-btn btn btn--tertiary btn--extra--small" value="3m">3m</button>
-            <button class="range-btn btn btn--tertiary btn--extra--small" value="6m">6m</button>
-            <button class="range-btn btn btn--tertiary btn--extra--small" value="1y">1y</button>
-            <button class="range-btn btn btn--tertiary btn--extra--small" value="all">All</button>
-          </div>
+          <%= render 'date_range_selector', id: 'roi' %>
           <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, nil, nil), id: 'campaign-roi-distribution', 
                                                                                prefix: '$',
                                                                                thousands: ',' %>
