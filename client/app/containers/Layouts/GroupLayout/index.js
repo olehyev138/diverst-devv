@@ -24,6 +24,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
+import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import { renderChildrenWithProps } from 'utils/componentHelpers';
 
 const styles = theme => ({
@@ -56,20 +57,20 @@ const GroupLayout = (props) => {
 
   return (
     <React.Fragment>
-      { currentGroup && <GroupLinks currentGroup={currentGroup} permission={permission} {...rest} /> }
-      <Scrollbar>
-        <Fade in appear>
-          <Container maxWidth='lg'>
-            <div className={classes.content}>
-              {currentGroup && (
+      <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !currentGroup} TransitionChildProps={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <GroupLinks currentGroup={currentGroup} permission={permission} {...rest} />
+        <Scrollbar>
+          <Fade in appear>
+            <Container maxWidth='lg'>
+              <div className={classes.content}>
                 <React.Fragment>
                   {renderChildrenWithProps(props.children, { currentGroup, permission, ...rest })}
                 </React.Fragment>
-              )}
-            </div>
-          </Container>
-        </Fade>
-      </Scrollbar>
+              </div>
+            </Container>
+          </Fade>
+        </Scrollbar>
+      </DiverstShowLoader>
     </React.Fragment>
   );
 };
@@ -79,6 +80,7 @@ GroupLayout.propTypes = {
   classes: PropTypes.object,
   currentGroup: PropTypes.object,
   groupHasChanged: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
