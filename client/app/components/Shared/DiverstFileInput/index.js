@@ -20,7 +20,7 @@ import messages from 'components/Shared/DiverstFileInput/messages';
 
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
-import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileKeys, getSupportedImageFileKeys } from 'utils/inputFilesHelper';
+import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileKeys, getSupportedImageFileKeys } from 'utils/fileInputHelpers';
 
 const styles = theme => ({
   fileInput: {
