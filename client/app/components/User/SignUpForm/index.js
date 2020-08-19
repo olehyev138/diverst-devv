@@ -36,7 +36,7 @@ import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
-import {injectIntl, intlShape} from "react-intl";
+import { injectIntl, intlShape } from 'react-intl';
 
 const submitGenerator = (action, token) => (values, actions) => {
   const payload = mapFields(values, ['time_zone']);
