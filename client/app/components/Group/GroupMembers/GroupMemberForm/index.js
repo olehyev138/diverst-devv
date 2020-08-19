@@ -20,9 +20,9 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -34,8 +34,6 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
     });
   };
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.groupMembersIndex;
 
   return (
     <Card>
@@ -62,13 +60,13 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
           <DiverstSubmit isCommitting={props.isCommitting}>
             <DiverstFormattedMessage {...messages.create} />
           </DiverstSubmit>
-          <Button
+          <DiverstCancel
             disabled={props.isCommitting}
-            to={cancelRedirect}
+            to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
+          </DiverstCancel>
         </CardActions>
       </Form>
     </Card>

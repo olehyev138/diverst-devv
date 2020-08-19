@@ -16,7 +16,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { floatRound, toNumber } from 'utils/floatRound';
 
-import { useLastLocation } from 'react-router-last-location';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -31,6 +30,7 @@ import {
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
@@ -48,9 +48,6 @@ const styles = theme => ({
 export function AnnualBudgetFormInner(
   { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudget, ...props }
 ) {
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : ROUTES.admin.plan.budgeting.index.path();
-
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudget}>
       <Card>
@@ -117,13 +114,13 @@ export function AnnualBudgetFormInner(
             <DiverstSubmit isCommitting={props.isCommitting}>
               <DiverstFormattedMessage {...formMessages.setAnnualBudget} />
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={cancelRedirect}
+              to={ROUTES.admin.plan.budgeting.index.path()}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...formMessages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

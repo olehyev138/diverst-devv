@@ -21,9 +21,9 @@ import messages from 'containers/User/UserRole/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import Select from 'components/Shared/DiverstSelect';
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -34,8 +34,6 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
     { label: <DiverstFormattedMessage {...messages.role.user} />, value: 'user' }
   ];
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.userRolesIndex;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.userRole}>
@@ -83,13 +81,13 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={cancelRedirect}
+                to={props.links.userRolesIndex}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

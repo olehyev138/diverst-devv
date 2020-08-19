@@ -18,6 +18,7 @@ import { Field, Formik, Form } from 'formik';
 
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
@@ -25,7 +26,6 @@ import { DateTime } from 'luxon';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/messages';
 
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
@@ -37,8 +37,6 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
     });
   };
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : links.CampaignsIndex;
 
   // const getCampaignBeginAction = (searchKey = '') => {
   //   props.getCampaignBegin({
@@ -139,13 +137,13 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={cancelRedirect}
+              to={links.CampaignsIndex}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

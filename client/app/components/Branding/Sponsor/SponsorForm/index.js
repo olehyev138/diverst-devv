@@ -20,7 +20,9 @@ import {
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
-import { useLastLocation } from 'react-router-last-location';
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -30,8 +32,6 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.sponsorIndex;
   return (
     <Card>
       <Form>
@@ -91,18 +91,18 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
+          <DiverstSubmit
             color='primary'
             type='submit'
           >
             {<DiverstFormattedMessage {...messages.save} />}
-          </Button>
-          <Button
+          </DiverstSubmit>
+          <DiverstCancel
             component={WrappedNavLink}
-            to={cancelRedirect}
+            to={props.links.sponsorIndex}
           >
             {<DiverstFormattedMessage {...messages.cancel} />}
-          </Button>
+          </DiverstCancel>
         </CardActions>
       </Form>
     </Card>

@@ -23,17 +23,14 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function InviteFormInner({ formikProps, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
 
-  const lastLocation = useLastLocation();
-  // eslint-disable-next-line no-nested-ternary
-  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.admin ? props.links.usersIndex : props.links.usersPath(values.id));
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -120,13 +117,13 @@ export function InviteFormInner({ formikProps, ...props }) {
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {props.buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={cancelRedirect}
+                to={(props.admin ? props.links.usersIndex : props.links.usersPath(values.id))}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

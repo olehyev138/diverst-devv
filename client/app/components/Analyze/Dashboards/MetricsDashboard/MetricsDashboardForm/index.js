@@ -22,8 +22,8 @@ import Select from 'components/Shared/DiverstSelect';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -41,8 +41,6 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
     });
   };
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.metricsDashboardsIndex;
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.metricsDashboard}>
       <Card>
@@ -96,13 +94,13 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              to={cancelRedirect}
+            <DiverstCancel
+              to={props.links.metricsDashboardsIndex}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

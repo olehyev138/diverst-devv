@@ -21,6 +21,7 @@ import messages from 'containers/Poll/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 import { getPillarsBegin } from 'containers/Group/Pillar/actions';
@@ -32,16 +33,12 @@ import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/Bud
 import GroupSelector from 'components/Shared/GroupSelector';
 import SegmentSelector from 'components/Shared/SegmentSelector';
 import { FieldsSubForm } from 'components/Shared/Fields/FieldsSubForm';
-import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function PollFormInner({ formikProps, buttonText, draftButtonText, header, poll, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors,
     setFieldValue, setFieldTouched, setFieldError, setSubmitting } = formikProps;
 
-  const lastLocation = useLastLocation();
-  // eslint-disable-next-line no-nested-ternary
-  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.poll ? props.links.pollShow : props.links.pollsIndex);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !poll}>
       <Form>
@@ -124,13 +121,13 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
                 {draftButtonText}
               </Button>
             )}
-            <Button
-              to={cancelRedirect}
+            <DiverstCancel
+              to={(props.poll ? props.links.pollShow : props.links.pollsIndex)}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Card>
       </Form>

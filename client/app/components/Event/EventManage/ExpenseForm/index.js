@@ -14,6 +14,7 @@ import { Form, Formik } from 'formik';
 import { Box, Button, CardContent, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
@@ -30,9 +31,6 @@ const { form: formMessages } = messages;
 /* eslint-disable object-curly-newline */
 export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
-
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.index;
 
   return (
     <React.Fragment>
@@ -79,14 +77,14 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
             </DiverstSubmit>
           </Grid>
           <Grid item>
-            <Button
+            <DiverstCancel
               component={WrappedNavLink}
-              to={cancelRedirect}
+              to={props.links.index}
               disabled={props.isCommitting}
               variant='contained'
             >
               <DiverstFormattedMessage {...formMessages.cancel} />
-            </Button>
+            </DiverstCancel>
           </Grid>
         </Grid>
       </Form>

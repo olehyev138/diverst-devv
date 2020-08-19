@@ -22,10 +22,10 @@ import messages from 'containers/GlobalSettings/Email/Email/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 
-import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   padding: {
@@ -66,8 +66,6 @@ export function EmailFormInner({
 
   const { intl } = props;
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.emailsIndex;
 
   return (
     <React.Fragment>
@@ -108,16 +106,16 @@ export function EmailFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 component={WrappedNavLink}
-                to={cancelRedirect}
+                to={props.links.emailsIndex}
                 variant='contained'
                 size='large'
                 color='primary'
                 className={classes.buttons}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

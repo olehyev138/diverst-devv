@@ -13,13 +13,12 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { useLastLocation } from 'react-router-last-location';
 
 /* eslint-disable object-curly-newline */
 export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.newsFeedIndex;
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.socialLink}>
       <Card>
@@ -43,13 +42,13 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={cancelRedirect}
+              to={props.links.newsFeedIndex}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

@@ -24,6 +24,7 @@ import messages from 'containers/Shared/Update/messages';
 
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
@@ -36,8 +37,6 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 
   const { group_id: groupId } = useParams();
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.index;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
@@ -86,13 +85,13 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={cancelRedirect}
+                to={props.links.index}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.form.button.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Card>
         </Form>

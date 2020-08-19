@@ -29,12 +29,12 @@ import messages from 'containers/GlobalSettings/Email/Event/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 import { DiverstTimePicker } from 'components/Shared/Pickers/DiverstTimePicker';
 import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   padding: {
@@ -68,8 +68,6 @@ export function EventFormInner({
 }) {
   const { intl } = props;
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.eventsIndex;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={!props.event}>
@@ -160,16 +158,16 @@ export function EventFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 component={WrappedNavLink}
-                to={cancelRedirect}
+                to={props.links.eventsIndex}
                 variant='contained'
                 size='large'
                 color='primary'
                 className={classes.buttons}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

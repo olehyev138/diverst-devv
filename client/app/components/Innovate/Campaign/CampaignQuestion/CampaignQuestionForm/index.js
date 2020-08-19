@@ -18,6 +18,7 @@ import { Field, Formik, Form } from 'formik';
 
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../../Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
@@ -31,9 +32,6 @@ import { useLastLocation } from 'react-router-last-location';
 /* eslint-disable object-curly-newline */
 export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
-
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : links.questionsIndex;
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.question}>
@@ -76,13 +74,13 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={cancelRedirect}
+              to={links.questionsIndex}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.question.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

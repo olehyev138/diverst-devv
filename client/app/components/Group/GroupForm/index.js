@@ -26,10 +26,11 @@ import {
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 import GroupSelector from 'components/Shared/GroupSelector';
-import { useLastLocation } from 'react-router-last-location';
+
 
 const styles = theme => ({
   noBottomPadding: {
@@ -57,8 +58,6 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
     });
   };
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : ROUTES.admin.manage.groups.index.path();
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
@@ -167,13 +166,13 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={cancelRedirect}
+              to={ROUTES.admin.manage.groups.index.path()}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

@@ -24,6 +24,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
@@ -50,10 +51,6 @@ const freeEvent = { label: 'Create new free event ($0.00)', value: null, availab
 /* eslint-disable object-curly-newline */
 export function EventFormInner({ buttonText, formikProps, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, touched, errors, setFieldValue, setFieldTouched, setFieldError } = formikProps;
-
-  const lastLocation = useLastLocation();
-  // eslint-disable-next-line no-nested-ternary
-  const cancelRedirect = lastLocation ? lastLocation.pathname : (props.event ? props.links.eventShow : props.links.eventsIndex);
 
   useInjectReducer({ key: 'pillars', reducer: pillarReducer });
   useInjectSaga({ key: 'pillars', saga: pillarSaga });
@@ -258,13 +255,13 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              to={cancelRedirect}
+            <DiverstCancel
+              to={props.event ? props.links.eventShow : props.links.eventsIndex}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

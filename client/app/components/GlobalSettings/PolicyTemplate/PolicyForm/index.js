@@ -36,6 +36,7 @@ import messages from 'containers/User/UserPolicy/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 import { useLastLocation } from 'react-router-last-location';
@@ -72,8 +73,6 @@ export function PolicyFormInner({
 }) {
   const { intl } = props;
 
-  const lastLocation = useLastLocation();
-  const cancelRedirect = lastLocation ? lastLocation.pathname : props.links.policiesIndex;
 
   const underToSpace = string => string.split('_').join(' ');
 
@@ -255,13 +254,13 @@ export function PolicyFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 component={WrappedNavLink}
-                to={cancelRedirect}
+                to={props.links.policiesIndex}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>
