@@ -27,8 +27,6 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import { useLastLocation } from 'react-router-last-location';
-
 /* eslint-disable object-curly-newline */
 export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;

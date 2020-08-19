@@ -26,7 +26,6 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import AddIcon from '@material-ui/icons/Add';
-import { useLastLocation } from 'react-router-last-location';
 
 const styles = theme => ({
   noBottomPadding: {

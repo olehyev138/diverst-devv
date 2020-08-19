@@ -45,7 +45,6 @@ import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
 import AddIcon from '@material-ui/icons/Add';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import { getCurrency } from 'utils/currencyHelpers';
-import { useLastLocation } from 'react-router-last-location';
 
 const { form: formMessage } = messages;
 
