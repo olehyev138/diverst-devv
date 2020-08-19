@@ -74,6 +74,8 @@
   "diverst.containers.SignUp.group_select": "Below is a list of available {erg_p} that you can join to be able to participate in events, post messages, receive news and much more. Select which {erg_p} you wish to join by clicking on them once.",
   "diverst.containers.SignUp.password": "Password",
   "diverst.containers.SignUp.passwordConfirmation": "Password Confirmation",
+  "diverst.containers.SignUp.consentTitle": "Terms and Conditions",
+  "diverst.containers.SignUp.consentAccept": "I have read and agree to the terms and conditions",
   "diverst.containers.PasswordReset.changePassword": "Change Password",
   "diverst.containers.PasswordReset.password": "Password",
   "diverst.containers.PasswordReset.passwordConfirmation": "Password Confirmation",

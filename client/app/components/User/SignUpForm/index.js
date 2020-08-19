@@ -36,6 +36,7 @@ import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
+import {injectIntl, intlShape} from "react-intl";
 
 const submitGenerator = (action, token) => (values, actions) => {
   const payload = mapFields(values, ['time_zone']);
@@ -294,7 +295,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             </Card>
             <DiverstDialog
               open={consentOpen}
-              title='Consent Message'
+              title={props.intl.formatMessage(signUpMessages.consentTitle)}
               handleNo={() => setConsent(false)}
               content={(
                 <Scrollbar>
@@ -313,14 +314,14 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                           name='__consent_accepted__'
                           margin='normal'
                           disabled={props.isCommitting}
-                          label='I have read and agree to the terms and conditions'
+                          label={<DiverstFormattedMessage {...signUpMessages.consentAccept} />}
                           /* eslint-disable-next-line no-underscore-dangle */
                           value={values.__consent_accepted__}
                           /* eslint-disable-next-line no-underscore-dangle */
                           checked={values.__consent_accepted__}
                         />
                       )}
-                      label='I have read and agree to the terms and conditions'
+                      label={<DiverstFormattedMessage {...signUpMessages.consentAccept} />}
                     />
                   </CardContent>
                   <CardActions>
@@ -381,6 +382,7 @@ export function SignUpForm(props) {
 }
 
 SignUpForm.propTypes = {
+  intl: intlShape,
   submitAction: PropTypes.func,
   user: PropTypes.object,
   groups: PropTypes.arrayOf(PropTypes.object),
@@ -404,5 +406,6 @@ SignUpFormInner.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
 )(SignUpForm);
