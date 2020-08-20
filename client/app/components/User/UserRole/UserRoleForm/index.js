@@ -16,7 +16,6 @@ import {
   Divider, Typography, Box
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/UserRole/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 

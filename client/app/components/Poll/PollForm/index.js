@@ -16,7 +16,6 @@ import {
   Button, Card, CardActions, CardContent, TextField, Grid, Divider, Box, CardHeader, Typography
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Poll/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
