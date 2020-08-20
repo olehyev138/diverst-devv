@@ -10,8 +10,6 @@ import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -98,8 +96,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
             {<DiverstFormattedMessage {...messages.save} />}
           </DiverstSubmit>
           <DiverstCancel
-            component={WrappedNavLink}
-            to={props.links.sponsorIndex}
+            redirectFallback={props.links.sponsorIndex}
           >
             {<DiverstFormattedMessage {...messages.cancel} />}
           </DiverstCancel>

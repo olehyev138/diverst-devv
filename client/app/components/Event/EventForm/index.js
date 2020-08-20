@@ -256,8 +256,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               {buttonText}
             </DiverstSubmit>
             <DiverstCancel
-              to={props.event ? props.links.eventShow : props.links.eventsIndex}
-              component={WrappedNavLink}
+              redirectFallback={props.event ? props.links.eventShow : props.links.eventsIndex}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />

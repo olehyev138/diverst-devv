@@ -15,7 +15,6 @@ import {
   Button, Card, CardActions, CardContent, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import Select from 'components/Shared/DiverstSelect';
 
@@ -77,8 +76,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               {buttonText}
             </DiverstSubmit>
             <DiverstCancel
-              component={WrappedNavLink}
-              to={props.links.metricsDashboardShow}
+              redirectFallback={props.links.metricsDashboardShow}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />

@@ -17,7 +17,6 @@ import {
   Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/GlobalSettings/Email/Email/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -107,8 +106,7 @@ export function EmailFormInner({
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
               <DiverstCancel
-                component={WrappedNavLink}
-                to={props.links.emailsIndex}
+                redirectFallback={props.links.emailsIndex}
                 variant='contained'
                 size='large'
                 color='primary'

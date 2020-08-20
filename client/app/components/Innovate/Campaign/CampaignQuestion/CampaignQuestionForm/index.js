@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
@@ -74,8 +73,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={links.questionsIndex}
-              component={WrappedNavLink}
+              redirectFallback={links.questionsIndex}
             >
               <DiverstFormattedMessage {...messages.question.cancel} />
             </DiverstCancel>

@@ -262,8 +262,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
           </Grid>
           <Grid item>
             <DiverstCancel
-              component={WrappedNavLink}
-              to={props.links.index}
+              redirectFallback={props.links.index}
               disabled={props.isCommitting}
               variant='contained'
             >

@@ -139,8 +139,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={links.CampaignsIndex}
-              component={WrappedNavLink}
+              redirectFallback={links.CampaignsIndex}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

@@ -34,7 +34,6 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 import { DiverstTimePicker } from 'components/Shared/Pickers/DiverstTimePicker';
 import Select from 'components/Shared/DiverstSelect';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   padding: {
@@ -159,8 +158,7 @@ export function EventFormInner({
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
               <DiverstCancel
-                component={WrappedNavLink}
-                to={props.links.eventsIndex}
+                redirectFallback={props.links.eventsIndex}
                 variant='contained'
                 size='large'
                 color='primary'

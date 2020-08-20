@@ -62,8 +62,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
           </DiverstSubmit>
           <DiverstCancel
             disabled={props.isCommitting}
-            to={props.links.groupMembersIndex}
-            component={WrappedNavLink}
+            redirectFallback={props.links.groupMembersIndex}
           >
             <DiverstFormattedMessage {...messages.cancel} />
           </DiverstCancel>

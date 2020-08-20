@@ -135,8 +135,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={(props.admin ? props.links.usersIndex : props.links.usersPath(values.id))}
-              component={WrappedNavLink}
+              redirectFallback={(props.admin ? props.links.usersIndex : props.links.usersPath(values.id))}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

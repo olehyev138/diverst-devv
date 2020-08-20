@@ -18,14 +18,12 @@ import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
-import { useLastLocation } from 'react-router-last-location';
 const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
@@ -78,8 +76,7 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
           </Grid>
           <Grid item>
             <DiverstCancel
-              component={WrappedNavLink}
-              to={props.links.index}
+              redirectFallback={props.links.index}
               disabled={props.isCommitting}
               variant='contained'
             >

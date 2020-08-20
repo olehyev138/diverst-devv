@@ -187,8 +187,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
               {buttonText}
             </DiverstSubmit>
             <DiverstCancel
-              to={props.links.outcomesIndex}
-              component={WrappedNavLink}
+              redirectFallback={props.links.outcomesIndex}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

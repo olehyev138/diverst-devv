@@ -141,8 +141,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.cancelPath}
-              component={WrappedNavLink}
+              redirectFallback={props.links.cancelPath}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

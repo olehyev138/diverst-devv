@@ -255,8 +255,7 @@ export function PolicyFormInner({
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
               <DiverstCancel
-                component={WrappedNavLink}
-                to={props.links.policiesIndex}
+                redirectFallback={props.links.policiesIndex}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />

@@ -122,8 +122,7 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
               </Button>
             )}
             <DiverstCancel
-              to={(props.poll ? props.links.pollShow : props.links.pollsIndex)}
-              component={WrappedNavLink}
+              redirectFallback={(props.poll ? props.links.pollShow : props.links.pollsIndex)}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />

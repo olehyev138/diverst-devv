@@ -43,8 +43,7 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.newsFeedIndex}
-              component={WrappedNavLink}
+              redirectFallback={props.links.newsFeedIndex}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

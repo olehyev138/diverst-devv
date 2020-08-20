@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { useLastLocation } from 'react-router-last-location';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   wrapper: {
@@ -24,14 +25,14 @@ const styles = theme => ({
 
 // Returns by default to the last location unless there is no previous location
 function DiverstCancel(props) {
-  const { classes, children, to, disabled, component, ...rest } = props;
+  const { classes, children, redirectFallback, disabled, component, ...rest } = props;
 
   const lastLocation = useLastLocation();
   return (
     <Button
-      to={(lastLocation && lastLocation.pathname) || to}
+      to={(lastLocation && lastLocation.pathname) || redirectFallback}
       disabled={disabled}
-      component={component}
+      component={(component && component) || WrappedNavLink}
       {...rest}
     >
       {children}
@@ -42,7 +43,7 @@ function DiverstCancel(props) {
 DiverstCancel.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
-  to: PropTypes.string,
+  redirectFallback: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   component: PropTypes.object,
 };

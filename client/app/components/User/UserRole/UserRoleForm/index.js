@@ -83,8 +83,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               </DiverstSubmit>
               <DiverstCancel
                 disabled={props.isCommitting}
-                to={props.links.userRolesIndex}
-                component={WrappedNavLink}
+                redirectFallback={props.links.userRolesIndex}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
               </DiverstCancel>

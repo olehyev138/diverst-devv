@@ -128,7 +128,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.cancelLink}
+              redirectFallback={props.links.cancelLink}
               component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
             >
               <DiverstFormattedMessage {...messages.cancel} />

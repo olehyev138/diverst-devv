@@ -121,8 +121,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.categories.index.path()}
-              component={WrappedNavLink}
+              redirectFallback={ROUTES.admin.manage.groups.categories.index.path()}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>

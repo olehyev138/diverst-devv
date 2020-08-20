@@ -18,7 +18,7 @@ import {
   Divider, Box
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
 import { buildValues } from 'utils/formHelpers';
 import messages from 'containers/Shared/Update/messages';
 
@@ -86,8 +86,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
               </DiverstSubmit>
               <DiverstCancel
                 disabled={props.isCommitting}
-                to={props.links.index}
-                component={WrappedNavLink}
+                redirectFallback={props.links.index}
               >
                 <DiverstFormattedMessage {...messages.form.button.cancel} />
               </DiverstCancel>
