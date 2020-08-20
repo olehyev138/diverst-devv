@@ -25,6 +25,10 @@ export function getAllSupportedFileKeys() {
   return Object.keys(supportedFiles);
 }
 
+export function getAllSupportedFileMessages() {
+  return Object.values(supportedFiles).map(item => item.message);
+}
+
 export function getSupportedImageFileTypes() {
   return Object.values(supportedFiles).filter(item => item.category === 'image').map(item => item.type);
 }
@@ -33,6 +37,6 @@ export function getSupportedImageFileKeys() {
   return Object.keys(supportedFiles).filter(key => supportedFiles[key].category === 'image');
 }
 
-export function getFileMessages(fileTypeKey) {
-  return supportedFiles[fileTypeKey].message;
+export function getSupportedImageFileMessages() {
+  return Object.values(supportedFiles).filter(item => item.category === 'image').map(item => item.message);
 }
