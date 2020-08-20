@@ -367,7 +367,9 @@ export function GroupMemberList(props) {
         rowsPerPage={props.params.count}
         actions={actions}
         tableOptions={{
-          exportButton: true,
+          exportButton: {
+            csv: true,
+          },
           exportCsv: (columns, data) => {
             handleDialogOpen();
           }

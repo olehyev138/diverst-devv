@@ -148,7 +148,9 @@ export function UserList(props, context) {
               })
             ]}
             tableOptions={{
-              exportButton: true,
+              exportButton: {
+                csv: true,
+              },
               exportCsv: (columns, data) => {
                 props.exportUsers();
               }
