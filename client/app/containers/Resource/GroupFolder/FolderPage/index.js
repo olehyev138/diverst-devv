@@ -164,6 +164,19 @@ export function FolderPage(props) {
     props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
     setParams(newParams);
   };
+
+
+  // Return all parents of the current folder
+  const parents = [];
+  function getAllParents(currentFolder) {
+    if (currentFolder == null)
+      return;
+    getAllParents(currentFolder.parent);
+    parents.push({ title: currentFolder.name, id: currentFolder.id, type: 'folders' });
+  }
+  getAllParents(props.currentFolder);
+  parents.pop();
+
   return (
     <div>
       { valid === false && (
@@ -210,7 +223,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstBreadcrumbs title={currentFolder && currentFolder.name} isLoading={props.isLoading} />
+          <DiverstBreadcrumbs title={currentFolder && currentFolder.name} isLoading={props.isLoading} nestedNavigation={parents} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}

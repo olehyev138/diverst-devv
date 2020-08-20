@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router-dom';
-
 import { withStyles } from '@material-ui/core/styles';
 import { Breadcrumbs, Link, Paper, Typography } from '@material-ui/core';
 import BreadcrumbSeparatorIcon from '@material-ui/icons/NavigateNext';
@@ -38,7 +37,79 @@ export function DiverstBreadcrumbs(props) {
 
   if (pathNames.length <= 1)
     return (<React.Fragment />);
-  console.log(props.title);
+
+  if (props.nestedNavigation && props.nestedNavigation.length >= 1) {
+    const differentBreadCrumbsItems = [];
+    pathNames.forEach((loc, index) => {
+      if (index >= 1) {
+        const [title, isPathPrefix] = findTitleForPath({
+          path: (`/${differentBreadCrumbsItems[index - 1].path}/${loc}`),
+          params: Object.values(params),
+          textArguments: customTexts()
+        });
+        differentBreadCrumbsItems.push({ path: (`${differentBreadCrumbsItems[index - 1].path}/${loc}`), title, isPathPrefix });
+      } else {
+        const [title, isPathPrefix] = findTitleForPath({ path: `/${loc}`, params: Object.values(params), textArguments: customTexts() });
+        differentBreadCrumbsItems.push({
+          path: loc,
+          title,
+          isPathPrefix
+        });
+      }
+    });
+
+    const temp = [];
+    props.nestedNavigation.forEach((component) => {
+      temp.push({ ...component, path: (`${differentBreadCrumbsItems[differentBreadCrumbsItems.length - 2].path}/${component.id}`) });
+    });
+    differentBreadCrumbsItems.splice(differentBreadCrumbsItems.length - 1, 0, ...temp);
+    console.log(differentBreadCrumbsItems);
+
+    return (
+      <React.Fragment>
+        <Paper elevation={0} className={classes.paper}>
+          <Breadcrumbs
+            separator={<BreadcrumbSeparatorIcon fontSize='small' />}
+            aria-label='breadcrumb'
+          >
+            {pathNames.map((value, index) => {
+              const last = index === pathNames.length - 1;
+              const to = `/${pathNames.slice(0, index + 1).join('/')}`;
+              console.log(to);
+              console.log(params);
+              const [title, isPathPrefix] = findTitleForPath({
+                path: to,
+                params: Object.values(params),
+                textArguments: customTexts()
+              });
+
+              if (!title)
+                return undefined;
+              console.log(title);
+              return last || isPathPrefix ? (
+                <Typography
+                  className={classes.breadcrumbCurrentPageText}
+                  key={to}
+                >
+                  {!props.isLoading && (props.title || title)}
+                </Typography>
+              ) : (
+                <Link
+                  component={WrappedNavLink}
+                  to={to}
+                  key={to}
+                >
+                  {title}
+                </Link>
+              );
+            })}
+          </Breadcrumbs>
+        </Paper>
+      </React.Fragment>
+    );
+  }
+
+
   return (
     <React.Fragment>
       <Paper elevation={0} className={classes.paper}>
@@ -85,6 +156,7 @@ DiverstBreadcrumbs.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   title: PropTypes.string,
+  nestedNavigation: PropTypes.array,
 };
 
 export default compose(
