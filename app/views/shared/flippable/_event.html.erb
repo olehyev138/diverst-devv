@@ -1,4 +1,4 @@
-<div class="block block-section <%= "flippable" if event.picture.present? %>" style="margin-bottom: 20px;">
+<div class="block block-section <%= "flippable" if event.picture.present? %>" style="<%= event.virtual? ? "margin-bottom: 100px;" : "margin-bottom: 20px;" %>">
   <div class="front">
     <% if event.virtual? %>
       <% if event.ongoing? %>
