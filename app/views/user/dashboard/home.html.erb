@@ -28,12 +28,12 @@
                 <% end %>
               <% end %>
 
-              <% if @upcoming_events.empty? || !InitiativePolicy.new(current_user, nil).index? %>
+              <% if @upcoming_and_ongoing_events.empty? || !InitiativePolicy.new(current_user, nil).index? %>
                 <div class="mtlarge text-center">
                   You have not joined any events yet.
                 </div>
               <% else %>
-                <% @upcoming_events.each do |event| %>
+                <% @upcoming_and_ongoing_events.each do |event| %>
                   <%= render "shared/flippable/event", event: event %>
                 <% end %>
               <% end %>
