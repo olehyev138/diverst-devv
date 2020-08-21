@@ -44,6 +44,7 @@ import {
 } from 'utils/resourceHelpers';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+import DiverstNestedBreadcrumbs from '../../../../components/Shared/DiverstNestedBreadcrumbs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
@@ -165,7 +166,6 @@ export function FolderPage(props) {
     setParams(newParams);
   };
 
-
   // Return all parents of the current folder
   const parents = [];
   function getAllParents(currentFolder) {
@@ -175,7 +175,6 @@ export function FolderPage(props) {
     parents.push({ title: currentFolder.name, id: currentFolder.id, type: 'folders' });
   }
   getAllParents(props.currentFolder);
-  parents.pop();
 
   return (
     <div>
@@ -223,7 +222,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstBreadcrumbs title={currentFolder && currentFolder.name} isLoading={props.isLoading} nestedNavigation={parents} />
+          <DiverstNestedBreadcrumbs nestedNavigation={parents} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}

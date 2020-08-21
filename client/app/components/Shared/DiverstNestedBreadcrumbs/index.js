@@ -1,3 +1,11 @@
+/*
+  DiverstNestedBreadcrumbs :
+  Used for navigation between items who may be nested inside one another.
+  The nestedNavigation prop must be of the form
+  { title, id }
+  and must include the parents and the current item to be displayed
+ */
+
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -27,9 +35,9 @@ const styles = theme => ({
   },
 });
 
-export function DiverstBreadcrumbs(props) {
-  const { classes } = props;
 
+export function DiverstNestedBreadcrumbs(props) {
+  const { classes } = props;
   const location = useLocation();
   const params = useParams();
 
@@ -38,6 +46,34 @@ export function DiverstBreadcrumbs(props) {
   if (pathNames.length <= 1)
     return (<React.Fragment />);
 
+  // Transform format of previous locations
+  const breadCrumbs = [];
+  pathNames.forEach((currentLocation, index) => {
+    if (index >= 1) {
+      const [title, isPathPrefix] = findTitleForPath({
+        path: (`/${breadCrumbs[index - 1].path}/${currentLocation}`),
+        params: Object.values(params),
+        textArguments: customTexts()
+      });
+      breadCrumbs.push({ path: (`${breadCrumbs[index - 1].path}/${currentLocation}`), title, isPathPrefix });
+    } else {
+      const [title, isPathPrefix] = findTitleForPath({ path: `/${currentLocation}`, params: Object.values(params), textArguments: customTexts() });
+      breadCrumbs.push({
+        path: currentLocation,
+        title,
+        isPathPrefix
+      });
+    }
+  });
+
+  const lastIndex = breadCrumbs.length - 1;
+  const pathBeginning = breadCrumbs[breadCrumbs.length - 2].path;
+  const parents = [];
+  props.nestedNavigation.forEach((component) => {
+    parents.push({ ...component, path: (`${pathBeginning}/${component.id}`) });
+  });
+  breadCrumbs.splice(lastIndex, 1, ...parents);
+
   return (
     <React.Fragment>
       <Paper elevation={0} className={classes.paper}>
@@ -45,32 +81,22 @@ export function DiverstBreadcrumbs(props) {
           separator={<BreadcrumbSeparatorIcon fontSize='small' />}
           aria-label='breadcrumb'
         >
-          {pathNames.map((value, index) => {
-            const last = index === pathNames.length - 1;
-            const to = `/${pathNames.slice(0, index + 1).join('/')}`;
-            const [title, isPathPrefix] = findTitleForPath({
-              path: to,
-              params: Object.values(params),
-              textArguments: customTexts()
-            });
-
-            if (!title)
-              return undefined;
-
-            return last || isPathPrefix ? (
+          {breadCrumbs.map((value, index) => {
+            const last = index === breadCrumbs.length - 1;
+            return last ? (
               <Typography
                 className={classes.breadcrumbCurrentPageText}
-                key={to}
+                key={value.path}
               >
-                {!props.isLoading && (props.title || title)}
+                {value.title}
               </Typography>
             ) : (
               <Link
                 component={WrappedNavLink}
-                to={to}
-                key={to}
+                to={`/${value.path}`}
+                key={value.path}
               >
-                {title}
+                {value.title}
               </Link>
             );
           })}
@@ -80,7 +106,7 @@ export function DiverstBreadcrumbs(props) {
   );
 }
 
-DiverstBreadcrumbs.propTypes = {
+DiverstNestedBreadcrumbs.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   title: PropTypes.string,
@@ -90,4 +116,4 @@ DiverstBreadcrumbs.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(DiverstBreadcrumbs);
+)(DiverstNestedBreadcrumbs);
