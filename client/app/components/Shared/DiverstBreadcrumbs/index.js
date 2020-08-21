@@ -63,7 +63,6 @@ export function DiverstBreadcrumbs(props) {
       temp.push({ ...component, path: (`${differentBreadCrumbsItems[differentBreadCrumbsItems.length - 2].path}/${component.id}`) });
     });
     differentBreadCrumbsItems.splice(differentBreadCrumbsItems.length - 1, 0, ...temp);
-    console.log(differentBreadCrumbsItems);
 
     return (
       <React.Fragment>
@@ -72,34 +71,22 @@ export function DiverstBreadcrumbs(props) {
             separator={<BreadcrumbSeparatorIcon fontSize='small' />}
             aria-label='breadcrumb'
           >
-            {pathNames.map((value, index) => {
-              const last = index === pathNames.length - 1;
-              const to = `/${pathNames.slice(0, index + 1).join('/')}`;
-              console.log(to);
-              console.log(params);
-              const [title, isPathPrefix] = findTitleForPath({
-                path: to,
-                params: Object.values(params),
-                textArguments: customTexts()
-              });
-
-              if (!title)
-                return undefined;
-              console.log(title);
-              return last || isPathPrefix ? (
+            {differentBreadCrumbsItems.map((value, index) => {
+              const last = index === differentBreadCrumbsItems.length - 1;
+              return last ? (
                 <Typography
                   className={classes.breadcrumbCurrentPageText}
-                  key={to}
+                  key={value.path}
                 >
-                  {!props.isLoading && (props.title || title)}
+                  {value.title}
                 </Typography>
               ) : (
                 <Link
                   component={WrappedNavLink}
-                  to={to}
-                  key={to}
+                  to={`/${value.path}`}
+                  key={value.path}
                 >
-                  {title}
+                  {value.title}
                 </Link>
               );
             })}
