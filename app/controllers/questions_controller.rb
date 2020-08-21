@@ -95,6 +95,9 @@ class QuestionsController < ApplicationController
           :value,
           :benefit_type,
           :supporting_document_from_sponsor,
+          :benefits,
+          :duration,
+          :unit_of_duration,
           expenses_attributes: [
             :id,
             :_destroy,

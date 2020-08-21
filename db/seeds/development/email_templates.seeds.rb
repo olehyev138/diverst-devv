@@ -133,6 +133,16 @@ after 'development:enterprise' do
             :subject => "Thank you for participating in our %{campaign.title} campaign",
             :description => "Email that goes out to users after they have submitted an idea.",
             :template => ""
+          },
+          #campaign_invitation_mailer
+          {
+            :name => "Campaign Invite For Collaboration Mailer",
+            :mailer_name => "campaign_invite_for_collaboration_mailer",
+            :mailer_method => "invitation_to_collaborate",
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You have been invited to collaborate on <strong> %{campaign.title} </strong> campaign.</p><p>%{click_here} to collaborate with others.</p></p>",
+            :subject => "Invitation to collaborate on %{campaign.title} campaign",
+            :description => "Email that goes out to users to invite them to collaborate with others on campaign.",
+            :template => ""
           }
         ]
       )

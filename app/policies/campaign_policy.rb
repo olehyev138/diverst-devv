@@ -45,6 +45,19 @@ class CampaignPolicy < ApplicationPolicy
     index?
   end
 
+  def engagement_activity_distribution?
+    index?
+  end
+
+  def roi_distribution?
+    index?
+  end
+
+  def engagement_distribution_per_campaign?
+    index?
+  end
+
+
   class Scope < Scope
     def index?
       CampaignPolicy.new(user, nil).index?

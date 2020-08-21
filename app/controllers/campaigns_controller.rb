@@ -1,8 +1,12 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers, :graphs]
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show,
+                                      :contributions_per_erg, :top_performers, :graphs,
+                                      :users_to_invite_to_collaborate, :invite_users]
   after_action :verify_authorized
   after_action :visit_page, only: [:index, :new, :show, :edit]
+
+  include Rewardable
 
   layout :resolve_layout
 
@@ -116,12 +120,50 @@ class CampaignsController < ApplicationController
   end
 
   def graphs
-    authorize @campaign, :show? 
+    authorize @campaign, :show?
   end
 
   def view_all_graphs
     authorize Campaign
-    @campaigns = policy_scope(Campaign)
+  end
+
+  def engagement_activity_distribution
+    authorize Campaign
+
+    render json: Campaign.engagement_activity_distribution(current_user.enterprise_id, nil, params[:date_range]).symbolize_keys
+  end
+
+  def roi_distribution
+    authorize Campaign
+
+    render json: Campaign.roi_distribution(current_user.enterprise_id, nil, params[:date_range]).symbolize_keys
+  end
+
+  def users_to_invite_to_collaborate
+    authorize @campaign, :show?
+
+    @users_to_invite = current_user.enterprise.users.joins(:user_role).where(user_roles: { role_name: 'Admin' })
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UsersToInviteToCollaborateDatatable.new(view_context, @campaign, @users_to_invite) }
+    end
+  end
+
+  def invite_users
+    authorize @campaign, :show?
+
+    CampaignCollaboratorsInvitationJob.perform_later(@campaign.id, params[:user_id].to_i)
+
+    render nothing: true, status: :ok
+  end
+
+  def engagement_distribution_per_campaign
+    authorize Campaign
+
+    campaign = Campaign.find_by(title: params[:campaign_title])
+
+    render json: campaign&.activities_distribution_per_campaign&.symbolize_keys, status: :ok
   end
 
 

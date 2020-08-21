@@ -31,7 +31,19 @@
           </div>
           <div class="card__section card__section--border">
             <h4>Planning</h4>
-            <%= a.input :outcome, input_html: { autofocus: true } %>
+            <%= a.input :benefits, label: 'What are the benefits of this idea to the organization?', input_html: { autofocus: true } %>
+            <br>
+            <h4>How long will it take to fully implement the idea to the organization?</h4>
+            <div class="row">
+              <div class="col sm-6">
+                <%= a.input :duration %>
+              </div>
+              <div class="col sm-6">
+                <%= a.input :unit_of_duration %>
+              </div>  
+            </div>
+            <br>
+            <%= a.input :outcome %>
             <p><% if a.object.supporting_document.exists? %> (<a href="<%= a.object.supporting_document.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(a.object) %>)"></a> <%= link_to "documentation", a.object.supporting_document.expiring_url(3600) %>)<% end %></p>
             <% if a.object.supporting_document_from_sponsor.exists? %>
               (<a href="<%= a.object.supporting_document_from_sponsor.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(a.object) %>)"></a> <%= link_to " supporting documentation", a.object.supporting_document_from_sponsor.expiring_url(3600) %>)              

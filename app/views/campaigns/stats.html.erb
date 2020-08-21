@@ -13,7 +13,6 @@
           <thead>
             <th style="width: 40%;">Title</th>
             <th>Engagement Level</th>
-            <th>Response Percentage(%)</th>
             <th>Total ROI</th>
             <th>Status</th>
             <th>Options</th>
@@ -23,7 +22,6 @@
               <tr>
                 <td><%= link_to campaign.title, campaign_questions_path(campaign) %></td>
                 <td><%= campaign.engagement_activity_level %></td>
-                <td><%= campaign.response_percentage %></td>
                 <td><%= number_to_currency(campaign.total_roi, precision: 0) %></td>
                 <td><%= campaign.status.capitalize %></td>
                 <td><%= link_to 'Graphs', campaign_graphs_path(campaign) %></td>
