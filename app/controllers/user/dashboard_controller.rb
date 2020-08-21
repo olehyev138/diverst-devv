@@ -6,7 +6,9 @@ class User::DashboardController < ApplicationController
   layout 'user'
 
   def home
-    @upcoming_events = current_user.initiatives.upcoming.includes(:owner_group).limit(4) + current_user.invited_initiatives.upcoming.includes(:owner_group).limit(3)
+    @upcoming_and_ongoing_events = current_user.initiatives.upcoming.includes(:owner_group).limit(4) +
+                                   current_user.invited_initiatives.upcoming.includes(:owner_group).limit(3) +
+                                   current_user.initiatives.ongoing.includes(:owner_group).limit(3)
     @posts = posts
     @messages = current_user.messages.includes(:group, :owner).limit(3)
     @enterprise_sponsors = @enterprise.sponsors

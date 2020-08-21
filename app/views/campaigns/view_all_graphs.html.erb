@@ -7,8 +7,12 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h3>Engagement Activity Distribution</h3>
-          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, nil), id: 'engagement-activity-distribution' %>
+          <h3 id="graph-title">Engagement Activity Distribution</h3>
+            <%= render 'date_range_selector', id: 'engagement' %>
+          <br>
+          <br>
+          <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, nil, nil), id: 'engagement-activity-distribution' %>
+          <span id='back'></span>
         </div>
       </div>
     </div>
@@ -16,10 +20,106 @@
       <div class="card">
         <div class="card__section">
           <h3>Campaign ROI Distribution</h3>
-          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, nil), id: 'campaign-roi-distribution', 
+          <%= render 'date_range_selector', id: 'roi' %>
+          <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, nil, nil), id: 'campaign-roi-distribution', 
                                                                                prefix: '$',
                                                                                thousands: ',' %>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    var createBackNavigation = function() {
+      var backNavigation = document.getElementById('backNavigation');
+      if(!backNavigation) {
+        var back = document.getElementById('back');
+        var a = document.createElement('a');
+        var linkText = document.createTextNode("back");
+        a.appendChild(linkText);
+        a.title = "previous graph";
+        a.id="backNavigation"
+        a.href = "#";
+        back.appendChild(a);
+      }
+    }
+
+    var changeGraphTitle = function(label) {
+      var graphTitle = document.getElementById('graph-title');
+      if(!(label == "ideas" || label == "comments" || label == "votes")){
+        graphTitle.innerHTML = label;
+      }
+    }
+
+    var hideRangeSelector = function() {
+      var rangeSelector = document.querySelector('#engagement');
+      $(rangeSelector).hide();
+    }
+
+    var showRangeSelector = function() {
+      var rangeSelector = document.querySelector('#engagement');
+      $(rangeSelector).show();
+    }
+
+    $('#engagement-activity-distribution').on('click', function(event){
+      var pieChart = Chartkick.charts['engagement-activity-distribution'];
+      var label = pieChart.getChartObject().getElementAtEvent(event)[0]._view.label;
+      console.log(pieChart.getChartObject().getElementAtEvent(event)[0]);
+      changeGraphTitle(label);
+      createBackNavigation();
+      hideRangeSelector();
+
+      $.ajax({
+        url: '<%= engagement_per_campaign_path %>',
+        method: 'get',
+        data: {
+          campaign_title: label
+        },
+
+        success: function(data) {
+          if(data) {
+            Chartkick.charts['engagement-activity-distribution'].updateData(data);
+          }
+        }
+      });
+    });
+
+    $('#engagement > .range-btn, #back').on('click', function(){
+      var date_range = this.value;
+      var backNavigation = document.getElementById('backNavigation');
+      var graphTitle = document.getElementById('graph-title');
+      if(backNavigation) {
+        backNavigation.remove();
+        graphTitle.innerHTML = "Engagement Activity Distribution";
+        showRangeSelector();
+      }
+     
+      $.ajax({
+        url: '<%= campaigns_engagement_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['engagement-activity-distribution'].updateData(data);
+        }
+      })
+    });
+
+     $('#roi > .range-btn').on('click', function(){
+      var date_range = this.value;
+     
+      $.ajax({
+        url: '<%= campaigns_roi_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['campaign-roi-distribution'].updateData(data);
+        }
+      })
+    });
+  </script>

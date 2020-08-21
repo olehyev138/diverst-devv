@@ -33,7 +33,8 @@
         <div class="card">
             <div class="card__section">
                 <h3>Campaign ROI Distribution</h3>
-                <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id), id: 'campaign-roi-distribution', 
+               <%= render 'date_range_selector', id: 'roi' %>
+                <%= pie_chart Campaign.roi_distribution(current_user.enterprise_id, @campaign.id, nil), id: 'campaign-roi-distribution', 
                                                                                prefix: '$',
                                                                                thousands: ',',
                                                                                colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
@@ -44,9 +45,44 @@
         <div class="card">
             <div class="card__section">
                 <h3>Engagement Activity Distribution</h3>
-                <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id), id: 'engagement-activity-distribution',
+                <%= render 'date_range_selector', id: 'engagement' %>
+                <%= pie_chart Campaign.engagement_activity_distribution(current_user.enterprise_id, @campaign.id, nil), id: 'engagement-activity-distribution',
                                                                                colors: [current_user.enterprise&.theme&.primary_color || '#7B77C9'] %>
             </div>
         </div>
     </div>
 </div>
+
+ <script>
+    $('#engagement > .range-btn').on('click', function(){
+      var date_range = this.value;
+     
+      $.ajax({
+        url: '<%= campaigns_engagement_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['engagement-activity-distribution'].updateData(data);
+        }
+      })
+    });
+
+     $('#roi > .range-btn').on('click', function(){
+      var date_range = this.value;
+     
+      $.ajax({
+        url: '<%= campaigns_roi_distribution_path %>',
+        method: 'get', 
+        data: {
+          date_range: date_range
+        }, 
+
+        success: function(data) {
+          Chartkick.charts['campaign-roi-distribution'].updateData(data);
+        }
+      })
+    });
+  </script>

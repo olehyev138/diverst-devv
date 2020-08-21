@@ -1,5 +1,10 @@
 class Campaign < BaseClass
   include PublicActivity::Common
+  ENGAGEMENT_POINTS_FOR_GRAPH = {
+    comments: 3,
+    ideas: 10,
+    votes: 1
+  }
 
   enum status: [:published, :draft, :closed, :reopened]
 
@@ -62,17 +67,9 @@ class Campaign < BaseClass
                  .inject({}) { |hash, (u, p)| hash.merge(u => p) }
   end
 
-  def response_percentage
-    # unique count of engaged users/number of invitations
-    no_of_engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq.size
-    no_of_invitations = self.invitations.size.to_f
-
-    ((no_of_engaged_users / no_of_invitations) * 100).to_i
-  end
-
   def engagement_activity_level
     # total number of answers, upvotes and comments across all questions for a campaign
-    self.answers.size + self.answer_upvotes.size + self.answer_comments.size
+    (self.answers.size * ENGAGEMENT_POINTS_FOR_GRAPH[:ideas]) + (self.answer_upvotes.size * ENGAGEMENT_POINTS_FOR_GRAPH[:votes]) + (self.answer_comments.size * ENGAGEMENT_POINTS_FOR_GRAPH[:comments])
   end
 
   def chosen_ideas
@@ -88,10 +85,14 @@ class Campaign < BaseClass
     enterprise.answers.where.not(value: nil).sum(:value)
   end
 
-  def self.roi_distribution(enterprise_id, campaign_id)
+  def self.roi_distribution(enterprise_id, campaign_id, time_frame_value)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
-    campaigns = enterprise.campaigns
+
+    date_range = date_range(time_frame_value, enterprise)
+
+    campaigns = enterprise.campaigns.where(created_at: date_range)
+
     campaigns = campaigns.select { |c| c.total_roi > 0 }
                          .map { |c| [c.title, c.total_roi] }
                          .inject({}) { |hash, (c, roi)| hash.merge(c => roi) }
@@ -104,10 +105,16 @@ class Campaign < BaseClass
     campaign.total_roi > 0 ? campaigns = { campaign.title => campaign.total_roi }.merge(campaigns) : campaigns
   end
 
-  def self.engagement_activity_distribution(enterprise_id, campaign_id)
+  def self.engagement_activity_distribution(enterprise_id, campaign_id, time_frame_value)
     campaign = Campaign.find_by(id: campaign_id)
     enterprise = Enterprise.find_by(id: enterprise_id)
-    campaigns = enterprise.campaigns
+
+    date_range = date_range(time_frame_value, enterprise)
+
+    
+
+    campaigns = enterprise.campaigns.where(created_at: date_range)
+
     campaigns = campaigns.select { |c| c.engagement_activity_level > 0 }
                           .map { |c| [c.title, c.engagement_activity_level] }
                           .inject({}) { |hash, (c, eal)| hash.merge(c => eal) }
@@ -118,6 +125,10 @@ class Campaign < BaseClass
 
     # this ensures a particular order of hash elements for graphical representation
     campaign.engagement_activity_level > 0 ? campaigns = { campaign.title => campaign.engagement_activity_level }.merge(campaigns) : campaigns
+  end
+
+  def activities_distribution_per_campaign
+    { 'ideas' => answers.size * ENGAGEMENT_POINTS_FOR_GRAPH[:ideas], 'votes' => answer_upvotes.size * ENGAGEMENT_POINTS_FOR_GRAPH[:votes], 'comments' => answer_comments.size * ENGAGEMENT_POINTS_FOR_GRAPH[:comments] }
   end
 
   def closed?
@@ -232,5 +243,24 @@ class Campaign < BaseClass
     report = Reports::Generator.new(strategy)
 
     report.to_csv
+  end
+
+  private 
+
+  def self.date_range(time_frame_value, enterprise)
+    case time_frame_value
+    when '1m'
+      (DateTime.now << 1)..DateTime.now
+    when '3m'
+      (DateTime.now << 3)..DateTime.now
+    when '6m'
+      (DateTime.now << 6)..DateTime.now
+    when '9m'
+      (DateTime.now << 9)..DateTime.now
+    when '1y'
+      (DateTime.now << 12)..DateTime.now
+    else
+      enterprise.created_at..DateTime.now
+    end
   end
 end
