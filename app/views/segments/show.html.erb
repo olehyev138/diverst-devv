@@ -4,7 +4,7 @@
     <div class="flex-row flex-row--middle">
       <% unless @segment.new_record? %>
         <div class="flex-row__cell">
-          <%= link_to "Export", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.is_admin? %>
+          <%= link_to "Export", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" %>
         </div>
       <% end %>
       <div class="flex-row__cell">

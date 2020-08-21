@@ -246,10 +246,6 @@ class User < BaseClass
     end
   end
 
-  def is_admin?
-    enterprise.user_roles.where(id: user_role_id).where("LOWER(role_type) = 'admin'").count > 0
-  end
-
   def has_answered_group_survey?(group: nil)
     if group.present?
       user_group = user_groups.find_by_group_id(group.id)
