@@ -6,6 +6,7 @@ RSpec.describe UserGroup do
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
+    it { expect(user_group).to have_many(:user_reward_actions) }
 
     it 'validates 1 user per group' do
       group_member = create(:user)
@@ -61,6 +62,22 @@ RSpec.describe UserGroup do
           expect(group.user_groups.accepted_users).to include user_group2
         end
       end
+    end
+  end
+
+  describe '.invited_users' do
+    let(:enterprise) { create :enterprise }
+    let(:invited_by) { create(:user, enterprise: enterprise) }
+    let(:user1) { create :user, enterprise: enterprise }
+    let(:user2) { create :user, enterprise: enterprise }
+
+    let(:group) { create :group, enterprise: enterprise }
+
+    let(:user_group1) { create :user_group, user: user1, group: group, accepted_member: true, invitation_sent_at: DateTime.now, invited_by: invited_by }
+    let(:user_group2) { create :user_group, user: user2, group: group, accepted_member: false }
+
+    it 'return invited users' do
+      expect(group.user_groups.invited_users).to eq([user_group1])
     end
   end
 

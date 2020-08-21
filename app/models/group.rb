@@ -108,6 +108,7 @@ class Group < BaseClass
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
   has_many :sponsors, dependent: :destroy
+  has_many :suggested_hires, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy

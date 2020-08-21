@@ -14,6 +14,8 @@ class UserRewardAction < BaseClass
   belongs_to :answer_upvote
   belongs_to :answer
   belongs_to :poll_response
+  belongs_to :user_group
+  belongs_to :suggested_hire
 
   validates :user, presence: true
   validates :reward_action, presence: true

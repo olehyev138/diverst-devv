@@ -55,6 +55,33 @@ module ResourcesHelper
     end
   end
 
+  def thumbnail_for_suggested_hire(suggested_hire)
+    return suggested_hire.resume.url if suggested_hire.resume_content_type&.start_with?('image')
+
+    image_url("icons/filetypes/#{thumbnail_for_suggested_hire_extension(suggested_hire)}")
+  end
+
+  def thumbnail_for_suggested_hire_extension(res)
+    # Try looking for extensions first
+    case res.resume_extension.downcase
+    when %r{doc}
+      'word.png'
+    when 'pdf'
+      'pdf.png'
+    when %r{xlsx?|csv}
+      'excel.png'
+    when %r{ppt}
+      'powerpoint.png'
+    when %r{zip|rar|7z|tar|bz2}
+      'archive.png'
+    else
+      # Look for MIME types
+      return 'video.png' if res.resume_content_type&.start_with?('video')
+
+      'other.png'
+    end
+  end
+
   def get_folders_url(folder, limit = nil, format = nil)
     return if folder.nil?
 

@@ -82,6 +82,7 @@ RSpec.describe User do
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
         it { expect(user).to have_many(:metrics_dashboards).with_foreign_key(:owner_id) }
         it { expect(user).to have_many(:shared_metrics_dashboards) }
+        it { expect(user).to have_many(:suggested_hires).dependent(:destroy) }
       end
 
       context 'validate paperclip' do

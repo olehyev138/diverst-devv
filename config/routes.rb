@@ -185,6 +185,8 @@ Rails.application.routes.draw do
 
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
   patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
+  post '/groups/:id/invite_users', to: 'groups#invite_users', as: :invite_users_to_join_group
+  get 'groups/:id/users_to_invite_to_group', to: 'groups#users_to_invite_to_group', as: :users_to_invite_to_group
   patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative
   patch '/groups/:group_id/initiatives/:id/restore', to: 'initiatives#restore', as: :restore_group_initiative
   patch 'initiatives/:initiative_id/resources/:id/restore', to: 'initiatives/resources#restore', as: :restore_initiative_resource
@@ -514,6 +516,7 @@ Rails.application.routes.draw do
   resources :idea_categories
   resources :departments
   resources :business_impacts
+  resources :suggested_hires, only: [:index, :create, :edit, :update, :destroy]
 
   devise_scope :user do
     namespace :user do

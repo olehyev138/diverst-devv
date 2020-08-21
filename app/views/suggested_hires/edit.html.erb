@@ -1,0 +1,20 @@
+<div class="content__main">
+  <%= simple_form_for(@suggested_hire) do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.hidden_field :user_id, value: current_user.id %>
+        <%= f.hidden_field :group_id, value: @group.id %>
+        <div class="custom-user-select">
+          <%= f.association :suggested_hire, as: :select,
+                                             selected: f.object.suggested_hire,
+                                             collection: [f.object.suggested_hire],
+                                             input_html: { class: 'select2-field-users', autofocus: true } %> 
+        </div>
+        <%= f.input :resume, as: :attachment_preview %>
+        <%= f.button :submit, 'Update suggested hire' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

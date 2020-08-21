@@ -22,6 +22,7 @@ RSpec.describe UserRewardAction do
     it { expect(user_reward_action).to belong_to(:answer_upvote) }
     it { expect(user_reward_action).to belong_to(:answer) }
     it { expect(user_reward_action).to belong_to(:poll_response) }
+    it { expect(user_reward_action).to belong_to(:user_group) }
     it { expect(user_reward_action).to define_enum_for(:operation).with([:add, :del]) }
   end
 end

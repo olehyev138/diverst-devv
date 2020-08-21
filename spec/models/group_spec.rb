@@ -60,6 +60,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy) }
     it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id) }
     it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
+    it { expect(group).to have_many(:suggested_hires).dependent(:destroy) }
 
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }

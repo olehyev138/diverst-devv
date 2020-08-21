@@ -1231,4 +1231,76 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
+
+  describe 'GET#users_to_invite_to_group' do
+    let!(:user1) { create(:user, enterprise: enterprise) }
+    let!(:group_membership) { create(:user_group, user_id: user1.id, group_id: different_group.id) }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      it 'returns users to invite' do 
+        get :users_to_invite_to_group, id: group.id
+        expect(assigns[:users_to_invite]).to eq([user1])
+      end
+
+      it 'renders no template' do
+        get :users_to_invite_to_group, id: group.id
+        expect(response).to render_template(nil)
+      end
+    end
+  end
+
+  describe 'POST#invite_users' do
+    let!(:user1) { create(:user, enterprise: enterprise) }
+    let!(:group_membership) { create(:user_group, user_id: user1.id, group_id: different_group.id) }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { post :invite_users, id: group.id, user_id: user1.id }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.invite_users' }
+
+          before {
+            perform_enqueued_jobs do
+              post :invite_users, id: group.id, user_id: user1.id
+            end
+          }
+
+          include_examples 'correct public activity'
+        end
+      end
+
+      describe 'perform Job' do
+        before {
+          allow(InviteUsersToGroupJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = 'back'
+          post :invite_users, id: group.id, user_id: user1.id
+        }
+
+        it 'calls job' do
+          expect(InviteUsersToGroupJob).to have_received(:perform_later)
+        end
+
+        it 'render nothing' do
+          expect(response).to render_template(nil)
+        end
+
+        it 'status code is :ok' do 
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
 end
