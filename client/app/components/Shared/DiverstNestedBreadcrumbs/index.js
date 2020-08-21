@@ -74,6 +74,9 @@ export function DiverstNestedBreadcrumbs(props) {
   });
   breadCrumbs.splice(lastIndex, 1, ...parents);
 
+  if (props.isLoading)
+    return (<React.Fragment />);
+
   return (
     <React.Fragment>
       <Paper elevation={0} className={classes.paper}>
