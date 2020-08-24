@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { useLastLocation } from 'react-router-last-location';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { DiverstDatePicker } from '../Pickers/DiverstDatePicker';
 
 const styles = theme => ({
   wrapper: {
