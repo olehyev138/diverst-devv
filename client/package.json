@@ -34,8 +34,7 @@
     "test": "cross-env NODE_ENV=test NODE_ICU_DATA=node_modules/full-icu jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "prettify": "prettier --write",
-    "postinstall": "cd ./node_modules/material-table && [ -d \"src\" ] && npm install && npm run build && rm -rf node_modules/"
+    "prettify": "prettier --write"
   },
   "browserslist": [
     "last 2 versions",
@@ -90,7 +89,7 @@
     "ip": "1.1.5",
     "lodash": "^4.17.19",
     "luxon": "^1.22.0",
-    "material-table": "https://github.com/TeamDiverst/material-table.git#with_source",
+    "material-table": "^1.69.0",
     "minimist": "^1.2.5",
     "node-sass": "^4.14.1",
     "notistack": "^0.9.7",
