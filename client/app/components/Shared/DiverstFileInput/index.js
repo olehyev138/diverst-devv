@@ -79,6 +79,9 @@ const styles = theme => ({
     marginLeft: 6,
     color: theme.palette.error.main,
   },
+  notAcceptedMessage: {
+    marginTop: 4
+  }
 });
 
 const apiURL = new URL(config.apiUrl);
@@ -167,7 +170,7 @@ export function DiverstFileInput(props) {
                 {props.label}
               </FormLabel>
               <input
-                accept={acceptFileTypes}
+                accept={acceptFileTypes.toString()}
                 id={props.id}
                 type='file'
                 className={classes.fileInput}
@@ -334,7 +337,7 @@ export function DiverstFileInput(props) {
                 </FormHelperText>
               )}
               {notAcceptedFile && (
-                <Typography color='error'>
+                <Typography color='error' className={classes.notAcceptedMessage}>
                   <DiverstFormattedMessage {...messages.notAccepted} />
                 </Typography>
               )}
