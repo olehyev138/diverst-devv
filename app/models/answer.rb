@@ -19,6 +19,21 @@ class Answer < ApplicationRecord
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :supporting_document_paperclip, s3_permissions: 'private'
 
+  # Legacy attribute
+  has_attached_file :video_upload_paperclip, s3_permissions: 'private'
+  validates_attachment_content_type :video_upload_paperclip,
+                                    content_type: ['video/mp4', 'video/webm'],
+                                    message: 'This format is not supported', if: Proc.new { |a| a.content.blank? && a.supporting_document.blank? }
+
+  has_attached_file :supporting_document_from_sponsor_paperclip, s3_permissions: 'private'
+  validates_attachment_content_type :supporting_document_from_sponsor_paperclip,
+                                    content_type: ['text/plain', 'application/pdf'],
+                                    message: 'This format is not supported'
+
+  # Legacy attributes - active storage equivalent
+  has_one_attached :video_upload
+  has_one_attached :supporting_document_from_sponsor
+
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
 
   validates_length_of :outcome, maximum: 65535
@@ -27,6 +42,12 @@ class Answer < ApplicationRecord
   validates :author, presence: true
   validates :content, presence: true
   validates :contributing_group, presence: true
+
+  # Legacy
+  validates_length_of :video_upload_content_type, maximum: 191
+  validates_length_of :video_upload_file_name, maximum: 191
+  validates_length_of :supporting_document_content_type, maximum: 191
+  validates_length_of :supporting_document_file_name, maximum: 191
 
   def supporting_document_extension
     File.extname(supporting_document.blob.filename)[1..-1].downcase
