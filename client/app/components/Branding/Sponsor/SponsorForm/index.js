@@ -89,14 +89,12 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
         </CardContent>
         <Divider />
         <CardActions>
-          <DiverstSubmit
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {<DiverstFormattedMessage {...messages.save} />}
           </DiverstSubmit>
           <DiverstCancel
             redirectFallback={props.links.sponsorIndex}
+            disabled={props.isCommitting}
           >
             {<DiverstFormattedMessage {...messages.cancel} />}
           </DiverstCancel>
@@ -147,7 +145,8 @@ SponsorFormInner.propTypes = {
   sponsor: PropTypes.object,
   links: PropTypes.shape({
     sponsorIndex: PropTypes.string
-  })
+  }),
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

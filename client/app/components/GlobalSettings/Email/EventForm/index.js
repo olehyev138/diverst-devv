@@ -161,8 +161,8 @@ export function EventFormInner({
                 redirectFallback={props.links.eventsIndex}
                 variant='contained'
                 size='large'
-                color='primary'
                 className={classes.buttons}
+                disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
               </DiverstCancel>

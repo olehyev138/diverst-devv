@@ -109,8 +109,8 @@ export function EmailFormInner({
                 redirectFallback={props.links.emailsIndex}
                 variant='contained'
                 size='large'
-                color='primary'
                 className={classes.buttons}
+                disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
               </DiverstCancel>

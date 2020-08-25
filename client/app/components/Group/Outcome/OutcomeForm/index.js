@@ -188,6 +188,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.outcomesIndex}
+              disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>
