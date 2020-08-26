@@ -83,6 +83,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 fullWidth
                 label={<DiverstFormattedMessage {...messages.Sponsors.media} />}
                 value={values.sponsor_media}
+                fileType='image'
               />
             </Grid>
           </Grid>
