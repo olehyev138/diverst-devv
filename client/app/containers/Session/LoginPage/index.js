@@ -22,7 +22,6 @@ import { loginBegin, ssoLoginBegin, ssoLinkBegin } from 'containers/Shared/App/a
 import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
 
 import LoginForm from 'components/Session/LoginForm';
-import EnterpriseForm from 'components/Session/EnterpriseForm';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
 export function LoginPage(props) {

@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import { compose } from 'redux';
 import { Redirect, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
