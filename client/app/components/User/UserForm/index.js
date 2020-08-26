@@ -21,7 +21,6 @@ import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
-import { permission } from 'utils/permissionsHelpers';
 
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
