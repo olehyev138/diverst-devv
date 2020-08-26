@@ -1,10 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
-import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import messages from './messages';
@@ -29,29 +26,31 @@ export function* getEmail(action) {
   } catch (err) {
     yield put(getEmailError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.email), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.email), options: { variant: 'warning' } }));
   }
 }
 
 export function* getEmails(action) {
   try {
+    console.log(action.payload);
     const response = yield call(api.emails.all.bind(api.emails), action.payload);
 
     yield put(getEmailsSuccess(response.data.page));
   } catch (err) {
     yield put(getEmailsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.emails), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.emails), options: { variant: 'warning' } }));
   }
 }
 
 export function* updateEmail(action) {
   try {
     const payload = { email: action.payload };
+
     const response = yield call(api.emails.update.bind(api.emails), payload.email.id, payload);
 
-    yield put(updateEmailSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'success' } }));
+    yield put(updateEmailSuccess());
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEmailError(err));
 
