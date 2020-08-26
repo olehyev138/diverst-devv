@@ -1,6 +1,6 @@
 <div class="content__main">
   <div class="content__header">
-    <h1>Actions</h1>
+    <h2 class="heading1-styling">Actions</h2>
     <%= simple_form_for @enterprise, :url => enable_rewards_path(@enterprise), method: :put do |f| %>
       <%= f.hidden_field :enable_rewards, value: 0 %>
       <%= f.input :enable_rewards, id: 'enable_rewards', label: 'Enable Rewards' %>
@@ -30,7 +30,7 @@
 <% if @enterprise.enable_rewards? %>
   <div class="content__main">
     <div class="content__header">
-      <h1><%= c_t(:badge).pluralize %></h1>
+      <h2 class="heading1-styling"><%= c_t(:badge).pluralize %></h2>
       <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary" %>
     </div>
     <div class="card">
@@ -67,7 +67,7 @@
   
   <div class="content__main">
     <div class="content__header">
-      <h1>Rewards</h1>
+      <h2 class="heading1-styling">Rewards</h2>
       <%= link_to "New reward", new_reward_path, class: "btn btn--primary" %>
     </div>
     <div class="card">

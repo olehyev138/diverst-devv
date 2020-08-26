@@ -46,7 +46,7 @@
         <div class="flex-row">
           <div class="flex-row__cell text-center">
             <div class="counter<%= answer.voters.exists?(id: current_user.id) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.voters.exists?(id: current_user.id) %>">
-              <span class="counter__number"><%= answer.upvote_count %></span>
+              <span aria-label="<%= answer.upvote_count %> votes" class="counter__number"><%= answer.upvote_count %></span>
             </div>
             <div class="chosen">
               <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" data-last-known-state="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
