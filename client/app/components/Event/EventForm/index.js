@@ -248,6 +248,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               margin='normal'
               label={<DiverstFormattedMessage {...messages.inputs.picture} />}
               value={values.picture}
+              fileType='image'
             />
           </CardContent>
           <Divider />
