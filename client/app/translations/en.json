@@ -1048,7 +1048,7 @@
   "diverst.components.DiverstFileInput.finished": "Finished uploading",
   "diverst.components.DiverstFileInput.nofile": "No file selected",
   "diverst.components.DiverstFileInput.deleteFileConfirm": "Are you sure you want to remove this file?",
-  "diverst.components.DiverstFileInput.fileTypes": "Only these files are allowed: ",
+  "diverst.components.DiverstFileInput.fileTypes": "Only these filetypes are allowed: ",
   "diverst.components.DiverstFileInput.fileTypes.png": "png",
   "diverst.components.DiverstFileInput.fileTypes.jpg": "jpg",
   "diverst.components.DiverstFileInput.fileTypes.jpeg": "jpeg",
