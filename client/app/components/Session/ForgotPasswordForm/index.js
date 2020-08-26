@@ -48,6 +48,8 @@ const styles = theme => ({
 export function ForgotPasswordFormInner(props) {
   const { classes, width, values, errors, touched } = props;
 
+  const loginPath = props.enterprise && props.enterprise.has_enabled_saml ? ROUTES.session.ssoBypass.path() : ROUTES.session.login.path();
+
   return (
     <Box boxShadow={4} borderRadius={4} width='80%'>
       <Card raised className={classes.card} variant='outlined'>
@@ -91,7 +93,7 @@ export function ForgotPasswordFormInner(props) {
               <Grid item align={width === 'xs' ? 'center' : 'right'} xs={12} sm={3}>
                 <Button
                   component={WrappedNavLink}
-                  to={ROUTES.session.login.path()}
+                  to={loginPath}
                   color='primary'
                   size='small'
                   variant='text'
@@ -135,6 +137,7 @@ function ForgotPasswordForm(props, context) {
 
 ForgotPasswordFormInner.propTypes = {
   classes: PropTypes.object,
+  enterprise: PropTypes.object,
   width: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,
@@ -143,6 +146,7 @@ ForgotPasswordFormInner.propTypes = {
 
 ForgotPasswordForm.propTypes = {
   email: PropTypes.string,
+  enterprise: PropTypes.object,
   forgotPasswordBegin: PropTypes.func,
 };
 
