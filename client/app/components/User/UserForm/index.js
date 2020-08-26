@@ -25,6 +25,7 @@ import { permission } from 'utils/permissionsHelpers';
 
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
@@ -161,13 +162,12 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
-              component={WrappedNavLink}
+              redirectFallback={(props.admin ? props.links.usersIndex : props.links.usersPath(values.id))}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

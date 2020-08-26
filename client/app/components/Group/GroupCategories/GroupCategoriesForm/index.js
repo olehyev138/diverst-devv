@@ -23,6 +23,7 @@ import {
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -38,6 +39,7 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
+
   return (
     // eslint-disable-next-line react/prop-types
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupCategory}>
@@ -117,13 +119,12 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.categories.index.path()}
-              component={WrappedNavLink}
+              redirectFallback={ROUTES.admin.manage.groups.categories.index.path()}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
