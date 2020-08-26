@@ -1,6 +1,7 @@
 {
   "session": {
     "login": "/login",
+    "ssoBypass": "/login/credentials",
     "forgotPassword": "/forgot",
     "passwordReset": "/password_reset/:token"
   },
