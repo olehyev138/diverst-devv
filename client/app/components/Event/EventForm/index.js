@@ -10,6 +10,8 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
+import { useLastLocation } from 'react-router-last-location';
+
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, FastField } from 'formik';
 import {
@@ -22,6 +24,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
@@ -252,13 +255,12 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              to={props.event ? props.links.eventShow : props.links.eventsIndex}
-              component={WrappedNavLink}
+            <DiverstCancel
+              redirectFallback={props.event ? props.links.eventShow : props.links.eventsIndex}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
