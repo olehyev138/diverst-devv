@@ -6,7 +6,7 @@ const supportedFiles = {
   png: { type: 'image/png', message: <DiverstFormattedMessage {...messages.fileTypes.png} />, category: 'image' },
   jpg: { type: 'image/jpg', message: <DiverstFormattedMessage {...messages.fileTypes.jpg} />, category: 'image' },
   jpeg: { type: 'image/jpeg', message: <DiverstFormattedMessage {...messages.fileTypes.jpeg} />, category: 'image' },
-  svg: { type: 'image/svg', message: <DiverstFormattedMessage {...messages.fileTypes.svg} />, category: 'image' },
+  svg: { type: 'image/svg+xml', message: <DiverstFormattedMessage {...messages.fileTypes.svg} />, category: 'image' },
   gif: { type: 'image/gif', message: <DiverstFormattedMessage {...messages.fileTypes.gif} />, category: 'other' },
   pdf: { type: 'application/pdf', message: <DiverstFormattedMessage {...messages.fileTypes.pdf} />, category: 'other' },
   csv: { type: 'text/csv', message: <DiverstFormattedMessage {...messages.fileTypes.csv} />, category: 'other' },
