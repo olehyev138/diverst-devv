@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Mentorship';
+export const snackbar = 'diverst.snackbars.Mentorship';
 
 export default defineMessages({
   mentor: {
@@ -149,5 +150,23 @@ export default defineMessages({
     feedback: {
       id: `${scope}.menu.feedback`
     },
-  }
+  },
+  snackbars: {
+    errors: {
+      users: {
+        id: `${snackbar}.errors.load.users`
+      },
+      user: {
+        id: `${snackbar}.errors.load.user`
+      },
+      update: {
+        id: `${snackbar}.errors.update.user`
+      },
+    },
+    success: {
+      update: {
+        id: `${snackbar}.success.update.user`
+      },
+    }
+  },
 });

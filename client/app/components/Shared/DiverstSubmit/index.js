@@ -22,9 +22,9 @@ const styles = theme => ({
 });
 
 function DiverstSubmit(props) {
-  const { classes, children, isCommitting, ...rest } = props;
+  const { classes, children, isCommitting, wrapperStyle, ...rest } = props;
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} style={wrapperStyle}>
       <Button
         color='primary'
         type='submit'
@@ -44,6 +44,7 @@ DiverstSubmit.propTypes = {
   classes: PropTypes.object,
   isCommitting: PropTypes.bool,
   children: PropTypes.any,
+  wrapperStyle: PropTypes.object
 };
 
 export default compose(

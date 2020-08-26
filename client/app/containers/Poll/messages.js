@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Poll';
+export const snackbar = 'diverst.snackbars.Poll';
 
 export default defineMessages({
   new: {
@@ -30,11 +31,17 @@ export default defineMessages({
   page: {
     id: `${scope}.index.button.page`,
   },
-  create: {
-    id: `${scope}.form.button.create`,
+  createPublish: {
+    id: `${scope}.form.button.createPublish`,
   },
-  update: {
-    id: `${scope}.form.button.update`,
+  updatePublish: {
+    id: `${scope}.form.button.updatePublish`,
+  },
+  createDraft: {
+    id: `${scope}.form.button.createDraft`,
+  },
+  updateDraft: {
+    id: `${scope}.form.button.updateDraft`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
@@ -116,6 +123,54 @@ export default defineMessages({
     },
     question: {
       id: `${scope}.textual.question`,
+    },
+  },
+  snackbars: {
+    errors: {
+      polls: {
+        id: `${snackbar}.errors.load.polls`
+      },
+      poll: {
+        id: `${snackbar}.errors.load.poll`
+      },
+      create: {
+        id: `${snackbar}.errors.create.poll`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.poll`
+      },
+      update: {
+        id: `${snackbar}.errors.update.poll`
+      },
+      create_publish: {
+        id: `${snackbar}.errors.create.publish.poll`
+      },
+      update_publish: {
+        id: `${snackbar}.errors.update.publish.poll`
+      },
+      publish: {
+        id: `${snackbar}.errors.publish`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.poll`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.poll`
+      },
+      update: {
+        id: `${snackbar}.success.update.poll`
+      },
+      create_publish: {
+        id: `${snackbar}.success.create.publish.poll`
+      },
+      update_publish: {
+        id: `${snackbar}.success.update.publish.poll`
+      },
+      publish: {
+        id: `${snackbar}.success.publish`
+      },
     },
   },
 });

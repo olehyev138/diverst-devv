@@ -30,6 +30,10 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 api.outcomes.all = jest.fn();
 api.outcomes.create = jest.fn();
 api.outcomes.update = jest.fn();
@@ -81,7 +85,7 @@ describe('Tests for outcomes saga', () => {
       );
 
       expect(api.outcomes.all).toHaveBeenCalledWith(initialAction.payload);
-      expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.outcomes);
     });
   });
 
@@ -120,7 +124,7 @@ describe('Tests for outcomes saga', () => {
       );
 
       expect(api.outcomes.get).toHaveBeenCalledWith(initialAction.payload.id);
-      expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.outcome);
     });
   });
 
@@ -148,6 +152,7 @@ describe('Tests for outcomes saga', () => {
       );
       expect(api.outcomes.create).toHaveBeenCalledWith({ outcome: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -171,6 +176,7 @@ describe('Tests for outcomes saga', () => {
       );
       expect(api.outcomes.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
 
     it('Should update a outcome', async () => {
@@ -195,6 +201,7 @@ describe('Tests for outcomes saga', () => {
       );
       expect(api.outcomes.update).toHaveBeenCalledWith(initialAction.payload.id, { outcome: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -219,6 +226,7 @@ describe('Tests for outcomes saga', () => {
 
       expect(api.outcomes.update).toHaveBeenCalledWith(initialAction.payload.id, { outcome: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -248,6 +256,7 @@ describe('Tests for outcomes saga', () => {
       );
       expect(api.outcomes.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -271,6 +280,7 @@ describe('Tests for outcomes saga', () => {
       );
       expect(api.outcomes.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

@@ -32,6 +32,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 
 api.initiatives.all = jest.fn();
 api.initiatives.get = jest.fn();
@@ -117,6 +120,7 @@ describe('Get Events Saga', () => {
 
     expect(api.initiatives.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.load_events);
   });
 });
 
@@ -156,12 +160,13 @@ describe('Get Event Saga', () => {
 
     expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.load_event);
   });
 });
 
 describe('Create event', () => {
   it('Should create an event', async () => {
-    api.initiatives.create.mockImplementation(() => Promise.resolve({ data: { event } }));
+    api.initiatives.create.mockImplementation(() => Promise.resolve({ data: { initiative: event } }));
     const notified = {
       notification: {
         key: 1590092641484,
@@ -171,7 +176,7 @@ describe('Create event', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [createEventSuccess(), push(ROUTES.group.events.index.path(event.owner_group_id)), notified];
+    const results = [createEventSuccess(), push(ROUTES.group.events.show.path(event.owner_group_id, event.id)), notified];
     const initialAction = { payload: event };
 
     const dispatched = await recordSaga(
@@ -180,6 +185,7 @@ describe('Create event', () => {
     );
 
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_event);
   });
 
   it('Should return error from the API', async () => {
@@ -203,6 +209,7 @@ describe('Create event', () => {
     );
     expect(api.initiatives.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_event);
   });
 });
 
@@ -226,6 +233,7 @@ describe('Update event', () => {
       initialAction
     );
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_event);
   });
 
   it('Should return error from the API', async () => {
@@ -250,6 +258,7 @@ describe('Update event', () => {
 
     expect(api.initiatives.update).toHaveBeenCalledWith(initialAction.payload.id, { initiative: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_event);
   });
 });
 
@@ -279,6 +288,7 @@ describe('Delete event', () => {
 
 
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete_event);
   });
 
   it('Should return error from the API', async () => {
@@ -302,6 +312,7 @@ describe('Delete event', () => {
     );
     expect(api.initiatives.destroy).toHaveBeenCalledWith(initialAction.payload.group_id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete_event);
   });
 });
 
@@ -331,6 +342,7 @@ describe('Delete comment', () => {
     );
 
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete_event_comment);
   });
 
   it('Should return error from the API', async () => {
@@ -354,6 +366,7 @@ describe('Delete comment', () => {
     );
     expect(api.initiativeComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete_event_comment);
   });
 });
 
@@ -380,6 +393,7 @@ describe('Create comment', () => {
     );
 
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_event_comment);
   });
 
   it('Should return error from the API', async () => {
@@ -403,6 +417,7 @@ describe('Create comment', () => {
     );
     expect(api.initiativeComments.create).toHaveBeenCalledWith({ initiative_comment: initialAction.payload.id });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_event_comment);
   });
 });
 
@@ -442,6 +457,7 @@ describe('Archive event', () => {
     );
     expect(api.initiatives.archive).toHaveBeenCalledWith(event.id, { initiative: event });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.archive);
   });
 });
 
@@ -481,6 +497,7 @@ describe('Join event', () => {
     );
     expect(api.initiativeUsers.join).toHaveBeenCalledWith({ initiative_user: event });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.join);
   });
 });
 
@@ -520,6 +537,7 @@ describe('Leave event', () => {
     );
     expect(api.initiativeUsers.leave).toHaveBeenCalledWith({ initiative_user: undefined });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leave);
   });
 });
 // TODO
@@ -567,6 +585,7 @@ describe('finalize expenses', () => {
     );
     expect(api.initiatives.finalizeExpenses).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.finalize_expense);
   });
 });
 
@@ -607,5 +626,6 @@ describe('Export event attendees', () => {
     );
     expect(api.initiativeUsers.leave).toHaveBeenCalledWith({ initiative_user: undefined });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.export_attendees);
   });
 });

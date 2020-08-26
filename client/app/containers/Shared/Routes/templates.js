@@ -21,6 +21,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
 import SignUpPage from 'containers/User/SignUpPage/Loadable';
+import PasswordResetPage from 'containers/User/PasswordResetPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
@@ -213,6 +214,7 @@ export {
   ApplicationLayout,
   AuthenticatedLayout,
   SignUpPage,
+  PasswordResetPage,
   UserLayout,
   GroupLayout,
   AdminLayout,

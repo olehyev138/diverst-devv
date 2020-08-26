@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Members';
+export const snackbar = 'diverst.snackbars.Group.Members';
 
 export default defineMessages({
   new: {
@@ -112,4 +113,31 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
+  snackbars: {
+    errors: {
+      members: {
+        id: `${snackbar}.errors.load.members`
+      },
+      create: {
+        id: `${snackbar}.errors.create.members`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.members`
+      },
+      export_members: {
+        id: `${snackbar}.errors.export.members`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.members`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.members`
+      },
+      export_members: {
+        id: `${snackbar}.success.export.members`
+      },
+    },
+  }
 });

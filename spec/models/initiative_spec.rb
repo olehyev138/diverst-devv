@@ -419,7 +419,7 @@ RSpec.describe Initiative, type: :model do
       expect(initiative.expenses_status).to eq('Expenses in progress')
     end
 
-    it 'returns Expenses in progress' do
+    it 'returns Expenses finished' do
       initiative = build(:initiative, finished_expenses: true)
       expect(initiative.expenses_status).to eq('Expenses finished')
     end
@@ -746,29 +746,25 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe 'protected' do
-    before do
-      Initiative.send(:public, *Initiative.protected_instance_methods)
-    end
-
     describe 'update_owner_group' do
       let!(:group) { create :group, :without_outcomes }
       let!(:outcome) { create :outcome, group_id: group.id }
       let!(:pillar) { create :pillar, outcome_id: outcome.id }
       let!(:initiative) { build(:initiative, pillar: pillar, owner_group: nil) }
       it 'updates owner group' do
-        expect(initiative.update_owner_group).to eq group.id
+        expect(initiative.send(:update_owner_group)).to eq group.id
       end
     end
 
     describe 'check_budget' do
       it 'returns true if estimated_funding is 0' do
         initiative = build(:initiative)
-        expect(initiative.check_budget).to eq true
+        expect(initiative.send(:check_budget)).to eq true
       end
 
       it 'returns true' do
         initiative = create(:initiative, :with_budget_item, estimated_funding: 10)
-        expect(initiative.check_budget).to eq true
+        expect(initiative.send(:check_budget)).to eq true
       end
 
       it 'returns false if group id is different' do
@@ -776,35 +772,35 @@ RSpec.describe Initiative, type: :model do
         group1 = create(:group)
         AnnualBudget.first.update(group_id: group1.id)
         initiative.budget.reload
-        expect(initiative.check_budget).to eq false
+        expect(initiative.send(:check_budget)).to eq false
       end
 
       it 'returns true if it is LEFTOVER_BUDGET_ITEM_ID' do
         initiative = build(:initiative, estimated_funding: 10, budget_item_id: BudgetItem::LEFTOVER_BUDGET_ITEM_ID)
-        expect(initiative.check_budget).to eq true
+        expect(initiative.send(:check_budget)).to eq true
       end
 
       it 'returns error message if no budget' do
         initiative = build(:initiative, estimated_funding: 10)
-        expect(initiative.check_budget).to eq ['Can not create event with funds but without budget']
+        expect(initiative.send(:check_budget)).to eq ['Can not create event with funds but without budget']
       end
     end
 
     describe 'budget_item_is_approved' do
       it 'returns nil' do
         initiative = create(:initiative)
-        expect(initiative.budget_item_is_approved).to be nil
+        expect(initiative.send(:budget_item_is_approved)).to be nil
       end
 
       it 'returns nil' do
         initiative = create(:initiative, :with_budget_item)
-        expect(initiative.budget_item_is_approved).to be nil
+        expect(initiative.send(:budget_item_is_approved)).to be nil
       end
 
       it 'returns error' do
         initiative = create(:initiative, :with_budget_item)
         initiative.budget.update(is_approved: false)
-        expect(initiative.budget_item_is_approved).to eq ['Budget Item is not approved']
+        expect(initiative.send(:budget_item_is_approved)).to eq ['Budget Item is not approved']
       end
     end
   end
