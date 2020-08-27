@@ -59,7 +59,7 @@ class BadgesController < ApplicationController
   end
 
   def badge_params
-    params.require(:badge).permit(:label, :points, :image)
+    params.require(:badge).permit(:label, :points, :image, :image_alt_text_desc)
   end
 
   def visit_page

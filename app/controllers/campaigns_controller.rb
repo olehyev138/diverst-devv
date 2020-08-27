@@ -186,6 +186,8 @@ class CampaignsController < ApplicationController
         :banner,
         :status,
         :input,
+        :image_alt_text_desc,
+        :banner_alt_text_desc,
         group_ids: [],
         segment_ids: [],
         manager_ids: [],

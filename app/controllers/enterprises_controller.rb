@@ -220,6 +220,7 @@ class EnterprisesController < ApplicationController
         :onboarding_consent_enabled,
         :onboarding_pop_up_content,
         :virtual_events_enabled,
+        :banner_alt_text_desc,
         theme: [
           :id,
           :primary_color,

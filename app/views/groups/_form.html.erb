@@ -8,6 +8,7 @@
         <%= f.hidden_field :private, value: 0 %>
         <%= f.input :private, label: 'Set as private' %>
         <%= f.input :logo, as: :attachment_preview %>
+        <%= f.input :logo_alt_text_desc %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2-field-segments"}, wrapper_html: { style: "display: none;" } %>
       </div>
 

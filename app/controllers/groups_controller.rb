@@ -536,6 +536,8 @@ class GroupsController < ApplicationController
           :expiry_age_for_resources,
           :expiry_age_for_events,
           :unit_of_expiry_age,
+          :logo_alt_text_desc,
+          :banner_alt_text_desc,
           manager_ids: [],
           child_ids: [],
           member_ids: [],

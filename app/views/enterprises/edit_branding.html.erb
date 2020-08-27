@@ -45,6 +45,7 @@
           </div>
         <% end %>
         <%= f.input :banner, as: :attachment_preview, label: false %>
+        <%= f.input :banner_alt_text_desc %>
 
         <%= f.label :home_message, label: "User Home message", input_html: { class: "field__label" } %>
         <%= f.input :home_message, as: :ckeditor, label: false %>
