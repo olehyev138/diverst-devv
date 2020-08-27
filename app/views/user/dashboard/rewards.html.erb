@@ -46,7 +46,7 @@
             <tbody>
               <% @badges.each do |badge| %>
               <tr>
-                <td><%= image_tag badge.image.url, style: "height: 24px; display: inline-block;" %></td>
+                <td><%= image_tag badge.image.url, alt: badge.image_alt_text_desc || "image of #{badge.image} badge", style: "height: 24px; display: inline-block;" %></td>
                 <td><%= badge.label %></td>
                 <td><%= badge.points %></td>
               </tr>
@@ -70,7 +70,7 @@
             <div class="col sm-4">
               <div class="flex-row">
                 <div class="flex-row__cell">
-                  <%= image_tag reward.picture.url, style: "width: 120px;" %>
+                  <%= image_tag reward.picture.url, alt: reward.pic_alt_text_desc || "image of #{reward.label} reward", style: "width: 120px;" %>
                 </div>
                 <div class="flex-row__cell">
                   <h4><%= reward.label %></h4>

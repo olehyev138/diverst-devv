@@ -1,7 +1,7 @@
- <% if @group.banner.present? %>
-    <div class="row">
-      <div class="col sm-12">
-        <%= image_tag @group.banner.url, style: 'width: 100%; max-width: 100%;' %>
-      </div>
+<% if @group.banner.present? %>
+  <div class="row">
+    <div class="col sm-12">
+      <%= image_tag(@group.banner.url, alt: @group.banner_alt_text_desc || "#{@group.name} banner", style: 'width: 100%; max-width: 100%;') %>
     </div>
-  <% end %>
+  </div>
+<% end %>

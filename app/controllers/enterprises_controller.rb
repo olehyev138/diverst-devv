@@ -265,6 +265,7 @@ class EnterprisesController < ApplicationController
           :sponsor_title,
           :sponsor_message,
           :sponsor_media,
+          :sponsor_alt_text_desc,
           :disable_sponsor_message,
           :_destroy
         ]
