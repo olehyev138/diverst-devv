@@ -23,12 +23,14 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 
 /* eslint-disable object-curly-newline */
 export function InviteFormInner({ formikProps, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -115,13 +117,12 @@ export function InviteFormInner({ formikProps, ...props }) {
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {props.buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
-                component={WrappedNavLink}
+                redirectFallback={(props.admin ? props.links.usersIndex : props.links.usersPath(values.id))}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>
