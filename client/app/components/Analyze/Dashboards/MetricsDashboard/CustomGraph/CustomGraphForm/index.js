@@ -15,12 +15,12 @@ import {
   Button, Card, CardActions, CardContent, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import Select from 'components/Shared/DiverstSelect';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
@@ -33,6 +33,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
       search: searchKey,
     });
   };
+
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.customGraph}>
@@ -74,13 +75,12 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.metricsDashboardShow}
+            <DiverstCancel
+              redirectFallback={props.links.metricsDashboardShow}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

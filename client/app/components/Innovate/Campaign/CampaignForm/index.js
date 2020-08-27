@@ -18,12 +18,14 @@ import { Field, Formik, Form } from 'formik';
 
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/messages';
+
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
@@ -34,6 +36,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
       search: searchKey,
     });
   };
+
 
   // const getCampaignBeginAction = (searchKey = '') => {
   //   props.getCampaignBegin({
@@ -134,13 +137,12 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={links.CampaignsIndex}
-              component={WrappedNavLink}
+              redirectFallback={links.CampaignsIndex}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
