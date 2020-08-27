@@ -20,6 +20,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -32,6 +33,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: [['not_member_of_group', props.currentGroup.id]]
     });
   };
+
 
   return (
     <Card>
@@ -58,13 +60,12 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
           <DiverstSubmit isCommitting={props.isCommitting}>
             <DiverstFormattedMessage {...messages.create} />
           </DiverstSubmit>
-          <Button
+          <DiverstCancel
             disabled={props.isCommitting}
-            to={props.links.groupMembersIndex}
-            component={WrappedNavLink}
+            redirectFallback={props.links.groupMembersIndex}
           >
             <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
+          </DiverstCancel>
         </CardActions>
       </Form>
     </Card>

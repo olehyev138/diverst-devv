@@ -21,6 +21,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
@@ -32,6 +33,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
   const enterpriseId = props.type === 'admin' && props.currentEnterprise ? {
     enterprise_id: props.currentEnterprise.id
   } : {};
+
 
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
@@ -124,13 +126,13 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.cancelLink}
+              redirectFallback={props.links.cancelLink}
               component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
