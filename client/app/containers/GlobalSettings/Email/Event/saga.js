@@ -50,7 +50,7 @@ export function* updateEvent(action) {
     const response = yield call(api.emailEvents.update.bind(api.emailEvents), payload.clockwork_database_event.id, payload);
 
     yield put(updateEventSuccess({}));
-    yield put(push(ROUTES.admin.system.globalSettings.mailEvents.index.path()));
+    yield put(push(ROUTES.admin.system.globalSettings.emails.events.index.path()));
     yield put(showSnackbar({ message: 'Successfully updated mailing event', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEventError(err));
