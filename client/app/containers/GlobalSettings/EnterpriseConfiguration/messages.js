@@ -112,5 +112,17 @@ export default defineMessages({
         id: `${snackbar}.success.update`,
       },
     }
-  }
+  },
+  module_setting: {
+    id: `${scope}.label.module_setting`,
+  },
+  function_setting: {
+    id: `${scope}.label.function_setting`,
+  },
+  email_setting: {
+    id: `${scope}.label.email_setting`,
+  },
+  archive_setting: {
+    id: `${scope}.label.archive_setting`,
+  },
 });

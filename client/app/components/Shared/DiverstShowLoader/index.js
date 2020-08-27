@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import FormErrorIcon from '@material-ui/icons/SyncProblem';
-import { CircularProgress, Grid, Slide } from '@material-ui/core';
+import { CircularProgress, Grid, Slide, Box } from '@material-ui/core';
 
 const styles = theme => ({
   loader: {
@@ -16,7 +16,7 @@ const styles = theme => ({
 });
 
 function DiverstShowLoader(props) {
-  const { classes, isLoading, isError, children, disableTransition, TransitionProps, TransitionComponent } = props;
+  const { classes, isLoading, isError, children, disableTransition, TransitionProps, TransitionComponent, TransitionChildComponent, TransitionChildProps } = props;
 
   const transitionComponentIsDefault = TransitionComponent === Slide;
 
@@ -43,9 +43,9 @@ function DiverstShowLoader(props) {
         <React.Fragment>
           {disableTransition ? children : (
             <TransitionComponent {...transitionProps}>
-              <div>
+              <TransitionChildComponent {...TransitionChildProps}>
                 {children}
-              </div>
+              </TransitionChildComponent>
             </TransitionComponent>
           )}
         </React.Fragment>
@@ -62,10 +62,13 @@ DiverstShowLoader.propTypes = {
   disableTransition: PropTypes.bool,
   TransitionProps: PropTypes.object,
   TransitionComponent: PropTypes.any,
+  TransitionChildProps: PropTypes.object,
+  TransitionChildComponent: PropTypes.any,
 };
 
 DiverstShowLoader.defaultProps = {
   TransitionComponent: Slide,
+  TransitionChildComponent: Box,
 };
 
 export default compose(
