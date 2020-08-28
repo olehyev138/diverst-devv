@@ -55,7 +55,7 @@ video#recorded-video {
             <div class="answer__content">
               <h3><%= answer.title %></h3>
               <p><%= answer.content if answer.content.present? %></p>
-              <p><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></p>                
+              <section aria-label='<%= answer.video_upload_alt_text_desc || "a video explaining an idea submitted to the #{answer.question.campaign.title} campaign" %>'><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200', alt: 'hello World') if answer.video_upload.present? %></section>                
               <p><%= link_to answer.supporting_document_file_name, answer.supporting_document.expiring_url(3600) unless answer.supporting_document.blank? %></p>
   
               <% answer.comments.each do |comment| %>
@@ -177,6 +177,7 @@ video#recorded-video {
                 <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] }, input_html: { id: 'answer_idea_category_id_video_upload' } %>
                 <%= f.input :title, label: 'Name/Title of idea', input_html: { id: 'answer_title_video_upload' } %>
                 <%= f.input :video_upload, as: :attachment_preview %>
+                <%= f.input :video_upload_alt_text_desc, label: 'video description' %>
                 <%= f.input :supporting_document, as: :attachment_preview %>
                 <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
                 <%= f.button :submit, value: "Submit" %>
