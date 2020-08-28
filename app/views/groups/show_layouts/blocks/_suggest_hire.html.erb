@@ -8,7 +8,7 @@
       <div class="modal-header">
         <h2 class="modal-title" id="usersToInviteToGroupTitle">Suggest a Hire For <%= @group.name %></h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">X</span>
         </button>
       </div>
       <div class="modal-body">
@@ -16,10 +16,8 @@
           <%= f.hidden_field :user_id, value: current_user.id %>
           <%= f.hidden_field :group_id, value: @group.id %>
           <div class="custom-user-select">
-            <%= f.association :suggested_hire, as: :select,
-                                selected: [],
-                                collection: [],
-                                input_html: { class: 'select2-field-users', autofocus: true } %> 
+            <%= f.input :name %>
+            <%= f.input :email %> 
           </div>
           <%= f.input :resume, as: :attachment_preview %>
           <%= f.button :submit, 'Suggest a hire' %>

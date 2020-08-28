@@ -6,11 +6,9 @@
     <% @suggested_hires.each do |suggested_hire| %>
       <div class="card__section card__section--border">
         <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell">
-            <%= image_tag suggested_hire.avatar.expiring_url(3600, :thumb), height: 100 %>
-          </div>
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= suggested_hire.name %></h4>
+            <h4><%= suggested_hire.email %></h4>
             <p><% if suggested_hire.resume.exists? %> (<a href="<%= suggested_hire.resume.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_suggested_hire(suggested_hire) %>)"></a> <%= link_to "resume", suggested_hire.resume.expiring_url(3600) %>)<% end %></p>
           </div>
           <div style="float: right;">

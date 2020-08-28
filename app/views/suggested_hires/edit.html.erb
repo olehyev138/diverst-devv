@@ -5,10 +5,8 @@
         <%= f.hidden_field :user_id, value: current_user.id %>
         <%= f.hidden_field :group_id, value: @group.id %>
         <div class="custom-user-select">
-          <%= f.association :suggested_hire, as: :select,
-                                             selected: f.object.suggested_hire,
-                                             collection: [f.object.suggested_hire],
-                                             input_html: { class: 'select2-field-users', autofocus: true } %> 
+          <%= f.input :name %>
+          <%= f.input :email%> 
         </div>
         <%= f.input :resume, as: :attachment_preview %>
         <%= f.button :submit, 'Update suggested hire' %>
