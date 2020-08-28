@@ -235,4 +235,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#calendar_colors' do
+    xit 'captures the error' do
+      allow_any_instance_of(controller).to receive(:base_authorize).and_return(nil)
+      allow(model.constantize).to receive(:select).and_raise(BadRequestException)
+      get "/api/v1/#{route}/#{item.id}/calendar_colors", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

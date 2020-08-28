@@ -16,11 +16,11 @@ import {
   Divider, Typography, Box
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/UserRole/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import Select from 'components/Shared/DiverstSelect';
 
@@ -80,13 +80,12 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={props.links.userRolesIndex}
-                component={WrappedNavLink}
+                redirectFallback={props.links.userRolesIndex}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

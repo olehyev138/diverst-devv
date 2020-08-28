@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { floatRound, toNumber } from 'utils/floatRound';
 
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -29,6 +30,7 @@ import {
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
@@ -112,13 +114,12 @@ export function AnnualBudgetFormInner(
             <DiverstSubmit isCommitting={props.isCommitting}>
               <DiverstFormattedMessage {...formMessages.setAnnualBudget} />
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={ROUTES.admin.plan.budgeting.index.path()}
-              component={WrappedNavLink}
+              redirectFallback={ROUTES.admin.plan.budgeting.index.path()}
             >
               <DiverstFormattedMessage {...formMessages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
