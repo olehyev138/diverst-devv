@@ -67,7 +67,7 @@
               <p>
               <h3><%= answer.title %></h3>
               <p><%= answer.content if answer.content.present? %></p>
-              <section aria-label='<%= answer.video_upload_alt_text_desc || "a video explaining an idea submitted to the #{answer.question.campaign.title} campaign" %>'><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></section>                
+              <section aria-label='<%= answer.video_description %>'><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></section>                
               <p><% if answer.supporting_document.exists? %> (<a href="<%= answer.supporting_document.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(answer) %>)"></a> <%= link_to "documentation", answer.supporting_document.expiring_url(3600) %>)<% end %></p>
               <p><% if answer.supporting_document_from_sponsor.exists? %> (<a href="<%= answer.supporting_document_from_sponsor.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(answer) %>)"></a> <%= link_to "supporting documentation", answer.supporting_document_from_sponsor.expiring_url(3600) %>)<% end %></p>
               <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>

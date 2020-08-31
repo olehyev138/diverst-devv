@@ -123,6 +123,13 @@ class Initiative < BaseClass
     end
   end
 
+  def picture_description
+    value = "image of #{name} event"
+    return value if self[:pic_alt_text_desc].nil?
+
+    self[:pic_alt_text_desc]
+  end
+
   def ongoing?
     self.start <= Time.current && self.end >= Time.current
   end

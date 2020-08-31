@@ -72,10 +72,10 @@ class RewardsController < ApplicationController
   end
 
   def reward_params
-    params.require(:reward).permit(:label, 
-                                   :points, 
-                                   :responsible_id, 
-                                   :picture, 
+    params.require(:reward).permit(:label,
+                                   :points,
+                                   :responsible_id,
+                                   :picture,
                                    :description,
                                    :pic_alt_text_desc)
   end

@@ -6,7 +6,7 @@
           <%= link_to group_path(group), 'data-trackable-id': group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
             <div class="flex-row">
               <div class="flex-row__cell">
-                <%= image_tag group.logo.expiring_url(3600, :thumb), alt: group.logo_alt_text_desc || "#{group.name} logo" %>
+                <%= image_tag group.logo.expiring_url(3600, :thumb), alt: group.logo_description %>
               </div>
               <div class="flex-row__cell flex-row__cell--grow">
                 <h4><%= group.name %></h4>
@@ -35,7 +35,7 @@
                 <%= link_to group_path(sub_group), 'data-trackable-id': sub_group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
                   <div class="flex-row">
                     <div class="flex-row__cell">
-                      <%= image_tag sub_group.logo.expiring_url(3600, :thumb), alt: sub_group.logo_alt_text_desc || "#{sub_group.name} logo" %>
+                      <%= image_tag sub_group.logo.expiring_url(3600, :thumb), alt: sub_group.logo_description %>
                     </div>
                     <div class="flex-row__cell flex-row__cell--grow">
                       <h4><%= sub_group.name %></h4>

@@ -27,11 +27,11 @@
           <div class="row">
 
             <div class="col-xs-12 text-center visible">
-              <%= video_tag(@user.enterprise.onboarding_sponsor_media.expiring_url(36000), controls: true, size: "400x400") %>
+              <%= video_tag(@user.enterprise.onboarding_sponsor_media.expiring_url(36000), alt: 'video of onboarding sponsor', controls: true, size: "400x400") %>
             </div>
 
             <div class="col-xs-6 invisible" style="display:none;">
-              <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_alt_text_desc || 'image of sponsor', class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
+              <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_description || 'image of sponsor', class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
             </div>
 
             <div class="col-xs-6 invisible" style="display:none;">
@@ -60,17 +60,17 @@
               <% if @user.enterprise.sponsors.any? %>
                 <% if @user.enterprise.sponsors.first.sponsor_media.present? %>
                   <% show_sponsor_media?(@user.enterprise.sponsors.first, "sponsor_media_content_type") do %>
-                    <%= image_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), alt: @user.enterprise.sponsors.first.sponsor_alt_text_desc || 'image of sponsor', class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;") %>
+                    <%= image_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), alt: @user.enterprise.sponsors.first.image_description || 'image of sponsor', class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;") %>
                   <% end %>
 
                   <% show_sponsor_video?(@user.enterprise.sponsors.first, "sponsor_media_content_type") do %>
-                    <%= video_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), alt: @user.enterprise.sponsors.first.sponsor_alt_text_desc || 'image of sponsor', controls: true, size: "200x200") %>
+                    <%= video_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), alt: @user.enterprise.sponsors.first.image_description || 'image of sponsor', controls: true, size: "200x200") %>
                   <% end %>
                 <% else %>
-                  <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_alt_text_desc || 'image of sponsor', class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
+                  <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_description, class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
                 <% end %>
               <% else %>
-                <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_alt_text_desc || 'image of sponsor', class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
+                <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), alt: @user.enterprise.cdo_description, class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
               <% end %>
 
             </div>

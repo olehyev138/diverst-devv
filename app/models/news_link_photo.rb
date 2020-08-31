@@ -11,4 +11,11 @@ class NewsLinkPhoto < BaseClass
   def group
     news_link.group
   end
+
+  def image_description
+    value = "image of #{news_link.title} news item"
+    return value if self[:photo_alt_text_desc].nil?
+
+    self[:photo_alt_text_desc]
+  end
 end
