@@ -80,6 +80,7 @@ RSpec.describe 'GroupMessageComments', type: :request do
     end
 
     it 'contains expected attributes' do
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => new_params }, headers: headers
       expect(model.constantize.find(item.id).content).to eq new_params[:content]
     end
 
