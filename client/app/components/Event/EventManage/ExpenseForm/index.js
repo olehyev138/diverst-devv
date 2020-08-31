@@ -14,10 +14,10 @@ import { Form, Formik } from 'formik';
 import { Box, Button, CardContent, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -75,14 +75,13 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
             </DiverstSubmit>
           </Grid>
           <Grid item>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.index}
+            <DiverstCancel
+              redirectFallback={props.links.index}
               disabled={props.isCommitting}
               variant='contained'
             >
               <DiverstFormattedMessage {...formMessages.cancel} />
-            </Button>
+            </DiverstCancel>
           </Grid>
         </Grid>
       </Form>

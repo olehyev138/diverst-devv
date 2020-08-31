@@ -18,12 +18,13 @@ import {
   Divider, Box
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
 import { buildValues } from 'utils/formHelpers';
 import messages from 'containers/Shared/Update/messages';
 
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
@@ -83,13 +84,12 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
               <DiverstSubmit isCommitting={props.isCommitting}>
                 {buttonText}
               </DiverstSubmit>
-              <Button
+              <DiverstCancel
                 disabled={props.isCommitting}
-                to={props.links.index}
-                component={WrappedNavLink}
+                redirectFallback={props.links.index}
               >
                 <DiverstFormattedMessage {...messages.form.button.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Card>
         </Form>
