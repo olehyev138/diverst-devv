@@ -132,15 +132,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#fields' do
     let!(:field) { create(:field_defined_by_initiative, field_definer: item) }
 
-    before do
-      get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
-    end
-
     it 'gets fields' do
+      get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
     it 'JSON body response contains expected attributes' do
+      get "/api/v1/#{route}/#{item.id}/fields", params: {}, headers: headers
       expect(JSON.parse(response.body)['page']['items'].first).to include('id' => field.id)
     end
 
@@ -154,15 +152,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#create field' do
     let!(:new_item) { build(:field) }
 
-    before do
-      post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field' => new_item.attributes }, headers: headers
-    end
-
     it 'creates a field' do
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field' => new_item.attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
 
     it 'contains expected attributes' do
+      post "/api/v1/#{route}/#{item.id}/create_field", params: { 'field' => new_item.attributes }, headers: headers
       id = JSON.parse(response.body)['text_field']['id']
       expect(Field.find(id).title).to eq new_item.title
     end
@@ -177,15 +173,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#updates' do
     let!(:update) { create(:initiative_update2, initiative: item) }
 
-    before do
-      get "/api/v1/#{route}/#{item.id}/updates", params: {}, headers: headers
-    end
-
     it 'gets updates' do
+      get "/api/v1/#{route}/#{item.id}/updates", params: {}, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
     it 'JSON body response contains expected attributes' do
+      get "/api/v1/#{route}/#{item.id}/updates", params: {}, headers: headers
       expect(JSON.parse(response.body)['page']['items'].first).to include('id' => update.id)
     end
 
@@ -199,15 +193,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#update_prototype' do
     let!(:update) { create(:initiative_update2, initiative: item) }
 
-    before do
-      get "/api/v1/#{route}/#{item.id}/update_prototype", params: {}, headers: headers
-    end
-
     it 'updates prototype' do
+      get "/api/v1/#{route}/#{item.id}/update_prototype", params: {}, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
     it 'returns prototype' do
+      get "/api/v1/#{route}/#{item.id}/update_prototype", params: {}, headers: headers
       expect(JSON.parse(response.body)['update']).to_not be nil
     end
 
@@ -221,15 +213,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#create_update' do
     let!(:new_item) { build(:initiative_update2) }
 
-    before do
-      post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update' => new_item.attributes }, headers: headers
-    end
-
     it 'creates an update' do
+      post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update' => new_item.attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
 
     it 'contains expected attributes' do
+      post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update' => new_item.attributes }, headers: headers
       id = JSON.parse(response.body)['update']['id']
       expect(Update.find(id).updatable_type).to eq new_item.updatable_type
     end
