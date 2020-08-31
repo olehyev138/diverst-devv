@@ -148,20 +148,6 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
   end
 
-  describe '#assign_leaders' do
-    it 'assigns a leader' do
-      allow_any_instance_of(controller).to receive(:base_authorize).and_return(nil)
-      put "/api/v1/#{route}/#{item.id}/assign_leaders", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:ok)
-    end
-
-    it 'captures the error' do
-      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
-      put "/api/v1/#{route}/#{item.id}/assign_leaders", params: { 'group_leader': group_leader.attributes }, headers: headers
-      expect(response).to have_http_status(:bad_request)
-    end
-  end
-
   describe '#annual_budget' do
     it 'gets the annual budget' do
       allow_any_instance_of(controller).to receive(:base_authorize).and_return(nil)
@@ -215,6 +201,15 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'captures the error' do
       allow(model.constantize).to receive(:find).and_raise(BadRequestException)
       post "/api/v1/#{route}/#{item.id}/update_categories", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe '#calendar_colors' do
+    xit 'captures the error' do
+      allow_any_instance_of(controller).to receive(:base_authorize).and_return(nil)
+      allow(model.constantize).to receive(:select).and_raise(BadRequestException)
+      get "/api/v1/#{route}/#{item.id}/calendar_colors", headers: headers
       expect(response).to have_http_status(:bad_request)
     end
   end
