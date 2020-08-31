@@ -23,10 +23,12 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { buildValues, isAttributesArrayEmpty } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
 import animateScrollTo from 'animated-scroll-to';
+
 
 const styles = theme => ({
   addItemButtonIcon: {
@@ -184,12 +186,12 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              to={props.links.outcomesIndex}
-              component={WrappedNavLink}
+            <DiverstCancel
+              redirectFallback={props.links.outcomesIndex}
+              disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

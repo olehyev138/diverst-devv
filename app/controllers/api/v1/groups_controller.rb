@@ -2,20 +2,6 @@ class Api::V1::GroupsController < DiverstController
   include Api::V1::Concerns::DefinesFields
   include Api::V1::Concerns::Updatable
 
-  def assign_leaders
-    params[klass.symbol] = payload
-    item = klass.find(params[:id])
-    base_authorize(item)
-    render status: 200, json: klass.update(self.diverst_request, params)
-  rescue => e
-    case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
-    end
-  end
-
   def create_field
     params[:field][:field_type] = 'regular'
     super
