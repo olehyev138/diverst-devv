@@ -352,7 +352,7 @@ class Api::V1::UsersController < DiverstController
             :mentorship_description,
             mentoring_interest_ids: [],
             mentoring_type_ids: [],
-            )
+          )
   end
 
   def sample_csv
