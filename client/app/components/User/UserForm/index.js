@@ -33,7 +33,7 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const [tab, setTab] = useState('general');
 
-  const canEditEmail = props.admin || (props.permissions.users_manage && (props.user && props.user.seen_onboarding));
+  const canEditEmail = props.permissions.users_manage || (props.user && props.user.seen_onboarding);
 
   const generalForm = (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
@@ -224,7 +224,7 @@ export function UserForm(props) {
   const user = dig(props, 'user');
   const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
 
-  const canEditEmail = props.admin || props.permissions.users_manage;
+  const canEditEmail = props.permissions.users_manage || (props.user && props.user.seen_onboarding);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
