@@ -7,6 +7,9 @@ import {
   RESTORE_ARCHIVE_BEGIN,
 } from './constants';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   getArchivesSuccess,
   getArchivesError,
@@ -43,10 +46,8 @@ export function* getArchives(action) {
     }
   } catch (err) {
     yield put(getArchivesError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load archives',
+      message: intl.formatMessage(messages.snackbars.load),
       options: { variant: 'warning' }
     }));
   }
@@ -76,10 +77,8 @@ export function* unArchive(action) {
     }
   } catch (err) {
     yield put(restoreArchiveError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to restore archived item',
+      message: intl.formatMessage(messages.snackbars.restore),
       options: { variant: 'warning' }
     }));
   }

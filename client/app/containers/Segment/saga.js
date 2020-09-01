@@ -3,7 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_SEGMENTS_BEGIN, CREATE_SEGMENT_BEGIN,
@@ -30,9 +31,7 @@ export function* getSegments(action) {
     yield put(getSegmentsSuccess(response.data.page));
   } catch (err) {
     yield put(getSegmentsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load segments', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.segments), options: { variant: 'warning' } }));
   }
 }
 
@@ -41,9 +40,8 @@ export function* getSegment(action) {
     const response = yield call(api.segments.get.bind(api.segments), action.payload.id);
     yield put(getSegmentSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getSegmentError(err));
-    yield put(showSnackbar({ message: 'Failed to get segment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.segment), options: { variant: 'warning' } }));
   }
 }
 
@@ -57,12 +55,10 @@ export function* createSegment(action) {
     yield put(createSegmentSuccess());
     // TODO: get id from response & direct to show/update page
     yield put(push(ROUTES.admin.manage.segments.index.path()));
-    yield put(showSnackbar({ message: 'Segment created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSegmentError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create segment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -72,12 +68,10 @@ export function* updateSegment(action) {
     const response = yield call(api.segments.update.bind(api.segments), payload.segment.id, payload);
 
     yield put(updateSegmentSuccess());
-    yield put(showSnackbar({ message: 'Segment updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSegmentError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update segment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -87,12 +81,10 @@ export function* deleteSegment(action) {
 
     yield put(deleteSegmentSuccess());
     yield put(push(ROUTES.admin.manage.segments.index.path()));
-    yield put(showSnackbar({ message: 'Segment deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSegmentError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update segment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -103,9 +95,7 @@ export function* getSegmentMembers(action) {
     yield put(getSegmentMembersSuccess(response.data.page));
   } catch (err) {
     yield put(getSegmentMembersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load segment members', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members), options: { variant: 'warning' } }));
   }
 }
 
@@ -115,6 +105,5 @@ export default function* segmentsSaga() {
   yield takeLatest(CREATE_SEGMENT_BEGIN, createSegment);
   yield takeLatest(UPDATE_SEGMENT_BEGIN, updateSegment);
   yield takeLatest(DELETE_SEGMENT_BEGIN, deleteSegment);
-
   yield takeLatest(GET_SEGMENT_MEMBERS_BEGIN, getSegmentMembers);
 }

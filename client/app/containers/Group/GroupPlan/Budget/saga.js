@@ -4,7 +4,8 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_BUDGET_BEGIN,
@@ -31,9 +32,7 @@ export function* getBudget(action) {
     yield put(getBudgetSuccess(response.data));
   } catch (err) {
     yield put(getBudgetError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.budget), options: { variant: 'warning' } }));
   }
 }
 
@@ -44,9 +43,7 @@ export function* getBudgets(action) {
     yield put(getBudgetsSuccess(response.data.page));
   } catch (err) {
     yield put(getBudgetsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get budgets', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.budgets), options: { variant: 'warning' } }));
   }
 }
 
@@ -58,12 +55,10 @@ export function* createBudgetRequest(action) {
 
     yield put(createBudgetRequestSuccess({}));
     yield put(push(path));
-    yield put(showSnackbar({ message: 'Successfully created budget request', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.budget_request), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createBudgetRequestError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create budget request', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.budget_request), options: { variant: 'warning' } }));
   }
 }
 
@@ -73,12 +68,10 @@ export function* approveBudget(action) {
     const response = yield call(api.budgets.approve.bind(api.budgets), id);
 
     yield put(approveBudgetSuccess(response.data));
-    yield put(showSnackbar({ message: 'Successfully approved budget', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.approve), options: { variant: 'success' } }));
   } catch (err) {
     yield put(approveBudgetError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to approve budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.approve), options: { variant: 'warning' } }));
   }
 }
 
@@ -88,12 +81,10 @@ export function* declineBudget(action) {
     const response = yield call(api.budgets.reject.bind(api.budgets), payload.budget.id, payload);
 
     yield put(declineBudgetSuccess(response.data));
-    yield put(showSnackbar({ message: 'Successfully declined budget', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.decline), options: { variant: 'success' } }));
   } catch (err) {
     yield put(declineBudgetError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to decline budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.decline), options: { variant: 'warning' } }));
   }
 }
 
@@ -103,12 +94,10 @@ export function* deleteBudget(action) {
     yield call(api.budgets.destroy.bind(api.budgets), id);
 
     yield put(deleteBudgetSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted budget', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteBudgetError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

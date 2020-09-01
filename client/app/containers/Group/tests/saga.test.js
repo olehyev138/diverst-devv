@@ -28,6 +28,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from '../messages';
+
 api.groups.all = jest.fn();
 api.groups.create = jest.fn();
 api.groups.update = jest.fn();
@@ -40,6 +43,7 @@ api.groups.resetBudget = jest.fn();
 api.userGroups.join = jest.fn();
 api.userGroups.leave = jest.fn();
 api.userGroups.joinSubgroups = jest.fn();
+
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -222,9 +226,11 @@ describe('Create group', () => {
         message: 'group created',
         options: { variant: 'warning' }
       },
-      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+      type: 'app/Notifier/ENQUEUE_SNACKBAR',
     };
+
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+
     const results = [createGroupSuccess(), push(ROUTES.group.home.path(group.id)), notified];
     const initialAction = { payload: {
       id: '',
@@ -242,6 +248,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith({ group: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
   });
 
   it('Should return error from the API', async () => {
@@ -265,6 +272,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
   });
 });
 
