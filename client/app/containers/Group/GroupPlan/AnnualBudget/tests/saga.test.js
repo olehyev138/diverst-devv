@@ -7,8 +7,8 @@ import {
 import {
   getAnnualBudgetSuccess, getAnnualBudgetError,
   getAnnualBudgetsError, getAnnualBudgetsSuccess,
-  createAnnualBudgetSuccess, createAnnualBudgetError,
-  updateAnnualBudgetSuccess, updateAnnualBudgetError, getCurrentAnnualBudgetError, getCurrentAnnualBudgetSuccess
+  updateAnnualBudgetSuccess, updateAnnualBudgetError,
+  getCurrentAnnualBudgetError, getCurrentAnnualBudgetSuccess
 } from '../actions';
 
 import { push } from 'connected-react-router';
@@ -205,7 +205,7 @@ describe('AnnualBudget Saga', () => {
         initialAction
       );
 
-      expect(api.annualBudgets.update).toHaveBeenCalledWith(undefined, { annual_budget: { ...initialAction.payload } });
+      expect(api.annualBudgets.update).toHaveBeenCalledWith();
       expect(dispatched).toEqual(results);
       expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
