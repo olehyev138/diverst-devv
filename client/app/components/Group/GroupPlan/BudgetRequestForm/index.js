@@ -31,6 +31,7 @@ import {
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import Select from 'components/Shared/DiverstSelect';
 
@@ -182,6 +183,8 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
 /* eslint-disable object-curly-newline */
 export function BudgetFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+
+
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
@@ -258,14 +261,13 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
             </DiverstSubmit>
           </Grid>
           <Grid item>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.index}
+            <DiverstCancel
+              redirectFallback={props.links.index}
               disabled={props.isCommitting}
               variant='contained'
             >
               <DiverstFormattedMessage {...formMessage.cancel} />
-            </Button>
+            </DiverstCancel>
           </Grid>
         </Grid>
       </Form>
