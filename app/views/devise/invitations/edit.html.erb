@@ -122,9 +122,11 @@
             <%= f.input :first_name, required: true %>
             <%= f.input :last_name, required: true %>
 
-            <%= f.input :password, required: true %>
-            <%= f.input :password_confirmation, required: true %>
-
+            <% unless resource.enterprise.has_enabled_saml? %>
+              <%= f.input :password, required: true %>
+              <%= f.input :password_confirmation, required: true %>
+            <% end %>
+            
             <% resource.enterprise.fields.where(private: false).each do |cf| %>
               <% if !cf.private %>
                 <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
