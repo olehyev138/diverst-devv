@@ -46,7 +46,7 @@
         <div class="flex-row">
           <div class="flex-row__cell text-center">
             <div class="counter<%= answer.voters.exists?(id: current_user.id) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.voters.exists?(id: current_user.id) %>">
-              <span class="counter__number"><%= answer.upvote_count %></span>
+              <span aria-label="<%= answer.upvote_count %> votes" class="counter__number"><%= answer.upvote_count %></span>
             </div>
             <div class="chosen">
               <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" data-last-known-state="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
@@ -67,7 +67,7 @@
               <p>
               <h3><%= answer.title %></h3>
               <p><%= answer.content if answer.content.present? %></p>
-              <p><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></p>                
+              <section aria-label='<%= answer.video_description %>'><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200') if answer.video_upload.present? %></section>                
               <p><% if answer.supporting_document.exists? %> (<a href="<%= answer.supporting_document.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(answer) %>)"></a> <%= link_to "documentation", answer.supporting_document.expiring_url(3600) %>)<% end %></p>
               <p><% if answer.supporting_document_from_sponsor.exists? %> (<a href="<%= answer.supporting_document_from_sponsor.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_answer(answer) %>)"></a> <%= link_to "supporting documentation", answer.supporting_document_from_sponsor.expiring_url(3600) %>)<% end %></p>
               <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>

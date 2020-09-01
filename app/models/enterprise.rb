@@ -127,6 +127,19 @@ class Enterprise < BaseClass
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
+  def cdo_description
+    value = 'image of sponsor'
+    return value if self[:cdo_alt_text_desc].nil?
+
+    self[:cdo_alt_text_desc]
+  end
+
+  def banner_description
+    value = "image of #{name} banner"
+    return value if self[:banner_alt_text_desc].nil?
+
+    self[:banner_alt_text_desc]
+  end
 
   def archive_switch
     if auto_archive?

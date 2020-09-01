@@ -12,7 +12,7 @@
         </label>
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell" id="handle">
-            <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
+            <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), alt: group.logo_description, class: "avatar" %><% end %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.accepted_members.size, "member" %></div>
           <div class="flex-row__cell link-group">
@@ -43,7 +43,7 @@
           <div class="flex-row flex-row--middle" style="margin-bottom: 10px;">
             <div class="flex-row__cell"></div>
             <div class="flex-row__cell">
-              <%= link_to group_path(child) do %><%= image_tag child.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
+              <%= link_to group_path(child) do %><%= image_tag child.logo.expiring_url(3600, :thumb), alt: child.logo_description, class: "avatar" %><% end %>
             </div>
             <div class="flex-row__cell flex-row__cell--grow">
               <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.accepted_members.size, "member" %></span>

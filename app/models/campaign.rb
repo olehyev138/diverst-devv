@@ -59,6 +59,20 @@ class Campaign < BaseClass
   # values obtained from enum field status defined above
   scope :valid_campaigns, -> { where(status: [0, 2, 3]) }
 
+  def banner_description
+    value = "#{title} campaign banner"
+    return value if self[:banner_alt_text_desc].nil?
+
+    self[:banner_alt_text_desc]
+  end
+
+  def image_description
+    value = "image of #{title} campaign"
+    return value if self[:image_alt_text_desc].nil?
+
+    self[:image_alt_text_desc]
+  end
+
   # users with the most campaign engagement points
   def top_campaign_performers
     engaged_users = User.where(id: self.answers.pluck(:author_id) + self.answer_comments.pluck(:author_id) + self.answer_upvotes.pluck(:author_id)).uniq

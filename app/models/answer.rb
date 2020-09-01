@@ -55,6 +55,13 @@ class Answer < BaseClass
 
   after_create :send_email_notification
 
+  def video_description
+    value = "a video explaining an idea submitted to the #{question.campaign.title} campaign"
+    return value if self[:video_upload_alt_text_desc].nil?
+
+    self[:video_upload_alt_text_desc]
+  end
+
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase

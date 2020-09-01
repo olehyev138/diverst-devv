@@ -188,6 +188,20 @@ class Group < BaseClass
 
   attr_accessor :start_date, :end_date
 
+  def logo_description
+    value = "#{name} logo"
+    return value if self[:logo_alt_text_desc].nil?
+
+    self[:logo_alt_text_desc]
+  end
+
+  def banner_description
+    value = "#{name} banner"
+    return value if self[:banner_alt_text_desc].nil?
+
+    self[:banner_alt_text_desc]
+  end
+
   def start_date
     self.annual_budgets.last.start_date if self.annual_budgets.last
   end

@@ -47,6 +47,8 @@ class User::UserCampaignsController < ApplicationController
           :start,
           :end,
           :nb_invites,
+          :image_alt_text_desc,
+          :banner_alt_text_desc,
           group_ids: [],
           segment_ids: [],
           questions_attributes: [

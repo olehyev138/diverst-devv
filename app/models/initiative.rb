@@ -97,8 +97,7 @@ class Initiative < BaseClass
   do_not_validate_attachment_file_type :video
 
 
-  validates :start, presence: true
-  validates :end, presence: true
+  validates :start, :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
   validate :check_budget
   validate :segment_enterprise
@@ -122,6 +121,13 @@ class Initiative < BaseClass
         end
       end
     end
+  end
+
+  def picture_description
+    value = "image of #{name} event"
+    return value if self[:pic_alt_text_desc].nil?
+
+    self[:pic_alt_text_desc]
   end
 
   def ongoing?
