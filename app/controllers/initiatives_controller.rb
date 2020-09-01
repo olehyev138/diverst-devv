@@ -307,6 +307,7 @@ class InitiativesController < ApplicationController
         :to, # For filtering
         :annual_budget_id,
         :virtual,
+        :pic_alt_text_desc,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [

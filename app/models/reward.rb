@@ -18,6 +18,13 @@ class Reward < BaseClass
   validates :responsible, presence: true
   validate :responsible_user
 
+  def picture_description
+    value = "image of #{label} reward"
+    return value if self[:pic_alt_text_desc].nil?
+
+    self[:pic_alt_text_desc]
+  end
+
   private
 
   def responsible_user

@@ -67,7 +67,8 @@ class ExpenseCategoriesController < ApplicationController
         :price,
         :category,
         :income,
-        :icon
+        :icon,
+        :icon_alt_text_desc
       )
   end
 

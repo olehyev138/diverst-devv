@@ -20,7 +20,7 @@
                 <% if RewardPolicy.new(current_user, pending_reward.reward).user_responsible? %>
                   <tr>
                     <td>
-                       <a href="<%= pending_reward.reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= pending_reward.reward.picture.expiring_url(3600) %>)"></a>
+                       <a href="<%= pending_reward.reward.picture.expiring_url(3600) %>" alt='<%= pending_reward.reward.pic_alt_text_desc || "image of #{pending_reward.reward.label} reward" %>' class="icon icon--bg icon--large" style="background-image: url(<%= pending_reward.reward.picture.expiring_url(3600) %>)"></a>
                        <%= pending_reward.reward.label %>
                      </td>
                     <td><%= pending_reward.points %></td>

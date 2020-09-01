@@ -137,7 +137,7 @@ class Groups::NewsLinksController < ApplicationController
           :title,
           :description,
           :picture,
-          photos_attributes: [:file, :_destroy, :id],
+          photos_attributes: [:file, :photo_alt_text_desc, :_destroy, :id],
           news_feed_link_attributes: [:id, :approved, :news_feed_id, :link, shared_news_feed_ids: [], segment_ids: []],
         )
   end
