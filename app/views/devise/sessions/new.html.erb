@@ -18,8 +18,8 @@
     <% if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])&.has_enabled_saml? %>
       <%= link_to 'Login with SSO', 
         sso_enterprise_saml_index_path(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']),
-        class: 'btn btn--tertiary',
-        style: 'margin-top: 5px;' %>
+        class: 'btn btn--tertiary tooltipster',
+        style: 'margin-top: 5px;', title: "Click here for #{Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']).name}" %>
     <% end %>
   <% end %>
   
