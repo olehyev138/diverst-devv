@@ -5,6 +5,8 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_EXPENSE_BEGIN,
@@ -30,8 +32,7 @@ export function* getExpense(action) {
   } catch (err) {
     yield put(getExpenseError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get expense', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.expense), options: { variant: 'warning' } }));
   }
 }
 
@@ -43,8 +44,7 @@ export function* getExpenses(action) {
   } catch (err) {
     yield put(getExpensesError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get expenses', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.expenses), options: { variant: 'warning' } }));
   }
 }
 
@@ -57,12 +57,11 @@ export function* createExpense(action) {
 
     yield put(createExpenseSuccess(response.data));
     yield put(push(path));
-    yield put(showSnackbar({ message: 'Successfully created expense', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createExpenseError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create expense', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -75,12 +74,11 @@ export function* updateExpense(action) {
 
     yield put(updateExpenseSuccess());
     yield put(push(path));
-    yield put(showSnackbar({ message: 'Successfully updated expense', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateExpenseError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update expense', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -89,12 +87,11 @@ export function* deleteExpense(action) {
     const response = yield call(api.initiativeExpenses.destroy.bind(api.initiativeExpenses), action.payload.id);
 
     yield put(deleteExpenseSuccess());
-    yield put(showSnackbar({ message: 'Successfully deleted expense', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteExpenseError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete expense', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

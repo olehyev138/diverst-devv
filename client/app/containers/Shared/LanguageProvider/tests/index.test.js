@@ -6,7 +6,6 @@ import { browserHistory } from 'react-router-dom';
 
 import ConnectedLanguageProvider, { LanguageProvider } from 'containers/Shared/LanguageProvider/index';
 import configureStore from 'configureStore';
-
 import { translationMessages } from 'i18n';
 
 const messages = defineMessages({
@@ -16,6 +15,12 @@ const messages = defineMessages({
     en: 'This is some en message',
   },
 });
+
+jest.mock('containers/Shared/LanguageProvider/GlobalLanguageProvider', () => (
+  function render() {
+    return 'This is some default message';
+  }
+));
 
 describe('<LanguageProvider />', () => {
   it('should render its children', () => {

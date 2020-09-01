@@ -6,6 +6,9 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   GET_EMAIL_BEGIN,
   GET_EMAILS_BEGIN,
@@ -26,8 +29,7 @@ export function* getEmail(action) {
   } catch (err) {
     yield put(getEmailError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get email', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.email), options: { variant: 'warning' } }));
   }
 }
 
@@ -39,8 +41,7 @@ export function* getEmails(action) {
   } catch (err) {
     yield put(getEmailsError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get emails', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.emails), options: { variant: 'warning' } }));
   }
 }
 
@@ -50,12 +51,11 @@ export function* updateEmail(action) {
     const response = yield call(api.emails.update.bind(api.emails), payload.email.id, payload);
 
     yield put(updateEmailSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated email', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEmailError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update email', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 

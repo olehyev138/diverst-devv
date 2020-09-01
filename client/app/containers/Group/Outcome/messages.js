@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Group.Outcome';
+export const snackbar = 'diverst.snackbars.Group.Outcome';
 
 export default defineMessages({
   new: {
@@ -78,6 +79,36 @@ export default defineMessages({
       empty: {
         id: `${scope}.Pillar.Event.empty`
       }
+    },
+  },
+  snackbars: {
+    errors: {
+      outcomes: {
+        id: `${snackbar}.errors.load.outcomes`
+      },
+      outcome: {
+        id: `${snackbar}.errors.load.outcome`
+      },
+      create: {
+        id: `${snackbar}.errors.create.outcome`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.outcome`
+      },
+      update: {
+        id: `${snackbar}.errors.update.outcome`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.outcome`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.outcome`
+      },
+      update: {
+        id: `${snackbar}.success.update.outcome`
+      },
     },
   },
 });
