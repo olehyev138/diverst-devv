@@ -32,7 +32,6 @@ export function* getEmail(action) {
 
 export function* getEmails(action) {
   try {
-    console.log(action.payload);
     const response = yield call(api.emails.all.bind(api.emails), action.payload);
 
     yield put(getEmailsSuccess(response.data.page));

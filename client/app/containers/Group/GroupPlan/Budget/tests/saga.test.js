@@ -281,4 +281,55 @@ describe('Budget Saga', () => {
       expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.decline);
     });
   });
+
+  describe('deleteBudget', () => {
+    it('Should deleteBudget', async () => {
+      api.budgets.destroy.mockImplementation(() => Promise.resolve({ data: { ...budget } }));
+      const notified = {
+        notification: {
+          key: 1590092641484,
+          message: 'Failed to load events',
+          options: { variant: 'warning' }
+        },
+        type: 'app/Notifier/ENQUEUE_SNACKBAR'
+      };
+
+      jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+      const results = [deleteBudgetSuccess(), notified];
+      const initialAction = { payload: {
+        ...budget
+      } };
+
+      const dispatched = await recordSaga(
+        deleteBudget,
+        initialAction
+      );
+      expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+    });
+
+    it('Should return error from the API', async () => {
+      const response = { response: { data: 'ERROR!' } };
+      api.budgets.destroy.mockImplementation(() => Promise.reject(response));
+      const notified = {
+        notification: {
+          key: 1590092641484,
+          message: 'Failed to load events',
+          options: { variant: 'warning' }
+        },
+        type: 'app/Notifier/ENQUEUE_SNACKBAR'
+      };
+
+      jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+      const results = [deleteBudgetError(response), notified];
+      const initialAction = { payload: { id: 2 } };
+      const dispatched = await recordSaga(
+        deleteBudget,
+        initialAction
+      );
+
+      expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+    });
+  });
 });
