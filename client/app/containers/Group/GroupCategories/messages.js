@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Group.Categories';
+export const snackbar = 'diverst.snackbars.Group.Categories';
 
 export default defineMessages({
   new: {
@@ -48,4 +49,34 @@ export default defineMessages({
   nocategories: {
     id: `${scope}.list.nocategories`,
   },
+  snackbars: {
+    errors: {
+      categories: {
+        id: `${snackbar}.errors.load.categories`
+      },
+      category: {
+        id: `${snackbar}.errors.load.category`
+      },
+      create: {
+        id: `${snackbar}.errors.create.category`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.category`
+      },
+      update: {
+        id: `${snackbar}.errors.update.category`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.category`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.category`
+      },
+      update: {
+        id: `${snackbar}.success.update.category`
+      },
+    }
+  }
 });

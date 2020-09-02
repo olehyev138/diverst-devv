@@ -76,7 +76,7 @@ class InitiativeBasePolicy < GroupBasePolicy
     def resolve(permission)
       if initiative
         if index?
-          initiative_base.merge(scope)
+          initiative_base.merge(scope.all)
         else
           scope.none
         end

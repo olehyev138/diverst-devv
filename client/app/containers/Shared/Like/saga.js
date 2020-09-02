@@ -2,6 +2,8 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   LIKE_NEWS_ITEM_BEGIN, LIKE_NEWS_ITEM_SUCCESS, LIKE_NEWS_ITEM_ERROR,
@@ -22,9 +24,8 @@ export function* likeNewsItem(action) {
     yield put(likeNewsItemSuccess(response.data));
     callback();
   } catch (err) {
-    // TODO: intl message
     yield put(likeNewsItemError(err));
-    yield put(showSnackbar({ message: 'Failed to like news item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.like), options: { variant: 'warning' } }));
   }
 }
 
@@ -37,9 +38,8 @@ export function* unlikeNewsItem(action) {
     yield put(unlikeNewsItemSuccess(response.data));
     callback();
   } catch (err) {
-    // TODO: intl message
     yield put(unlikeNewsItemError(err));
-    yield put(showSnackbar({ message: 'Failed to unlike news item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.unlike), options: { variant: 'warning' } }));
   }
 }
 

@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -35,9 +37,7 @@ export function* getPoll(action) {
     yield put(getPollSuccess(response.data));
   } catch (err) {
     yield put(getPollError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.poll), options: { variant: 'warning' } }));
   }
 }
 
@@ -48,9 +48,7 @@ export function* getPolls(action) {
     yield put(getPollsSuccess(response.data.page));
   } catch (err) {
     yield put(getPollsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get polls', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.polls), options: { variant: 'warning' } }));
   }
 }
 
@@ -62,12 +60,10 @@ export function* createPoll(action) {
 
     yield put(createPollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: 'Successfully created poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -79,12 +75,10 @@ export function* updatePoll(action) {
 
     yield put(updatePollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: 'Successfully updated poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -96,12 +90,10 @@ export function* createPollAndPublish(action) {
 
     yield put(createPollAndPublishSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: 'Successfully created and published poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_publish), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollAndPublishError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create and publish poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_publish), options: { variant: 'warning' } }));
   }
 }
 
@@ -113,12 +105,10 @@ export function* updatePollAndPublish(action) {
 
     yield put(updatePollAndPublishSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: 'Successfully updated and published poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_publish), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollAndPublishError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update and publish poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_publish), options: { variant: 'warning' } }));
   }
 }
 
@@ -127,12 +117,10 @@ export function* publishPoll(action) {
     const response = yield call(api.polls.publish.bind(api.polls), action.payload.id);
 
     yield put(publishPollSuccess());
-    yield put(showSnackbar({ message: 'Successfully published poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.publish), options: { variant: 'success' } }));
   } catch (err) {
     yield put(publishPollError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to publish poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.publish), options: { variant: 'warning' } }));
   }
 }
 
@@ -140,12 +128,10 @@ export function* deletePoll(action) {
   try {
     yield call(api.polls.destroy.bind(api.polls), action.payload.id);
     yield put(deletePollSuccess());
-    yield put(showSnackbar({ message: 'Successfully deleted poll', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePollError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete poll', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

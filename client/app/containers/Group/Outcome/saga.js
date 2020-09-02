@@ -4,6 +4,8 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_OUTCOMES_BEGIN, CREATE_OUTCOME_BEGIN,
@@ -28,8 +30,7 @@ export function* getOutcomes(action) {
   } catch (err) {
     yield put(getOutcomesError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load outcomes', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.outcomes), options: { variant: 'warning' } }));
   }
 }
 
@@ -38,9 +39,8 @@ export function* getOutcome(action) {
     const response = yield call(api.outcomes.get.bind(api.outcomes), action.payload.id);
     yield put(getOutcomeSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getOutcomeError(err));
-    yield put(showSnackbar({ message: 'Failed to get outcome', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.outcome), options: { variant: 'warning' } }));
   }
 }
 
@@ -54,12 +54,10 @@ export function* createOutcome(action) {
 
     yield put(createOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Outcome created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createOutcomeError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create outcome', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -70,12 +68,10 @@ export function* updateOutcome(action) {
 
     yield put(updateOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Outcome updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateOutcomeError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update outcome', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -85,12 +81,10 @@ export function* deleteOutcome(action) {
 
     yield put(deleteOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Outcome deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteOutcomeError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete outcome', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

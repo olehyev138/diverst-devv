@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_USERS_BEGIN,
@@ -54,9 +56,7 @@ export function* getUsers(action) {
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.users), options: { variant: 'warning' } }));
   }
 }
 
@@ -65,9 +65,8 @@ export function* getUser(action) {
     const response = yield call(api.users.get.bind(api.users), action.payload.id);
     yield put(getUserSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getUserError(err));
-    yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.user), options: { variant: 'warning' } }));
   }
 }
 
@@ -77,9 +76,7 @@ export function* getUserPosts(action) {
     yield put(getUserPostsSuccess(response.data.page));
   } catch (err) {
     yield put(getUserPostsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load posts', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.posts), options: { variant: 'warning' } }));
   }
 }
 
@@ -97,9 +94,7 @@ export function* getUserEvents(action) {
     yield put(getUserEventsSuccess(response.data.page));
   } catch (err) {
     yield put(getUserEventsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load events', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.events), options: { variant: 'warning' } }));
   }
 }
 
@@ -109,9 +104,7 @@ export function* getUserDownloads(action) {
     yield put(getUserDownloadsSuccess(response.data.page));
   } catch (err) {
     yield put(getUserDownloadsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to retrieve downloads', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.downloads), options: { variant: 'warning' } }));
   }
 }
 
@@ -123,12 +116,10 @@ export function* createUser(action) {
 
     yield put(createUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'User created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -139,12 +130,10 @@ export function* updateUser(action) {
 
     yield put(updateUserSuccess());
     yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -154,12 +143,10 @@ export function* deleteUser(action) {
 
     yield put(deleteUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -169,12 +156,10 @@ export function* updateFieldData(action) {
     const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
 
     yield put(updateFieldDataSuccess());
-    yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.fields), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldDataError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.fields), options: { variant: 'warning' } }));
   }
 }
 
@@ -183,12 +168,10 @@ export function* exportUsers(action) {
     const response = yield call(api.users.csvExport.bind(api.users), action.payload);
 
     yield put(exportUsersSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully exported users', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export), options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportUsersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to export users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export), options: { variant: 'warning' } }));
   }
 }
 
@@ -198,9 +181,7 @@ export function* getSampleImport(action) {
     yield put(getSampleImportSuccess({}));
   } catch (err) {
     yield put(getSampleImportError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to export users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.import), options: { variant: 'warning' } }));
   }
 }
 
@@ -211,9 +192,7 @@ export function* getUserDownloadData(action) {
     yield put(getUserDownloadDataSuccess({ data: response.data, contentType: response.headers['content-type'] }));
   } catch (err) {
     yield put(getUserDownloadDataError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to retrieve file data', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.user_data), options: { variant: 'warning' } }));
   }
 }
 
@@ -224,9 +203,7 @@ export function* getUserPrototype(action) {
     yield put(getUserPrototypeSuccess(response.data));
   } catch (err) {
     yield put(getUserPrototypeError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.prototype), options: { variant: 'warning' } }));
   }
 }
 

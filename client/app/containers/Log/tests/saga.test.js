@@ -15,6 +15,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from '../messages';
+
 api.activities.all = jest.fn();
 api.activities.csvExport = jest.fn();
 
@@ -66,6 +69,7 @@ describe('Get logs Saga', () => {
     );
     expect(api.activities.all).toHaveBeenCalledWith(action.payload);
     expect(dispatched).toEqual(result);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.logs);
   });
 });
 
@@ -92,6 +96,7 @@ describe('export Saga', () => {
 
     expect(api.activities.csvExport).toHaveBeenCalledWith(action.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.export);
   });
 
   it('Should return error from the API for all resources possible', async () => {
@@ -118,5 +123,6 @@ describe('export Saga', () => {
 
     expect(api.activities.csvExport).toHaveBeenCalledWith(action.payload);
     expect(newsDispatched).toEqual(result);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.export);
   });
 });

@@ -361,37 +361,6 @@ RSpec.describe GroupPolicy, type: :policy do
         end
       end
 
-      describe '#assign_leaders?' do
-        context 'when manage_all is true' do
-          before { user.policy_group.update manage_all: true }
-
-          it 'returns true' do
-            expect(subject.assign_leaders?).to eq true
-          end
-        end
-
-        context 'when user is group leader : has_group_leader_permissions?' do
-          before do
-            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update group_leader_manage: true
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
-          it 'returns true' do
-            expect(subject.assign_leaders?).to eq true
-          end
-        end
-
-        context 'when group_leader_manage? is true' do
-          before { user.policy_group.update group_leader_manage: true }
-
-          it 'returns true' do
-            expect(subject.assign_leaders?).to eq true
-          end
-        end
-      end
-
       describe '#calendar?' do
         context 'when manage_all is true' do
           before { user.policy_group.update manage_all: true }
@@ -689,37 +658,6 @@ RSpec.describe GroupPolicy, type: :policy do
         context 'when user isnt a leader' do
           it 'returns false' do
             expect(subject.is_a_leader?).to eq false
-          end
-        end
-      end
-
-      describe '#assign_leaders?' do
-        context 'when manage_all is false' do
-          before { user.policy_group.update manage_all: false }
-
-          it 'returns false' do
-            expect(subject.assign_leaders?).to eq false
-          end
-        end
-
-        context 'when user is group leader : has_group_leader_permissions?' do
-          before do
-            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update group_leader_manage: false
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
-          it 'returns false' do
-            expect(subject.assign_leaders?).to eq false
-          end
-        end
-
-        context 'when group_leader_manage? is false' do
-          before { user.policy_group.update group_leader_manage: false }
-
-          it 'returns false' do
-            expect(subject.assign_leaders?).to eq false
           end
         end
       end

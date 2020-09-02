@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_FIELD_BEGIN, UPDATE_FIELD_BEGIN, DELETE_FIELD_BEGIN
@@ -21,9 +23,8 @@ export function* getField(action) {
     const response = yield call(api.fields.get.bind(api.fields), action.payload.id);
     yield put(getFieldSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getFieldError(err));
-    yield put(showSnackbar({ message: 'Failed to get field', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.field), options: { variant: 'warning' } }));
   }
 }
 
@@ -33,12 +34,10 @@ export function* updateField(action) {
     const response = yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
 
     yield put(updateFieldSuccess());
-    yield put(showSnackbar({ message: 'Field updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update field', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -47,12 +46,10 @@ export function* deleteField(action) {
     yield call(api.fields.destroy.bind(api.fields), action.payload);
 
     yield put(deleteFieldSuccess());
-    yield put(showSnackbar({ message: 'Field deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteFieldError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update field', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -63,9 +60,7 @@ export function* getFields(action, fieldDefinerApi) {
     yield put(getFieldsSuccess(response.data.page));
   } catch (err) {
     yield put(getFieldsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load fields', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.fields), options: { variant: 'warning' } }));
   }
 }
 
@@ -77,12 +72,10 @@ export function* createField(action, fieldDefinerApi) {
     const response = yield call(fieldDefinerApi.createFields.bind(fieldDefinerApi), fieldDefinerId, payload);
 
     yield put(createFieldSuccess());
-    yield put(showSnackbar({ message: 'Field created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createFieldError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create field', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
