@@ -12,7 +12,12 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading } from 'containers/Resource/selectors';
+import {
+  selectPaginatedFolders,
+  selectFoldersTotal,
+  selectIsFolderLoading,
+  selectHasChanged
+} from 'containers/Resource/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
@@ -85,6 +90,15 @@ export function FoldersPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      getFolders();
+
+    return () => {
+      props.foldersUnmount();
+    };
+  }, [props.hasChanged]);
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -117,6 +131,7 @@ FoldersPage.propTypes = {
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -130,6 +145,7 @@ const mapStateToProps = createStructuredSelector({
   foldersTotal: selectFoldersTotal(),
   currentEnterprise: selectEnterprise(),
   isLoading: selectIsFolderLoading(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
