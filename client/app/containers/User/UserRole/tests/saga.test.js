@@ -30,6 +30,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 api.userRoles.all = jest.fn();
 api.userRoles.create = jest.fn();
 api.userRoles.update = jest.fn();
@@ -83,6 +86,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.roles);
     });
   });
 
@@ -123,6 +127,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.role);
     });
   });
 
@@ -150,6 +155,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.create).toHaveBeenCalledWith({ user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -173,6 +179,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
   });
 
@@ -199,6 +206,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -223,6 +231,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -252,6 +261,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -275,6 +285,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

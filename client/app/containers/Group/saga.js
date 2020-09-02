@@ -170,7 +170,7 @@ export function* deleteGroup(action) {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
     yield put(deleteGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupError(err));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));

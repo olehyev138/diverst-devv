@@ -99,7 +99,7 @@ export function* updateFolder(action) {
   } catch (err) {
     yield put(updateFolderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update),
+      message: intl.formatMessage(messages.snackbars.errors.update_folder),
       options: { variant: 'warning' }
     }));
   }
