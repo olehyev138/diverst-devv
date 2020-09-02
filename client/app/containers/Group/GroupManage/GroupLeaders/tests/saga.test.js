@@ -26,6 +26,9 @@ import {
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
@@ -81,6 +84,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leaders);
     });
   });
 
@@ -120,6 +124,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leader);
     });
   });
 
@@ -147,6 +152,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.create).toHaveBeenCalledWith({ group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -170,6 +176,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
 
     it('Should update a groupLeader', async () => {
@@ -194,6 +201,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -218,6 +226,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -247,6 +256,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -270,6 +280,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

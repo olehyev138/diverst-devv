@@ -27,6 +27,10 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 api.userGroups.all = jest.fn();
 api.groupMembers.addMembers = jest.fn();
 api.groupMembers.removeMembers = jest.fn();
@@ -78,6 +82,7 @@ describe('Tests for members saga', () => {
 
       expect(api.userGroups.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.members);
     });
   });
 
@@ -101,6 +106,7 @@ describe('Tests for members saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -123,10 +129,11 @@ describe('Tests for members saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
   });
 
-  describe('Delete member', () => {
+  describe('Export member', () => {
     it('Should delete a member', async () => {
       api.groupMembers.removeMembers.mockImplementation(() => Promise.resolve({ data: { member } }));
       const notified = {
@@ -150,6 +157,7 @@ describe('Tests for members saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -172,6 +180,7 @@ describe('Tests for members saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 

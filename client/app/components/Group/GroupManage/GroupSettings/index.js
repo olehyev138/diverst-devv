@@ -231,6 +231,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={<DiverstFormattedMessage {...messages.settings.banner} />}
                 disabled={props.isCommitting}
                 value={values.banner}
+                fileType='image'
               />
             </Grid>
             <Grid item xs='auto'>
@@ -244,6 +245,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 label={intl.formatMessage(messages.settings.logo)}
                 disabled={props.isCommitting}
                 value={values.logo}
+                fileType='image'
               />
             </Grid>
             <Grid item xs='auto'>
