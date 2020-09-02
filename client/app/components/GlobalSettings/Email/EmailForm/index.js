@@ -17,13 +17,14 @@ import {
   Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/GlobalSettings/Email/Email/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
+
 
 const styles = theme => ({
   padding: {
@@ -64,6 +65,7 @@ export function EmailFormInner({
 
   const { intl } = props;
 
+
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={!props.email}>
@@ -103,16 +105,15 @@ export function EmailFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
-              <Button
-                component={WrappedNavLink}
-                to={props.links.emailsIndex}
+              <DiverstCancel
+                redirectFallback={props.links.emailsIndex}
                 variant='contained'
                 size='large'
-                color='primary'
                 className={classes.buttons}
+                disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>

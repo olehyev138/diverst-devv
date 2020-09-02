@@ -14,6 +14,8 @@ import {
 import { setUserData } from 'containers/Shared/App/actions';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 export function* updateCustomText(action) {
   try {
@@ -28,12 +30,11 @@ export function* updateCustomText(action) {
     const enterprise = yield select(selectEnterprise());
     yield put(setUserData({ enterprise: { ...enterprise, custom_text: response.data.custom_text } }, true));
 
-    yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update custom text', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 

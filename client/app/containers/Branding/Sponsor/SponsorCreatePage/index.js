@@ -21,6 +21,7 @@ import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectIsCommitting } from 'containers/Shared/Sponsors/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorCreatePage(props) {
@@ -40,6 +41,7 @@ export function SponsorCreatePage(props) {
         links={links}
         buttonText={intl.formatMessage(messages.create)}
         sponsorableId={null}
+        isCommitting={props.isCommitting}
       />
     </React.Fragment>
   );
@@ -48,11 +50,13 @@ export function SponsorCreatePage(props) {
 SponsorCreatePage.propTypes = {
   intl: intlShape.isRequired,
   createSponsorBegin: PropTypes.func,
-  sponsorsUnmount: PropTypes.func
+  sponsorsUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

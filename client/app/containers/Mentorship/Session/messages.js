@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.MentorshipSession';
+export const snackbar = 'diverst.snackbars.Mentorship.Session';
 
 export default defineMessages({
   index: {
@@ -137,6 +138,54 @@ export default defineMessages({
       delete: {
         id: `${scope}.show.confirm.delete`,
       }
+    }
+  },
+  snackbars: {
+    errors: {
+      session: {
+        id: `${snackbar}.errors.load.session`
+      },
+      hosting: {
+        id: `${snackbar}.errors.load.hosting`
+      },
+      participating: {
+        id: `${snackbar}.errors.load.participating`
+      },
+      participating_users: {
+        id: `${snackbar}.errors.load.participating_users`
+      },
+      create: {
+        id: `${snackbar}.errors.create.session`
+      },
+      update: {
+        id: `${snackbar}.errors.update.session`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.session`
+      },
+      accept: {
+        id: `${snackbar}.errors.accept`
+      },
+      decline: {
+        id: `${snackbar}.errors.decline`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.session`
+      },
+      update: {
+        id: `${snackbar}.success.update.session`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.session`
+      },
+      accept: {
+        id: `${snackbar}.success.accept`
+      },
+      decline: {
+        id: `${snackbar}.success.decline`
+      },
     }
   }
 });

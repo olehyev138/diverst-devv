@@ -10,6 +10,7 @@ import {
   GET_SPONSORS_SUCCESS, GET_SPONSOR_BEGIN, GET_SPONSOR_SUCCESS,
   GET_SPONSOR_ERROR, SPONSORS_UNMOUNT,
   CREATE_SPONSOR_BEGIN, CREATE_SPONSOR_SUCCESS, CREATE_SPONSOR_ERROR,
+  DELETE_SPONSOR_BEGIN, DELETE_SPONSOR_ERROR, DELETE_SPONSOR_SUCCESS
 } from './constants';
 
 
@@ -18,6 +19,7 @@ export const initialState = {
   sponsorList: [],
   sponsorTotal: null,
   currentSponsor: null,
+  hasChanged: false,
   isFetchingSponsors: true
 };
 
@@ -53,6 +55,12 @@ function sponsorsReducer(state = initialState, action) {
         break;
       case GET_SPONSOR_ERROR:
         draft.isFormLoading = false;
+        break;
+      case DELETE_SPONSOR_BEGIN:
+        draft.hasChanged = false;
+        break;
+      case DELETE_SPONSOR_SUCCESS:
+        draft.hasChanged = true;
         break;
       case SPONSORS_UNMOUNT:
         return initialState;
