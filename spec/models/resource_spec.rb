@@ -10,6 +10,7 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to belong_to(:initiative) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to belong_to(:mentoring_session) }
+
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
     it { expect(resource).to have_many(:views).dependent(:destroy) }
 
@@ -25,6 +26,7 @@ RSpec.describe Resource, type: :model do
     # it { expect(resource).to validate_attachment_presence(:file)}
 
     it { expect(resource).to validate_presence_of(:title) }
+    it { expect(resource).to validate_presence_of(:url) }
   end
 
   describe 'test scopes' do
@@ -43,6 +45,20 @@ RSpec.describe Resource, type: :model do
         expect(Resource.archived.count).to eq(2)
       end
     end
+
+    describe '.unarchived_resources' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise: enterprise) }
+      let!(:group_folder) { create(:folder, group_id: group.id, enterprise_id: nil) }
+      let!(:enterprise_folder) { create(:folder, enterprise_id: enterprise.id, group_id: nil) }
+      let!(:group_resources) { create_list(:resource, 2, folder: group_folder, archived_at: DateTime.now) }
+      let!(:enterprise_resources) { create_list(:resource, 4, folder: enterprise_folder) }
+
+      it 'returns unarchived resources' do
+        folder_ids = [group_folder.id]
+        expect(described_class.unarchived_resources(folder_ids, [])).to eq(group_resources)
+      end
+    end
   end
 
   describe 'test callbacks' do
@@ -53,6 +69,108 @@ RSpec.describe Resource, type: :model do
         expect(resource).to receive(:smart_add_url_protocol)
         resource.valid?
       end
+    end
+  end
+
+  describe 'policy test' do
+    let!(:resource) { create(:resource) }
+
+    it 'when the resource belongs to a group' do
+      resource.update(group_id: 2)
+      expect(resource.policy_class).to be GroupResourcePolicy
+    end
+
+    it 'when the resource belongs to a initiative' do
+      resource.update(initiative_id: 2)
+      expect(resource.policy_class).to be GroupResourcePolicy
+    end
+
+    it 'when the resource belongs to an enterprise' do
+      resource.update(enterprise_id: 2)
+      expect(resource.policy_class).to be EnterpriseResourcePolicy
+    end
+
+    it 'when the resource belongs to a mentoring session' do
+      resource.update(mentoring_session_id: 2)
+      expect(resource.policy_class).to be EnterpriseResourcePolicy
+    end
+
+    it 'when resource doesnt belong to anything and the parent folder belongs to groups' do
+      resource.update(enterprise_id: nil)
+      resource.folder.update(enterprise_id: nil, group_id: 2)
+      expect(resource.policy_class).to be GroupResourcePolicy
+    end
+
+    it 'when resource doesnt belong to anything and the parent folder belongs to enterprises' do
+      resource.update(enterprise_id: nil)
+      resource.folder.update(enterprise_id: 1, group_id: nil)
+      expect(resource.policy_class).to be EnterpriseResourcePolicy
+    end
+
+    it 'when resource doesnt belong to anything and the parent folder doesnt belong to anything' do
+      resource.update(enterprise_id: nil)
+      resource.folder.update(enterprise_id: nil, group_id: nil)
+      expect { resource.policy_class }.to raise_error(StandardError, 'Folder is without parent')
+    end
+  end
+
+  describe '#file_location' do
+    let!(:resource) { create(:resource) }
+    let!(:resource_with_file) { create(:resource_with_file) }
+
+    it 'returns nil when no file is attached' do
+      expect(resource.file_location).to be nil
+    end
+
+    it 'returns the url for the file' do
+      expect(resource_with_file.file_location).to eq Rails.application.routes.url_helpers.url_for(resource_with_file.file)
+    end
+  end
+
+  describe '#path_for_file_download' do
+    let!(:resource) { create(:resource) }
+    let!(:resource_with_file) { create(:resource_with_file) }
+
+    it 'returns nil when no file is attached' do
+      expect(resource.path_for_file_download).to be nil
+    end
+
+    it 'returns the url for the file' do
+      expect(resource_with_file.path_for_file_download).to eq Rails.application.routes.url_helpers.rails_blob_path(resource_with_file.file, only_path: true, disposition: 'attachment')
+    end
+  end
+
+  describe '#container' do
+    let!(:resource) { create(:resource) }
+    let!(:group) { create(:group) }
+    let!(:enterprise) { create(:enterprise) }
+    let!(:initiative) { create(:initiative) }
+    let!(:folder) { create(:folder) }
+    let!(:mentoring_session) { create(:mentoring_session) }
+
+    it 'when the resource belongs to a group' do
+      resource.update(group: group, folder: nil)
+      expect(resource.container).to be group
+    end
+
+    it 'when the resource belongs to a initiative' do
+      resource.update(initiative: initiative, folder: nil)
+      expect(resource.container).to be initiative
+    end
+
+    it 'when the resource belongs to a folder' do
+      resource.update(folder: folder)
+      expect(resource.container).to be folder
+    end
+
+    it 'when the resource belongs to an enterprise' do
+      resource.update(enterprise: enterprise, folder: nil)
+      expect(resource.container).to be enterprise
+    end
+
+    it 'when the resource belongs to a mentoring session' do
+      resource.update(mentoring_session: mentoring_session, folder: nil)
+      expect(resource.container).to be mentoring_session
     end
   end
 
@@ -193,19 +311,6 @@ RSpec.describe Resource, type: :model do
     end
   end
 
-  describe '.unarchived_resources' do
-    let!(:enterprise) { create(:enterprise) }
-    let!(:group) { create(:group, enterprise: enterprise) }
-    let!(:group_folder) { create(:folder, group_id: group.id, enterprise_id: nil) }
-    let!(:enterprise_folder) { create(:folder, enterprise_id: enterprise.id, group_id: nil) }
-    let!(:group_resources) { create_list(:resource, 2, folder: group_folder, archived_at: DateTime.now) }
-    let!(:enterprise_resources) { create_list(:resource, 4, folder: enterprise_folder) }
-
-    it 'returns unarchived resources' do
-      folder_ids = [group_folder.id]
-      expect(described_class.unarchived_resources(folder_ids, [])).to eq(group_resources)
-    end
-  end
 
   describe '.archive_expired_resources' do
     let!(:enterprise) { create(:enterprise) }

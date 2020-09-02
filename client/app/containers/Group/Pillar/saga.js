@@ -6,6 +6,9 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   GET_PILLAR_BEGIN,
   GET_PILLARS_BEGIN,
@@ -29,9 +32,7 @@ export function* getPillar(action) {
     yield put(getPillarSuccess(response.data));
   } catch (err) {
     yield put(getPillarError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get pillar', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillar), options: { variant: 'warning' } }));
   }
 }
 
@@ -42,9 +43,7 @@ export function* getPillars(action) {
     yield put(getPillarsSuccess(response.data.page));
   } catch (err) {
     yield put(getPillarsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get pillars', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillars), options: { variant: 'warning' } }));
   }
 }
 
@@ -53,12 +52,10 @@ export function* createPillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(createPillarSuccess());
-    yield put(showSnackbar({ message: 'Successfully created pillar', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPillarError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create pillar', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -67,12 +64,10 @@ export function* updatePillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(updatePillarSuccess());
-    yield put(showSnackbar({ message: 'Successfully updated pillar', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePillarError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update pillar', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -81,12 +76,10 @@ export function* deletePillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(deletePillarSuccess());
-    yield put(showSnackbar({ message: 'Successfully deleted pillar', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePillarError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete pillar', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

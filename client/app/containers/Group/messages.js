@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Group';
+export const snackbar = 'diverst.snackbars.Group';
 
 export default defineMessages({
   new: {
@@ -147,5 +148,80 @@ export default defineMessages({
     close: {
       id: `${scope}.selectorDialog.close`,
     },
+  },
+  snackbars: {
+    errors: {
+      group: {
+        id: `${snackbar}.errors.group`
+      },
+      groups: {
+        id: `${snackbar}.errors.groups`
+      },
+      annualBudgets: {
+        id: `${snackbar}.errors.annualBudgets`
+      },
+      colors: {
+        id: `${snackbar}.errors.colors`
+      },
+      create: {
+        id: `${snackbar}.errors.create.group`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.group`
+      },
+      update: {
+        id: `${snackbar}.errors.update.group`
+      },
+      group_categorize: {
+        id: `${snackbar}.errors.group_categorize`
+      },
+      update_group_position: {
+        id: `${snackbar}.errors.update_group_position`
+      },
+      update_group_settings: {
+        id: `${snackbar}.errors.update_group_settings`
+      },
+      carry: {
+        id: `${snackbar}.errors.budget.carry`
+      },
+      reset: {
+        id: `${snackbar}.errors.budget.reset`
+      },
+      leave: {
+        id: `${snackbar}.errors.group.leave`
+      },
+      join: {
+        id: `${snackbar}.errors.group.join`
+      },
+      join_subgroups: {
+        id: `${snackbar}.errors.group.join_subgroups`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.group`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.group`
+      },
+      update: {
+        id: `${snackbar}.success.update.group`
+      },
+      group_categorize: {
+        id: `${snackbar}.success.group_categorize`
+      },
+      update_group_position: {
+        id: `${snackbar}.success.update_group_position`
+      },
+      update_group_settings: {
+        id: `${snackbar}.success.update_group_settings`
+      },
+      carry: {
+        id: `${snackbar}.success.budget.carry`
+      },
+      reset: {
+        id: `${snackbar}.success.budget.reset`
+      },
+    }
   }
 });

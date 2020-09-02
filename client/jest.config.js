@@ -23,6 +23,7 @@ module.exports = {
   },
   setupFilesAfterEnv: [
     '<rootDir>app/tests/setup/setupEnzyme.js',
+    '<rootDir>app/tests/setup/setupJestMock.js',
     '<rootDir>/internals/testing/test-bundler.js',
   ],
   setupFiles: ['raf/polyfill'],
