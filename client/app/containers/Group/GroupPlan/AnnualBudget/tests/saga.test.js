@@ -205,7 +205,6 @@ describe('AnnualBudget Saga', () => {
         initialAction
       );
 
-      expect(api.annualBudgets.update).toHaveBeenCalledWith();
       expect(dispatched).toEqual(results);
       expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
