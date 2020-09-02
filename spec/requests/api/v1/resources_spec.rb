@@ -42,6 +42,10 @@ RSpec.describe 'Resources', type: :request do
       expect(response).to have_http_status(:created)
     end
 
+    it 'inserts item in the database' do
+      expect { post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers }.to change(model.constantize, :count).by(1)
+    end
+
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:build).and_raise(BadRequestException)
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
@@ -55,6 +59,11 @@ RSpec.describe 'Resources', type: :request do
     it 'updates an item' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'item has been updated' do
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'title' => 'Asian Blue Communitya' } }, headers: headers
+      expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
     end
 
     it 'captures the error when BadRequestException' do
@@ -71,6 +80,10 @@ RSpec.describe 'Resources', type: :request do
       expect(response).to have_http_status(:no_content)
     end
 
+    it 'destroys item in the database' do
+      expect { delete "/api/v1/#{route}/#{item.id}", headers: headers }.to change(model.constantize, :count).by(-1)
+    end
+
     it 'captures the error' do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
@@ -82,6 +95,11 @@ RSpec.describe 'Resources', type: :request do
     it 'archives an item' do
       post "/api/v1/#{route}/#{item.id}/archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'item has been archived' do
+      post "/api/v1/#{route}/#{item.id}/archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      expect(model.constantize.find(item.id).attributes['archived_at']).to_not eq nil
     end
 
     it 'captures the error' do
@@ -101,6 +119,14 @@ RSpec.describe 'Resources', type: :request do
     it 'unarchives an item' do
       put "/api/v1/#{route}/#{item.id}/un_archive", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'item has been unarchived' do
+      resource = build(route.singularize.to_sym)
+      resource.update(archived_at: Time.now)
+      expect(model.constantize.find(resource.id).attributes['archived_at']).to_not eq nil
+      put "/api/v1/#{route}/#{resource.id}/un_archive", params: { "#{route.singularize}" => resource.attributes }, headers: headers
+      expect(model.constantize.find(resource.id).attributes['archived_at']).to eq nil
     end
 
     it 'captures the error' do

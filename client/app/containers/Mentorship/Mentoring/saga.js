@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_USER_MENTORS_BEGIN, GET_AVAILABLE_MENTORS_BEGIN, DELETE_MENTORSHIP_BEGIN, REQUEST_MENTORSHIP_BEGIN
@@ -38,9 +40,7 @@ export function* getMentors(action) {
     yield put(getMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getMentorsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load user\'s mentorships', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.mentors), options: { variant: 'warning' } }));
   }
 }
 
@@ -59,9 +59,7 @@ export function* getAvailableMentors(action) {
     yield put(getAvailableMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getAvailableMentorsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: `Failed to load available ${action.payload.query_scopes[0]}`, options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.available_mentors), options: { variant: 'warning' } }));
   }
 }
 
@@ -76,12 +74,10 @@ export function* deleteMentorship(action) {
 
     yield put(deleteMentorshipSuccess());
     yield put(push(path));
-    yield put(showSnackbar({ message: 'Mentorship deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteMentorshipError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete mentorship', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -91,19 +87,16 @@ export function* requestMentorship(action) {
     yield call(api.mentoringRequests.create.bind(api.mentoringRequests), payload);
 
     yield put(requestsMentorshipSuccess());
-    yield put(showSnackbar({ message: 'Request Submitted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.request), options: { variant: 'success' } }));
   } catch (err) {
     yield put(requestsMentorshipError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Request Failed to Submit', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.request), options: { variant: 'warning' } }));
   }
 }
 
 export default function* mentorshipSaga() {
   yield takeLatest(GET_USER_MENTORS_BEGIN, getMentors);
   yield takeLatest(GET_AVAILABLE_MENTORS_BEGIN, getAvailableMentors);
-
   yield takeLatest(DELETE_MENTORSHIP_BEGIN, deleteMentorship);
   yield takeLatest(REQUEST_MENTORSHIP_BEGIN, requestMentorship);
 }
