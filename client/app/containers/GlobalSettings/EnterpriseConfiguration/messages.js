@@ -98,6 +98,21 @@ export default defineMessages({
       id: `${scope}.settings.units.weeks`,
     },
   },
+  snackbars: {
+    errors: {
+      load: {
+        id: `${snackbar}.errors.load`,
+      },
+      update: {
+        id: `${snackbar}.errors.update`,
+      },
+    },
+    success: {
+      update: {
+        id: `${snackbar}.success.update`,
+      },
+    }
+  },
   module_setting: {
     id: `${scope}.label.module_setting`,
   },
