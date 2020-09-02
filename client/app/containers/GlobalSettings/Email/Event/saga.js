@@ -50,7 +50,7 @@ export function* updateEvent(action) {
     const payload = { clockwork_database_event: action.payload };
     const response = yield call(api.emailEvents.update.bind(api.emailEvents), payload.clockwork_database_event.id, payload);
 
-    yield put(updateEventSuccess());
+    yield put(updateEventSuccess({}));
     yield put(push(ROUTES.admin.system.globalSettings.emails.events.index.path()));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
