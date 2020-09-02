@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.RequestList';
+export const snackbar = 'diverst.snackbars.Mentorship.Requests';
 
 export default defineMessages({
   columns: {
@@ -61,5 +62,35 @@ export default defineMessages({
     rejectWarning: {
       id: `${scope}.actions.rejectWarning`
     },
+  },
+  snackbars: {
+    errors: {
+      request: {
+        id: `${snackbar}.errors.load.request`
+      },
+      proposal: {
+        id: `${snackbar}.errors.load.proposal`
+      },
+      accept: {
+        id: `${snackbar}.errors.accept.request`
+      },
+      reject: {
+        id: `${snackbar}.errors.reject.request`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.request`
+      },
+    },
+    success: {
+      accept: {
+        id: `${snackbar}.success.accept.request`
+      },
+      reject: {
+        id: `${snackbar}.success.reject.request`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.request`
+      },
+    }
   }
 });

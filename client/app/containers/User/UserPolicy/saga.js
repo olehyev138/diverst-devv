@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -29,9 +31,7 @@ export function* getPolicy(action) {
     yield put(getPolicySuccess(response.data));
   } catch (err) {
     yield put(getPolicyError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get policy', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.policy), options: { variant: 'warning' } }));
   }
 }
 
@@ -42,9 +42,7 @@ export function* getPolicies(action) {
     yield put(getPoliciesSuccess(response.data.page));
   } catch (err) {
     yield put(getPoliciesError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get policyTemplates', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.policies), options: { variant: 'warning' } }));
   }
 }
 
@@ -54,12 +52,10 @@ export function* createPolicy(action) {
     const response = yield call(api.policyTemplates.create.bind(api.policyTemplates), payload);
 
     yield put(createPolicySuccess());
-    yield put(showSnackbar({ message: 'Successfully created policy', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPolicyError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create policy', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -69,13 +65,11 @@ export function* updatePolicy(action) {
     const response = yield call(api.policyTemplates.update.bind(api.policyTemplates), payload.policy_group_template.id, payload);
 
     yield put(updatePolicySuccess());
-    yield put(showSnackbar({ message: 'Successfully updated policy', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
     yield put(push(ROUTES.admin.system.users.policy_templates.index.path()));
   } catch (err) {
     yield put(updatePolicyError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update policy', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -84,12 +78,10 @@ export function* deletePolicy(action) {
     yield call(api.policyTemplates.destroy.bind(api.policyTemplates), action.payload.id);
 
     yield put(deletePolicySuccess());
-    yield put(showSnackbar({ message: 'Successfully deleted policy', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePolicyError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete policy', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
