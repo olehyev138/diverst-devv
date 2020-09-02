@@ -12,8 +12,28 @@ module UserGroup::Actions
 
     def csv_attributes(current_user = nil, params = {})
       group = params[:group_id].present? ? Group.find(params[:group_id]) : nil
-      user_fields = current_user.present? ? current_user.fields.where(add_to_member_list: true) : Field.none
-      survey_fields = group.present? && GroupLeader.exists?(group_id: group.id, user_id: current_user&.id) ? group.survey_fields : Field.none
+
+      policy = if current_user.present? && group.present?
+        UserGroupPolicy.new(current_user, [group, UserGroup])
+      else
+        Class.new do
+          def method_missing(m, *args, &block)
+            false
+          end
+        end.new
+      end
+
+      user_fields = if policy.is_admin_manager?
+                      current_user&.fields
+                    elsif policy.manage?
+                      current_user&.fields&.where(add_to_member_list: true)
+                    end || Field.none
+
+      survey_fields = if policy.is_admin_manager?
+                        group&.survey_fields
+                      elsif policy.manage?
+                        group&.survey_fields&.where(add_to_member_list: true)
+                      end || Field.none
 
       {
           titles: ['First name',
