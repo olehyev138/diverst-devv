@@ -107,8 +107,8 @@ export default defineMessages({
       create: {
         id: `${snackbar}.success.create.field`
       },
-      field: {
-        id: `${snackbar}.success.field.field`
+      update: {
+        id: `${snackbar}.success.update.field`
       },
       delete: {
         id: `${snackbar}.success.delete.field`
