@@ -107,17 +107,17 @@ export function GroupMemberList(props) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.columns.givenName} />,
+      title: intl.formatMessage(messages.columns.givenName),
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
     {
-      title: <DiverstFormattedMessage {...messages.columns.familyName} />,
+      title: intl.formatMessage(messages.columns.familyName),
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
     {
-      title: <DiverstFormattedMessage {...messages.columns.status} />,
+      title: intl.formatMessage(messages.columns.status),
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND NOT accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
