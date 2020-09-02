@@ -6,6 +6,9 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   GET_BUDGET_ITEM_BEGIN,
   GET_BUDGET_ITEMS_BEGIN,
@@ -25,9 +28,7 @@ export function* getBudgetItem(action) {
     yield put(getBudgetItemSuccess(response.data));
   } catch (err) {
     yield put(getBudgetItemError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get budget item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.budget_item), options: { variant: 'warning' } }));
   }
 }
 
@@ -38,9 +39,7 @@ export function* getBudgetItems(action) {
     yield put(getBudgetItemsSuccess(response.data.page));
   } catch (err) {
     yield put(getBudgetItemsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get budget items', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.budget_items), options: { variant: 'warning' } }));
   }
 }
 
@@ -49,12 +48,10 @@ export function* closeBudgetItems(action) {
     const response = yield call(api.budgetItems.closeBudget.bind(api.budgetItems), action.payload.id);
 
     yield put(closeBudgetItemsSuccess());
-    yield put(showSnackbar({ message: 'Successfully closed budget item', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.close), options: { variant: 'success' } }));
   } catch (err) {
     yield put(closeBudgetItemsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to close budget item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.close), options: { variant: 'warning' } }));
   }
 }
 

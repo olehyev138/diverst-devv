@@ -88,6 +88,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 label={intl.formatMessage(messages.Home.banner)}
                 disabled={props.isCommitting}
                 value={values.banner}
+                fileType='image'
               />
             </Grid>
           </Grid>

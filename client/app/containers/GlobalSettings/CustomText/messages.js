@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.GlobalSettings.CustomText';
+export const snackbar = 'diverst.snackbars.GlobalSettings.CustomText';
 
 export default defineMessages({
   update: {
@@ -51,4 +52,16 @@ export default defineMessages({
   privacy_statement: {
     id: `${scope}.form.custom_text.privacy_statement`
   },
+  snackbars: {
+    errors: {
+      update: {
+        id: `${snackbar}.errors.update`
+      },
+    },
+    success: {
+      update: {
+        id: `${snackbar}.success.update`
+      },
+    }
+  }
 });

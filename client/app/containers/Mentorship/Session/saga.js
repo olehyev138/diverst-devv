@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -37,9 +39,7 @@ export function* getSession(action) {
     yield put(getSessionSuccess(response.data));
   } catch (err) {
     yield put(getSessionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get session', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.session), options: { variant: 'warning' } }));
   }
 }
 
@@ -54,9 +54,7 @@ export function* getHostingSessions(action) {
     yield put(getHostingSessionsSuccess(response.data.page));
   } catch (err) {
     yield put(getHostingSessionsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get hosting sessions', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.hosting), options: { variant: 'warning' } }));
   }
 }
 
@@ -72,9 +70,7 @@ export function* getParticipatingSessions(action) {
     yield put(getParticipatingSessionsSuccess(response.data.page));
   } catch (err) {
     yield put(getParticipatingSessionsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get participating sessions', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.participating), options: { variant: 'warning' } }));
   }
 }
 
@@ -90,9 +86,7 @@ export function* getParticipatingUsers(action) {
     yield put(getParticipatingUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getParticipatingUsersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get participating users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.participating_users), options: { variant: 'warning' } }));
   }
 }
 
@@ -103,12 +97,10 @@ export function* createSession(action) {
 
     yield put(createSessionSuccess());
     yield put(push(ROUTES.user.mentorship.sessions.hosting.path(action.payload.creator_id)));
-    yield put(showSnackbar({ message: 'Successfully created session', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSessionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create session', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -119,12 +111,10 @@ export function* updateSession(action) {
 
     yield put(updateSessionSuccess());
     yield put(push(ROUTES.user.mentorship.sessions.hosting.path(action.payload.creator_id)));
-    yield put(showSnackbar({ message: 'Successfully updated session', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSessionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update session', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
@@ -135,12 +125,10 @@ export function* deleteSession(action) {
     yield call(api.mentoringSessions.destroy.bind(api.mentoringSessions), action.payload.id);
 
     yield put(deleteSessionSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted session', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSessionError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete session', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -149,12 +137,10 @@ export function* acceptInvitation(action) {
     const response = yield call(api.mentorshipSessions.acceptInvite.bind(api.mentorshipSessions), action.payload);
 
     yield put(acceptInvitationSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully accepted invitation', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.accept), options: { variant: 'success' } }));
   } catch (err) {
     yield put(acceptInvitationError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to accept invitation', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.accept), options: { variant: 'warning' } }));
   }
 }
 
@@ -163,12 +149,10 @@ export function* declineInvitation(action) {
     const response = yield call(api.mentorshipSessions.declineInvite.bind(api.mentorshipSessions), action.payload);
 
     yield put(declineInvitationSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully declined invitation', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.decline), options: { variant: 'success' } }));
   } catch (err) {
     yield put(declineInvitationError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to decline invitation', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.decline), options: { variant: 'warning' } }));
   }
 }
 
