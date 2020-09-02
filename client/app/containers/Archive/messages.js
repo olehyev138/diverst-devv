@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Archive';
+export const snackbar = 'diverst.snackbars.Archive';
 
 export default defineMessages({
   posts: {
@@ -50,5 +51,13 @@ export default defineMessages({
   },
   error: {
     id: `${scope}.field.type.error`
+  },
+  snackbars: {
+    load: {
+      id: `${snackbar}.errors.load.archives`
+    },
+    restore: {
+      id: `${snackbar}.errors.restore.archives`
+    }
   }
 });

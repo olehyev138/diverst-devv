@@ -15,7 +15,8 @@ import {
   updateEnterpriseSuccess, updateEnterpriseError
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 export function* getEnterprise(action) {
   try {
@@ -23,9 +24,8 @@ export function* getEnterprise(action) {
     yield put(getEnterpriseSuccess(response.data));
     yield put(setUserData({ enterprise: response.data.enterprise }, true));
   } catch (err) {
-    // TODO: intl message
     yield put(getEnterpriseError(err));
-    yield put(showSnackbar({ message: 'Failed to get enterprise', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.load), options: { variant: 'warning' } }));
   }
 }
 
@@ -36,12 +36,11 @@ export function* updateEnterprise(action) {
 
     yield put(updateEnterpriseSuccess());
     yield put(setUserData({ enterprise: response.data.enterprise }, true));
-    yield put(showSnackbar({ message: 'Enterprise updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEnterpriseError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update enterprise', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
