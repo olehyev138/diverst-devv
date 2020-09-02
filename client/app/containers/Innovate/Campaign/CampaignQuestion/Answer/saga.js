@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_ANSWERS_BEGIN, GET_ANSWER_BEGIN, CREATE_ANSWER_BEGIN,
@@ -23,9 +25,7 @@ export function* getAnswers(action) {
     yield put(getAnswersSuccess(response.data.page));
   } catch (err) {
     yield put(getAnswersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load answers', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.answers), options: { variant: 'warning' } }));
   }
 }
 
@@ -36,12 +36,10 @@ export function* createAnswer(action) {
 
     yield put(createAnswerSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
-    yield put(showSnackbar({ message: 'Answer created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createAnswerError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create answer', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -53,15 +51,13 @@ export function* updateAnswer(action) {
     yield put(updateAnswerSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
     yield put(showSnackbar({
-      message: 'Answer updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateAnswerError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update answer',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }
@@ -73,10 +69,9 @@ export function* getAnswer(action) {
     const response = yield call(api.answers.get.bind(api.answers), action.payload.id);
     yield put(getAnswerSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getAnswerError(err));
     yield put(showSnackbar({
-      message: 'Failed to get answer',
+      message: intl.formatMessage(messages.snackbars.errors.answer),
       options: { variant: 'warning' }
     }));
   }
@@ -88,12 +83,10 @@ export function* deleteAnswer(action) {
 
     yield put(deleteAnswerSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaignId)));
-    yield put(showSnackbar({ message: 'Answer deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.pillars), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteAnswerError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove answer', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

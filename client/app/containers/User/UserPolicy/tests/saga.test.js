@@ -30,6 +30,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 api.policyTemplates.all = jest.fn();
 api.policyTemplates.create = jest.fn();
 api.policyTemplates.update = jest.fn();
@@ -83,6 +86,7 @@ describe('tests for policy saga', () => {
 
       expect(api.policyTemplates.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.policies);
     });
   });
 
@@ -123,6 +127,7 @@ describe('tests for policy saga', () => {
 
       expect(api.policyTemplates.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.policy);
     });
   });
 
@@ -150,6 +155,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.create).toHaveBeenCalledWith({ policy_group_template: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -173,6 +179,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
   });
 
@@ -199,6 +206,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.update).toHaveBeenCalledWith(initialAction.payload.id, { policy_group_template: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -223,6 +231,7 @@ describe('tests for policy saga', () => {
 
       expect(api.policyTemplates.update).toHaveBeenCalledWith(initialAction.payload.id, { policy_group_template: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -252,6 +261,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -275,6 +285,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

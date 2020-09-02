@@ -173,11 +173,11 @@ class NewsFeedLink < ApplicationRecord
 
   def to_label
     if group_message_id.present?
-      group_message.to_s
+      group_message.to_label
     elsif news_link_id.present?
-      news_link.to_s
+      news_link.to_label
     elsif social_link_id.present?
-      social_link.to_s
+      social_link.to_label
     else
       super
     end

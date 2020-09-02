@@ -8,8 +8,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GlobalLanguageProvider } from '../index';
-
+const { GlobalLanguageProvider } = jest.requireActual('containers/Shared/LanguageProvider/GlobalLanguageProvider');
 const props = {
   children: <p></p>
 };

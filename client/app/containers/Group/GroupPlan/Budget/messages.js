@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Budget';
+export const snackbar = 'diverst.snackbards.Group.Budget';
 
 export default defineMessages({
   columns: {
@@ -48,4 +49,40 @@ export default defineMessages({
   tableTitle: {
     id: `${scope}.index.tableTitle`,
   },
+  snackbars: {
+    errors: {
+      budget: {
+        id: `${snackbar}.errors.load.budget`
+      },
+      budgets: {
+        id: `${snackbar}.errors.load.budgets`
+      },
+      budget_request: {
+        id: `${snackbar}.errors.create.budget_request`
+      },
+      decline: {
+        id: `${snackbar}.errors.decline.budget`
+      },
+      approve: {
+        id: `${snackbar}.errors.approve.budget`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.budget`
+      },
+    },
+    success: {
+      budget_request: {
+        id: `${snackbar}.success.create.budget_request`
+      },
+      decline: {
+        id: `${snackbar}.success.decline.budget`
+      },
+      approve: {
+        id: `${snackbar}.success.approve.budget`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.budget`
+      },
+    }
+  }
 });

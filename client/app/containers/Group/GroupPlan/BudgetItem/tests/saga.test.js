@@ -20,6 +20,9 @@ import {
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
@@ -75,6 +78,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget_items);
     });
   });
 
@@ -114,6 +118,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget_item);
     });
   });
   describe('close budget', () => {
@@ -139,6 +144,7 @@ describe('Tests for budgetItems saga', () => {
       );
       expect(api.budgetItems.closeBudget).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.close);
     });
 
     it('Should return error from the API', async () => {
@@ -163,6 +169,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.closeBudget).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.close);
     });
   });
 });
