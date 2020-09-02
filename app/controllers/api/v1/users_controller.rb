@@ -44,7 +44,7 @@ class Api::V1::UsersController < DiverstController
   end
 
   def update
-    if current_user.seen_onboarding || current_user.users_manage
+    if current_user.users_manage
       params[klass.symbol] = payload
     else
       params[klass.symbol] = profile_update_payload
