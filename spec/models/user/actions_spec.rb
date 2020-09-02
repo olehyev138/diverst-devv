@@ -2,11 +2,22 @@ require 'rails_helper'
 
 RSpec.describe User::Actions, type: :model do
   describe 'csv_attributes' do
-    it { expect(User.csv_attributes.dig(:titles)).to eq ['First name', 'Last name', 'Email', 'Biography', 'Active', 'Group Membership'] }
+    let(:csv_attributes) {
+      [
+          'First name',
+          'Last name',
+          'Email',
+          'Biography',
+          'Active',
+          'Group Membership'
+      ]
+    }
+    it { expect(User.csv_attributes.dig(:titles)).to eq csv_attributes }
   end
 
   let(:user_role) { create(:user_role, role_name: 'test role') }
   let(:group) { create(:group, name: 'test group') }
+
   describe 'parameter_name' do
     it 'raises an exception if scope is missing' do
       expect { User.parameter_name({}) }.to raise_error(ArgumentError)
@@ -24,60 +35,108 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'valid_scopes' do
-    it { expect(User.valid_scopes.include?('enterprise_mentors')).to eq true }
-    it { expect(User.valid_scopes.include?('mentors')).to eq true }
-    it { expect(User.valid_scopes.include?('mentees')).to eq true }
-    it { expect(User.valid_scopes.include?('accepting_mentee_requests')).to eq true }
-    it { expect(User.valid_scopes.include?('accepting_mentor_requests')).to eq true }
-    it { expect(User.valid_scopes.include?('all')).to eq true }
-    it { expect(User.valid_scopes.include?('active')).to eq true }
-    it { expect(User.valid_scopes.include?('inactive')).to eq true }
-    it { expect(User.valid_scopes.include?('saml')).to eq true }
-    it { expect(User.valid_scopes.include?('invitation_sent')).to eq true }
-    it { expect(User.valid_scopes.include?('of_role')).to eq true }
+    let(:valid_scopes) {
+      %w(
+          enterprise_mentors
+          mentors
+          mentees
+          accepting_mentee_requests
+          accepting_mentor_requests
+          all
+          active
+          inactive
+          saml
+          invitation_sent
+          of_role
+          not_member_of_group
+      )
+    }
+
+    it { expect(User.valid_scopes).to eq valid_scopes }
   end
 
   describe 'preload_attachments' do
-    it { expect(User.preload_attachments.include?(:avatar)).to eq true }
+    let(:preload_attachments) { [:avatar] }
+
+    it { expect(User.preload_attachments).to eq preload_attachments }
   end
 
   describe 'base_preloads' do
-    it { expect(User.base_preloads.include?(:field_data)).to eq true }
-    it { expect(User.base_preloads.include?(:enterprise)).to eq true }
-    it { expect(User.base_preloads.include?(:user_groups)).to eq true }
-    it { expect(User.base_preloads.include?(:user_role)).to eq true }
-    it { expect(User.base_preloads.include?(:news_links)).to eq true }
-    it { expect(User.base_preloads.include?(:avatar_attachment)).to eq true }
-    it { expect(User.base_preloads.include?(:avatar_blob)).to eq true }
-    it { expect(User.base_preloads.include?({ field_data: [:field, { field: [:field_definer] }],
-                                              enterprise: [:theme, :mobile_fields] })).to eq true
+    let(:base_preloads) {
+      [
+          :field_data,
+          :enterprise,
+          :user_groups,
+          :user_role,
+          :news_links,
+          :avatar_attachment,
+          :avatar_blob,
+          field_data: [
+              :field,
+              field: Field.base_preloads
+          ],
+          enterprise: [
+              :theme,
+              :mobile_fields
+          ]
+      ]
     }
+
+    it { expect(User.base_preloads).to eq base_preloads }
   end
 
   describe 'base_attribute_preloads' do
-    it { expect(User.base_attribute_preloads.include?(:enterprise)).to eq true }
-    it { expect(User.base_attribute_preloads.include?(:user_role)).to eq true }
-    it { expect(User.base_attribute_preloads.include?(:news_links)).to eq true }
-    it { expect(User.base_attribute_preloads.include?(:avatar_attachment)).to eq true }
-    it { expect(User.base_attribute_preloads.include?({ enterprise: [:theme, :mobile_fields] })).to eq true }
+    let(:base_attribute_preloads) {
+      [
+          :user_role,
+          :enterprise,
+          :news_links,
+          :avatar_attachment,
+          enterprise: [
+              :theme,
+              :mobile_fields
+          ]
+      ]
+    }
+
+    it { expect(User.base_attribute_preloads).to eq base_attribute_preloads }
   end
 
   describe 'mentor_lite_includes' do
-    it { expect(User.mentor_lite_includes.include?(:mentoring_interests)).to eq true }
-    it { expect(User.mentor_lite_includes.include?(:mentoring_types)).to eq true }
-    it { expect(User.mentor_lite_includes.include?(:availabilities)).to eq true }
+    let(:mentor_lite_includes) {
+      [
+          :mentoring_interests,
+          :mentoring_types,
+          :availabilities
+      ]
+    }
+
+    it { expect(User.mentor_lite_includes).to eq mentor_lite_includes }
   end
 
   describe 'mentor_includes' do
-    it { expect(User.mentor_includes.include?(:mentoring_interests)).to eq true }
-    it { expect(User.mentor_includes.include?(:mentoring_types)).to eq true }
-    it { expect(User.mentor_includes.include?(:availabilities)).to eq true }
-    it { expect(User.mentor_includes.include?(:mentors)).to eq true }
-    it { expect(User.mentor_includes.include?(:mentees)).to eq true }
-    it { expect(User.mentor_includes.include?(:mentorship_ratings)).to eq true }
-    it { expect(User.mentor_includes.include?({ mentees: [:mentoring_interests, :mentoring_types, :availabilities],
-                                                mentors: [:mentoring_interests, :mentoring_types, :availabilities] })).to eq true
+    let(:mentor_includes) {
+      [
+          :mentoring_interests,
+          :mentoring_types,
+          :mentors,
+          :mentees,
+          :mentorship_ratings,
+          :availabilities,
+          mentors: [
+              :mentoring_interests,
+              :mentoring_types,
+              :availabilities
+          ],
+          mentees: [
+              :mentoring_interests,
+              :mentoring_types,
+              :availabilities
+          ]
+      ]
     }
+
+    it { expect(User.mentor_includes).to eq mentor_includes }
   end
 
   describe 'signin' do

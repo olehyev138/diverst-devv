@@ -4,6 +4,7 @@ ANNUAL_BUDGET = 10000
 BUDGET_ITEM_AMOUNT = 5000
 INITIATIVE_ESTIMATE = 2500
 EXPENSE_AMOUNT = 1250
+INITIATIVE_EXPENSE = 1000
 
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
@@ -17,60 +18,64 @@ RSpec.describe Group, type: :model do
     it { expect(group).to belong_to(:enterprise).counter_cache(:true) }
     it { expect(group).to belong_to(:lead_manager).class_name('User') }
     it { expect(group).to belong_to(:owner).class_name('User') }
+    it { expect(group).to belong_to(:group_category) }
+    it { expect(group).to belong_to(:group_category_type) }
+
+    it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id).inverse_of(:children) }
+    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy).inverse_of(:parent) }
 
     it { expect(group).to have_one(:news_feed).dependent(:destroy) }
 
-    it { expect(group).to delegate_method(:news_feed_links).to(:news_feed) }
-    it { expect(group).to delegate_method(:shared_news_feed_links).to(:news_feed) }
-
     it { expect(group).to have_many(:user_groups).dependent(:destroy) }
     it { expect(group).to have_many(:members).through(:user_groups).class_name('User').source(:user) }
+
     it { expect(group).to have_many(:groups_polls).dependent(:destroy) }
     it { expect(group).to have_many(:polls).through(:groups_polls) }
-    it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
     it { expect(group).to have_many(:poll_responses).through(:polls).source(:responses) }
 
     it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id').dependent(:destroy) }
     it { expect(group).to have_many(:initiative_participating_groups) }
     it { expect(group).to have_many(:participating_initiatives).through(:initiative_participating_groups).source(:initiative) }
-    it { expect(group).to have_many(:budgets).dependent(:destroy).through(:annual_budgets) }
+
     it { expect(group).to have_many(:messages).class_name('GroupMessage').dependent(:destroy) }
     it { expect(group).to have_many(:message_comments).through(:messages).class_name('GroupMessageComment').source(:comments) }
     it { expect(group).to have_many(:news_links).dependent(:destroy) }
     it { expect(group).to have_many(:news_link_comments).through(:news_links).class_name('NewsLinkComment').source(:comments) }
     it { expect(group).to have_many(:social_links).dependent(:destroy) }
+
     it { expect(group).to have_many(:invitation_segments_groups).dependent(:destroy) }
     it { expect(group).to have_many(:invitation_segments).class_name('Segment').through(:invitation_segments_groups) }
+
     it { expect(group).to have_many(:resources).dependent(:destroy) }
     it { expect(group).to have_many(:folders).dependent(:destroy) }
     it { expect(group).to have_many(:folder_shares).dependent(:destroy) }
     it { expect(group).to have_many(:shared_folders).through(:folder_shares).source('folder') }
+
     it { expect(group).to have_many(:campaigns_groups).dependent(:destroy) }
     it { expect(group).to have_many(:campaigns).through(:campaigns_groups) }
     it { expect(group).to have_many(:questions).through(:campaigns) }
     it { expect(group).to have_many(:answers).through(:questions) }
     it { expect(group).to have_many(:answer_upvotes).through(:answers).source(:votes) }
     it { expect(group).to have_many(:answer_comments).through(:answers).class_name('AnswerComment').source(:comments) }
+
     it { expect(group).to have_many(:outcomes).dependent(:destroy) }
     it { expect(group).to have_many(:pillars).through(:outcomes) }
     it { expect(group).to have_many(:initiatives).through(:pillars) }
-    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
-    it { expect(group).to have_many(:fields).dependent(:destroy) }
-    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+
     it { expect(group).to have_many(:group_leaders).dependent(:destroy) }
-    it { expect(group).to have_many(:views).dependent(:destroy) }
-    it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
-    it { expect(group).to have_many(:sponsors).dependent(:destroy) }
-    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy).inverse_of(:parent) }
-    it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id).inverse_of(:children) }
+    it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
+
     it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
+    it { expect(group).to have_many(:budgets).dependent(:destroy).through(:annual_budgets) }
     it { expect(group).to have_many(:budget_items).dependent(:destroy).through(:budgets) }
     it { expect(group).to have_many(:initiative_expenses).through(:annual_budgets) }
 
-    it { expect(group).to belong_to(:group_category) }
-    it { expect(group).to belong_to(:group_category_type) }
-
-    it { expect(group).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+    it { expect(group).to have_many(:fields).dependent(:destroy) }
+    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
+    it { expect(group).to have_many(:views).dependent(:destroy) }
+    it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
+    it { expect(group).to have_many(:sponsors).dependent(:destroy) }
 
     # ActiveStorage
     [:logo, :banner].each do |attribute|
@@ -100,11 +105,29 @@ RSpec.describe Group, type: :model do
     it { expect(group).to validate_length_of(:yammer_group_name).is_at_most(191) }
     it { expect(group).to validate_length_of(:description).is_at_most(65535) }
     it { expect(group).to validate_length_of(:name).is_at_most(191) }
+    it { expect(group).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+
+    it { expect(group).to delegate_method(:news_feed_links).to(:news_feed) }
+    it { expect(group).to delegate_method(:shared_news_feed_links).to(:news_feed) }
+    it { expect(group).to delegate_method(:leftover).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:remaining).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:approved).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:expenses).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:available).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:finalized_expenditure).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:carryover!).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:reset!).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:currency).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+
+    it { expect(group).to validate_numericality_of(:expiry_age_for_resources).is_greater_than_or_equal_to(0) }
+    it { expect(group).to validate_numericality_of(:expiry_age_for_news).is_greater_than_or_equal_to(0) }
+    it { expect(group).to validate_numericality_of(:expiry_age_for_events).is_greater_than_or_equal_to(0) }
 
     describe 'validate uniqueness mentor group' do
       let!(:mentor_group) { build(:group, default_mentor_group: true) }
       it { expect(mentor_group).to validate_uniqueness_of(:default_mentor_group).scoped_to(:enterprise_id) }
     end
+
     describe '#perform_check_for_consistency_in_category' do
       let!(:category_type1) { create(:group_category_type, name: 'New Category1') }
       let!(:categories_of_category_type1) { create_list(:group_category, 2, group_category_type_id: category_type1.id) }
@@ -654,7 +677,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-
   describe '#expenses' do
     it 'returns 0 with annual expenses' do
       group = build(:group)
@@ -674,7 +696,7 @@ RSpec.describe Group, type: :model do
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
-      expense = create(:initiative_expense, initiative_id: initiative.id, amount: 10)
+      create(:initiative_expense, initiative_id: initiative.id, amount: 10)
       initiative.finish_expenses!
 
       expect(group.annual_budget_expenses).to eq 10
@@ -819,7 +841,6 @@ RSpec.describe Group, type: :model do
       budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
       initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
       build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT)
-
 
       expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
     end
@@ -1052,7 +1073,7 @@ RSpec.describe Group, type: :model do
 
       group_2.default_mentor_group = true
       expect(group_2.valid?).to be false
-      expect(group_2.errors.full_messages.first).to eq ('Default mentor group has already been taken')
+      expect(group_2.errors.full_messages.first).to eq 'Default mentor group has already been taken'
 
       group_3.default_mentor_group = true
       group_3.save!
@@ -1129,6 +1150,159 @@ RSpec.describe Group, type: :model do
       group = create(:group, enterprise: enterprise)
       csv = group.membership_list_csv(group.members)
       expect(csv).to eq("first_name,last_name,email_address,mentor,mentee\ntotal,,0\n")
+    end
+  end
+
+  describe 'create_annual_budget' do
+    it 'returns annual budget' do
+      group = create(:group)
+      expect(group.create_annual_budget).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_annual_budget' do
+    it 'returns current annual budget ' do
+      group = create(:group)
+      group.create_annual_budget
+
+      expect(group.current_annual_budget).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_annual_budget' do
+    it 'returns current annual budget' do
+      group = create(:group)
+      expect(group.current_annual_budget!).to eq AnnualBudget.first
+    end
+  end
+
+  describe 'current_budget_items' do
+    it 'returns budget items' do
+      group = create(:group)
+      group.create_annual_budget
+      create(:budget, annual_budget: AnnualBudget.first)
+      expect(group.current_budget_items.count).to eq 3
+    end
+  end
+
+  describe 'reload' do
+    it 'returns new amount' do
+      group = create(:group, :with_annual_budget)
+      AnnualBudget.first.update(amount: 10)
+      group.reload
+      expect(group.annual_budget).to eq 10
+    end
+  end
+
+  describe 'annual_budget' do
+    it 'returns annual budget' do
+      group = create(:group)
+      expect(group.annual_budget).to eq 0
+    end
+
+    it 'returns new budget' do
+      group = create(:group, :with_annual_budget)
+      group.annual_budget = 100
+      group.reload
+      expect(group.annual_budget).to eq 100
+    end
+  end
+
+  describe 'load_sums' do
+    it 'returns load sums' do
+      group = create(:group)
+      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
+      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
+      budget_item = budget.budget_items.first
+      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
+      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
+      create(:initiative_expense, initiative: initiative, amount: INITIATIVE_EXPENSE)
+      sum = Group.load_sums.first
+      expect(sum.expenses_sum).to eq INITIATIVE_EXPENSE
+      expect(sum.approved_sum).to eq BUDGET_ITEM_AMOUNT
+      expect(sum.reserved_sum).to eq INITIATIVE_ESTIMATE
+    end
+  end
+
+  describe 'layout_values' do
+    it 'returns layout values' do
+      group = create(:group)
+      expect(group.layout_values['layout_0']).to eq 'Default layout'
+      expect(group.layout_values['layout_1']).to eq 'Layout without leader boards for Most Active Members'
+      expect(group.layout_values['layout_2']).to eq 'Layout with Sub-Groups on top of group leaders'
+    end
+  end
+
+  describe 'has_survey?' do
+    it 'returns true' do
+      field = build(:field, field_type: 'group_survey')
+      group = create(:group, survey_fields: [field])
+      expect(group.has_survey?).to eq true
+    end
+  end
+
+  describe 'protected' do
+    describe 'url_protocol' do
+      it 'returns url with protocol' do
+        group = build(:group, company_video_url: 'google.com')
+        expect(group.send(:smart_add_url_protocol)).to eq 'http://google.com'
+      end
+
+      it 'has protocol' do
+        group = build(:group, company_video_url: 'http://google.com')
+        expect(group.send(:have_protocol?)).to_not be nil
+      end
+    end
+  end
+
+  describe 'private' do
+    describe 'should_create_yammer_group?' do
+      it 'returns false' do
+        group = create(:group)
+        expect(group.send(:should_create_yammer_group?)).to eq false
+      end
+      it 'returns true' do
+        enterprise = build(:enterprise, yammer_token: 'token')
+        group = create(:group, enterprise: enterprise, yammer_create_group: true, yammer_group_created: false)
+        expect(group.send(:should_create_yammer_group?)).to eq true
+      end
+    end
+
+    describe 'filter_by_membership' do
+      let!(:group) { create :group }
+      let!(:members) { create_list :user, 3 }
+      before do
+        members.each do |m|
+          create(:user_group, user: m, group: group, accepted_member: true)
+        end
+        UserGroup.first.update(accepted_member: false)
+      end
+      it 'returns member' do
+        expect(group.send(:filter_by_membership, true).count).to eq 2
+      end
+
+      it 'returns not member' do
+        expect(group.send(:filter_by_membership, false).count).to eq 1
+      end
+    end
+
+    describe 'avg_members_per_group' do
+      let!(:enterprise) { create :enterprise }
+      let!(:group1) { create :group, enterprise: enterprise }
+      let!(:group2) { create :group, enterprise: enterprise }
+      let!(:members1) { create_list :user, 2 }
+      let!(:members2) { create_list :user, 4 }
+      before do
+        members1.each do |m|
+          create(:user_group, user: m, group: group1, accepted_member: true)
+        end
+        members2.each do |m|
+          create(:user_group, user: m, group: group2, accepted_member: true)
+        end
+      end
+      it 'returns avg_members_per_group' do
+        expect(Group.avg_members_per_group(enterprise: enterprise)).to eq 3
+      end
     end
   end
 end

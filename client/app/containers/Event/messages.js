@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Event';
+export const snackbar = 'diverst.snackbars.Event';
 
 export default defineMessages({
   comment: {
@@ -140,6 +141,9 @@ export default defineMessages({
     goal: {
       id: `${scope}.form.input.goal`
     },
+    participatingGroups: {
+      id: `${scope}.form.input.participatingGroups`
+    },
     budgetName: {
       id: `${scope}.form.input.budgetName`
     },
@@ -157,5 +161,80 @@ export default defineMessages({
     until: {
       id: `${scope}.show.until`
     },
+    participating_groups: {
+      id: `${scope}.show.participating_groups`
+    },
+    hosted_by: {
+      id: `${scope}.show.hosted_by`
+    },
+    hosted_by_group: {
+      id: `${scope}.show.hosted_by_group`
+    },
   },
+  snackbars: {
+    errors: {
+      create_event: {
+        id: `${snackbar}.errors.create.event`
+      },
+      update_event: {
+        id: `${snackbar}.errors.update.event`
+      },
+      delete_event: {
+        id: `${snackbar}.errors.delete.event`
+      },
+      load_events_no_permission: {
+        id: `${snackbar}.errors.load.events.no_permission`
+      },
+      load_events: {
+        id: `${snackbar}.errors.load.events`
+      },
+      load_event: {
+        id: `${snackbar}.errors.load.event`
+      },
+      create_event_comment: {
+        id: `${snackbar}.errors.create.event_comment`
+      },
+      delete_event_comment: {
+        id: `${snackbar}.errors.delete.event_comment`
+      },
+      archive: {
+        id: `${snackbar}.errors.archive`
+      },
+      join: {
+        id: `${snackbar}.errors.join`
+      },
+      leave: {
+        id: `${snackbar}.errors.leave`
+      },
+      finalize_expense: {
+        id: `${snackbar}.errors.finalize_expense`
+      },
+      export_attendees: {
+        id: `${snackbar}.errors.export_attendees`
+      },
+    },
+    success: {
+      create_event: {
+        id: `${snackbar}.success.create.event`
+      },
+      update_event: {
+        id: `${snackbar}.success.update.event`
+      },
+      delete_event: {
+        id: `${snackbar}.success.delete.event`
+      },
+      create_event_comment: {
+        id: `${snackbar}.success.create.event_comment`
+      },
+      delete_event_comment: {
+        id: `${snackbar}.success.delete.event_comment`
+      },
+      finalize_expense: {
+        id: `${snackbar}.success.finalize_expense`
+      },
+      export_attendees: {
+        id: `${snackbar}.success.export_attendees`
+      },
+    }
+  }
 });

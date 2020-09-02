@@ -197,5 +197,8 @@ export default defineMessages({
     fetchUserData: {
       id: `${scope}.errors.fetchUserData`
     },
+    invalidURL: {
+      id: `${scope}.errors.invalidURL`
+    },
   },
 });

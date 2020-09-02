@@ -20,17 +20,20 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const usersSelectAction = (searchKey = '') => {
-    props.getMembersBegin({
+    props.getUsersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      query_scopes: [['not_member_of_group', props.currentGroup.id]]
     });
   };
+
 
   return (
     <Card>
@@ -57,13 +60,12 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
           <DiverstSubmit isCommitting={props.isCommitting}>
             <DiverstFormattedMessage {...messages.create} />
           </DiverstSubmit>
-          <Button
+          <DiverstCancel
             disabled={props.isCommitting}
-            to={props.links.groupMembersIndex}
-            component={WrappedNavLink}
+            redirectFallback={props.links.groupMembersIndex}
           >
             <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
+          </DiverstCancel>
         </CardActions>
       </Form>
     </Card>
@@ -105,7 +107,8 @@ GroupMemberFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   selectUsers: PropTypes.array,
-  getMembersBegin: PropTypes.func,
+  getUsersBegin: PropTypes.func,
+  currentGroup: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,

@@ -16,11 +16,11 @@ import {
   Button, Card, CardActions, CardContent, TextField, Grid, Divider, Box, CardHeader, Typography
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Poll/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 import { getPillarsBegin } from 'containers/Group/Pillar/actions';
@@ -110,20 +110,22 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
             </DiverstSubmit>
             {dig(poll, 'status') === 'published' || (
               <Button
-                to={props.poll ? props.links.pollShow : props.links.pollsIndex}
-                component={WrappedNavLink}
                 disabled={props.isCommitting}
+                onClick={() => {
+                  setSubmitting(true);
+                  props.pollAction(mapFields({ ...values }, ['group_ids', 'segment_ids']));
+                  setSubmitting(false);
+                }}
               >
                 {draftButtonText}
               </Button>
             )}
-            <Button
-              to={props.poll ? props.links.pollShow : props.links.pollsIndex}
-              component={WrappedNavLink}
+            <DiverstCancel
+              redirectFallback={(props.poll ? props.links.pollShow : props.links.pollsIndex)}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Card>
       </Form>

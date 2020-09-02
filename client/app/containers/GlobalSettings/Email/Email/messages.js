@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.GlobalSettings.Emails';
+export const snackbar = 'diverst.snackbars.GlobalSettings.Email';
 
 export default defineMessages({
   form: {
@@ -53,4 +54,22 @@ export default defineMessages({
       id: `${scope}.index.empty`,
     },
   },
+  snackbars: {
+    errors: {
+      email: {
+        id: `${snackbar}.errors.load.email`
+      },
+      emails: {
+        id: `${snackbar}.errors.load.emails`
+      },
+      update: {
+        id: `${snackbar}.errors.update.email`
+      },
+    },
+    success: {
+      update: {
+        id: `${snackbar}.success.email`
+      },
+    }
+  }
 });

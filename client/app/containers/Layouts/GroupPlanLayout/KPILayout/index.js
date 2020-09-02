@@ -11,9 +11,9 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 import KPILinks from 'components/Group/GroupPlan/KPILinks';
 
 const KPIPages = Object.freeze([
-  // 'metrics', // NOT IMPLEMENTED YET
-  'fields',
   'updates',
+  'fields',
+  // 'metrics', // NOT IMPLEMENTED YET
 ]);
 
 const KPILayout = (props) => {

@@ -1,11 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe InitiativeUser::Actions, type: :model do
-  let!(:group) { create(:group, name: 'test') }
-  let!(:activity) { create(:activity) }
-
   describe 'csv_attributes' do
-    it { expect(InitiativeUser.csv_attributes.dig(:titles)).to eq ['First name', 'Last name', 'Email', 'Attended', 'Checked In', 'Check In Time'] }
+    let(:csv_attributes) {
+      [
+          'First name',
+          'Last name',
+          'Email',
+          'Attended',
+          'Checked In',
+          'Check In Time'
+      ]
+    }
+
+    it { expect(InitiativeUser.csv_attributes.dig(:titles)).to eq csv_attributes }
   end
 
   describe 'file_name' do

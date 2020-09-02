@@ -16,8 +16,10 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../../Shared/DiverstCancel';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { injectIntl, intlShape } from 'react-intl';
+
 
 export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
@@ -29,6 +31,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: ['active', ['user_search', searchKey]]
     });
   };
+
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
@@ -72,13 +75,12 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={links.index}
-              component={WrappedNavLink}
+              redirectFallback={links.index}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

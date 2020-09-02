@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.EventExpenses';
+export const snackbar = 'diverst.snackbars.Event.Expense';
 
 export default defineMessages({
   columns: {
@@ -80,4 +81,34 @@ export default defineMessages({
   pressure: {
     id: `${scope}.pressure`,
   },
+  snackbars: {
+    errors: {
+      expense: {
+        id: `${snackbar}.errors.load.expense`
+      },
+      expenses: {
+        id: `${snackbar}.errors.load.expenses`
+      },
+      create: {
+        id: `${snackbar}.errors.create.expense`
+      },
+      update: {
+        id: `${snackbar}.errors.update.expense`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.expense`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.expense`
+      },
+      update: {
+        id: `${snackbar}.success.update.expense`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.expense`
+      },
+    }
+  }
 });
