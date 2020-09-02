@@ -81,7 +81,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
             />
             <Divider />
             <CardActions>
-              <DiverstSubmit isCommitting={props.isCommitting} disabled={(dig(props, 'update', 'field_data') || []).length > 0 ? false : true}>
+              <DiverstSubmit isCommitting={props.isCommitting} disabled={(dig(props, 'update', 'field_data') || []).length <= 0}>
                 {buttonText}
               </DiverstSubmit>
               <DiverstCancel
