@@ -4,6 +4,9 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
 import {
   GET_GROUP_LEADERS_BEGIN, GET_GROUP_LEADER_BEGIN, CREATE_GROUP_LEADER_BEGIN,
   DELETE_GROUP_LEADER_BEGIN, UPDATE_GROUP_LEADER_BEGIN, UPDATE_GROUP_LEADER_SUCCESS, UPDATE_GROUP_LEADER_ERROR
@@ -24,8 +27,7 @@ export function* getGroupLeaders(action) {
   } catch (err) {
     yield put(getGroupLeadersError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load Group Leaders', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leaders), options: { variant: 'warning' } }));
   }
 }
 
@@ -34,10 +36,9 @@ export function* getGroupLeader(action) {
     const response = yield call(api.groupLeaders.get.bind(api.groupLeaders), action.payload.id);
     yield put(getGroupLeaderSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getGroupLeaderError(err));
     yield put(showSnackbar({
-      message: 'Failed to load Group Leader',
+      message: intl.formatMessage(messages.snackbars.errors.leader),
       options: { variant: 'warning' }
     }));
   }
@@ -49,12 +50,11 @@ export function* createGroupLeader(action) {
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
     yield put(createGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Group Leader created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupLeaderError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create Group Leader', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -63,12 +63,11 @@ export function* deleteGroupLeader(action) {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Group Leader deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete Group Leader', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -79,15 +78,14 @@ export function* updateGroupLeader(action) {
     yield put(updateGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({
-      message: 'Group Leader updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateGroupLeaderError(err));
 
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update Group Leader',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }

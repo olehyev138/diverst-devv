@@ -3,6 +3,9 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 
 import {
   GET_CAMPAIGNS_BEGIN, GET_CAMPAIGN_BEGIN, CREATE_CAMPAIGN_BEGIN,
@@ -24,9 +27,7 @@ export function* getCampaigns(action) {
     yield put(getCampaignsSuccess(response.data.page));
   } catch (err) {
     yield put(getCampaignsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load campaigns', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.campaigns), options: { variant: 'warning' } }));
   }
 }
 
@@ -35,10 +36,9 @@ export function* getCampaign(action) {
     const response = yield call(api.campaigns.get.bind(api.campaigns), action.payload.id);
     yield put(getCampaignSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getCampaignError(err));
     yield put(showSnackbar({
-      message: 'Failed to get campaign',
+      message: intl.formatMessage(messages.snackbars.errors.campaign),
       options: { variant: 'warning' }
     }));
   }
@@ -51,12 +51,10 @@ export function* createCampaigns(action) {
 
     yield put(createCampaignSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.index.path()));
-    yield put(showSnackbar({ message: 'Campaign created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCampaignError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create campaigns', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -65,12 +63,10 @@ export function* deleteCampaigns(action) {
     yield call(api.campaigns.destroy.bind(api.campaigns), action.payload.id);
     yield put(deleteCampaignSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.index.path(action.payload.id)));
-    yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteCampaignError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove campaigns', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -82,15 +78,13 @@ export function* updateCampaign(action) {
     yield put(updateCampaignSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.index.path()));
     yield put(showSnackbar({
-      message: 'Campaign updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateCampaignError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update campaign',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }

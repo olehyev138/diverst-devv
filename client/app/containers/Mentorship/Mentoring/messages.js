@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.MentorshipList';
+export const snackbar = 'diverst.snackbars.Mentorship.Mentoring';
 
 export default defineMessages({
   columns: {
@@ -58,6 +59,33 @@ export default defineMessages({
     },
     viewProfile: {
       id: `${scope}.actions.viewProfile`
+    }
+  },
+  snackbars: {
+    errors: {
+      available_mentors: {
+        id: `${snackbar}.errors.load.available_mentors`
+      },
+      available_mentees: {
+        id: `${snackbar}.errors.load.available_mentees`
+      },
+      mentors: {
+        id: `${snackbar}.errors.load.mentors`
+      },
+      request: {
+        id: `${snackbar}.errors.request`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.mentor`
+      },
+    },
+    success: {
+      request: {
+        id: `${snackbar}.success.request`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.mentor`
+      },
     }
   }
 });
