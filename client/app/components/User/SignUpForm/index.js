@@ -330,6 +330,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                       () => {
                         setSubmitting(true);
                         submitGenerator(props.submitAction, props.token)(values);
+                        setFieldValue('__consent_accepted__', false)
                         setSubmitting(false);
                       },
                       props.isCommitting,
