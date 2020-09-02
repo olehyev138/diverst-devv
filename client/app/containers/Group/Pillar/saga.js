@@ -32,7 +32,7 @@ export function* getPillar(action) {
     yield put(getPillarSuccess(response.data));
   } catch (err) {
     yield put(getPillarError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillars), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillar), options: { variant: 'warning' } }));
   }
 }
 
@@ -43,7 +43,7 @@ export function* getPillars(action) {
     yield put(getPillarsSuccess(response.data.page));
   } catch (err) {
     yield put(getPillarsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillar), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillars), options: { variant: 'warning' } }));
   }
 }
 

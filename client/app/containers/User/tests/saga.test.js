@@ -39,6 +39,10 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 api.users.all = jest.fn();
 api.users.create = jest.fn();
 api.users.update = jest.fn();
@@ -101,6 +105,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.users);
     });
   });
 
@@ -140,6 +145,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user);
     });
   });
 
@@ -167,6 +173,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.create).toHaveBeenCalledWith({ user: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -190,6 +197,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
 
     it('Should update a user', async () => {
@@ -214,6 +222,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.update).toHaveBeenCalledWith(initialAction.payload.id, { user: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -238,6 +247,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.update).toHaveBeenCalledWith(initialAction.payload.id, { user: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -267,6 +277,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -290,6 +301,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 
@@ -332,6 +344,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.prototype).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.prototype);
     });
   });
 
@@ -375,6 +388,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getDownloadData).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user_data);
     });
   });
 
@@ -417,6 +431,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getPosts).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.posts);
     });
   });
 
@@ -477,6 +492,7 @@ describe('saga tests for users', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.events);
     });
   });
 
@@ -519,6 +535,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getDownloads).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user_data);
     });
   });
 
@@ -543,6 +560,7 @@ describe('saga tests for users', () => {
       );
       expect(api.fieldData.updateFieldData).toHaveBeenCalledWith({ field_data: { field_data: {} } });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.fields);
     });
 
     it('Should return error from the API', async () => {
@@ -567,6 +585,7 @@ describe('saga tests for users', () => {
 
       expect(api.fieldData.updateFieldData).toHaveBeenCalledWith({ field_data: { field_data: {} } });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.fields);
     });
   });
 });

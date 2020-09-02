@@ -30,6 +30,10 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 api.groupCategoryTypes.all = jest.fn();
 api.groupCategoryTypes.create = jest.fn();
 api.groupCategoryTypes.update = jest.fn();
@@ -81,6 +85,7 @@ describe('Tests for groupCategories saga', () => {
 
       expect(api.groupCategoryTypes.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.categories);
     });
   });
 
@@ -120,6 +125,7 @@ describe('Tests for groupCategories saga', () => {
 
       expect(api.groupCategoryTypes.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.category);
     });
   });
 
@@ -147,6 +153,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.create).toHaveBeenCalledWith({ group_category_type: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -170,6 +177,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
 
     it('Should update a groupCategory', async () => {
@@ -194,6 +202,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.update).toHaveBeenCalledWith(initialAction.payload.id, { group_category_type: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -218,6 +227,7 @@ describe('Tests for groupCategories saga', () => {
 
       expect(api.groupCategoryTypes.update).toHaveBeenCalledWith(initialAction.payload.id, { group_category_type: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -247,6 +257,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -270,6 +281,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });
