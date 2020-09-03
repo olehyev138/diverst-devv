@@ -4,6 +4,8 @@ class NumericField < Field
   # return list of operator codes for a NumericField
   include NumericOptionnable # TODO: MAY BE DEPRECATED
 
+  validates :validate_min_max, if: -> { min.present? && max.present? }
+
   def operators
     [
       Field::OPERATORS[:equals],
@@ -13,6 +15,13 @@ class NumericField < Field
       Field::OPERATORS[:greater_than_incl],
       Field::OPERATORS[:lesser_than_incl]
     ]
+  end
+
+  def validate_min_max
+    if min > max
+      errors.add(:min, "Can't be greater than max")
+      errors.add(:max, "Can't be less than min")
+    end
   end
 
   # -------------------------------------------------------------------------------------------------
