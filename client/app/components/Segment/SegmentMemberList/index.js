@@ -43,8 +43,8 @@ export function SegmentMemberList(props) {
   };
 
   const columns = [
-    { title: <DiverstFormattedMessage {...messages.member.firstname} />, field: 'first_name' },
-    { title: <DiverstFormattedMessage {...messages.member.lastname} />, field: 'last_name' }
+    { title: intl.formatMessage(messages.member.firstname), field: 'first_name' },
+    { title: intl.formatMessage(messages.member.lastname), field: 'last_name' }
   ];
 
   return (
