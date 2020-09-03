@@ -225,7 +225,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
                   required
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
-                  minDate={values['start']}
+                  minDate={touched['start'] ? values['start'] : undefined}
                   minDateMessage={<DiverstFormattedMessage {...messages.inputs.enderror} />}
                   fullWidth
                   id='end'
@@ -276,8 +276,8 @@ export function EventForm(props) {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: undefined },
-    end: { default: undefined },
+    start: { default: null },
+    end: { default: null },
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
