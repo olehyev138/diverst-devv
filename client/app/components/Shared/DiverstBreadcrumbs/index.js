@@ -84,7 +84,6 @@ DiverstBreadcrumbs.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   title: PropTypes.string,
-  nestedNavigation: PropTypes.array,
 };
 
 export default compose(
