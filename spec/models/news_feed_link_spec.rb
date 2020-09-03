@@ -152,7 +152,7 @@ RSpec.describe NewsFeedLink, type: :model do
       end
     end
 
-    describe '.combined_news_links_with_segments' do
+    describe '.combined_news_links_with_segments', skip: 'inconsistent test' do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:group2) { create(:group, enterprise_id: enterprise.id) }
