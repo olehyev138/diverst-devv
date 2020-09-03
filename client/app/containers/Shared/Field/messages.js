@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Field';
+export const snackbar = 'diverst.snackbars.Shared.Field';
 
 export default defineMessages({
   newTextField: {
@@ -90,4 +91,34 @@ export default defineMessages({
   set_order: {
     id: 'diverst.containers.Group.index.button.set_order',
   },
+  snackbars: {
+    errors: {
+      field: {
+        id: `${snackbar}.errors.load.field`
+      },
+      fields: {
+        id: `${snackbar}.errors.load.fields`
+      },
+      create: {
+        id: `${snackbar}.errors.create.field`
+      },
+      update: {
+        id: `${snackbar}.errors.field.field`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.field`
+      }
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.field`
+      },
+      field: {
+        id: `${snackbar}.success.field.field`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.field`
+      }
+    }
+  }
 });

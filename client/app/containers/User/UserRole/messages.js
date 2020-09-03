@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.UserRole';
+export const snackbar = 'diverst.snackbars.User.Role';
 
 export default defineMessages({
   new: {
@@ -64,6 +65,35 @@ export default defineMessages({
     user: {
       id: `${scope}.role.user`
     },
+  },
+  snackbars: {
+    errors: {
+      role: {
+        id: `${snackbar}.errors.load.role`
+      },
+      roles: {
+        id: `${snackbar}.errors.load.roles`
+      },
+      create: {
+        id: `${snackbar}.errors.create.role`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.role`
+      },
+      update: {
+        id: `${snackbar}.errors.update.role`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.role`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.role`
+      },
+      update: {
+        id: `${snackbar}.success.update.role`
+      },
+    }
   }
-
 });

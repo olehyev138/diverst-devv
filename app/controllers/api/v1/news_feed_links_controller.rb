@@ -38,7 +38,7 @@ class Api::V1::NewsFeedLinksController < DiverstController
   def un_pin
     item = klass.find(params[:id])
     params[klass.symbol] = payload
-    params[klass.symbol][:is_pinned] = true
+    params[klass.symbol][:is_pinned] = false
 
     params[klass.symbol][:id] = item.id
     base_authorize(item)
