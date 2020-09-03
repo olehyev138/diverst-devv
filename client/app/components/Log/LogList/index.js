@@ -187,7 +187,9 @@ export function LogList(props, context) {
             dataTotal={props.logTotal}
             columns={columns}
             tableOptions={{
-              exportButton: true,
+              exportButton: {
+                csv: true,
+              },
               exportCsv: (columns, data) => {
                 props.exportLogsBegin();
               }

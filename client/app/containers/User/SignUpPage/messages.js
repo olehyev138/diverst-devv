@@ -21,4 +21,10 @@ export default defineMessages({
   passwordConfirmation: {
     id: `${scope}.passwordConfirmation`
   },
+  consentTitle: {
+    id: `${scope}.consentTitle`
+  },
+  consentAccept: {
+    id: `${scope}.consentAccept`
+  },
 });

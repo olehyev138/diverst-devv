@@ -55,8 +55,8 @@ export function CampaignList(props) {
   };
 
   const columns = [
-    { title: <DiverstFormattedMessage {...messages.Campaign.title} />, field: 'title' },
-    { title: <DiverstFormattedMessage {...messages.Campaign.description} />, field: 'description' }
+    { title: intl.formatMessage(messages.Campaign.title), field: 'title' },
+    { title: intl.formatMessage(messages.Campaign.description), field: 'description' }
   ];
 
   return (
