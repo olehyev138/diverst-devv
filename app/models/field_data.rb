@@ -6,7 +6,7 @@ class FieldData < ApplicationRecord
 
   validates_presence_of :field
   validates_presence_of :field_user
-  validates :validate_numeric_limit, if: -> { field.is_a? NumericField }
+  validate :validate_numeric_limit, if: -> { field.is_a? NumericField }
 
   def deserialized_data
     field.deserialize_value(data)
