@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Field';
-export const snackbar = 'diverst.snackbars.Shared.Field';
+export const snackbar = 'diverst.snackbars.Shared.Fields';
 
 export default defineMessages({
   newTextField: {
@@ -103,7 +103,7 @@ export default defineMessages({
         id: `${snackbar}.errors.create.field`
       },
       update: {
-        id: `${snackbar}.errors.field.field`
+        id: `${snackbar}.errors.update.field`
       },
       delete: {
         id: `${snackbar}.errors.delete.field`
