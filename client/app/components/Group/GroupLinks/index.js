@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
-import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath, useParams } from 'react-router-dom';
