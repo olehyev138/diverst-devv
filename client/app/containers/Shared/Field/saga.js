@@ -34,12 +34,11 @@ export function* updateFieldPosition(action) {
     const payload = { field: { id: action.payload.id, position: action.payload.position, type: action.payload.type } };
     yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
     yield put(updateFieldPositionSuccess());
-    yield put(showSnackbar({ message: 'Field order updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.position), options: { variant: 'warning' } }));
   } catch (err) {
     yield put(updateFieldPositionError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update field order', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.position), options: { variant: 'warning' } }));
   }
 }
 

@@ -107,6 +107,9 @@ export default defineMessages({
       },
       delete: {
         id: `${snackbar}.errors.delete.field`
+      },
+      position: {
+        id: `${snackbar}.errors.position.field`
       }
     },
     success: {
@@ -118,6 +121,9 @@ export default defineMessages({
       },
       delete: {
         id: `${snackbar}.success.delete.field`
+      },
+      position: {
+        id: `${snackbar}.success.position.field`
       }
     }
   }
