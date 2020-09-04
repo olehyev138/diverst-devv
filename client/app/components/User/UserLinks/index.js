@@ -14,7 +14,7 @@ import HomeIcon from '@material-ui/icons/HomeOutlined';
 import LightbulbIcon from '@material-ui/icons/WbIncandescentOutlined';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswerOutlined';
 import EventIcon from '@material-ui/icons/EventOutlined';
-import GroupIcon from '@material-ui/icons/GroupOutlined';
+import GroupIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownloadOutlined';
 import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
