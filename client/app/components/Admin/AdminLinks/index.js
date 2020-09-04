@@ -433,7 +433,7 @@ export function AdminLinks(props) {
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
           </ListPermission>
 
-          { /* Disable Innovate */ }
+          { /* Disable Mentorship */ }
           <ListPermission
             button
             show={false
