@@ -7,11 +7,7 @@ import PropTypes from 'prop-types';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import {
-  AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton
-} from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
-import { matchPath } from 'react-router';
+import { Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import HomeIcon from '@material-ui/icons/HomeOutlined';
@@ -21,15 +17,12 @@ import EventIcon from '@material-ui/icons/EventOutlined';
 import GroupIcon from '@material-ui/icons/GroupOutlined';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownloadOutlined';
 import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
-import DvrIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import messages from 'containers/Session/LoginPage/messages';
 import { selectEnterprise, selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import WithPermission from 'components/Compositions/WithPermission';
 import dig from 'object-dig';
-import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
