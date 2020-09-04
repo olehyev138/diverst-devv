@@ -26,6 +26,9 @@ import {
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
@@ -81,6 +84,7 @@ describe('Tests for expenses saga', () => {
 
       expect(api.initiativeExpenses.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.expenses);
     });
   });
 
@@ -120,6 +124,7 @@ describe('Tests for expenses saga', () => {
 
       expect(api.initiativeExpenses.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.expense);
     });
   });
 
@@ -147,6 +152,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.create).toHaveBeenCalledWith({ initiative_expense: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -170,6 +176,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.create).toHaveBeenCalledWith({ initiative_expense: { expense: {} } });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
 
     it('Should update a expense', async () => {
@@ -194,6 +201,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.update).toHaveBeenCalledWith(initialAction.payload.id, { initiative_expense: {} });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -219,6 +227,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.update).toHaveBeenCalledWith(initialAction.payload.id, { initiative_expense: {} });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -248,6 +257,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -271,6 +281,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

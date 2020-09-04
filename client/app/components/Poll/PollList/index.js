@@ -57,28 +57,28 @@ export function PollList(props, context) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.list.name} />,
+      title: intl.formatMessage(messages.list.name),
       field: 'title',
       query_field: 'title'
     },
     {
-      title: <DiverstFormattedMessage {...messages.list.questions} />,
+      title: intl.formatMessage(messages.list.questions),
       field: 'fields_count',
       sorting: false,
     },
     {
-      title: <DiverstFormattedMessage {...messages.list.responses} />,
+      title: intl.formatMessage(messages.list.responses),
       field: 'responses_count',
       sorting: false,
     },
     {
-      title: <DiverstFormattedMessage {...messages.list.creationDate} />,
+      title: intl.formatMessage(messages.list.creationDate),
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
     },
     {
-      title: <DiverstFormattedMessage {...messages.list.status} />,
+      title: intl.formatMessage(messages.list.status),
       field: 'status',
       query_field: 'status'
     },

@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -23,9 +25,7 @@ export function* getResponse(action) {
     yield put(getResponseSuccess(response.data));
   } catch (err) {
     yield put(getResponseError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get response', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.response), options: { variant: 'warning' } }));
   }
 }
 
@@ -36,9 +36,7 @@ export function* getResponses(action) {
     yield put(getResponsesSuccess(response.data.page));
   } catch (err) {
     yield put(getResponsesError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get responses', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.responses), options: { variant: 'warning' } }));
   }
 }
 

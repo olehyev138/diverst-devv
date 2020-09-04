@@ -3,7 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -33,9 +34,7 @@ export function* getRequests(action) {
     yield put(getRequestsSuccess(response.data.page));
   } catch (err) {
     yield put(getRequestsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get requests', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.request), options: { variant: 'warning' } }));
   }
 }
 
@@ -49,9 +48,7 @@ export function* getProposals(action) {
     yield put(getProposalsSuccess(response.data.page));
   } catch (err) {
     yield put(getProposalsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get proposals', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.proposal), options: { variant: 'warning' } }));
   }
 }
 
@@ -60,12 +57,10 @@ export function* acceptRequest(action) {
     const response = yield call(api.mentoringRequests.acceptRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(acceptRequestSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully accepted request', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.accept), options: { variant: 'success' } }));
   } catch (err) {
     yield put(acceptRequestError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to accept request', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.accept), options: { variant: 'warning' } }));
   }
 }
 
@@ -74,12 +69,10 @@ export function* rejectRequest(action) {
     const response = yield call(api.mentoringRequests.rejectRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(rejectRequestSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully rejected request', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.reject), options: { variant: 'success' } }));
   } catch (err) {
     yield put(rejectRequestError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to reject request', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.reject), options: { variant: 'warning' } }));
   }
 }
 
@@ -88,12 +81,10 @@ export function* deleteRequest(action) {
     const response = yield call(api.mentoringRequests.destroy.bind(api.mentoringRequests), action.payload.id);
 
     yield put(deleteRequestSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted request', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRequestError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete request', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
