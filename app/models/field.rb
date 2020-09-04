@@ -141,5 +141,6 @@ class Field < ApplicationRecord
 
   def set_position
     self.position = self.id
+    save!
   end
 end
