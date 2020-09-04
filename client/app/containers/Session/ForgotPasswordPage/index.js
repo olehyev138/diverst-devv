@@ -29,6 +29,7 @@ export function ForgotPasswordPage(props) {
   return (
     <ForgotPasswordForm
       email={email}
+      enterprise={props.enterprise}
       forgotPasswordBegin={props.requestPasswordResetBegin}
     />
   );
@@ -36,6 +37,7 @@ export function ForgotPasswordPage(props) {
 
 ForgotPasswordPage.propTypes = {
   location: PropTypes.object,
+  enterprise: PropTypes.object,
   requestPasswordResetBegin: PropTypes.func,
 };
 
