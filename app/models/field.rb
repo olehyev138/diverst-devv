@@ -7,7 +7,7 @@ class Field < ApplicationRecord
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  before_save :set_position
+  after_create :set_position
 
   validates_length_of :field_type, maximum: 191
   validates_length_of :options_text, maximum: 65535

@@ -13,6 +13,7 @@ class Api::V1::FieldsController < DiverstController
       .require(:field)
       .permit(
         :field_definer_id,
+        :id,
         :field_definer_type,
         :type,
         :title,
