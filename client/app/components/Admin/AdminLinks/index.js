@@ -12,16 +12,46 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
+// UI Icons
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ListIcon from '@material-ui/icons/List';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import LightbulbIcon from '@material-ui/icons/WbIncandescent';
-import HowToVoteIcon from '@material-ui/icons/HowToVote';
-import UsersCircleIcon from '@material-ui/icons/GroupWork';
+
+// Shared Icons
+import UsersIcon from '@material-ui/icons/People'; // Analyze & System
+import GroupsIcon from '@material-ui/icons/SupervisedUserCircle'; // Analyze & Manage
+import PlaceholderIcon from '@material-ui/icons/List'; // Placeholder
+
+// Analyze
+import AnalyzeIcon from '@material-ui/icons/Equalizer';
+import AnalyzeOverviewIcon from '@material-ui/icons/ViewModule';
+import AnalyzeCustomIcon from '@material-ui/icons/Poll';
+
+// Manage
+import ManageIcon from '@material-ui/icons/DeviceHub';
+import ManageSegmentsIcon from '@material-ui/icons/Layers';
+import ManageResourcesIcon from '@material-ui/icons/PermMedia';
+import ManageArchiveIcon from '@material-ui/icons/Archive';
+import ManageCalendarIcon from '@material-ui/icons/CalendarToday';
+
+// Plan
+import PlanIcon from '@material-ui/icons/AssignmentTurnedIn';
+import PlanGroupBudgetsIcon from '@material-ui/icons/AttachMoney';
+
+// Innovate
+import InnovateIcon from '@material-ui/icons/WbIncandescent';
+
+// Mentorship
+import MentorshipIcon from '@material-ui/icons/GroupWork';
+
+// Include
+import IncludeIcon from '@material-ui/icons/HowToVote';
+
+// System
+import SystemIcon from '@material-ui/icons/Settings';
+import SystemGlobalSettingsIcon from '@material-ui/icons/Tune';
+import SystemBrandingIcon from '@material-ui/icons/Landscape';
+import SystemLogsIcon from '@material-ui/icons/Book';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { selectAdminDrawerOpen, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
@@ -150,7 +180,7 @@ export function AdminLinks(props) {
         <List>
           <ListPermission button onClick={handleAnalyzeClick} show={permission(props, 'metrics_overview')}>
             <ListItemIcon>
-              <EqualizerIcon />
+              <AnalyzeIcon />
             </ListItemIcon>
             <ListItemText>
               <DiverstFormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
@@ -168,7 +198,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'metrics_overview')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <AnalyzeOverviewIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
@@ -182,7 +212,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'metrics_overview')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <UsersIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
@@ -196,7 +226,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'metrics_overview')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <GroupsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
@@ -210,7 +240,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'metrics_overview')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <AnalyzeCustomIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.analyze.custom.index.data.titleMessage} />
@@ -230,7 +260,7 @@ export function AdminLinks(props) {
             }
           >
             <ListItemIcon>
-              <DeviceHubIcon />
+              <ManageIcon />
             </ListItemIcon>
             <ListItemText>
               <DiverstFormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
@@ -247,7 +277,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'groups_create')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <GroupsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
@@ -261,7 +291,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'segments_create')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <ManageSegmentsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
@@ -275,7 +305,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'enterprise_folders_view')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <ManageResourcesIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
@@ -289,7 +319,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'archive_manage')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <ManageArchiveIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.archived.index.data.titleMessage} />
@@ -303,7 +333,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'groups_calendars')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <ManageCalendarIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.manage.calendar.index.data.titleMessage} />
@@ -320,7 +350,7 @@ export function AdminLinks(props) {
             }
           >
             <ListItemIcon>
-              <AssignmentTurnedInIcon />
+              <PlanIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.plan.index.data.titleMessage} />} />
             {state.plan.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -335,7 +365,7 @@ export function AdminLinks(props) {
                 show={permission(props, 'manage_all_budgets')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <PlanGroupBudgetsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   Group Budgets
@@ -350,7 +380,7 @@ export function AdminLinks(props) {
             show={false && permission(props, 'campaigns_create')}
           >
             <ListItemIcon>
-              <LightbulbIcon className={classes.lightbulbIcon} />
+              <InnovateIcon className={classes.lightbulbIcon} />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.innovate.index.data.titleMessage} />} />
             {state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -366,7 +396,7 @@ export function AdminLinks(props) {
                 show={false && permission(props, 'campaigns_create')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <PlaceholderIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
@@ -381,7 +411,7 @@ export function AdminLinks(props) {
                 show={false && permission(props, 'campaigns_manage')}
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <PlaceholderIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.innovate.financials.index.data.titleMessage} />
@@ -398,7 +428,7 @@ export function AdminLinks(props) {
             show={permission(props, 'polls_create')}
           >
             <ListItemIcon>
-              <HowToVoteIcon />
+              <IncludeIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
           </ListPermission>
@@ -412,7 +442,7 @@ export function AdminLinks(props) {
             }
           >
             <ListItemIcon>
-              <UsersCircleIcon />
+              <MentorshipIcon />
             </ListItemIcon>
             <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.mentorship.index.data.titleMessage} />} />
           </ListPermission>
@@ -437,7 +467,7 @@ export function AdminLinks(props) {
             }
           >
             <ListItemIcon>
-              <SettingsIcon />
+              <SystemIcon />
             </ListItemIcon>
             <ListItemText>
               <DiverstFormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
@@ -465,7 +495,7 @@ export function AdminLinks(props) {
                 }
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <SystemGlobalSettingsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.globalSettings.fields.index.titleMessage} />
@@ -482,7 +512,7 @@ export function AdminLinks(props) {
                 }
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <UsersIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
@@ -498,7 +528,7 @@ export function AdminLinks(props) {
                 }
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <SystemBrandingIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.branding.index.data.titleMessage} />
@@ -514,7 +544,7 @@ export function AdminLinks(props) {
                 }
               >
                 <ListItemIcon>
-                  <ListIcon />
+                  <SystemLogsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
@@ -532,7 +562,7 @@ export function AdminLinks(props) {
               {/*  } */}
               {/* > */}
               {/*  <ListItemIcon> */}
-              {/*    <ListIcon /> */}
+              {/*    <PlaceholderIcon /> */}
               {/*  </ListItemIcon> */}
               {/*  <ListItemText> */}
               {/*    <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} /> */}
