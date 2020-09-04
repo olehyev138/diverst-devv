@@ -16,6 +16,20 @@ class ApplicationRecord < ActiveRecord::Base
     time_ago_in_words created_at
   end
 
+  def to_label
+    if respond_to?('name')
+      name
+    elsif respond_to?('title')
+      title
+    elsif respond_to?('subject')
+      subject
+    elsif respond_to?('description')
+      description
+    else
+      "#{self.class.name}(#{id})"
+    end
+  end
+
   def self.column_reload!
     self.connection.schema_cache.clear!
     self.reset_column_information

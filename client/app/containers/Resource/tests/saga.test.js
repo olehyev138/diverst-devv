@@ -41,6 +41,10 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 api.folders.all = jest.fn();
 api.folders.create = jest.fn();
 api.folders.update = jest.fn();
@@ -109,6 +113,7 @@ describe('Tests for folders', () => {
 
       expect(api.folders.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.folders);
     });
   });
 
@@ -148,6 +153,7 @@ describe('Tests for folders', () => {
 
       expect(api.folders.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.folder);
     });
   });
 
@@ -175,6 +181,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.create).toHaveBeenCalledWith({ folder: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_folder);
     });
 
     it('Should return error from the API', async () => {
@@ -198,6 +205,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.create).toHaveBeenCalledWith({ folder: initialAction.payload, group_id: 2 });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_folder);
     });
   });
 
@@ -224,6 +232,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.update).toHaveBeenCalledWith(initialAction.payload.id, { folder: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_folder);
     });
 
     it('Should return error from the API', async () => {
@@ -248,6 +257,7 @@ describe('Tests for folders', () => {
 
       expect(api.folders.update).toHaveBeenCalledWith(initialAction.payload.id, { folder: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_folder);
     });
   });
 
@@ -276,6 +286,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete_folder);
     });
 
     it('Should return error from the API', async () => {
@@ -299,6 +310,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete_folder);
     });
   });
 
@@ -343,6 +355,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.validatePassword).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.password);
     });
   });
 });
@@ -388,6 +401,7 @@ describe('Tests for resources', () => {
 
       expect(api.resources.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.resources);
     });
   });
 
@@ -427,6 +441,7 @@ describe('Tests for resources', () => {
 
       expect(api.resources.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.resource);
     });
   });
 
@@ -454,6 +469,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.create).toHaveBeenCalledWith({ resource: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_resource);
     });
 
     it('Should return error from the API', async () => {
@@ -477,6 +493,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.create).toHaveBeenCalledWith({ resource: initialAction.payload, group_id: 2 });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_resource);
     });
   });
 
@@ -503,6 +520,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.update).toHaveBeenCalledWith(initialAction.payload.id, { resource: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_resource);
     });
 
     it('Should return error from the API', async () => {
@@ -527,6 +545,7 @@ describe('Tests for resources', () => {
 
       expect(api.resources.update).toHaveBeenCalledWith(initialAction.payload.id, { resource: initialAction.payload });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_resource);
     });
   });
 
@@ -555,6 +574,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete_resource);
     });
 
     it('Should return error from the API', async () => {
@@ -578,6 +598,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete_resource);
     });
   });
 
@@ -603,6 +624,7 @@ describe('Tests for resources', () => {
       );
 
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.archive);
     });
 
     it('Should return error from the API', async () => {
@@ -626,6 +648,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.archive).toHaveBeenCalledWith(resource.id, { resource });
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.archive);
     });
   });
 
@@ -671,6 +694,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.getFileData).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.file_data);
     });
   });
 });

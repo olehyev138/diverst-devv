@@ -17,7 +17,7 @@ import {
 
 import {
   selectPaginatedSponsors, selectSponsorTotal,
-  selectIsFetchingSponsors
+  selectIsFetchingSponsors, selectHasChanged
 } from 'containers/Shared/Sponsors/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -65,6 +65,15 @@ export function SponsorListPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getSponsorsBegin(params);
+
+    return () => {
+      props.getSponsorsBegin();
+    };
+  }, [props.hasChanged]);
+
   return (
     <React.Fragment>
       <SponsorList
@@ -94,6 +103,7 @@ SponsorListPage.propTypes = {
   sponsor: PropTypes.object,
   handleVisitSponsorEdit: PropTypes.func,
   handleVisitSponsorShow: PropTypes.func,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -101,6 +111,7 @@ const mapStateToProps = createStructuredSelector({
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
   permissions: selectPermissions(),
+  hasChanged: selectHasChanged(),
 });
 
 

@@ -12,7 +12,12 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
+import {
+  selectPaginatedGroups,
+  selectGroupTotal,
+  selectGroupIsLoading,
+  selectHasChanged
+} from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
@@ -45,6 +50,13 @@ export function AdminGroupListPage(props) {
     return () => props.groupAllUnmount();
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getGroupsBegin(params);
+
+    return () => props.groupAllUnmount();
+  }, [props.hasChanged]);
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -73,6 +85,7 @@ AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
@@ -83,6 +96,7 @@ AdminGroupListPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
+  hasChanged: selectHasChanged(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),

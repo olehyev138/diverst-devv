@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.User';
+export const snackbar = 'diverst.snackbars.User';
 
 export default defineMessages({
   new: {
@@ -163,4 +164,64 @@ export default defineMessages({
       id: `${scope}.tooltip.delete`
     },
   },
+  snackbars: {
+    errors: {
+      user: {
+        id: `${snackbar}.errors.load.user`
+      },
+      users: {
+        id: `${snackbar}.errors.load.users`
+      },
+      posts: {
+        id: `${snackbar}.errors.load.posts`
+      },
+      events: {
+        id: `${snackbar}.errors.load.events`
+      },
+      downloads: {
+        id: `${snackbar}.errors.load.downloads`
+      },
+      create: {
+        id: `${snackbar}.errors.create.user`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.user`
+      },
+      update: {
+        id: `${snackbar}.errors.update.user`
+      },
+      fields: {
+        id: `${snackbar}.errors.fields`
+      },
+      export: {
+        id: `${snackbar}.errors.export`
+      },
+      import: {
+        id: `${snackbar}.errors.import`
+      },
+      user_data: {
+        id: `${snackbar}.errors.user_data`
+      },
+      prototype: {
+        id: `${snackbar}.errors.prototype`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.user`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.user`
+      },
+      update: {
+        id: `${snackbar}.success.update.user`
+      },
+      fields: {
+        id: `${snackbar}.success.fields`
+      },
+      export: {
+        id: `${snackbar}.success.export`
+      },
+    }
+  }
 });
