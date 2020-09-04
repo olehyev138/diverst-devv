@@ -69,7 +69,9 @@ module User::Actions
   end
 
   def reset_password(params)
-    if update_attributes(reset_password_token: nil, reset_password_sent_at: nil, **params)
+    params[:reset_password_token] = nil
+    params[:reset_password_sent_at] = nil
+    if update_attributes(params)
       self
     else
       raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })

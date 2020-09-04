@@ -47,12 +47,12 @@ export function DiverstDialog(props) {
       </DialogContent>
       {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
-          {handleYes && (
+          {handleYes && textYes && (
             <Button onClick={handleYes} color='primary' autoFocus>
               {textYes}
             </Button>
           )}
-          {handleNo && (
+          {handleNo && textNo && (
             <Button onClick={handleNo} color='primary'>
               {textNo}
             </Button>

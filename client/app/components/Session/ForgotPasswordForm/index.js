@@ -46,7 +46,7 @@ const styles = theme => ({
 
 /* eslint-disable indent, object-curly-newline */
 export function ForgotPasswordFormInner(props) {
-  const { classes, width, values, errors, touched } = props;
+  const { classes, width, values, errors, touched, handleChange } = props;
 
   const loginPath = props.enterprise && props.enterprise.has_enabled_saml ? ROUTES.session.ssoBypass.path() : ROUTES.session.login.path();
 
@@ -67,6 +67,7 @@ export function ForgotPasswordFormInner(props) {
               name='email'
               type='email'
               label={<FormattedMessage {...loginMessages.email} />}
+              onChange={handleChange}
               margin='normal'
               autoComplete='off'
               error={errors.email && touched.email}
@@ -142,6 +143,7 @@ ForgotPasswordFormInner.propTypes = {
   values: PropTypes.object,
   errors: PropTypes.object,
   touched: PropTypes.object,
+  handleChange: PropTypes.func,
 };
 
 ForgotPasswordForm.propTypes = {
