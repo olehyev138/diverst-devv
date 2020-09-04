@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Events</h1>
+  <h2 class="heading1-styling">Events</h2>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
       <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if GroupEventsPolicy.new(current_user, [@group]).create? %>

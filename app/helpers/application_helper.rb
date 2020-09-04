@@ -32,6 +32,12 @@ module ApplicationHelper
     end
   end
 
+  def event_status(event)
+    return 'ongoing' if event.ongoing?
+    return 'upcoming' if event.upcoming?
+    return 'past' if event.past?
+  end
+
   def event_color(event)
     calendar_color = event.try(:group).try(:calendar_color).blank? ? nil : '#' + event.try(:group).try(:calendar_color)
 

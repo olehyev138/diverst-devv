@@ -12,4 +12,11 @@ class Badge < BaseClass
   has_attached_file :image, styles: { thumb: '120x120>' }
   validates_attachment_presence :image
   validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
+
+  def image_description
+    value = "image of #{label} badge"
+    return if self[:image_alt_text_desc].nil?
+
+    self[:image_alt_text_desc]
+  end
 end

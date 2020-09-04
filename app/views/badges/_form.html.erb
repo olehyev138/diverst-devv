@@ -17,6 +17,7 @@
         <%= f.input :image,
               as: :attachment_preview,
               label: "Choose a <strong>picture</strong> for #{ c_t(:badge) }.".html_safe %>
+        <%= f.input :image_alt_text_desc, label: 'image description' %>
       </div>
     </div>
 
