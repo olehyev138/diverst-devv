@@ -5,7 +5,7 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#new_email_update' do
             let(:enterprise) { create(:enterprise, disable_emails: false) }
             let(:record) { create :user, enterprise: enterprise }
-            let!(:mail) { described_class.new_email_update(record).deliver_now }
+            let!(:mail) { described_class.new_email_update(record.id,record.email).deliver_now }
 
             it 'renders the receiver email' do
               expect(mail.to).to eq([record.email])
@@ -15,7 +15,7 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#old_email_update' do
       let(:enterprise) { create(:enterprise, disable_emails: false) }
       let(:record) { create :user, enterprise: enterprise }
-      let!(:mail) { described_class.old_email_update(record).deliver_now }
+      let!(:mail) { described_class.old_email_update(record.id,record.email).deliver_now }
 
       it 'renders the receiver email' do
         expect(mail.to).to eq([record.email])
