@@ -34,7 +34,7 @@ export function* updateFieldPosition(action) {
     const payload = { field: { id: action.payload.id, position: action.payload.position, type: action.payload.type } };
     yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
     yield put(updateFieldPositionSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.position), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.position), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldPositionError(err));
 
