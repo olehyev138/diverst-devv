@@ -194,9 +194,9 @@ class Group < ApplicationRecord
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_save :set_position
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
+  after_create :set_position
 
   after_update :accept_pending_members, unless: :pending_members_enabled?
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
