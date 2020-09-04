@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Innovate';
+export const snackbar = 'diverst.snackbars.Analyze.Question';
 
 export default defineMessages({
   new: {
@@ -79,6 +80,36 @@ export default defineMessages({
       },
       description: {
         id: `${scope}.question.list.description`,
+      },
+    }
+  },
+  snackbars: {
+    errors: {
+      question: {
+        id: `${snackbar}.errors.load.question`
+      },
+      questions: {
+        id: `${snackbar}.errors.load.questions`
+      },
+      create: {
+        id: `${snackbar}.errors.create.question`
+      },
+      update: {
+        id: `${snackbar}.errors.update.question`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.question`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.question`
+      },
+      update: {
+        id: `${snackbar}.success.update.question`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.question`
       },
     }
   }

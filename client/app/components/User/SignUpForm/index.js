@@ -34,10 +34,57 @@ import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import { union, difference, intersection } from 'utils/arrayHelpers';
 import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import DiverstDialog from 'components/Shared/DiverstDialog';
+import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
+import { injectIntl, intlShape } from 'react-intl';
+
+const submitGenerator = (action, token) => (values, actions) => {
+  const payload = mapFields(values, ['time_zone']);
+  payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
+  payload.group_ids = Object.keys(payload.groupIds).filter(key => payload.groupIds[key]);
+  delete payload.fieldData;
+  delete payload.groupIds;
+  action({ token, ...payload });
+};
+
+const submitButtonGenerator = (submitText, committing, disabled = false) => (
+  <DiverstSubmit
+    isCommitting={committing}
+    disabled={disabled}
+    size='large'
+    variant='contained'
+    wrapperStyle={{ width: '100%' }}
+    fullWidth
+    endIcon={<DoubleArrowIcon />}
+  >
+    {submitText}
+  </DiverstSubmit>
+);
+
+const activateButtonGenerator = (submitText, onClick = () => null, committing = false, disabled = false) => (
+  <Button
+    disabled={committing || disabled}
+    size='large'
+    variant='contained'
+    style={{ width: '100%' }}
+    color='primary'
+    fullWidth
+    endIcon={<DoubleArrowIcon />}
+    onClick={onClick}
+  >
+    {submitText}
+  </Button>
+);
+
+const submitText = (
+  <Typography variant='h6'>
+    <DiverstFormattedMessage {...signUpMessages.activate} />
+  </Typography>
+);
 
 /* eslint-disable object-curly-newline */
 export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
-  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, setSubmitting } = formikProps;
   const { user, groups, enterprise, ...rest } = props;
 
   const [expandedGroups, setExpandedGroups] = useState({});
@@ -64,6 +111,8 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
     group => setFieldValue(`groupIds[${group.id}]`, undefined),
     [values.groupIds],
   );
+
+  const [consentOpen, setConsent] = useState(false);
 
   return (
     <Scrollbar>
@@ -121,6 +170,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   fullWidth
                   required
                   type='password'
+                  autoComplete='new-password'
                   disabled={props.isCommitting}
                   margin='normal'
                   id='password'
@@ -237,20 +287,60 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             <Box mb={2} />
             <Card>
               <CardActions>
-                <DiverstSubmit
-                  isCommitting={props.isCommitting}
-                  size='large'
-                  variant='contained'
-                  wrapperStyle={{ width: '100%' }}
-                  fullWidth
-                  endIcon={<DoubleArrowIcon />}
-                >
-                  <Typography variant='h6'>
-                    <DiverstFormattedMessage {...signUpMessages.activate} />
-                  </Typography>
-                </DiverstSubmit>
+                {enterprise.onboarding_consent_enabled
+                  ? activateButtonGenerator(submitText, () => setConsent(true), props.isCommitting)
+                  : submitButtonGenerator(submitText, props.isCommitting)
+                }
               </CardActions>
             </Card>
+            <DiverstDialog
+              open={consentOpen}
+              title={props.intl.formatMessage(signUpMessages.consentTitle)}
+              handleNo={() => setConsent(false)}
+              content={(
+                <Scrollbar>
+                  <CardContent>
+                    <DiverstHTMLEmbedder
+                      html={
+                        enterprise.onboarding_consent_message || ''
+                      }
+                    />
+                    <FormControlLabel
+                      control={(
+                        <Field
+                          component={Checkbox}
+                          onChange={handleChange}
+                          id='__consent_accepted__'
+                          name='__consent_accepted__'
+                          margin='normal'
+                          disabled={props.isCommitting}
+                          label={<DiverstFormattedMessage {...signUpMessages.consentAccept} />}
+                          /* eslint-disable-next-line no-underscore-dangle */
+                          value={values.__consent_accepted__}
+                          /* eslint-disable-next-line no-underscore-dangle */
+                          checked={values.__consent_accepted__}
+                        />
+                      )}
+                      label={<DiverstFormattedMessage {...signUpMessages.consentAccept} />}
+                    />
+                  </CardContent>
+                  <CardActions>
+                    {activateButtonGenerator(
+                      submitText,
+                      () => {
+                        setSubmitting(true);
+                        submitGenerator(props.submitAction, props.token)(values);
+                        setFieldValue('__consent_accepted__', false);
+                        setSubmitting(false);
+                      },
+                      props.isCommitting,
+                      // eslint-disable-next-line no-underscore-dangle
+                      !values.__consent_accepted__ && enterprise.onboarding_consent_enabled
+                    )}
+                  </CardActions>
+                </Scrollbar>
+              )}
+            />
           </Form>
         </DiverstFormLoader>
         <Box mb={4} />
@@ -272,20 +362,14 @@ export function SignUpForm(props) {
     password_confirmation: { default: '' },
     field_data: { default: [], customKey: 'fieldData' },
     group_ids: { default: {}, customKey: 'groupIds' },
+    __consent_accepted__: { default: false }
   });
 
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
-      onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone']);
-        payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
-        payload.group_ids = Object.keys(payload.groupIds).filter(key => payload.groupIds[key]);
-        delete payload.fieldData;
-        delete payload.groupIds;
-        props.submitAction({ token: props.token, ...payload });
-      }}
+      onSubmit={submitGenerator(props.submitAction, props.token)}
     >
       {formikProps => (
         <SignUpFormInner
@@ -299,6 +383,7 @@ export function SignUpForm(props) {
 }
 
 SignUpForm.propTypes = {
+  intl: intlShape,
   submitAction: PropTypes.func,
   user: PropTypes.object,
   groups: PropTypes.arrayOf(PropTypes.object),
@@ -322,5 +407,6 @@ SignUpFormInner.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
 )(SignUpForm);

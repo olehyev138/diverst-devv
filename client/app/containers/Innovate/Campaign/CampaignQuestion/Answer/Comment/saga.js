@@ -3,6 +3,9 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 
 import {
   GET_COMMENTS_BEGIN, GET_COMMENT_BEGIN, CREATE_COMMENT_BEGIN,
@@ -23,9 +26,7 @@ export function* getComments(action) {
     yield put(getCommentsSuccess(response.data.page));
   } catch (err) {
     yield put(getCommentsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load comments', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.comments), options: { variant: 'warning' } }));
   }
 }
 
@@ -36,12 +37,10 @@ export function* createComment(action) {
 
     yield put(createCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
-    yield put(showSnackbar({ message: 'Comment created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCommentError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create comment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -53,15 +52,13 @@ export function* updateComment(action) {
     yield put(updateCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
     yield put(showSnackbar({
-      message: 'Comment updated',
+      message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateCommentError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update comment',
+      message: intl.formatMessage(messages.snackbars.errors.update),
       options: { variant: 'warning' }
     }));
   }
@@ -73,10 +70,9 @@ export function* getComment(action) {
     const response = yield call(api.comments.get.bind(api.comments), action.payload.id);
     yield put(getCommentSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getCommentError(err));
     yield put(showSnackbar({
-      message: 'Failed to get comment',
+      message: intl.formatMessage(messages.snackbars.errors.comment),
       options: { variant: 'warning' }
     }));
   }
@@ -88,12 +84,10 @@ export function* deleteComment(action) {
 
     yield put(deleteCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaignId)));
-    yield put(showSnackbar({ message: 'Comment deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteCommentError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove comment', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 

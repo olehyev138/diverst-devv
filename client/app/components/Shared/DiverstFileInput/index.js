@@ -18,6 +18,10 @@ import AuthService from 'utils/authService';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstFileInput/messages';
 
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileMessages, getSupportedImageFileMessages } from 'utils/fileInputHelpers';
+
 const styles = theme => ({
   fileInput: {
     display: 'none',
@@ -75,12 +79,15 @@ const styles = theme => ({
     marginLeft: 6,
     color: theme.palette.error.main,
   },
+  notAcceptedMessage: {
+    marginTop: 4
+  }
 });
 
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
-  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, ...rest } = props;
+  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, fileType, ...rest } = props;
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const inputRef = useRef();
@@ -108,6 +115,10 @@ export function DiverstFileInput(props) {
     multiple,
     inputProps,
   } = rest;
+
+  const [notAcceptedFile, setNotAcceptedFile] = useState(false);
+  const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
+  const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileMessages() : getAllSupportedFileMessages();
 
   return (
     <React.Fragment>
@@ -159,7 +170,7 @@ export function DiverstFileInput(props) {
                 {props.label}
               </FormLabel>
               <input
-                accept='image/*'
+                accept={acceptFileTypes.toString()}
                 id={props.id}
                 type='file'
                 className={classes.fileInput}
@@ -171,7 +182,11 @@ export function DiverstFileInput(props) {
                   if (handleUploadBegin)
                     handleUploadBegin(e);
 
-                  handleUpload(e.currentTarget.files);
+                  if (Object.values(e.currentTarget.files).every(file => acceptFileTypes.includes(file.type))) {
+                    setNotAcceptedFile(false);
+                    handleUpload(e.currentTarget.files);
+                  } else
+                    setNotAcceptedFile(true);
                 }}
                 {...inputProps}
               />
@@ -269,6 +284,7 @@ export function DiverstFileInput(props) {
                                     aria-label='delete'
                                     size='small'
                                     onClick={() => {
+                                      setNotAcceptedFile(false);
                                       /* eslint-disable-next-line no-alert, no-restricted-globals */
                                       if (!confirm(intl.formatMessage(messages.deleteFileConfirm))) return;
 
@@ -295,6 +311,19 @@ export function DiverstFileInput(props) {
                     </Box>
                   )}
                 </Grid>
+                <Grid item>
+                  <Tooltip
+                    title={(
+                      <div>
+                        <DiverstFormattedMessage {...messages.fileTypes} />
+                        {acceptFileTypeNames.map(message => <li>{message}</li>)}
+                      </div>
+                    )}
+                    placement='bottom'
+                  >
+                    <InfoIcon fontSize='small' color='primary' />
+                  </Tooltip>
+                </Grid>
               </Grid>
               {props.showHelperText && (
                 <FormHelperText
@@ -306,6 +335,11 @@ export function DiverstFileInput(props) {
                 >
                   {props.helperText}
                 </FormHelperText>
+              )}
+              {notAcceptedFile && (
+                <Typography color='error' className={classes.notAcceptedMessage}>
+                  <DiverstFormattedMessage {...messages.notAccepted} />
+                </Typography>
               )}
             </FormControl>
           </React.Fragment>
@@ -331,6 +365,7 @@ DiverstFileInput.propTypes = {
   fileName: PropTypes.string,
   inputProps: PropTypes.object,
   intl: intlShape.isRequired,
+  fileType: PropTypes.string
 };
 
 export default compose(

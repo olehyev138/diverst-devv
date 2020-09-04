@@ -10,8 +10,6 @@ import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -20,6 +18,9 @@ import {
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -82,24 +83,22 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 fullWidth
                 label={<DiverstFormattedMessage {...messages.Sponsors.media} />}
                 value={values.sponsor_media}
+                fileType='image'
               />
             </Grid>
           </Grid>
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {<DiverstFormattedMessage {...messages.save} />}
-          </Button>
-          <Button
-            component={WrappedNavLink}
-            to={props.links.sponsorIndex}
+          </DiverstSubmit>
+          <DiverstCancel
+            redirectFallback={props.links.sponsorIndex}
+            disabled={props.isCommitting}
           >
             {<DiverstFormattedMessage {...messages.cancel} />}
-          </Button>
+          </DiverstCancel>
         </CardActions>
       </Form>
     </Card>
@@ -147,7 +146,8 @@ SponsorFormInner.propTypes = {
   sponsor: PropTypes.object,
   links: PropTypes.shape({
     sponsorIndex: PropTypes.string
-  })
+  }),
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

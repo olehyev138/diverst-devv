@@ -15,10 +15,10 @@ import {
   Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
@@ -61,13 +61,12 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.newsFeedIndex}
-              component={WrappedNavLink}
+              redirectFallback={props.links.newsFeedIndex}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

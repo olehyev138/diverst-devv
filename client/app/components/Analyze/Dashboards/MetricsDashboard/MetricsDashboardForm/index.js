@@ -15,13 +15,13 @@ import {
   Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import Select from 'components/Shared/DiverstSelect';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
@@ -93,13 +93,12 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
-              to={props.links.metricsDashboardsIndex}
-              component={WrappedNavLink}
+            <DiverstCancel
+              redirectFallback={props.links.metricsDashboardsIndex}
               disabled={props.isCommitting}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

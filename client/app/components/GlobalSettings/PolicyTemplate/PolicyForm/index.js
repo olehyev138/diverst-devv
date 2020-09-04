@@ -36,8 +36,10 @@ import messages from 'containers/User/UserPolicy/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
+
 
 const styles = theme => ({
   padding: {
@@ -70,6 +72,7 @@ export function PolicyFormInner({
   ...props
 }) {
   const { intl } = props;
+
 
   const underToSpace = string => string.split('_').join(' ');
 
@@ -251,13 +254,12 @@ export function PolicyFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
-              <Button
-                component={WrappedNavLink}
-                to={props.links.policiesIndex}
+              <DiverstCancel
+                redirectFallback={props.links.policiesIndex}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
-              </Button>
+              </DiverstCancel>
             </CardActions>
           </Form>
         </Card>
