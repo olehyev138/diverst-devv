@@ -102,7 +102,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     to="/groups"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <GroupOutlinedIcon />
+      <SupervisedUserCircleOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <Memo(Connect(DiverstFormattedMessage))
       id="diverst.containers.Routes.user.groups"
@@ -230,7 +230,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     <Hidden
       smDown={true}
     >
-      <GroupOutlinedIcon />
+      <SupervisedUserCircleOutlinedIcon />
     </Hidden>
     <Memo(Connect(DiverstFormattedMessage))
       id="diverst.containers.Routes.user.groups"
