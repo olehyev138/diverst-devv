@@ -97,7 +97,7 @@ export default defineMessages({
         id: `${snackbar}.errors.create.field`
       },
       update: {
-        id: `${snackbar}.errors.field.field`
+        id: `${snackbar}.errors.update.field`
       },
       delete: {
         id: `${snackbar}.errors.delete.field`
@@ -107,8 +107,8 @@ export default defineMessages({
       create: {
         id: `${snackbar}.success.create.field`
       },
-      field: {
-        id: `${snackbar}.success.field.field`
+      update: {
+        id: `${snackbar}.success.update.field`
       },
       delete: {
         id: `${snackbar}.success.delete.field`
