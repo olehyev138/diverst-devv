@@ -14,10 +14,10 @@ export const timezoneMap = (timeZones, user, draft) => timeZones.map((element) =
 export const deserializeFields = (fieldData) => {
   if (fieldData)
     return fieldData.map(datum => produce(datum, (draft) => {
-      draft.data = deserializeDatum(fieldData);
+      draft.data = deserializeDatum(datum);
       draft.field.options = deserializeOptionsText(datum.field);
     }));
-  return [];
+  return fieldData;
 };
 
 // maps each field to transform select/checkbox field options to an array compatible with the Select Field
