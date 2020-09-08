@@ -65,7 +65,7 @@ export function GroupMessageCommentForm(props) {
 
   const initialValues = {
     author_id: props?.currentUserId || undefined,
-    message_id: dig(props, 'newsItem', 'group_message', 'id') || undefined,
+    message_id: props?.newsItem?.group_message?.id || undefined,
     content: '',
   };
 
@@ -76,7 +76,7 @@ export function GroupMessageCommentForm(props) {
       onSubmit={(values, actions) => {
         // pass news_feed_link_id to saga to refetch news_feed_link with new comment
         props.commentAction({
-          news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
+          news_feed_link_id: props?.newsItem?.id || undefined,
           attributes: values
         });
 

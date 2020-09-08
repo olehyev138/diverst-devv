@@ -148,8 +148,8 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
               isMulti
               disabled={props.isCommitting}
-              queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
-              dialogQueryScopes={[['replace_with_children', dig(props, 'currentGroup', 'id')]]}
+              queryScopes={[['except_id', props?.currentGroup?.id]]}
+              dialogQueryScopes={[['replace_with_children', props?.currentGroup?.id]]}
               handleChange={handleChange}
               values={values}
               setFieldValue={setFieldValue}

@@ -119,7 +119,7 @@ export function EventFormInner({
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.day} />}
                 value={values.day}
-                options={dig(props, 'event', 'timezones') || []}
+                options={props?.event?.timezones || []}
               />
               <Field
                 component={DiverstTimePicker}
@@ -147,7 +147,7 @@ export function EventFormInner({
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.tz} />}
                 value={values.tz}
-                options={dig(props, 'event', 'timezones') || []}
+                options={props?.event?.timezones || []}
                 onChange={value => setFieldValue('tz', value)}
                 onBlur={() => setFieldTouched('tz', true)}
               />

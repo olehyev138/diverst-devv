@@ -105,7 +105,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               margin='normal'
               label={<DiverstFormattedMessage {...messages.time_zone} />}
               value={values.time_zone}
-              options={dig(props, 'user', 'timezones') || []}
+              options={props?.user?.timezones || []}
               onChange={value => setFieldValue('time_zone', value)}
               onBlur={() => setFieldTouched('time_zone', true)}
             />

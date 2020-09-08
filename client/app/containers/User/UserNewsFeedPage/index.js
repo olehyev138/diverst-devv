@@ -37,7 +37,7 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    const userId = dig(props, 'currentUser', 'id');
+    const userId = props?.currentUser?.id;
     props.getUserPostsBegin(params);
 
     return () => {

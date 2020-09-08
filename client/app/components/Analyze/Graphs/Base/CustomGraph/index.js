@@ -112,7 +112,7 @@ export function CustomGraph(props) {
           <VerticalGridLines />
           { props.data && props.data.map((series, index) => {
             // TODO: hide/show series with legend like line graph
-            if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
+            if (legendData[series.key]?.hidden) return (<React.Fragment key={series.key} />);
 
             return (
               <HorizontalBarSeries

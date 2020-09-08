@@ -53,13 +53,13 @@ const selectFetchUserDataError = () => createSelector(
 
 const selectCustomText = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState, 'data', 'enterprise', 'custom_text')
+  globalState => globalState?.data?.enterprise?.custom_text
 );
 
 const selectMentoringInterests = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mInterests = dig(globalState, 'data', 'enterprise', 'mentoring_interests');
+    const mInterests = globalState?.data?.enterprise?.mentoring_interests;
     if (mInterests)
       return mInterests.map(i => ({ label: i.name, value: i.id }));
     return [];
@@ -69,7 +69,7 @@ const selectMentoringInterests = () => createSelector(
 const selectMentoringTypes = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mTypes = dig(globalState, 'data', 'enterprise', 'mentoring_types');
+    const mTypes = globalState?.data?.enterprise?.mentoring_types;
     if (mTypes)
       return mTypes.map(i => ({ label: i.name, value: i.id }));
     return [];

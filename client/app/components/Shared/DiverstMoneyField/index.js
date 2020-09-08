@@ -28,7 +28,7 @@ export function DiverstMoneyField(props) {
           value={props.value}
           onChange={props.onChange}
           disabled={props.disabled}
-          numericProps={getCurrencyProps(props.intl, dig(props, 'currency', 'value'))}
+          numericProps={getCurrencyProps(props.intl, props?.currency?.value)}
           max={props.max}
         />
       </Grid>

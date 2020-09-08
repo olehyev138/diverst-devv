@@ -59,7 +59,7 @@ export function NewsLinkCommentForm(props) {
 
   const initialValues = {
     author_id: props?.currentUserId || undefined,
-    news_link_id: dig(props, 'newsItem', 'news_link', 'id') || undefined,
+    news_link_id: props?.newsItem?.news_link?.id || undefined,
     content: '',
   };
 
@@ -70,7 +70,7 @@ export function NewsLinkCommentForm(props) {
       onSubmit={(values, actions) => {
         // pass news_feed_link_id to saga to refetch news_feed_link with new comment
         props.commentAction({
-          news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
+          news_feed_link_id: props?.newsItem?.id || undefined,
           attributes: values
         });
 

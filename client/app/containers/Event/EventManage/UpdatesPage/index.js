@@ -54,15 +54,15 @@ export function UpdateListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'report_date',
-      updatableId: dig(props, 'currentEvent', 'id'),
+      updatableId: props?.currentEvent?.id,
     }
   );
 
   const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
-    new: partialLink.new.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
+    new: partialLink.new.path(props?.currentGroup?.id, props?.currentEvent?.id),
+    edit: id => partialLink.edit.path(props?.currentGroup?.id, props?.currentEvent?.id, id),
+    show: id => partialLink.show.path(props?.currentGroup?.id, props?.currentEvent?.id, id),
   };
 
   useEffect(() => {

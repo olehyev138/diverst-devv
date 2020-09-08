@@ -10,7 +10,7 @@ class AuthService {
   static getJwt() {
     const state = store.getState();
 
-    return dig(state, 'global', 'token') || UserStorage.getStorageValue('jwt');
+    return state?.global?.token || UserStorage.getStorageValue('jwt');
   }
 
   // Store JWT in user storage
@@ -28,17 +28,17 @@ class AuthService {
   static getUserData() {
     const state = store.getState();
 
-    return dig(state, 'global', 'data');
+    return state?.global?.data;
   }
 
   // Get Policy Group from the global data
   static getPolicyGroup() {
-    return dig(this.getUserData(), 'policy_group');
+    return this.getUserData()?.policy_group;
   }
 
   // Get Enterprise from the global data
   static getEnterprise() {
-    return dig(this.getUserData(), 'enterprise');
+    return this.getUserData()?.enterprise;
   }
 
 
@@ -48,7 +48,7 @@ class AuthService {
   static isUserInStore() {
     const state = store.getState();
 
-    return !!dig(state, 'global', 'token');
+    return !!state?.global?.token;
   }
 
   // Returns true if the passed in routeData object contains a `permission` property that contains

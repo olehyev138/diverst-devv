@@ -66,13 +66,13 @@ export function TextFieldFormInner(props) {
 
 export function TextFieldForm(props) {
   const initialValues = {
-    title: dig(props, 'field', 'title') || '',
-    id: dig(props, 'field', 'id') || '',
-    show_on_vcard: dig(props, 'field', 'show_on_vcard') || true,
-    alternative_layout: dig(props, 'field', 'alternative_layout') || false,
-    private: dig(props, 'field', 'private') || false,
-    required: dig(props, 'field', 'required') || false,
-    add_to_member_list: dig(props, 'field', 'add_to_member_list') || false,
+    title: props?.field?.title || '',
+    id: props?.field?.id || '',
+    show_on_vcard: props?.field?.show_on_vcard || true,
+    alternative_layout: props?.field?.alternative_layout || false,
+    private: props?.field?.private || false,
+    required: props?.field?.required || false,
+    add_to_member_list: props?.field?.add_to_member_list || false,
     type: FIELD_TYPE
   };
 

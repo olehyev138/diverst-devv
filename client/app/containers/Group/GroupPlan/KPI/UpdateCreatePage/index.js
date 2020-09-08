@@ -68,7 +68,7 @@ export function UpdateEditPage(props) {
   const { intl } = props;
 
   useEffect(() => {
-    const updatableId = dig(props, 'currentGroup', 'id');
+    const updatableId = props?.currentGroup?.id;
     if (updatableId)
       props.getUpdatePrototypeBegin({ updatableId });
 
@@ -79,7 +79,7 @@ export function UpdateEditPage(props) {
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
-    index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
+    index: partialLink.index.path(props?.currentGroup?.id),
   };
 
   return (
@@ -91,7 +91,7 @@ export function UpdateEditPage(props) {
       buttonText={intl.formatMessage(messages.createupdate)}
       updateAction={payload => props.createUpdateBegin({
         ...payload,
-        updatableId: dig(props, 'currentGroup', 'id')
+        updatableId: props?.currentGroup?.id
       })}
       updateFieldDataBegin={props.updateFieldDataBegin}
 

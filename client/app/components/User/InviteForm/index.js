@@ -80,7 +80,7 @@ export function InviteFormInner({ formikProps, ...props }) {
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.time_zone} />}
                 value={values.time_zone}
-                options={dig(props, 'user', 'timezones') || []}
+                options={props?.user?.timezones || []}
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
@@ -93,7 +93,7 @@ export function InviteFormInner({ formikProps, ...props }) {
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.user_role} />}
                 value={values.user_role_id}
-                options={dig(props, 'user', 'available_roles') || []}
+                options={props?.user?.available_roles || []}
                 onChange={value => setFieldValue('user_role_id', value)}
                 onBlur={() => setFieldTouched('user_role_id', true)}
               />
@@ -101,7 +101,7 @@ export function InviteFormInner({ formikProps, ...props }) {
             {/* Consider For Later */}
             {false && (
               <FieldInputForm
-                fieldData={dig(props, 'user', 'field_data') || []}
+                fieldData={props?.user?.field_data || []}
                 isCommitting={props.isCommitting}
                 isFetching={props.isFormLoading}
 

@@ -92,10 +92,10 @@ export function PollShowPage(props) {
 
   useEffect(() => {
     if (props.poll)
-      setTextFieldOptions(dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField')));
+      setTextFieldOptions(poll?.fields?.filter(f => f.type === 'TextField'));
 
     return () => null;
-  }, [dig(props, 'poll', 'id')]);
+  }, [props?.poll?.id]);
 
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),

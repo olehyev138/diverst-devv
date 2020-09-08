@@ -57,9 +57,9 @@ export function EmailFormInner({
   ...props
 }) {
   const regex = /%{(.*?)}/g;
-  const variables = dig(props, 'email', 'variables') || {};
+  const variables = props?.email?.variables || {};
   const replace = (whole, grouped) => {
-    const example = dig(variables, grouped, 'example');
+    const example = variables?.[grouped]?.example;
     return example || whole;
   };
 

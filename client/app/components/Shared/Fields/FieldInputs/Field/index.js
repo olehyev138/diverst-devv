@@ -23,7 +23,7 @@ const CustomField = (props) => {
   const fieldData = props?.fieldDatum;
 
   const renderField = (fieldData) => {
-    switch (dig(fieldData, 'field', 'type')) {
+    switch (fieldData?.field?.type) {
       case 'TextField':
         return (<CustomTextField {...props} inputType='' />);
       case 'NumericField':

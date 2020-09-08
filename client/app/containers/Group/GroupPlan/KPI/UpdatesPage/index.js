@@ -55,15 +55,15 @@ export function UpdateListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'report_date',
-      updatableId: dig(props, 'currentGroup', 'id'),
+      updatableId: props?.currentGroup?.id,
     }
   );
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
-    new: partialLink.new.path(dig(props, 'currentGroup', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
+    new: partialLink.new.path(props?.currentGroup?.id),
+    edit: id => partialLink.edit.path(props?.currentGroup?.id, id),
+    show: id => partialLink.show.path(props?.currentGroup?.id, id),
   };
 
   useEffect(() => {

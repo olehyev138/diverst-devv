@@ -45,8 +45,8 @@ export function BudgetPage(props) {
   useInjectReducer({ key: 'budgetItems', reducer: itemReducer });
   useInjectSaga({ key: 'budgetItems', saga: itemSaga });
 
-  const groupId = dig(props, 'budget', 'group_id');
-  const annualBudgetId = dig(props, 'budget', 'annual_budget_id');
+  const groupId = props?.budget?.group_id;
+  const annualBudgetId = props?.budget?.annual_budget_id;
 
   const links = {
     back: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)

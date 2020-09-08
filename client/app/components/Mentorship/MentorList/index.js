@@ -52,7 +52,7 @@ export function MentorList(props, context) {
   const singleType = type.slice(-1);
 
   const actions = [];
-  if (dig(props, 'user', 'id') === props.userSession.user_id)
+  if (props?.user?.id === props.userSession.user_id)
     if (type === 'mentors') {
       if (props.currentTab === 0)
         actions.push({
@@ -182,7 +182,7 @@ export function MentorList(props, context) {
           textColor='primary'
         >
           <Tab label={intl.formatMessage(messages.tabs.current)} />
-          { dig(props, 'user', 'id') === props.userSession.user_id && (
+          { props?.user?.id === props.userSession.user_id && (
             <Tab label={intl.formatMessage(messages.tabs.available)} />
           )}
         </ResponsiveTabs>

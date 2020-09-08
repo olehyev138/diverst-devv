@@ -69,9 +69,9 @@ export function UpdateEditPage(props) {
 
   const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
-    index: partialLink.index.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
+    index: partialLink.index.path(props?.currentGroup?.id, props?.currentEvent?.id),
+    edit: id => partialLink.edit.path(props?.currentGroup?.id, props?.currentEvent?.id, id),
+    show: id => partialLink.show.path(props?.currentGroup?.id, props?.currentEvent?.id, id),
   };
 
   const update = props.currentUpdate || location.update;

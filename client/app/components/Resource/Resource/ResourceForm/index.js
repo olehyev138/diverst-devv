@@ -160,7 +160,7 @@ export function ResourceForm(props) {
     url: { default: '' },
     file: { default: null },
     resource_type: { default: 'url' },
-    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
+    group_id: { default: props.type === 'group' ? props?.currentGroup?.id : null },
   });
 
   return (

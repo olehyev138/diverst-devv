@@ -82,15 +82,15 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function NewsLinkForm(props) {
-  const newsLink = dig(props, 'newsItem', 'news_link');
+  const newsLink = props?.newsItem?.news_link;
 
   const initialValues = buildValues(newsLink, {
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    author_id: { default: props?.currentUser?.user_id || '' },
+    group_id: { default: props?.currentGroup?.id || '' }
   });
 
   return (

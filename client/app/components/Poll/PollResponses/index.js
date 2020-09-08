@@ -19,7 +19,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
-import { permission } from 'utils/permissionsHelpers';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field';
 import dig from 'object-dig';
 import DiverstSelect from 'components/Shared/DiverstSelect';
@@ -57,7 +56,7 @@ export function PollResponses(props, context) {
   const textColumns = [
     {
       title: intl.formatMessage(messages.textual.answer),
-      render: rowData => dig(rowData, 'field_data', fd => fd.find(fd => fd.field_id === fieldId), 'data'),
+      render: rowData => rowData?.field_data?.find(fd => fd.field_id === fieldId)?.data,
       sorting: false,
     },
     {

@@ -93,7 +93,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.timezone} />}
                 value={values.time_zone}
-                options={dig(props, 'enterprise', 'timezones') || []}
+                options={props?.enterprise?.timezones || []}
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />

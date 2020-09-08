@@ -72,7 +72,7 @@ export function SessionPage(props) {
   }, [props.hasChanged]);
 
   function getParticipants(newParams = params) {
-    if (dig(props, 'session', 'id')) {
+    if (props?.session?.id) {
       const sessionId = props.session.id;
       props.getParticipatingUsersBegin({ ...newParams, sessionId });
     }

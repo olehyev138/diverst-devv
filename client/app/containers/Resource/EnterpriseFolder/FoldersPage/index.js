@@ -47,7 +47,7 @@ export function FoldersPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (scopes, resetParams = false) => {
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);

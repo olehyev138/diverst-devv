@@ -75,14 +75,14 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
 }
 
 export function GroupMessageForm(props) {
-  const groupMessage = dig(props, 'newsItem', 'group_message');
+  const groupMessage = props?.newsItem?.group_message;
 
   const initialValues = buildValues(groupMessage, {
     id: { default: '' },
     subject: { default: '' },
     content: { default: '' },
-    owner_id: { default: dig(props, 'currentUser', 'user_id') || '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    owner_id: { default: props?.currentUser?.user_id || '' },
+    group_id: { default: props?.currentGroup?.id || '' }
   });
 
   return (

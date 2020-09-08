@@ -67,7 +67,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
           <Box mb={2} />
           <Card>
             <FieldInputForm
-              fieldData={dig(props, 'update', 'field_data') || []}
+              fieldData={props?.update?.field_data || []}
               updateFieldDataBegin={props.updateFieldDataBegin}
               isCommitting={props.isCommitting}
               isFetching={props.isFetching}
@@ -81,7 +81,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
             />
             <Divider />
             <CardActions>
-              <DiverstSubmit isCommitting={props.isCommitting} disabled={(dig(props, 'update', 'field_data') || []).length <= 0}>
+              <DiverstSubmit isCommitting={props.isCommitting} disabled={(props?.update?.field_data || []).length <= 0}>
                 {buttonText}
               </DiverstSubmit>
               <DiverstCancel

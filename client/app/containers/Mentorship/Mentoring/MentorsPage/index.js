@@ -245,7 +245,7 @@ export default compose(
 )(Conditional(
   MentorsPage,
   ['user.permissions.show?'],
-  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(props?.sessionUser?.user_id),
   permissionMessages.mentorship.mentoring.mentorsPage,
   true
 ));

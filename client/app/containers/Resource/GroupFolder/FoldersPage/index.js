@@ -58,8 +58,8 @@ export function FoldersPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (scopes, resetParams = false) => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const groupId = props?.currentGroup?.id;
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);

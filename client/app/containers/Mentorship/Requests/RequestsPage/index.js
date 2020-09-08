@@ -187,7 +187,7 @@ export default compose(
 )(Conditional(
   MentorsPage,
   ['user.permissions.update?'],
-  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(props?.sessionUser?.user_id),
   permissionMessages.mentorship.requests.indexPage,
   true
 ));

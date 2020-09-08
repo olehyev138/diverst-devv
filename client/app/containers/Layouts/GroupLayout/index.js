@@ -53,7 +53,7 @@ const GroupLayout = (props) => {
     return () => rest.groupFormUnmount();
   }, [groupId, rest.groupHasChanged]);
 
-  const permission = name => dig(currentGroup, 'permissions', name);
+  const permission = name => currentGroup?.permissions?.[name];
 
   return (
     <React.Fragment>

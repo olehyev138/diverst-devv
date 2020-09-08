@@ -93,15 +93,15 @@ export function NumericFieldFormInner(props) {
 
 export function NumericFieldForm(props) {
   const initialValues = {
-    title: dig(props, 'field', 'title') || '',
-    min: typeof dig(props, 'field', 'min') === 'number' ? dig(props, 'field', 'min') : '',
-    max: typeof dig(props, 'field', 'max') === 'number' ? dig(props, 'field', 'max') : '',
-    id: dig(props, 'field', 'id') || '',
-    show_on_vcard: dig(props, 'field', 'show_on_vcard') || true,
-    alternative_layout: dig(props, 'field', 'alternative_layout') || false,
-    private: dig(props, 'field', 'private') || false,
-    required: dig(props, 'field', 'required') || false,
-    add_to_member_list: dig(props, 'field', 'add_to_member_list') || false,
+    title: props?.field?.title || '',
+    min: typeof props?.field?.min === 'number' ? props?.field?.min : '',
+    max: typeof props?.field?.max === 'number' ? props?.field?.max : '',
+    id: props?.field?.id || '',
+    show_on_vcard: props?.field?.show_on_vcard || true,
+    alternative_layout: props?.field?.alternative_layout || false,
+    private: props?.field?.private || false,
+    required: props?.field?.required || false,
+    add_to_member_list: props?.field?.add_to_member_list || false,
     type: FIELD_TYPE
   };
 

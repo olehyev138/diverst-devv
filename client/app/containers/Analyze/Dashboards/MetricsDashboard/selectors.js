@@ -68,7 +68,7 @@ const selectFormCustomGraph = () => createSelector(
 const selectCustomGraphData = graphId => createSelector(
   selectCustomMetricsDomain,
   (customMetricsState) => {
-    const series = dig(customMetricsState.currentCustomGraphData, graphId, 'series') || [];
+    const series = customMetricsState.currentCustomGraphData?.[graphId]?.series || [];
     return series.map(series => ({
       key: series.key,
       values: series.values.map(value => ({ x: value.y, y: value.x, series: series.key }))

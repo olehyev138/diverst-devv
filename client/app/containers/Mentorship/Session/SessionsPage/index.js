@@ -67,7 +67,7 @@ export function SessionsPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getSessions = (scopes, resetParams = false) => {
-    const id = dig(props, 'user', 'id');
+    const id = props?.user?.id;
 
     if (resetParams)
       setParams(defaultParams);

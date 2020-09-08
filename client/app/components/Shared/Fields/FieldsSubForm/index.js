@@ -136,7 +136,7 @@ export function FieldsSubForm(props, context) {
   );
 
   const fieldForm = props => (
-    props.field && !dig(props, 'field', '_destroy') ? (
+    props.field && !props?.field?._destroy ? (
       <React.Fragment key={props.index}>
         <FieldForm
           {...props}

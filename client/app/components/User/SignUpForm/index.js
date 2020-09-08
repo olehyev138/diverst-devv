@@ -241,7 +241,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   margin='normal'
                   label={<DiverstFormattedMessage {...messages.time_zone} />}
                   value={values.time_zone}
-                  options={dig(props, 'user', 'timezones') || []}
+                  options={props?.user?.timezones || []}
                   onChange={value => setFieldValue('time_zone', value)}
                   onBlur={() => setFieldTouched('time_zone', true)}
                 />
@@ -251,7 +251,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             <Card>
               <CardContent>
                 <FieldInputForm
-                  fieldData={dig(props, 'user', 'field_data') || []}
+                  fieldData={props?.user?.field_data || []}
                   updateFieldDataBegin={props.updateFieldDataBegin}
                   isCommitting={props.isCommitting}
                   isFormLoading={props.isFormLoading}

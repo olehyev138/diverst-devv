@@ -37,7 +37,7 @@ const CustomFieldShow = (props) => {
   const { classes } = props;
 
   const renderField = (fieldData) => {
-    switch (dig(fieldData, 'field', 'type')) {
+    switch (fieldData?.field?.type) {
       case 'TextField':
         return (<CustomText {...props} inputType='' classes={classes} />);
       case 'NumericField':

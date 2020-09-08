@@ -11,8 +11,8 @@ function customTexts(customText, intlObject = intl) {
   // eslint-disable-next-line no-return-assign
   Object.keys(customTextMessages.texts).forEach(
     (key, index) => {
-      customTexts[key] = dig(customText, key) || intlObject.formatMessage(customTextMessages.texts[key]);
-      customTexts[`${key}_p`] = dig(customText, 'plural', key) || intlObject.formatMessage(customTextMessages.plural_text[key]);
+      customTexts[key] = customText?.[key] || intlObject.formatMessage(customTextMessages.texts[key]);
+      customTexts[`${key}_p`] = customText?.plural?.[key] || intlObject.formatMessage(customTextMessages.plural_text[key]);
     }
   );
 

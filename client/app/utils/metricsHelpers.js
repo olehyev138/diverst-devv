@@ -37,7 +37,7 @@ export function filterData(data, filters) {
 
   return data.filter((datapoint) => {
     for (const filter of filters)
-      if (filter && !OPERATIONS[filter.op](dig(datapoint, filter.key), filter.value))
+      if (filter && !OPERATIONS[filter.op](datapoint?.[filter.key], filter.value))
         return false;
 
     return true;
@@ -143,5 +143,5 @@ export function formatBarGraphData(data) {
 }
 
 export function selectSeriesValues(data, series) {
-  return dig(data, 'series', series, 'values');
+  return data?.series?.[series]?.values;
 }

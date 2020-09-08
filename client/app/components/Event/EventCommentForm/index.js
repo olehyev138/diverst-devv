@@ -65,7 +65,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
 export function EventCommentForm(props) {
   const initialValues = {
     user_id: props?.currentUserId || undefined,
-    initiative_id: dig(props, 'event', 'id') || undefined,
+    initiative_id: props?.event?.id || undefined,
     content: '',
   };
   return (
@@ -75,7 +75,7 @@ export function EventCommentForm(props) {
       onSubmit={(values, actions) => {
         // pass initiative_id to saga to refresh event with new comment
         props.commentAction({
-          initiative_id: dig(props, 'event', 'id') || undefined,
+          initiative_id: props?.event?.id || undefined,
           attributes: values
         });
         actions.resetForm();

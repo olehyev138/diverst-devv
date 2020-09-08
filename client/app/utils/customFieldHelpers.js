@@ -43,7 +43,7 @@ function serializeFieldDataWithFieldId(fieldData) {
 
 function serializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
-  const type = dig(fieldDatum, 'field', 'type');
+  const type = fieldDatum?.field?.type;
 
   switch (type) {
     case 'CheckboxField':
@@ -65,7 +65,7 @@ const dateMap = {};
 
 function deserializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
-  const type = dig(fieldDatum, 'field', 'type');
+  const type = fieldDatum?.field?.type;
   const parsed = ['CheckboxField', 'SelectField', 'DateField'].includes(type) ? datum && JSON.parse(datum) : datum;
 
   switch (type) {

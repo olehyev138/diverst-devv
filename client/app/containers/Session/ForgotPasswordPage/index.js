@@ -24,7 +24,7 @@ export function ForgotPasswordPage(props) {
   useInjectReducer({ key: 'forgotPassword', reducer });
   useInjectSaga({ key: 'forgotPassword', saga });
 
-  const [email, setEmail] = useState(dig(props.location, 'state', 'email') || '');
+  const [email, setEmail] = useState(props.location?.state?.email || '');
 
   return (
     <ForgotPasswordForm

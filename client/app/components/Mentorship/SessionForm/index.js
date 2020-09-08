@@ -110,7 +110,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               margin='normal'
               label={props.intl.formatMessage(messages.form.users)}
               value={values.user_ids}
-              options={dig(props, 'user', 'mentees')}
+              options={props?.user?.mentees}
               onChange={value => setFieldValue('user_ids', value)}
             />
           </CardContent>

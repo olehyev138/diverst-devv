@@ -345,7 +345,7 @@ export function AdminLinks(props) {
             button
             onClick={handlePlanClick}
             show={
-              dig(props, 'enterprise', 'plan_module_enabled')
+              props?.enterprise?.plan_module_enabled
               && permission(props, 'manage_all_budgets')
             }
           >
@@ -437,7 +437,7 @@ export function AdminLinks(props) {
           <ListPermission
             button
             show={false
-              && dig(props, 'enterprise', 'mentorship_module_enabled')
+              && props?.enterprise?.mentorship_module_enabled
               && permission(props, 'mentoring_interests_create')
             }
           >

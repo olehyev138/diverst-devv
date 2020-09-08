@@ -205,7 +205,7 @@ export function OutcomeForm(props) {
   const initialValues = buildValues(outcome, {
     id: { default: '' },
     name: { default: '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' },
+    group_id: { default: props?.currentGroup?.id || '' },
     pillars: { default: [], customKey: 'pillars_attributes' }
   });
 

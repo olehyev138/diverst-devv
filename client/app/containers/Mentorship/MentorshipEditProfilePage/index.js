@@ -79,7 +79,7 @@ export default compose(
 )(Conditional(
   MentorshipEditProfilePage,
   ['formUser.permissions.update?'],
-  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(props?.sessionUser?.user_id),
   permissionMessages.mentorship.editProfilePage,
   true
 ));

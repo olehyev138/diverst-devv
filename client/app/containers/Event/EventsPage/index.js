@@ -53,7 +53,7 @@ export function EventsPage(props) {
   const [calendar, setCalendar] = useState(null);
 
   const getEvents = (scopes = null, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
+    const id = props?.currentGroup?.id;
 
     if (resetParams)
       setParams(defaultParams);

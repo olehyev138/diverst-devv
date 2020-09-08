@@ -53,7 +53,7 @@ const MentorshipLayout = (props) => {
    */
 
   const location = useLocation();
-  const { user_id: userId } = useParams();
+  const { user_id: userId1 } = useParams();
 
   // eslint-disable-next-line comma-spacing
   const [pageTitle,] = findTitleForPath({
@@ -63,18 +63,18 @@ const MentorshipLayout = (props) => {
 
   useEffect(() => {
     const userId1 = userId || null;
-    const userId2 = dig(rest, 'userSession', 'user_id');
+    const userId2 = rest?.userSession?.user_id;
 
     // const userId = userId1;
     const userId = userId1 || userId2;
 
-    if (userId && dig(rest, 'user', 'id') !== userId)
+    if (userId && rest?.user?.id !== userId)
       rest.getUserBegin({ id: userId });
 
     return () => {
       rest.userUnmount();
     };
-  }, [dig(rest, 'userSession', 'user_id')]);
+  }, [rest?.userSession?.user_id]);
 
   return (
     <React.Fragment>
