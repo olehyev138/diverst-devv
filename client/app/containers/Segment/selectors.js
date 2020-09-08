@@ -5,7 +5,7 @@ import dig from 'object-dig';
 import produce from 'immer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import {deserializeFields} from "utils/selectorHelpers";
+import { deserializeFields } from 'utils/selectorHelpers';
 
 const selectSegmentsDomain = state => state.segments || initialState;
 
