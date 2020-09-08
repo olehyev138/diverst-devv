@@ -190,7 +190,6 @@ class Group < ApplicationRecord
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
   before_validation -> (group) { group.calendar_color = group.calendar_color.presence&.gsub('#', '') }
-  before_validation :smart_add_url_protocol
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
