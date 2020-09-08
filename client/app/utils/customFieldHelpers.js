@@ -110,7 +110,6 @@ function deserializeOptionsText(field) {
    *  - Split them on '\n' into an array
    *  - Map array to a list of 'select' objects - [ { label: <>, value: <> ] } ... ]
    */
-  console.log(field);
   return field.options_text
     ? field.options_text.split('\n').filter(o => o && o.length).map(o => ({ value: o, label: o }))
     : null;
