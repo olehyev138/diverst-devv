@@ -57,7 +57,6 @@ RSpec.describe 'Resources', type: :request do
   end
 
   describe '#update' do
-
     it 'updates an item' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
