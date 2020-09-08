@@ -49,7 +49,7 @@ export function FieldInputForm({ formikProps, messages, link, ...props }) {
             render={_ => (
               <React.Fragment>
                 {values.fieldData.filter(fd => !fd.field.private || permission(props, 'users_manage')).map((fieldDatum, i) => (
-                  <div key={fieldDatum.id} className={props.classes.fieldInput}>
+                  <div key={fieldDatum.field_id} className={props.classes.fieldInput}>
                     <Divider />
                     <CardContent>
                       {Object.entries(fieldDatum).length !== 0 && (

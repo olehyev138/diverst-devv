@@ -19,6 +19,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'JSON body response contains expected attributes' do
       get "/api/v1/#{route}", headers: headers
+      p JSON.parse(response.body)
       expect(JSON.parse(response.body)['page']['items'].first).to include('id' => item.id)
     end
 

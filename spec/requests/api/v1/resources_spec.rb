@@ -9,6 +9,7 @@ RSpec.describe 'Resources', type: :request do
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:item22) { build_stubbed(model.constantize.table_name.singularize.to_sym) }
 
   describe '#index' do
     it 'gets all items' do
@@ -56,12 +57,14 @@ RSpec.describe 'Resources', type: :request do
   end
 
   describe '#update' do
+
     it 'updates an item' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
     it 'item has been updated' do
+      p item22
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => { 'id' => item.id, 'title' => 'Asian Blue Communitya' } }, headers: headers
       expect(item.attributes).to_not eq model.constantize.find(item.id).attributes
     end
