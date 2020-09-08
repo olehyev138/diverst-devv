@@ -5,20 +5,20 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#new_email_update' do
             let(:enterprise) { create(:enterprise, disable_emails: false) }
             let(:record) { create :user, enterprise: enterprise }
-            let!(:mail) { described_class.new_email_update(record.id,record.email).deliver_now }
+            let!(:mail) { described_class.new_email_update(record.id,'abc@123.com').deliver_now }
 
             it 'renders the receiver email' do
-              expect(mail.to).to eq([record.email])
+              expect(mail.to).to eq(['abc@123.com'])
             end
     end
 
     describe '#old_email_update' do
       let(:enterprise) { create(:enterprise, disable_emails: false) }
       let(:record) { create :user, enterprise: enterprise }
-      let!(:mail) { described_class.old_email_update(record.id,record.email).deliver_now }
+      let!(:mail) { described_class.old_email_update(record.id,'abc@123.com').deliver_now }
 
       it 'renders the receiver email' do
-        expect(mail.to).to eq([record.email])
+        expect(mail.to).to eq(['abc@123.com'])
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#new_email_update' do
       let(:enterprise) { create(:enterprise, disable_emails: true) }
       let(:record) { create :user, enterprise: enterprise }
-      let!(:mail) { described_class.new_email_update(record.id,record.email).deliver_now }
+      let!(:mail) { described_class.new_email_update(record.id,'abc@123.com').deliver_now }
 
             it 'renders null mail object' do
               expect(mail).to be(nil)
@@ -57,7 +57,7 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#old_email_update' do
       let(:enterprise) { create(:enterprise, disable_emails: true) }
       let(:record) { create :user, enterprise: enterprise }
-      let!(:mail) { described_class.old_email_update(record.id,record.email).deliver_now }
+      let!(:mail) { described_class.old_email_update(record.id,'abc@123.com').deliver_now }
 
       it 'renders null mail object' do
         expect(mail).to be(nil)
