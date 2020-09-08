@@ -126,7 +126,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
 }
 
 export function SessionForm(props) {
-  const session = dig(props, 'session');
+  const session = props?.session;
 
 
   const initialValues = buildValues(session, {

@@ -29,7 +29,7 @@ export function buildValues(object, valueSchemas) {
   const values = {};
 
   for (const [key, valueSchema] of Object.entries(valueSchemas)) {
-    const storeKey = dig(valueSchema, 'customKey') || key;
+    const storeKey = valueSchema?.customKey || key;
     values[storeKey] = dig(object, key) ? object[key] : valueSchema.default;
   }
 

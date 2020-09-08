@@ -26,9 +26,9 @@ export function CampaignShow(props) {
 
   return (
     <React.Fragment>
-      <p>{ dig(props.campaign, 'title') }</p>
+      <p>{ props.campaign?.title }</p>
 
-      <p>{ dig(props.campaign, 'description') }</p>
+      <p>{ props.campaign?.description }</p>
     </React.Fragment>
   );
 }

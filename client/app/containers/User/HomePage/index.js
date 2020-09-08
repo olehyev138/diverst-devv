@@ -155,7 +155,7 @@ export class HomePage extends React.PureComponent {
     const enterpriseImage = this.props.enterprise ? this.props.enterprise.banner_data && (
       <DiverstImg
         data={this.props.enterprise.banner_data}
-        contentType={dig(this.props.enterprise, 'banner_content_type')}
+        contentType={this.props.enterprise?.banner_content_type}
         alt=''
         maxWidth='100%'
         minWidth='100%'

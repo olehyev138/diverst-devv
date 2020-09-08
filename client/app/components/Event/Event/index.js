@@ -66,7 +66,7 @@ const styles = theme => ({
 
 export function Event(props) {
   const { classes, intl } = props;
-  const event = dig(props, 'event');
+  const event = props?.event;
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -271,7 +271,7 @@ export function Event(props) {
             <DiverstFormattedMessage {...messages.comment.total_comments} />
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {dig(event, 'comments').sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
+          {event?.comments.sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
             return (
               <EventComment
                 key={comment.id}

@@ -90,7 +90,7 @@ export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
 }
 
 export function ExpenseForm(props) {
-  const expense = dig(props, 'expense');
+  const expense = props?.expense;
 
   const initialValues = buildValues(expense, {
     id: { default: '' },

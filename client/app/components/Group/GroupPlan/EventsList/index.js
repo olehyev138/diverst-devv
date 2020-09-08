@@ -55,7 +55,7 @@ const styles = theme => ({
 
 export function EventsList(props) {
   const { classes } = props;
-  const outcomes = dig(props, 'outcomes');
+  const outcomes = props?.outcomes;
 
   return (
     <React.Fragment>

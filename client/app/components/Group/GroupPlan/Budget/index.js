@@ -131,7 +131,7 @@ export function Budget(props) {
       decline_reason: '',
     },
     onSubmit: (values) => {
-      declineAction({ id: dig(budget, 'id'), ...values });
+      declineAction({ id: budget?.id, ...values });
       handleFormClose();
     },
   });
@@ -189,7 +189,7 @@ export function Budget(props) {
                 <Button
                   color='primary'
                   variant='contained'
-                  onClick={() => approveAction({ id: dig(budget, 'id') })}
+                  onClick={() => approveAction({ id: budget?.id })}
                 >
                   <Typography variant='h6' component='h2'>
                     <DiverstFormattedMessage {...messages.buttons.approve} />

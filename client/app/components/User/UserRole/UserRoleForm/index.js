@@ -95,7 +95,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function UserRoleForm(props) {
-  const userRole = dig(props, 'userRole');
+  const userRole = props?.userRole;
 
   const initialValues = buildValues(userRole, {
     id: { default: undefined },

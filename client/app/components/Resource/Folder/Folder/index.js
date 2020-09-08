@@ -67,7 +67,7 @@ const styles = theme => ({
 
 export function Folder(props) {
   const { classes, type, permissions, currentGroup } = props;
-  const folder = dig(props, 'folder');
+  const folder = props?.folder;
 
   const [fileName, setFileName] = useState(null);
 

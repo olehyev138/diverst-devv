@@ -107,7 +107,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
 }
 
 export function MetricsDashboardForm(props) {
-  const metricsDashboard = dig(props, 'metricsDashboard');
+  const metricsDashboard = props?.metricsDashboard;
   const initialValues = buildValues(metricsDashboard, {
     id: { default: '' },
     name: { default: '' },

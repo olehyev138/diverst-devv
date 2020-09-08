@@ -141,7 +141,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 }
 
 export function FolderForm(props) {
-  const folder = dig(props, 'folder');
+  const folder = props?.folder;
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },

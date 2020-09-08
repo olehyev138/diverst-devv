@@ -28,7 +28,7 @@ export function GroupPage(props) {
   const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    if (dig(props.currentGroup, 'id') !== groupId)
+    if (props.currentGroup?.id !== groupId)
       props.getGroupBegin({ id: groupId });
 
     return () => props.groupFormUnmount();

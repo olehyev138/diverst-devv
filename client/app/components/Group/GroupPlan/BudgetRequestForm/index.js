@@ -276,7 +276,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
 }
 
 export function BudgetForm(props) {
-  const budget = dig(props, 'budget');
+  const budget = props?.budget;
 
   const initialValues = buildValues(budget, {
     description: { default: '' },

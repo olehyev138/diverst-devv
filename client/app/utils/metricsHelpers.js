@@ -137,7 +137,7 @@ export function getHandleDrilldown([data, setCurrentData], [isDrilldown, setIsDr
  */
 export function formatBarGraphData(data) {
   if (data)
-    return data.map(d => ({ x: d.y, y: d.x, children: dig(d, 'children') || {} }));
+    return data.map(d => ({ x: d.y, y: d.x, children: d?.children || {} }));
 
   return [];
 }

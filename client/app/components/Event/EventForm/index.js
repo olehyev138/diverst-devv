@@ -270,7 +270,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
 }
 
 export function EventForm(props) {
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   const initialValues = buildValues(event, {
     id: { default: '' },

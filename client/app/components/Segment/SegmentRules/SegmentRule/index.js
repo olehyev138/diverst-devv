@@ -18,7 +18,7 @@ import SegmentOrderRule from 'components/Segment/SegmentRules/SegmentOrderRule';
 import SegmentGroupRule from 'components/Segment/SegmentRules/SegmentGroupRule';
 
 const SegmentRule = (props) => {
-  const ruleName = dig(props, 'ruleName');
+  const ruleName = props?.ruleName;
 
   const renderRule = (ruleName) => {
     switch (ruleName) {

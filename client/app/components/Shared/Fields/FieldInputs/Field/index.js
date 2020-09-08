@@ -20,7 +20,7 @@ import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField'
 import CustomCheckboxField from 'components/Shared/Fields/FieldInputs/CheckboxField';
 
 const CustomField = (props) => {
-  const fieldData = dig(props, 'fieldDatum');
+  const fieldData = props?.fieldDatum;
 
   const renderField = (fieldData) => {
     switch (dig(fieldData, 'field', 'type')) {

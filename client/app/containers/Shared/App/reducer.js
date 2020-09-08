@@ -37,7 +37,7 @@ function appReducer(state = initialState, action) {
         break;
       case LOGOUT_SUCCESS:
         draft.token = initialState.token;
-        draft.data = { enterprise: dig(draft.data, 'enterprise') };
+        draft.data = { enterprise: draft.data?.enterprise };
         break;
       case SET_USER_DATA:
         if (action.append === true)

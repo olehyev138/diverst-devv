@@ -200,7 +200,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
 }
 
 export function OutcomeForm(props) {
-  const outcome = dig(props, 'outcome');
+  const outcome = props?.outcome;
 
   const initialValues = buildValues(outcome, {
     id: { default: '' },

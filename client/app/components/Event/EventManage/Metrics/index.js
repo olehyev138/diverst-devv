@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 export function Metrics(props) {
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   return (
     <React.Fragment>

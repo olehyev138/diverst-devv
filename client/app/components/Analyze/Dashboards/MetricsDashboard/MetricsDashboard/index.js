@@ -48,7 +48,7 @@ const styles = theme => ({
 
 export function MetricsDashboard(props) {
   const { classes } = props;
-  const metricsDashboard = dig(props, 'metricsDashboard');
+  const metricsDashboard = props?.metricsDashboard;
 
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !metricsDashboard}>

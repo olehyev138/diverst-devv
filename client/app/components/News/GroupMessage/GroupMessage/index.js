@@ -17,8 +17,8 @@ const styles = theme => ({});
 
 export function GroupMessage(props) {
   const { classes, ...rest } = props;
-  const newsItem = dig(props, 'newsItem');
-  const groupMessage = dig(newsItem, 'group_message');
+  const newsItem = props?.newsItem;
+  const groupMessage = newsItem?.group_message;
 
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !groupMessage}>
@@ -39,7 +39,7 @@ export function GroupMessage(props) {
             Comments
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
+          {groupMessage?.comments && groupMessage.comments.map((comment, i) => {
             return (
               <NewsComment
                 key={comment.id}

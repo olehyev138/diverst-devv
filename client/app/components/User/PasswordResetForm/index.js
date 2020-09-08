@@ -98,7 +98,7 @@ export function PasswordResetFormInner({ formikProps, buttonText, errors, ...pro
 }
 
 export function PasswordResetForm(props) {
-  const user = dig(props, 'user');
+  const user = props?.user;
 
   const initialValues = buildValues(user, {
     email: { default: '' },

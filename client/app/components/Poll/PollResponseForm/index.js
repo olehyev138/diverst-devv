@@ -103,7 +103,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
 }
 
 export function PollResponseForm(props) {
-  const user = dig(props, 'response');
+  const user = props?.response;
   const { intl } = props;
 
   const initialValues = buildValues(user, {

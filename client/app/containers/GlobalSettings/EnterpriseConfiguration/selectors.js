@@ -33,7 +33,7 @@ const selectFormEnterprise = () => createSelector(
 /* Selects the enterprise theme, used by Branding components */
 const selectEnterpriseTheme = () => createSelector(
   selectConfigurationDomain,
-  configurationState => dig(configurationState.currentEnterprise, 'theme')
+  configurationState => configurationState.currentEnterprise?.theme
 );
 
 const selectEnterpriseIsLoading = () => createSelector(

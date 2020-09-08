@@ -269,7 +269,7 @@ export function PolicyFormInner({
 }
 
 export function PolicyForm(props) {
-  const policy = dig(props, 'policy');
+  const policy = props?.policy;
 
   const initialValues = buildValues(policy, {
     id: { default: '' },

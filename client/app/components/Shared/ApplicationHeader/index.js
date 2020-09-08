@@ -108,7 +108,7 @@ export function ApplicationHeader(props) {
 
   const isMenuOpen = Boolean(menuAnchor);
 
-  const adminPath = dig(permissions, 'adminPath');
+  const adminPath = permissions?.adminPath;
 
   const logoutBegin = () => props.logoutBegin();
 

@@ -64,7 +64,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
 
 export function EventCommentForm(props) {
   const initialValues = {
-    user_id: dig(props, 'currentUserId') || undefined,
+    user_id: props?.currentUserId || undefined,
     initiative_id: dig(props, 'event', 'id') || undefined,
     content: '',
   };

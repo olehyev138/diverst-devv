@@ -55,7 +55,7 @@ const styles = theme => ({
 
 export function EventLite(props) {
   const { classes, intl } = props;
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   return event ? (
     <React.Fragment>

@@ -24,7 +24,7 @@ export function GrowthOfUsersGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
-  const data = (dig(props.data, 'series') || undefined);
+  const data = (props.data?.series || undefined);
   const [currentData, setCurrentData] = useState([]);
 
   const [params, setParams] = useState({

@@ -18,8 +18,8 @@ const styles = theme => ({});
 export function NewsLink(props) {
   /* Render a NewsLink, its comments & a comment form */
   const { classes, ...rest } = props;
-  const newsItem = dig(props, 'newsItem');
-  const newsLink = dig(newsItem, 'news_link');
+  const newsItem = props?.newsItem;
+  const newsLink = newsItem?.news_link;
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !newsLink}>
       {newsLink && (
@@ -39,7 +39,7 @@ export function NewsLink(props) {
             Comments
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {dig(newsLink, 'comments') && newsLink.comments.map((comment, i) => {
+          {newsLink?.comments && newsLink.comments.map((comment, i) => {
             return (
               <NewsComment
                 key={comment.id}

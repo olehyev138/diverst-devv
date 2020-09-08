@@ -193,8 +193,8 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
 }
 
 export function UserForm(props) {
-  const user = dig(props, 'user');
-  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
+  const user = props?.user;
+  const defaultRole = (user?.available_roles || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },

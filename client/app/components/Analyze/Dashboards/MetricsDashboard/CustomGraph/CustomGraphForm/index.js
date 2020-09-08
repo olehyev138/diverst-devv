@@ -89,7 +89,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
 }
 
 export function CustomGraphForm(props) {
-  const customGraph = dig(props, 'customGraph');
+  const customGraph = props?.customGraph;
   const initialValues = buildValues(customGraph, {
     id: { default: '' },
     field: { default: '', customKey: 'field_id' },

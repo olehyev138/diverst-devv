@@ -46,8 +46,8 @@ const styles = theme => ({
 
 export function Profile(props) {
   const { classes } = props;
-  const user = dig(props, 'user');
-  const fieldData = dig(props, 'fieldData');
+  const user = props?.user;
+  const fieldData = props?.fieldData;
 
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !user}>

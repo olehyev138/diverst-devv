@@ -52,8 +52,8 @@ const styles = theme => ({
 
 export function Profile(props) {
   const { classes } = props;
-  const update = dig(props, 'update');
-  const fieldData = dig(update, 'field_data');
+  const update = props?.update;
+  const fieldData = update?.field_data;
 
   return (
     <DiverstShowLoader isLoading={props.isFetching} isError={!props.isFetching && !update}>

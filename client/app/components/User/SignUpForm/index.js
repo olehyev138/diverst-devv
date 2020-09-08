@@ -130,7 +130,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             <Box mb={2} />
           </React.Fragment>
         )}
-        { dig(enterprise, 'privacy_statement') && (
+        { enterprise?.privacy_statement && (
           <React.Fragment>
             <Card>
               <CardHeader
@@ -350,7 +350,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
 }
 
 export function SignUpForm(props) {
-  const user = dig(props, 'user');
+  const user = props?.user;
 
   const initialValues = buildValues(user, {
     email: { default: '' },

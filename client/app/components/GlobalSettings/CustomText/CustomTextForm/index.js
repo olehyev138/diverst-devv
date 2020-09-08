@@ -186,7 +186,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
 }
 
 export function CustomTextForm(props) {
-  const customText = dig(props, 'customText');
+  const customText = props?.customText;
 
   const initialValues = buildValues(customText, {
     id: { default: '' },

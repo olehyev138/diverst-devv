@@ -47,8 +47,8 @@ const styles = theme => ({
 
 export function FolderListItem(props) {
   const { classes } = props;
-  const item = dig(props, 'item');
-  const isResource = dig(props, 'isResource');
+  const item = props?.item;
+  const isResource = props?.isResource;
 
   let linkProps;
   if (isResource)

@@ -55,7 +55,7 @@ export function BudgetPage(props) {
   const { budget_id: budgetId } = useParams();
   const location = useLocation();
 
-  const budget = dig(props, 'budget') || location.budget;
+  const budget = props?.budget || location.budget;
 
   useEffect(() => {
     if (!budget || budget.id !== budgetId)

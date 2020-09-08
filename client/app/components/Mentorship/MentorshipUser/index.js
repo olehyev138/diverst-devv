@@ -52,8 +52,8 @@ function timeToSimpleString(time) {
 
 export function Profile(props) {
   const { classes } = props;
-  const user = dig(props, 'user');
-  const fieldData = dig(props, 'fieldData');
+  const user = props?.user;
+  const fieldData = props?.fieldData;
 
   return (
     <React.Fragment>

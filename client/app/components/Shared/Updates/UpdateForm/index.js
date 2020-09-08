@@ -99,7 +99,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 }
 
 export function UpdateForm(props) {
-  const update = dig(props, 'update');
+  const update = props?.update;
 
   const initialValues = buildValues(update, {
     report_date: { default: DateTime.local() },

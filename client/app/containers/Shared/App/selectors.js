@@ -13,17 +13,17 @@ const selectLocation = () => createSelector(
 
 const selectEnterprise = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'enterprise')
+  globalState => globalState.data?.enterprise
 );
 
 const selectEnterprisePrivacyMessage = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data.enterprise, 'privacy_statement')
+  globalState => globalState.data.enterprise?.privacy_statement
 );
 
 const selectPermissions = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'permissions')
+  globalState => globalState.data?.permissions
 );
 
 const selectToken = () => createSelector(
@@ -33,7 +33,7 @@ const selectToken = () => createSelector(
 
 const selectUserPolicyGroup = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'policy_group')
+  globalState => globalState.data?.policy_group
 );
 
 const selectUser = () => createSelector(

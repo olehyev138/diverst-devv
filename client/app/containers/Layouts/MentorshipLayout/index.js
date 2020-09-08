@@ -85,7 +85,7 @@ const MentorshipLayout = (props) => {
               {user && (
                 <MentorshipMenu
                   user={user}
-                  userSession={dig(rest, 'userSession')}
+                  userSession={rest?.userSession}
                 />
               )}
             </CardContent>

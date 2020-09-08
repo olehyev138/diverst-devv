@@ -14,8 +14,8 @@ import { Typography } from '@material-ui/core';
 const CustomSelect = (props) => {
   const { classes } = props;
 
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const fieldDatum = props?.fieldDatum;
+  const fieldDatumIndex = props?.fieldDatumIndex;
 
   return (
     <div className={classes.cell}>

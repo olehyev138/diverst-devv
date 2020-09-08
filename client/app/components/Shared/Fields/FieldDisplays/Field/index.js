@@ -33,7 +33,7 @@ const styles = theme => ({
 });
 
 const CustomFieldShow = (props) => {
-  const fieldData = dig(props, 'fieldDatum');
+  const fieldData = props?.fieldDatum;
   const { classes } = props;
 
   const renderField = (fieldData) => {

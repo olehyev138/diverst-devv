@@ -47,7 +47,7 @@ const GroupLayout = (props) => {
   const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    if (groupId && dig(currentGroup, 'id') !== groupId)
+    if (groupId && currentGroup?.id !== groupId)
       rest.getGroupBegin({ id: groupId });
 
     return () => rest.groupFormUnmount();

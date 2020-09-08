@@ -133,7 +133,7 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.innovate.path()}
         activeClassName={classes.mobileNavLinkActive}
-        show={dig(enterprise, 'collaborate_module_enabled')}
+        show={enterprise?.collaborate_module_enabled}
       >
         <ListItemIcon>
           <LightbulbIcon className={classes.lightbulbIcon} />
@@ -144,7 +144,7 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.news.path()}
         activeClassName={classes.mobileNavLinkActive}
-        show={dig(permissions, 'news_view')}
+        show={permissions?.news_view}
       >
         <ListItemIcon>
           <QuestionAnswerIcon />
@@ -155,7 +155,7 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.events.path()}
         activeClassName={classes.mobileNavLinkActive}
-        show={dig(permissions, 'events_view')}
+        show={permissions?.events_view}
       >
         <ListItemIcon>
           <EventIcon />
@@ -166,7 +166,7 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.groups.path()}
         activeClassName={classes.mobileNavLinkActive}
-        show={dig(permissions, 'groups_view')}
+        show={permissions?.groups_view}
       >
         <ListItemIcon>
           <GroupIcon />
@@ -181,9 +181,9 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
       </MenuItem>
       <MenuItemPermission
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.show.path(dig(user, 'user_id'))}
+        to={ROUTES.user.mentorship.show.path(user?.user_id)}
         activeClassName={classes.mobileNavLinkActive}
-        show={dig(enterprise, 'mentorship_module_enabled')}
+        show={enterprise?.mentorship_module_enabled}
       >
         <ListItemIcon>
           <UsersCircleIcon />
@@ -216,7 +216,7 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.innovate.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={dig(enterprise, 'collaborate_module_enabled')}
+        show={enterprise?.collaborate_module_enabled}
       >
         <Hidden smDown>
           <LightbulbIcon className={classes.lightbulbIcon} />
@@ -228,7 +228,7 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.news.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={dig(permissions, 'news_view')}
+        show={permissions?.news_view}
       >
         <Hidden smDown>
           <QuestionAnswerIcon className={classes.navIcon} />
@@ -240,7 +240,7 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.events.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={dig(permissions, 'events_view')}
+        show={permissions?.events_view}
       >
         <Hidden smDown>
           <EventIcon className={classes.navIcon} />
@@ -252,7 +252,7 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.groups.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={dig(permissions, 'groups_view')}
+        show={permissions?.groups_view}
       >
         <Hidden smDown>
           <GroupIcon className={classes.navIcon} />
@@ -272,10 +272,10 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
       </Button>
       <PermissionButton
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.show.path(dig(user, 'user_id'))}
+        to={ROUTES.user.mentorship.show.path(user?.user_id)}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={dig(enterprise, 'mentorship_module_enabled')}
+        show={enterprise?.mentorship_module_enabled}
       >
         <Hidden smDown>
           <UsersCircleIcon className={classes.navIcon} />

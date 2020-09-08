@@ -45,12 +45,12 @@ const selectSegmentWithRules = () => createSelector(
     return produce(currentSegment, (draft) => {
       // TODO: multi selects
 
-      (dig(draft, 'field_rules') || []).forEach((fieldRule) => {
+      (draft?.field_rules || []).forEach((fieldRule) => {
         fieldRule.data = deserializeDatum(fieldRule);
         fieldRule.field.options_text = deserializeOptionsText(fieldRule.field);
       });
 
-      (dig(draft, 'group_rules') || []).forEach((groupRule) => {
+      (draft?.group_rules || []).forEach((groupRule) => {
         groupRule.group_ids = groupRule.group_ids.map(group => ({ label: group.name, value: group.id }));
       });
     });

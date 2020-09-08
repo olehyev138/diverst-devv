@@ -42,8 +42,8 @@ const styles = theme => ({
 });
 
 export function MentorshipMenu(props) {
-  const user = dig(props, 'user');
-  const userSession = dig(props, 'userSession');
+  const user = props?.user;
+  const userSession = props?.userSession;
   const { classes } = props;
 
   return (

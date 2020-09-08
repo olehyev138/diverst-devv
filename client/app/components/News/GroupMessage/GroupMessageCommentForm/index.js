@@ -64,7 +64,7 @@ export function GroupMessageCommentForm(props) {
   // No comment editing
 
   const initialValues = {
-    author_id: dig(props, 'currentUserId') || undefined,
+    author_id: props?.currentUserId || undefined,
     message_id: dig(props, 'newsItem', 'group_message', 'id') || undefined,
     content: '',
   };
