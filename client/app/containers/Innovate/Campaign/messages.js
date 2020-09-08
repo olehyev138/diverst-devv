@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Innovate';
+export const snackbar = 'diverst.snackbars.Analyze.Campaign';
 
 export default defineMessages({
   links: {
@@ -70,4 +71,35 @@ export default defineMessages({
       id: `${scope}.Campaign.tooltip.delete_confirm`,
     },
   },
+  snackbars: {
+    errors: {
+      campaign: {
+        id: `${snackbar}.errors.load.campaign`
+      },
+      campaigns: {
+        id: `${snackbar}.errors.load.campaigns`
+      },
+      create: {
+        id: `${snackbar}.errors.create.campaign`
+      },
+      update: {
+        id: `${snackbar}.errors.update.campaign`
+      },
+      delete: {
+        id: `${snackbar}.errors.delete.campaign`
+      },
+    },
+    success: {
+      create: {
+        id: `${snackbar}.success.create.campaign`
+      },
+      update: {
+        id: `${snackbar}.success.update.campaign`
+      },
+      delete: {
+        id: `${snackbar}.success.delete.campaign
+`
+      },
+    }
+  }
 });

@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.MetricsDashboard';
+export const snackbar = 'diverst.snackbars.Analyze.Dashboards';
 
 export default defineMessages({
   new: {
@@ -74,4 +75,58 @@ export default defineMessages({
   },
   show: {
   },
+  snackbars: {
+    errors: {
+      dashboard: {
+        id: `${snackbar}.errors.load.dashboard`
+      },
+      dashboards: {
+        id: `${snackbar}.errors.load.dashboards`
+      },
+      create_dashboard: {
+        id: `${snackbar}.errors.create.dashboard`
+      },
+      update_dashboard: {
+        id: `${snackbar}.errors.update.dashboard`
+      },
+      delete_dashboard: {
+        id: `${snackbar}.errors.delete.dashboard`
+      },
+      graph: {
+        id: `${snackbar}.errors.load.graph`
+      },
+      graph_data: {
+        id: `${snackbar}.errors.load.graph_data`
+      },
+      create_graph: {
+        id: `${snackbar}.errors.create.graph`
+      },
+      update_graph: {
+        id: `${snackbar}.errors.update.graph`
+      },
+      delete_graph: {
+        id: `${snackbar}.errors.delete.graph`
+      }
+    },
+    success: {
+      create_graph: {
+        id: `${snackbar}.success.create.graph`
+      },
+      update_graph: {
+        id: `${snackbar}.success.update.graph`
+      },
+      delete_graph: {
+        id: `${snackbar}.success.delete.graph`
+      },
+      create_dashboard: {
+        id: `${snackbar}.success.create.dashboard`
+      },
+      update_dashboard: {
+        id: `${snackbar}.success.update.dashboard`
+      },
+      delete_dashboard: {
+        id: `${snackbar}.success.delete.dashboard`
+      },
+    }
+  }
 });

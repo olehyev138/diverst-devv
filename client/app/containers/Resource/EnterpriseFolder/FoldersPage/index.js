@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading } from 'containers/Resource/selectors';
+import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading, selectHasChanged } from 'containers/Resource/selectors';
 import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
@@ -68,6 +68,15 @@ export function FoldersPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      getFolders();
+
+    return () => {
+      props.foldersUnmount();
+    };
+  }, [props.hasChanged]);
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -98,6 +107,7 @@ FoldersPage.propTypes = {
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   permissions: PropTypes.object,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
@@ -113,6 +123,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   isLoading: selectIsFolderLoading(),
   permissions: selectPermissions(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = {

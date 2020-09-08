@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.BudgetItem';
+export const snackbar = 'diverst.snackbars.Group.BudgetItem';
 
 export default defineMessages({
   columns: {
@@ -133,5 +134,23 @@ export default defineMessages({
         id: `${scope}.form.event.private`,
       },
     },
+  },
+  snackbars: {
+    errors: {
+      budget_item: {
+        id: `${snackbar}.errors.load.budgetItem`
+      },
+      budget_items: {
+        id: `${snackbar}.errors.load.budgetItems`
+      },
+      close: {
+        id: `${snackbar}.errors.close.budgetItem`
+      },
+    },
+    success: {
+      close: {
+        id: `${snackbar}.success.close.budgetItem`
+      },
+    }
   },
 });

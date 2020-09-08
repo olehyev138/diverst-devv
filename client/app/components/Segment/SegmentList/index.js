@@ -58,7 +58,7 @@ export function SegmentList(props, context) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.list.name} />,
+      title: intl.formatMessage(messages.list.name),
       field: 'name',
       query_field: 'name'
     },
