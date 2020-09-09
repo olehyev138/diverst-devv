@@ -68,6 +68,7 @@ export function UserEditPage(props) {
         fieldData={props.fieldData}
         buttonText={intl.formatMessage(messages.update)}
         admin={location.pathname.startsWith('/admin')}
+        permissions={props.permissions}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
@@ -85,6 +86,7 @@ UserEditPage.propTypes = {
   userUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
