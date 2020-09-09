@@ -210,7 +210,7 @@ class Group < ApplicationRecord
 
   # parents/children
   scope :all_parents,       -> { where(parent_id: nil) }
-  scope :possible_children, -> (id) { where(parent_id: [nil, id]).no_children }
+  scope :possible_children, -> (id) { except_id(id).where(parent_id: [nil, id]).no_children }
   scope :all_children,      -> { where.not(parent_id: nil) }
   scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
 
