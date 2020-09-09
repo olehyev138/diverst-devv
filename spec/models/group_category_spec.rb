@@ -6,7 +6,7 @@ RSpec.describe GroupCategory, type: :model do
   it { expect(group_category).to validate_presence_of(:name) }
   it { expect(group_category).to belong_to(:group_category_type) }
   it { expect(group_category).to belong_to(:enterprise) }
-  it { expect(group_category).to have_many(:groups).dependent(:nullify) }
+  it { expect(group_category).to have_many(:groups) }
 
   it { expect(group_category).to validate_presence_of(:name) }
 
