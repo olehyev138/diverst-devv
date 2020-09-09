@@ -12,8 +12,9 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper
+  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper, Tooltip, Grid
 } from '@material-ui/core';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -31,23 +32,49 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const [tab, setTab] = useState('general');
 
+
   const generalForm = (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
       <Card>
         <Form>
           <CardContent>
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              required
-              margin='normal'
-              id='email'
-              name='email'
-              value={values.email}
-              label={<DiverstFormattedMessage {...messages.email} />}
-            />
+            {!props.permissions.users_manage
+              ? (
+                <Grid container justify='space-between' alignItems='center'>
+                  <Grid item xs={11}>
+                    <Field
+                      component={TextField}
+                      onChange={handleChange}
+                      fullWidth
+                      disabled
+                      required
+                      margin='normal'
+                      id='email'
+                      name='email'
+                      value={values.email}
+                      label={<DiverstFormattedMessage {...messages.email} />}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Tooltip title={<DiverstFormattedMessage {...messages.email_warning} />} placement='left'>
+                      <InfoOutlinedIcon color='disabled' />
+                    </Tooltip>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  disabled={props.isCommitting}
+                  required
+                  margin='normal'
+                  id='email'
+                  name='email'
+                  value={values.email}
+                  label={<DiverstFormattedMessage {...messages.email} />}
+                />
+              )}
             <Field
               component={TextField}
               onChange={handleChange}
@@ -214,6 +241,8 @@ export function UserForm(props) {
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['time_zone', 'user_role_id']);
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
+        // eslint-disable-next-line no-unused-expressions
+        !props.permissions.users_manage && delete payload.email;
         props.userAction(payload);
       }}
     >
@@ -233,7 +262,8 @@ UserForm.propTypes = {
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  permissions: PropTypes.object,
 };
 
 UserFormInner.propTypes = {
@@ -254,7 +284,8 @@ UserFormInner.propTypes = {
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  permissions: PropTypes.object,
 };
 
 export default compose(

@@ -1,7 +1,27 @@
 require 'rails_helper'
 
-#RSpec.describe DiverstMailer, type: :mailer do
-#  context 'when enterprise disable_emails is false' do
+RSpec.describe DiverstMailer, type: :mailer do
+  context 'when enterprise disable_emails is false' do
+    describe '#new_email_update' do
+            let(:enterprise) { create(:enterprise, disable_emails: false) }
+            let(:record) { create :user, enterprise: enterprise }
+            let!(:mail) { described_class.new_email_update(record.id,'abc@123.com').deliver_now }
+
+            it 'renders the receiver email' do
+              expect(mail.to).to eq(['abc@123.com'])
+            end
+    end
+
+    describe '#old_email_update' do
+      let(:enterprise) { create(:enterprise, disable_emails: false) }
+      let(:record) { create :user, enterprise: enterprise }
+      let!(:mail) { described_class.old_email_update(record.id,'abc@123.com').deliver_now }
+
+      it 'renders the receiver email' do
+        expect(mail.to).to eq(['abc@123.com'])
+      end
+    end
+
 #    describe '#invitation_instructions' do
 #      let(:enterprise) { create(:enterprise, disable_emails: false) }
 #      let(:record) { create :user, enterprise: enterprise }
@@ -21,9 +41,29 @@ require 'rails_helper'
 #        expect(mail.to).to eq([record.email])
 #      end
 #    end
-#  end
-#
-#  context 'when enterprise disable_emails is true' do
+ end
+
+  context 'when enterprise disable_emails is true' do
+    describe '#new_email_update' do
+      let(:enterprise) { create(:enterprise, disable_emails: true) }
+      let(:record) { create :user, enterprise: enterprise }
+      let!(:mail) { described_class.new_email_update(record.id,'abc@123.com').deliver_now }
+
+            it 'renders null mail object' do
+              expect(mail).to be(nil)
+            end
+    end
+
+    describe '#old_email_update' do
+      let(:enterprise) { create(:enterprise, disable_emails: true) }
+      let(:record) { create :user, enterprise: enterprise }
+      let!(:mail) { described_class.old_email_update(record.id,'abc@123.com').deliver_now }
+
+      it 'renders null mail object' do
+        expect(mail).to be(nil)
+      end
+    end
+
 #    describe '#invitation_instructions' do
 #      let(:enterprise) { create(:enterprise, disable_emails: true) }
 #      let(:record) { create :user, enterprise: enterprise }
@@ -113,5 +153,5 @@ require 'rails_helper'
 #        expect(mail.from).to eq(["info@diverst.com"])
 #      end
 #    end
-#  end
-#end
+ end
+end
