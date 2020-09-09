@@ -19,7 +19,7 @@ class AddNewEmailTemplateEmailChange < ActiveRecord::Migration[5.2]
         mailer_name: 'diverst_mailer',
         mailer_method: 'new_email_update',
         content: "<p>Dear %{user.name}, </p>\r\n\r\n<p>Your email address has successfully been updated. This email
-        address is now the email address that will be used to sign in to your organization's Diverst Platform</p>\r\n<p>
+        address is now the email address that will be used to sign in to your organization's Diverst platform.</p>\r\n<p>
         If you did not request to change your email address or if you are unsure why your email address has been changed,
         please contact an administrator.</p>\r\n\r\n<p>If you have any questions or
         need further assistance, please contact info@diverst.com.</p>\r\n",
