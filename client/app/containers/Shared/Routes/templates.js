@@ -20,6 +20,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import SSOLandingPage from 'containers/Session/SSOLandingPage/Loadable';
 import SignUpPage from 'containers/User/SignUpPage/Loadable';
 import PasswordResetPage from 'containers/User/PasswordResetPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
@@ -223,6 +224,7 @@ export {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  SSOLandingPage,
   ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
