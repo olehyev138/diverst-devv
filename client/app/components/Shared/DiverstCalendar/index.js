@@ -163,7 +163,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
           events={events}
-          datesSet={({ view, el }) => dig(rest?.calendarDateCallback, a => a(addDays(view.currentStart, -14), addDays(view.currentEnd, 14)))}
+          datesSet={({ view, el }) => rest?.calendarDateCallback?.(addDays(view.currentStart, -14), addDays(view.currentEnd, 14))}
           eventClick={clickEvent}
           eventDisplay='block'
           dayMaxEvents={5}
