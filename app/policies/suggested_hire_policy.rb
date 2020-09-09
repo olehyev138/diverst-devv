@@ -13,7 +13,9 @@ class SuggestedHirePolicy < GroupBasePolicy
   end
 
   def index?
-    return true if group.suggested_hires.any? && super
+    return true if group.suggested_hires.any?
+
+    super
   end
 
   def create?
