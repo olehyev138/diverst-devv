@@ -15,6 +15,7 @@ import {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  SSOLandingPage,
   ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
@@ -176,6 +177,8 @@ export default function Routes(props) {
             <SwitchWithProps>
               {/* Login */}
               <RouteWithProps path={ROUTES.session.login.path()}><LoginPage /></RouteWithProps>
+              {/* SSO Landing */}
+              <RouteWithProps path={ROUTES.session.ssoLanding.path()}><SSOLandingPage /></RouteWithProps>
               {/* Forgot password */}
               <RouteWithProps path={ROUTES.session.forgotPassword.path()}><ForgotPasswordPage /></RouteWithProps>
               {/* Password Reset */}
