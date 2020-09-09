@@ -22,7 +22,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectEnterprise, selectPermissions, selectUser } from 'containers/Shared/App/selectors';
 import WithPermission from 'components/Compositions/WithPermission';
-import dig from 'object-dig';
 
 const styles = theme => ({
   toolbar: {

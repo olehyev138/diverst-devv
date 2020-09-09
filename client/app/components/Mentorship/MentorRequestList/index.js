@@ -11,7 +11,6 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { useFormik } from 'formik';
-import dig from 'object-dig';
 
 import { injectIntl, intlShape } from 'react-intl';
 

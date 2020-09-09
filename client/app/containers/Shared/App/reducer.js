@@ -16,7 +16,6 @@ import {
   FETCH_USER_DATA_ERROR,
   TOGGLE_ADMIN_DRAWER
 } from 'containers/Shared/App/constants';
-import dig from 'object-dig';
 
 // The initial state of the App
 export const initialState = {

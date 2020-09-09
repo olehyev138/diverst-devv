@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 export function Metrics(props) {
   const event = props?.event;

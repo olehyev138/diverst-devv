@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import dig from 'object-dig';
 import { useLocation, useParams } from 'react-router-dom';
 
 import { CardContent, Grid } from '@material-ui/core';

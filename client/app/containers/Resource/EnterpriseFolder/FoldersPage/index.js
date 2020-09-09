@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';

@@ -11,7 +11,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import { compose } from 'redux/';
 import { withStyles } from '@material-ui/core/styles';

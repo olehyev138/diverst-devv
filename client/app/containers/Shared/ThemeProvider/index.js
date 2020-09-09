@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 

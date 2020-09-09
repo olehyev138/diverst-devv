@@ -6,8 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import dig from 'object-dig';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 

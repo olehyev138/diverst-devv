@@ -7,7 +7,6 @@
 import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage, FastField } from 'formik';

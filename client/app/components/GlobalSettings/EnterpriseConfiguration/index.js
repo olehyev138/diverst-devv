@@ -7,7 +7,6 @@
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
-import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';

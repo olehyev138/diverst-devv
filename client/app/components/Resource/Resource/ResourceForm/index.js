@@ -8,7 +8,6 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { Field, Formik, Form } from 'formik';
 import {

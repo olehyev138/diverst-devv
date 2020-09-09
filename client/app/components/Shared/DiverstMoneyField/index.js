@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 import Select from 'react-select';
 
 import { Grid, FormHelperText, FormLabel, Input, InputAdornment, InputLabel } from '@material-ui/core';

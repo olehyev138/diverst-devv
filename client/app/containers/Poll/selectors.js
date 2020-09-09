@@ -2,7 +2,6 @@ import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 import produce from 'immer';
 import { mapSelectField } from 'utils/selectorHelpers';
-import dig from 'object-dig';
 
 const selectPollDomain = state => state.polls || initialState;
 

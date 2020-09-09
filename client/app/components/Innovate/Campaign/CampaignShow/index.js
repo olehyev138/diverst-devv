@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
 } from '@material-ui/core';

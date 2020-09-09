@@ -57,7 +57,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { selectAdminDrawerOpen, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import WithPermission from 'components/Compositions/WithPermission';
 import { permission } from 'utils/permissionsHelpers';
-import dig from 'object-dig';
 
 import Scrollbar from 'components/Shared/Scrollbar';
 

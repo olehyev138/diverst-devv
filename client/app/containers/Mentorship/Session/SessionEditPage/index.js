@@ -23,7 +23,6 @@ import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SessionProfilePage(props) {

@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import dig from 'object-dig';
 
 import messages from './messages';
 

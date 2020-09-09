@@ -26,7 +26,6 @@ import { Button, Tab, Card, Box } from '@material-ui/core';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import PollResponses from 'components/Poll/PollResponses';
 import PollGraphs from 'components/Poll/PollGraphs';
-import dig from 'object-dig';
 
 import {
   selectIsFetchingResponses,

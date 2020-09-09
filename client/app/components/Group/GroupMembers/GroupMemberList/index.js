@@ -7,7 +7,6 @@
 import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions, DialogContent,

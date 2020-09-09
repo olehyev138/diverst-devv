@@ -6,8 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import dig from 'object-dig';
 import Select from 'components/Shared/DiverstSelect';
 import { Typography } from '@material-ui/core';
 

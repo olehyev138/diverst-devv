@@ -21,7 +21,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import EventLite from 'components/Event/EventLite';
 import SegmentSelector from 'components/Shared/SegmentSelector';
-import dig from 'object-dig';
 
 const styles = theme => ({
   wrapper: {

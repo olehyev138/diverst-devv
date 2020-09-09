@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/Segment/reducer';
-
-import dig from 'object-dig';
 import produce from 'immer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';

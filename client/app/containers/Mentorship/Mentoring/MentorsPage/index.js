@@ -46,7 +46,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import MentorList from 'components/Mentorship/MentorList';
 import Conditional from 'components/Compositions/Conditional';
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const Types = Object.freeze({

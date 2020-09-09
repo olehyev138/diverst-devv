@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect/lib';
 
 import produce from 'immer';
-import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 

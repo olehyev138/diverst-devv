@@ -44,7 +44,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import RequestList from 'components/Mentorship/MentorRequestList';
 import Conditional from 'components/Compositions/Conditional';
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({

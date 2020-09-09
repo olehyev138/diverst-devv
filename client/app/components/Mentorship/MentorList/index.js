@@ -31,7 +31,6 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import Profile from 'components/Mentorship/MentorshipUser';
 import messages from 'containers/Mentorship/Mentoring/messages';
 import appMessages from 'containers/Shared/App/messages';
-import dig from 'object-dig';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 

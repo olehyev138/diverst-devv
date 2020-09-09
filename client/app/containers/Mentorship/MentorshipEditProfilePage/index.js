@@ -20,8 +20,6 @@ import { selectMentoringInterests, selectMentoringTypes, selectUser } from 'cont
 import saga from 'containers/Mentorship/saga';
 import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
 import Conditional from 'components/Compositions/Conditional';
-
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MentorshipEditProfilePage(props) {

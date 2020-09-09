@@ -7,8 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import dig from 'object-dig';
-
 import { TextField, Typography } from '@material-ui/core';
 
 const CustomText = (props) => {

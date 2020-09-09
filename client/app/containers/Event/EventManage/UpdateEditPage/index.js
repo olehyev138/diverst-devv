@@ -15,7 +15,6 @@
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
 import { useLocation, useParams } from 'react-router-dom';
 
 import { createStructuredSelector } from 'reselect/lib';

@@ -7,7 +7,6 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import { useLastLocation } from 'react-router-last-location';

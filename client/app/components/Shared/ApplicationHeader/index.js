@@ -35,7 +35,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
 import Permission from 'components/Shared/DiverstPermission';
-import dig from 'object-dig';
 import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({

@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { useInjectSaga } from 'utils/injectSaga';

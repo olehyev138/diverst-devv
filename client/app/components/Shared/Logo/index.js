@@ -2,7 +2,6 @@ import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';

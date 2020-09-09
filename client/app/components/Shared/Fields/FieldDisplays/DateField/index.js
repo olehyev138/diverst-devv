@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect, getIn } from 'formik';
-import dig from 'object-dig';
 
 import { TextField, Typography } from '@material-ui/core';
 

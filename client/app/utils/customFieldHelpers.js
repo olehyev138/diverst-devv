@@ -7,7 +7,6 @@
 /* eslint-disable react/prop-types, no-underscore-dangle */
 
 import React from 'react';
-import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
 import Select from 'react-select';

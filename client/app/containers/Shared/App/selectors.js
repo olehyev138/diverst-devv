@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import { initialState } from 'containers/Shared/App/reducer';
 
-import dig from 'object-dig';
-
 const selectGlobal = state => state.global || initialState;
 const selectRouter = state => state.router;
 

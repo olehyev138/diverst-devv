@@ -11,7 +11,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import SegmentFieldRule from 'components/Segment/SegmentRules/SegmentFieldRule';
 import SegmentOrderRule from 'components/Segment/SegmentRules/SegmentOrderRule';

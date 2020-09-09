@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from './reducer';
 import produce from 'immer';
-import dig from 'object-dig';
 
 const selectConfigurationDomain = state => state.configuration || initialState;
 

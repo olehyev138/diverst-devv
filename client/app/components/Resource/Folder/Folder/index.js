@@ -2,7 +2,6 @@ import React, { memo, useState, useEffect } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import { Typography, Grid, Button, Box, Divider } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';

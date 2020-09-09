@@ -1,5 +1,4 @@
 import React, { memo, useEffect } from 'react';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';

@@ -20,7 +20,6 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field';
-import dig from 'object-dig';
 import DiverstSelect from 'components/Shared/DiverstSelect';
 
 const styles = theme => ({

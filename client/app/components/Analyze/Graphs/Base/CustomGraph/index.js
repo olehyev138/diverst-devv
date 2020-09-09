@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import produce from 'immer';
-import dig from 'object-dig';
 
 import {
   Grid, Paper, withStyles, Box,

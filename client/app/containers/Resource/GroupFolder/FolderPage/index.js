@@ -33,7 +33,6 @@ import Folder from 'components/Resource/Folder/Folder';
 
 import { Field, Form, Formik } from 'formik';
 import { Button, Card, CardContent, TextField } from '@material-ui/core';
-import dig from 'object-dig';
 import {
   getParentPage,
   getFolderNewPath,

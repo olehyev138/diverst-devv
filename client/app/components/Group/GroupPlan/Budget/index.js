@@ -5,7 +5,6 @@
  */
 
 import React, { memo } from 'react';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';

@@ -1,5 +1,4 @@
 import { store } from 'configureStore';
-import dig from 'object-dig';
 
 import UserStorage from './userStorage';
 

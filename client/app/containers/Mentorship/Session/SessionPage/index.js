@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';

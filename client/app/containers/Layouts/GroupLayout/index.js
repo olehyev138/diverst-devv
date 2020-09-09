@@ -16,7 +16,6 @@ import saga from 'containers/Group/saga';
 
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup, selectHasChanged, selectGroupIsFormLoading } from 'containers/Group/selectors';
-import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 
 import Scrollbar from 'components/Shared/Scrollbar';
