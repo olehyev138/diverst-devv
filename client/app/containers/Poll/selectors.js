@@ -27,8 +27,8 @@ const selectFormPoll = () => createSelector(
   selectPollDomain,
   pollState => produce(pollState.currentPoll, (draft) => {
     if (pollState.currentPoll) {
-      draft.groups = pollState?.currentPoll?.groups?.val?.map(group => mapSelectField(group));
-      draft.segments = pollState?.currentPoll?.segments?.val?.map(segment => mapSelectField(segment));
+      draft.groups = pollState?.currentPoll?.groups?.map(group => mapSelectField(group));
+      draft.segments = pollState?.currentPoll?.segments?.map(segment => mapSelectField(segment));
     }
   })
 );
