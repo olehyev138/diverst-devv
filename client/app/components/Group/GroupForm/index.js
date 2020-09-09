@@ -158,6 +158,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
               queryScopes={['all_parents', ['except_id', values.id]]}
+              isClearable
               {...formikProps}
             />
           </CardContent>
