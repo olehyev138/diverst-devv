@@ -6,8 +6,7 @@ RSpec.describe SuggestedHiresController, type: :controller do
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let!(:previous_suggested_hire) {create(:user, enterprise: enterprise) }
-  let!(:suggested_hire) { create(:suggested_hire, group_id: group.id, user_id: user.id, suggested_hire_id: previous_suggested_hire.id) }
+  let!(:suggested_hire) { create(:suggested_hire, group_id: group.id, user_id: user.id) }
 
   describe 'GET#index' do
     context 'with user logged in' do
@@ -29,16 +28,16 @@ RSpec.describe SuggestedHiresController, type: :controller do
       login_user_from_let
 
       it 'create a suggested hire object' do
-        expect { post :create, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise) } }.to change(SuggestedHire, :count).by(1)
+        expect { post :create, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' } }.to change(SuggestedHire, :count).by(1)
       end
 
       it 'displays a flash notice' do
-        post :create, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise) }
+        post :create, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' }
         expect(flash[:notice]).to eq('You just suggested a hire')
       end
 
       it 'redirects to group show page' do
-        post :create, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise) }
+        post :create, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' }
         expect(response).to redirect_to group_path(group)
       end
 
@@ -47,7 +46,7 @@ RSpec.describe SuggestedHiresController, type: :controller do
 
         it 'creates public activity record' do
           perform_enqueued_jobs do
-            expect { post :create, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise) } }.to change(PublicActivity::Activity, :count).by(1)
+            expect { post :create, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' } }.to change(PublicActivity::Activity, :count).by(1)
           end
         end
 
@@ -58,7 +57,7 @@ RSpec.describe SuggestedHiresController, type: :controller do
 
           before {
             perform_enqueued_jobs do
-              post :create, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise).id }
+              post :create, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' }
             end
           }
 
@@ -71,16 +70,16 @@ RSpec.describe SuggestedHiresController, type: :controller do
       login_user_from_let
 
       it 'does not create suggested hire object' do
-        expect { post :create, group_id: group.id, suggested_hire: { suggested_hire_id: '' } }.to change(SuggestedHire, :count).by(0)
+        expect { post :create, group_id: group.id, suggested_hire: { email: '' } }.to change(SuggestedHire, :count).by(0)
       end
 
       it 'displays flash alert message' do
-        post :create, group_id: group.id, suggested_hire: { suggested_hire_id: '' }
+        post :create, group_id: group.id, suggested_hire: { email: '' }
         expect(flash[:alert]).to eq('Something went wrong')
       end
 
       it 'redirects to group show page' do
-        post :create, group_id: group.id, suggested_hire: { suggested_hire_id: '' }
+        post :create, group_id: group.id, suggested_hire: { email: '' }
         expect(response).to redirect_to group_path(group)
       end
     end
@@ -105,11 +104,11 @@ RSpec.describe SuggestedHiresController, type: :controller do
   describe 'PATCH#update' do
     context 'with correct params' do
       login_user_from_let
-      before { patch :update, id: suggested_hire.id, group_id: group.id, suggested_hire: { suggested_hire_id: create(:user, enterprise: enterprise).id } }
+      before { patch :update, id: suggested_hire.id, group_id: group.id, suggested_hire: { email: 'derek@diverst.com' } }
 
       it 'updates suggested hire' do
         suggested_hire.reload
-        expect(assigns[:suggested_hire].suggested_hire).to_not eq(previous_suggested_hire)
+        expect(assigns[:suggested_hire].email).to eq('derek@diverst.com')
       end
 
       it 'renders edit template' do
@@ -123,11 +122,11 @@ RSpec.describe SuggestedHiresController, type: :controller do
 
     context 'with incorrect params' do
       login_user_from_let
-      before { patch :update, id: suggested_hire.id, group_id: group.id, suggested_hire: { suggested_hire_id: nil } }
+      before { patch :update, id: suggested_hire.id, group_id: group.id, suggested_hire: { email: nil } }
 
       it 'does not update suggested hire' do
         suggested_hire.reload
-        expect(suggested_hire.suggested_hire).to eq(previous_suggested_hire)
+        expect(suggested_hire).to eq(suggested_hire)
       end
 
       it 'renders edit template' do

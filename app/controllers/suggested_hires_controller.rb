@@ -66,7 +66,8 @@ class SuggestedHiresController < ApplicationController
   def suggested_hire_params
     params.require(:suggested_hire).permit(:user_id,
                                            :group_id,
-                                           :suggested_hire_id,
+                                           :email,
+                                           :name,
                                            :resume)
   end
 end
