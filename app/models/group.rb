@@ -209,9 +209,10 @@ class Group < ApplicationRecord
   scope :non_private,       -> { where(private: false) }
 
   # parents/children
-  scope :all_parents,     -> { where(parent_id: nil) }
-  scope :all_children,    -> { where.not(parent_id: nil) }
-  scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
+  scope :all_parents,       -> { where(parent_id: nil) }
+  scope :possible_children, -> (id) { where(parent_id: [nil, id]).no_children }
+  scope :all_children,      -> { where.not(parent_id: nil) }
+  scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
 
   # This scope acts as an alternative to `all_parents` which ignore a given list of groups, while getting the
   # children of said groups and adding them to the result of the query

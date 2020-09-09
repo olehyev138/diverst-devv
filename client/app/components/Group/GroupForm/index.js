@@ -142,7 +142,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               disabled={props.isCommitting}
-              queryScopes={['all_parents', 'no_children']}
+              queryScopes={[['possible_children', values.id]]}
               {...formikProps}
             />
           </CardContent>
@@ -157,7 +157,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
 
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
-              queryScopes={['all_parents']}
+              queryScopes={['all_parents', ['except_id', values.id]]}
               {...formikProps}
             />
           </CardContent>
