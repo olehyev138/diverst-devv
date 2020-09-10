@@ -142,7 +142,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.module_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.mentorship_module} />}
                           control={(
                             <Field
@@ -160,7 +160,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.collaborate_module} />}
                           control={(
                             <Field
@@ -178,7 +178,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.scope_module} />}
                           control={(
                             <Field
@@ -196,7 +196,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.plan_module} />}
                           control={(
                             <Field
@@ -221,7 +221,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.function_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.likes} />}
                           control={(
                             <Field
@@ -239,7 +239,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.pending_comments} />}
                           control={(
                             <Field
@@ -257,7 +257,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.rewards} />}
                           control={(
                             <Field
@@ -275,7 +275,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.social_media} />}
                           control={(
                             <Field
@@ -300,7 +300,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.email_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.onboarding_emails} />}
                           control={(
                             <Field
@@ -318,7 +318,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       </FormControl>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<Typography color='error'><DiverstFormattedMessage {...messages.all_emails} /></Typography>}
                           control={(
                             <Field
@@ -344,7 +344,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.archive_setting} /></Typography>
                       <FormControl>
                         <FormControlLabel
-                          labelPlacement='right'
+                          labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.auto_archive} />}
                           control={(
                             <Field
