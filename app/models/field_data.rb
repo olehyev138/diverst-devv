@@ -12,6 +12,14 @@ class FieldData < ApplicationRecord
     field.deserialize_value(data)
   end
 
+  def data
+    field.deserialize_value(super)
+  end
+
+  def data=(a)
+    super(field.serialize_value(a))
+  end
+
   private
 
   def same_parent

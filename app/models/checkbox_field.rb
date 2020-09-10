@@ -24,7 +24,11 @@ class CheckboxField < Field
   end
 
   def serialize_value(value)
-    value.present? ? value.to_json : nil
+    case value
+    when Array then value.to_json
+    when String then (JSON.parse(value).is_a?(Array) rescue false) ? value : [value].to_json
+    else nil
+    end if value.present?
   end
 
   def deserialize_value(value)

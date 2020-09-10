@@ -48,14 +48,37 @@ module ContainsFieldData
     @info.extend(FieldDataDeprecated)
   end
 
+  def field_of_key(key)
+    down_cased = key.to_s.downcase.gsub(/[^\w]/, '')
+    fields.load.find { |field| field.title.downcase.gsub(/[^\w]/, '').include? down_cased }
+  end
+
+  def field_data_reader(field)
+    fd = get_field_data(field) || (new_record? ? field_data.new(data: nil, field_id: field.id) : field_data.create(data: nil, field_id: field.id))
+    fd.data
+  end
+  def field_data_writer(field, value)
+    if new_record?
+      field_data.new(data: value, field_id: field.id)
+    else
+      fd = get_field_data(field)
+      fd.present? ?
+          fd.update(data: value) :
+          field_data.create(field_id: field.id, data: value)
+    end
+  end
+
   def [](key)
     case key
-    when Symbol, String then super(key)
+    when Symbol, String
+      if has_attribute? key
+        super
+      elsif (field = field_of_key(key))
+        field_data_reader(field)
+      end
     when Field
       raise FieldNotFound unless fields.load.ids.include? key.id
-
-      fd = get_field_data(key) || (new_record? ? field_data.new(data: nil, field_id: key.id) : field_data.create(data: nil, field_id: key.id))
-      fd.deserialized_data
+      field_data_reader(key)
     else raise ArgumentError
     end
   rescue
@@ -64,20 +87,15 @@ module ContainsFieldData
 
   def []=(key, value)
     case key
-    when Symbol, String then super(key, value)
+    when Symbol, String
+      if has_attribute? key
+        super
+      elsif (field = field_of_key(key))
+        field_data_writer(field, value)
+      end
     when Field
       raise FieldNotFound unless fields.ids.include? key.id
-
-      serialized_value = key.serialize_value(value)
-
-      if new_record?
-        field_data.new(data: serialized_value, field_id: key.id)
-      else
-        fd = get_field_data(key)
-        fd.present? ?
-            fd.update(data: serialized_value) :
-            field_data.create(field_id: key.id, data: serialized_value)
-      end
+      field_data_writer(key, value)
     else raise ArgumentError
     end
   end
