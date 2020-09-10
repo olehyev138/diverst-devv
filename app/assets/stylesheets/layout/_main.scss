@@ -25,6 +25,7 @@
   margin: 0 auto;
   max-width: 1240px;
   min-height: calc(100vh - 130px - 20px);
+  -webkit-transform: translate3d(0,0,0);
 
   @include mq(medium) {
     padding: $spacing-large;
