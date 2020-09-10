@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Redirect, useRouteMatch } from 'react-router-dom';
+import { Redirect, useRouteMatch, useLocation } from 'react-router-dom';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -26,12 +26,21 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function LoginPage(props) {
   useInjectReducer({ key: 'loginPage', reducer });
 
+  const location = useLocation();
+
   const ssoBypass = !!useRouteMatch(ROUTES.session.ssoBypass.path());
 
   const [email, setEmail] = useState('');
 
   if (props.enterprise && props.enterprise.has_enabled_saml && !ssoBypass)
-    return <Redirect to={ROUTES.session.ssoLanding.path()} />;
+    return (
+      <Redirect
+        to={{
+          pathname: ROUTES.session.ssoLanding.path(),
+          search: location.search, // Necessary to pass query params from an SSO provider that redirects to just /login
+        }}
+      />
+    );
 
   return (
     <LoginForm
