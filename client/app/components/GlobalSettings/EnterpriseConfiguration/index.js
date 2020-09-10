@@ -379,6 +379,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                               id='expiry_age_for_resources'
                               name='expiry_age_for_resources'
                               type='number'
+                              InputProps={{ inputProps: { min: 0 } }}
                               margin='normal'
                               label={<DiverstFormattedMessage {...messages.expiry_resources} />}
                               value={values.expiry_age_for_resources}
