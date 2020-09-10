@@ -36,8 +36,16 @@ const styles = theme => ({
     paddingRight: 16,
     paddingBottom: 16,
   },
-  submitButtonLabel: {
+  enterButtonLabel: {
     minWidth: 'max-content',
+    fontSize: 18,
+    fontWeight: 'bold',
+    '& .MuiButton-endIcon': {
+      marginTop: -2,
+      '& svg': {
+        fontSize: 24,
+      },
+    },
   },
   centerAlign: {
     textAlign: 'center', // Necessary as the grid item prop "align='center'" breaks the outlined input label layout slightly
@@ -55,26 +63,27 @@ export function SSOLanding(props) {
           <Box pb={2} />
         </CardContent>
         <CardActions className={classes.cardActions}>
-          <Grid container spacing={1} alignItems='center' justify='space-between' direction='row-reverse'>
-            <Grid item xs={8} sm={6} align={width === 'xs' ? 'left' : 'center'}>
+          <Grid container spacing={4} direction='column'>
+            <Grid item>
+              <div className={classes.centerAlign}>
+                <LocaleToggle />
+              </div>
+            </Grid>
+            <Grid item xs align='center'>
               <Button
                 classes={{
-                  label: classes.submitButtonLabel
+                  label: classes.enterButtonLabel
                 }}
                 type='submit'
                 color='primary'
                 size='large'
+                fullWidth
                 variant='contained'
-                endIcon={<EnterIcon />}
+                endIcon={<EnterIcon fontSize='large' />}
                 onClick={handleEnter}
               >
                 {<FormattedMessage {...messages.enter} />}
               </Button>
-            </Grid>
-            <Grid item xs={12} sm>
-              <div className={classes.centerAlign}>
-                <LocaleToggle />
-              </div>
             </Grid>
           </Grid>
         </CardActions>
