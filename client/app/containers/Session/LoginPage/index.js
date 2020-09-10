@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -22,13 +22,16 @@ import { loginBegin, ssoLoginBegin, ssoLinkBegin } from 'containers/Shared/App/a
 import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
 
 import LoginForm from 'components/Session/LoginForm';
-import EnterpriseForm from 'components/Session/EnterpriseForm';
 import { Backdrop, CircularProgress } from '@material-ui/core';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function LoginPage(props) {
   useInjectReducer({ key: 'loginPage', reducer });
 
   const location = useLocation();
+
+  const ssoBypass = !!useRouteMatch(ROUTES.session.ssoBypass.path());
 
   const [email, setEmail] = useState('');
 
@@ -48,12 +51,12 @@ export function LoginPage(props) {
     if (userToken)
       // Login after successful SSO login
       props.ssoLoginBegin({ userToken });
-    else if (props.enterprise && props.enterprise.has_enabled_saml)
+    else if (props.enterprise && props.enterprise.has_enabled_saml && !ssoBypass)
       // Redirect to configured SSO IDP
       props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
   }, []);
 
-  if (props.enterprise && props.enterprise.has_enabled_saml)
+  if (props.enterprise && props.enterprise.has_enabled_saml && !ssoBypass)
     return (
       <Backdrop open={!props.enterprise}>
         <CircularProgress

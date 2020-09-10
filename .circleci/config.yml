@@ -61,16 +61,16 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Run linter
       #
@@ -91,7 +91,9 @@ jobs:
           RACK_ENV: test
     shell: /bin/bash --login
     environment:
-      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit/js-test-results.xml
+      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit
+      JEST_JUNIT_OUTPUT_NAME: results.xml
+      JEST_JUNIT_ADD_FILE_ATTRIBUTE: true
     steps:
       - checkout
       - run:
@@ -103,32 +105,32 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Run frontend tests
       #
       - run:
           name: Run frontend tests
-          command: cd client/ && npm test -- $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=filesize) --ci --runInBand --reporters=default --reporters=jest-junit
+          command: cd client/ && npm test -- $(circleci tests glob "app/**/*.test.*" | circleci tests split --split-by=timings) --ci --runInBand --reporters=default --reporters=jest-junit
       #
-      ## Store artifacts
+      ## Store test results
       #
-      - store_artifacts:
-          path: /tmp/circleci-test-results/junit
       - store_test_results:
-          path: /tmp/circleci-test-results/junit
+          path: /tmp/circleci-test-results/junit/
+      - store_artifacts:
+          path: /tmp/circleci-test-results/junit/
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 2
+    parallelism: 4
     shell: /bin/bash --login
     environment:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results/rspec
@@ -192,17 +194,17 @@ jobs:
       #
       - run:
           name: Run backend tests
-          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/results.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
       #
-      ## Store artifacts
+      ## Store test results
       #
       - store_test_results:
-          path: /tmp/circleci-test-results/rspec
+          path: /tmp/circleci-test-results/rspec/
       - store_artifacts:
-          path: /tmp/circleci-test-results/rspec
+          path: /tmp/circleci-test-results/rspec/
   #
   ## Deploy job for testing environment
   #
@@ -231,16 +233,16 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-            - node-{{ .Branch }}-
-            - node-
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
       - run:
           name: Install node modules
           command: cd client && npm install
       - save_cache:
           paths:
             - ./client/node_modules
-          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
       ## Build & deploy frontend
       #

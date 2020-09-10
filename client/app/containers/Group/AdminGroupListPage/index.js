@@ -12,12 +12,17 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
+import {
+  selectPaginatedGroups,
+  selectGroupTotal,
+  selectGroupIsLoading,
+  selectHasChanged
+} from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
+import { getGroupsBegin, groupAllUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -42,8 +47,15 @@ export function AdminGroupListPage(props) {
   useEffect(() => {
     props.getGroupsBegin(params);
 
-    return () => props.groupListUnmount();
+    return () => props.groupAllUnmount();
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getGroupsBegin(params);
+
+    return () => props.groupAllUnmount();
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -71,8 +83,9 @@ export function AdminGroupListPage(props) {
 
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
+  groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
@@ -83,6 +96,7 @@ AdminGroupListPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
+  hasChanged: selectHasChanged(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
@@ -90,7 +104,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getGroupsBegin,
-  groupListUnmount,
+  groupAllUnmount,
   deleteGroupBegin,
   createCsvFileBegin,
   updateGroupPositionBegin

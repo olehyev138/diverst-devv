@@ -28,6 +28,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 api.segments.all = jest.fn();
 api.segments.create = jest.fn();
 api.segments.update = jest.fn();
@@ -80,6 +83,7 @@ describe('Get segments Saga', () => {
 
     expect(api.segments.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.segments);
   });
 });
 
@@ -119,6 +123,7 @@ describe('Get segment Saga', () => {
 
     expect(api.segments.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.segment);
   });
 });
 
@@ -146,6 +151,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.create).toHaveBeenCalledWith({ segment: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
   });
 
   it('Should return error from the API', async () => {
@@ -169,6 +175,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
   });
 
   it('Should update a segment', async () => {
@@ -193,6 +200,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.update).toHaveBeenCalledWith(initialAction.payload.id, { segment: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
   });
 
   it('Should return error from the API', async () => {
@@ -217,6 +225,7 @@ describe('Create segment', () => {
 
     expect(api.segments.update).toHaveBeenCalledWith(initialAction.payload.id, { segment: initialAction.payload });
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
   });
 });
 
@@ -246,6 +255,7 @@ describe('Delete segment', () => {
     );
     expect(api.segments.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
   });
 
   it('Should return error from the API', async () => {
@@ -269,6 +279,7 @@ describe('Delete segment', () => {
     );
     expect(api.segments.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
   });
 });
 
@@ -321,5 +332,6 @@ describe('get members for a segment', () => {
     );
     expect(api.userSegments.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.members);
   });
 });

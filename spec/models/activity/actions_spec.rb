@@ -2,32 +2,52 @@ require 'rails_helper'
 
 RSpec.describe Activity::Actions, type: :model do
   describe 'valid_scopes' do
-    it { expect(Activity.valid_scopes.include?('joined_from')).to eq true }
-    it { expect(Activity.valid_scopes.include?('joined_to')).to eq true }
-    it { expect(Activity.valid_scopes.include?('for_group_ids')).to eq true }
+    let(:valid_scopes) {
+      %w(
+          joined_from
+          joined_to
+          for_group_ids
+      )
+    }
+
+    it { expect(Activity.valid_scopes).to eq valid_scopes }
   end
 
   describe 'base_includes' do
-    it { expect(Activity.base_includes.include?(:owner)).to eq true }
+    let(:base_includes) { [:owner] }
+
+    it { expect(Activity.base_includes).to eq base_includes }
   end
 
   describe 'base_preloads' do
-    it { expect(Activity.base_preloads.include?(:owner)).to eq true }
-    it { expect(Activity.base_preloads.include?({ owner: [:field_data,
-                                                          :enterprise,
-                                                          :user_groups,
-                                                          :user_role,
-                                                          :news_links,
-                                                          :avatar_attachment,
-                                                          :avatar_blob,
-                                                          { enterprise: [:theme, :mobile_fields], field_data: [:field, { field: [:field_definer] }] }
-                                                         ] })).to eq true
+    let(:base_preloads) {
+      [
+          :owner,
+          owner: [:field_data,
+                  :enterprise,
+                  :user_groups,
+                  :user_role,
+                  :news_links,
+                  :avatar_attachment,
+                  :avatar_blob,
+                  enterprise: [
+                      :theme,
+                      :mobile_fields
+                  ],
+                  field_data: [
+                      :field,
+                      field: [:field_definer]
+                  ]
+          ]
+      ]
     }
+
+    it { expect(Activity.base_preloads).to eq base_preloads }
   end
 
   describe 'ClassMethods' do
-    let!(:group) { create(:group, name: 'test') }
-    let!(:activity) { create(:activity) }
+    let(:group) { create(:group, name: 'test') }
+    let(:activity) { create(:activity) }
 
     describe 'csv_attributes' do
       it 'returns csv attributes' do

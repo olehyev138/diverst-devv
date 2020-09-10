@@ -3,7 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-
+import messages from './messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_LOGS_BEGIN, EXPORT_LOGS_BEGIN
@@ -21,9 +22,7 @@ export function* getLogs(action) {
     yield put(getLogsSuccess(response.data.page));
   } catch (err) {
     yield put(getLogsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load logs', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.logs), options: { variant: 'warning' } }));
   }
 }
 
@@ -32,12 +31,10 @@ export function* exportLogs(action) {
     const response = yield call(api.activities.csvExport.bind(api.activities), action.payload);
 
     yield put(exportLogsSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully exported logs', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export), options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportLogsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to export logs', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export), options: { variant: 'warning' } }));
   }
 }
 

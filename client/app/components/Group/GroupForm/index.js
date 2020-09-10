@@ -26,9 +26,11 @@ import {
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 import GroupSelector from 'components/Shared/GroupSelector';
+
 
 const styles = theme => ({
   noBottomPadding: {
@@ -55,6 +57,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
       query_scopes: ['all_parents']
     });
   };
+
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
@@ -139,7 +142,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
               label={<DiverstFormattedMessage {...messages.children} />}
               isMulti
               disabled={props.isCommitting}
-              queryScopes={['all_parents', 'no_children']}
+              queryScopes={[['possible_children', values.id]]}
               {...formikProps}
             />
           </CardContent>
@@ -154,7 +157,8 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
 
               label={<DiverstFormattedMessage {...messages.parent} />}
               disabled={props.isCommitting}
-              queryScopes={['all_parents']}
+              queryScopes={['all_parents', ['except_id', values.id]]}
+              isClearable
               {...formikProps}
             />
           </CardContent>
@@ -163,13 +167,12 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.index.path()}
-              component={WrappedNavLink}
+              redirectFallback={ROUTES.admin.manage.groups.index.path()}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>

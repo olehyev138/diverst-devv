@@ -44,4 +44,13 @@ RSpec.describe PolicyGroup, type: :model do
       expect(described_class.all_permission_fields).not_to be_empty
     end
   end
+
+  describe '.logout_user' do
+    let!(:sessions) { create_list(:session, 3) }
+    let!(:user) { create(:user, sessions: sessions) }
+    let(:policy_group) { user.policy_group }
+    it 'removes all sessions for user' do
+      expect { policy_group.logout_user }.to change { user.sessions.count }.to(0)
+    end
+  end
 end

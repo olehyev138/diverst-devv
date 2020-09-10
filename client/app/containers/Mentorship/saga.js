@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_MENTORSHIP_USERS_BEGIN,
@@ -29,9 +31,7 @@ export function* getUsers(action) {
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.users), options: { variant: 'warning' } }));
   }
 }
 
@@ -41,9 +41,8 @@ export function* getUser(action) {
     const response = yield call(api.users.get.bind(api.users), action.payload.id, { serializer: action.payload.serializer });
     yield put(getUserSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getUserError(err));
-    yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.user), options: { variant: 'warning' } }));
   }
 }
 
@@ -53,12 +52,10 @@ export function* updateUser(action) {
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
     yield put(push(ROUTES.user.mentorship.show.path(payload.user.id)));
-    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 

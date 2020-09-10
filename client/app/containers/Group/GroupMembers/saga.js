@@ -4,6 +4,10 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
+
+
 import {
   GET_MEMBERS_BEGIN, CREATE_MEMBERS_BEGIN,
   DELETE_MEMBER_BEGIN, EXPORT_MEMBERS_BEGIN
@@ -23,8 +27,7 @@ export function* getMembers(action) {
   } catch (err) {
     yield put(getMembersError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load members', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members), options: { variant: 'warning' } }));
   }
 }
 
@@ -39,12 +42,11 @@ export function* createMembers(action) {
 
     yield put(createMembersSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
-    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createMembersError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create members', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
 
@@ -59,12 +61,11 @@ export function* deleteMembers(action) {
 
     yield put(deleteMemberSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
-    yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteMemberError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove members', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
   }
 }
 
@@ -73,12 +74,11 @@ export function* exportMembers(action) {
     const response = yield call(api.userGroups.csvExport.bind(api.userGroups), action.payload);
 
     yield put(exportMembersSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully exported members', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export_members), options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportMembersError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to export members', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export_members), options: { variant: 'warning' } }));
   }
 }
 

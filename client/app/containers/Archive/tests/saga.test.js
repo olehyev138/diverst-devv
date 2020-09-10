@@ -15,6 +15,9 @@ import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
+import messages from '../messages';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 api.resources.all = jest.fn();
 api.newsFeedLinks.all = jest.fn();
 api.initiatives.all = jest.fn();
@@ -160,6 +163,7 @@ describe('Get archives Saga', () => {
     delete eventsCall.resource;
     expect(api.initiatives.all).toHaveBeenCalledWith(eventsCall);
     expect(eventsDispatched).toEqual(result);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.load);
   });
 });
 
@@ -242,5 +246,6 @@ describe('UnArchive Saga', () => {
 
     expect(api.initiatives.un_archive).toHaveBeenCalledWith(eventsAction.payload.id, { resource: eventsAction.payload });
     expect(eventsDispatched).toEqual(result);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.restore);
   });
 });

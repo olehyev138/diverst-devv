@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
-import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath, useParams } from 'react-router-dom';
@@ -15,7 +14,7 @@ import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
 import MembersIcon from '@material-ui/icons/PeopleOutline';
 import EventIcon from '@material-ui/icons/EventOutlined';
-import ResourcesIcon from '@material-ui/icons/FolderSharedOutlined';
+import ResourcesIcon from '@material-ui/icons/PermMediaOutlined';
 import NewsIcon from '@material-ui/icons/QuestionAnswerOutlined';
 import ManageIcon from '@material-ui/icons/SettingsOutlined';
 import PlanIcon from '@material-ui/icons/AssignmentTurnedInOutlined';

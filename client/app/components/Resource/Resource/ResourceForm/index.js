@@ -15,14 +15,15 @@ import {
   Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Resource/Resource/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstCancel from '../../../Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -46,6 +47,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
   useEffect(() => {
     parentSelectAction();
   }, []);
+
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
@@ -136,13 +138,12 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            <Button
+            <DiverstCancel
               disabled={props.isCommitting}
-              to={props.links.cancelPath}
-              component={WrappedNavLink}
+              redirectFallback={props.links.cancelPath}
             >
               <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
+            </DiverstCancel>
           </CardActions>
         </Form>
       </Card>
