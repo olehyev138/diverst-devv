@@ -91,8 +91,8 @@ export function LogListPage(props) {
     setTo(to);
     if (values.groupIds)
       groupIds = ['for_group_ids', values.groupIds];
-    if (values.groupLabels)
-      groupIds = ['for_group_ids', values.groupIds];
+    else if (values.groupLabels)
+      groupIds = ['for_group_ids', values.groupLabels.map(label => label.name)];
     setGroupIds(groupIds);
     setGroupLabels(values.groupLabels);
     getLogs(getScopes({ from, to, groupIds }, defaultParams));

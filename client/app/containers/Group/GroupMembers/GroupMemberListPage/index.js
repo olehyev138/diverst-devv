@@ -129,15 +129,12 @@ export function GroupMemberListPage(props) {
     if (values.to)
       to = ['joined_to', values.to];
     setTo(to);
-    if (values.segmentIds) {
+    if (values.segmentIds)
       segmentIds = ['for_segment_ids', values.segmentIds];
-      setSegmentIds(segmentIds);
-    }
-    if (values.segmentLabels) {
-      segmentIds = ['for_segment_ids', values.segmentIds];
-      setSegmentIds(segmentIds);
-      setSegmentLabels(values.segmentLabels);
-    }
+    else if (values.segmentLabels)
+      segmentIds = ['for_segment_ids', values.segmentLabels.map(label => label.value)];
+    setSegmentIds(segmentIds);
+    setSegmentLabels(values.segmentLabels);
     getMembers(getScopes({ from, to, segmentIds }, defaultParams));
   };
 
