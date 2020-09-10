@@ -420,7 +420,6 @@ describe('Update group settings', () => {
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
     expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_group_settings);
-
   });
 });
 
