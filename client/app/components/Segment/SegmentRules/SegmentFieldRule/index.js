@@ -86,7 +86,6 @@ const SegmentFieldRule = (props) => {
 
     // fetch field object & deserialize options text for select
     const newField = props.fields[value.value];
-    newField.options_text = deserializeOptionsText(newField);
 
     // Set new field object & id on rule
     props.formik.setFieldValue(`${ruleLocation}.field`, newField);
