@@ -10,7 +10,6 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 
 import { withStyles } from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth';
 
 import { Button, Card, CardActions, CardContent, Grid, Box } from '@material-ui/core';
 
@@ -53,7 +52,7 @@ const styles = theme => ({
 });
 
 export function SSOLanding(props) {
-  const { classes, width, handleEnter, ...rest } = props;
+  const { classes, handleEnter, ...rest } = props;
 
   return (
     <Box boxShadow={4} borderRadius={4} width='100%'>
@@ -94,18 +93,15 @@ export function SSOLanding(props) {
 
 SSOLanding.propTypes = {
   classes: PropTypes.object,
-  width: PropTypes.string,
   handleEnter: PropTypes.func.isRequired,
 };
 
 // without memo
 export const StyledSSOLanding = compose(
-  withWidth(),
   withStyles(styles),
 )(SSOLanding);
 
 export default compose(
   memo,
-  withWidth(),
   withStyles(styles),
 )(SSOLanding);
