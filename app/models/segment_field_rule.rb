@@ -25,12 +25,8 @@ class SegmentFieldRule < ApplicationRecord
     field.evaluate(field_data.deserialized_data, deserialized_data, operator)
   end
 
-  def deserialized_data
+  def value
     field.deserialize_value(data)
-  end
-
-  def data
-    field.deserialize_value(super)
   end
 
   def data=(a)
