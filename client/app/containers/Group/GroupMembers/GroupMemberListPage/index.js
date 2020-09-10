@@ -123,14 +123,12 @@ export function GroupMemberListPage(props) {
     let from = null;
     let to = null;
     let segmentIds = null;
-    if (values.from) {
+    if (values.from)
       from = ['joined_from', values.from];
-      setFrom(from);
-    }
-    if (values.to) {
+    setFrom(from);
+    if (values.to)
       to = ['joined_to', values.to];
-      setTo(to);
-    }
+    setTo(to);
     if (values.segmentIds) {
       segmentIds = ['for_segment_ids', values.segmentIds];
       setSegmentIds(segmentIds);
