@@ -135,7 +135,7 @@ function serializeSegment(segment) {
     field_id: r.field_id,
     segment_id: r.segment_id,
     operator: r.operator,
-    data: JSON.stringify([r.data.value]), // TODO: change this to multi
+    data: serializeDatum(r),
     _destroy: r._destroy || 0
   }));
 
