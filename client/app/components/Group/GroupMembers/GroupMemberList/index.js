@@ -213,8 +213,6 @@ export function GroupMemberList(props) {
     </Dialog>
   );
 
-  console.log(props.memberFrom);
-
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
@@ -301,7 +299,7 @@ export function GroupMemberList(props) {
                 props.handleFilterChange(values);
               }}
             >
-              {formikProps => console.log(formikProps.values) || (
+              {formikProps => (
                 <Form>
                   <CardContent>
                     <Grid container spacing={2}>
