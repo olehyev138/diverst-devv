@@ -2,15 +2,13 @@ class CheckboxField < Field
   include Optionnable
 
   def operators
-    def operators
-      [
-          Field::OPERATORS[:equals],
-          Field::OPERATORS[:is_not],
-          Field::OPERATORS[:contains_any_of],
-          Field::OPERATORS[:contains_all_of],
-          Field::OPERATORS[:does_not_contain]
-      ]
-    end
+    [
+        Field::OPERATORS[:equals],
+        Field::OPERATORS[:is_not],
+        Field::OPERATORS[:contains_any_of],
+        Field::OPERATORS[:contains_all_of],
+        Field::OPERATORS[:does_not_contain]
+    ]
   end
 
   def string_value(values)
