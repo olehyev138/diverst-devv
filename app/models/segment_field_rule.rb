@@ -22,7 +22,7 @@ class SegmentFieldRule < ApplicationRecord
 
     return false unless field_data
 
-    field.evaluate(field_data.deserialized_data, deserialized_data, operator)
+    field.evaluate(field_data.value, value, operator)
   end
 
   def value

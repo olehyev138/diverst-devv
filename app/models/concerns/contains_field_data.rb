@@ -137,7 +137,7 @@ module ContainsFieldData
     field_data.includes(:field).find_each do |fd|
       # Define a getter, that gets the field_data, called that field's title, on self's singleton
       singleton_class.send(:define_method, self.class.field_to_method_name(fd.field)) do
-        fd.deserialized_data
+        fd.value
       end
 
       # Define a setter, that sets the field_data, called that field's title =, on self's singleton
@@ -246,7 +246,7 @@ module ContainsFieldData
   end
 
   def get_field_data_value(field)
-    get_field_data(field).deserialized_data
+    get_field_data(field).value
   end
 
   def set_field_data_value(field, data)
@@ -299,7 +299,7 @@ module ContainsFieldData
         u.field_data.each do |fd|
           # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
           u.singleton_class.send(:define_method, field_to_method_name(fd.field)) do
-            fd.deserialized_data
+            fd.value
           end
 
           # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
