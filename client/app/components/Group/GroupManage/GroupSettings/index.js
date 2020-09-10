@@ -134,7 +134,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             component={DiverstRichTextInput}
             required
             onChange={value => setFieldValue('description', value)}
-            fullWidth
             id='description'
             name='description'
             margin='normal'
