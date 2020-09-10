@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 import { formatColor, mapFieldNames } from 'utils/selectorHelpers';
+import produce from 'immer';
 
 const selectGroupsDomain = state => state.groups || initialState;
 
@@ -82,14 +83,17 @@ const selectFormGroup = () => createSelector(
     if (!currentGroup) return null;
 
     // clone group before making mutations on it
-    const selectGroup = Object.assign({}, currentGroup);
-
-    selectGroup.children = selectGroup.children.map(child => ({
-      value: child.id,
-      label: child.name
-    }));
-
-    return selectGroup;
+    return produce(currentGroup, (draft) => {
+      draft.children = currentGroup.children.map(child => ({
+        value: child.id,
+        label: child.name
+      }));
+      if (currentGroup.parent)
+        draft.parent = {
+          value: currentGroup.parent.id,
+          label: currentGroup.parent.name
+        };
+    });
   }
 );
 const selectHasChanged = () => createSelector(
