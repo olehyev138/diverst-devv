@@ -4,8 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 import { TimePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import {IconButton} from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
+import { IconButton } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const styles = theme => ({
   inlinePickerPopover: {
