@@ -15,8 +15,6 @@ body {
   background-color: $diverst-background;
   color: $diverst-grey;
   overflow-x: hidden;
-  -webkit-transform: translate3d(0,0,0);
-
 
   &.auth {
     display: flex;
