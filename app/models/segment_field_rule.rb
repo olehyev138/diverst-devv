@@ -26,15 +26,15 @@ class SegmentFieldRule < ApplicationRecord
   end
 
   def deserialized_data
-    case field.type
-    when 'SelectField'
-      # TODO: multi select - assume single element array for now
-      JSON.parse(data)
-    when 'NumericField'
-      data.to_i
-    else
-      data
-    end
+    field.deserialize_value(data)
+  end
+
+  def data
+    field.deserialize_value(super)
+  end
+
+  def data=(a)
+    super(field.serialize_value(a))
   end
 
   #
