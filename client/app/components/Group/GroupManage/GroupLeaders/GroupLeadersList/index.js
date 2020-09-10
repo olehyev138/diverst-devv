@@ -34,8 +34,8 @@ export function GroupLeadersList(props) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: <DiverstFormattedMessage {...messages.leader.column_name} />, field: 'user.name' },
-    { title: <DiverstFormattedMessage {...messages.leader.column_position} />, field: 'position_name' }
+    { title: intl.formatMessage(messages.leader.column_name), field: 'user.name' },
+    { title: intl.formatMessage(messages.leader.column_position), field: 'position_name' }
   ];
 
   const actions = [];

@@ -86,7 +86,7 @@ export function UpdatePage(props) {
     return () => {
       props.updatesUnmount();
     };
-  }, []);
+  }, [location]);
 
   return (
     <Update
