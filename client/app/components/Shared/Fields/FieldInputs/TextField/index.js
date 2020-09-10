@@ -14,7 +14,7 @@ import { TextField } from '@material-ui/core';
 
 const CustomTextField = (props) => {
   const { inputType, fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
+  const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
 
   return (
     <FastField
@@ -37,6 +37,7 @@ CustomTextField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
   inputType: PropTypes.string,
+  dataLocation: PropTypes.string,
   formik: PropTypes.object
 };
 

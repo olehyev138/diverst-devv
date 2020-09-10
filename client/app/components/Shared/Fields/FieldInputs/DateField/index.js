@@ -15,8 +15,8 @@ import dig from 'object-dig';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const CustomDateField = (props) => {
-  const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
+  const { fieldDatum, fieldDatumIndex, formik, dataLocation: oldDataLocation, ...rest } = props;
+  const dataLocation = oldDataLocation || `fieldData.${fieldDatumIndex}.data`;
 
   return (
     <React.Fragment>
@@ -43,6 +43,7 @@ const CustomDateField = (props) => {
 CustomDateField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
+  dataLocation: PropTypes.string,
   formik: PropTypes.object
 };
 

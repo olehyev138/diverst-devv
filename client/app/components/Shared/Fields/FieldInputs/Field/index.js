@@ -44,7 +44,8 @@ const CustomField = (props) => {
 
 CustomField.propTypes = {
   fieldDatum: PropTypes.object,
-  fieldDatumIndex: PropTypes.number
+  fieldDatumIndex: PropTypes.number,
+  dataLocation: PropTypes.string,
 };
 
 export default CustomField;
