@@ -45,6 +45,9 @@ function serializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
   const type = dig(fieldDatum, 'field', 'type');
 
+  if (datum == null)
+    return null;
+
   switch (type) {
     case 'CheckboxField':
       if (datum.length === 0)

@@ -84,7 +84,7 @@ const SegmentFieldRule = (props) => {
     const newField = props.fields[value.value];
 
     // wipe data & operator values
-    props.formik.setFieldValue(`${ruleLocation}.data`, newField.type === 'DateField' ? undefined : '');
+    props.formik.setFieldValue(`${ruleLocation}.data`, newField.type === 'DateField' ? null : '');
     props.formik.setFieldValue(`${ruleLocation}.operator`, {});
 
     // Set new field object & id on rule
