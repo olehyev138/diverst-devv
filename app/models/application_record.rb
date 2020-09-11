@@ -10,10 +10,24 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseCsvExport
   include ActionView::Helpers::DateHelper
 
-  scope :except_id, -> (id) { where.not(id: id) }
+  scope :except_id, -> (id) { where.not(id: id.presence) }
 
   def time_since_creation
     time_ago_in_words created_at
+  end
+
+  def to_label
+    if respond_to?('name')
+      name
+    elsif respond_to?('title')
+      title
+    elsif respond_to?('subject')
+      subject
+    elsif respond_to?('description')
+      description
+    else
+      "#{self.class.name}(#{id})"
+    end
   end
 
   def self.column_reload!

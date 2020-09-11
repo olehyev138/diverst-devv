@@ -44,13 +44,24 @@ class Api::V1::UsersController < DiverstController
   end
 
   def update
-    params[klass.symbol] = payload
+    if current_user.policy_group.users_manage
+      params[klass.symbol] = payload
+    else
+      params[klass.symbol] = profile_update_payload
+    end
     item = klass.find(params[:id])
     base_authorize(item)
     item.avatar.purge_later if item.avatar.attached? && params[:avatar].blank?
 
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
+
+    # when the Email has been modified
+    if item.email != updated_item.email
+      DiverstMailer.old_email_update(item.id, item.email).deliver_later
+      DiverstMailer.new_email_update(updated_item.id, updated_item.email).deliver_later
+    end
+
     render status: 200, json: updated_item, serializer: serializer(params)
   rescue => e
     case e
@@ -318,6 +329,30 @@ class Api::V1::UsersController < DiverstController
         mentoring_interest_ids: [],
         mentoring_type_ids: [],
       )
+  end
+
+  def profile_update_payload
+    params
+        .require(:user)
+        .permit(
+            :avatar,
+            :first_name,
+            :last_name,
+            :biography,
+            :time_zone,
+            :user_role_id,
+            :groups_notifications_frequency,
+            :groups_notifications_date,
+            :custom_policy_group,
+            :mentor,
+            :mentee,
+            :linkedin_profile_url,
+            :accepting_mentee_requests,
+            :accepting_mentor_requests,
+            :mentorship_description,
+            mentoring_interest_ids: [],
+            mentoring_type_ids: [],
+          )
   end
 
   def sample_csv

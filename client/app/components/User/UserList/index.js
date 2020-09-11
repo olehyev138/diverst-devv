@@ -67,17 +67,17 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.first_name} />,
+      title: intl.formatMessage(messages.first_name),
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: <DiverstFormattedMessage {...messages.last_name} />,
+      title: intl.formatMessage(messages.last_name),
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: <DiverstFormattedMessage {...messages.email} />,
+      title: intl.formatMessage(messages.email),
       field: 'email',
       query_field: 'email'
     },
@@ -148,7 +148,9 @@ export function UserList(props, context) {
               })
             ]}
             tableOptions={{
-              exportButton: true,
+              exportButton: {
+                csv: true,
+              },
               exportCsv: (columns, data) => {
                 props.exportUsers();
               }

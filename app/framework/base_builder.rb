@@ -77,7 +77,9 @@ module BaseBuilder
       item = find_by_id(id)
       return if item.nil?
 
-      item.remove
+      unless item.remove
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      end
     end
 
     def symbol

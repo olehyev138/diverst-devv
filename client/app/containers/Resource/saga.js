@@ -3,6 +3,8 @@ import api from 'api/api';
 import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+import messages from './messages';
 
 import {
   GET_FOLDERS_BEGIN, GET_FOLDER_BEGIN,
@@ -43,10 +45,8 @@ export function* getFolders(action) {
     yield (put(getFoldersSuccess(response.data.page)));
   } catch (err) {
     yield put(getFoldersError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load folders',
+      message: intl.formatMessage(messages.snackbars.errors.folders),
       options: { variant: 'warning' }
     }));
   }
@@ -57,10 +57,9 @@ export function* getFolder(action) {
     const response = yield call(api.folders.get.bind(api.folders), action.payload.id);
     yield put(getFolderSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getFolderError(err));
     yield put(showSnackbar({
-      message: 'Failed to get folder',
+      message: intl.formatMessage(messages.snackbars.errors.folder),
       options: { variant: 'warning' }
     }));
   }
@@ -74,15 +73,13 @@ export function* createFolder(action) {
     yield put(createFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
-      message: 'Folder created',
+      message: intl.formatMessage(messages.snackbars.success.create_folder),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createFolderError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to create folder',
+      message: intl.formatMessage(messages.snackbars.errors.create_folder),
       options: { variant: 'warning' }
     }));
   }
@@ -96,15 +93,13 @@ export function* updateFolder(action) {
     yield put(updateFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
-      message: 'Folder updated',
+      message: intl.formatMessage(messages.snackbars.success.update_folder),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateFolderError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update folder',
+      message: intl.formatMessage(messages.snackbars.errors.update_folder),
       options: { variant: 'warning' }
     }));
   }
@@ -117,15 +112,13 @@ export function* deleteFolder(action) {
     yield put(deleteFolderSuccess());
     yield put(push(getParentPage(action.payload.folder)));
     yield put(showSnackbar({
-      message: 'Folder deleted',
+      message: intl.formatMessage(messages.snackbars.success.delete_folder),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteFolderError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to delete folder',
+      message: intl.formatMessage(messages.snackbars.errors.delete_folder),
       options: { variant: 'warning' }
     }));
   }
@@ -138,10 +131,8 @@ export function* getResources(action) {
     yield (put(getResourcesSuccess(response.data.page)));
   } catch (err) {
     yield put(getResourcesError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load resources',
+      message: intl.formatMessage(messages.snackbars.errors.resources),
       options: { variant: 'warning' }
     }));
   }
@@ -152,10 +143,9 @@ export function* getResource(action) {
     const response = yield call(api.resources.get.bind(api.resources), action.payload.id);
     yield put(getResourceSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(getResourceError(err));
     yield put(showSnackbar({
-      message: 'Failed to get resource',
+      message: intl.formatMessage(messages.snackbars.errors.resource),
       options: { variant: 'warning' }
     }));
   }
@@ -169,15 +159,13 @@ export function* createResource(action) {
     yield put(createResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
-      message: 'Resource created',
+      message: intl.formatMessage(messages.snackbars.success.create_resource),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createResourceError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to create resource',
+      message: intl.formatMessage(messages.snackbars.errors.create_resource),
       options: { variant: 'warning' }
     }));
   }
@@ -191,15 +179,13 @@ export function* updateResource(action) {
     yield put(updateResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
-      message: 'Resource updated',
+      message: intl.formatMessage(messages.snackbars.success.update_resource),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateResourceError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update resource',
+      message: intl.formatMessage(messages.snackbars.errors.update_resource),
       options: { variant: 'warning' }
     }));
   }
@@ -213,15 +199,13 @@ export function* deleteResource(action) {
     yield put(deleteResourceSuccess());
     yield put(push(getFolderShowPath(action.payload.folder)));
     yield put(showSnackbar({
-      message: 'Resource deleted',
+      message: intl.formatMessage(messages.snackbars.success.delete_resource),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteResourceError(err));
-
-    // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to delete resource',
+      message: intl.formatMessage(messages.snackbars.errors.delete_resource),
       options: { variant: 'warning' }
     }));
   }
@@ -233,14 +217,13 @@ export function* archiveResource(action) {
     const response = yield call(api.resources.archive.bind(api.resources), payload.resource.id, payload);
     yield put(archiveResourceSuccess());
     yield put(showSnackbar({
-      message: 'Successfully archived resource',
+      message: intl.formatMessage(messages.snackbars.success.archive),
       options: { variant: 'success' }
     }));
   } catch (err) {
-    // TODO: intl message
     yield put(archiveResourceError(err));
     yield put(showSnackbar({
-      message: 'Failed to archive resource',
+      message: intl.formatMessage(messages.snackbars.errors.archive),
       options: { variant: 'warning' }
     }));
   }
@@ -251,10 +234,9 @@ export function* validateFolderPassword(action) {
     const response = yield call(api.folders.validatePassword.bind(api.folders), action.payload);
     yield put(validateFolderPasswordSuccess(response.data));
   } catch (err) {
-    // TODO: intl message
     yield put(validateFolderPasswordError(err));
     yield put(showSnackbar({
-      message: 'Password Incorrect',
+      message: intl.formatMessage(messages.snackbars.errors.password),
       options: { variant: 'warning' }
     }));
   }
@@ -267,9 +249,7 @@ export function* getResourceFileData(action) {
     yield put(getFileDataSuccess({ data: response.data, contentType: response.headers['content-type'] }));
   } catch (err) {
     yield put(getFileDataError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to retrieve file data', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.file_data), options: { variant: 'warning' } }));
   }
 }
 
