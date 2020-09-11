@@ -15,10 +15,11 @@ class DiverstController < ApplicationController
   # skip filter for routing errors
   skip_before_action :verify_jwt_token, only: [:routing_error]
 
-  # Get locale from params, otherwise fallback to default. This requires every request to contain the user's locale
+  # Locale is pulled from the 'Diverst-Locale' header (this is how it works with our frontend), but the locale can also be passed via params
+  # Silently falls back to default locale if the passed locale is not valid
   def apply_locale(&action)
-    locale = params[:locale] || I18n.default_locale
-    I18n.with_locale(locale, &action)
+    locale = (params[:locale] || request.headers['Diverst-Locale'] || I18n.default_locale).to_s.downcase
+    I18n.with_locale(is_supported_locale?(locale) ? locale : I18n.default_locale, &action)
   end
 
   # Checks if the passed locale string is a valid locale & is an available locale, returns true if so, false otherwise
