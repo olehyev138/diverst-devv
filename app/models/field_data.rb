@@ -13,7 +13,7 @@ class FieldData < ApplicationRecord
   end
 
   def data=(a)
-    super(field.serialize_value(a))
+    field_id.present? ? super(field.serialize_value(a)) : super
   end
 
   private
