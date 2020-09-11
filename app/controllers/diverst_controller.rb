@@ -21,6 +21,13 @@ class DiverstController < ApplicationController
     I18n.with_locale(locale, &action)
   end
 
+  # Checks if the passed locale string is a valid locale & is an available locale, returns true if so, false otherwise
+  def is_supported_locale?(locale)
+    I18n.available_locales.map(&:to_s).include?(locale)
+  rescue
+    false
+  end
+
   def error_json(e)
     json = { message: e.message }
     json[:attribute] = e.attribute if e.respond_to?(:attribute)
