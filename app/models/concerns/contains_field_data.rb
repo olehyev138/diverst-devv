@@ -262,7 +262,7 @@ module ContainsFieldData
 
   def field_data_reader(field)
     fd = get_field_data(field) || (new_record? ? field_data.new(data: nil, field_id: field.id) : field_data.create(data: nil, field_id: field.id))
-    fd.data
+    fd.value
   end
 
   def field_data_writer(field, value)
