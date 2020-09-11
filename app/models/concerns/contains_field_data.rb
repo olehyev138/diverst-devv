@@ -48,6 +48,13 @@ module ContainsFieldData
     @info.extend(FieldDataDeprecated)
   end
 
+  # Returns the value of the attribute of the object
+  # If the key is the name of a field, or a field object, returns the
+  # deserialized version of the corresponding field data
+  #
+  # @example
+  #    User.first[:gender] => 'Male'
+  #    User.first[Field.find_by(title: 'gender')] => 'Male'
   def [](key)
     case key
     when Symbol, String
@@ -66,6 +73,15 @@ module ContainsFieldData
     nil
   end
 
+  # Set the value of the attribute of the object
+  # If the key is the name of a field, or a field object, set the
+  # serialized version of the corresponding field data
+  #
+  # @example
+  #    User.first[:gender] = 'Male'
+  #    User.first[Field.find_by(title: 'Gender')] = 'Male'
+  #   Is equivalent to
+  #    FieldData.find_by(user: User.first, field: Field.find_by(title: 'Gender')).update(data: 'Male')
   def []=(key, value)
     case key
     when Symbol, String
@@ -245,26 +261,24 @@ module ContainsFieldData
     end
   end
 
-  def get_field_data_value(field)
-    get_field_data(field).value
-  end
-
-  def set_field_data_value(field, data)
-    get_field_data(field).update(data: field.serialize_value(data))
-  end
-
   private
 
+  # Returns the field based on a key
+  # Based on Field's title, case_insensitive ignoring non-character
   def field_of_key(key)
     down_cased = key.to_s.downcase.gsub(/[^\w]/, '')
     fields.load.find { |field| field.title.downcase.gsub(/[^\w]/, '').include? down_cased }
   end
 
+  # Gets the field_data for a given field
+  # If the field data record doesn't exists, it creates the appropriate field data
   def field_data_reader(field)
     fd = get_field_data(field) || (new_record? ? field_data.new(data: nil, field_id: field.id) : field_data.create(data: nil, field_id: field.id))
     fd.value
   end
 
+  # Updates the field_data for a given field
+  # If the field data record doesn't exists, it creates the appropriate field data
   def field_data_writer(field, value)
     if new_record?
       field_data.new(data: value, field_id: field.id)
