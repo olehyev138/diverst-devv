@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
 
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from './saga';
+
 import { changeLocale } from 'containers/Shared/LanguageProvider/actions';
 
 import { selectLocale } from './selectors';
@@ -25,6 +28,8 @@ import { getLocaleObjectFromLocaleString, getLanguageStringFromLocaleObject, get
 import { Settings, DateTime } from 'luxon';
 
 export function LanguageProvider(props) {
+  useInjectSaga({ key: 'language', saga });
+
   // Gets the browser locale
   const defaultBrowserLocale = DateTime.local() && DateTime.local().resolvedLocaleOpts() && DateTime.local().resolvedLocaleOpts().locale;
   // Get the Intl.Locale object using the current set locale, the browser locale if the locale isn't set, or falls back to en-US
