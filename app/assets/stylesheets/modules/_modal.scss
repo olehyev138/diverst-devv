@@ -10,8 +10,7 @@
   padding: 0!important;
   text-align: center;
   -webkit-overflow-scrolling: touch;
-  // @include z-index(modal);
-  z-index: 1060;
+  @include z-index(modal);
   transition: opacity $time $curve, visibility $time $curve;
 
   &:after {
@@ -146,5 +145,4 @@
   top: 0;
   left: 0;
   background-color: rgba($diverst-black, 0.7);
-  z-index: 1020;
 }
