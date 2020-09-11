@@ -45,6 +45,7 @@ const CustomField = (props) => {
 CustomField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
+  fieldType: PropTypes.oneOf(['FastField', 'Field']),
   dataLocation: PropTypes.string,
 };
 
