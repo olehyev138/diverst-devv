@@ -163,7 +163,7 @@ export function SocialLinkListItem(props) {
                     props.deleteSocialLinkBegin(newsItem.social_link);
                 }}
               >
-                Delete
+                <DiverstFormattedMessage {...messages.delete} />
               </Button>
             </Permission>
           </React.Fragment>

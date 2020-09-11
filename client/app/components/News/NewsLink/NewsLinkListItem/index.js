@@ -200,7 +200,7 @@ export function NewsLinkListItem(props) {
                         props.deleteNewsLinkBegin(newsItem.news_link);
                     }}
                   >
-                    Delete
+                    <DiverstFormattedMessage {...messages.delete} />
                   </Button>
                 </Permission>
               </React.Fragment>
