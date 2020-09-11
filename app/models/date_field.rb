@@ -65,6 +65,8 @@ class DateField < Field
 
     case value
     when Time, Date, DateTime then value.strftime('%s').to_i
+    # If the string is an integer, return the integer
+    # Otherwise assume its a ISO time string, and convert to time then to integer
     when String then Integer(value) rescue value.to_time.to_i
     else value.to_i
     end
