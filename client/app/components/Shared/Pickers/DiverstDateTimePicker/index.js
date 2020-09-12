@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 import { DateTimePicker, KeyboardDateTimePicker } from '@material-ui/pickers';
+import { IconButton } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const styles = theme => ({
   inlinePickerPopover: {
@@ -13,8 +15,10 @@ const styles = theme => ({
   },
 });
 
-export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, form, disablePast, disableFuture, ...props }) {
+export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, form, disablePast, disableFuture, isClearable, ...props }) {
   let inlineProps = {};
+  const InputProps = {};
+  const InputAdornmentProps = {};
 
   // Necessary as there's an issue with the word-break property for the inline variant
   if (variant === 'inline')
@@ -23,6 +27,25 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
         className: classes.inlinePickerPopover,
       },
     };
+
+  const onError = (error) => {
+    // Handle as a side effect
+    if (error !== form.errors[field.name])
+      form.setFieldError(field.name, error);
+  };
+
+  // If you are using custom validation schema you probably want to pass `true` as third argument
+  const onChange = (date) => {
+    form.setFieldValue(field.name, date, false);
+    form.setFieldTouched(field.name, true, false);
+  };
+
+  if (isClearable)
+    InputProps.startAdornment = (
+      <IconButton onClick={() => pickerProps.onChange(null)}>
+        <ClearIcon />
+      </IconButton>
+    );
 
   const pickerProps = {
     variant,
@@ -34,16 +57,10 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
     value: field.value,
     helperText: form.errors[field.name],
     error: !!form.errors[field.name],
-    onError: (error) => {
-      // Handle as a side effect
-      if (error !== form.errors[field.name])
-        form.setFieldError(field.name, error);
-    },
-    onChange: (date) => {
-      // If you are using custom validation schema you probably want to pass `true` as third argument
-      form.setFieldValue(field.name, date, false);
-      form.setFieldTouched(field.name, true, false);
-    },
+    onError,
+    onChange,
+    InputProps,
+    InputAdornmentProps,
     ...inlineProps,
     ...props
   };
@@ -78,6 +95,7 @@ DiverstDateTimePicker.propTypes = {
   disableFuture: PropTypes.bool,
   field: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
+  isClearable: PropTypes.bool,
 };
 
 export default compose(
