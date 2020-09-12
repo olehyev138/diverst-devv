@@ -312,6 +312,7 @@ export function GroupMemberList(props) {
                           id='from'
                           name='from'
                           margin='normal'
+                          isClearable
                           label={<DiverstFormattedMessage {...messages.filter.from} />}
                         />
                       </Grid>
@@ -327,6 +328,7 @@ export function GroupMemberList(props) {
                           id='to'
                           name='to'
                           margin='normal'
+                          isClearable
                           label={<DiverstFormattedMessage {...messages.filter.to} />}
                         />
                       </Grid>
