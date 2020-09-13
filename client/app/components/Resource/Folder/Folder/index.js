@@ -2,7 +2,6 @@ import React, { memo, useState, useEffect } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import { Typography, Grid, Button, Box, Divider } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
@@ -67,7 +66,7 @@ const styles = theme => ({
 
 export function Folder(props) {
   const { classes, type, permissions, currentGroup } = props;
-  const folder = dig(props, 'folder');
+  const folder = props?.folder;
 
   const [fileName, setFileName] = useState(null);
 

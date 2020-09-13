@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { push } from 'connected-react-router';
 
 import { useInjectSaga } from 'utils/injectSaga';

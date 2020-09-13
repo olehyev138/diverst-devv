@@ -7,7 +7,6 @@
 /* eslint-disable react/prop-types, no-underscore-dangle */
 
 import React from 'react';
-import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
 import Select from 'react-select';
@@ -43,7 +42,7 @@ function serializeFieldDataWithFieldId(fieldData) {
 
 function serializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
-  const type = dig(fieldDatum, 'field', 'type');
+  const type = fieldDatum?.field?.type;
 
   switch (type) {
     case 'CheckboxField':
@@ -65,7 +64,7 @@ const dateMap = {};
 
 function deserializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
-  const type = dig(fieldDatum, 'field', 'type');
+  const type = fieldDatum?.field?.type;
   const parsed = ['CheckboxField', 'SelectField', 'DateField'].includes(type) ? datum && JSON.parse(datum) : datum;
 
   switch (type) {

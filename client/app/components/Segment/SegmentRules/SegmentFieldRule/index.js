@@ -6,8 +6,6 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import dig from 'object-dig';
 import { connect, Field, getIn } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
