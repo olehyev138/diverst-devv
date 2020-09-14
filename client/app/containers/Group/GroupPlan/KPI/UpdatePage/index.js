@@ -15,7 +15,6 @@
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
 import { useParams, useLocation } from 'react-router-dom';
 
 import { createStructuredSelector } from 'reselect/lib';
@@ -70,9 +69,9 @@ export function UpdatePage(props) {
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
-    index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
+    index: partialLink.index.path(props?.currentGroup?.id),
+    edit: id => partialLink.edit.path(props?.currentGroup?.id, id),
+    show: id => partialLink.show.path(props?.currentGroup?.id, id),
   };
 
   const update = props.currentUpdate || location.update;

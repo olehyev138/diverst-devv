@@ -23,7 +23,6 @@ import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SessionProfilePage(props) {
@@ -97,7 +96,7 @@ export default compose(
 )(Conditional(
   SessionProfilePage,
   ['type', 'formSession.permissions.update?', 'isFormLoading'],
-  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(props?.sessionUser?.user_id),
   permissionMessages.mentorship.session.editPage,
   false,
   a => a[0] !== 'edit' || a.slice(1, 3).some(b => b)

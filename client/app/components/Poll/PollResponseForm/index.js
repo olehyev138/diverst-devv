@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
@@ -41,11 +40,11 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
           <Box mb={6} />
           <Card>
             <CardHeader
-              title={dig(props, 'response', 'poll', 'title')}
+              title={props?.response?.poll?.title}
             />
             <CardContent>
               <Typography variant='h6' color='secondary'>
-                {dig(props, 'response', 'poll', 'description')}
+                {props?.response?.poll?.description}
               </Typography>
             </CardContent>
           </Card>
@@ -54,7 +53,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
             <Form>
               <Card>
                 <FieldInputForm
-                  fieldData={dig(props, 'response', 'field_data') || []}
+                  fieldData={props?.response?.field_data || []}
                   isCommitting={props.isCommitting}
                   isFetching={props.isLoading}
 
@@ -103,7 +102,7 @@ export function PollResponseFormInner({ formikProps, buttonText, errors, ...prop
 }
 
 export function PollResponseForm(props) {
-  const user = dig(props, 'response');
+  const user = props?.response;
   const { intl } = props;
 
   const initialValues = buildValues(user, {

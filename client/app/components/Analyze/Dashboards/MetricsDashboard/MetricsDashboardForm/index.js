@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -107,7 +106,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
 }
 
 export function MetricsDashboardForm(props) {
-  const metricsDashboard = dig(props, 'metricsDashboard');
+  const metricsDashboard = props?.metricsDashboard;
   const initialValues = buildValues(metricsDashboard, {
     id: { default: '' },
     name: { default: '' },

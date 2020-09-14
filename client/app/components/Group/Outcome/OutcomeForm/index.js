@@ -7,7 +7,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/Outcome/messages';
@@ -200,12 +199,12 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
 }
 
 export function OutcomeForm(props) {
-  const outcome = dig(props, 'outcome');
+  const outcome = props?.outcome;
 
   const initialValues = buildValues(outcome, {
     id: { default: '' },
     name: { default: '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' },
+    group_id: { default: props?.currentGroup?.id || '' },
     pillars: { default: [], customKey: 'pillars_attributes' }
   });
 

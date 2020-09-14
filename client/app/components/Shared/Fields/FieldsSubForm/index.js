@@ -8,7 +8,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import {
   Button, Divider, Grid, Box, Typography
@@ -136,7 +135,7 @@ export function FieldsSubForm(props, context) {
   );
 
   const fieldForm = props => (
-    props.field && !dig(props, 'field', '_destroy') ? (
+    props.field && !props?.field?._destroy ? (
       <React.Fragment key={props.index}>
         <FieldForm
           {...props}

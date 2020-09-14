@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -54,13 +53,13 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
 }
 
 export function SocialLinkForm(props) {
-  const socialLink = dig(props, 'newsItem', 'social_link');
+  const socialLink = props?.newsItem?.social_link;
 
   const initialValues = buildValues(socialLink, {
     id: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    author_id: { default: props?.currentUser?.user_id || '' },
+    group_id: { default: props?.currentGroup?.id || '' }
   });
 
   return (

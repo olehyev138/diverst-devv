@@ -4,8 +4,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 
-import dig from 'object-dig';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -24,7 +22,7 @@ export function GrowthOfUsersGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
-  const data = (dig(props.data, 'series') || undefined);
+  const data = (props.data?.series || undefined);
   const [currentData, setCurrentData] = useState([]);
 
   const [params, setParams] = useState({
