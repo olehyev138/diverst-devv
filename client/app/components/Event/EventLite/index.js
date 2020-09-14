@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Paper, Typography, Grid, Button, Box
@@ -55,7 +54,7 @@ const styles = theme => ({
 
 export function EventLite(props) {
   const { classes, intl } = props;
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   return event ? (
     <React.Fragment>

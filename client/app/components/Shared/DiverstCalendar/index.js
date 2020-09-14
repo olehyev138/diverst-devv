@@ -21,7 +21,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import EventLite from 'components/Event/EventLite';
 import SegmentSelector from 'components/Shared/SegmentSelector';
-import dig from 'object-dig';
 
 const styles = theme => ({
   wrapper: {
@@ -163,7 +162,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
             right: 'dayGridMonth,timeGridWeek,listWeek'
           }}
           events={events}
-          datesSet={({ view, el }) => dig(rest, 'calendarDateCallback', a => a(addDays(view.currentStart, -14), addDays(view.currentEnd, 14)))}
+          datesSet={({ view, el }) => rest?.calendarDateCallback?.(addDays(view.currentStart, -14), addDays(view.currentEnd, 14))}
           eventClick={clickEvent}
           eventDisplay='block'
           dayMaxEvents={5}
@@ -176,7 +175,7 @@ export function DiverstCalendar({ events, calendarEvents, isLoading, classes, ..
               `${xProps.group.name}${xProps.description.length > 0 ? `<br>${xProps.description}` : ''}`);
             // eslint-disable-next-line func-names
             info.el.setAttribute('data-place', (function () {
-              switch (dig(calendarRef, 'current', cal => cal.getApi().view.type)) {
+              switch (calendarRef?.current?.getApi().view.type) {
                 case 'dayGridMonth':
                   return 'top';
                 case 'timeGridWeek':

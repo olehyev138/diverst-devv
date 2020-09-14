@@ -29,8 +29,8 @@ export function buildValues(object, valueSchemas) {
   const values = {};
 
   for (const [key, valueSchema] of Object.entries(valueSchemas)) {
-    const storeKey = dig(valueSchema, 'customKey') || key;
-    values[storeKey] = dig(object, key) != null ? object[key] : valueSchema.default;
+    const storeKey = valueSchema?.customKey || key;
+    values[storeKey] = object?.[key] != null ? object[key] : valueSchema.default;
   }
 
   return values;

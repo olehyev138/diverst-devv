@@ -83,23 +83,18 @@ export function LogListPage(props) {
     let from = null;
     let to = null;
     let groupIds = null;
-    if (values.from) {
+    if (values.from)
       from = ['joined_from', values.from];
-      setFrom(from);
-    }
-    if (values.to) {
+    setFrom(from);
+    if (values.to)
       to = ['joined_to', values.to];
-      setTo(to);
-    }
-    if (values.groupIds) {
+    setTo(to);
+    if (values.groupIds)
       groupIds = ['for_group_ids', values.groupIds];
-      setGroupIds(groupIds);
-    }
-    if (values.groupLabels) {
-      groupIds = ['for_group_ids', values.groupIds];
-      setGroupIds(groupIds);
-      setGroupLabels(values.groupLabels);
-    }
+    else if (values.groupLabels)
+      groupIds = ['for_group_ids', values.groupLabels.map(label => label.name)];
+    setGroupIds(groupIds);
+    setGroupLabels(values.groupLabels);
     getLogs(getScopes({ from, to, groupIds }, defaultParams));
   };
 

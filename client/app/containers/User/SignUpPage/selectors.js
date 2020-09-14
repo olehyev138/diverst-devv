@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect/lib';
 
 import produce from 'immer';
-import dig from 'object-dig';
 
 import { initialState } from './reducer';
 import { deserializeFields, timezoneMap } from 'utils/selectorHelpers';

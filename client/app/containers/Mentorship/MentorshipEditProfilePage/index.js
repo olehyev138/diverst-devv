@@ -20,8 +20,6 @@ import { selectMentoringInterests, selectMentoringTypes, selectUser } from 'cont
 import saga from 'containers/Mentorship/saga';
 import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
 import Conditional from 'components/Compositions/Conditional';
-
-import dig from 'object-dig';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function MentorshipEditProfilePage(props) {
@@ -79,7 +77,7 @@ export default compose(
 )(Conditional(
   MentorshipEditProfilePage,
   ['formUser.permissions.update?'],
-  (props, params) => ROUTES.user.mentorship.show.path(dig(props, 'sessionUser', 'user_id')),
+  (props, params) => ROUTES.user.mentorship.show.path(props?.sessionUser?.user_id),
   permissionMessages.mentorship.editProfilePage,
   true
 ));
