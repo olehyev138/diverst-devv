@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Typography, Card, CardContent, Divider, Link, CardActionArea, Box, Grid, Button, CardActions,
@@ -55,7 +54,7 @@ const styles = theme => ({
 
 export function EventsList(props) {
   const { classes } = props;
-  const outcomes = dig(props, 'outcomes');
+  const outcomes = props?.outcomes;
 
   return (
     <React.Fragment>

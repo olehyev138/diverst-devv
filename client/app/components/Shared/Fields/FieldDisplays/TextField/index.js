@@ -7,14 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import dig from 'object-dig';
-
 import { TextField, Typography } from '@material-ui/core';
 
 const CustomText = (props) => {
   const { classes } = props;
 
-  const fieldDatum = dig(props, 'fieldDatum');
+  const fieldDatum = props?.fieldDatum;
 
   return (
     <div className={classes.cell}>

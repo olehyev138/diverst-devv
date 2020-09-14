@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -80,7 +79,7 @@ export function InviteFormInner({ formikProps, ...props }) {
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.time_zone} />}
                 value={values.time_zone}
-                options={dig(props, 'user', 'timezones') || []}
+                options={props?.user?.timezones || []}
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />
@@ -93,7 +92,7 @@ export function InviteFormInner({ formikProps, ...props }) {
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.user_role} />}
                 value={values.user_role_id}
-                options={dig(props, 'user', 'available_roles') || []}
+                options={props?.user?.available_roles || []}
                 onChange={value => setFieldValue('user_role_id', value)}
                 onBlur={() => setFieldTouched('user_role_id', true)}
               />
@@ -101,7 +100,7 @@ export function InviteFormInner({ formikProps, ...props }) {
             {/* Consider For Later */}
             {false && (
               <FieldInputForm
-                fieldData={dig(props, 'user', 'field_data') || []}
+                fieldData={props?.user?.field_data || []}
                 isCommitting={props.isCommitting}
                 isFetching={props.isFormLoading}
 
@@ -132,8 +131,8 @@ export function InviteFormInner({ formikProps, ...props }) {
 }
 
 export function InviteForm(props) {
-  const user = dig(props, 'user');
-  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
+  const user = props?.user;
+  const defaultRole = (user?.available_roles || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },

@@ -7,7 +7,6 @@
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
-import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
@@ -93,7 +92,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.timezone} />}
                 value={values.time_zone}
-                options={dig(props, 'enterprise', 'timezones') || []}
+                options={props?.enterprise?.timezones || []}
                 onChange={value => setFieldValue('time_zone', value)}
                 onBlur={() => setFieldTouched('time_zone', true)}
               />

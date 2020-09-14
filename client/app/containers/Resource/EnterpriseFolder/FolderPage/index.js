@@ -33,7 +33,6 @@ import Folder from 'components/Resource/Folder/Folder';
 
 import { Field, Form, Formik } from 'formik';
 import { Button, Card, CardContent, TextField } from '@material-ui/core';
-import dig from 'object-dig';
 import {
   getParentPage,
   getFolderNewPath,
@@ -80,7 +79,7 @@ export function FolderPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (parentId, scopes, resetParams = false) => {
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);
@@ -95,8 +94,8 @@ export function FolderPage(props) {
   };
 
   const getResources = (folderId, scopes = null, resetParams = false) => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const groupId = props?.currentGroup?.id;
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);

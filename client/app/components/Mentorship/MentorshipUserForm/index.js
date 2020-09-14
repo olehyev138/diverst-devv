@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -210,7 +209,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
 }
 
 export function MentorshipUserForm(props) {
-  const user = dig(props, 'user');
+  const user = props?.user;
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },
