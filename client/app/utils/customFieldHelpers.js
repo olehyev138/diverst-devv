@@ -90,7 +90,7 @@ function deserializeDatum(fieldDatum) {
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(`Can't deserialize "${fieldDatum.data}" of type ${dig(fieldDatum, 'field', 'type')}`);
+    console.error(`Can't deserialize "${fieldDatum.data}" of type ${fieldDatum?.field?.type}`);
     // eslint-disable-next-line no-console
     console.error(error);
     return fieldDatum.data || '';
