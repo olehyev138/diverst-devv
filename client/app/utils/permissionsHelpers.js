@@ -1,3 +1,3 @@
 import dig from 'object-dig';
 
-export const permission = (object, permission) => dig(object, 'permissions', permission);
+export const permission = (object, permission) => object?.permissions?.[permission];

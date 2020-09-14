@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/Session/reducer';
@@ -67,7 +66,7 @@ export function SessionsPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getSessions = (scopes, resetParams = false) => {
-    const id = dig(props, 'user', 'id');
+    const id = props?.user?.id;
 
     if (resetParams)
       setParams(defaultParams);

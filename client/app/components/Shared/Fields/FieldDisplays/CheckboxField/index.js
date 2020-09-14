@@ -6,16 +6,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import dig from 'object-dig';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 const CustomCheckbox = (props) => {
   const { classes } = props;
 
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const fieldDatum = props?.fieldDatum;
+  const fieldDatumIndex = props?.fieldDatumIndex;
 
   return (
     <div className={classes.cell}>

@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -119,7 +118,7 @@ export function EventFormInner({
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.day} />}
                 value={values.day}
-                options={dig(props, 'event', 'timezones') || []}
+                options={props?.event?.timezones || []}
               />
               <Field
                 component={DiverstTimePicker}
@@ -147,7 +146,7 @@ export function EventFormInner({
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.tz} />}
                 value={values.tz}
-                options={dig(props, 'event', 'timezones') || []}
+                options={props?.event?.timezones || []}
                 onChange={value => setFieldValue('tz', value)}
                 onBlur={() => setFieldTouched('tz', true)}
               />
@@ -175,7 +174,7 @@ export function EventFormInner({
 }
 
 export function EventForm(props) {
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   const initialValues = buildValues(event, {
     id: { default: '' },

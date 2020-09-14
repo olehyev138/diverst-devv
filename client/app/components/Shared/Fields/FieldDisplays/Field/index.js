@@ -11,7 +11,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import { compose } from 'redux/';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,11 +32,11 @@ const styles = theme => ({
 });
 
 const CustomFieldShow = (props) => {
-  const fieldData = dig(props, 'fieldDatum');
+  const fieldData = props?.fieldDatum;
   const { classes } = props;
 
   const renderField = (fieldData) => {
-    switch (dig(fieldData, 'field', 'type')) {
+    switch (fieldData?.field?.type) {
       case 'TextField':
         return (<CustomText {...props} inputType='' classes={classes} />);
       case 'NumericField':

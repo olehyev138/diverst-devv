@@ -8,7 +8,6 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { Field, Formik, Form } from 'formik';
 import {
@@ -152,7 +151,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function ResourceForm(props) {
-  const resource = dig(props, 'resource');
+  const resource = props?.resource;
   const initialValues = buildValues(resource, {
     id: { default: '' },
     title: { default: '' },
@@ -160,7 +159,7 @@ export function ResourceForm(props) {
     url: { default: '' },
     file: { default: null },
     resource_type: { default: 'url' },
-    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
+    group_id: { default: props.type === 'group' ? props?.currentGroup?.id : null },
   });
 
   return (

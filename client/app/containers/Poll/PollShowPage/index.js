@@ -26,7 +26,6 @@ import { Button, Tab, Card, Box } from '@material-ui/core';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import PollResponses from 'components/Poll/PollResponses';
 import PollGraphs from 'components/Poll/PollGraphs';
-import dig from 'object-dig';
 
 import {
   selectIsFetchingResponses,
@@ -92,10 +91,10 @@ export function PollShowPage(props) {
 
   useEffect(() => {
     if (props.poll)
-      setTextFieldOptions(dig(poll, 'fields', fs => fs.filter(f => f.type === 'TextField')));
+      setTextFieldOptions(poll?.fields?.filter(f => f.type === 'TextField'));
 
     return () => null;
-  }, [dig(props, 'poll', 'id')]);
+  }, [props?.poll?.id]);
 
   const links = {
     pollsIndex: ROUTES.admin.include.polls.index.path(),

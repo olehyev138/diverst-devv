@@ -6,8 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import dig from 'object-dig';
 import { connect, FastField, Field, getIn } from 'formik';
 
 import Select from 'components/Shared/DiverstSelect';

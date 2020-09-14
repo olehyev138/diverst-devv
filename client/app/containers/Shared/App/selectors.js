@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import { initialState } from 'containers/Shared/App/reducer';
 
-import dig from 'object-dig';
-
 const selectGlobal = state => state.global || initialState;
 const selectRouter = state => state.router;
 
@@ -13,17 +11,17 @@ const selectLocation = () => createSelector(
 
 const selectEnterprise = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'enterprise')
+  globalState => globalState.data?.enterprise
 );
 
 const selectEnterprisePrivacyMessage = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data.enterprise, 'privacy_statement')
+  globalState => globalState.data.enterprise?.privacy_statement
 );
 
 const selectPermissions = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'permissions')
+  globalState => globalState.data?.permissions
 );
 
 const selectToken = () => createSelector(
@@ -33,7 +31,7 @@ const selectToken = () => createSelector(
 
 const selectUserPolicyGroup = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState.data, 'policy_group')
+  globalState => globalState.data?.policy_group
 );
 
 const selectUser = () => createSelector(
@@ -53,13 +51,13 @@ const selectFetchUserDataError = () => createSelector(
 
 const selectCustomText = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState, 'data', 'enterprise', 'custom_text')
+  globalState => globalState?.data?.enterprise?.custom_text
 );
 
 const selectMentoringInterests = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mInterests = dig(globalState, 'data', 'enterprise', 'mentoring_interests');
+    const mInterests = globalState?.data?.enterprise?.mentoring_interests;
     if (mInterests)
       return mInterests.map(i => ({ label: i.name, value: i.id }));
     return [];
@@ -69,7 +67,7 @@ const selectMentoringInterests = () => createSelector(
 const selectMentoringTypes = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mTypes = dig(globalState, 'data', 'enterprise', 'mentoring_types');
+    const mTypes = globalState?.data?.enterprise?.mentoring_types;
     if (mTypes)
       return mTypes.map(i => ({ label: i.name, value: i.id }));
     return [];

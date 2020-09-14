@@ -15,7 +15,6 @@
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -67,7 +66,7 @@ export function UpdateCreatePage(props) {
   const { intl } = props;
 
   useEffect(() => {
-    const updatableId = dig(props, 'currentEvent', 'id');
+    const updatableId = props?.currentEvent?.id;
     if (updatableId)
       props.getUpdatePrototypeBegin({ updatableId });
 
@@ -78,7 +77,7 @@ export function UpdateCreatePage(props) {
 
   const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
-    index: partialLink.index.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
+    index: partialLink.index.path(props?.currentGroup?.id, props?.currentEvent?.id),
   };
 
   return (
@@ -90,7 +89,7 @@ export function UpdateCreatePage(props) {
       buttonText={intl.formatMessage(messages.createupdate)}
       updateAction={payload => props.createUpdateBegin({
         ...payload,
-        updatableId: dig(props, 'currentEvent', 'id')
+        updatableId: props?.currentEvent?.id
       })}
       updateFieldDataBegin={props.updateFieldDataBegin}
 

@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
@@ -98,7 +97,7 @@ export function PasswordResetFormInner({ formikProps, buttonText, errors, ...pro
 }
 
 export function PasswordResetForm(props) {
-  const user = dig(props, 'user');
+  const user = props?.user;
 
   const initialValues = buildValues(user, {
     email: { default: '' },

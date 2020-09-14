@@ -7,7 +7,6 @@
 import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, ErrorMessage, FastField } from 'formik';
@@ -130,7 +129,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             <Box mb={2} />
           </React.Fragment>
         )}
-        { dig(enterprise, 'privacy_statement') && (
+        { enterprise?.privacy_statement && (
           <React.Fragment>
             <Card>
               <CardHeader
@@ -241,7 +240,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   margin='normal'
                   label={<DiverstFormattedMessage {...messages.time_zone} />}
                   value={values.time_zone}
-                  options={dig(props, 'user', 'timezones') || []}
+                  options={props?.user?.timezones || []}
                   onChange={value => setFieldValue('time_zone', value)}
                   onBlur={() => setFieldTouched('time_zone', true)}
                 />
@@ -251,7 +250,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             <Card>
               <CardContent>
                 <FieldInputForm
-                  fieldData={dig(props, 'user', 'field_data') || []}
+                  fieldData={props?.user?.field_data || []}
                   updateFieldDataBegin={props.updateFieldDataBegin}
                   isCommitting={props.isCommitting}
                   isFormLoading={props.isFormLoading}
@@ -350,7 +349,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
 }
 
 export function SignUpForm(props) {
-  const user = dig(props, 'user');
+  const user = props?.user;
 
   const initialValues = buildValues(user, {
     email: { default: '' },

@@ -16,7 +16,6 @@ import saga from 'containers/Group/saga';
 
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup, selectHasChanged, selectGroupIsFormLoading } from 'containers/Group/selectors';
-import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 
 import Scrollbar from 'components/Shared/Scrollbar';
@@ -47,13 +46,13 @@ const GroupLayout = (props) => {
   const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    if (groupId && dig(currentGroup, 'id') !== groupId)
+    if (groupId && currentGroup?.id !== groupId)
       rest.getGroupBegin({ id: groupId });
 
     return () => rest.groupFormUnmount();
   }, [groupId, rest.groupHasChanged]);
 
-  const permission = name => dig(currentGroup, 'permissions', name);
+  const permission = name => currentGroup?.permissions?.[name];
 
   return (
     <React.Fragment>

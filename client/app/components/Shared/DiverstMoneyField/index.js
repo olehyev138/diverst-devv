@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 import Select from 'react-select';
 
 import { Grid, FormHelperText, FormLabel, Input, InputAdornment, InputLabel } from '@material-ui/core';
@@ -28,7 +27,7 @@ export function DiverstMoneyField(props) {
           value={props.value}
           onChange={props.onChange}
           disabled={props.disabled}
-          numericProps={getCurrencyProps(props.intl, dig(props, 'currency', 'value'))}
+          numericProps={getCurrencyProps(props.intl, props?.currency?.value)}
           max={props.max}
         />
       </Grid>
