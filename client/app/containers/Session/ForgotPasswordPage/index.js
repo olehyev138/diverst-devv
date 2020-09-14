@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -24,7 +23,7 @@ export function ForgotPasswordPage(props) {
   useInjectReducer({ key: 'forgotPassword', reducer });
   useInjectSaga({ key: 'forgotPassword', saga });
 
-  const [email, setEmail] = useState(dig(props.location, 'state', 'email') || '');
+  const [email, setEmail] = useState(props.location?.state?.email || '');
 
   return (
     <ForgotPasswordForm

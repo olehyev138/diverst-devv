@@ -8,15 +8,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect, getIn } from 'formik';
-import dig from 'object-dig';
 
 import { TextField, Typography } from '@material-ui/core';
 
 const CustomDate = (props) => {
   const { classes } = props;
 
-  const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
+  const fieldDatum = props?.fieldDatum;
+  const fieldDatumIndex = props?.fieldDatumIndex;
 
   return (
     <div className={classes.cell}>

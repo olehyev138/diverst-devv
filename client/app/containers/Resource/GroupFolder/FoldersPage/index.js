@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
@@ -58,8 +57,8 @@ export function FoldersPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (scopes, resetParams = false) => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const groupId = props?.currentGroup?.id;
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);

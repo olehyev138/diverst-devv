@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import dig from 'object-dig';
 
 import messages from './messages';
 
@@ -155,7 +154,7 @@ export class HomePage extends React.PureComponent {
     const enterpriseImage = this.props.enterprise ? this.props.enterprise.banner_data && (
       <DiverstImg
         data={this.props.enterprise.banner_data}
-        contentType={dig(this.props.enterprise, 'banner_content_type')}
+        contentType={this.props.enterprise?.banner_content_type}
         alt=''
         maxWidth='100%'
         minWidth='100%'

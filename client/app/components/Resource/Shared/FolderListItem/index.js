@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Typography, Grid, Button, Card, CardContent, Link, Divider, CardActions, CardActionArea, CircularProgress
@@ -47,8 +46,8 @@ const styles = theme => ({
 
 export function FolderListItem(props) {
   const { classes } = props;
-  const item = dig(props, 'item');
-  const isResource = dig(props, 'isResource');
+  const item = props?.item;
+  const isResource = props?.isResource;
 
   let linkProps;
   if (isResource)
