@@ -7,7 +7,6 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import { useLastLocation } from 'react-router-last-location';
@@ -148,8 +147,8 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
               isMulti
               disabled={props.isCommitting}
-              queryScopes={[['except_id', dig(props, 'currentGroup', 'id')]]}
-              dialogQueryScopes={[['replace_with_children', dig(props, 'currentGroup', 'id')]]}
+              queryScopes={[['except_id', props?.currentGroup?.id]]}
+              dialogQueryScopes={[['replace_with_children', props?.currentGroup?.id]]}
               handleChange={handleChange}
               values={values}
               setFieldValue={setFieldValue}
@@ -225,7 +224,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
                   required
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
-                  minDate={values['start']}
+                  minDate={touched['start'] ? values['start'] : undefined}
                   minDateMessage={<DiverstFormattedMessage {...messages.inputs.enderror} />}
                   fullWidth
                   id='end'
@@ -270,7 +269,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
 }
 
 export function EventForm(props) {
-  const event = dig(props, 'event');
+  const event = props?.event;
 
   const initialValues = buildValues(event, {
     id: { default: '' },

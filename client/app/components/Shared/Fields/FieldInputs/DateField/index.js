@@ -10,7 +10,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect, FastField, Field, getIn } from 'formik';
-import dig from 'object-dig';
 
 import { KeyboardDatePicker } from '@material-ui/pickers';
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -28,7 +27,7 @@ export function GroupPage(props) {
   const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    if (dig(props.currentGroup, 'id') !== groupId)
+    if (props.currentGroup?.id !== groupId)
       props.getGroupBegin({ id: groupId });
 
     return () => props.groupFormUnmount();

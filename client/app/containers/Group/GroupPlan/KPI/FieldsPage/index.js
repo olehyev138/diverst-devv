@@ -15,7 +15,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -55,7 +54,7 @@ export function FieldListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'fields.id',
-      fieldDefinerId: dig(props, 'currentGroup', 'id')
+      fieldDefinerId: props?.currentGroup?.id
     }
   );
 
@@ -91,7 +90,7 @@ export function FieldListPage(props) {
         isLoading={props.isLoading}
         createFieldBegin={payload => props.createFieldBegin({
           ...payload,
-          fieldDefinerId: dig(props, 'currentGroup', 'id'),
+          fieldDefinerId: props?.currentGroup?.id,
         })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}

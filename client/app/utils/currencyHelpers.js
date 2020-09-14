@@ -45,13 +45,13 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
   function thousandsPicker() {
     // 1,23,456
     if (prototype.match(/1([^0-9]*)2/)[1].length > 0)
-      return ['lakh', dig(prototype.match(/1([^0-9]+)2/), 1)];
+      return ['lakh', prototype.match(/1([^0-9]+)2/)?.[1]];
     // 12,3456
     if (prototype.match(/2([^0-9]*)3/)[1].length > 0)
-      return ['wan', dig(prototype.match(/2([^0-9]+)3/), 1)];
+      return ['wan', prototype.match(/2([^0-9]+)3/)?.[1]];
     // 123,456
     if (prototype.match(/123/) != null)
-      return ['thousand', dig(prototype.match(/3([^0-9]+)4/), 1)];
+      return ['thousand', prototype.match(/3([^0-9]+)4/)?.[1]];
     return ['thousand', ','];
   }
 

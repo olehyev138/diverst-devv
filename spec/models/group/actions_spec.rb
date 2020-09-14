@@ -9,6 +9,7 @@ RSpec.describe Group::Actions, type: :model do
     let(:valid_scopes) {
       %w(
           all_children
+          possible_children
           all_parents
           no_children
           is_private

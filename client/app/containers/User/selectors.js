@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect/lib';
 
 import produce from 'immer';
-import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 
@@ -147,7 +146,7 @@ const selectDownloadData = () => createSelector(
 const selectFieldData = () => createSelector(
   selectUsersDomain,
   (usersState) => {
-    const fieldData = dig(usersState, 'currentUser', 'field_data');
+    const fieldData = usersState?.currentUser?.field_data;
     if (!fieldData) return fieldData;
 
     return deserializeFields(fieldData);

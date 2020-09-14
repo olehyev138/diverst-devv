@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -47,7 +46,7 @@ export function FoldersPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (scopes, resetParams = false) => {
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);
