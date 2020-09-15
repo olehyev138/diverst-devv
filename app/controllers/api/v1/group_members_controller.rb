@@ -21,8 +21,8 @@ class Api::V1::GroupMembersController < DiverstController
 
       # if we made it here - were good, serialize group and return status 204
       track_activity(group)
-      render status: 204, json: {}
     end
+    render status: 204, json: {}
   end
 
   def remove_members
