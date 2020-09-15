@@ -18,7 +18,7 @@ import {
 import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { Toggles } from 'components/Shared/Fields/FieldForms/Toggles';
-import {buildValues} from "utils/formHelpers";
+import { buildValues } from 'utils/formHelpers';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'DateField';
