@@ -43,7 +43,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    index? || is_an_accepted_member?
+    (!private? && index?) || is_an_accepted_member?
   end
 
   def initiatives?
@@ -254,6 +254,8 @@ class GroupPolicy < ApplicationPolicy
   def is_a_leader?
     @group_leader.present?
   end
+
+  delegate :private?, to: :record
 
   def update?
     return true if manage?
