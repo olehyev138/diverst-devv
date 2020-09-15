@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -89,7 +88,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
 }
 
 export function CustomGraphForm(props) {
-  const customGraph = dig(props, 'customGraph');
+  const customGraph = props?.customGraph;
   const initialValues = buildValues(customGraph, {
     id: { default: '' },
     field: { default: '', customKey: 'field_id' },

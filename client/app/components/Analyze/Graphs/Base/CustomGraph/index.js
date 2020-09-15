@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import produce from 'immer';
-import dig from 'object-dig';
 
 import {
   Grid, Paper, withStyles, Box,
@@ -112,7 +111,7 @@ export function CustomGraph(props) {
           <VerticalGridLines />
           { props.data && props.data.map((series, index) => {
             // TODO: hide/show series with legend like line graph
-            if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
+            if (legendData[series.key]?.hidden) return (<React.Fragment key={series.key} />);
 
             return (
               <HorizontalBarSeries

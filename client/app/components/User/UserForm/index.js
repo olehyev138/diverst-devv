@@ -7,7 +7,6 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -132,7 +131,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               margin='normal'
               label={<DiverstFormattedMessage {...messages.time_zone} />}
               value={values.time_zone}
-              options={dig(props, 'user', 'timezones') || []}
+              options={props?.user?.timezones || []}
               onChange={value => setFieldValue('time_zone', value)}
               onBlur={() => setFieldTouched('time_zone', true)}
             />
@@ -220,8 +219,8 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
 }
 
 export function UserForm(props) {
-  const user = dig(props, 'user');
-  const defaultRole = (dig(user, 'available_roles') || []).find(item => item.default);
+  const user = props?.user;
+  const defaultRole = (user?.available_roles || []).find(item => item.default);
 
   const initialValues = buildValues(user, {
     first_name: { default: '' },

@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -269,7 +268,7 @@ export function PolicyFormInner({
 }
 
 export function PolicyForm(props) {
-  const policy = dig(props, 'policy');
+  const policy = props?.policy;
 
   const initialValues = buildValues(policy, {
     id: { default: '' },

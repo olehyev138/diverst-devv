@@ -2,7 +2,6 @@ import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -35,10 +34,10 @@ export function Logo(props) {
 
   let isDefault = true;
   let logo = props.coloredDefault ? defaultLogoPrimary : defaultLogo;
-  let logoRedirectUrl = (dig(props.enterprise, 'theme', 'logo_redirect_url') || currentURLWithoutPath).toLowerCase(); // Defaults to current URL without path
-  const logoContentType = dig(props.enterprise, 'theme', 'logo_content_type');
+  let logoRedirectUrl = (props.enterprise?.theme?.logo_redirect_url || currentURLWithoutPath).toLowerCase(); // Defaults to current URL without path
+  const logoContentType = props.enterprise?.theme?.logo_content_type;
 
-  const logoData = dig(props.enterprise, 'theme', 'logo_data');
+  const logoData = props.enterprise?.theme?.logo_data;
 
   if (logoData) {
     logo = logoData;
