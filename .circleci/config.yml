@@ -49,6 +49,9 @@ jobs:
             - v1-gem-cache-{{ arch }}-{{ .Branch }}-
             - v1-gem-cache-{{ arch }}-
       - run:
+          name: 'Run Danger'
+          command: npx danger ci
+      - run:
           name: Install gems
           command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
       - save_cache:
