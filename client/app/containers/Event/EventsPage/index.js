@@ -146,6 +146,7 @@ export function EventsPage(props) {
         onlyUpcoming={props.onlyUpcoming}
         calendarDateCallback={handleCalendarPage}
         currentGroupID={props.currentGroup.id}
+        params={params}
       />
     </React.Fragment>
   );

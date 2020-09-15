@@ -191,6 +191,7 @@ export function EventsPage(props) {
       loaderProps={props.loaderProps}
       readonly
       calendarDateCallback={handleCalendarPage}
+      params={params}
     />
   );
 }
