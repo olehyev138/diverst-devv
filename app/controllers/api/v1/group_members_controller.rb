@@ -28,9 +28,9 @@ class Api::V1::GroupMembersController < DiverstController
   end
 
   def remove_members
-    UserGroup.transaction do
-      group = Group.find(payload[:group_id])
+    group = Group.find(payload[:group_id])
 
+    UserGroup.transaction do
       payload[:member_ids].each do |user_id|
         user_group = UserGroup.find_by(user_id: user_id)
         base_authorize(user_group)
