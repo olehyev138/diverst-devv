@@ -134,7 +134,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             component={DiverstRichTextInput}
             required
             onChange={value => setFieldValue('description', value)}
-            fullWidth
             id='description'
             name='description'
             margin='normal'
@@ -303,6 +302,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     variant='outlined'
                     name='expiry_age_for_news'
                     type='number'
+                    InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
                     label={intl.formatMessage(messages.settings.expiry_news)}
                     value={values.expiry_age_for_news}
@@ -315,6 +315,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     variant='outlined'
                     name='expiry_age_for_events'
                     type='number'
+                    InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
                     label={intl.formatMessage(messages.settings.expiry_events)}
                     value={values.expiry_age_for_events}
@@ -327,6 +328,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     variant='outlined'
                     name='expiry_age_for_resources'
                     type='number'
+                    InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
                     label={intl.formatMessage(messages.settings.expiry_resources)}
                     value={values.expiry_age_for_resources}
