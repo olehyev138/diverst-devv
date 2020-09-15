@@ -1,4 +1,6 @@
 class GroupLeader < ApplicationRecord
+  include GroupLeader::Actions
+
   belongs_to :group
   belongs_to :user
   belongs_to :user_role
