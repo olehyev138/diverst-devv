@@ -73,7 +73,7 @@ export function TextFieldForm(props) {
     private: { default: false },
     required: { default: false },
     add_to_member_list: { default: false },
-    type: FIELD_TYPE,
+    type: { default: FIELD_TYPE },
   });
 
   return (

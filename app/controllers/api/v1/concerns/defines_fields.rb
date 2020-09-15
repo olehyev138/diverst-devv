@@ -33,6 +33,7 @@ module Api::V1::Concerns::DefinesFields
             :title,
             :options_text,
             :min,
+            :max,
             :show_on_vcard,
             :alternative_layout,
             :private,
