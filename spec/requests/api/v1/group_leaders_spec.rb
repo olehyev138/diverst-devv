@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 model = 'GroupLeader'
-abc = 'GroupLeader'
 RSpec.describe 'GroupLeaders', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
