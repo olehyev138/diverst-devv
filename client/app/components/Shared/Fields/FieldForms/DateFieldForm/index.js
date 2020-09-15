@@ -70,6 +70,7 @@ export function DareFieldForm(props) {
     id: { default: '' },
     show_on_vcard: { default: true },
     alternative_layout: { default: false },
+    private: { default: false },
     required: { default: false },
     add_to_member_list: { default: false },
     type: { default: FIELD_TYPE },
