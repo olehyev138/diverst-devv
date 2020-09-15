@@ -21,9 +21,11 @@ const NameToPathMap = Object.freeze({
   rewards_manage: null,
   logs_view: ROUTES.admin.system.logs.index,
   edit_posts: null,
+  enterprise_manage: ROUTES.admin.system.globalSettings.enterpriseConfiguration.index,
 });
 
 const GlobalSettingsPaths = Object.freeze([
+  'enterprise_manage',
   'users_manage',
   'sso_authentication',
   'policy_templates_manage',
