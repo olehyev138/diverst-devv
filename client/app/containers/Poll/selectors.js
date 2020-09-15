@@ -2,7 +2,6 @@ import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 import produce from 'immer';
 import { mapSelectField } from 'utils/selectorHelpers';
-import dig from 'object-dig';
 
 const selectPollDomain = state => state.polls || initialState;
 
@@ -20,7 +19,7 @@ const selectPoll = () => createSelector(
   selectPollDomain,
   pollState => produce(pollState.currentPoll, (draft) => {
     if (pollState.currentPoll)
-      draft.fields = dig(pollState, 'currentPoll', 'fields', val => val.map(field => mapSelectField(field, 'title', 'type')));
+      draft.fields = pollState?.currentPoll?.fields?.map(field => mapSelectField(field, 'title', 'type'));
   })
 );
 
@@ -28,8 +27,8 @@ const selectFormPoll = () => createSelector(
   selectPollDomain,
   pollState => produce(pollState.currentPoll, (draft) => {
     if (pollState.currentPoll) {
-      draft.groups = dig(pollState, 'currentPoll', 'groups', val => val.map(group => mapSelectField(group)));
-      draft.segments = dig(pollState, 'currentPoll', 'segments', val => val.map(segment => mapSelectField(segment)));
+      draft.groups = pollState?.currentPoll?.groups?.map(group => mapSelectField(group));
+      draft.segments = pollState?.currentPoll?.segments?.map(segment => mapSelectField(segment));
     }
   })
 );

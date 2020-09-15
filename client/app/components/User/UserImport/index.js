@@ -16,7 +16,6 @@ import {
   Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem, Paper, CardHeader, TextField, Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import dig from 'object-dig';
 
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';

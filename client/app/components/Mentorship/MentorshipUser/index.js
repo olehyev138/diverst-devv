@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Paper, Typography, Grid, Button, Divider, CardContent, Card, Box, List, ListItem,
@@ -52,8 +51,8 @@ function timeToSimpleString(time) {
 
 export function Profile(props) {
   const { classes } = props;
-  const user = dig(props, 'user');
-  const fieldData = dig(props, 'fieldData');
+  const user = props?.user;
+  const fieldData = props?.fieldData;
 
   return (
     <React.Fragment>
