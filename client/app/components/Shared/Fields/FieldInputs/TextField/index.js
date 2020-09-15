@@ -7,16 +7,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect, FastField, getIn } from 'formik';
+import { connect, FastField, Field, getIn } from 'formik';
 
 import { TextField } from '@material-ui/core';
 
 const CustomTextField = (props) => {
-  const { inputType, fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
+  const { inputType, fieldDatum, fieldDatumIndex, formik, fieldType, ...rest } = props;
+  const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
+
+  const UsedField = ((type) => {
+    switch (type) {
+      case 'FastField':
+        return FastField;
+      case 'Field':
+        return Field;
+      default:
+        // eslint-disable-next-line no-console
+        console.error('Invalid Field Type');
+        return Field;
+    }
+  })(fieldType);
 
   return (
-    <FastField
+    <UsedField
       component={TextField}
       required={fieldDatum.field.required}
       name={dataLocation}
@@ -36,7 +49,13 @@ CustomTextField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
   inputType: PropTypes.string,
+  dataLocation: PropTypes.string,
+  fieldType: PropTypes.oneOf(['FastField', 'Field']),
   formik: PropTypes.object
+};
+
+CustomTextField.defaultProps = {
+  fieldType: 'FastField'
 };
 
 export default connect(CustomTextField);
