@@ -1,6 +1,8 @@
 class Api::V1::GroupMembersController < DiverstController
+  before_action :set_policy
+
   def add_members
-    # authorize [@group], :create?, policy_class: GroupMemberPolicy - TODO
+    base_authorize(UserGroup)
 
     group = Group.find(payload[:group_id])
 
@@ -26,21 +28,22 @@ class Api::V1::GroupMembersController < DiverstController
   end
 
   def remove_members
-    # authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy - TODO
-    group = Group.find(payload[:group_id])
+    UserGroup.transaction do
+      group = Group.find(payload[:group_id])
 
-    payload[:member_ids].each do |user_id|
-      user_group = UserGroup.find_by(user_id: user_id)
+      payload[:member_ids].each do |user_id|
+        user_group = UserGroup.find_by(user_id: user_id)
+        base_authorize(user_group)
 
-      if user_group && user_group.group.enterprise == diverst_request.user.enterprise
-        begin
-          group.user_groups.find_by(user_id: user_id).destroy
-        rescue => e
-          raise BadRequestException.new(e.message)
+        if user_group && user_group.group.enterprise == diverst_request.user.enterprise
+          begin
+            group.user_groups.find_by(user_id: user_id).destroy
+          rescue => e
+            raise BadRequestException.new(e.message)
+          end
+        else
+          raise BadRequestException.new('Membership doesnt exist')
         end
-      else
-        # TODO: done properly?
-        raise BadRequestException.new('Membership doesnt exist')
       end
     end
 
@@ -57,6 +60,10 @@ class Api::V1::GroupMembersController < DiverstController
     when :remove_members then 'remove_member_from_group'
     else nil
     end
+  end
+
+  def set_policy
+    @policy = GroupMemberPolicy
   end
 
   def payload
