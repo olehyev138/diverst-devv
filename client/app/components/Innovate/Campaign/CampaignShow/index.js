@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
 } from '@material-ui/core';
@@ -26,9 +25,9 @@ export function CampaignShow(props) {
 
   return (
     <React.Fragment>
-      <p>{ dig(props.campaign, 'title') }</p>
+      <p>{ props.campaign?.title }</p>
 
-      <p>{ dig(props.campaign, 'description') }</p>
+      <p>{ props.campaign?.description }</p>
     </React.Fragment>
   );
 }

@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Paper, Typography, Grid, Button
@@ -48,7 +47,7 @@ const styles = theme => ({
 
 export function MetricsDashboard(props) {
   const { classes } = props;
-  const metricsDashboard = dig(props, 'metricsDashboard');
+  const metricsDashboard = props?.metricsDashboard;
 
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !metricsDashboard}>

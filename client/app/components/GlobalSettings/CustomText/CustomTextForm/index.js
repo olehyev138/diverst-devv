@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -186,7 +185,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
 }
 
 export function CustomTextForm(props) {
-  const customText = dig(props, 'customText');
+  const customText = props?.customText;
 
   const initialValues = buildValues(customText, {
     id: { default: '' },

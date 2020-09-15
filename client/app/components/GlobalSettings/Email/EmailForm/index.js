@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -57,9 +56,9 @@ export function EmailFormInner({
   ...props
 }) {
   const regex = /%{(.*?)}/g;
-  const variables = dig(props, 'email', 'variables') || {};
+  const variables = props?.email?.variables || {};
   const replace = (whole, grouped) => {
-    const example = dig(variables, grouped, 'example');
+    const example = variables?.[grouped]?.example;
     return example || whole;
   };
 
@@ -162,7 +161,7 @@ export function EmailFormInner({
 }
 
 export function EmailForm(props) {
-  const email = dig(props, 'email');
+  const email = props?.email;
 
   const initialValues = buildValues(email, {
     id: { default: '' },

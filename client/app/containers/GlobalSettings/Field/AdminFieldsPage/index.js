@@ -15,7 +15,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -57,7 +56,7 @@ export function AdminFieldsPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'position',
-      fieldDefinerId: dig(props, 'currentEnterprise', 'id')
+      fieldDefinerId: props?.currentEnterprise?.id
     }
   );
 
@@ -99,7 +98,7 @@ export function AdminFieldsPage(props) {
         isLoading={props.isLoading}
         createFieldBegin={payload => props.createFieldBegin({
           ...payload,
-          fieldDefinerId: dig(props, 'currentEnterprise', 'id')
+          fieldDefinerId: props?.currentEnterprise?.id
         })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
@@ -107,14 +106,12 @@ export function AdminFieldsPage(props) {
         isCommitting={props.isCommitting}
         commitSuccess={props.commitSuccess}
         currentEnterprise={props.currentEnterprise}
-
         toggles={{
           visible: true,
           editable: true,
           memberList: true,
           required: true,
         }}
-
         positions={positions}
         defaultParams={params}
         updateFieldPositionBegin={props.updateFieldPositionBegin}
