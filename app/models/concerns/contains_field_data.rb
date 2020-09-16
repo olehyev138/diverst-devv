@@ -48,36 +48,52 @@ module ContainsFieldData
     @info.extend(FieldDataDeprecated)
   end
 
+  # Returns the value of the attribute of the object
+  # If the key is the name of a field, or a field object, returns the
+  # deserialized version of the corresponding field data
+  #
+  # @example
+  #    User.first[:gender] => 'Male'
+  #    User.first[Field.find_by(title: 'gender')] => 'Male'
   def [](key)
     case key
-    when Symbol, String then super(key)
+    when Symbol, String
+      if has_attribute? key
+        super
+      elsif (field = field_of_key(key))
+        field_data_reader(field)
+      end
     when Field
       raise FieldNotFound unless fields.load.ids.include? key.id
 
-      fd = get_field_data(key) || (new_record? ? field_data.new(data: nil, field_id: key.id) : field_data.create(data: nil, field_id: key.id))
-      fd.deserialized_data
+      field_data_reader(key)
     else raise ArgumentError
     end
   rescue
     nil
   end
 
+  # Set the value of the attribute of the object
+  # If the key is the name of a field, or a field object, set the
+  # serialized version of the corresponding field data
+  #
+  # @example
+  #    User.first[:gender] = 'Male'
+  #    User.first[Field.find_by(title: 'Gender')] = 'Male'
+  #   Is equivalent to
+  #    FieldData.find_by(user: User.first, field: Field.find_by(title: 'Gender')).update(data: 'Male')
   def []=(key, value)
     case key
-    when Symbol, String then super(key, value)
+    when Symbol, String
+      if has_attribute? key
+        super
+      elsif (field = field_of_key(key))
+        field_data_writer(field, value)
+      end
     when Field
       raise FieldNotFound unless fields.ids.include? key.id
 
-      serialized_value = key.serialize_value(value)
-
-      if new_record?
-        field_data.new(data: serialized_value, field_id: key.id)
-      else
-        fd = get_field_data(key)
-        fd.present? ?
-            fd.update(data: serialized_value) :
-            field_data.create(field_id: key.id, data: serialized_value)
-      end
+      field_data_writer(key, value)
     else raise ArgumentError
     end
   end
@@ -137,7 +153,7 @@ module ContainsFieldData
     field_data.includes(:field).find_each do |fd|
       # Define a getter, that gets the field_data, called that field's title, on self's singleton
       singleton_class.send(:define_method, self.class.field_to_method_name(fd.field)) do
-        fd.deserialized_data
+        fd.value
       end
 
       # Define a setter, that sets the field_data, called that field's title =, on self's singleton
@@ -245,12 +261,33 @@ module ContainsFieldData
     end
   end
 
-  def get_field_data_value(field)
-    get_field_data(field).deserialized_data
+  private
+
+  # Returns the field based on a key
+  # Based on Field's title, case_insensitive ignoring non-character
+  def field_of_key(key)
+    down_cased = key.to_s.downcase.gsub(/[^\w]/, '')
+    fields.load.find { |field| field.title.downcase.gsub(/[^\w]/, '').include? down_cased }
   end
 
-  def set_field_data_value(field, data)
-    get_field_data(field).update(data: field.serialize_value(data))
+  # Gets the field_data for a given field
+  # If the field data record doesn't exists, it creates the appropriate field data
+  def field_data_reader(field)
+    fd = get_field_data(field) || (new_record? ? field_data.new(data: nil, field_id: field.id) : field_data.create(data: nil, field_id: field.id))
+    fd.value
+  end
+
+  # Updates the field_data for a given field
+  # If the field data record doesn't exists, it creates the appropriate field data
+  def field_data_writer(field, value)
+    if new_record?
+      field_data.new(data: value, field_id: field.id)
+    else
+      fd = get_field_data(field)
+      fd.present? ?
+          fd.update(data: value) :
+          field_data.create(field_id: field.id, data: value)
+    end
   end
 
   # Class Methods for FieldData Models
@@ -276,7 +313,7 @@ module ContainsFieldData
         u.field_data.each do |fd|
           # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
           u.singleton_class.send(:define_method, field_to_method_name(fd.field)) do
-            fd.deserialized_data
+            fd.value
           end
 
           # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
