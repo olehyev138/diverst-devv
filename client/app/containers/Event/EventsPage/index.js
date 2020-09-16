@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useParams } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -53,7 +52,7 @@ export function EventsPage(props) {
   const [calendar, setCalendar] = useState(null);
 
   const getEvents = (scopes = null, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
+    const id = props?.currentGroup?.id;
 
     if (resetParams)
       setParams(defaultParams);

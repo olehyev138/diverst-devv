@@ -11,7 +11,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
 import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
@@ -20,10 +19,10 @@ import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField'
 import CustomCheckboxField from 'components/Shared/Fields/FieldInputs/CheckboxField';
 
 const CustomField = (props) => {
-  const fieldData = dig(props, 'fieldDatum');
+  const fieldData = props?.fieldDatum;
 
   const renderField = (fieldData) => {
-    switch (dig(fieldData, 'field', 'type')) {
+    switch (fieldData?.field?.type) {
       case 'TextField':
         return (<CustomTextField {...props} inputType='' />);
       case 'NumericField':
@@ -44,7 +43,9 @@ const CustomField = (props) => {
 
 CustomField.propTypes = {
   fieldDatum: PropTypes.object,
-  fieldDatumIndex: PropTypes.number
+  fieldDatumIndex: PropTypes.number,
+  fieldType: PropTypes.oneOf(['FastField', 'Field']),
+  dataLocation: PropTypes.string,
 };
 
 export default CustomField;

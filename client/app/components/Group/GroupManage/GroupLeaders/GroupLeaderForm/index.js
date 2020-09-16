@@ -71,6 +71,20 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
             />
           </CardContent>
           <Divider />
+          <CardContent>
+            <TextField
+              fullWidth
+              id='position_name'
+              name='position_name'
+              label={<DiverstFormattedMessage {...messages.leader.position} />}
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.position_name}
+              onChange={handleChange}
+              onBlur={() => setFieldTouched('position_name', true)}
+            />
+          </CardContent>
+          <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}

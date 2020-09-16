@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router-dom';
-
 import { withStyles } from '@material-ui/core/styles';
 import { Breadcrumbs, Link, Paper, Typography } from '@material-ui/core';
 import BreadcrumbSeparatorIcon from '@material-ui/icons/NavigateNext';
@@ -63,7 +62,7 @@ export function DiverstBreadcrumbs(props) {
                 className={classes.breadcrumbCurrentPageText}
                 key={to}
               >
-                {title}
+                {!props.isLoading && (props.title || title)}
               </Typography>
             ) : (
               <Link
@@ -83,6 +82,8 @@ export function DiverstBreadcrumbs(props) {
 
 DiverstBreadcrumbs.propTypes = {
   classes: PropTypes.object,
+  isLoading: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 export default compose(

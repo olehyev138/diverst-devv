@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -72,7 +71,7 @@ export function SessionPage(props) {
   }, [props.hasChanged]);
 
   function getParticipants(newParams = params) {
-    if (dig(props, 'session', 'id')) {
+    if (props?.session?.id) {
       const sessionId = props.session.id;
       props.getParticipatingUsersBegin({ ...newParams, sessionId });
     }

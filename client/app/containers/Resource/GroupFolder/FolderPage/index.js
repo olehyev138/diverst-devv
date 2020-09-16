@@ -33,7 +33,6 @@ import Folder from 'components/Resource/Folder/Folder';
 
 import { Field, Form, Formik } from 'formik';
 import { Button, Card, CardContent, TextField } from '@material-ui/core';
-import dig from 'object-dig';
 import {
   getParentPage,
   getFolderNewPath,
@@ -44,6 +43,7 @@ import {
 } from 'utils/resourceHelpers';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
+import DiverstNestedBreadcrumbs from '../../../../components/Shared/DiverstNestedBreadcrumbs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
@@ -83,8 +83,8 @@ export function FolderPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (parentId, scopes, resetParams = false) => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const groupId = props?.currentGroup?.id;
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);
@@ -108,8 +108,8 @@ export function FolderPage(props) {
   };
 
   const getResources = (folderId, scopes = null, resetParams = false) => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+    const groupId = props?.currentGroup?.id;
+    const enterpriseId = props?.currentEnterprise?.id;
 
     if (resetParams)
       setParams(defaultParams);
@@ -165,6 +165,16 @@ export function FolderPage(props) {
     setParams(newParams);
   };
 
+  // Return all parents of the current folder
+  const parents = [];
+  function getAllParents(currentFolder) {
+    if (currentFolder == null)
+      return;
+    getAllParents(currentFolder.parent);
+    parents.push({ title: currentFolder.name, id: currentFolder.id, type: 'folders' });
+  }
+  getAllParents(props.currentFolder);
+
   return (
     <div>
       { valid === false && (
@@ -211,7 +221,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstBreadcrumbs />
+          <DiverstNestedBreadcrumbs nestedNavigation={parents} isLoading={props.isLoading} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}

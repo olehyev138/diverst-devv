@@ -1,11 +1,21 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from 'containers/Shared/Field/reducer';
+import { produce } from 'immer';
+import { deserializeOptionsText } from 'utils/customFieldHelpers';
+import { objectMap } from 'utils/objectHelpers';
 
 const selectFieldsDomain = state => state.fields || initialState;
 
 const selectPaginatedFields = () => createSelector(
   selectFieldsDomain,
   fieldsState => fieldsState.fieldList
+);
+
+const selectPaginatedOptionsSelectFields = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => objectMap(fieldsState.fieldList, field => produce(field, (draft) => {
+    draft.options = deserializeOptionsText(field);
+  }))
 );
 
 /* Select field list & format it for a select
@@ -71,5 +81,5 @@ const selectHasChanged = () => createSelector(
 export {
   selectFieldsDomain, selectPaginatedFields, selectPaginatedSelectFields,
   selectFieldTotal, selectField, selectFormField, selectIsLoading, selectIsCommitting,
-  selectCommitSuccess, selectHasChanged
+  selectCommitSuccess, selectHasChanged, selectPaginatedOptionsSelectFields
 };
