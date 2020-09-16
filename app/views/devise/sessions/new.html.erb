@@ -1,4 +1,4 @@
-<h2><%= t('login.title') %></h2>
+<h2><%= t('login.title') %> Manually</h2>
 <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 <%= f.input :email, label: t('login.email'), autofocus: true %>
 <%= f.input :password, label: t('login.password'), autocomplete: "off" %>
@@ -9,32 +9,25 @@
 
 <%= f.button :submit, value: t('login.title') %>
 <% end %>
+<br>
+<%= render "devise/shared/links" %>
+<%= render 'activate_account' %> 
 
 <% content_for :links do %>
 <div class="text-center">
-  <%= render "devise/shared/links" %>
-  <br>
   <% if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] %>
     <% if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])&.has_enabled_saml? %>
-      <%= link_to 'Login with SSO', 
+      <hr>
+      OR
+      <hr>
+      <br>
+      <%= link_to "Login with #{@sso_button_text}", 
         sso_enterprise_saml_index_path(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']),
         class: 'btn btn--tertiary tooltipster',
         style: 'margin-top: 5px;', title: @sso_button_text %>
     <% end %>
   <% end %>
   
-  <% if ENV["ALTERNATIVE_ACCOUNT_ACTIVATION"] %>
-  <%= link_to 'Activate Account', 
-          alternative_activation_new_path, 
-          class: 'btn btn--tertiary',
-          style: 'margin-top: 5px;' %>
-
-  <% else %>
-  <%= link_to "Activate account",
-        new_password_path(resource_name, setup: '1'),
-          class: "btn btn--tertiary",
-          style: 'margin-top: 5px;' %>
-  <% end %>
 </div>
 <% end %>
 
