@@ -10,4 +10,8 @@ class GroupLeaderPolicy < GroupBasePolicy
   def base_manage_permission
     'group_leader_manage'
   end
+
+  def create?
+    super && has_permission('groups_members_index')
+  end
 end
