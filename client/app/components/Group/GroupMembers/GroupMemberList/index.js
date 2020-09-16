@@ -139,7 +139,7 @@ export function GroupMemberList(props) {
           /* eslint-disable-next-line no-alert, no-restricted-globals */
           if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
             props.deleteMemberBegin({
-              userId: rowData.id,
+              userId: rowData.user.id,
               groupId: props.groupId
             });
         }

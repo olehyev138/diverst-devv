@@ -28,4 +28,7 @@ class GroupMemberPolicy < GroupBasePolicy
 
     super
   end
+
+  alias_method :add_members?, :create?
+  alias_method :remove_members?, :destroy?
 end
