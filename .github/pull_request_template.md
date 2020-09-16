@@ -2,7 +2,7 @@
 
 ---
 ### Requirements Checklist
-> **Note:** Requirements are intended to be assertions, meaning that if you didn't directly change what the requirement said, checking it conveys that you verified that it wasn't necessary to make the respective changes, with the exception of items in *italics* which should only be checked if actual changes were made (this helps us be aware of potentially destructive changes)
+> **Note:** Requirements are intended to be assertions, meaning that if you didn't directly change what the requirement said, checking it conveys that you verified that it wasn't necessary to make the respective changes.
 
 ### General
 - [ ] Completed the specified task as described using proper code patterns & practices
@@ -25,4 +25,4 @@
 - [ ] Verified that there are no server or Sidekiq errors
 - [ ] Methods/actions catch, throw, and return exceptions properly & with respect to API responses
 - [ ] Ensured that policies, serializers, permitted params, model validations, and controller actions enforce intended authorization
-- [ ] *Updated seeds, factories, and included a proper migration (with the schema changes) when a model is changed accordingly*
+- [ ] Updated seeds, factories, and included a proper migration (with the schema changes) when a model is changed accordingly
