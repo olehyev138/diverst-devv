@@ -121,9 +121,9 @@ function annualBudgetReducer(state = initialState, action) {
         break;
 
       case GET_EVENTS_ERROR:
-        if (action.payload.annualBudgetId)
+        if (action.error.annualBudgetId)
           draft.isFetchingAnnualBudgetInitiatives = produce(draft.isFetchingAnnualBudgetInitiatives, (draft2) => {
-            draft2[action.payload.annualBudgetId] = false;
+            draft2[action.error.annualBudgetId] = false;
           });
         break;
 

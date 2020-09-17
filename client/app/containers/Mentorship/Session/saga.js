@@ -124,7 +124,7 @@ export function* deleteSession(action) {
 
     yield call(api.mentoringSessions.destroy.bind(api.mentoringSessions), action.payload.id);
 
-    yield put(deleteSessionSuccess({}));
+    yield put(deleteSessionSuccess());
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSessionError(err));
@@ -136,7 +136,7 @@ export function* acceptInvitation(action) {
   try {
     const response = yield call(api.mentorshipSessions.acceptInvite.bind(api.mentorshipSessions), action.payload);
 
-    yield put(acceptInvitationSuccess({}));
+    yield put(acceptInvitationSuccess());
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.accept), options: { variant: 'success' } }));
   } catch (err) {
     yield put(acceptInvitationError(err));
@@ -148,7 +148,7 @@ export function* declineInvitation(action) {
   try {
     const response = yield call(api.mentorshipSessions.declineInvite.bind(api.mentorshipSessions), action.payload);
 
-    yield put(declineInvitationSuccess({}));
+    yield put(declineInvitationSuccess());
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.decline), options: { variant: 'success' } }));
   } catch (err) {
     yield put(declineInvitationError(err));
