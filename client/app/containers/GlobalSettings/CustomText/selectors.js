@@ -9,4 +9,4 @@ const selectIsCommitting = () => createSelector(
   customTextState => customTextState.isCommitting
 );
 
-export { selectIsCommitting };
+export { selectIsCommitting, selectCustomTextDomain };

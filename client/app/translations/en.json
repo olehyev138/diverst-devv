@@ -1534,10 +1534,10 @@
   "diverst.snackbars.Shared.Field.success.delete.field": "Successfully deleted field",
   "diverst.snackbars.Shared.Sponsors.errors.load.sponsor": "Failed to load sponsor",
   "diverst.snackbars.Shared.Sponsors.errors.load.sponsors": "Failed to load sponsors",
-  "diverst.snackbars.Shared.Sponsors.errors.update": "Failed to update sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.update": "Successfully updated sponsor",
-  "diverst.snackbars.Shared.Sponsors.errors.delete": "Failed to delete sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.delete": "Successfully deleted sponsor",
-  "diverst.snackbars.Shared.Sponsors.errors.create": "Failed to create sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.create": "Successfully created sponsor"
+  "diverst.snackbars.Shared.Sponsors.errors.update.sponsor": "Failed to update sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.update.sponsor": "Successfully updated sponsor",
+  "diverst.snackbars.Shared.Sponsors.errors.delete.sponsor": "Failed to delete sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.delete.sponsor": "Successfully deleted sponsor",
+  "diverst.snackbars.Shared.Sponsors.errors.create.sponsor": "Failed to create sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.create.sponsor": "Successfully created sponsor"
 }
