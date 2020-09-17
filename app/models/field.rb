@@ -63,11 +63,11 @@ class Field < ApplicationRecord
     when OPERATORS[:not_equals_any_of]
       v2.is_a?(Array) && (v2.exclude? v1)
     when OPERATORS[:contains_any_of]
-      v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).length > 0
+      v1.is_a?(Array) && v2.is_a?(Array) && !(v1 & v2).empty?
     when operators[:contains_all_of]
-      v1 == v2
+      (v1 - v2).empty?
     when operators[:does_not_contain]
-      v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).length <= 0
+      v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).empty?
     when OPERATORS[:greater_than_incl]
       v1 >= v2
     when OPERATORS[:lesser_than_incl]

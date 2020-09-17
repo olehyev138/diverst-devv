@@ -78,13 +78,12 @@ const SegmentFieldRule = (props) => {
   };
 
   const onFieldSelectChange = (value) => {
-    // wipe data & operator values
-    props.formik.setFieldValue(`${ruleLocation}.data`, '');
-    props.formik.setFieldValue(`${ruleLocation}.operator`, {});
-
     // fetch field object & deserialize options text for select
     const newField = props.fields[value.value];
-    newField.options_text = deserializeOptionsText(newField);
+
+    // wipe data & operator values
+    props.formik.setFieldValue(`${ruleLocation}.data`, newField.type === 'DateField' ? null : '');
+    props.formik.setFieldValue(`${ruleLocation}.operator`, '');
 
     // Set new field object & id on rule
     props.formik.setFieldValue(`${ruleLocation}.field`, newField);
@@ -123,6 +122,7 @@ const SegmentFieldRule = (props) => {
             fieldDatum={getIn(props.formik.values, ruleLocation)}
             fieldDatumIndex={props.ruleIndex}
             dataLocation={`${ruleLocation}.data`}
+            fieldType='Field'
           />
         </Grid>
       </Grid>
