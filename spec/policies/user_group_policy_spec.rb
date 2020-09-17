@@ -234,12 +234,12 @@ RSpec.describe UserGroupPolicy, type: :policy do
         end
       end
 
-      context 'when current user IS same as record' do
+      context 'when current user IS NOT an admin' do
         let!(:member) { user }
-        it { is_expected.to permit_actions([:create, :destroy]) }
+        it { is_expected.to_not permit_actions([:create, :destroy]) }
       end
 
-      context 'when groups_manage and groups_members_manage are true and current user IS NOT same as record' do
+      context 'when groups_manage and groups_members_manage are true' do
         let!(:member) { create(:user) }
         before { user.policy_group.update groups_manage: true, groups_members_manage: true }
         it { is_expected.to permit_actions([:create, :destroy]) }
