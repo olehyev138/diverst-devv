@@ -11,7 +11,6 @@ import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
-import dig from 'object-dig';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
