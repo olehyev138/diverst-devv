@@ -18,6 +18,7 @@ class Api::V1::FieldsController < DiverstController
         :title,
         :options_text,
         :min,
+        :max,
         :show_on_vcard,
         :alternative_layout,
         :private,

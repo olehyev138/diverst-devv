@@ -20,7 +20,7 @@ class UserGroupPolicy < GroupBasePolicy
   end
 
   def join?
-    group.active?
+    group.active? && !group.private?
   end
 
   def leave?
@@ -28,8 +28,6 @@ class UserGroupPolicy < GroupBasePolicy
   end
 
   alias_method :view_members?, :index?
-  alias_method :create?, :join?
-  alias_method :destroy?, :leave?
 
   class Scope < Scope
     def is_member(permission)

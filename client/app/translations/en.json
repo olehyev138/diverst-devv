@@ -70,6 +70,7 @@
   "diverst.containers.Login.input.password.invalid": "Invalid password",
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findEnterprise": "Find my Community",
+  "diverst.containers.SSOLanding.button.enter": "Enter",
   "diverst.containers.SignUp.activate": "Activate Account",
   "diverst.containers.SignUp.group_select": "Below is a list of available {erg_p} that you can join to be able to participate in events, post messages, receive news and much more. Select which {erg_p} you wish to join by clicking on them once.",
   "diverst.containers.SignUp.password": "Password",
@@ -1533,10 +1534,10 @@
   "diverst.snackbars.Shared.Field.success.delete.field": "Successfully deleted field",
   "diverst.snackbars.Shared.Sponsors.errors.load.sponsor": "Failed to load sponsor",
   "diverst.snackbars.Shared.Sponsors.errors.load.sponsors": "Failed to load sponsors",
-  "diverst.snackbars.Shared.Sponsors.errors.update": "Failed to update sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.update": "Successfully updated sponsor",
-  "diverst.snackbars.Shared.Sponsors.errors.delete": "Failed to delete sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.delete": "Successfully deleted sponsor",
-  "diverst.snackbars.Shared.Sponsors.errors.create": "Failed to create sponsor",
-  "diverst.snackbars.Shared.Sponsors.success.create": "Successfully created sponsor"
+  "diverst.snackbars.Shared.Sponsors.errors.update.sponsor": "Failed to update sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.update.sponsor": "Successfully updated sponsor",
+  "diverst.snackbars.Shared.Sponsors.errors.delete.sponsor": "Failed to delete sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.delete.sponsor": "Successfully deleted sponsor",
+  "diverst.snackbars.Shared.Sponsors.errors.create.sponsor": "Failed to create sponsor",
+  "diverst.snackbars.Shared.Sponsors.success.create.sponsor": "Successfully created sponsor"
 }

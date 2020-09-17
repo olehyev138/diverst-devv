@@ -25,8 +25,10 @@ class SelectField < Field
 
   def serialize_value(value)
     case value
-    when String then [value].to_json
     when Array then value.to_json
+    # If the string represents a JSON Array, then its already serialized,
+    # Otherwise wrap it in a Array and convert to json
+    when String then (JSON.parse(value).is_a?(Array) rescue false) ? value : [value].to_json
     else nil
     end
   end

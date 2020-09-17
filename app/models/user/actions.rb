@@ -294,7 +294,7 @@ module User::Actions
       if request
         user.current_sign_in_ip = request.remote_ip
       end
-      user.save!
+      user.save!(validate: false)
 
       user
     end
