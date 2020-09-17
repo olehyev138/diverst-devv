@@ -43,7 +43,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    index? || is_an_accepted_member?
+    (!private? && index?) || is_an_accepted_member?
   end
 
   def initiatives?
@@ -124,7 +124,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def members_create?
-    UserGroupPolicy.new(self, UserGroup).create?
+    GroupMemberPolicy.new(self, UserGroup).create?
   end
 
   def message_create?
@@ -158,7 +158,7 @@ class GroupPolicy < ApplicationPolicy
   # MANAGE PERMISSIONS
 
   def members_destroy?
-    UserGroupPolicy.new(self, UserGroup).destroy?
+    GroupMemberPolicy.new(self, UserGroup).destroy?
   end
 
   def leaders_manage?
@@ -183,6 +183,16 @@ class GroupPolicy < ApplicationPolicy
 
   def resources_manage?
     GroupResourcePolicy.new(self, Resource).manage?
+  end
+
+  # MISC PERMISSION
+
+  def join?
+    UserGroupPolicy.new(self, UserGroup).join?
+  end
+
+  def leave?
+    UserGroupPolicy.new(self, UserGroup).destroy?
   end
 
   # ========================================
@@ -244,6 +254,8 @@ class GroupPolicy < ApplicationPolicy
   def is_a_leader?
     @group_leader.present?
   end
+
+  delegate :private?, to: :record
 
   def update?
     return true if manage?

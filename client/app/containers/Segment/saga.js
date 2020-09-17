@@ -68,6 +68,7 @@ export function* updateSegment(action) {
     const response = yield call(api.segments.update.bind(api.segments), payload.segment.id, payload);
 
     yield put(updateSegmentSuccess());
+    yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSegmentError(err));

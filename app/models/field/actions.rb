@@ -4,6 +4,10 @@ module Field::Actions
   end
 
   module ClassMethods
+    def base_query
+      "LOWER(#{self.table_name}.title) LIKE :search"
+    end
+
     def base_preloads
       [:field_definer]
     end

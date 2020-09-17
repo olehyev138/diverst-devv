@@ -18,6 +18,7 @@ import {
 import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { Toggles } from 'components/Shared/Fields/FieldForms/Toggles';
+import { buildValues } from 'utils/formHelpers';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'NumericField';
@@ -91,18 +92,18 @@ export function NumericFieldFormInner(props) {
 }
 
 export function NumericFieldForm(props) {
-  const initialValues = {
-    title: props?.field?.title || '',
-    min: typeof props?.field?.min === 'number' ? props?.field?.min : '',
-    max: typeof props?.field?.max === 'number' ? props?.field?.max : '',
-    id: props?.field?.id || '',
-    show_on_vcard: props?.field?.show_on_vcard || true,
-    alternative_layout: props?.field?.alternative_layout || false,
-    private: props?.field?.private || false,
-    required: props?.field?.required || false,
-    add_to_member_list: props?.field?.add_to_member_list || false,
-    type: FIELD_TYPE
-  };
+  const initialValues = buildValues(props.field, {
+    title: { default: '' },
+    min: { default: '' },
+    max: { default: '' },
+    id: { default: '' },
+    show_on_vcard: { default: true },
+    alternative_layout: { default: false },
+    private: { default: false },
+    required: { default: false },
+    add_to_member_list: { default: false },
+    type: { default: FIELD_TYPE },
+  });
 
   return (
     <Formik

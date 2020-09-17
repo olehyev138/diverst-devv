@@ -70,6 +70,7 @@
   "diverst.containers.Login.input.password.invalid": "Invalid password",
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findEnterprise": "Find my Community",
+  "diverst.containers.SSOLanding.button.enter": "Enter",
   "diverst.containers.SignUp.activate": "Activate Account",
   "diverst.containers.SignUp.group_select": "Below is a list of available {erg_p} that you can join to be able to participate in events, post messages, receive news and much more. Select which {erg_p} you wish to join by clicking on them once.",
   "diverst.containers.SignUp.password": "Password",

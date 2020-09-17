@@ -71,7 +71,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
                     value={values.children[i].category}
                     options={props.categories}
                     onChange={(value) => {
-                      setFieldValue(`children[${i}].group_category_id`, dig(value, 'value'));
+                      setFieldValue(`children[${i}].group_category_id`, value?.value);
                       setFieldValue(`children[${i}].category`, value);
                     }}
                     isClearable
