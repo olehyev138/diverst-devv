@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/Segment/reducer';
-
-import dig from 'object-dig';
 import produce from 'immer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
+import { deserializeFields } from 'utils/selectorHelpers';
 
 const selectSegmentsDomain = state => state.segments || initialState;
 
@@ -40,17 +39,12 @@ const selectSegmentWithRules = () => createSelector(
   (segmentsState) => {
     const { currentSegment } = segmentsState;
     if (!currentSegment) return currentSegment;
-
     // use immer to avoid mutating the store
     return produce(currentSegment, (draft) => {
       // TODO: multi selects
+      draft.field_rules = deserializeFields(currentSegment.field_rules);
 
-      (dig(draft, 'field_rules') || []).forEach((fieldRule) => {
-        fieldRule.data = deserializeDatum(fieldRule);
-        fieldRule.field.options_text = deserializeOptionsText(fieldRule.field);
-      });
-
-      (dig(draft, 'group_rules') || []).forEach((groupRule) => {
+      (draft?.group_rules || []).forEach((groupRule) => {
         groupRule.group_ids = groupRule.group_ids.map(group => ({ label: group.name, value: group.id }));
       });
     });

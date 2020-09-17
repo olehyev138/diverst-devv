@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -19,6 +18,7 @@ import {
 import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { Toggles } from 'components/Shared/Fields/FieldForms/Toggles';
+import { buildValues } from 'utils/formHelpers';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'NumericField';
@@ -92,18 +92,18 @@ export function NumericFieldFormInner(props) {
 }
 
 export function NumericFieldForm(props) {
-  const initialValues = {
-    title: dig(props, 'field', 'title') || '',
-    min: typeof dig(props, 'field', 'min') === 'number' ? dig(props, 'field', 'min') : '',
-    max: typeof dig(props, 'field', 'max') === 'number' ? dig(props, 'field', 'max') : '',
-    id: dig(props, 'field', 'id') || '',
-    show_on_vcard: dig(props, 'field', 'show_on_vcard') || true,
-    alternative_layout: dig(props, 'field', 'alternative_layout') || false,
-    private: dig(props, 'field', 'private') || false,
-    required: dig(props, 'field', 'required') || false,
-    add_to_member_list: dig(props, 'field', 'add_to_member_list') || false,
-    type: FIELD_TYPE
-  };
+  const initialValues = buildValues(props.field, {
+    title: { default: '' },
+    min: { default: '' },
+    max: { default: '' },
+    id: { default: '' },
+    show_on_vcard: { default: true },
+    alternative_layout: { default: false },
+    private: { default: false },
+    required: { default: false },
+    add_to_member_list: { default: false },
+    type: { default: FIELD_TYPE },
+  });
 
   return (
     <Formik

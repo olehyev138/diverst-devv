@@ -11,7 +11,6 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { useFormik } from 'formik';
-import dig from 'object-dig';
 
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -95,7 +94,7 @@ export function MentorRequestList(props, context) {
   ];
 
   const actions = [];
-  if (type === 'incoming' && dig(props, 'user', 'id') === props.userSession.user_id) {
+  if (type === 'incoming' && props?.user?.id === props.userSession.user_id) {
     actions.push({
       icon: () => (<CheckIcon />),
       tooltip: intl.formatMessage(messages.actions.approve),
@@ -119,7 +118,7 @@ export function MentorRequestList(props, context) {
         }
       }
     });
-  } else if (dig(props, 'user', 'id') === props.userSession.user_id)
+  } else if (props?.user?.id === props.userSession.user_id)
     actions.push({
       icon: () => (<DeleteIcon />),
       tooltip: intl.formatMessage(messages.actions.remove),

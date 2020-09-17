@@ -7,7 +7,6 @@
 import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 
 import {
   Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions, DialogContent,
@@ -140,7 +139,7 @@ export function GroupMemberList(props) {
           /* eslint-disable-next-line no-alert, no-restricted-globals */
           if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
             props.deleteMemberBegin({
-              userId: rowData.id,
+              userId: rowData.user.id,
               groupId: props.groupId
             });
         }
@@ -313,6 +312,7 @@ export function GroupMemberList(props) {
                           id='from'
                           name='from'
                           margin='normal'
+                          isClearable
                           label={<DiverstFormattedMessage {...messages.filter.from} />}
                         />
                       </Grid>
@@ -328,6 +328,7 @@ export function GroupMemberList(props) {
                           id='to'
                           name='to'
                           margin='normal'
+                          isClearable
                           label={<DiverstFormattedMessage {...messages.filter.to} />}
                         />
                       </Grid>

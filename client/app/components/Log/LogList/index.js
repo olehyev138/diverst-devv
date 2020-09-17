@@ -135,6 +135,7 @@ export function LogList(props, context) {
                     name='from'
                     margin='normal'
                     label=''
+                    isClearable
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -151,6 +152,7 @@ export function LogList(props, context) {
                     name='to'
                     margin='normal'
                     label=''
+                    isClearable
                   />
                 </Grid>
                 <Grid item xs={2}>

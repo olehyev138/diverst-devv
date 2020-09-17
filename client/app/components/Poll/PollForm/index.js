@@ -7,7 +7,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -108,7 +107,7 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
-            {dig(poll, 'status') === 'published' || (
+            {poll?.status === 'published' || (
               <Button
                 disabled={props.isCommitting}
                 onClick={() => {
@@ -134,7 +133,7 @@ export function PollFormInner({ formikProps, buttonText, draftButtonText, header
 }
 
 export function PollForm(props) {
-  const poll = dig(props, 'poll');
+  const poll = props?.poll;
 
   const initialValues = buildValues(poll, {
     id: { default: '' },

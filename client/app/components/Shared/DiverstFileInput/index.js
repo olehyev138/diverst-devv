@@ -316,7 +316,7 @@ export function DiverstFileInput(props) {
                     title={(
                       <div>
                         <DiverstFormattedMessage {...messages.fileTypes} />
-                        {acceptFileTypeNames.map(message => <li>{message}</li>)}
+                        {acceptFileTypeNames.map((message, i) => <li key={acceptFileTypes[i]}>{message}</li>)}
                       </div>
                     )}
                     placement='bottom'

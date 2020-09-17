@@ -190,7 +190,7 @@ describe('Create segment', () => {
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-    const results = [updateSegmentSuccess(), notified];
+    const results = [updateSegmentSuccess(), push(ROUTES.admin.manage.segments.index.path()), notified];
     const initialAction = { payload: {
       id: 1,
     } };

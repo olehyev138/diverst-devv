@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { initialState } from 'containers/Analyze/reducer';
-
 import { formatBarGraphData, selectSeriesValues } from 'utils/metricsHelpers';
 
 const selectMetricsDomain = state => state.metrics || initialState;

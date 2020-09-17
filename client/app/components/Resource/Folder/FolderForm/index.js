@@ -8,7 +8,6 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { Field, Formik, Form } from 'formik';
 import {
@@ -129,7 +128,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             <DiverstCancel
               disabled={props.isCommitting}
               redirectFallback={props.links.cancelLink}
-              component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
+              component={props?.links?.cancelLink ? WrappedNavLink : 'button'}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </DiverstCancel>
@@ -141,15 +140,15 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 }
 
 export function FolderForm(props) {
-  const folder = dig(props, 'folder');
+  const folder = props?.folder;
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
     parent: { default: props.from && props.from.action === 'new' ? { value: props.from.folder.id, label: props.from.folder.name } : null, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
-    owner_id: { default: dig(props, 'currentUser', 'id') || '' },
-    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
+    owner_id: { default: props?.currentUser?.id || '' },
+    group_id: { default: props.type === 'group' ? props?.currentGroup?.id : null },
   });
 
   return (

@@ -7,6 +7,9 @@ const ROUTES = {
     login: {
       path: () => '/login',
     },
+    ssoLanding: {
+      path: () => '/login/landing',
+    },
     // SSO Bypass doesn't represent an actual route -> page component match, instead it's used on LoginPage to determine whether or not we should bypass SSO and use normal credentials
     ssoBypass: {
       path: () => '/login/credentials',
