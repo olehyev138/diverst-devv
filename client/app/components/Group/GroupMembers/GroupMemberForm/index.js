@@ -34,7 +34,6 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
     });
   };
 
-  console.log(values.memb);
   return (
     <Card>
       <Form>
