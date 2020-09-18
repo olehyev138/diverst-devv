@@ -7,7 +7,8 @@ RSpec.describe InviteTokenService, type: :service do
       let(:token) { InviteTokenService.request_token(user) }
       context 'user is not found' do
         before { allow(InviteTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([nil, {}]) }
+                                                  .and_return([nil, {}])
+        }
         it 'raises and error' do
           expect { InviteTokenService.verify_jwt_token token, 'invite' }
               .to raise_error(BadRequestException, 'Invalid Invitation Link')
@@ -15,7 +16,8 @@ RSpec.describe InviteTokenService, type: :service do
       end
       context 'wrong type of token' do
         before { allow(InviteTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'set_password' }]) }
+                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'set_password' }])
+        }
         it 'raises and error' do
           expect { InviteTokenService.verify_jwt_token token, 'invite' }
               .to raise_error(BadRequestException, 'Invalid Token')
@@ -23,7 +25,8 @@ RSpec.describe InviteTokenService, type: :service do
       end
       context 'invitation expired' do
         before { allow_any_instance_of(User).to receive(:invitation_created_at)
-                                                    .and_return((InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago) }
+                                                    .and_return((InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago)
+        }
         it 'raises and error' do
           expect { InviteTokenService.verify_jwt_token token, 'invite' }
               .to raise_error(BadRequestException, 'Invitation Expired')

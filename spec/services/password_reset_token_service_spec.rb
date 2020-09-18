@@ -7,7 +7,8 @@ RSpec.describe PasswordResetTokenService, type: :service do
       let(:token) { PasswordResetTokenService.request_token(user) }
       context 'user is not found' do
         before { allow(PasswordResetTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([nil, {}]) }
+                                                  .and_return([nil, {}])
+        }
         it 'raises and error' do
           expect { PasswordResetTokenService.verify_jwt_token token, 'reset_password' }
               .to raise_error(BadRequestException, 'Invalid Password Reset Link')
@@ -15,7 +16,8 @@ RSpec.describe PasswordResetTokenService, type: :service do
       end
       context 'wrong type of token' do
         before { allow(PasswordResetTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'set_new_password' }]) }
+                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'set_new_password' }])
+        }
         it 'raises and error' do
           expect { PasswordResetTokenService.verify_jwt_token token, 'reset_password' }
               .to raise_error(BadRequestException, 'Invalid Token')
@@ -23,7 +25,8 @@ RSpec.describe PasswordResetTokenService, type: :service do
       end
       context 'invitation expired' do
         before { allow(PasswordResetTokenService).to receive(:get_payload_from_jwt)
-                                                         .and_return([user, { 'user_id' => user.id, 'type' => 'reset_password', 'created' => (InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago }]) }
+                                                         .and_return([user, { 'user_id' => user.id, 'type' => 'reset_password', 'created' => (InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago }])
+        }
         it 'raises and error' do
           expect { PasswordResetTokenService.verify_jwt_token token, 'reset_password' }
               .to raise_error(BadRequestException, 'Token Expired')
