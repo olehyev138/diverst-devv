@@ -44,6 +44,9 @@ function serializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
   const type = fieldDatum?.field?.type;
 
+  if (datum == null)
+    return null;
+
   switch (type) {
     case 'CheckboxField':
       if (datum.length === 0)
@@ -63,26 +66,34 @@ function serializeDatum(fieldDatum) {
 const dateMap = {};
 
 function deserializeDatum(fieldDatum) {
-  const datum = fieldDatum.data;
-  const type = fieldDatum?.field?.type;
-  const parsed = ['CheckboxField', 'SelectField', 'DateField'].includes(type) ? datum && JSON.parse(datum) : datum;
+  try {
+    const datum = fieldDatum.data;
+    const type = fieldDatum?.field?.type;
+    const parsed = ['CheckboxField', 'SelectField', 'DateField'].includes(type) ? datum && JSON.parse(datum) : datum;
 
-  switch (type) {
-    case 'CheckboxField':
-      // Seeds seem to be malformed. This is a safety net
-      if (parsed instanceof Array)
-        return parsed.map(i => ({ label: i, value: i }));
-      if (parsed != null)
-        return [{ label: parsed, value: parsed }];
-      return [];
-    case 'SelectField':
-      /* Certain fields have there data json serialized as a single item array  */
-      return { label: (parsed || [])[0], value: (parsed || [])[0] };
-    case 'DateField':
-      /* TODO: change this to use Moment.js */
-      return new Date(parsed).toISOString().split('T')[0];
-    default:
-      return datum || '';
+    switch (type) {
+      case 'CheckboxField':
+        // Seeds seem to be malformed. This is a safety net
+        if (parsed instanceof Array)
+          return parsed.map(i => ({ label: i, value: i }));
+        if (parsed != null)
+          return [{ label: parsed, value: parsed }];
+        return [];
+      case 'SelectField':
+        /* Certain fields have there data json serialized as a single item array  */
+        return { label: (parsed || [])[0], value: (parsed || [])[0] };
+      case 'DateField':
+        /* TODO: change this to use Moment.js */
+        return new Date(parsed).toISOString().split('T')[0];
+      default:
+        return datum || '';
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Can't deserialize "${fieldDatum.data}" of type ${fieldDatum?.field?.type}`);
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return fieldDatum.data || '';
   }
 }
 
@@ -126,7 +137,7 @@ function serializeSegment(segment) {
     field_id: r.field_id,
     segment_id: r.segment_id,
     operator: r.operator,
-    data: JSON.stringify([r.data.value]), // TODO: change this to multi
+    data: serializeDatum(r),
     _destroy: r._destroy || 0
   }));
 

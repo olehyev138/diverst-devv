@@ -36,10 +36,10 @@ export function getGroupOverviewMetricsSuccess(payload) {
   };
 }
 
-export function getGroupOverviewMetricsError(payload) {
+export function getGroupOverviewMetricsError(error) {
   return {
     type: GET_GROUP_OVERVIEW_METRICS_ERROR,
-    payload
+    error
   };
 }
 
@@ -54,15 +54,15 @@ export function getGroupSpecificMetricsBegin(payload) {
 
 export function getGroupSpecificMetricsSuccess(payload) {
   return {
-    type: GET_GROUP_SPECIFIC_METRICS_BEGIN,
+    type: GET_GROUP_SPECIFIC_METRICS_SUCCESS,
     payload
   };
 }
 
-export function getGroupSpecificMetricsError(payload) {
+export function getGroupSpecificMetricsError(error) {
   return {
     type: GET_GROUP_SPECIFIC_METRICS_ERROR,
-    payload
+    error
   };
 }
 
@@ -105,10 +105,10 @@ export function getGrowthOfGroupsSuccess(payload) {
   };
 }
 
-export function getGrowthOfGroupsError(payload) {
+export function getGrowthOfGroupsError(error) {
   return {
     type: GET_GROWTH_OF_GROUPS_ERROR,
-    payload
+    error
   };
 }
 
@@ -128,10 +128,10 @@ export function getViewsPerGroupSuccess(payload) {
   };
 }
 
-export function getViewsPerGroupError(payload) {
+export function getViewsPerGroupError(error) {
   return {
     type: GET_VIEWS_PER_GROUP_ERROR,
-    payload
+    error
   };
 }
 
@@ -151,10 +151,10 @@ export function getInitiativesPerGroupSuccess(payload) {
   };
 }
 
-export function getInitiativesPerGroupError(payload) {
+export function getInitiativesPerGroupError(error) {
   return {
     type: GET_INITIATIVES_PER_GROUP_ERROR,
-    payload
+    error
   };
 }
 
@@ -174,10 +174,10 @@ export function getNewsPerGroupSuccess(payload) {
   };
 }
 
-export function getNewsPerGroupError(payload) {
+export function getNewsPerGroupError(error) {
   return {
     type: GET_NEWS_PER_GROUP_ERROR,
-    payload
+    error
   };
 }
 
@@ -197,10 +197,10 @@ export function getViewsPerNewsLinkSuccess(payload) {
   };
 }
 
-export function getViewsPerNewsLinkError(payload) {
+export function getViewsPerNewsLinkError(error) {
   return {
     type: GET_VIEWS_PER_NEWS_LINK_ERROR,
-    payload
+    error
   };
 }
 
@@ -220,10 +220,10 @@ export function getViewsPerFolderSuccess(payload) {
   };
 }
 
-export function getViewsPerFolderError(payload) {
+export function getViewsPerFolderError(error) {
   return {
     type: GET_VIEWS_PER_FOLDER_ERROR,
-    payload
+    error
   };
 }
 
@@ -243,10 +243,10 @@ export function getViewsPerResourceSuccess(payload) {
   };
 }
 
-export function getViewsPerResourceError(payload) {
+export function getViewsPerResourceError(error) {
   return {
     type: GET_VIEWS_PER_RESOURCE_ERROR,
-    payload
+    error
   };
 }
 
@@ -266,10 +266,10 @@ export function getGrowthOfResourcesSuccess(payload) {
   };
 }
 
-export function getGrowthOfResourcesError(payload) {
+export function getGrowthOfResourcesError(error) {
   return {
     type: GET_GROWTH_OF_RESOURCES_ERROR,
-    payload
+    error
   };
 }
 
@@ -289,10 +289,10 @@ export function getGrowthOfUsersSuccess(payload) {
   };
 }
 
-export function getGrowthOfUsersError(payload) {
+export function getGrowthOfUsersError(error) {
   return {
     type: GET_GROWTH_OF_USERS_ERROR,
-    payload
+    error
   };
 }
 

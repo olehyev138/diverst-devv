@@ -25,7 +25,7 @@ import {
 import { selectIsCommitting, selectSegmentWithRules, selectIsFormLoading } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
-  selectPaginatedFields, selectPaginatedSelectFields
+  selectPaginatedOptionsSelectFields, selectPaginatedSelectFields
 } from 'containers/Shared/Field/selectors';
 
 import { Divider, Box } from '@material-ui/core';
@@ -115,7 +115,7 @@ const mapStateToProps = createStructuredSelector({
   segment: selectSegmentWithRules(),
   groups: selectPaginatedSelectGroups(),
   selectFields: selectPaginatedSelectFields(),
-  fields: selectPaginatedFields(),
+  fields: selectPaginatedOptionsSelectFields(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
   currentEnterprise: selectEnterprise(),

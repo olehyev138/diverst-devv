@@ -54,21 +54,20 @@ export function EventsPage(props) {
   const getEvents = (scopes = null, resetParams = false) => {
     const id = props?.currentGroup?.id;
 
-    if (resetParams)
-      setParams(defaultParams);
+    const subject = resetParams ? defaultParams : params;
 
     if (id) {
       let newParams;
       if (calendar)
         newParams = {
-          ...params,
+          ...subject,
           group_id: id,
           query_scopes: ['not_archived', ['date_range', ...dateRange]],
           count: -1
         };
       else
         newParams = {
-          ...params,
+          ...subject,
           group_id: id,
           query_scopes: scopes || params.query_scopes
         };
@@ -147,6 +146,7 @@ export function EventsPage(props) {
         onlyUpcoming={props.onlyUpcoming}
         calendarDateCallback={handleCalendarPage}
         currentGroupID={props.currentGroup.id}
+        params={params}
       />
     </React.Fragment>
   );

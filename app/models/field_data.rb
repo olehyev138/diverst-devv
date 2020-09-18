@@ -8,8 +8,12 @@ class FieldData < ApplicationRecord
   validates_presence_of :field_user
   validate :validate_numeric_limit, if: -> { field.is_a? NumericField }
 
-  def deserialized_data
+  def value
     field.deserialize_value(data)
+  end
+
+  def data=(a)
+    field_id.present? ? super(field.serialize_value(a)) : super
   end
 
   private

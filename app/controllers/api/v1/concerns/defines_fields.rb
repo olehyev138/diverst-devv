@@ -34,6 +34,11 @@ module Api::V1::Concerns::DefinesFields
             :options_text,
             :min,
             :max,
+            :show_on_vcard,
+            :alternative_layout,
+            :private,
+            :required,
+            :add_to_member_list,
           )
   end
 end
