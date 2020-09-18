@@ -54,6 +54,9 @@ const styles = theme => ({
   cardContent: {
     paddingBottom: 0,
   },
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 export function NewsLinkListItem(props) {
@@ -190,13 +193,14 @@ export function NewsLinkListItem(props) {
                 <Permission show={permission(newsItem, 'destroy?')}>
                   <Button
                     size='small'
+                    className={classes.errorButton}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
                       if (confirm('Delete news link?'))
                         props.deleteNewsLinkBegin(newsItem.news_link);
                     }}
                   >
-                    Delete
+                    <DiverstFormattedMessage {...messages.delete} />
                   </Button>
                 </Permission>
               </React.Fragment>

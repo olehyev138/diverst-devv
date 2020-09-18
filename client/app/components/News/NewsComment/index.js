@@ -28,6 +28,9 @@ const styles = theme => ({
   centerVertically: {
     padding: 3,
   },
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 export function NewsComment(props) {
@@ -65,6 +68,7 @@ export function NewsComment(props) {
         <CardActions>
           <Button
             size='small'
+            className={classes.errorButton}
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm(intl.formatMessage(messages.group_comment_delete_confirm)))
