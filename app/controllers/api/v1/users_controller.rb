@@ -173,6 +173,7 @@ class Api::V1::UsersController < DiverstController
             group_ids: [],
             field_data_attributes: [
                 :id,
+                :field_id,
                 :data,
             ]
           )
