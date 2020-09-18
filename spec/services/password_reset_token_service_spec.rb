@@ -20,7 +20,7 @@ RSpec.describe PasswordResetTokenService, type: :service do
       context 'wrong type of token' do
         before do
           allow(PasswordResetTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([user, {'user_id' => user.id, 'type' => 'set_new_password'}])
+                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'set_new_password' }])
         end
 
         it 'raises and error' do
@@ -32,7 +32,7 @@ RSpec.describe PasswordResetTokenService, type: :service do
       context 'invitation expired' do
         before do
           allow(PasswordResetTokenService).to receive(:get_payload_from_jwt)
-                                                  .and_return([user, {'user_id' => user.id, 'type' => 'reset_password', 'created' => (InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago}])
+                                                  .and_return([user, { 'user_id' => user.id, 'type' => 'reset_password', 'created' => (InviteTokenService::TOKEN_EXPIRATION + 1.hour).ago }])
         end
 
         it 'raises and error' do

@@ -20,7 +20,7 @@ RSpec.describe InviteTokenService, type: :service do
       context 'wrong type of token' do
         before do
           allow(InviteTokenService).to receive(:get_payload_from_jwt)
-                                           .and_return([user, {'user_id' => user.id, 'type' => 'set_password'}])
+                                           .and_return([user, { 'user_id' => user.id, 'type' => 'set_password' }])
         end
 
         it 'raises and error' do
