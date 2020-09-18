@@ -85,6 +85,12 @@ export default defineMessages({
   header: {
     id: `${scope}.form.header`,
   },
+  change_order: {
+    id: 'diverst.containers.Group.index.button.change_order',
+  },
+  set_order: {
+    id: 'diverst.containers.Group.index.button.set_order',
+  },
   snackbars: {
     errors: {
       field: {
@@ -101,6 +107,9 @@ export default defineMessages({
       },
       delete: {
         id: `${snackbar}.errors.delete.field`
+      },
+      position: {
+        id: `${snackbar}.errors.position.field`
       }
     },
     success: {
@@ -112,6 +121,9 @@ export default defineMessages({
       },
       delete: {
         id: `${snackbar}.success.delete.field`
+      },
+      position: {
+        id: `${snackbar}.success.position.field`
       }
     }
   }
