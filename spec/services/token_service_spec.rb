@@ -13,6 +13,7 @@ RSpec.describe TokenService, type: :service do
         expect { TokenService.user_token_error('custom message') }.to raise_error(BadRequestException, 'custom message')
       end
     end
+
     context 'without message' do
       it 'raise a BadRequestException with message' do
         expect { TokenService.user_token_error }.to raise_error(BadRequestException, 'Invalid User Token')

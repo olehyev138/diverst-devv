@@ -17,6 +17,7 @@ RSpec.describe PollTokenService, type: :service do
           allow(PollTokenService).to receive(:get_payload_from_jwt)
                                            .and_return([nil, {}])
         end
+
         it 'raises and error' do
           expect { PollTokenService.verify_jwt_token token, 'response' }
               .to raise_error(BadRequestException, 'Invalid Poll Token')
@@ -28,6 +29,7 @@ RSpec.describe PollTokenService, type: :service do
           allow_any_instance_of(UserPollToken).to receive(:cancelled?)
                                            .and_return(true)
         end
+
         it 'raises and error' do
           expect { PollTokenService.verify_jwt_token token, 'response' }
               .to raise_error(BadRequestException, 'Invalid Poll Token')
@@ -39,6 +41,7 @@ RSpec.describe PollTokenService, type: :service do
           allow_any_instance_of(UserPollToken).to receive(:submitted?)
                                            .and_return(true)
         end
+
         it 'raises and error' do
           expect { PollTokenService.verify_jwt_token token, 'response' }
               .to raise_error(BadRequestException, 'User Already Answered')
