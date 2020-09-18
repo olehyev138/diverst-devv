@@ -34,7 +34,7 @@ class FieldData < ApplicationRecord
   end
 
   def validate_presence_field_data
-    if field.required && (data.blank? || value.blank?)
+    if field&.required && (data.blank? || value.blank?)
       key = field.title.parameterize.underscore.to_sym
       field_user.errors.add(key, "can't be blank")
       errors.add(:data, "can't be blank")
