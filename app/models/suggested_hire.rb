@@ -3,7 +3,7 @@ class SuggestedHire < ActiveRecord::Base
   belongs_to :group
   has_many :user_reward_actions
 
-  validates :candidate_email, :hr_email, uniqueness: true, format: { with: Devise.email_regexp }
+  validates :candidate_email, :manager_email, uniqueness: true, format: { with: Devise.email_regexp }
   has_attached_file :resume, s3_permissions: 'private'
   validates_attachment_content_type :resume,
                                     content_type: ['text/plain', 'application/pdf'],
