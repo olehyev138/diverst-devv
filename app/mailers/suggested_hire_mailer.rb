@@ -3,6 +3,7 @@ class SuggestedHireMailer < ApplicationMailer
 
   def suggest_hire(suggested_hire_id)
     @suggested_hire = SuggestedHire.find_by(id: suggested_hire_id)
+    attachments[@suggested_hire.resume_file_name] = File.read(@suggested_hire.resume.path)
     @content = @suggested_hire.message_to_manager
     @candidate_email = @suggested_hire.candidate_email
     @candidate_name = @suggested_hire.candidate_name
