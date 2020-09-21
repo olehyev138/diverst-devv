@@ -44,7 +44,7 @@ RSpec.shared_examples 'it Contains Field Data' do |*input|
 
     it 'will not be valid if field data is touched' do
       skip "don't know how to handle typed fields in tests" if parent.class.get_association('fields').scope.present?
-      child.field_data_attributes = [{field_id: not_required_field.id, data: 5}]
+      child.field_data_attributes = [{ field_id: not_required_field.id, data: 5 }]
       expect(child.valid?).to be(false)
       expect(child.errors.full_messages.first.downcase).to eq("#{required_field.title.to_s.downcase.gsub(/[^\w ]/, '')} can't be blank")
     end
