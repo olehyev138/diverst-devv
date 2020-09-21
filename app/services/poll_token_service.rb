@@ -28,7 +28,7 @@ class PollTokenService < TokenService
   end
 
   def self.verify_jwt_token(token, type)
-    poll_token, payload = get_token_from_jwt(token)
+    poll_token, payload = get_payload_from_jwt(token)
 
     user_token_error('Invalid Poll Token') if poll_token.blank? || poll_token.poll.blank? || poll_token.cancelled?
     user_token_error('User Already Answered') if poll_token.submitted?
@@ -37,7 +37,7 @@ class PollTokenService < TokenService
     poll_token
   end
 
-  def self.get_token_from_jwt(token)
+  def self.get_payload_from_jwt(token)
     payload, _ = get_poll_payload(token)
 
     [UserPollToken.find_by(token: payload['poll_token']), payload]

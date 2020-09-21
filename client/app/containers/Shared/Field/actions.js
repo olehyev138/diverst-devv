@@ -10,7 +10,8 @@ import {
   CREATE_FIELD_BEGIN, CREATE_FIELD_SUCCESS, CREATE_FIELD_ERROR,
   UPDATE_FIELD_BEGIN, UPDATE_FIELD_SUCCESS, UPDATE_FIELD_ERROR,
   DELETE_FIELD_BEGIN, DELETE_FIELD_SUCCESS, DELETE_FIELD_ERROR,
-  FIELD_LIST_UNMOUNT, FIELD_FORM_UNMOUNT
+  FIELD_LIST_UNMOUNT, FIELD_FORM_UNMOUNT, UPDATE_FIELD_POSITION_BEGIN,
+  UPDATE_FIELD_POSITION_ERROR, UPDATE_FIELD_POSITION_SUCCESS,
 } from 'containers/Shared/Field/constants';
 
 /* Field listing */
@@ -131,5 +132,26 @@ export function deleteFieldError(error) {
 export function fieldUnmount() {
   return {
     type: FIELD_LIST_UNMOUNT
+  };
+}
+
+export function updateFieldPositionBegin(payload) {
+  return {
+    type: UPDATE_FIELD_POSITION_BEGIN,
+    payload,
+  };
+}
+
+export function updateFieldPositionSuccess(payload) {
+  return {
+    type: UPDATE_FIELD_POSITION_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFieldPositionError(error) {
+  return {
+    type: UPDATE_FIELD_POSITION_ERROR,
+    error,
   };
 }

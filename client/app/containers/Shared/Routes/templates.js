@@ -84,7 +84,7 @@ import PollShowPage from 'containers/Poll/PollShowPage/Loadable';
 import PollResponsePage from 'containers/Poll/PollResponsePage/Loadable';
 
 /* Admin - System - Global Settings */
-import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
+import AdminFieldsPage from 'containers/GlobalSettings/Field/AdminFieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
@@ -237,7 +237,7 @@ export {
   GroupCategorizePage,
   SegmentListPage,
   SegmentPage,
-  FieldsPage,
+  AdminFieldsPage,
   UsersPage,
   UsersImportPage,
   UserCreatePage,
