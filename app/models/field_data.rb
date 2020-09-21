@@ -33,6 +33,7 @@ class FieldData < ApplicationRecord
     end
   end
 
+  # Sets an error if data is blank while field is required
   def validate_presence_field_data
     if field&.required && (data.blank? || value.blank?)
       key = field.title.parameterize.underscore.to_sym
