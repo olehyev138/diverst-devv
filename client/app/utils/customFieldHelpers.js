@@ -8,9 +8,7 @@
 
 import React from 'react';
 
-import { TextField } from '@material-ui/core';
-import Select from 'react-select';
-import { Field } from 'formik';
+import { DateTime } from 'luxon';
 import produce from 'immer';
 
 function serializeFieldData(fieldData) {
@@ -83,8 +81,7 @@ function deserializeDatum(fieldDatum) {
         /* Certain fields have there data json serialized as a single item array  */
         return { label: (parsed || [])[0], value: (parsed || [])[0] };
       case 'DateField':
-        /* TODO: change this to use Moment.js */
-        return new Date(parsed * 1000).toISOString().split('T')[0];
+        return DateTime.fromSeconds(parsed).toISO.split('T')[0];
       default:
         return datum || '';
     }
