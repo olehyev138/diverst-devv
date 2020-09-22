@@ -1036,6 +1036,8 @@
   "diverst.containers.Archive.field.type.group_message": "{erg} Message",
   "diverst.containers.Archive.field.type.social_link": "Social Link",
   "diverst.containers.Archive.field.type.error": "Error",
+  "diverst.containers.Archive.table.title": "Archives",
+  "diverst.containers.Archive.table.tooltip": "Restore",
   "diverst.containers.Calendar.form.filter": "Filter",
   "diverst.containers.Calendar.form.groups": "{erg_p}",
   "diverst.containers.Calendar.form.segments": "{segment_p}",
