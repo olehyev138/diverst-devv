@@ -1,7 +1,7 @@
 import {message, danger} from 'danger'
 
 /* Check for Jira issue link */
-if (! danger.github.pr.body.includes("jira"))
+if (! danger.github.pr.body.includes("DI-"))
     warn('Missing Issue Link!')
 
 /* Ensure gemfile lock is committed when gemfile is changed */
