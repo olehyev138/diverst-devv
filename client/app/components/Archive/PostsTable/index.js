@@ -2,7 +2,6 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
@@ -21,10 +20,9 @@ const styles = theme => ({
 });
 
 export function PostsTable(props) {
-  const { intl } = props;
   const columns = [
     {
-      title: 'Title',
+      title: messages.title,
       render: (rowData) => {
         if (rowData.group_message)
           return rowData.group_message.subject;
@@ -42,15 +40,15 @@ export function PostsTable(props) {
         + 'END)',
     },
     {
-      title: 'Type',
+      title: messages.type,
       render: (rowData) => {
         if (rowData.group_message)
-          return intl.formatMessage(messages.group_message);
+          return messages.group_message;
         if (rowData.news_link)
-          return intl.formatMessage(messages.news_link);
+          return messages.news_link;
         if (rowData.social_link)
-          return intl.formatMessage(messages.social_link);
-        return intl.formatMessage(messages.error);
+          return messages.social_link;
+        return messages.error;
       },
       query_field: '(CASE '
         + 'WHEN group_message_id IS NOT NULL THEN 1 '
@@ -69,7 +67,7 @@ export function PostsTable(props) {
 
   return (
     <DiverstTable
-      title='Archives'
+      title={messages.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -79,7 +77,7 @@ export function PostsTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: 'Restore',
+        tooltip: messages.tooltip,
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
@@ -92,7 +90,6 @@ PostsTable.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
@@ -104,6 +101,5 @@ PostsTable.propTypes = {
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles)
 )(PostsTable);

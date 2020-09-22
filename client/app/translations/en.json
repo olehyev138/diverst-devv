@@ -1038,6 +1038,7 @@
   "diverst.containers.Archive.field.type.error": "Error",
   "diverst.containers.Archive.table.title": "Archives",
   "diverst.containers.Archive.table.tooltip": "Restore",
+  "diverst.containers.Archive.table.type": "Type",
   "diverst.containers.Calendar.form.filter": "Filter",
   "diverst.containers.Calendar.form.groups": "{erg_p}",
   "diverst.containers.Calendar.form.segments": "{segment_p}",
