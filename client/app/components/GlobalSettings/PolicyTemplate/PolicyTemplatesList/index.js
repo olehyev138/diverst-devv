@@ -55,7 +55,7 @@ const styles = theme => ({
 
 const columns = [
   {
-    title: 'Name',
+    title: messages.name,
     field: 'name',
     query_field: 'name'
   },
@@ -67,7 +67,7 @@ export function TemplatesList(props) {
   const actions = [
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: 'Edit Permissions',
+      tooltip: messages.action,
       onClick: (_, rowData) => {
         props.handlePolicyEdit(rowData.id);
       },
@@ -86,7 +86,7 @@ export function TemplatesList(props) {
     <React.Fragment>
       <CardContent>
         <DiverstTable
-          title='Policies'
+          title={messages.policies}
           handlePagination={props.handlePagination}
           onOrderChange={handleOrderChange}
           isLoading={props.isLoading}

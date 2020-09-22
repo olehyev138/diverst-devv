@@ -63,32 +63,32 @@ export function MentorRequestList(props, context) {
   };
 
   const columns = [
-    { title: intl.formatMessage(appMessages.person.givenName),
+    { title: appMessages.person.givenName,
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name`,
       query_field: 'users.first_name'
     },
-    { title: intl.formatMessage(appMessages.person.familyName),
+    { title: appMessages.person.familyName,
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name`,
       query_field: 'users.last_name'
     },
-    { title: intl.formatMessage(messages.columns.notes), field: 'notes', query_field: 'notes' },
+    { title: messages.columns.notes, field: 'notes', query_field: 'notes' },
     {
-      title: intl.formatMessage(messages.columns.type),
+      title: messages.columns.type,
       field: 'mentoring_type',
       query_field: 'mentoring_type',
       lookup: {
-        mentor: intl.formatMessage(mentorMessages.mentor.neutral),
-        mentee: intl.formatMessage(mentorMessages.mentee.neutral),
+        mentor: mentorMessages.mentor.neutral,
+        mentee: mentorMessages.mentee.neutral,
       }
     },
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: messages.columns.status,
       field: 'status',
       query_field: 'status',
       lookup: {
-        pending: intl.formatMessage(messages.status.pending),
-        accepted: intl.formatMessage(messages.status.accept),
-        rejected: intl.formatMessage(messages.status.reject),
+        pending: messages.status.pending,
+        accepted: messages.status.accept,
+        rejected: messages.status.reject,
       }
     },
   ];
@@ -97,7 +97,7 @@ export function MentorRequestList(props, context) {
   if (type === 'incoming' && props?.user?.id === props.userSession.user_id) {
     actions.push({
       icon: () => (<CheckIcon />),
-      tooltip: intl.formatMessage(messages.actions.approve),
+      tooltip: messages.actions.approve,
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
         if (confirm(intl.formatMessage(messages.actions.approveWarning))) {
@@ -109,7 +109,7 @@ export function MentorRequestList(props, context) {
 
     actions.push({
       icon: () => (<ClearIcon />),
-      tooltip: intl.formatMessage(messages.actions.reject),
+      tooltip: messages.actions.reject,
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
         if (confirm(intl.formatMessage(messages.actions.rejectWarning))) {
@@ -121,7 +121,7 @@ export function MentorRequestList(props, context) {
   } else if (props?.user?.id === props.userSession.user_id)
     actions.push({
       icon: () => (<DeleteIcon />),
-      tooltip: intl.formatMessage(messages.actions.remove),
+      tooltip: messages.actions.remove,
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
         if (confirm(intl.formatMessage(messages.actions.removeWarning))) {
@@ -133,7 +133,7 @@ export function MentorRequestList(props, context) {
 
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: intl.formatMessage(messages.actions.viewProfile),
+    tooltip: messages.actions.viewProfile,
     onClick: (_, rowData) => {
       handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
     }
@@ -151,8 +151,8 @@ export function MentorRequestList(props, context) {
       <Box mb={1} />
       <DiverstTable
         title={type === 'incoming'
-          ? intl.formatMessage(messages.title.incoming)
-          : intl.formatMessage(messages.title.outgoing)}
+          ? messages.title.incoming
+          : messages.title.outgoing}
         handlePagination={props.handleRequestPagination}
         onOrderChange={handleOrderChange}
         isLoading={props.isFetchingRequests}

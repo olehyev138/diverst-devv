@@ -57,28 +57,28 @@ export function PollList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.list.name),
+      title: messages.list.name,
       field: 'title',
       query_field: 'title'
     },
     {
-      title: intl.formatMessage(messages.list.questions),
+      title: messages.list.questions,
       field: 'fields_count',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.list.responses),
+      title: messages.list.responses,
       field: 'responses_count',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.list.creationDate),
+      title: messages.list.creationDate,
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
     },
     {
-      title: intl.formatMessage(messages.list.status),
+      title: messages.list.status,
       field: 'status',
       query_field: 'status'
     },
@@ -95,7 +95,7 @@ export function PollList(props, context) {
 
   actions.push(rowData => ({
     icon: () => <EditIcon />,
-    tooltip: intl.formatMessage(messages.list.edit),
+    tooltip: messages.list.edit,
     onClick: (_, rowData) => {
       props.handlePollEdit(rowData.id);
     },
@@ -104,7 +104,7 @@ export function PollList(props, context) {
 
   actions.push(rowData => ({
     icon: () => <DeleteIcon />,
-    tooltip: intl.formatMessage(messages.list.delete),
+    tooltip: messages.list.delete,
     onClick: (_, rowData) => {
       /* eslint-disable-next-line no-alert, no-restricted-globals */
       if (confirm(intl.formatMessage(messages.delete_confirm)))
@@ -135,7 +135,7 @@ export function PollList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.list.title)}
+            title={messages.list.title}
             handlePagination={props.handlePagination}
             handleSearching={props.handleSearching}
             onOrderChange={handleOrderChange}

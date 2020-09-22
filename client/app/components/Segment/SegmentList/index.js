@@ -58,7 +58,7 @@ export function SegmentList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.list.name),
+      title: messages.list.name,
       field: 'name',
       query_field: 'name'
     },
@@ -91,7 +91,7 @@ export function SegmentList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.list.title)}
+            title={messages.list.title}
             handlePagination={props.handlePagination}
             handleSearching={props.handleSearching}
             onOrderChange={handleOrderChange}
@@ -103,7 +103,7 @@ export function SegmentList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: intl.formatMessage(messages.list.edit),
+                tooltip: messages.list.edit,
                 onClick: (_, rowData) => {
                   props.handleSegmentEdit(rowData.id);
                 },
@@ -111,7 +111,7 @@ export function SegmentList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.list.delete),
+                tooltip: messages.list.delete,
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

@@ -56,35 +56,35 @@ export function BudgetList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.requested),
+      title: messages.columns.requested,
       field: 'requested_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.requested_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.available),
+      title: messages.columns.available,
       field: 'available_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: messages.columns.status,
       field: 'status',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.columns.requestedAt),
+      title: messages.columns.requestedAt,
       field: 'requested_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.requested_at, DateTime.DATETIME_MED)
     },
     {
-      title: intl.formatMessage(messages.columns.number),
+      title: messages.columns.number,
       field: 'item_count',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.columns.description),
+      title: messages.columns.description,
       field: 'description',
       query_field: 'description',
     },
@@ -94,7 +94,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DetailsIcon />,
-    tooltip: intl.formatMessage(messages.actions.details),
+    tooltip: messages.actions.details,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
@@ -103,7 +103,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DeleteIcon />,
-    tooltip: intl.formatMessage(messages.actions.delete),
+    tooltip: messages.actions.delete,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.deleteBudgetBegin({ id: rowData.id });
@@ -147,7 +147,7 @@ export function BudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.tableTitle)}
+            title={messages.tableTitle}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}

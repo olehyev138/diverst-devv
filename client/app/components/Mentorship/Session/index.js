@@ -103,26 +103,26 @@ export function Session(props) {
   };
 
   const columns = [
-    { title: intl.formatMessage(appMessages.person.givenName),
+    { title: appMessages.person.givenName,
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
-    { title: intl.formatMessage(appMessages.person.familyName),
+    { title: appMessages.person.familyName,
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
-    { title: intl.formatMessage(messages.show.role),
+    { title: messages.show.role,
       field: 'role',
       query_field: 'role' },
     {
-      title: intl.formatMessage(messages.show.status),
+      title: messages.show.status,
       field: 'status',
       query_field: 'status',
       lookup: {
-        leading: intl.formatMessage(messages.show.leading),
-        pending: intl.formatMessage(messages.show.pending),
-        accepted: intl.formatMessage(messages.show.accepted),
-        declined: intl.formatMessage(messages.show.rejected),
+        leading: messages.show.leading,
+        pending: messages.show.pending,
+        accepted: messages.show.accepted,
+        declined: messages.show.rejected,
       }
     },
   ];
@@ -130,7 +130,7 @@ export function Session(props) {
   const actions = [];
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: intl.formatMessage(messages.show.viewProfile),
+    tooltip: messages.show.viewProfile,
     onClick: (_, rowData) => {
       handleProfileClickOpen(rowData.user);
     }
@@ -306,7 +306,7 @@ export function Session(props) {
             {session.users && (
               <React.Fragment>
                 <DiverstTable
-                  title={intl.formatMessage(messages.show.title)}
+                  title={messages.show.title}
                   handlePagination={props.handleParticipantPagination}
                   onOrderChange={handleOrderChange}
                   isLoading={props.isFetchingSessions}

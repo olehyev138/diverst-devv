@@ -58,6 +58,9 @@ export default defineMessages({
   tableName: {
     id: `${scope}.table.title`
   },
+  type: {
+    id: `${scope}.table.type`
+  },
   snackbars: {
     load: {
       id: `${snackbar}.errors.load.archives`

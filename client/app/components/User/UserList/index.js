@@ -67,17 +67,17 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.first_name),
+      title: messages.first_name,
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: intl.formatMessage(messages.last_name),
+      title: messages.last_name,
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: intl.formatMessage(messages.email),
+      title: messages.email,
       field: 'email',
       query_field: 'email'
     },
@@ -118,7 +118,7 @@ export function UserList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.members)}
+            title={messages.members}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             handleSearching={props.handleSearching}
@@ -130,7 +130,7 @@ export function UserList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: intl.formatMessage(messages.tooltip.edit),
+                tooltip: messages.tooltip.edit,
                 onClick: (_, rowData) => {
                   props.handleVisitUserEdit(rowData.id);
                 },
@@ -138,7 +138,7 @@ export function UserList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.tooltip.delete),
+                tooltip: messages.tooltip.delete,
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

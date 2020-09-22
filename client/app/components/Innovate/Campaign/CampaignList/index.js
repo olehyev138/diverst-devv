@@ -55,8 +55,8 @@ export function CampaignList(props) {
   };
 
   const columns = [
-    { title: intl.formatMessage(messages.Campaign.title), field: 'title' },
-    { title: intl.formatMessage(messages.Campaign.description), field: 'description' }
+    { title: messages.Campaign.title, field: 'title' },
+    { title: messages.Campaign.description, field: 'description' }
   ];
 
   return (
@@ -77,7 +77,7 @@ export function CampaignList(props) {
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title={intl.formatMessage(messages.Campaign.campaigns)}
+          title={messages.Campaign.campaigns}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingCampaigns}
           onOrderChange={handleOrderChange}
@@ -89,7 +89,7 @@ export function CampaignList(props) {
           actions={[
             rowData => ({
               icon: () => <EditIcon />,
-              tooltip: intl.formatMessage(messages.Campaign.edit),
+              tooltip: messages.Campaign.edit,
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
               },
@@ -97,7 +97,7 @@ export function CampaignList(props) {
             }),
             rowData => ({
               icon: () => <DeleteIcon />,
-              tooltip: intl.formatMessage(messages.Campaign.delete),
+              tooltip: messages.Campaign.delete,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))

@@ -106,24 +106,24 @@ export function GroupMemberList(props) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.givenName),
+      title: messages.columns.givenName,
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
     {
-      title: intl.formatMessage(messages.columns.familyName),
+      title: messages.columns.familyName,
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: messages.columns.status,
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND NOT accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
-        active: intl.formatMessage(messages.status.active),
-        inactive: intl.formatMessage(messages.status.inactive),
-        pending: intl.formatMessage(messages.status.pending),
+        active: messages.status.active,
+        inactive: messages.status.inactive,
+        pending: messages.status.pending,
       }
     },
   ];
@@ -134,7 +134,7 @@ export function GroupMemberList(props) {
     actions.push(
       {
         icon: () => <DeleteIcon />,
-        tooltip: intl.formatMessage(messages.tooltip.delete),
+        tooltip: messages.tooltip.delete,
         onClick: (_, rowData) => {
           /* eslint-disable-next-line no-alert, no-restricted-globals */
           if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
@@ -357,7 +357,7 @@ export function GroupMemberList(props) {
       </Grid>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={intl.formatMessage(messages.members)}
+        title={messages.members}
         handlePagination={props.handlePagination}
         handleSearching={props.handleSearching}
         isLoading={props.isFetchingMembers}

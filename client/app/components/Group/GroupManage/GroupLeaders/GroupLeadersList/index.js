@@ -20,7 +20,6 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 
@@ -31,25 +30,25 @@ const styles = theme => ({
 });
 
 export function GroupLeadersList(props) {
-  const { classes, links, intl } = props;
+  const { classes, links } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.leader.column_name), field: 'user.name', query_field: 'users.last_name' },
-    { title: intl.formatMessage(messages.leader.column_position), field: 'position_name', query_field: 'position_name' }
+    { title: messages.leader.column_name, field: 'user.name', query_field: 'users.last_name' },
+    { title: messages.leader.column_position, field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
   if (permission(props.group, 'leaders_manage?')) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(messages.leader.edit),
+      tooltip: messages.leader.edit,
       onClick: (_, rowData) => {
         props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
       }
     });
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: intl.formatMessage(messages.leader.delete),
+      tooltip: messages.leader.delete,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to delete this group leader?'))
@@ -87,7 +86,7 @@ export function GroupLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.leader.title)}
+            title={messages.leader.title}
             onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingGroupLeaders}
@@ -104,7 +103,6 @@ export function GroupLeadersList(props) {
 }
 
 GroupLeadersList.propTypes = {
-  intl: intlShape.isRequired,
   classes: PropTypes.object,
   group: PropTypes.object,
   deleteGroupLeaderBegin: PropTypes.func,
@@ -124,7 +122,6 @@ GroupLeadersList.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   memo,
   withStyles(styles)
 )(GroupLeadersList);

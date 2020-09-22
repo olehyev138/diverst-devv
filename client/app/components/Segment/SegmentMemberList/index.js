@@ -43,8 +43,8 @@ export function SegmentMemberList(props) {
   };
 
   const columns = [
-    { title: intl.formatMessage(messages.member.firstname), field: 'first_name' },
-    { title: intl.formatMessage(messages.member.lastname), field: 'last_name' }
+    { title: messages.member.firstname, field: 'first_name' },
+    { title: messages.member.lastname, field: 'last_name' }
   ];
 
   return (
@@ -65,7 +65,7 @@ export function SegmentMemberList(props) {
       </Grid>
       <Box mb={2} />
       <DiverstTable
-        title={intl.formatMessage(messages.member.title)}
+        title={messages.member.title}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}

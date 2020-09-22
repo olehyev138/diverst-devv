@@ -15,7 +15,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstTable/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { customTexts } from '../../../utils/customTextHelpers';
 
 
 const styles = theme => ({
@@ -73,7 +72,7 @@ export function DiverstTable(props) {
         onOrderChange={handleOrderChange}
         onSearchChange={handleSearchChange}
         onRowClick={props.handleRowClick}
-        columns={columns.map(column => ({ title: props.intl.formatMessage(column.title, props.customText), field: column.field, query_field: column.query_field, tableData: column.tableData }))}
+        columns={columns.map(column => ({ title: props.intl.formatMessage(column.title, props.customText), field: column.field, query_field: column.query_field, tableData: column.tableData, render: column.render, sorting: column.sorting }))}
         actions={actions.map(action => ({ tooltip: props.intl.formatMessage(action.tooltip, props.customText), icon: action.icon, onClick: action.onClick }))}
         options={{
           search: !!props.handleSearching, // Disable searching when callback isn't passed

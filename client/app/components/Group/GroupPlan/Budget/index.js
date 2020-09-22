@@ -66,7 +66,7 @@ export function Budget(props) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: messages.columns.status,
       field: 'is_done',
       query_field: 'budget_items.is_done',
       lookup: {
@@ -75,24 +75,24 @@ export function Budget(props) {
       }
     },
     {
-      title: intl.formatMessage(messages.columns.title),
+      title: messages.columns.title,
       field: 'title',
       query_field: 'budget_items.title',
     },
     {
-      title: intl.formatMessage(messages.columns.requested),
+      title: messages.columns.requested,
       field: 'estimated_amount',
       query_field: 'budget_items.estimated_amount',
       render: rowData => toCurrencyString(props.intl, rowData.estimated_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.available),
+      title: messages.columns.available,
       field: 'available_amount',
       query_field: 'budget_items.available_amount',
       render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.endDate),
+      title: messages.columns.endDate,
       field: 'estimated_date',
       query_field: 'budget_items.estimated_date',
       render: rowData => rowData.estimated_date
@@ -100,7 +100,7 @@ export function Budget(props) {
         : intl.formatMessage(messages.lookup.notSet)
     },
     {
-      title: intl.formatMessage(messages.columns.private),
+      title: messages.columns.private,
       field: 'is_private',
       query_field: 'budget_items.is_private',
       lookup: {
@@ -114,7 +114,7 @@ export function Budget(props) {
 
   actions.push(rowData => ({
     icon: () => <CloseIcon />,
-    tooltip: intl.formatMessage(messages.actions.close),
+    tooltip: messages.actions.close,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-restricted-globals,no-alert
       if (confirm(intl.formatMessage(messages.actions.closeConfirm)))
@@ -272,7 +272,7 @@ export function Budget(props) {
         </Card>
         <Box mb={2} />
         <DiverstTable
-          title={intl.formatMessage(messages.tableTitle)}
+          title={messages.tableTitle}
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}

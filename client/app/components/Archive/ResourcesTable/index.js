@@ -2,7 +2,6 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
@@ -23,20 +22,19 @@ const styles = theme => ({
 });
 
 export function ResourcesTable(props) {
-  const { intl } = props;
   const columns = [
     {
-      title: intl.formatMessage(messages.title),
+      title: messages.title,
       field: 'title',
       query_field: 'title'
     },
     {
-      title: intl.formatMessage(messages.url),
+      title: messages.url,
       field: 'url',
       query_field: 'url',
     },
     {
-      title: intl.formatMessage(messages.creation),
+      title: messages.creation,
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
@@ -51,7 +49,7 @@ export function ResourcesTable(props) {
 
   return (
     <DiverstTable
-      title='Archives'
+      title={messages.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -61,7 +59,7 @@ export function ResourcesTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: 'Restore',
+        tooltip: messages.restore,
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
@@ -74,7 +72,6 @@ ResourcesTable.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
@@ -86,6 +83,5 @@ ResourcesTable.propTypes = {
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles)
 )(ResourcesTable);

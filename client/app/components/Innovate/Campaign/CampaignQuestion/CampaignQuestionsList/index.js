@@ -24,7 +24,6 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import { permission } from 'utils/permissionsHelpers';
 import Permission from 'components/Shared/DiverstPermission';
 const styles = theme => ({
@@ -48,14 +47,14 @@ const styles = theme => ({
 
 export function CampaignQuestionsList(props) {
   const { classes } = props;
-  const { links, intl } = props;
+  const { links } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
 
   const columns = [
-    { title: intl.formatMessage(messages.question.list.title), field: 'title' },
-    { title: intl.formatMessage(messages.question.list.description), field: 'description' }
+    { title: messages.question.list.title, field: 'title' },
+    { title: messages.question.list.description, field: 'description' }
   ];
 
   return (
@@ -77,7 +76,7 @@ export function CampaignQuestionsList(props) {
       </Permission>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={intl.formatMessage(messages.question.list.questions)}
+        title={messages.question.list.questions}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingQuestions}
         onOrderChange={handleOrderChange}
@@ -89,7 +88,7 @@ export function CampaignQuestionsList(props) {
         actions={[
           rowData => ({
             icon: () => <EditIcon />,
-            tooltip: intl.formatMessage(messages.question.edit),
+            tooltip: messages.question.edit,
             onClick: (_, rowData) => {
               props.handleVisitQuestionEdit(props.campaignId, rowData.id);
             },
@@ -97,7 +96,7 @@ export function CampaignQuestionsList(props) {
           }),
           rowData => ({
             icon: () => <DeleteIcon />,
-            tooltip: intl.formatMessage(messages.question.delete),
+            tooltip: messages.question.delete,
             onClick: (_, rowData) => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm('Delete question?'))
@@ -112,7 +111,6 @@ export function CampaignQuestionsList(props) {
 }
 
 CampaignQuestionsList.propTypes = {
-  intl: intlShape.isRequired,
   classes: PropTypes.object,
   deleteQuestionBegin: PropTypes.func,
   links: PropTypes.shape({
@@ -131,7 +129,6 @@ CampaignQuestionsList.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   memo,
   withStyles(styles)
 )(CampaignQuestionsList);

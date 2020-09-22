@@ -45,7 +45,7 @@ const styles = theme => ({
 function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, intl, ...rest }) {
   const columns = [
     {
-      title: intl.formatMessage(eventMessages.columns.name),
+      title: eventMessages.columns.name,
       field: 'name',
       query_field: 'initiative.name',
       render: rowData => (
@@ -59,25 +59,25 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       )
     },
     {
-      title: intl.formatMessage(eventMessages.columns.funding),
+      title: eventMessages.columns.funding,
       field: 'estimated_funding',
       query_field: 'estimated_funding',
       render: rowData => toCurrencyString(intl, rowData.estimated_funding || 0),
     },
     {
-      title: intl.formatMessage(eventMessages.columns.spent),
+      title: eventMessages.columns.spent,
       field: 'current_expenses_sum',
       sorting: false,
       render: rowData => toCurrencyString(intl, rowData.current_expenses_sum || 0),
     },
     {
-      title: intl.formatMessage(eventMessages.columns.unspent),
+      title: eventMessages.columns.unspent,
       field: 'leftover',
       sorting: false,
       render: rowData => toCurrencyString(intl, rowData.leftover || 0),
     },
     {
-      title: intl.formatMessage(eventMessages.columns.status),
+      title: eventMessages.columns.status,
       field: 'expenses_status',
       query_field: 'finished_expenses',
     },
@@ -96,7 +96,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
         handlePagination={handlePagination}
         onOrderChange={handleOrderChange}
         isLoading={isLoading}
-        title={intl.formatMessage(eventMessages.title)}
+        title={eventMessages.title}
         rowsPerPage={clamp((initiatives || []).length, 1, 5)}
         dataArray={initiatives || []}
         dataTotal={initiativeCount || 0}

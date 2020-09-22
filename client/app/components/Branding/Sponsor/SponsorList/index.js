@@ -56,8 +56,8 @@ export function SponsorList(props) {
   };
 
   const columns = [
-    { title: intl.formatMessage(messages.Sponsors.name), field: 'sponsor_name' },
-    { title: intl.formatMessage(messages.Sponsors.title), field: 'sponsor_title' }
+    { title: messages.Sponsors.name, field: 'sponsor_name' },
+    { title: messages.Sponsors.title, field: 'sponsor_title' }
   ];
 
   return (
@@ -78,7 +78,7 @@ export function SponsorList(props) {
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title={intl.formatMessage(messages.Sponsors.tabletitle)}
+          title={messages.Sponsors.tabletitle}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingSponsors}
           onOrderChange={handleOrderChange}
@@ -89,14 +89,14 @@ export function SponsorList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: intl.formatMessage(messages.Sponsors.edit),
+              tooltip: messages.Sponsors.edit,
               onClick: (_, rowData) => {
                 props.handleVisitSponsorEdit(rowData.sponsorable_id, rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: intl.formatMessage(messages.Sponsors.delete),
+              tooltip: messages.Sponsors.delete,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))
