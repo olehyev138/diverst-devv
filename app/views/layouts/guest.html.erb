@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Diverst</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <% if current_user.present? %>
       <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
     <% else %>
