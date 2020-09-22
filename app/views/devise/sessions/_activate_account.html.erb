@@ -1,0 +1,12 @@
+<% if ENV["ALTERNATIVE_ACCOUNT_ACTIVATION"] %>
+  <%= link_to 'Activate Account', 
+          alternative_activation_new_path, 
+          class: 'btn btn--tertiary',
+          style: 'margin-top: 5px;' %>
+
+  <% else %>
+  <%= link_to "Activate account",
+        new_password_path(resource_name, setup: '1'),
+          class: "btn btn--tertiary",
+          style: 'margin-top: 5px;' %>
+  <% end %>
