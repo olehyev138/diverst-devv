@@ -104,11 +104,12 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
 export function GroupLeaderForm(props) {
   const { intl } = props;
 
+  // TODO : Drag customTextValue here
   const initialValues = buildValues(props.groupLeader, {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
-    position_name: { default: intl.formatMessage(messages.leader.position) },
+    position_name: { default: intl.formatMessage(messages.leader.position, { erg: 'Group' }) },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },

@@ -9,7 +9,7 @@
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { EventsTable } from '../index';
-import { intl } from 'tests/mocks/react-intl';
+import { shallow } from 'enzyme';
 
 loadTranslation('./app/translations/en.json');
 
@@ -20,7 +20,7 @@ const props = {
 describe('<EventsTable />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<EventsTable intl={intl} {...props} />);
+    const wrapper = shallow(<EventsTable {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
