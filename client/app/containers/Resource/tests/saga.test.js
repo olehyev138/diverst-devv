@@ -469,7 +469,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.create).toHaveBeenCalledWith({ resource: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_resource, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_resource, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -520,7 +520,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.update).toHaveBeenCalledWith(initialAction.payload.id, { resource: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_resource, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_resource, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -574,7 +574,7 @@ describe('Tests for resources', () => {
       );
       expect(api.resources.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_resource, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_resource, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -624,7 +624,7 @@ describe('Tests for resources', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.archive, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.archive, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
