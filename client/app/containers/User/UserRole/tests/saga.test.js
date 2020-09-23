@@ -86,7 +86,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.roles, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.roles, options: { variant: 'warning' } });
     });
   });
 
@@ -127,7 +127,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.role, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.role, options: { variant: 'warning' } });
     });
   });
 
@@ -155,7 +155,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.create).toHaveBeenCalledWith({ user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -179,7 +179,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
   });
 
@@ -206,7 +206,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -231,7 +231,7 @@ describe('tests for userRole saga', () => {
 
       expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -261,7 +261,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -285,7 +285,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

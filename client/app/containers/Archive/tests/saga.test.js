@@ -163,7 +163,7 @@ describe('Get archives Saga', () => {
     delete eventsCall.resource;
     expect(api.initiatives.all).toHaveBeenCalledWith(eventsCall);
     expect(eventsDispatched).toEqual(result);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.load, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.load, options: { variant: 'warning' } });
   });
 });
 
@@ -246,6 +246,6 @@ describe('UnArchive Saga', () => {
 
     expect(api.initiatives.un_archive).toHaveBeenCalledWith(eventsAction.payload.id, { resource: eventsAction.payload });
     expect(eventsDispatched).toEqual(result);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.restore, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.restore, options: { variant: 'warning' } });
   });
 });

@@ -84,7 +84,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leaders, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leaders, options: { variant: 'warning' } });
     });
   });
 
@@ -124,7 +124,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leader, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leader, options: { variant: 'warning' } });
     });
   });
 
@@ -152,7 +152,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.create).toHaveBeenCalledWith({ group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -176,7 +176,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
 
     it('Should update a groupLeader', async () => {
@@ -201,7 +201,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -226,7 +226,7 @@ describe('Tests for groupLeaders saga', () => {
 
       expect(api.groupLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { group_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -256,7 +256,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -280,7 +280,7 @@ describe('Tests for groupLeaders saga', () => {
       );
       expect(api.groupLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

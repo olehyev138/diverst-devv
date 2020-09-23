@@ -69,7 +69,7 @@ describe('Get logs Saga', () => {
     );
     expect(api.activities.all).toHaveBeenCalledWith(action.payload);
     expect(dispatched).toEqual(result);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.logs, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.logs, options: { variant: 'warning' } });
   });
 });
 
@@ -96,7 +96,7 @@ describe('export Saga', () => {
 
     expect(api.activities.csvExport).toHaveBeenCalledWith(action.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.export, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.export, options: { variant: 'warning' } });
   });
 
   it('Should return error from the API for all resources possible', async () => {
@@ -123,6 +123,6 @@ describe('export Saga', () => {
 
     expect(api.activities.csvExport).toHaveBeenCalledWith(action.payload);
     expect(newsDispatched).toEqual(result);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.export, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.export, options: { variant: 'warning' } });
   });
 });

@@ -83,7 +83,7 @@ describe('Get segments Saga', () => {
 
     expect(api.segments.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.segments, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.segments, options: { variant: 'warning' } });
   });
 });
 
@@ -123,7 +123,7 @@ describe('Get segment Saga', () => {
 
     expect(api.segments.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.segment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.segment, options: { variant: 'warning' } });
   });
 });
 
@@ -151,7 +151,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.create).toHaveBeenCalledWith({ segment: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
   });
 
   it('Should return error from the API', async () => {
@@ -175,7 +175,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
   });
 
   it('Should update a segment', async () => {
@@ -200,7 +200,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.update).toHaveBeenCalledWith(initialAction.payload.id, { segment: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
   });
 
   it('Should return error from the API', async () => {
@@ -225,7 +225,7 @@ describe('Create segment', () => {
 
     expect(api.segments.update).toHaveBeenCalledWith(initialAction.payload.id, { segment: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
   });
 });
 
@@ -255,7 +255,7 @@ describe('Delete segment', () => {
     );
     expect(api.segments.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
   });
 
   it('Should return error from the API', async () => {
@@ -279,7 +279,7 @@ describe('Delete segment', () => {
     );
     expect(api.segments.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
   });
 });
 
@@ -332,6 +332,6 @@ describe('get members for a segment', () => {
     );
     expect(api.userSegments.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.members, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.members, options: { variant: 'warning' } });
   });
 });
