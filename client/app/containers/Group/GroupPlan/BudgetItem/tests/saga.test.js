@@ -78,7 +78,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget_items);
+      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.budget_items, options: { variant: 'warning' } });
     });
   });
 
@@ -118,7 +118,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget_item);
+      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.budget_item, options: { variant: 'warning' } });
     });
   });
   describe('close budget', () => {
@@ -144,7 +144,7 @@ describe('Tests for budgetItems saga', () => {
       );
       expect(api.budgetItems.closeBudget).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.close);
+      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.close, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -169,7 +169,7 @@ describe('Tests for budgetItems saga', () => {
 
       expect(api.budgetItems.closeBudget).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.close);
+      expect(showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.close, options: { variant: 'warning' } });
     });
   });
 });
