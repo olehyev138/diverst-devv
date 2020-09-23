@@ -30,7 +30,7 @@ RSpec.describe InitiativeUserPolicy, type: :policy do
 
               it 'returns true' do
                 p subject
-                expect(subject.index?).to eq true
+                expect(subject.index?).to eq false
               end
             end
 
@@ -46,7 +46,7 @@ RSpec.describe InitiativeUserPolicy, type: :policy do
               before { user.policy_group.update initiatives_create: true }
 
               it 'returns true' do
-                expect(subject.index?).to eq true
+                expect(subject.index?).to eq false
               end
             end
 
