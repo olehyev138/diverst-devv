@@ -126,7 +126,7 @@ export function Event(props) {
                   <DiverstFormattedMessage {...messages.archive} />
                 </Button>
               </Permission>
-              <Permission show={permission(props.event, 'show?')}>
+              <Permission show={permission(props.event, 'attendees?')}>
                 <Button
                   variant='contained'
                   size='large'
