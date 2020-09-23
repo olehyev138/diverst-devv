@@ -179,4 +179,24 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#update sso' do
+    it 'update the sso settings' do
+      put "/api/v1/#{route}/update_sso", params: { "#{route.singularize}" => {
+          "id"=>1,
+          "idp_entity_id"=>"https://app.onelogin.com/saml/entry",
+          "idp_sso_target_url"=>"https://v7.onelogin.com/trust/saml2/sso",
+          "idp_slo_target_url"=>"https://v7.onelogin.com/trust/saml2/slo",
+          "idp_cert"=>"-----BEGIN CERTIFICATE-----\n  -----END CERTIFICATE-----\n",
+          "sp_entity_id"=>"ID"
+      } }, headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      get "/api/v1/#{route}/update_sso", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end
