@@ -10,6 +10,7 @@ import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
 import { selectFormUser, selectIsCommitting, selectIsFormLoading } from 'containers/User/selectors';
+import { selectCustomText, selectPermissions } from '../../Shared/App/selectors';
 import {
   createUserBegin, updateFieldDataBegin,
   getUsersBegin, userUnmount, getUserPrototypeBegin
@@ -20,7 +21,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import InviteForm from 'components/User/InviteForm';
 
@@ -49,7 +50,7 @@ export function UserCreatePage(props) {
       isFormLoading={props.isFormLoading}
       userAction={props.createUserBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={intl.formatMessage(messages.create, props.customTexts)}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       links={links}
@@ -76,6 +77,7 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
   user: selectFormUser(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

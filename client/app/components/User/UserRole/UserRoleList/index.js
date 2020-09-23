@@ -81,7 +81,7 @@ export function UserRoleList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: messages.edit,
+                tooltip: intl.formatMessage(messages.edit, props.customTexts),
                 onClick: (_, rowData) => {
                   props.handleVisitUserRoleEdit(rowData.id);
                 },
@@ -89,10 +89,10 @@ export function UserRoleList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: messages.delete,
+                tooltip: intl.formatMessage(messages.delete, props.customTexts),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                     props.deleteUserRoleBegin(rowData.id);
                 },
                 disabled: !permission(rowData, 'destroy?')
@@ -118,7 +118,8 @@ UserRoleList.propTypes = {
   links: PropTypes.shape({
     userRoleNew: PropTypes.string,
     userRoleEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

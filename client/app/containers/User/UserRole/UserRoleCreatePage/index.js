@@ -22,7 +22,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -40,7 +40,7 @@ export function UserRoleCreatePage(props) {
     <UserRoleForm
       admin
       userRoleAction={props.createUserRoleBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={intl.formatMessage(messages.create, props.customTexts)}
       getUserRolesBegin={props.getUserRolesBegin}
       selectUserRoles={props.userRoles}
       links={links}
@@ -56,11 +56,13 @@ UserRoleCreatePage.propTypes = {
   userRoleUnmount: PropTypes.func,
   userRoles: PropTypes.array,
   isCommitting: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
