@@ -23,6 +23,10 @@ class InitiativePolicy < GroupBasePolicy
     'upcoming_events_visibility'
   end
 
+  def attendees?
+    InitiativeUserPolicy.new(self, InitiativeUser).index?
+  end
+
   def update?
     (record.owner == user if Initiative === record) || super
   end
