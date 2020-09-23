@@ -24,7 +24,7 @@ export function* getField(action) {
     yield put(getFieldSuccess(response.data));
   } catch (err) {
     yield put(getFieldError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.field), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.field, options: { variant: 'warning' } }));
   }
 }
 
@@ -34,10 +34,10 @@ export function* updateField(action) {
     const response = yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
 
     yield put(updateFieldSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -46,10 +46,10 @@ export function* deleteField(action) {
     yield call(api.fields.destroy.bind(api.fields), action.payload);
 
     yield put(deleteFieldSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteFieldError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -60,7 +60,7 @@ export function* getFields(action, fieldDefinerApi) {
     yield put(getFieldsSuccess(response.data.page));
   } catch (err) {
     yield put(getFieldsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.fields), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.fields, options: { variant: 'warning' } }));
   }
 }
 
@@ -72,10 +72,10 @@ export function* createField(action, fieldDefinerApi) {
     const response = yield call(fieldDefinerApi.createFields.bind(fieldDefinerApi), fieldDefinerId, payload);
 
     yield put(createFieldSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createFieldError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 

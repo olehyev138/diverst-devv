@@ -29,7 +29,7 @@ export function* getEmail(action) {
   } catch (err) {
     yield put(getEmailError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.email), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.update.email, options: { variant: 'warning' } }));
   }
 }
 
@@ -41,7 +41,7 @@ export function* getEmails(action) {
   } catch (err) {
     yield put(getEmailsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.update.emails), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.update.emails, options: { variant: 'warning' } }));
   }
 }
 
@@ -51,11 +51,11 @@ export function* updateEmail(action) {
     const response = yield call(api.emails.update.bind(api.emails), payload.email.id, payload);
 
     yield put(updateEmailSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEmailError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 

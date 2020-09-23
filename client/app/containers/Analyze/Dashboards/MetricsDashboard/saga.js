@@ -46,7 +46,7 @@ export function* getMetricsDashboards(action) {
   } catch (err) {
     yield put(getMetricsDashboardsError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.dashboards),
+      message: messages.snackbars.errors.dashboards,
       options: { variant: 'warning' }
     }));
   }
@@ -59,7 +59,7 @@ export function* getMetricsDashboard(action) {
   } catch (err) {
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.dashboard),
+      message: messages.snackbars.errors.dashboard,
       options: { variant: 'warning' }
     }));
   }
@@ -73,13 +73,13 @@ export function* createMetricsDashboard(action) {
     yield put(createMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.create_dashboard),
+      message: messages.snackbars.success.create_dashboard,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.create_dashboard),
+      message: messages.snackbars.errors.create_dashboard,
       options: { variant: 'warning' }
     }));
   }
@@ -94,13 +94,13 @@ export function* updateMetricsDashboard(action) {
     yield put(updateMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_dashboard),
+      message: messages.snackbars.success.update_dashboard,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_dashboard),
+      message: messages.snackbars.errors.update_dashboard,
       options: { variant: 'warning' }
     }));
   }
@@ -113,13 +113,13 @@ export function* deleteMetricsDashboard(action) {
     yield put(deleteMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.delete_dashboard),
+      message: messages.snackbars.success.delete_dashboard,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.delete_dashboard),
+      message: messages.snackbars.errors.delete_dashboard,
       options: { variant: 'warning' }
     }));
   }
@@ -134,7 +134,7 @@ export function* getCustomGraph(action) {
   } catch (err) {
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.graph),
+      message: messages.snackbars.errors.graph,
       options: { variant: 'warning' }
     }));
   }
@@ -147,7 +147,7 @@ export function* getCustomGraphData(action) {
   } catch (err) {
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.graph_data),
+      message: messages.snackbars.errors.graph_data,
       options: { variant: 'warning' }
     }));
   }
@@ -161,13 +161,13 @@ export function* createCustomGraph(action) {
     yield put(createCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.create_graph),
+      message: messages.snackbars.success.create_graph,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createCustomGraphError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.create_graph),
+      message: messages.snackbars.errors.create_graph,
       options: { variant: 'warning' }
     }));
   }
@@ -182,13 +182,13 @@ export function* updateCustomGraph(action) {
     yield put(updateCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_graph),
+      message: messages.snackbars.success.update_graph,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateCustomGraphError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_graph),
+      message: messages.snackbars.errors.update_graph,
       options: { variant: 'warning' }
     }));
   }
@@ -201,13 +201,13 @@ export function* deleteCustomGraph(action) {
     yield put(deleteCustomGraphSuccess(action.payload));
     yield put(getMetricsDashboardBegin({ id: action.payload.dashboardId }));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.delete_graph),
+      message: messages.snackbars.success.delete_graph,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteCustomGraphError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.delete_graph),
+      message: messages.snackbars.errors.delete_graph,
       options: { variant: 'warning' }
     }));
   }

@@ -47,7 +47,7 @@ export function* getArchives(action) {
   } catch (err) {
     yield put(getArchivesError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.load),
+      message: messages.snackbars.load,
       options: { variant: 'warning' }
     }));
   }
@@ -78,7 +78,7 @@ export function* unArchive(action) {
   } catch (err) {
     yield put(restoreArchiveError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.restore),
+      message: messages.snackbars.restore,
       options: { variant: 'warning' }
     }));
   }

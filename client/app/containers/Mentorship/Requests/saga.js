@@ -34,7 +34,7 @@ export function* getRequests(action) {
     yield put(getRequestsSuccess(response.data.page));
   } catch (err) {
     yield put(getRequestsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.request), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.request, options: { variant: 'warning' } }));
   }
 }
 
@@ -48,7 +48,7 @@ export function* getProposals(action) {
     yield put(getProposalsSuccess(response.data.page));
   } catch (err) {
     yield put(getProposalsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.proposal), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.proposal, options: { variant: 'warning' } }));
   }
 }
 
@@ -57,10 +57,10 @@ export function* acceptRequest(action) {
     const response = yield call(api.mentoringRequests.acceptRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(acceptRequestSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.accept), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.accept, options: { variant: 'success' } }));
   } catch (err) {
     yield put(acceptRequestError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.accept), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.accept, options: { variant: 'warning' } }));
   }
 }
 
@@ -69,10 +69,10 @@ export function* rejectRequest(action) {
     const response = yield call(api.mentoringRequests.rejectRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(rejectRequestSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.reject), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.reject, options: { variant: 'success' } }));
   } catch (err) {
     yield put(rejectRequestError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.reject), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.reject, options: { variant: 'warning' } }));
   }
 }
 
@@ -81,10 +81,10 @@ export function* deleteRequest(action) {
     const response = yield call(api.mentoringRequests.destroy.bind(api.mentoringRequests), action.payload.id);
 
     yield put(deleteRequestSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRequestError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

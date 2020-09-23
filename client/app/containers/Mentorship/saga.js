@@ -31,7 +31,7 @@ export function* getUsers(action) {
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.users), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.users, options: { variant: 'warning' } }));
   }
 }
 
@@ -42,7 +42,7 @@ export function* getUser(action) {
     yield put(getUserSuccess(response.data));
   } catch (err) {
     yield put(getUserError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.user), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.user, options: { variant: 'warning' } }));
   }
 }
 
@@ -52,10 +52,10 @@ export function* updateUser(action) {
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
     yield put(push(ROUTES.user.mentorship.show.path(payload.user.id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
