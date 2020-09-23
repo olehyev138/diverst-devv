@@ -262,6 +262,7 @@ export function Event(props) {
             currentUserId={props.currentUserId}
             event={props.event}
             commentAction={props.createEventCommentBegin}
+            customTexts={props.customTexts}
           />
           <Box mb={4} />
           <Typography variant='h6'>
@@ -277,6 +278,7 @@ export function Event(props) {
                 comment={comment}
                 deleteEventCommentBegin={props.deleteEventCommentBegin}
                 currentUserId={props.currentUserId}
+                customTexts={props.customTexts}
               />
             );
           })}
@@ -304,6 +306,7 @@ Event.propTypes = {
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
   export: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

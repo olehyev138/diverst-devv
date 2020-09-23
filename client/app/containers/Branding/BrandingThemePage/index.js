@@ -22,7 +22,7 @@ import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -44,6 +44,7 @@ export function BrandingThemePage(props) {
         isLoading={props.isLoading}
         isCommitting={props.isCommitting}
         buttonText={intl.formatMessage(messages.update)}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -57,6 +58,7 @@ BrandingThemePage.propTypes = {
   configurationUnmount: PropTypes.func,
   isLoading: PropTypes.bool,
   isCommitting: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -64,12 +66,13 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectEnterpriseIsLoading(),
   isCommitting: selectEnterpriseIsCommitting(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
   getEnterpriseBegin,
   updateEnterpriseBegin,
-  configurationUnmount
+  configurationUnmount,
 };
 
 const withConnect = connect(

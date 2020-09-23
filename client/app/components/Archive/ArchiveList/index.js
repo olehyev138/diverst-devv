@@ -14,6 +14,7 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import EventsTable from 'components/Archive/EventsTable';
 import ResourcesTable from '../ResourcesTable';
 import PostsTable from '../PostsTable';
+import DiverstFormattedMessage from '../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   link: {
@@ -45,9 +46,9 @@ export function ArchiveList(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label={intl.formatMessage(messages.posts)} />
-          <Tab label={intl.formatMessage(messages.resources)} />
-          <Tab label={intl.formatMessage(messages.events)} />
+          <Tab label={<DiverstFormattedMessage {...messages.posts} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.resources} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.events} />} />
         </ResponsiveTabs>
       </Paper>
       <br />

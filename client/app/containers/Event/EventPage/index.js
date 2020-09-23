@@ -14,7 +14,7 @@ import saga from 'containers/Event/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectEvent, selectHasChanged, selectIsFormLoading } from 'containers/Event/selectors';
 import { redirectAction } from 'utils/reduxPushHelper';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
@@ -85,6 +85,7 @@ export function EventPage(props) {
         hasChanged={props.hasChanged}
         currentGroup={props.currentGroup}
         export={props.exportAttendeesBegin}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -107,6 +108,7 @@ EventPage.propTypes = {
   hasChanged: PropTypes.bool,
   redirectAction: PropTypes.func,
   showSnackbar: PropTypes.func,
+  customTexts: PropTypes.object,
   intl: intlShape,
 };
 
@@ -116,6 +118,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectEvent(),
   isFormLoading: selectIsFormLoading(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

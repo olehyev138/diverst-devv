@@ -19,7 +19,7 @@ import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function BrandingHomePage(props) {
@@ -33,6 +33,7 @@ export function BrandingHomePage(props) {
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
         buttonText={intl.formatMessage(messages.update)}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -42,11 +43,13 @@ BrandingHomePage.propTypes = {
   intl: intlShape.isRequired,
   enterprise: PropTypes.object,
   updateEnterpriseBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
