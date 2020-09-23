@@ -31,6 +31,7 @@ class NewsLink < ApplicationRecord
   validates :title,           presence: true
   validates :description,     presence: true
   validates :author_id,       presence: true
+  validates :url,             presence: true
   validates :url,             length: { maximum: 191 }
 
   # ActiveStorage
@@ -87,8 +88,6 @@ class NewsLink < ApplicationRecord
   end
 
   def valid_url
-    return nil if url.blank?
-
     uri = URI.parse(self.url)
     uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
