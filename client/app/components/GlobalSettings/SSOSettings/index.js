@@ -21,7 +21,7 @@ import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
-import DiverstSubmit from "components/Shared/DiverstSubmit";
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   noBottomPadding: {
