@@ -181,7 +181,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.create).toHaveBeenCalledWith({ folder: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_folder, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_folder, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -232,7 +232,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.update).toHaveBeenCalledWith(initialAction.payload.id, { folder: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_folder, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_folder, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -286,7 +286,7 @@ describe('Tests for folders', () => {
       );
       expect(api.folders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_folder, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_folder, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

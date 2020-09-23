@@ -185,7 +185,7 @@ describe('Create event', () => {
     );
 
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_event, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_event, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -233,7 +233,7 @@ describe('Update event', () => {
       initialAction
     );
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_event, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_event, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -288,7 +288,7 @@ describe('Delete event', () => {
 
 
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_event, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_event, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -342,7 +342,7 @@ describe('Delete comment', () => {
     );
 
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_event_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_event_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -393,7 +393,7 @@ describe('Create comment', () => {
     );
 
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_event_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_event_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {

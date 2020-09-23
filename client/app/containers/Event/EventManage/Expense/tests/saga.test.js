@@ -152,7 +152,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.create).toHaveBeenCalledWith({ initiative_expense: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -201,7 +201,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.update).toHaveBeenCalledWith(initialAction.payload.id, { initiative_expense: {} });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -257,7 +257,7 @@ describe('Tests for expenses saga', () => {
       );
       expect(api.initiativeExpenses.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

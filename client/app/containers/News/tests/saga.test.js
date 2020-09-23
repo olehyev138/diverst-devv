@@ -266,7 +266,7 @@ describe('Update news item', () => {
 
     expect(api.newsFeedLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_feed_link: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_news_item, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_news_item, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -315,7 +315,7 @@ describe('Create group message', () => {
 
     expect(api.groupMessages.create).toHaveBeenCalledWith({ group_message: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_group_message, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_group_message, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -363,7 +363,7 @@ describe('Update group message', () => {
 
     expect(api.groupMessages.update).toHaveBeenCalledWith(initialAction.payload.id, { group_message: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_message, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_message, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -412,7 +412,7 @@ describe('Delete group message', () => {
 
     expect(api.groupMessages.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_group_message, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_group_message, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -461,7 +461,7 @@ describe('Create group message comment', () => {
 
     expect(api.groupMessageComments.create).toHaveBeenCalledWith({ group_message_comment: initialAction.payload.attributes });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_group_message_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_group_message_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -510,7 +510,7 @@ describe('Delete group message comment', () => {
 
     expect(api.groupMessageComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_group_message_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_group_message_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -558,7 +558,7 @@ describe('Create news link', () => {
 
     expect(api.newsLinks.create).toHaveBeenCalledWith({ news_link: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_news_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_news_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -606,7 +606,7 @@ describe('Update news link', () => {
 
     expect(api.newsLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { news_link: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_news_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_news_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -655,7 +655,7 @@ describe('Delete news link', () => {
 
     expect(api.newsLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_news_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_news_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -704,7 +704,7 @@ describe('Create news link comment', () => {
 
     expect(api.newsLinkComments.create).toHaveBeenCalledWith({ news_link_comment: initialAction.payload.attributes });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_news_link_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_news_link_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -753,7 +753,7 @@ describe('Delete news link comment', () => {
 
     expect(api.newsLinkComments.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_news_link_comment, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_news_link_comment, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -801,7 +801,7 @@ describe('Create social link', () => {
 
     expect(api.socialLinks.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_social_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_social_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -849,7 +849,7 @@ describe('Update social link', () => {
 
     expect(api.socialLinks.update).toHaveBeenCalledWith(initialAction.payload.id, { social_link: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_social_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_social_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -898,7 +898,7 @@ describe('Delete social link', () => {
 
     expect(api.socialLinks.destroy).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_social_link, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete_social_link, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {

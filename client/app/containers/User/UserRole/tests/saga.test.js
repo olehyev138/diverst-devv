@@ -155,7 +155,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.create).toHaveBeenCalledWith({ user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -206,7 +206,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.update).toHaveBeenCalledWith(initialAction.payload.id, { user_role: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -261,7 +261,7 @@ describe('tests for userRole saga', () => {
       );
       expect(api.userRoles.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

@@ -173,7 +173,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.create).toHaveBeenCalledWith({ user: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -222,7 +222,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.update).toHaveBeenCalledWith(initialAction.payload.id, { user: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -277,7 +277,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -560,7 +560,7 @@ describe('saga tests for users', () => {
       );
       expect(api.fieldData.updateFieldData).toHaveBeenCalledWith({ field_data: { field_data: {} } });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.fields, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.fields, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

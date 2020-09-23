@@ -155,7 +155,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.create).toHaveBeenCalledWith({ policy_group_template: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -206,7 +206,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.update).toHaveBeenCalledWith(initialAction.payload.id, { policy_group_template: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -261,7 +261,7 @@ describe('tests for policy saga', () => {
       );
       expect(api.policyTemplates.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

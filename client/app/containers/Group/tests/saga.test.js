@@ -251,7 +251,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith({ group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -343,7 +343,7 @@ describe('Update group', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -394,7 +394,7 @@ describe('Update group settings', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_settings, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_settings, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -449,7 +449,7 @@ describe('Delete group', () => {
     );
     expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {

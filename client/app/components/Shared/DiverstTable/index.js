@@ -32,6 +32,7 @@ const styles = theme => ({
 });
 
 export function DiverstTable(props) {
+  console.log(props.actions);
   const { classes, params, dataArray, dataTotal, page, rowsPerPage, title, columns, actions, isStatic, tableOptions, ...rest } = props;
 
   const [pageState, setPage] = useState(page || 0);
@@ -73,7 +74,7 @@ export function DiverstTable(props) {
         onSearchChange={handleSearchChange}
         onRowClick={props.handleRowClick}
         columns={columns.map(column => ({ title: props.intl.formatMessage(column.title, props.customText), field: column.field, query_field: column.query_field, tableData: column.tableData, render: column.render, sorting: column.sorting }))}
-        actions={actions && actions.map(action => ({ tooltip: props.intl.formatMessage(action.tooltip, props.customText), icon: action.icon, onClick: action.onClick }))}
+        actions={actions[0].tooltip ? actions.map(action => ({ tooltip: props.intl.formatMessage(action.tooltip, props.customText), icon: action.icon, onClick: action.onClick })) : actions}
         options={{
           search: !!props.handleSearching, // Disable searching when callback isn't passed
           actionsColumnIndex: -1,

@@ -153,7 +153,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.create).toHaveBeenCalledWith({ group_category_type: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -202,7 +202,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.update).toHaveBeenCalledWith(initialAction.payload.id, { group_category_type: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -257,7 +257,7 @@ describe('Tests for groupCategories saga', () => {
       );
       expect(api.groupCategoryTypes.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

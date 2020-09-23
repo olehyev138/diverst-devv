@@ -144,7 +144,7 @@ describe('Tests for budgetItems saga', () => {
       );
       expect(api.budgetItems.closeBudget).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.close, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.close, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {

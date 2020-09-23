@@ -130,7 +130,7 @@ export function UserList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: messages.tooltip.edit,
+                tooltip: intl.formatMessage(messages.tooltip.edit),
                 onClick: (_, rowData) => {
                   props.handleVisitUserEdit(rowData.id);
                 },
@@ -138,7 +138,7 @@ export function UserList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: messages.tooltip.delete,
+                tooltip: intl.formatMessage(messages.tooltip.delete),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

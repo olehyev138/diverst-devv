@@ -151,7 +151,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.create).toHaveBeenCalledWith({ segment: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -200,7 +200,7 @@ describe('Create segment', () => {
     );
     expect(api.segments.update).toHaveBeenCalledWith(initialAction.payload.id, { segment: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -255,7 +255,7 @@ describe('Delete segment', () => {
     );
     expect(api.segments.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
