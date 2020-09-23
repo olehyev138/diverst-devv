@@ -1,42 +1,133 @@
-<h2><%= t('login.title') %></h2>
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-<%= f.input :email, label: t('login.email'), autofocus: true %>
-<%= f.input :password, label: t('login.password'), autocomplete: "off" %>
+<style>
+  .line {
+    position: absolute;
+    left: 49%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #999;
+    z-index: 1;
+}
 
-<% if devise_mapping.rememberable? -%>
-<%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
-<% end -%>
+  .wordwrapper {
+    text-align: center;
+    height: 12px;
+    position: absolute;
+    left: -20px;
+    right: 0;
+    top: 50%;
+    margin-top: -12px;
+    z-index: 2;
+}
 
-<%= f.button :submit, value: t('login.title') %>
-<% end %>
+.circle-with-text {
+  width: 100px;
+  height: 100px;
+  background: #EBECED;
+  border-radius: 100px;
+  border: solid 1px;
+  padding: 140%;
+  right: 130%;
+  bottom: 310%;
+  position: relative;
+}
 
-<% content_for :links do %>
-<div class="text-center">
-  <%= render "devise/shared/links" %>
-  <br>
-  <% if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] %>
-    <% if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])&.has_enabled_saml? %>
-      <%= link_to 'Login with SSO', 
-        sso_enterprise_saml_index_path(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']),
+.word {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px;
+  font: bold 12px;
+}
+
+.wrapper {
+    position: relative;
+    height: 450px;
+    margin: 10px;
+}
+</style>
+
+<div class="desktop">
+  <p>
+    NOTE: Those with Aramark.net access should click the “Login with Aramark.net” button to access the system. Those without .net access can activate their account by clicking the “Activate Account” button below.
+  </p>
+  <div class="col sm-12 md-5">
+    <div class="card" style= "<%= @enterprise&.has_enabled_saml? ? "" : "left: 80%;" %>">
+      <div class="card__section">
+        <h2><%= t('login.title') %> Manually</h2>
+        <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <%= f.input :email, label: t('login.email'), autofocus: true %>
+        <%= f.input :password, label: t('login.password'), autocomplete: "off" %>
+
+        <% if devise_mapping.rememberable? -%>
+        <%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
+        <% end -%>
+
+        <%= f.button :submit, value: t('login.title') %>
+        <% end %>
+        <br>
+        <%= render "devise/shared/links" %>
+        <%= render 'activate_account' %> 
+      </div>
+    </div>
+  </div>
+
+
+  <% if @enterprise&.has_enabled_saml? %>
+  <div class="col sm-12 md-2">
+    <div class="wrapper">
+      <div class="line">
+        <div class="wordwrapper">
+          <div class="circle-with-text">
+            <h1 class="word">OR</h1>
+          </div>
+        </div>  
+      </div>
+    </div>  
+  </div>
+
+  <div class="col sm-12 md-5">
+    <div class="text-center">
+      <%= link_to "Login with #{@sso_button_text}", 
+        sso_enterprise_saml_index_path(@enterprise.id),
         class: 'btn btn--tertiary tooltipster',
         style: 'margin-top: 5px;', title: @sso_button_text %>
-    <% end %>
-  <% end %>
-  
-  <% if ENV["ALTERNATIVE_ACCOUNT_ACTIVATION"] %>
-  <%= link_to 'Activate Account', 
-          alternative_activation_new_path, 
-          class: 'btn btn--tertiary',
-          style: 'margin-top: 5px;' %>
-
-  <% else %>
-  <%= link_to "Activate account",
-        new_password_path(resource_name, setup: '1'),
-          class: "btn btn--tertiary",
-          style: 'margin-top: 5px;' %>
-  <% end %>
+    </div>
+  </div>  
+<% end %>      
 </div>
-<% end %>
+
+
+<div class="mobile">
+  <div class="card">
+    <div class="card__section">
+      <h2><%= t('login.title') %> Manually</h2>
+      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= f.input :email, label: t('login.email'), autofocus: true %>
+      <%= f.input :password, label: t('login.password'), autocomplete: "off" %>
+
+      <% if devise_mapping.rememberable? -%>
+      <%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
+      <% end -%>
+
+      <%= f.button :submit, value: t('login.title') %>
+      <% end %>
+      <br>
+      <%= render "devise/shared/links" %>
+      <%= render 'activate_account' %> 
+    </div>
+  </div>
+
+  <div class="text-center">
+    <% if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] %>
+      <% if Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])&.has_enabled_saml? %>
+        <%= link_to "Login with #{@sso_button_text}", 
+            sso_enterprise_saml_index_path(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']),
+            class: 'btn btn--tertiary tooltipster',
+            style: 'margin-top: 5px;', title: @sso_button_text %>
+      <% end %>
+    <% end %>      
+  </div>
+</div>
 
 <script>
   $(document).ready(function () {

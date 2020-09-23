@@ -69,3 +69,14 @@
     margin-bottom: $spacing-x-large;
   }
 }
+
+.desktop {
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+.mobile {
+  @media (min-width: 800px) {
+    display: none;
+  }
+}

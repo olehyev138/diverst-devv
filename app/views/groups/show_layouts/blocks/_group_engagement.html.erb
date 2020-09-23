@@ -47,7 +47,7 @@
   $('#usersToInviteToGroup').on('shown.bs.modal', function(){
       $('a.send-invite').on('ajax:success', function(){
           $(this).fadeOut('slow', function(){
-              this.replaceWith('Sent Inivite!');
+              this.replaceWith('Sent!');
           })
       })
   });
