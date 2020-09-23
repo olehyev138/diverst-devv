@@ -44,6 +44,9 @@ import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import GroupSelector from 'components/Shared/GroupSelector';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import { permission } from 'utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
@@ -138,22 +141,24 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               onBlur={() => setFieldTouched('pillar_id', true)}
             />
           </CardContent>
-          <Divider />
-          <CardContent>
-            <GroupSelector
-              groupField='participating_group_ids'
-              dialogSelector
+          <Permission show={permission(props, 'groups_view')}>
+            <Divider />
+            <CardContent>
+              <GroupSelector
+                groupField='participating_group_ids'
+                dialogSelector
 
-              label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
-              isMulti
-              disabled={props.isCommitting}
-              queryScopes={[['except_id', props?.currentGroup?.id]]}
-              dialogQueryScopes={[['replace_with_children', props?.currentGroup?.id]]}
-              handleChange={handleChange}
-              values={values}
-              setFieldValue={setFieldValue}
-            />
-          </CardContent>
+                label={<DiverstFormattedMessage {...messages.inputs.participatingGroups} />}
+                isMulti
+                disabled={props.isCommitting}
+                queryScopes={[['except_id', props?.currentGroup?.id]]}
+                dialogQueryScopes={[['replace_with_children', props?.currentGroup?.id]]}
+                handleChange={handleChange}
+                values={values}
+                setFieldValue={setFieldValue}
+              />
+            </CardContent>
+          </Permission>
           <Divider />
           <CardContent>
             <Grid
@@ -347,6 +352,7 @@ EventFormInner.propTypes = {
 const mapStateToProps = createStructuredSelector({
   pillars: selectPaginatedSelectPillars(),
   budgetItems: selectPaginatedSelectBudgetItems(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
