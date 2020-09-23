@@ -21,6 +21,7 @@ import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
+import DiverstSubmit from "components/Shared/DiverstSubmit";
 
 const styles = theme => ({
   noBottomPadding: {
@@ -103,12 +104,11 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
+          <DiverstSubmit
+            isCommitting={props.isCommitting}
           >
-            {<DiverstFormattedMessage {...messages.save} />}
-          </Button>
+            <DiverstFormattedMessage {...messages.save} />
+          </DiverstSubmit>
         </CardActions>
       </Form>
     </Card>
@@ -165,6 +165,7 @@ SSOSettingsInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
+  isCommitting: PropTypes.bool,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func

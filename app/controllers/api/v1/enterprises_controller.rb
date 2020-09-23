@@ -69,6 +69,7 @@ class Api::V1::EnterprisesController < DiverstController
 
   def update_sso
     params[klass.symbol] = sso_payload
+    params[:id] = diverst_request.user.enterprise.id
     item = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(item)
 
