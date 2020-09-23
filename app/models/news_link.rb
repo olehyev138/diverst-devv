@@ -87,6 +87,8 @@ class NewsLink < ApplicationRecord
   end
 
   def valid_url
+    return nil if url.blank?
+
     uri = URI.parse(self.url)
     uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
