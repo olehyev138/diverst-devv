@@ -13,7 +13,6 @@ import {
 
 export const initialState = {
   isCommitting: false,
-  hasChanged: false,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -27,10 +26,9 @@ function SSOSettingsReducer(state = initialState, action) {
         break;
 
       case UPDATE_SSO_SETTINGS_SUCCESS:
+      case UPDATE_SSO_SETTINGS_ERROR:
         draft.isCommitting = false;
         break;
-
-      case UPDATE_SSO_SETTINGS_ERROR:
     }
   });
 }
