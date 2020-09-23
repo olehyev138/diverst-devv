@@ -16,10 +16,22 @@
           <%= f.hidden_field :user_id, value: current_user.id %>
           <%= f.hidden_field :group_id, value: @group.id %>
           <div class="custom-user-select">
-            <%= f.input :name %>
-            <%= f.input :email %> 
+            <%= f.input :candidate_name %>
+            <%= f.input :candidate_email %> 
           </div>
           <%= f.input :resume, as: :attachment_preview %>
+          <div class="custom-user-select">
+            <%= f.input :manager_email, label: "Manager's email" %>
+            <%= f.input :message_to_manager, label: 'Email content',
+            placeholder: "Dear %Name%
+
+Attached please find the resume of XXXXX. I think he/she will be an excellent candidate for the position of XXXX.
+
+Sincerly,
+
+XXXXX" %>
+          </div>
+          <br>
           <%= f.button :submit, 'Suggest a hire' %>
         <% end %>
       </div>
