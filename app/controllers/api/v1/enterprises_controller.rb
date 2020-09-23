@@ -67,6 +67,35 @@ class Api::V1::EnterprisesController < DiverstController
     end
   end
 
+  def update_sso
+    params[klass.symbol] = sso_payload
+    item = Enterprise.find(diverst_request.user.enterprise.id)
+    base_authorize(item)
+
+    updated_item = klass.update(self.diverst_request, params)
+    track_activity(updated_item)
+    render status: 200, json: updated_item
+  rescue => e
+    case e
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
+  def sso_payload
+    params
+        .require(klass.symbol)
+        .permit(
+            :sp_entity_id,
+            :idp_entity_id,
+            :idp_sso_target_url,
+            :idp_slo_target_url,
+            :idp_cert,
+            :saml_first_name_mapping,
+            :saml_last_name_mapping,
+        )
+  end
+
   def payload
     params
     .require(klass.symbol)

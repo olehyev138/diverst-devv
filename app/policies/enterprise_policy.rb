@@ -12,7 +12,11 @@ class EnterprisePolicy < ApplicationPolicy
   end
 
   def get_enterprise?
-    update?
+    update? || sso_manage?
+  end
+
+  def update_sso?
+    sso_manage?
   end
 
   def fields?
