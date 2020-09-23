@@ -9,9 +9,7 @@ import {
   Tab } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import messages from 'containers/Archive/messages';
-import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
-import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import RestoreIcon from '@material-ui/icons/Restore';
 import EventsTable from 'components/Archive/EventsTable';
 import ResourcesTable from '../ResourcesTable';
@@ -58,7 +56,7 @@ export function ArchiveList(props) {
           <Grid item xs>
             {props.currentTab === ArchiveTypes.events && (
               <EventsTable
-                title='Archives'
+                title={messages.tableName}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -66,20 +64,12 @@ export function ArchiveList(props) {
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
               />
             )}
 
             {props.currentTab === ArchiveTypes.resources && (
               <ResourcesTable
-                title='Archives'
+                title={messages.tableName}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -87,20 +77,12 @@ export function ArchiveList(props) {
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
               />
             )}
 
             {props.currentTab === ArchiveTypes.posts && (
               <PostsTable
-                title='Archives'
+                title={messages.tableName}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -108,14 +90,6 @@ export function ArchiveList(props) {
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
               />
             )}
           </Grid>

@@ -60,7 +60,7 @@ export function EventsTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: messages.tooltip,
+        tooltip: messages.restore,
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
