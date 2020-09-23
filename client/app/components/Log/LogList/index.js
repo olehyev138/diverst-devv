@@ -48,7 +48,7 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: 'Log',
+      title: messages.logs,
       render: (activity) => {
         try {
           // eslint-disable-next-line global-require
@@ -180,7 +180,7 @@ export function LogList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Logs'
+            title={messages.logs}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isLoading}

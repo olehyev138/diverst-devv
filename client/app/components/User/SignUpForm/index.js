@@ -30,12 +30,9 @@ import Logo from 'components/Shared/Logo';
 import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
-import { union, difference, intersection } from 'utils/arrayHelpers';
 import GroupSelectorItem from 'components/Shared/GroupSelector/item';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import DiverstDialog from 'components/Shared/DiverstDialog';
-import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
-import { injectIntl, intlShape } from 'react-intl';
 
 const submitGenerator = (action, token) => (values, actions) => {
   const payload = mapFields(values, ['time_zone']);
@@ -294,7 +291,7 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
             </Card>
             <DiverstDialog
               open={consentOpen}
-              title={props.intl.formatMessage(signUpMessages.consentTitle)}
+              title={signUpMessages.consentTitle}
               handleNo={() => setConsent(false)}
               content={(
                 <Scrollbar>
@@ -382,7 +379,6 @@ export function SignUpForm(props) {
 }
 
 SignUpForm.propTypes = {
-  intl: intlShape,
   submitAction: PropTypes.func,
   user: PropTypes.object,
   groups: PropTypes.arrayOf(PropTypes.object),
@@ -406,6 +402,5 @@ SignUpFormInner.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   memo,
 )(SignUpForm);
