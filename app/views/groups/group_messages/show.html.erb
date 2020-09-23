@@ -76,12 +76,21 @@
                     </small>
                   </p>
                 </div>
-                <div class="flex-row__cell link-group">
-                  <%= link_to "Approve", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id, group_message_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and GroupPostsPolicy.new(current_user, [@group, @message]).update? %>
-                  <%= link_to "Edit", edit_group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :get, class: "btn btn--secondary" if current_user === comment.author %>
-                  <%= link_to "Delete", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if current_user === comment.author %>
-                </div>
               </div>
+              <div class="row">
+                <div class="flex-row__cell link-group">
+                  <span class="hidden-xs pull-right">
+                    <%= link_to "Approve", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id, group_message_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and GroupPostsPolicy.new(current_user, [@group, @message]).update? %>
+                    <%= link_to "Edit", edit_group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :get, class: "btn btn--secondary" if current_user === comment.author %>
+                    <%= link_to "Delete", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if current_user === comment.author %>
+                  </span>
+                  <span class="btn-group visible-xs pull-right">
+                    <%= link_to "Approve", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id, group_message_comment: {approved: true}), method: :put, class: "btn btn-primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and GroupPostsPolicy.new(current_user, [@group, @message]).update? %>
+                    <%= link_to "Edit", edit_group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :get, class: "btn btn-secondary" if current_user === comment.author %>
+                    <%= link_to "Delete", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" if current_user === comment.author %>
+                  </span>
+                </div>
+              </div>  
             </div>
           </div>
         </div>
