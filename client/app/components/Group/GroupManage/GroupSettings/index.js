@@ -25,7 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import groupmessages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import { intl } from '../../../../containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
