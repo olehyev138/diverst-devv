@@ -23,10 +23,6 @@ class EnterprisePolicy < ApplicationPolicy
     edit_fields?
   end
 
-  def create_field?
-    update?
-  end
-
   def edit_auth?
     return true if manage_all?
     return true if basic_group_leader_permission?('sso_manage')
@@ -40,6 +36,8 @@ class EnterprisePolicy < ApplicationPolicy
 
     @policy_group.sso_manage?
   end
+
+  alias :create_field? :edit_fields?
 
   def edit_mobile_fields?
     return true if manage_all?
