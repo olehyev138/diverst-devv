@@ -82,7 +82,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_permission(permission)
-    policy_group[permission] || has_group_leader_permissions?(permission)
+    manage_all? || policy_group[permission] || has_group_leader_permissions?(permission)
   end
 
   def basic_group_leader_permission?(permission)
