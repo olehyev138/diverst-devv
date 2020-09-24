@@ -311,7 +311,7 @@ RSpec.describe User do
           user[mandatory_field] = ''
           user.valid?
 
-          expect(user.errors.messages).to eq({ test: ["can't be blank"] })
+          expect(user.errors.messages).to match(hash_including({ test: ["can't be blank"] }))
         end
       end
 
