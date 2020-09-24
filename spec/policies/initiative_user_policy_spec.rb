@@ -28,8 +28,7 @@ RSpec.describe InitiativeUserPolicy, type: :policy do
             context 'when ONLY initiatives_index is true' do
               before { user.policy_group.update initiatives_index: true }
 
-              it 'returns true' do
-                p subject
+              it 'returns false' do
                 expect(subject.index?).to eq false
               end
             end
@@ -45,7 +44,7 @@ RSpec.describe InitiativeUserPolicy, type: :policy do
             context 'when ONLY initiatives_create is true' do
               before { user.policy_group.update initiatives_create: true }
 
-              it 'returns true' do
+              it 'returns false' do
                 expect(subject.index?).to eq false
               end
             end
