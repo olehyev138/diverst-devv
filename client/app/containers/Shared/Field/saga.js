@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -7,7 +7,7 @@ import messages from './messages';
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
-  GET_FIELD_BEGIN, UPDATE_FIELD_BEGIN, DELETE_FIELD_BEGIN
+  GET_FIELD_BEGIN, UPDATE_FIELD_BEGIN, DELETE_FIELD_BEGIN, UPDATE_FIELD_POSITION_BEGIN
 } from 'containers/Shared/Field/constants';
 
 import {
@@ -15,7 +15,8 @@ import {
   updateFieldSuccess, updateFieldError,
   deleteFieldError, deleteFieldSuccess,
   getFieldsSuccess, getFieldsError,
-  createFieldSuccess, createFieldError
+  createFieldSuccess, createFieldError,
+  updateFieldPositionSuccess, updateFieldPositionError,
 } from 'containers/Shared/Field/actions';
 
 export function* getField(action) {
@@ -25,6 +26,19 @@ export function* getField(action) {
   } catch (err) {
     yield put(getFieldError(err));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.field), options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateFieldPosition(action) {
+  try {
+    const payload = { field: { id: action.payload.id, position: action.payload.position, type: action.payload.type } };
+    yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
+    yield put(updateFieldPositionSuccess());
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.position), options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updateFieldPositionError(err));
+
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.position), options: { variant: 'warning' } }));
   }
 }
 
@@ -78,6 +92,7 @@ export function* createField(action, fieldDefinerApi) {
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
+
 
 export default function* fieldsSaga() {
   yield takeLatest(GET_FIELD_BEGIN, getField);
