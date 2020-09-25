@@ -85,6 +85,18 @@ class GroupBasePolicy < ApplicationPolicy
     manage_all? || policy_group[permission] || has_group_leader_permissions?(permission)
   end
 
+  def has_at_least_permission(permission)
+    permissions = if permission.include? 'index'
+                    [permission, permission.gsub('index', 'create'), permission.gsub('index', 'manage')]
+                  elsif permission.include? 'create'
+                    [permission, permission.gsub('create', 'manage')]
+                  else
+                    [permission]
+                  end & PolicyGroup.attribute_names
+
+    permissions.any? { |per| has_permission(per) }
+  end
+
   def basic_group_leader_permission?(permission)
     PolicyGroupTemplate.where(user_role_id: group_leader_role_id, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
