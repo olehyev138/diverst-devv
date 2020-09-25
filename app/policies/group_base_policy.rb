@@ -87,12 +87,12 @@ class GroupBasePolicy < ApplicationPolicy
 
   def has_at_least_permission(permission)
     permissions = if permission.include? 'index'
-                    [permission, permission.gsub('index', 'create'), permission.gsub('index', 'manage')]
-                  elsif permission.include? 'create'
-                    [permission, permission.gsub('create', 'manage')]
-                  else
-                    [permission]
-                  end & PolicyGroup.attribute_names
+      [permission, permission.gsub('index', 'create'), permission.gsub('index', 'manage')]
+    elsif permission.include? 'create'
+      [permission, permission.gsub('create', 'manage')]
+    else
+      [permission]
+    end & PolicyGroup.attribute_names
 
     permissions.any? { |per| has_permission(per) }
   end
