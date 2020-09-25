@@ -46,6 +46,7 @@ export function DroppableFieldList(props) {
       currentPage={props.currentPage}
       importAction={props.importAction}
       rowsPerPage={props.rowsPerPage}
+      intl={props.intl}
     />
   );
 }

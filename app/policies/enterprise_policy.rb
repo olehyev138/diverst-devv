@@ -12,15 +12,15 @@ class EnterprisePolicy < ApplicationPolicy
   end
 
   def get_enterprise?
-    update?
+    update? || sso_manage?
+  end
+
+  def update_sso?
+    sso_manage?
   end
 
   def fields?
     edit_fields?
-  end
-
-  def create_field?
-    update?
   end
 
   def edit_auth?
@@ -36,6 +36,8 @@ class EnterprisePolicy < ApplicationPolicy
 
     @policy_group.sso_manage?
   end
+
+  alias :create_field? :edit_fields?
 
   def edit_mobile_fields?
     return true if manage_all?
