@@ -15,7 +15,7 @@ FactoryBot.define do
     association :policy_group
 
     trait :no_permissions do
-      association :policy_group, :no_permissions
+      association :policy_group, factory: [:policy_group, :no_permissions]
     end
     seen_onboarding true
 
