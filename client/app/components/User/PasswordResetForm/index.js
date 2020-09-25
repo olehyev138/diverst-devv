@@ -101,8 +101,8 @@ export function PasswordResetForm(props) {
 
   const initialValues = buildValues(user, {
     email: { default: '' },
-    password: '',
-    password_confirmation: '',
+    password: { default: '' },
+    password_confirmation: { default: '' },
   });
 
   return (
