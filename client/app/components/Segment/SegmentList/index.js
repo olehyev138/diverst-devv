@@ -103,7 +103,7 @@ export function SegmentList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: messages.list.edit,
+                tooltip: <DiverstFormattedMessage {...messages.list.edit} />,
                 onClick: (_, rowData) => {
                   props.handleSegmentEdit(rowData.id);
                 },
@@ -111,7 +111,7 @@ export function SegmentList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: messages.list.delete,
+                tooltip: <DiverstFormattedMessage {...messages.list.delete} />,
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

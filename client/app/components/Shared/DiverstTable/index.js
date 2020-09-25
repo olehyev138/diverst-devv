@@ -74,7 +74,7 @@ export function DiverstTable(props) {
         onSearchChange={handleSearchChange}
         onRowClick={props.handleRowClick}
         columns={columns.map(column => ({ title: props.intl.formatMessage(column.title, props.customText), field: column.field, query_field: column.query_field, tableData: column.tableData, render: column.render, sorting: column.sorting }))}
-        actions={actions[0].tooltip ? actions.map(action => ({ tooltip: props.intl.formatMessage(action.tooltip, props.customText), icon: action.icon, onClick: action.onClick })) : actions}
+        actions={actions && actions[0].tooltip ? actions.map(action => ({ tooltip: props.intl.formatMessage(action.tooltip, props.customText), icon: action.icon, onClick: action.onClick })) : actions}
         options={{
           search: !!props.handleSearching, // Disable searching when callback isn't passed
           actionsColumnIndex: -1,

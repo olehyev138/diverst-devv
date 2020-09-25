@@ -25,6 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
 
@@ -81,7 +82,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: listMessages.actions.edit,
+      tooltip: <DiverstFormattedMessage {...listMessages.actions.edit} />,
       onClick: (_, rowData) => {
         props.handleVisitEditPage(rowData.id);
       },
@@ -92,7 +93,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <RedoIcon />,
-      tooltip: listMessages.actions.carryover,
+      tooltip: <DiverstFormattedMessage {...listMessages.actions.carryover} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
@@ -105,7 +106,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <LoopIcon />,
-      tooltip: listMessages.actions.reset,
+      tooltip: <DiverstFormattedMessage {...listMessages.actions.reset} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))

@@ -18,6 +18,7 @@ import messages from 'containers/GlobalSettings/Email/Email/messages';
 import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   emailListItem: {
@@ -67,7 +68,7 @@ export function TemplatesList(props) {
   const actions = [
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: messages.action,
+      tooltip: <DiverstFormattedMessage {...messages.action} />,
       onClick: (_, rowData) => {
         props.handlePolicyEdit(rowData.id);
       },
