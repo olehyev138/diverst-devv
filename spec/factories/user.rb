@@ -11,9 +11,10 @@ FactoryBot.define do
     provider 'email'
     time_zone ActiveSupport::TimeZone.find_tzinfo('UTC').name
     user_role { enterprise.user_roles.where(role_type: 'admin').first }
+    association :policy_group, factory: :policy_group
 
-    after(:create) do |user|
-      user.policy_group = create(:policy_group)
+    trait :no_permissions do
+      association :policy_group, :no_permissions
     end
     seen_onboarding true
 

@@ -6,7 +6,7 @@ RSpec.describe GroupLeaderPolicy, type: :policy do
   let(:annual_budget) { create(:annual_budget, group: group) }
   let(:budget) { create(:budget, annual_budget: annual_budget) }
   let(:group_leader) { create(:group_leader, group: group) }
-  let(:no_access) { create(:user) }
+  let(:no_access) { create(:user, :no_permissions) }
   let!(:user) { no_access }
 
   subject { described_class.new(user.reload, [group, group_leader]) }

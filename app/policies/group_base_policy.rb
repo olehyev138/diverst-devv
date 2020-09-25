@@ -86,7 +86,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_at_least_permission(permission)
-    permissions = Rails.cache.fetch('permission') do
+    permissions = Rails.cache.fetch(permission) do
       if permission.include? 'index'
         [permission, permission.gsub('index', 'create'), permission.gsub('index', 'manage'), 'manage_all']
       elsif permission.include? 'create'
