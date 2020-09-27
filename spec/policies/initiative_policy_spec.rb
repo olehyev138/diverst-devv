@@ -71,7 +71,7 @@ RSpec.describe InitiativePolicy, type: :policy do
 
         context 'when initiatives_manage is true' do
           before { user.policy_group.update initiatives_manage: true }
-          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy, :attendees]) }
         end
 
         context 'user has basic group leader permission for initiatives_manage' do
@@ -82,7 +82,7 @@ RSpec.describe InitiativePolicy, type: :policy do
                                   user_role_id: user_role.id)
           end
 
-          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :attendees, :destroy]) }
         end
       end
 
@@ -97,13 +97,13 @@ RSpec.describe InitiativePolicy, type: :policy do
         user.policy_group.update manage_all: true
       end
 
-      it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+      it { is_expected.to permit_actions([:index, :show, :create, :update, :attendees, :destroy]) }
     end
   end
 
   describe 'for users with no access' do
     before { initiative.owner = create(:user) }
-    it { is_expected.to forbid_actions([:index, :show, :create, :update, :destroy]) }
+    it { is_expected.to forbid_actions([:index, :show, :create, :update, :attendees, :destroy]) }
   end
 
   describe 'test custom policies' do
