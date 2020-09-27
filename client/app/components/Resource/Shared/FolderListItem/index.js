@@ -123,52 +123,55 @@ export function FolderListItem(props) {
                 </Grid>
               </CardContent>
             </CardActionArea>
-            <Divider />
           </Link>
-          <CardActions>
-            <Permission show={permission(item, 'update?')}>
-              <Button
-                color='primary'
-                className={classes.folderLink}
-                component={WrappedNavLink}
-                to={isResource ? props.links.resourceEdit(item) : props.links.folderEdit(item)}
-              >
-                <DiverstFormattedMessage {...(isResource ? resourceMessages.edit : folderMessages.edit)} />
-              </Button>
-            </Permission>
-            {(isResource) && (
-              <Permission show={permission(props.currentGroup, 'resources_manage?')}>
+          <Permission show={permission(item, 'update?') || permission(item, 'destroy?')}>
+
+            <Divider />
+            <CardActions>
+              <Permission show={permission(item, 'update?')}>
                 <Button
-                  className={classes.folderLink}
                   color='primary'
-                  onClick={() => {
-                    props.archiveResourceBegin({
-                      id: item.id,
-                    });
-                  }}
+                  className={classes.folderLink}
+                  component={WrappedNavLink}
+                  to={isResource ? props.links.resourceEdit(item) : props.links.folderEdit(item)}
                 >
-                  <DiverstFormattedMessage {...resourceMessages.archive} />
+                  <DiverstFormattedMessage {...(isResource ? resourceMessages.edit : folderMessages.edit)} />
                 </Button>
               </Permission>
-            )}
-            {(isResource || !item.password_protected) && (
-              <Permission show={permission(item, 'destroy?')}>
-                <Button
-                  className={classNames(classes.folderLink, classes.deleteButton)}
-                  onClick={() => {
-                    // eslint-disable-next-line no-restricted-globals,no-alert
-                    if (confirm(props.intl.formatMessage(isResource ? resourceMessages.confirm_delete : folderMessages.confirm_delete)))
-                      props.deleteAction({
+              {(isResource) && (
+                <Permission show={permission(props.currentGroup, 'resources_manage?')}>
+                  <Button
+                    className={classes.folderLink}
+                    color='primary'
+                    onClick={() => {
+                      props.archiveResourceBegin({
                         id: item.id,
-                        folder: isResource ? item.folder : item,
                       });
-                  }}
-                >
-                  <DiverstFormattedMessage {...(isResource ? resourceMessages.delete : folderMessages.delete)} />
-                </Button>
-              </Permission>
-            )}
-          </CardActions>
+                    }}
+                  >
+                    <DiverstFormattedMessage {...resourceMessages.archive} />
+                  </Button>
+                </Permission>
+              )}
+              {(isResource || !item.password_protected) && (
+                <Permission show={permission(item, 'destroy?')}>
+                  <Button
+                    className={classNames(classes.folderLink, classes.deleteButton)}
+                    onClick={() => {
+                      // eslint-disable-next-line no-restricted-globals,no-alert
+                      if (confirm(props.intl.formatMessage(isResource ? resourceMessages.confirm_delete : folderMessages.confirm_delete)))
+                        props.deleteAction({
+                          id: item.id,
+                          folder: isResource ? item.folder : item,
+                        });
+                    }}
+                  >
+                    <DiverstFormattedMessage {...(isResource ? resourceMessages.delete : folderMessages.delete)} />
+                  </Button>
+                </Permission>
+              )}
+            </CardActions>
+          </Permission>
         </Card>
       )}
     </React.Fragment>

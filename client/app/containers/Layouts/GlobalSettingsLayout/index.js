@@ -65,6 +65,7 @@ const GlobalSettingsLayout = (props) => {
     <React.Fragment>
       <GlobalSettingsLinks
         currentTab={tab}
+        permissions={props.permissions}
       />
       <Box mb={3} />
       <Fade in appear>
