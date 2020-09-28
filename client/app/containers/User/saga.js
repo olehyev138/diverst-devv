@@ -52,7 +52,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUsers(action) {
   try {
-    const response = yield call(api.users.all.bind(api.users), action.payload);
+    const { type, ...payload } = action.payload;
+    const response = yield (() => {
+      switch (type) {
+        case 'budget_approval':
+          return call(api.users.budgetApprovers.bind(api.users), payload);
+        default:
+          return call(api.users.all.bind(api.users), payload);
+      }
+    })();
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));

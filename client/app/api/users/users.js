@@ -27,6 +27,9 @@ Object.assign(Users, {
   prototype(payload) {
     return axios.get(appendQueryArgs(`${this.url}/prototype`, payload));
   },
+  budgetApprovers(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/budget_approvers`, payload));
+  },
   sampleCSV(payload) {
     return axios.get(appendQueryArgs(`${this.url}/sample_csv`, payload)).then(
       response => download(response.data, 'diverst_import.csv', response.content_type)
