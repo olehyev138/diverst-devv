@@ -3,6 +3,10 @@ class FolderSerializer < ApplicationRecordSerializer
 
   belongs_to :parent
 
+  def policies
+    super + [:archive?]
+  end
+
   def excluded_keys
     [:password_digest]
   end

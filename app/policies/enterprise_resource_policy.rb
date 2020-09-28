@@ -28,6 +28,10 @@ class EnterpriseResourcePolicy < ApplicationPolicy
     update?
   end
 
+  def archive?
+    update?
+  end
+
   class Scope < Scope
     def index?
       EnterpriseResourcePolicy.new(user, nil).index?
