@@ -35,7 +35,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
   end
 
   def policies
-    super + [:join_event?]
+    super + [:join_event?, :attendees?]
   end
 
   # Picture

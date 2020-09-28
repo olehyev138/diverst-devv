@@ -13,16 +13,19 @@ class Api::V1::FieldsController < DiverstController
       .require(:field)
       .permit(
         :field_definer_id,
+        :id,
         :field_definer_type,
         :type,
         :title,
         :options_text,
         :min,
+        :max,
         :show_on_vcard,
         :alternative_layout,
         :private,
         :required,
         :add_to_member_list,
+        :position
       )
   end
 end

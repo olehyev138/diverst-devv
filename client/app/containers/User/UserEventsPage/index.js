@@ -57,9 +57,6 @@ export function EventsPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getEvents = (scopes = null, participation = null, resetParams = false) => {
-    if (resetParams)
-      setParams(defaultParams);
-
     if (participation == null)
       switch (participateTab) {
         case 0:
@@ -92,10 +89,12 @@ export function EventsPage(props) {
           break;
       }
 
+    const subject = resetParams ? defaultParams : params;
     let newParams;
+
     if (calendar)
       newParams = {
-        ...params,
+        ...subject,
         userId: props.currentSession.user_id,
         query_scopes: ['not_archived', ['date_range', ...dateRange]],
         count: -1,
@@ -103,7 +102,7 @@ export function EventsPage(props) {
       };
     else
       newParams = {
-        ...params,
+        ...subject,
         userId: props.currentSession.user_id,
         query_scopes: scopes,
         participation
@@ -192,6 +191,7 @@ export function EventsPage(props) {
       loaderProps={props.loaderProps}
       readonly
       calendarDateCallback={handleCalendarPage}
+      params={params}
     />
   );
 }

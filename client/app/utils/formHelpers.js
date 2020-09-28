@@ -30,7 +30,7 @@ export function buildValues(object, valueSchemas) {
 
   for (const [key, valueSchema] of Object.entries(valueSchemas)) {
     const storeKey = valueSchema?.customKey || key;
-    values[storeKey] = object?.[key] ? object[key] : valueSchema.default;
+    values[storeKey] = object?.[key] != null ? object[key] : valueSchema.default;
   }
 
   return values;

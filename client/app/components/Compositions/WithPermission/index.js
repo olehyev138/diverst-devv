@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 export default function WithPermission(Component) {
-  const WrappedComponent = ({ show, valid, ...props }) => show || (valid && valid())
+  const WrappedComponent = ({ show, valid, ...props }) => show || (valid?.())
     ? <Component {...props} />
     : <React.Fragment />;
 

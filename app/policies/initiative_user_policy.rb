@@ -1,10 +1,10 @@
 class InitiativeUserPolicy < InitiativeBasePolicy
   def base_index_permission
-    'initiatives_index'
+    'initiatives_manage'
   end
 
   def base_create_permission
-    'initiatives_create'
+    'initiatives_manage'
   end
 
   def base_manage_permission
