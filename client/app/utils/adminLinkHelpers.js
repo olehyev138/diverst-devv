@@ -26,7 +26,7 @@ const NameToPathMap = Object.freeze({
 
 const GlobalSettingsPaths = Object.freeze([
   'enterprise_manage',
-  'users_manage',
+  'users_create',
   'sso_authentication',
   'policy_templates_manage',
   'fields_manage',
