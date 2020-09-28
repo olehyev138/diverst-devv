@@ -32,34 +32,38 @@ export function SystemUsersLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.users.index.path()}
-            label={<DiverstFormattedMessage {...messages.tab.users} />}
-            value='users'
-            show={permission(props, 'users_create')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.users.roles.index.path()}
-            label={<DiverstFormattedMessage {...messages.tab.roles} />}
-            value='roles'
-            show={permission(props, 'policy_templates_create')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.users.policy_templates.index.path()}
-            label={<DiverstFormattedMessage {...messages.tab.policy} />}
-            value='templates'
-            show={permission(props, 'policy_templates_manage')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.users.import.path()}
-            label='Import Users'
-            value='import'
-            show={permission(props, 'users_create')}
-          />
+          { permission(props, 'users_create') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.admin.system.users.index.path()}
+              label={<DiverstFormattedMessage {...messages.tab.users} />}
+              value='users'
+            />
+          ) }
+          { permission(props, 'policy_templates_create') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.admin.system.users.roles.index.path()}
+              label={<DiverstFormattedMessage {...messages.tab.roles} />}
+              value='roles'
+            />
+          ) }
+          { permission(props, 'policy_templates_manage') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.admin.system.users.policy_templates.index.path()}
+              label={<DiverstFormattedMessage {...messages.tab.policy} />}
+              value='templates'
+            />
+          ) }
+          { permission(props, 'users_create') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.admin.system.users.import.path()}
+              label='Import Users'
+              value='import'
+            />
+          ) }
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

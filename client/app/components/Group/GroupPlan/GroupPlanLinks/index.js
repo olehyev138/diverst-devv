@@ -32,30 +32,34 @@ export function GroupPlanLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.KPI} />}
-            value='kpi'
-            show={permission(props.currentGroup, 'kpi_manage?')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.event} />}
-            value='events'
-            show={permission(props.currentGroup, 'events_manage?')}
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.budgeting} />}
-            value='budgeting'
-            show={
-              permission(props.currentGroup, 'annual_budgets_view?')
-                || permission(props.currentGroup, 'budgets_create?')
-                || permission(props.currentGroup, 'annual_budgets_index?')}
-          />
+          { permission(props.currentGroup, 'kpi_manage?') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.KPI} />}
+              value='kpi'
+            />
+          ) }
+          { permission(props.currentGroup, 'events_manage?') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.event} />}
+              value='events'
+            />
+          ) }
+          {(
+            permission(props.currentGroup, 'annual_budgets_view?')
+            || permission(props.currentGroup, 'budgets_create?')
+            || permission(props.currentGroup, 'annual_budgets_index?')
+          ) && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.budget.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.budgeting} />}
+              value='budgeting'
+            />
+          ) }
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

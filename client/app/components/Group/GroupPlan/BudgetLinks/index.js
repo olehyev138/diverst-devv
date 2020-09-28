@@ -31,20 +31,24 @@ export function BudgetLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.overview.path(currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.overview} />}
-            show={permission(currentGroup, 'annual_budgets_view?')}
-            value='overview'
-          />
-          <PermissionTabs
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.editAnnualBudget.path(currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.editAnnualBudget} />}
-            show={permission(currentGroup, 'annual_budgets_manage?')}
-            value='annual_budget'
-          />
+          { permission(currentGroup, 'annual_budgets_view?') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.budget.overview.path(currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.overview} />}
+
+              value='overview'
+            />
+          ) }
+          { permission(currentGroup, 'annual_budgets_manage?') && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.budget.editAnnualBudget.path(currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.editAnnualBudget} />}
+
+              value='annual_budget'
+            />
+          ) }
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>
