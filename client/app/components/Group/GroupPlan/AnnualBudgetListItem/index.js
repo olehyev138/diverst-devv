@@ -278,15 +278,17 @@ export function AnnualBudgetListItem(props) {
           </Grid>
         </Grid>
         <Box mb={2} />
-        <Button
-          color='primary'
-          variant='contained'
-          onClick={() => {
-            toggleList();
-          }}
-        >
-          <DiverstFormattedMessage {...eventMessages.title} />
-        </Button>
+        <Permission show={permission(props.currentGroup, 'events_view?')}>
+          <Button
+            color='primary'
+            variant='contained'
+            onClick={() => {
+              toggleList();
+            }}
+          >
+            <DiverstFormattedMessage {...eventMessages.title} />
+          </Button>
+        </Permission>
       </CardContent>
       <Collapse in={initList}>
         <InitiativeList
