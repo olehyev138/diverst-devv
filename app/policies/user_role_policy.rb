@@ -1,9 +1,11 @@
 class UserRolePolicy < ApplicationPolicy
   def index?
     return true if create?
-    return true if basic_group_leader_permission?('users_index')
+    return true if basic_group_leader_permission?('users_manage')
+    return true if basic_group_leader_permission?('permissions_manage')
+    return true if @policy_group.users_manage?
 
-    @policy_group.users_index?
+    @policy_group.permissions_manage?
   end
 
   def new?

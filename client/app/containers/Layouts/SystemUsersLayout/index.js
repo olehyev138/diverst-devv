@@ -14,6 +14,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { renderChildrenWithProps } from 'utils/componentHelpers';
+import { push } from 'connected-react-router';
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   content: {
@@ -28,8 +31,10 @@ const SystemUsersPages = Object.freeze([
   'import',
 ]);
 
+const redirectAction = path => push(path);
+
 const SystemUsersLayout = (props) => {
-  const { classes, children, permissions, ...rest } = props;
+  const { classes, children, permissions, showSnackbar, redirectAction, ...rest } = props;
 
   const location = useLocation();
 
@@ -46,6 +51,18 @@ const SystemUsersLayout = (props) => {
   const [tab, setTab] = useState(SystemUsersPages[currentPage] || SystemUsersPages[0]);
 
   useEffect(() => {
+    if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
+      if (permission(props, 'users_create'))
+        redirectAction(ROUTES.admin.system.users.roles.index.path());
+      else if (permission(props, 'policy_templates_create'))
+        redirectAction(ROUTES.admin.system.users.roles.index.path());
+      else if (permission(props, 'policy_templates_manage'))
+        redirectAction(ROUTES.admin.system.users.roles.index.path());
+      else {
+        showSnackbar({ message: 'You do not have permission to see this page', options: { variant: 'warning' } });
+        redirectAction(ROUTES.user.home.path());
+      }
+
     if (tab !== currentPage)
       setTab(currentPage);
   }, [currentPage]);
@@ -70,14 +87,22 @@ SystemUsersLayout.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
   permissions: PropTypes.object,
+  redirectAction: PropTypes.func,
+  showSnackbar: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
 });
 
+const mapDispatchToProps = {
+  redirectAction,
+  showSnackbar,
+};
+
 const withConnect = connect(
   mapStateToProps,
+  mapDispatchToProps
 );
 
 export default compose(
