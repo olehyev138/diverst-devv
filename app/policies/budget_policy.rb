@@ -21,9 +21,11 @@ class BudgetPolicy < GroupBasePolicy
     manage_group_resource('budget_approval')
   end
 
-  def decline?
-    approve?
+  def index?
+    super || approve?
   end
+
+  alias_method :decline?, :approve?
 
   def manage_all_budgets?
     return true if user.policy_group.manage_all?

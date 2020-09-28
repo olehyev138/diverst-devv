@@ -146,7 +146,7 @@ export function AnnualBudgetListItem(props) {
           <Grid item>
             <Divider orientation='vertical' />
           </Grid>
-          <Permission show={permission(props.currentGroup, 'budgets_create?')}>
+          <Permission show={permission(props.currentGroup, 'budgets_view?')}>
             <Grid item>
               <Link
                 className={classes.eventLink}
@@ -161,27 +161,27 @@ export function AnnualBudgetListItem(props) {
                 </Typography>
               </Link>
             </Grid>
-            { item.closed || (
-              <React.Fragment>
-                <Grid item>
-                  <Divider orientation='vertical' />
-                </Grid>
-                <Grid item>
-                  <Link
-                    className={classes.eventLink}
-                    component={WrappedNavLink}
-                    to={{
-                      pathname: props.links.newRequest(item.id),
-                      annualBudget: item
-                    }}
-                  >
-                    <Typography color='primary' variant='body1' component='h2'>
-                      <DiverstFormattedMessage {...itemMessages.createRequests} />
-                    </Typography>
-                  </Link>
-                </Grid>
-              </React.Fragment>
-            )}
+          </Permission>
+          {permission(props.currentGroup, 'budgets_view?') && permission(props.currentGroup, 'budgets_create?') && !item.closed && (
+            <Grid item>
+              <Divider orientation='vertical' />
+            </Grid>
+          )}
+          <Permission show={permission(props.currentGroup, 'budgets_create?') && !item.closed}>
+            <Grid item>
+              <Link
+                className={classes.eventLink}
+                component={WrappedNavLink}
+                to={{
+                  pathname: props.links.newRequest(item.id),
+                  annualBudget: item
+                }}
+              >
+                <Typography color='primary' variant='body1' component='h2'>
+                  <DiverstFormattedMessage {...itemMessages.createRequests} />
+                </Typography>
+              </Link>
+            </Grid>
           </Permission>
         </Grid>
         <Grid
