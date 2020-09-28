@@ -1,7 +1,8 @@
 <div class="content__header">
   <h2 class="heading1-styling">Group Leaders</h2>
   <% if GroupLeaderPolicy.new(current_user, [@group]).create? %>
-    <%= link_to "Manage leaders", new_group_leader_path(@group), class: "btn btn--primary" %>
+    <%= link_to "Manage leaders", new_group_leader_path(@group), class: "btn btn--primary hidden-xs" %>
+    <%= link_to "Manage leaders", new_group_leader_path(@group), class: "btn btn-primary visible-xs" %>
   <% end %>
 </div>
 

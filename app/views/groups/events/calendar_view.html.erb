@@ -2,7 +2,8 @@
   <h1>Events Calendar</h1>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "List View",   group_events_path(@group), class: "btn btn--secondary" %>
+      <%= link_to "List View",   group_events_path(@group), class: "btn btn--secondary hidden-xs" %>
+      <%= link_to "List View",   group_events_path(@group), class: "btn btn-secondary visible-xs" %>
     </div>
   </div>
 </div>
@@ -22,7 +23,8 @@
             %>
           </div>
           <div class="col sm-1" style="padding-top: 15px;">
-            <%= f.button :submit, value: "Filter" %>
+            <%= f.button :submit, value: "Filter", class: 'hidden-xs' %>
+            <%= f.submit value: "Filter", class: 'btn btn-primary visible-xs' %>
           </div>
         </div>
       </div>

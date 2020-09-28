@@ -2,7 +2,7 @@
   <h2 class="heading1-styling">Members (<%= @members.size %>)</h2>
   <% if GroupMemberPolicy.new(current_user, [@group]).export_group_members_list_csv? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary hidden-xs" %>
-    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn-primary visible-xs" %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn-primary visible-xs", style: "margin-bottom: 5px;" %>
     <div class="flex-row__cell">
       <%= active_link_to 'Export Group Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"ExportGroupMembers", "aria-control": "navigation", "data-jq-dropdown": "#export_group_members", class: "btn btn--secondary hidden-xs", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
           <nav id="export_group_members" class="jq-dropdown jq-dropdown-tip">
@@ -87,7 +87,8 @@
             %>
           </div>
           <div class="col xs-2" style="padding-top: 15px;">
-            <%= f.button :submit, value: "Filter" %>
+            <%= f.submit value: "Filter", class: 'btn btn--primary hidden-xs' %>
+            <%= f.submit value: "Filter", class: 'btn btn-primary visible-xs' %>
           </div>
         </div>
       </div>
