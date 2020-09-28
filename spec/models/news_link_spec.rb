@@ -191,9 +191,10 @@ RSpec.describe NewsLink, type: :model do
 
   describe 'valid_url' do
     it 'returns error message' do
-      news_link = build(:news_link, url: 'test test test')
+      news_link = build(:news_link, url: 'test')
       expect(news_link.valid_url[0]).to eq 'Invalid URL'
     end
+
     it 'returns true' do
       news_link = build(:news_link, url: 'http://google.com')
       expect(news_link.valid_url).to be true

@@ -1,4 +1,4 @@
-require 'uri'
+require 'open-uri'
 class NewsLink < ApplicationRecord
   include PublicActivity::Common
   include NewsLink::Actions
@@ -88,9 +88,9 @@ class NewsLink < ApplicationRecord
   end
 
   def valid_url
-    uri = URI.parse(self.url)
-    uri.is_a?(URI::HTTP) && !uri.host.nil?
-  rescue URI::InvalidURIError
+    open(self.url)
+    true
+  rescue => e
     errors.add(:url, 'Invalid URL')
   end
 
