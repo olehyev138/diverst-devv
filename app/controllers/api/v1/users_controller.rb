@@ -29,7 +29,7 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
-    base =  User.left_joins(:policy_group, :group_leaders, :user_groups)
+    base = User.left_joins(:policy_group, :group_leaders, :user_groups)
                 .where(
                     [
                         '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
