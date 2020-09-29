@@ -41,6 +41,7 @@ const CustomSelectField = (props) => {
       value={getIn(formik.values, dataLocation)}
       options={fieldDatum.field.options}
       onChange={v => formik.setFieldValue(dataLocation, v)}
+      isClearable
       {...rest}
     />
   );
