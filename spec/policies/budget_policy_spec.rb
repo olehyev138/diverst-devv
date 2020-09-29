@@ -31,6 +31,14 @@ RSpec.describe BudgetPolicy, type: :policy do
           end
         end
 
+        context 'when ONLY budget_approval is true' do
+          before { user.policy_group.update budget_approval: true }
+
+          it 'returns true' do
+            expect(subject.index?).to eq true
+          end
+        end
+
         context 'when ONLY groups_budgets_request is true' do
           before { user.policy_group.update groups_budgets_request: true }
 

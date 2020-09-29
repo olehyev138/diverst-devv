@@ -46,11 +46,17 @@ RSpec.describe GroupPolicy, type: :policy do
         it { is_expected.to permit_actions([:index, :show, :sort]) }
       end
 
+      context 'when only groups_budgets_index is true' do
+        before { user.policy_group.update groups_budgets_index: true }
+
+        it { is_expected.to permit_actions([:current_annual_budget]) }
+      end
+
       context 'groups_manage is true, groups_create and groups_index are false' do
         before { user.policy_group.update groups_manage: true }
 
         it { is_expected.to permit_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-                                            :add_category, :update_with_new_category, :update, :destroy])
+                                            :add_category, :update_with_new_category, :update, :current_annual_budget, :destroy])
         }
       end
 
@@ -58,7 +64,7 @@ RSpec.describe GroupPolicy, type: :policy do
         before { user.policy_group.update groups_create: true }
 
         it { is_expected.to permit_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-                                            :add_category, :update_with_new_category, :update, :destroy])
+                                            :add_category, :update_with_new_category, :update, :current_annual_budget, :destroy])
         }
       end
 
@@ -88,7 +94,7 @@ RSpec.describe GroupPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:update, :destroy, :layouts]) }
+        it { is_expected.to permit_actions([:update, :current_annual_budget, :destroy, :layouts]) }
       end
 
       context 'is group leader with group layout permissions and current user IS NOT owner' do
@@ -120,7 +126,7 @@ RSpec.describe GroupPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:update, :destroy, :settings]) }
+        it { is_expected.to permit_actions([:update, :current_annual_budget, :destroy, :settings]) }
       end
 
       context 'is group leader with group settings permissions and current user IS NOT owner' do
@@ -141,7 +147,7 @@ RSpec.describe GroupPolicy, type: :policy do
 
       context 'when groups_manage, groups_create groups_index are false' do
         it { is_expected.to permit_actions([:index, :new, :show, :create, :sort, :view_all, :add_category, :update_with_new_category,
-                                            :update, :destroy, :calendar, :layouts, :settings])
+                                            :update, :current_annual_budget, :destroy, :calendar, :layouts, :settings])
         }
       end
     end
@@ -151,7 +157,7 @@ RSpec.describe GroupPolicy, type: :policy do
     before { group.owner = create(:user) }
     let!(:user) { no_access }
     it { is_expected.to forbid_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-                                        :add_category, :update_with_new_category, :update, :destroy, :settings, :layouts, :calendar])
+                                        :add_category, :update_with_new_category, :update, :current_annual_budget, :destroy, :settings, :layouts, :calendar])
     }
   end
 

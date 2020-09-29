@@ -16,6 +16,7 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
     no_access.policy_group.groups_budgets_index = false
     no_access.policy_group.groups_budgets_manage = false
     no_access.policy_group.groups_budgets_request = false
+    no_access.policy_group.budget_approval = false
     no_access.policy_group.save!
   }
 
@@ -25,6 +26,14 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
         context 'when visibility is not set' do
           context 'when ONLY groups_budgets_index is true' do
             before { user.policy_group.update groups_budgets_index: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when ONLY budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
 
             it 'returns true' do
               expect(subject.index?).to eq true

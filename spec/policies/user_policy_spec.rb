@@ -31,6 +31,12 @@ RSpec.describe UserPolicy, type: :policy do
         it { is_expected.to permit_actions([:index, :show]) }
       end
 
+      context 'when user is able to create a budget' do
+        before { allow_any_instance_of(BudgetPolicy).to receive(:create?).and_return(true) }
+
+        it { is_expected.to permit_actions([:budget_approvers]) }
+      end
+
       context 'when users_index is false but users_manage is true' do
         before { user.policy_group.update(users_manage: true) }
 
