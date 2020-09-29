@@ -76,7 +76,7 @@ class CustomEmailsController < ApplicationController
 
     # TODO calculate how manu users got an email
     flash[:notice] = 'Your email has been sent.'
-    redirect_to custom_emails_path
+    redirect_to root_path
   end
 
   protected
