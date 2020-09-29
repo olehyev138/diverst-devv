@@ -58,7 +58,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}

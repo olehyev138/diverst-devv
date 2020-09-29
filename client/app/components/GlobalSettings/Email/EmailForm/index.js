@@ -10,7 +10,6 @@ import { compose } from 'redux';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
   Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
@@ -61,8 +60,6 @@ export function EmailFormInner({
     const example = variables?.[grouped]?.example;
     return example || whole;
   };
-
-  const { intl } = props;
 
 
   return (
@@ -119,8 +116,8 @@ export function EmailFormInner({
         <Box mb={2} />
         <Card>
           <CardHeader
-            title={intl.formatMessage(messages.preview.title)}
-            subheader={intl.formatMessage(messages.preview.subTitle)}
+            title=<DiverstFormattedMessage {...messages.preview.title} />
+            subheader={<DiverstFormattedMessage {...messages.preview.subTitle} />}
           />
           <CardContent>
             <Interweave
@@ -135,8 +132,8 @@ export function EmailFormInner({
         <Box mb={2} />
         <Card>
           <CardHeader
-            title={intl.formatMessage(messages.variables.title)}
-            subheader={intl.formatMessage(messages.variables.subTitle)}
+            title=<DiverstFormattedMessage {...messages.variables.title} />
+            subheader=<DiverstFormattedMessage {...messages.variables.subTitle} />
           />
           {/* eslint-disable-next-line array-callback-return */}
           {props.email && Object.values(props.email.variables).map(variable => (
@@ -189,9 +186,7 @@ EmailForm.propTypes = {
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
-
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 EmailFormInner.propTypes = {
@@ -215,11 +210,9 @@ EmailFormInner.propTypes = {
   }),
 
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles),
 )(EmailForm);
