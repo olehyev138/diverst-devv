@@ -69,7 +69,7 @@ class CustomEmailsController < ApplicationController
   def deliver
     # TODO authenticate
 
-    plaintext_emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
+    plaintext_emails = ''#custom_email_params[:receivers].split(',').map { |i| i.strip }
     receivers_groups_ids = custom_email_params[:receiver_groups_ids]
 
     CustomEmailMailer.custom(@custom_email.id, plaintext_emails, receivers_groups_ids).deliver_later
