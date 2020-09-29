@@ -44,6 +44,7 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 
 
 api.users.all = jest.fn();
+api.users.budgetApprovers = jest.fn();
 api.users.create = jest.fn();
 api.users.update = jest.fn();
 api.users.destroy = jest.fn();
@@ -80,6 +81,22 @@ describe('saga tests for users', () => {
         initialAction
       );
       expect(api.users.all).toHaveBeenCalledWith(initialAction.payload);
+      expect(dispatched).toEqual(results);
+    });
+
+    it('Should return approverList', async () => {
+      api.users.budgetApprovers.mockImplementation(() => Promise.resolve({ data: { page: { ...user } } }));
+      const results = [getUsersSuccess(user)];
+
+      const initialAction = { payload: {
+        count: 5, type: 'budget_approval'
+      } };
+
+      const dispatched = await recordSaga(
+        getUsers,
+        initialAction
+      );
+      expect(api.users.budgetApprovers).toHaveBeenCalledWith({ count: 5 });
       expect(dispatched).toEqual(results);
     });
 
