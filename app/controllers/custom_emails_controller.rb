@@ -74,8 +74,9 @@ class CustomEmailsController < ApplicationController
 
     CustomEmailMailer.custom(@custom_email.id, plaintext_emails, receivers_groups_ids).deliver_later
 
-    flash[:notice] = "Your email has been sent to #{emails.count} user(s)."
-    redirect_to emails_path
+    # TODO calculate how manu users got an email
+    flash[:notice] = 'Your email has been sent.'
+    redirect_to custom_emails_path
   end
 
   protected
