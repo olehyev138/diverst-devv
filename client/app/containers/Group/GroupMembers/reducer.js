@@ -16,7 +16,7 @@ export const initialState = {
   isCommitting: false,
   memberList: [],
   memberTotal: null,
-  hasChanged: null,
+  hasChanged: false,
   isFetchingMembers: true
 };
 
