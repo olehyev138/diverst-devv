@@ -18,7 +18,6 @@ import {
 } from 'containers/Group/actions';
 
 import GroupForm from 'components/Group/GroupForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -27,7 +26,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-  const { intl } = props;
 
   const { group_id: groupId } = useParams();
 
@@ -47,7 +45,7 @@ export function GroupEditPage(props) {
         getGroupsBegin={props.getGroupsBegin}
         selectGroups={props.groups}
         group={props.group}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={messages.update}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
         getGroupsSuccess={props.getGroupsSuccess}
@@ -57,7 +55,6 @@ export function GroupEditPage(props) {
 }
 
 GroupEditPage.propTypes = {
-  intl: intlShape.isRequired,
   group: PropTypes.object,
   groups: PropTypes.array,
   getGroupBegin: PropTypes.func,
@@ -90,7 +87,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

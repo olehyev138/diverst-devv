@@ -32,7 +32,6 @@ export function BrandingHomePage(props) {
       <BrandingHome
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText={intl.formatMessage(messages.update)}
         customTexts={props.customTexts}
       />
     </React.Fragment>

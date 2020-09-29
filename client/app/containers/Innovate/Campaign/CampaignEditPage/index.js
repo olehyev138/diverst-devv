@@ -27,7 +27,6 @@ import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectFormGroup } from 'containers/Group/selectors';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/messages';
 import Conditional from 'components/Compositions/Conditional';
 
@@ -41,8 +40,6 @@ export function CampaignEditPage(props) {
   const links = {
     CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };
-
-  const { intl } = props;
 
   useEffect(() => {
     props.getCampaignBegin({ id: campaignId });
@@ -60,7 +57,7 @@ export function CampaignEditPage(props) {
       campaignAction={props.updateCampaignBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       campaign={props.campaign}
       links={links}
     />
@@ -68,7 +65,6 @@ export function CampaignEditPage(props) {
 }
 
 CampaignEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getCampaignBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   updateCampaignBegin: PropTypes.func,
@@ -102,7 +98,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

@@ -135,7 +135,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}

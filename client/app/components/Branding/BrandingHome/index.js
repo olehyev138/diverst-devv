@@ -33,7 +33,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
   return (
     <Card>
@@ -199,7 +199,6 @@ BrandingHomeInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   intl: intlShape.isRequired,
