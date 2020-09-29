@@ -1,0 +1,9 @@
+/*
+ *
+ * SSO Settings constants
+ *
+ */
+
+export const UPDATE_SSO_SETTINGS_BEGIN = 'app/GlobalSettings/SSO_SETTINGS/UPDATE_SSO_SETTINGS_BEGIN';
+export const UPDATE_SSO_SETTINGS_SUCCESS = 'app/GlobalSettings/SSO_SETTINGS/UPDATE_SSO_SETTINGS_SUCCESS';
+export const UPDATE_SSO_SETTINGS_ERROR = 'app/GlobalSettings/SSO_SETTINGS/UPDATE_SSO_SETTINGS_ERROR';

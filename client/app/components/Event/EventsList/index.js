@@ -242,6 +242,8 @@ export function EventsList(props) {
             <DiverstPagination
               isLoading={props.isLoading}
               count={props.eventsTotal}
+              page={props.params.page}
+              rowsPerPage={props.params.count}
               handlePagination={props.handlePagination}
             />
           )}
@@ -273,7 +275,11 @@ EventsList.propTypes = {
   joinEventBegin: PropTypes.func,
   leaveEventBegin: PropTypes.func,
   calendarDateCallback: PropTypes.func,
-  currentGroupID: PropTypes.number
+  currentGroupID: PropTypes.number,
+  params: PropTypes.shape({
+    page: PropTypes.number,
+    count: PropTypes.number
+  })
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -51,6 +51,7 @@ export function* updateUser(action) {
     addSerializer(action);
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
+    yield put(updateUserSuccess());
     yield put(push(ROUTES.user.mentorship.show.path(payload.user.id)));
     yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {

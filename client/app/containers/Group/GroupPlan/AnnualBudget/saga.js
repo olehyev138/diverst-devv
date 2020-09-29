@@ -74,7 +74,7 @@ export function* updateAnnualBudget(action) {
     const payload = { annual_budget: action.payload };
     const response = yield call(api.annualBudgets.update.bind(api.annualBudgets), payload.annual_budget.id, payload);
 
-    yield put(updateAnnualBudgetSuccess({}));
+    yield put(updateAnnualBudgetSuccess());
     yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateAnnualBudgetError(err));
@@ -87,6 +87,5 @@ export default function* annualBudgetSaga() {
   yield takeLatest(GET_CURRENT_ANNUAL_BUDGET_BEGIN, getCurrentAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGET_BEGIN, getAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
-  yield takeLatest(CREATE_ANNUAL_BUDGET_BEGIN, createAnnualBudget);
   yield takeLatest(UPDATE_ANNUAL_BUDGET_BEGIN, updateAnnualBudget);
 }

@@ -5,7 +5,7 @@
 
 import { defineMessages } from 'react-intl';
 
-export const snackbar = 'diverst.snackbars.Group.Categories';
+export const snackbar = 'diverst.snackbars.Group.Leaders';
 
 export default defineMessages({
   snackbars: {

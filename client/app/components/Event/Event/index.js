@@ -126,7 +126,7 @@ export function Event(props) {
                   <DiverstFormattedMessage {...messages.archive} />
                 </Button>
               </Permission>
-              <Permission show={permission(props.event, 'show?')}>
+              <Permission show={permission(props.event, 'attendees?')}>
                 <Button
                   variant='contained'
                   size='large'
@@ -215,7 +215,7 @@ export function Event(props) {
                 <Typography className={classes.dataHeaders}>
                   <DiverstFormattedMessage {...messages.show.dateAndTime} />
                 </Typography>
-                <Typography color='primary' className={classes.data}>
+                <Typography color='primary' className={classes.data} component='h1'>
                   {formatDateTimeString(event.start, DateTime.DATETIME_FULL)}
                   <Typography display='inline' color='textSecondary'>
                     &nbsp;
