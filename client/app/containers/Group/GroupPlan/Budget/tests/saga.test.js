@@ -79,7 +79,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budget);
     });
   });
 
@@ -121,7 +121,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budgets);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budgets);
     });
   });
 
@@ -149,7 +149,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.budget_request);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.budget_request);
     });
 
     it('Should return error from the API', async () => {
@@ -173,7 +173,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.budget_request);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budget_request);
     });
   });
 
@@ -202,7 +202,7 @@ describe('Budget Saga', () => {
       );
       expect(api.budgets.approve).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.approve);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.approve);
     });
 
     it('Should return error from the API', async () => {
@@ -227,7 +227,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.approve).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.approve);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.approve);
     });
   });
 
@@ -254,7 +254,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.decline);
     });
 
     it('Should return error from the API', async () => {
@@ -278,7 +278,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.decline);
     });
   });
 
@@ -305,7 +305,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -329,7 +329,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

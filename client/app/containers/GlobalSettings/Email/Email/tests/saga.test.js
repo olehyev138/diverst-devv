@@ -75,7 +75,7 @@ describe('Email saga', () => {
 
       expect(api.emails.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.email);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.email);
     });
   });
 
@@ -123,7 +123,7 @@ describe('Email saga', () => {
 
       expect(api.emails.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.emails);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.emails);
     });
   });
 
@@ -180,7 +180,7 @@ describe('Email saga', () => {
 
       expect(api.emails.update).toHaveBeenCalledWith(initialAction.payload.id, { email: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 });

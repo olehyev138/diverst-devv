@@ -56,7 +56,7 @@ describe('SSO saga', () => {
       );
       expect(api.enterprises.updateSSO).toHaveBeenCalledWith({ enterprise: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -85,7 +85,7 @@ describe('SSO saga', () => {
 
       expect(api.enterprises.updateSSO).toHaveBeenCalledWith({ enterprise: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 });

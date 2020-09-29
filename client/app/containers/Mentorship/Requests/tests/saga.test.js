@@ -75,7 +75,7 @@ describe('Request Saga', () => {
 
       expect(api.mentoringRequests.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.request);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.request);
     });
   });
 
@@ -117,7 +117,7 @@ describe('Request Saga', () => {
 
       expect(api.mentoringRequests.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.proposal);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.proposal);
     });
   });
 
@@ -146,7 +146,7 @@ describe('Request Saga', () => {
       );
       expect(api.mentoringRequests.acceptRequest).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.accept);
     });
 
     it('Should return error from the API', async () => {
@@ -171,7 +171,7 @@ describe('Request Saga', () => {
 
       expect(api.mentoringRequests.acceptRequest).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.accept);
     });
   });
 
@@ -198,7 +198,7 @@ describe('Request Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.reject);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.reject);
     });
 
     it('Should return error from the API', async () => {
@@ -222,7 +222,7 @@ describe('Request Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.reject);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.reject);
     });
   });
 
@@ -249,7 +249,7 @@ describe('Request Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -273,7 +273,7 @@ describe('Request Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 });

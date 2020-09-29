@@ -87,7 +87,7 @@ describe('Session Saga', () => {
 
       expect(api.mentoringSessions.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.session);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.session);
     });
   });
 
@@ -115,7 +115,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.create);
     });
 
     it('Should return error from the API', async () => {
@@ -139,7 +139,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.create);
     });
   });
 
@@ -168,7 +168,7 @@ describe('Session Saga', () => {
       );
       expect(api.mentorshipSessions.acceptInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.accept);
     });
 
     it('Should return error from the API', async () => {
@@ -193,7 +193,7 @@ describe('Session Saga', () => {
 
       expect(api.mentorshipSessions.acceptInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.accept);
     });
   });
 
@@ -222,7 +222,7 @@ describe('Session Saga', () => {
       );
       expect(api.mentorshipSessions.declineInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.decline);
     });
 
     it('Should return error from the API', async () => {
@@ -247,7 +247,7 @@ describe('Session Saga', () => {
 
       expect(api.mentorshipSessions.declineInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.decline);
     });
   });
 
@@ -274,7 +274,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
     });
 
     it('Should return error from the API', async () => {
@@ -298,7 +298,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
     });
   });
 
@@ -325,7 +325,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.update);
     });
 
     it('Should return error from the API', async () => {
@@ -349,7 +349,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
     });
   });
 
@@ -391,7 +391,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.hosting);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.hosting);
     });
   });
 
@@ -433,7 +433,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.participating);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.participating);
     });
   });
 
@@ -475,7 +475,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.participating_users);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.participating_users);
     });
   });
 });
