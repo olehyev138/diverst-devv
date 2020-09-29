@@ -29,17 +29,17 @@ RSpec.describe EnterpriseResourcePolicy, type: :policy do
 
       context 'when enterprise_resources_manage is true' do
         before { user.policy_group.update enterprise_resources_manage: true }
-        it { is_expected.to permit_actions([:index, :create, :edit, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :create, :edit, :update, :archive, :destroy]) }
       end
     end
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-      it { is_expected.to permit_actions([:index, :create, :edit, :update, :destroy]) }
+      it { is_expected.to permit_actions([:index, :create, :edit, :update, :archive, :destroy]) }
     end
   end
 
   describe 'for users with no access' do
-    it { is_expected.to forbid_actions([:index, :create, :edit, :update, :destroy]) }
+    it { is_expected.to forbid_actions([:index, :create, :edit, :update, :archive, :destroy]) }
   end
 end
