@@ -93,7 +93,7 @@ class CustomEmailsController < ApplicationController
         :content,
         :subject,
         :receivers,
-        :receiver_groups_ids
+        receiver_groups_ids: []
       )
   end
 end
