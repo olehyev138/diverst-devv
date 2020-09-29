@@ -35,15 +35,6 @@ class EmailsController < ApplicationController
   def prepare_for_sending
   end
 
-  def send_custom
-    emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
-
-    CustomEmailMailer.custom(@custom_email, emails).deliver_later
-
-    flash[:notice] = "Your email has been sent to #{emails.count} user(s)."
-    redirect_to action: :index
-  end
-
   protected
 
   def set_email
