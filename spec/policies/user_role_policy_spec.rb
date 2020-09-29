@@ -16,13 +16,25 @@ RSpec.describe UserRolePolicy, type: :policy do
     no_access.policy_group.manage_all = false
     no_access.policy_group.users_manage = false
     no_access.policy_group.users_index = false
+    no_access.policy_group.permissions_manage = false
     no_access.policy_group.save!
   }
 
   describe 'for user with access' do
     context 'when manage_all is false' do
-      context 'when users_index and users_manage are true' do
-        before { user.policy_group.update users_index: true, users_manage: true }
+      context 'when users_manage are true' do
+        before { user.policy_group.update users_manage: true }
+        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
+      end
+
+      context 'when users_index is true' do
+        before { user.policy_group.update users_index: true }
+        it { is_expected.to permit_actions([:index]) }
+        it { is_expected.to forbid_actions([:new, :create, :update, :destroy]) }
+      end
+
+      context 'when permissions_manage is true' do
+        before { user.policy_group.update permissions_manage: true }
         it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
       end
     end
