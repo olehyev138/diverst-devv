@@ -47,7 +47,6 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
     parentSelectAction();
   }, []);
 
-
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
       <Card>
