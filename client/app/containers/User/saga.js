@@ -52,7 +52,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUsers(action) {
   try {
-    const { type, ...payload } = action.payload;
+    const { type, ...payload } = action.payload || { };
     const response = yield (() => {
       switch (type) {
         case 'budget_approval':

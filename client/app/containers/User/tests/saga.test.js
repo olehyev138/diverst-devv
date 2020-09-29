@@ -103,7 +103,7 @@ describe('saga tests for users', () => {
         initialAction
       );
 
-      expect(api.users.all).toHaveBeenCalledWith(initialAction.payload);
+      expect(api.users.all).toHaveBeenCalledWith({});
       expect(dispatched).toEqual(results);
       expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.users);
     });
