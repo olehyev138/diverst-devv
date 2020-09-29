@@ -77,7 +77,7 @@ describe('Event saga', () => {
 
       expect(api.emailEvents.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.email);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.email, options: { variant: 'warning' } });
     });
   });
 
@@ -125,7 +125,7 @@ describe('Event saga', () => {
 
       expect(api.emailEvents.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.emails);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.emails, options: { variant: 'warning' } });
     });
   });
 
@@ -153,7 +153,7 @@ describe('Event saga', () => {
       );
       expect(api.emailEvents.update).toHaveBeenCalledWith(initialAction.payload.id, { clockwork_database_event: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -182,7 +182,7 @@ describe('Event saga', () => {
 
       expect(api.emailEvents.update).toHaveBeenCalledWith(initialAction.payload.id, { clockwork_database_event: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 });

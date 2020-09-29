@@ -74,7 +74,7 @@ describe('Mentoring Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.mentors);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.mentors, options: { variant: 'warning' } });
     });
   });
 
@@ -117,7 +117,7 @@ describe('Mentoring Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.available_mentors);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.available_mentors, options: { variant: 'warning' } });
     });
   });
 
@@ -148,7 +148,7 @@ describe('Mentoring Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -172,7 +172,7 @@ describe('Mentoring Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

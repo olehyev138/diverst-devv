@@ -1289,6 +1289,7 @@
   "diverst.snackbars.Group.AnnualBudget.errors.load.annualBudget": "Failed to load annual budget",
   "diverst.snackbars.Group.AnnualBudget.errors.load.annualBudgets": "Failed to load annual budgets",
   "diverst.snackbars.Group.AnnualBudget.errors.load.currentBudget": "Failed to load current annual budget",
+  "diverst.snackbars.Group.Members.errors.load.annualBudget": "Failed to load annual budget",
   "diverst.snackbars.Group.AnnualBudget.errors.update.annualBudget": "Failed to update annual budget",
   "diverst.snackbars.Group.AnnualBudget.success.create.annualBudget": "Successfully created annual budget",
   "diverst.snackbars.Group.AnnualBudget.success.update.annualBudget": "Successfully updated annual budget",

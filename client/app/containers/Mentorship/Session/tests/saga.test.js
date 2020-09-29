@@ -87,7 +87,7 @@ describe('Session Saga', () => {
 
       expect(api.mentoringSessions.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.session);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.session, options: { variant: 'warning' } });
     });
   });
 
@@ -115,7 +115,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -139,7 +139,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
   });
 
@@ -168,7 +168,7 @@ describe('Session Saga', () => {
       );
       expect(api.mentorshipSessions.acceptInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.accept, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -193,7 +193,7 @@ describe('Session Saga', () => {
 
       expect(api.mentorshipSessions.acceptInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.accept);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.accept, options: { variant: 'warning' } });
     });
   });
 
@@ -222,7 +222,7 @@ describe('Session Saga', () => {
       );
       expect(api.mentorshipSessions.declineInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.decline, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -247,7 +247,7 @@ describe('Session Saga', () => {
 
       expect(api.mentorshipSessions.declineInvite).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.decline, options: { variant: 'warning' } });
     });
   });
 
@@ -274,7 +274,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -298,7 +298,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 
@@ -325,7 +325,7 @@ describe('Session Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -349,7 +349,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -391,7 +391,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.hosting);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.hosting, options: { variant: 'warning' } });
     });
   });
 
@@ -433,7 +433,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.participating);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.participating, options: { variant: 'warning' } });
     });
   });
 
@@ -475,7 +475,7 @@ describe('Session Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.participating_users);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.participating_users, options: { variant: 'warning' } });
     });
   });
 });

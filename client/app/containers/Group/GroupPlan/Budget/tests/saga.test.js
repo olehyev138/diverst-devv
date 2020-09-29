@@ -79,7 +79,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budget);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.budget, options: { variant: 'warning' } });
     });
   });
 
@@ -121,7 +121,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budgets);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.budgets, options: { variant: 'warning' } });
     });
   });
 
@@ -149,7 +149,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.budget_request);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.budget_request, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -173,7 +173,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.budget_request);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.budget_request, options: { variant: 'warning' } });
     });
   });
 
@@ -202,7 +202,7 @@ describe('Budget Saga', () => {
       );
       expect(api.budgets.approve).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.approve);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.approve, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -227,7 +227,7 @@ describe('Budget Saga', () => {
 
       expect(api.budgets.approve).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.approve);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.approve, options: { variant: 'warning' } });
     });
   });
 
@@ -254,7 +254,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.decline, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -278,7 +278,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.decline);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.decline, options: { variant: 'warning' } });
     });
   });
 
@@ -305,7 +305,7 @@ describe('Budget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -329,7 +329,7 @@ describe('Budget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });
