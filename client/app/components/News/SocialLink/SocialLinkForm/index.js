@@ -37,7 +37,7 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}

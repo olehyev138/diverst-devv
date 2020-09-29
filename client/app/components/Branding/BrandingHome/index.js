@@ -45,7 +45,8 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 component={DiverstRichTextInput}
                 required
                 onChange={value => setFieldValue('home_message', value)}
-                fullWidth
+                fullWidthupdate
+                social
                 id='home_message'
                 name='home_message'
                 margin='normal'

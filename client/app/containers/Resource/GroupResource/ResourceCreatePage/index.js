@@ -5,8 +5,6 @@ import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { injectIntl, intlShape } from 'react-intl';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -64,7 +62,7 @@ export function ResourceCreatePage(props) {
         getFoldersBegin={props.getFoldersBegin}
         selectFolders={props.searchFolders}
         resourceAction={props.createResourceBegin}
-        buttonText={props.intl.formatMessage(messages.create)}
+        buttonText={messages.create}
         currentUser={currentUser}
         currentGroup={currentGroup}
         currentFolder={currentFolder}
@@ -76,7 +74,6 @@ export function ResourceCreatePage(props) {
 }
 
 ResourceCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   path: PropTypes.string,
   getFolderBegin: PropTypes.func,
   getFoldersBegin: PropTypes.func,
