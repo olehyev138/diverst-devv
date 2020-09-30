@@ -18,7 +18,6 @@ import { createQuestionBegin, campaignQuestionsUnmount } from 'containers/Innova
 import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { getCampaignBegin } from 'containers/Innovate/Campaign/actions';
@@ -30,7 +29,6 @@ export function CampaignQuestionCreatePage(props) {
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
-  const { intl } = props;
 
   const { campaign_id: campaignId } = useParams();
   const links = {
@@ -47,7 +45,7 @@ export function CampaignQuestionCreatePage(props) {
     <CampaignQuestionForm
       questionAction={props.createQuestionBegin}
       campaignId={campaignId}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       isCommitting={props.isCommitting}
       links={links}
     />
@@ -55,7 +53,6 @@ export function CampaignQuestionCreatePage(props) {
 }
 
 CampaignQuestionCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   getCampaignBegin: PropTypes.func,
@@ -82,7 +79,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(
