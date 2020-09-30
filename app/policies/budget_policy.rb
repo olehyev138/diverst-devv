@@ -11,6 +11,10 @@ class BudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def visibility
+    'group'
+  end
+
   def update?
     false
   end
