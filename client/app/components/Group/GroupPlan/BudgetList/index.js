@@ -31,8 +31,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
 import { toCurrencyString } from 'utils/currencyHelpers';
-import {permission} from "utils/permissionsHelpers";
-import Permission from "components/Shared/DiverstPermission";
+import { permission } from 'utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   budgetListItem: {
