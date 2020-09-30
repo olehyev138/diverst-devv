@@ -37,11 +37,10 @@ import saga from '../saga';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 import ExpenseForm from 'components/Event/EventManage/ExpenseForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/EventManage/Expense/messages';
 const { form: formMessages } = messages;
 
-export function ExpenseEditPage({ intl, ...props }) {
+export function ExpenseEditPage() {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
 
@@ -75,7 +74,7 @@ export function ExpenseEditPage({ intl, ...props }) {
         isLoading={props.isLoading}
         expense={props.expense}
         expenseAction={props.updateExpenseBegin}
-        buttonText={intl.formatMessage(formMessages.update)}
+        buttonText={formMessages.update}
         links={links}
       />
     </React.Fragment>
@@ -83,7 +82,6 @@ export function ExpenseEditPage({ intl, ...props }) {
 }
 
 ExpenseEditPage.propTypes = {
-  intl: intlShape.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
   getExpenseBegin: PropTypes.func.isRequired,
   expense: PropTypes.object,
@@ -122,5 +120,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl,
 )(ExpenseEditPage);

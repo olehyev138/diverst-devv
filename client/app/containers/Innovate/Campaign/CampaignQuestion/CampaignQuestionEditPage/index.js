@@ -53,7 +53,7 @@ export function CampaignQuestionEditPage(props) {
       questionId={props.questionId}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       question={props.question}
       links={links}
     />

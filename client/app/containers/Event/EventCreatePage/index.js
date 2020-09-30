@@ -47,7 +47,7 @@ export function EventCreatePage(props) {
       <EventForm
         eventAction={props.createEventBegin}
         isCommitting={props.isCommitting}
-        buttonText={intl.formatMessage(messages.create)}
+        buttonText={messages.create}
         currentUser={currentUser}
         currentGroup={currentGroup}
         links={links}

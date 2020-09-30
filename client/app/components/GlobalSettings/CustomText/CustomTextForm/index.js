@@ -176,7 +176,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
+            <DiverstFormattedMessage {...buttonText} />
           </DiverstSubmit>
         </CardActions>
       </Form>

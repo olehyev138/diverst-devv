@@ -258,7 +258,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.event ? props.links.eventShow : props.links.eventsIndex}
@@ -321,7 +321,7 @@ EventForm.propTypes = {
 EventFormInner.propTypes = {
   edit: PropTypes.bool,
   event: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
 
   formikProps: PropTypes.shape({
     handleSubmit: PropTypes.func,
