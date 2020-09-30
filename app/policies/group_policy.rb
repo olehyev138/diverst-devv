@@ -60,23 +60,27 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def fields?
-    update?
+    return true if manage_all?
+    return true if @policy_group.groups_manage?
+    return true if has_group_leader_permissions?('groups_insights_manage')
+
+    @policy_group.groups_insights_manage
   end
 
   def create_field?
-    update?
+    fields?
   end
 
   def updates?
-    update?
+    fields?
   end
 
   def update_prototype?
-    updates?
+    fields?
   end
 
   def create_update?
-    update?
+    fields?
   end
 
   def update_all_sub_groups?

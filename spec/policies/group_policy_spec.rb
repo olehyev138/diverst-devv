@@ -23,6 +23,7 @@ RSpec.describe GroupPolicy, type: :policy do
     no_access.policy_group.global_calendar = false
     no_access.policy_group.groups_layouts_manage = false
     no_access.policy_group.group_settings_manage = false
+    no_access.policy_group.groups_insights_manage = false
     no_access.policy_group.save!
   }
 
@@ -56,7 +57,7 @@ RSpec.describe GroupPolicy, type: :policy do
         before { user.policy_group.update groups_manage: true }
 
         it { is_expected.to permit_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-                                            :add_category, :update_with_new_category, :update, :current_annual_budget, :destroy])
+                                            :add_category, :update_with_new_category, :update, :current_annual_budget, :destroy, :fields])
         }
       end
 
@@ -140,6 +141,29 @@ RSpec.describe GroupPolicy, type: :policy do
 
         it { is_expected.to permit_action(:settings) }
       end
+
+      context 'is group leader with group insight permissions and current user IS owner' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update groups_insights_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:update, :destroy, :fields]) }
+      end
+
+      context 'is group leader with group insight permissions and current user IS NOT owner' do
+        before do
+          group.owner = create(:user)
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update groups_insights_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_action(:fields) }
+      end
     end
 
     context 'when manage_all is true' do
@@ -147,7 +171,7 @@ RSpec.describe GroupPolicy, type: :policy do
 
       context 'when groups_manage, groups_create groups_index are false' do
         it { is_expected.to permit_actions([:index, :new, :show, :create, :sort, :view_all, :add_category, :update_with_new_category,
-                                            :update, :current_annual_budget, :destroy, :calendar, :layouts, :settings])
+                                            :update, :current_annual_budget, :destroy, :calendar, :layouts, :settings, :fields])
         }
       end
     end
