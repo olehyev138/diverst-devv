@@ -22,28 +22,58 @@ RSpec.describe BudgetPolicy, type: :policy do
 
   describe 'for users with access' do
     context 'index?' do
-      context 'when visibility is not set' do
-        context 'when ONLY groups_budgets_manage is true' do
-          before { user.policy_group.update groups_budgets_manage: true }
+      context 'user is an accepted member : is_an_accepted_member' do
+        before { create(:user_group, user: user, group: group )}
+        context 'when visibility is not set' do
+          context 'when ONLY groups_budgets_manage is true' do
+            before { user.policy_group.update groups_budgets_manage: true }
 
-          it 'returns true' do
-            expect(subject.index?).to eq true
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when ONLY budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when ONLY groups_budgets_request is true' do
+            before { user.policy_group.update groups_budgets_request: true }
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
           end
         end
+      end
+      context 'user is NOT an accepted member : is_an_accepted_member' do
+        context 'when visibility is not set' do
+          context 'when ONLY groups_budgets_manage is true' do
+            before { user.policy_group.update groups_budgets_manage: true }
 
-        context 'when ONLY budget_approval is true' do
-          before { user.policy_group.update budget_approval: true }
-
-          it 'returns true' do
-            expect(subject.index?).to eq true
+            it 'returns false' do
+              expect(subject.index?).to eq false
+            end
           end
-        end
 
-        context 'when ONLY groups_budgets_request is true' do
-          before { user.policy_group.update groups_budgets_request: true }
+          context 'when ONLY budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
 
-          it 'returns true' do
-            expect(subject.index?).to eq true
+            it 'returns false' do
+              expect(subject.index?).to eq false
+            end
+          end
+
+          context 'when ONLY groups_budgets_request is true' do
+            before { user.policy_group.update groups_budgets_request: true }
+
+            it 'returns false' do
+              expect(subject.index?).to eq false
+            end
           end
         end
       end
@@ -155,47 +185,93 @@ RSpec.describe BudgetPolicy, type: :policy do
 
     context 'approve?/decline?' do
       context 'when manage_all is false' do
-        context 'when groups_manage and groups_budgets_manage are true' do
-          before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
+        context 'is an accepted member' do
+          before { create(:user_group, user: user, group: group)}
 
-          it { is_expected.to permit_actions([:approve, :decline]) }
-        end
+          context 'when groups_manage and groups_budgets_manage are true' do
+            before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
 
-        context 'user has group leader permissions and groups_budgets_manage is true' do
-          before do
-            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update groups_budgets_manage: true
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
+            it { is_expected.to permit_actions([:approve, :decline]) }
           end
 
-          it { is_expected.to permit_actions([:approve, :decline]) }
-        end
+          context 'user has group leader permissions and groups_budgets_manage is true' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update groups_budgets_manage: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
 
-        context 'user is group member and groups_budgets_manage is true' do
-          before do
-            create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
-            user.policy_group.update groups_budgets_manage: true
+            it { is_expected.to permit_actions([:approve, :decline]) }
           end
 
-          it { is_expected.to permit_actions([:approve, :decline]) }
-        end
+          context 'groups_budgets_manage is true' do
+            before do
+              user.policy_group.update groups_budgets_manage: true
+            end
 
-        context 'user has basic group leader permissions and budget_approval is true' do
-          before do
-            user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update budget_approval: true
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
+            it { is_expected.to permit_actions([:approve, :decline]) }
           end
 
-          it { is_expected.to permit_actions([:approve, :decline]) }
+          context 'user has basic group leader permissions and budget_approval is true' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update budget_approval: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
+
+            it { is_expected.to permit_actions([:approve, :decline]) }
+          end
+
+          context 'when budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
+
+            it { is_expected.to permit_actions([:approve, :decline]) }
+          end
         end
+        context 'not a member' do
+          context 'when groups_manage and groups_budgets_manage are true' do
+            before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
 
-        context 'when budget_approval is true' do
-          before { user.policy_group.update budget_approval: true }
+            it { is_expected.to permit_actions([:approve, :decline]) }
+          end
 
-          it { is_expected.to permit_actions([:approve, :decline]) }
+          context 'user has group leader permissions and groups_budgets_manage is true' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update groups_budgets_manage: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
+
+            it { is_expected.to permit_actions([:approve, :decline]) }
+          end
+
+          context 'user is not group member and groups_budgets_manage is true' do
+            before do
+              user.policy_group.update groups_budgets_manage: true
+            end
+
+            it { is_expected.to forbid_actions([:approve, :decline]) }
+          end
+
+          context 'user has basic group leader permissions and budget_approval is true' do
+            before do
+              user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update budget_approval: true
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                     user_role_id: user_role.id)
+            end
+
+            it { is_expected.to permit_actions([:approve, :decline]) }
+          end
+
+          context 'when budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
+
+            it { is_expected.to forbid_actions([:approve, :decline]) }
+          end
         end
       end
 

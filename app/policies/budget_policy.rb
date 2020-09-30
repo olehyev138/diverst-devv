@@ -20,7 +20,6 @@ class BudgetPolicy < GroupBasePolicy
   end
 
   def approve?
-    policy_group.budget_approval ||
     manage_group_resource(base_manage_permission) ||
     manage_group_resource('budget_approval')
   end
