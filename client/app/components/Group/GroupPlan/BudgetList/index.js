@@ -31,6 +31,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import { injectIntl, intlShape } from 'react-intl';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import {permission} from "utils/permissionsHelpers";
+import Permission from "components/Shared/DiverstPermission";
 
 const styles = theme => ({
   budgetListItem: {
@@ -131,17 +133,19 @@ export function BudgetList(props, context) {
               <DiverstFormattedMessage {...messages.buttons.back} />
             </Button>
           </Grid>
-          <Grid item xs align='right'>
-            <Button
-              color='primary'
-              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
-              to={props.links.newRequest}
-              component={WrappedNavLink}
-              startIcon={<AddIcon />}
-            >
-              <DiverstFormattedMessage {...messages.buttons.new} />
-            </Button>
-          </Grid>
+          <Permission show={permission(props.currentGroup, 'budgets_create?') && !props.annualBudget.closed}>
+            <Grid item xs align='right'>
+              <Button
+                color='primary'
+                variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
+                to={props.links.newRequest}
+                component={WrappedNavLink}
+                startIcon={<AddIcon />}
+              >
+                <DiverstFormattedMessage {...messages.buttons.new} />
+              </Button>
+            </Grid>
+          </Permission>
         </Grid>
       </CardContent>
       <Grid container spacing={3}>
