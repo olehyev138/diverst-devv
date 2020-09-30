@@ -32,7 +32,6 @@ const styles = theme => ({
 });
 
 export function DiverstTable(props) {
-  console.log(props);
   const { classes, params, dataArray, dataTotal, page, rowsPerPage, title, columns, actions, isStatic, tableOptions, ...rest } = props;
 
   const [pageState, setPage] = useState(page || 0);
