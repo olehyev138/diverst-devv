@@ -32,11 +32,22 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
             end
           end
 
-          context 'when ONLY budget_approval is true' do
-            before { user.policy_group.update budget_approval: true }
+          context 'when is a member with ONLY budget_approval is true' do
+            before do
+              create(:user_group, user: user, group: group)
+              user.policy_group.update budget_approval: true
+            end
 
             it 'returns true' do
               expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when is not a member when ONLY budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
+
+            it 'returns false' do
+              expect(subject.index?).to eq false
             end
           end
 
