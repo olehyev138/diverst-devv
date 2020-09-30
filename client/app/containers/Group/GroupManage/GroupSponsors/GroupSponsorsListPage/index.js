@@ -21,6 +21,7 @@ import {
   selectIsFetchingSponsors, selectHasChanged
 } from 'containers/Shared/Sponsors/selectors';
 import { selectGroup } from 'containers/Group/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -83,6 +84,7 @@ export function GroupSponsorListPage(props) {
         deleteSponsorBegin={props.deleteSponsorBegin}
         handleVisitSponsorEdit={props.handleVisitSponsorEdit}
         handleVisitSponsorShow={props.handleVisitSponsorShow}
+        customTexts={props.customTexts}
         links={links}
         setParams={params}
         params={params}
@@ -113,6 +115,7 @@ const mapStateToProps = createStructuredSelector({
   isFetchingSponsors: selectIsFetchingSponsors(),
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

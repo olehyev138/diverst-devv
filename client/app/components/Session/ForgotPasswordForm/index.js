@@ -116,7 +116,7 @@ function ForgotPasswordForm(props, context) {
   const ForgotPasswordFormSchema = Yup.object().shape({
     email: Yup
       .string()
-      .email(intl.formatMessage(loginMessages.invalidEmail)),
+      .email(intl.formatMessage(loginMessages.invalidEmail, props.customTexts)),
   });
 
   return (
@@ -154,6 +154,7 @@ ForgotPasswordForm.propTypes = {
 
 ForgotPasswordForm.contextTypes = {
   intl: PropTypes.object.isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

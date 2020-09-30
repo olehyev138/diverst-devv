@@ -99,7 +99,7 @@ export function SponsorList(props) {
               tooltip: messages.Sponsors.delete,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))
+                if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm, props.customTexts)))
                   props.deleteSponsorBegin({ id: rowData.id, type: rowData.sponsorable_type, location: rowData.sponsorable_id });
               }
             }]}
@@ -126,6 +126,7 @@ SponsorList.propTypes = {
   edit: PropTypes.bool,
   sponsor: PropTypes.object,
   handleVisitSponsorEdit: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
