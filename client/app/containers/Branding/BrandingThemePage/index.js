@@ -43,7 +43,7 @@ export function BrandingThemePage(props) {
         theme={props.theme}
         isLoading={props.isLoading}
         isCommitting={props.isCommitting}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={messages.update}
         customTexts={props.customTexts}
       />
     </React.Fragment>

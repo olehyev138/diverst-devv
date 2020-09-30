@@ -90,7 +90,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.metricsDashboardsIndex}

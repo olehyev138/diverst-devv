@@ -72,7 +72,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.metricsDashboardShow}
