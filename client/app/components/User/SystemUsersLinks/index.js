@@ -38,7 +38,7 @@ export function SystemUsersLinks(props) {
               value='users'
             />
           ) }
-          { permission(props, 'policy_templates_create') && (
+          { permission(props, 'policy_templates_view') && (
             <Tab
               component={WrappedNavLink}
               to={ROUTES.admin.system.users.roles.index.path()}

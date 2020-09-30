@@ -54,6 +54,8 @@ const SystemUsersLayout = (props) => {
     if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
       if (permission(props, 'users_create'))
         redirectAction(ROUTES.admin.system.users.index.path());
+      else if (permission(props, 'policy_templates_view'))
+        redirectAction(ROUTES.admin.system.users.roles.index.path());
       else if (permission(props, 'policy_templates_create'))
         redirectAction(ROUTES.admin.system.users.roles.index.path());
       else if (permission(props, 'policy_templates_manage'))

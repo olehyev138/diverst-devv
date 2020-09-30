@@ -116,7 +116,7 @@ export default compose(
   memo,
 )(Conditional(
   UserRoleListPage,
-  ['permissions.policy_templates_create'],
+  ['permissions.policy_templates_view'],
   (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.userRole.listPage
 ));
