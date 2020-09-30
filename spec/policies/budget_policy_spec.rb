@@ -23,7 +23,7 @@ RSpec.describe BudgetPolicy, type: :policy do
   describe 'for users with access' do
     context 'index?' do
       context 'user is an accepted member : is_an_accepted_member' do
-        before { create(:user_group, user: user, group: group )}
+        before { create(:user_group, user: user, group: group) }
         context 'when visibility is not set' do
           context 'when ONLY groups_budgets_manage is true' do
             before { user.policy_group.update groups_budgets_manage: true }
@@ -186,7 +186,7 @@ RSpec.describe BudgetPolicy, type: :policy do
     context 'approve?/decline?' do
       context 'when manage_all is false' do
         context 'is an accepted member' do
-          before { create(:user_group, user: user, group: group)}
+          before { create(:user_group, user: user, group: group) }
 
           context 'when groups_manage and groups_budgets_manage are true' do
             before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
@@ -199,7 +199,7 @@ RSpec.describe BudgetPolicy, type: :policy do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update groups_budgets_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                     user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_actions([:approve, :decline]) }
@@ -218,7 +218,7 @@ RSpec.describe BudgetPolicy, type: :policy do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update budget_approval: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                     user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_actions([:approve, :decline]) }
@@ -242,7 +242,7 @@ RSpec.describe BudgetPolicy, type: :policy do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update groups_budgets_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                     user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_actions([:approve, :decline]) }
@@ -261,7 +261,7 @@ RSpec.describe BudgetPolicy, type: :policy do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update budget_approval: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                     user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_actions([:approve, :decline]) }
