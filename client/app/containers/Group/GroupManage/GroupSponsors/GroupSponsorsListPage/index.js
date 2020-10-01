@@ -107,6 +107,7 @@ GroupSponsorListPage.propTypes = {
   handleVisitSponsorShow: PropTypes.func,
   currentGroup: PropTypes.object,
   hasChanged: PropTypes.bool,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({

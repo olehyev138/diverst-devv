@@ -112,6 +112,7 @@ ArchiveList.propTypes = {
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

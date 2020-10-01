@@ -44,6 +44,7 @@ import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 import { selectIsCommitting } from 'containers/Event/selectors';
+import { intlShape } from 'react-intl';
 
 const styles = theme => ({
   eventListItem: {
@@ -279,7 +280,8 @@ EventsList.propTypes = {
   params: PropTypes.shape({
     page: PropTypes.number,
     count: PropTypes.number
-  })
+  }),
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

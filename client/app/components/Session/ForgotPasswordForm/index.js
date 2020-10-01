@@ -144,6 +144,7 @@ ForgotPasswordFormInner.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   handleChange: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 ForgotPasswordForm.propTypes = {

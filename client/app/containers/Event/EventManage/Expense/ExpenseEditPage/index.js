@@ -40,7 +40,7 @@ import ExpenseForm from 'components/Event/EventManage/ExpenseForm';
 import messages from 'containers/Event/EventManage/Expense/messages';
 const { form: formMessages } = messages;
 
-export function ExpenseEditPage() {
+export function ExpenseEditPage(props) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
 

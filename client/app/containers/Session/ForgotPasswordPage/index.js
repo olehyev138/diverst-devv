@@ -40,6 +40,7 @@ ForgotPasswordPage.propTypes = {
   location: PropTypes.object,
   enterprise: PropTypes.object,
   requestPasswordResetBegin: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({

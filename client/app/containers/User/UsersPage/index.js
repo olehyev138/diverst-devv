@@ -139,7 +139,8 @@ UserListPage.propTypes = {
   deleteUserBegin: PropTypes.func,
   exportUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
-  handleVisitUserEdit: PropTypes.func
+  handleVisitUserEdit: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

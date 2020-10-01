@@ -70,6 +70,7 @@ UserCreatePage.propTypes = {
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
