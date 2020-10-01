@@ -97,7 +97,7 @@ AdminGroupListPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
-  permissions: PropTypes.func,
+  permissions: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
