@@ -5,6 +5,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   link: {
@@ -20,9 +21,11 @@ const styles = theme => ({
 });
 
 export function PostsTable(props) {
+  const { intl } = props;
+
   const columns = [
     {
-      title: messages.title,
+      title: intl.formatMessage(messages.title, props.customTexts),
       render: (rowData) => {
         if (rowData.group_message)
           return rowData.group_message.subject;
@@ -40,7 +43,7 @@ export function PostsTable(props) {
         + 'END)',
     },
     {
-      title: messages.type,
+      title: intl.formatMessage(messages.type, props.customTexts),
       render: (rowData) => {
         if (rowData.group_message)
           return messages.group_message;
@@ -77,7 +80,7 @@ export function PostsTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: messages.restore,
+        tooltip: intl.formatMessage(messages.restore, props.customTexts),
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
@@ -87,6 +90,7 @@ export function PostsTable(props) {
 }
 
 PostsTable.propTypes = {
+  intl: intlShape.isRequired,
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
@@ -96,10 +100,12 @@ PostsTable.propTypes = {
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(PostsTable);

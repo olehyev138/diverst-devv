@@ -26,6 +26,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { permission } from 'utils/permissionsHelpers';
 
+
 const styles = theme => ({
   metricsDashboardListItem: {
     width: '100%',
@@ -56,7 +57,7 @@ export function MetricsDashboardsList(props, context) {
   const { classes, intl } = props;
 
   const columns = [
-    { title: messages.fields.name, field: 'name' }
+    { title: intl.formatMessage(messages.fields.name, props.customTexts), field: 'name' }
   ];
 
   return (
@@ -88,7 +89,7 @@ export function MetricsDashboardsList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: messages.table.edit,
+                tooltip: intl.formatMessage(messages.table.edit, props.customTexts),
                 onClick: (_, rowData) => {
                   props.handleVisitDashboardEdit(rowData.id);
                 },
@@ -96,10 +97,10 @@ export function MetricsDashboardsList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: messages.table.delete,
+                tooltip: intl.formatMessage(messages.table.delete, props.customTexts),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.table.delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.table.delete_confirm, props.customTexts)))
                     props.deleteMetricsDashboardBegin(rowData.id);
                 },
                 disabled: !permission(rowData, 'destroy?')
@@ -124,6 +125,7 @@ MetricsDashboardsList.propTypes = {
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

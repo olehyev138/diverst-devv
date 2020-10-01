@@ -56,8 +56,8 @@ export function SponsorList(props) {
   };
 
   const columns = [
-    { title: messages.Sponsors.name, field: 'sponsor_name' },
-    { title: messages.Sponsors.title, field: 'sponsor_title' }
+    { title: intl.formatMessage(messages.Sponsors.name, props.customTexts), field: 'sponsor_name' },
+    { title: intl.formatMessage(messages.Sponsors.title, props.customTexts), field: 'sponsor_title' }
   ];
 
   return (
@@ -89,14 +89,14 @@ export function SponsorList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: messages.Sponsors.edit,
+              tooltip: intl.formatMessage(messages.Sponsors.edit, props.customTexts),
               onClick: (_, rowData) => {
                 props.handleVisitSponsorEdit(rowData.sponsorable_id, rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: messages.Sponsors.delete,
+              tooltip: intl.formatMessage(messages.Sponsors.delete, props.customTexts),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm, props.customTexts)))

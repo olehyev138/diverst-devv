@@ -128,7 +128,7 @@ ExpenseFormInner.propTypes = {
 
   formikProps: PropTypes.object,
 
-  buttonText: PropTypes.string.isRequired,
+  buttonText: PropTypes.object.isRequired,
 
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,

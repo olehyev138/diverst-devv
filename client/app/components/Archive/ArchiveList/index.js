@@ -9,7 +9,6 @@ import {
   Tab } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import messages from 'containers/Archive/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import RestoreIcon from '@material-ui/icons/Restore';
 import EventsTable from 'components/Archive/EventsTable';
 import ResourcesTable from '../ResourcesTable';
@@ -36,7 +35,6 @@ const ArchiveTypes = Object.freeze({
 });
 
 export function ArchiveList(props) {
-  const { intl } = props;
   return (
     <React.Fragment>
       <Paper>
@@ -65,6 +63,7 @@ export function ArchiveList(props) {
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
                 rowsPerPage={10}
+                customTexts={props.customTexts}
               />
             )}
 
@@ -77,6 +76,7 @@ export function ArchiveList(props) {
                 handlePagination={props.handlePagination}
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
+                customTexts={props.customTexts}
                 rowsPerPage={10}
               />
             )}
@@ -90,6 +90,7 @@ export function ArchiveList(props) {
                 handlePagination={props.handlePagination}
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
+                customTexts={props.customTexts}
                 rowsPerPage={10}
               />
             )}
@@ -104,18 +105,16 @@ ArchiveList.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles)
 )(ArchiveList);

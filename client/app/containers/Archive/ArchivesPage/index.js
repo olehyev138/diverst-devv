@@ -13,7 +13,7 @@ import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/action
 import ArchiveList from 'components/Archive/ArchiveList';
 import { selectArchives, selectArchivesTotal, selectHasChanged, selectIsLoading } from '../selectors';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -106,6 +106,7 @@ export function ArchivePage(props) {
       archivesTotal={props.archivesTotal}
       handleRestore={handleRestore}
       isLoading={props.isLoading}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -119,6 +120,7 @@ ArchivePage.propTypes = {
   columns: PropTypes.array,
   isLoading: PropTypes.bool,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -127,6 +129,7 @@ const mapStateToProps = createStructuredSelector({
   hasChanged: selectHasChanged(),
   isLoading: selectIsLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

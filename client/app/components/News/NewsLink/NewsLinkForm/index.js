@@ -16,6 +16,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(buttonText);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.newsLink}>
       <Card>
@@ -64,7 +65,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              <DiverstFormattedMessage {...messages.buttonText} />
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}

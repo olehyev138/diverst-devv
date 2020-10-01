@@ -19,6 +19,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   emailListItem: {
@@ -54,21 +55,23 @@ const styles = theme => ({
   },
 });
 
-const columns = [
-  {
-    title: messages.name,
-    field: 'name',
-    query_field: 'name'
-  },
-];
 
 export function TemplatesList(props) {
   const { classes } = props;
+  const { intl } = props;
+
+  const columns = [
+    {
+      title: intl.formatMessage(messages.name, props.customTexts),
+      field: 'name',
+      query_field: 'name'
+    },
+  ];
 
   const actions = [
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: <DiverstFormattedMessage {...messages.action} />,
+      tooltip: intl.formatMessage(messages.action, props.customTexts),
       onClick: (_, rowData) => {
         props.handlePolicyEdit(rowData.id);
       },
@@ -104,6 +107,7 @@ export function TemplatesList(props) {
 }
 
 TemplatesList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   templates: PropTypes.array,
   templatesTotal: PropTypes.number,
@@ -112,9 +116,11 @@ TemplatesList.propTypes = {
   handleOrdering: PropTypes.func,
   handlePolicyEdit: PropTypes.func,
   params: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
+  injectIntl,
   withStyles(styles),
   memo,
 )(TemplatesList);

@@ -66,6 +66,7 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = props?.event;
+  console.log(props);
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -86,7 +87,7 @@ export function Event(props) {
                   startIcon={<DeleteIcon />}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       props.deleteEventBegin({
                         id: event.id,
                         group_id: event.owner_group_id

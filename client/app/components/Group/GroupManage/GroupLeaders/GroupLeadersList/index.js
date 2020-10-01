@@ -22,6 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DiverstTable from 'components/Shared/DiverstTable';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -30,25 +31,25 @@ const styles = theme => ({
 });
 
 export function GroupLeadersList(props) {
-  const { classes, links } = props;
+  const { classes, links, intl } = props;
 
   const columns = [
-    { title: messages.leader.column_name, field: 'user.name', query_field: 'users.last_name' },
-    { title: messages.leader.column_position, field: 'position_name', query_field: 'position_name' }
+    { title: intl.formatMessage(messages.leader.column_name, props.customTexts), field: 'user.name', query_field: 'users.last_name' },
+    { title: intl.formatMessage(messages.leader.column_position, props.customTexts), field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
   if (permission(props.group, 'leaders_manage?')) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: messages.leader.edit,
+      tooltip: intl.formatMessage(messages.leader.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
       }
     });
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: messages.leader.delete,
+      tooltip: intl.formatMessage(messages.leader.delete, props.customTexts),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to delete this group leader?'))
@@ -103,6 +104,7 @@ export function GroupLeadersList(props) {
 }
 
 GroupLeadersList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   group: PropTypes.object,
   deleteGroupLeaderBegin: PropTypes.func,
@@ -119,9 +121,11 @@ GroupLeadersList.propTypes = {
   edit: PropTypes.bool,
   groupLeader: PropTypes.object,
   handleVisitGroupLeaderEdit: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(GroupLeadersList);
