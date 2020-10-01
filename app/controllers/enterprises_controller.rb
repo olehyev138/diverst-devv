@@ -221,6 +221,7 @@ class EnterprisesController < ApplicationController
         :onboarding_pop_up_content,
         :virtual_events_enabled,
         :banner_alt_text_desc,
+        :login_text,
         theme: [
           :id,
           :primary_color,
