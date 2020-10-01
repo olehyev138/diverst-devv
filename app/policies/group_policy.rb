@@ -338,7 +338,7 @@ class GroupPolicy < ApplicationPolicy
       if manage?
         scope.where(enterprise_id: user.enterprise_id)
       elsif index?
-        scope.joins(:user_groups)
+        scope.left_joins(:user_groups)
             .where(enterprise_id: user.enterprise_id)
             .where('user_groups.user_id = ? OR groups.private = FALSE', user.id).all
       else
