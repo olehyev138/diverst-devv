@@ -2,6 +2,10 @@ module ApplicationHelper
   class MissingKeyError < StandardError
   end
 
+  def default_login_text
+    'NOTE: Those with Aramark.net access should click the “Login with Aramark.net” button to access the system. Those without Aramark.net access can activate their account by clicking the “Activate Account” button below.'
+  end
+
   def linkedin_logo_for_connected_users(user)
     inline_svg('icons/linkedin', size: '17px*17px') if user.linkedin_profile_url.present?
   end
