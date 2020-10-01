@@ -36,6 +36,7 @@ RSpec.describe Groups::NewsLinkCommentController, type: :controller do
 
       context 'when successful' do
         before do
+          request.env["HTTP_REFERER"] = 'back'
           patch :update, group_id: group.id, news_link_id: news_link.id, id: news_link_comment.id, news_link_comment: { content: 'updated', approved: true }
         end
 
@@ -46,7 +47,7 @@ RSpec.describe Groups::NewsLinkCommentController, type: :controller do
         end
 
         it 'redirect to message' do
-          expect(response).to redirect_to comments_group_news_link_url(id: news_link.id, group_id: group.id)
+          expect(response).to redirect_to 'back'
         end
       end
 

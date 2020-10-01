@@ -447,6 +447,16 @@ class Group < BaseClass
     end
   end
 
+  def posts_with_pending_comments
+    posts = []
+    pending_comments = message_comments.unapproved + news_link_comments.unapproved
+    pending_comments.each do |pending_comment|
+      posts << pending_comment.news_link if pending_comment.respond_to?(:news_link)
+      posts << pending_comment.message if pending_comment.respond_to?(:message)
+    end
+    posts.uniq
+  end
+
   def pending_comments_count
     message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end

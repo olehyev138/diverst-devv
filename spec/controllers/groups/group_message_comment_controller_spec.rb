@@ -34,6 +34,7 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
       login_user_from_let
 
       before do
+        request.env["HTTP_REFERER"] = 'back'
         patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: { content: 'updated' }
       end
 
@@ -47,7 +48,7 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
       end
 
       it 'redirect to message' do
-        expect(response).to redirect_to group_group_message_url(id: group_message.id, group_id: group.id)
+        expect(response).to redirect_to 'back'
       end
     end
 

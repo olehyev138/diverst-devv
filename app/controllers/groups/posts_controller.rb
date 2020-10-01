@@ -69,6 +69,10 @@ class Groups::PostsController < ApplicationController
     redirect_to :back
   end
 
+  def pending_comments
+    @posts_with_pending_comments = @group.posts_with_pending_comments
+  end
+
   protected
 
   def split_search_terms
