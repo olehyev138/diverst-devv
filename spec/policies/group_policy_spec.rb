@@ -34,6 +34,11 @@ RSpec.describe GroupPolicy, type: :policy do
       it 'shows only groups belonging to enterprise' do
         expect(policy_scope).to eq [group]
       end
+
+      it 'shows even with with no members' do
+        new_group = create(:group, members: [], enterprise: enterprise)
+        expect(policy_scope).to eq [group, new_group]
+      end
     end
   end
 
