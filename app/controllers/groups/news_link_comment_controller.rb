@@ -13,7 +13,7 @@ class Groups::NewsLinkCommentController < ApplicationController
 
     if @comment.update(comment_params)
       flash[:notice] = 'Your comment was updated'
-      redirect_to comments_group_news_link_url(id: @news_link, group_id: @group.id)
+      redirect_to :back
     else
       flash[:alert] = 'Your comment was not updated. Please fix the errors'
       render :edit
