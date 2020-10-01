@@ -103,14 +103,15 @@ export function BudgetList(props, context) {
     }
   });
 
-  actions.push({
+  actions.push(rowData => ({
     icon: () => <DeleteIcon />,
     tooltip: intl.formatMessage(messages.actions.delete),
+    disabled: !permission(rowData, 'destroy?'),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.deleteBudgetBegin({ id: rowData.id });
     }
-  });
+  }));
 
   return (
     <React.Fragment>
