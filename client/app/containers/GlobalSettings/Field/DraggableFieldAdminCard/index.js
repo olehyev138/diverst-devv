@@ -84,7 +84,7 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
               className={classes.errorButton}
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
+                if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                   deleteFieldBegin(field.id);
               }}
             >
@@ -131,4 +131,5 @@ DraggableFieldAdminCard.propTypes = {
     required: PropTypes.bool,
     memberList: PropTypes.bool,
   }),
+  customTexts: PropTypes.object,
 };

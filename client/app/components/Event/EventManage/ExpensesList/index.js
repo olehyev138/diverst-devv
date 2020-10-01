@@ -129,7 +129,7 @@ export function ExpenseList(props, context) {
                       variant='contained'
                       onClick={() => {
                         // eslint-disable-next-line no-restricted-globals,no-alert
-                        if (intl.formatMessage(messages.buttons.closeConfirm))
+                        if (intl.formatMessage(messages.buttons.closeConfirm, props.customTexts))
                           props.finalizeExpensesBegin({ id: props.initiative.id });
                       }}
                     >

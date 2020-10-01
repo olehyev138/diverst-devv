@@ -146,7 +146,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   className={classes.errorButton}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       deleteGroupBegin(group.id);
                   }}
                 >
@@ -217,7 +217,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   className={classes.errorButton}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       deleteGroupBegin(group.id);
                   }}
                 >
@@ -359,4 +359,5 @@ DraggableGroupAdminCard.propTypes = {
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };

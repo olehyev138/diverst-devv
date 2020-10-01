@@ -28,7 +28,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
 import csvReducer from 'containers/Shared/CsvFile/reducer';
@@ -81,6 +81,7 @@ export function AdminGroupListPage(props) {
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
         intl={intl}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -97,6 +98,7 @@ AdminGroupListPage.propTypes = {
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -105,6 +107,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
+  cusomTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -21,6 +21,7 @@ import {
   getSegmentBegin, createSegmentBegin, getSegmentMembersBegin,
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
+import { selectCustomText, selectEnterprise, selectPermissions } from '../../Shared/App/selectors';
 
 import { selectIsCommitting, selectSegmentWithRules, selectIsFormLoading } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
@@ -32,7 +33,7 @@ import { Divider, Box } from '@material-ui/core';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Segment/messages';
@@ -77,7 +78,7 @@ export function SegmentPage(props) {
           selectFields: props.selectFields,
           fields: props.fields
         }}
-        buttonText={segmentId ? intl.formatMessage(messages.update) : intl.formatMessage(messages.create)}
+        buttonText={segmentId ? intl.formatMessage(messages.update, props.customTexts) : intl.formatMessage(messages.create, props.customTexts)}
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}
@@ -108,7 +109,8 @@ SegmentPage.propTypes = {
   isFormLoading: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -120,6 +122,7 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
