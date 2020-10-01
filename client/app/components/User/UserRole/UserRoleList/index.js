@@ -45,9 +45,9 @@ export function UserRoleList(props, context) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: messages.role_name, field: 'role_name' },
-    { title: messages.role_type, field: 'role_type' },
-    { title: messages.priority, field: 'priority' },
+    { title: intl.formatMessage(messages.role_name, props.customTexts), field: 'role_name' },
+    { title: intl.formatMessage(messages.role_type, props.customTexts), field: 'role_type' },
+    { title: intl.formatMessage(messages.priority, props.customTexts), field: 'priority' },
   ];
 
   return (

@@ -42,10 +42,10 @@ const styles = theme => ({
   },
 });
 
-function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, intl, ...rest }) {
+function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, intl, customTexts, ...rest }) {
   const columns = [
     {
-      title: eventMessages.columns.name,
+      title: intl.formatMessage(eventMessages.columns.name, customTexts),
       field: 'name',
       query_field: 'initiative.name',
       render: rowData => (
@@ -59,25 +59,25 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       )
     },
     {
-      title: eventMessages.columns.funding,
+      title: intl.formatMessage(eventMessages.columns.funding, customTexts),
       field: 'estimated_funding',
       query_field: 'estimated_funding',
       render: rowData => toCurrencyString(intl, rowData.estimated_funding || 0),
     },
     {
-      title: eventMessages.columns.spent,
+      title: intl.formatMessage(eventMessages.columns.spent, customTexts),
       field: 'current_expenses_sum',
       sorting: false,
       render: rowData => toCurrencyString(intl, rowData.current_expenses_sum || 0),
     },
     {
-      title: eventMessages.columns.unspent,
+      title: intl.formatMessage(eventMessages.columns.unspent, customTexts),
       field: 'leftover',
       sorting: false,
       render: rowData => toCurrencyString(intl, rowData.leftover || 0),
     },
     {
-      title: eventMessages.columns.status,
+      title: intl.formatMessage(eventMessages.columns.status, customTexts),
       field: 'expenses_status',
       query_field: 'finished_expenses',
     },
@@ -315,6 +315,7 @@ AnnualBudgetListItem.propTypes = {
   initiativesLoading: PropTypes.bool,
   handlePagination: PropTypes.func.isRequired,
   handleOrdering: PropTypes.func.isRequired,
+  customTexts: PropTypes.object
 };
 
 InitiativeList.propTypes = {
@@ -326,6 +327,7 @@ InitiativeList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

@@ -53,24 +53,24 @@ export function AnnualBudgetList(props, context) {
 
   const columns = [
     {
-      title: listMessages.columns.group,
+      title: intl.formatMessage(listMessages.columns.group, props.customTexts),
       field: 'name',
       query_field: 'name'
     },
     {
-      title: listMessages.columns.budget,
+      title: intl.formatMessage(listMessages.columns.budget, props.customTexts),
       field: 'annual_budget',
       sorting: false,
       render: rowData => rowData.leftover ? toCurrencyString(props.intl, rowData.leftover) : intl.formatMessage(listMessages.notSet),
     },
     {
-      title: listMessages.columns.leftover,
+      title: intl.formatMessage(listMessages.columns.leftover, props.customTexts),
       field: 'annual_budget_leftover',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency)
     },
     {
-      title: listMessages.columns.approved,
+      title: intl.formatMessage(listMessages.columns.approved, props.customTexts),
       field: 'annual_budget_approved',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency)
@@ -82,7 +82,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: <DiverstFormattedMessage {...listMessages.actions.edit} />,
+      tooltip: intl.formatMessage(listMessages.actions.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.handleVisitEditPage(rowData.id);
       },
@@ -158,7 +158,8 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

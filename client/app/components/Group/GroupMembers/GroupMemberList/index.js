@@ -106,24 +106,24 @@ export function GroupMemberList(props) {
 
   const columns = [
     {
-      title: messages.columns.givenName,
+      title: intl.formatMessage(messages.columns.givenName, props.customTexts),
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
     {
-      title: messages.columns.familyName,
+      title: intl.formatMessage(messages.columns.familyName, props.customTexts),
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
     {
-      title: messages.columns.status,
+      title: intl.formatMessage(messages.columns.status, props.customTexts),
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND NOT accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
-        active: messages.status.active,
-        inactive: messages.status.inactive,
-        pending: messages.status.pending,
+        active: intl.formatMessage(messages.status.active, props.customTexts),
+        inactive: intl.formatMessage(messages.status.inactive, props.customTexts),
+        pending: intl.formatMessage(messages.status.pending, props.customTexts),
       }
     },
   ];
@@ -134,10 +134,10 @@ export function GroupMemberList(props) {
     actions.push(
       {
         icon: () => <DeleteIcon />,
-        tooltip: messages.tooltip.delete,
+        tooltip: intl.formatMessage(messages.tooltip.delete, props.customTexts),
         onClick: (_, rowData) => {
           /* eslint-disable-next-line no-alert, no-restricted-globals */
-          if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
+          if (confirm(intl.formatMessage(messages.tooltip.delete_confirm, props.customTexts)))
             props.deleteMemberBegin({
               userId: rowData.user.id,
               groupId: props.groupId
@@ -438,6 +438,7 @@ GroupMemberList.propTypes = {
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
   currentGroup: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

@@ -43,8 +43,8 @@ export function SegmentMemberList(props) {
   };
 
   const columns = [
-    { title: messages.member.firstname, field: 'first_name' },
-    { title: messages.member.lastname, field: 'last_name' }
+    { title: intl.formatMessage(messages.member.firstname, props.customTexts), field: 'first_name' },
+    { title: intl.formatMessage(messages.member.lastname, props.customTexts), field: 'last_name' }
   ];
 
   return (
@@ -89,7 +89,8 @@ SegmentMemberList.propTypes = {
   isFetchingMembers: PropTypes.bool,
   segmentId: PropTypes.string,
   handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func
+  handleOrdering: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

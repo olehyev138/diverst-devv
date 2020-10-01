@@ -20,6 +20,7 @@ import {
   selectPaginatedMembers, selectMemberTotal,
   selectIsFetchingMembers
 } from 'containers/Group/GroupMembers/selectors';
+import { selectCustomText } from '../../../Shared/App/selectors';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 
@@ -196,6 +197,7 @@ export function GroupMemberListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleSearching={handleSearching}
+        customTexts={props.customTexts}
 
         memberType={type}
         MemberTypes={MemberTypes}
@@ -219,12 +221,14 @@ GroupMemberListPage.propTypes = {
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
   currentGroup: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedMembers(),
   memberTotal: selectMemberTotal(),
-  isFetchingMembers: selectIsFetchingMembers()
+  isFetchingMembers: selectIsFetchingMembers(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

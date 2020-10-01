@@ -21,6 +21,7 @@ import {
   selectInitiativesTotal,
   selectIsFetchingInitiatives
 } from '../selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import { getAnnualBudgetsBegin, annualBudgetsUnmount } from '../actions';
 import { getEventsBegin } from 'containers/Event/actions';
@@ -114,6 +115,7 @@ export function AnnualBudgetsPage(props) {
         handleInitiativeOrdering={handleInitiativeOrdering}
         defaultParams={defaultParams}
         currentGroup={props.currentGroup}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -131,6 +133,7 @@ AnnualBudgetsPage.propTypes = {
   isCommitting: PropTypes.bool,
   isFetchingAnnualBudgets: PropTypes.bool,
   isFetchingInitiatives: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -141,6 +144,7 @@ const mapStateToProps = createStructuredSelector({
   initiativesTotals: selectInitiativesTotal(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
   isFetchingInitiatives: selectIsFetchingInitiatives(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

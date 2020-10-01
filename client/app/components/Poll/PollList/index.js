@@ -57,28 +57,28 @@ export function PollList(props, context) {
 
   const columns = [
     {
-      title: messages.list.name,
+      title: intl.formatMessage(messages.list.name, props.customTexts),
       field: 'title',
       query_field: 'title'
     },
     {
-      title: messages.list.questions,
+      title: intl.formatMessage(messages.list.questions, props.customTexts),
       field: 'fields_count',
       sorting: false,
     },
     {
-      title: messages.list.responses,
+      title: intl.formatMessage(messages.list.responses, props.customTexts),
       field: 'responses_count',
       sorting: false,
     },
     {
-      title: messages.list.creationDate,
+      title: intl.formatMessage(messages.list.creationDate, props.customTexts),
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
     },
     {
-      title: messages.list.status,
+      title: intl.formatMessage(messages.list.status, props.customTexts),
       field: 'status',
       query_field: 'status'
     },
@@ -95,7 +95,7 @@ export function PollList(props, context) {
 
   actions.push(rowData => ({
     icon: () => <EditIcon />,
-    tooltip: messages.list.edit,
+    tooltip: intl.formatMessage(messages.list.edit, props.customTexts),
     onClick: (_, rowData) => {
       props.handlePollEdit(rowData.id);
     },
@@ -104,10 +104,10 @@ export function PollList(props, context) {
 
   actions.push(rowData => ({
     icon: () => <DeleteIcon />,
-    tooltip: messages.list.delete,
+    tooltip: intl.formatMessage(messages.list.delete, props.customTexts),
     onClick: (_, rowData) => {
       /* eslint-disable-next-line no-alert, no-restricted-globals */
-      if (confirm(intl.formatMessage(messages.delete_confirm)))
+      if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
         props.deletePollBegin({ id: rowData.id });
     },
     disabled: !permission(rowData, 'destroy?')
@@ -169,7 +169,8 @@ PollList.propTypes = {
   links: PropTypes.shape({
     pollNew: PropTypes.string,
     pollEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 export default compose(
   injectIntl,

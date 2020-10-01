@@ -55,8 +55,8 @@ export function CampaignList(props) {
   };
 
   const columns = [
-    { title: messages.Campaign.title, field: 'title' },
-    { title: messages.Campaign.description, field: 'description' }
+    { title: intl.formatMessage(messages.Campaign.title, props.customTexts), field: 'title' },
+    { title: intl.formatMessage(messages.Campaign.description, props.customTexts), field: 'description' }
   ];
 
   return (
@@ -89,7 +89,7 @@ export function CampaignList(props) {
           actions={[
             rowData => ({
               icon: () => <EditIcon />,
-              tooltip: messages.Campaign.edit,
+              tooltip: intl.formatMessage(messages.Campaign.edit, props.customTexts),
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
               },
@@ -97,10 +97,10 @@ export function CampaignList(props) {
             }),
             rowData => ({
               icon: () => <DeleteIcon />,
-              tooltip: messages.Campaign.delete,
+              tooltip: intl.formatMessage(messages.Campaign.delete, props.customTexts),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))
+                if (confirm(intl.formatMessage(messages.Campaign.delete_confirm, props.customTexts)))
                   props.deleteCampaignBegin({ id: rowData.id });
               },
               disabled: !permission(rowData, 'update?')
@@ -130,6 +130,7 @@ CampaignList.propTypes = {
   campaign: PropTypes.object,
   handleVisitCampaignEdit: PropTypes.func,
   handleVisitCampaignShow: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 export default compose(

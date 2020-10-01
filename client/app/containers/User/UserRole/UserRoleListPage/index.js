@@ -90,7 +90,8 @@ UserRoleListPage.propTypes = {
   isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func.isRequired,
-  handleVisitUserRoleEdit: PropTypes.func
+  handleVisitUserRoleEdit: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({

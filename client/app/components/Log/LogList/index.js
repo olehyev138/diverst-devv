@@ -48,7 +48,7 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: messages.logs,
+      title: intl.formatMessage(messages.logs, props.customTexts),
       render: (activity) => {
         try {
           // eslint-disable-next-line global-require
@@ -221,7 +221,7 @@ LogList.propTypes = {
   logFrom: PropTypes.instanceOf(DateTime),
   logTo: PropTypes.instanceOf(DateTime),
   groupLabels: PropTypes.array,
-
+  customTexts: PropTypes.object,
 };
 export default compose(
   injectIntl,

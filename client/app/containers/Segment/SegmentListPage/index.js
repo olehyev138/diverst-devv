@@ -20,7 +20,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
 import { push } from 'connected-react-router';
@@ -80,6 +80,7 @@ export function SegmentListPage(props) {
         handleSearching={handleSearching}
         links={links}
         currentEnterprise={props.currentEnterprise}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -96,7 +97,8 @@ SegmentListPage.propTypes = {
 
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -105,6 +107,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

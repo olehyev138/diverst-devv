@@ -56,35 +56,35 @@ export function BudgetList(props, context) {
 
   const columns = [
     {
-      title: messages.columns.requested,
+      title: intl.formatMessage(messages.columns.requested, props.customTexts),
       field: 'requested_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.requested_amount || 0, rowData.currency),
     },
     {
-      title: messages.columns.available,
+      title: intl.formatMessage(messages.columns.available, props.customTexts),
       field: 'available_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
-      title: messages.columns.status,
+      title: intl.formatMessage(messages.columns.status, props.customTexts),
       field: 'status',
       sorting: false,
     },
     {
-      title: messages.columns.requestedAt,
+      title: intl.formatMessage(messages.columns.requestedAt, props.customTexts),
       field: 'requested_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.requested_at, DateTime.DATETIME_MED)
     },
     {
-      title: messages.columns.number,
+      title: intl.formatMessage(messages.columns.number, props.customTexts),
       field: 'item_count',
       sorting: false,
     },
     {
-      title: messages.columns.description,
+      title: intl.formatMessage(messages.columns.description, props.customTexts),
       field: 'description',
       query_field: 'description',
     },
@@ -94,7 +94,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DetailsIcon />,
-    tooltip: messages.actions.details,
+    tooltip: intl.formatMessage(messages.actions.details, props.customTexts),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
@@ -103,7 +103,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DeleteIcon />,
-    tooltip: messages.actions.delete,
+    tooltip: intl.formatMessage(messages.actions.delete, props.customTexts),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.deleteBudgetBegin({ id: rowData.id });
@@ -185,7 +185,8 @@ BudgetList.propTypes = {
     newRequest: PropTypes.string,
     annualBudgetOverview: PropTypes.string,
     requestDetails: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 export default compose(
