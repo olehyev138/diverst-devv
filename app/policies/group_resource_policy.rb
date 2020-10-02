@@ -15,9 +15,7 @@ class GroupResourcePolicy < GroupBasePolicy
     update?
   end
 
-  def un_archive?
-    update?
-  end
+  alias_method :un_archive?, :archived?
 
   class Scope < Scope
     def is_member(permission)

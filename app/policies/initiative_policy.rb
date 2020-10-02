@@ -63,9 +63,7 @@ class InitiativePolicy < GroupBasePolicy
     update?
   end
 
-  def un_archive?
-    update?
-  end
+  alias_method :un_archive?, :archived?
 
   # Miscellaneous
 

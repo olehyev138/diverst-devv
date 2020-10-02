@@ -10,6 +10,8 @@ class EnterpriseResourcePolicy < ApplicationPolicy
     policy_group.manage_all? || policy_group.auto_archive_manage?
   end
 
+  alias_method :un_archive?, :archived?
+
   def create?
     return true if update?
     return true if basic_group_leader_permission?('enterprise_resources_create')
