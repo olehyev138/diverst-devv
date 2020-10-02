@@ -72,7 +72,7 @@ class CustomEmailsController < ApplicationController
     plaintext_emails = ''#custom_email_params[:receivers].split(',').map { |i| i.strip }
     receivers_groups_ids = custom_email_params[:receiver_groups_ids]
 
-    CustomEmailMailer.custom(@custom_email.id, plaintext_emails, receivers_groups_ids).deliver_later
+    CustomEmailMailer.custom(@custom_email.id, plaintext_emails, current_user.id, receivers_groups_ids).deliver_later
 
     # TODO calculate how manu users got an email
     flash[:notice] = 'Your email has been sent.'

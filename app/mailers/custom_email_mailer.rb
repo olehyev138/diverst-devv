@@ -1,5 +1,5 @@
 class CustomEmailMailer < ApplicationMailer
-  def custom(custom_email_id, emails, group_ids = [])
+  def custom(custom_email_id, emails, current_user_id, group_ids = [])
     @custom_email = Email.find custom_email_id
     return unless @custom_email.custom?
 
@@ -7,8 +7,10 @@ class CustomEmailMailer < ApplicationMailer
 
     emails = members_from_groups(custom_email_id, group_ids)
 
+    current_user = User.find_by_id current_user_id
+
     # TODO check emails are unique
-    mail(from: @from_address, to: emails, subject: @custom_email.subject)
+    mail(from: @from_address, to: current_user, bcc: emails, subject: @custom_email.subject)
   end
 
   def members_from_groups(custom_email_id, group_ids)
