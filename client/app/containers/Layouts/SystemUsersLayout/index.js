@@ -45,7 +45,7 @@ const SystemUsersLayout = (props) => {
     currentPage = 'import';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.policy_templates.index.path() }))
     currentPage = 'templates';
-  else
+  else if (!matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
     currentPage = 'users';
 
   const [tab, setTab] = useState(SystemUsersPages[currentPage] || SystemUsersPages[0]);
