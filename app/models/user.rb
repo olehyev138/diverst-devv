@@ -740,7 +740,7 @@ class User < ApplicationRecord
 
   def check_lifespan_of_user
     # deletes users 14 days or younger
-    return true unless can_be_destroyed
+    return true if can_be_destroyed
 
     errors.add(:base, 'Users older then 14 days cannot be destroyed')
     throw(:abort)
