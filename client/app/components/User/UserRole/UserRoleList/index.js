@@ -54,7 +54,7 @@ export function UserRoleList(props, context) {
   return (
     <React.Fragment>
       <Permission show={permission(props, 'policy_templates_create')}>
-        <Grid container spacing={3} justify='flex-end'>]
+        <Grid container spacing={3} justify='flex-end'>
           <Grid item>
             <Button
               variant='contained'
