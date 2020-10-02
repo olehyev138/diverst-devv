@@ -76,6 +76,7 @@ export function UserRoleListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitUserRoleEdit={props.handleVisitUserRoleEdit}
+        permissions={props.permissions}
         links={links}
       />
     </React.Fragment>
@@ -85,6 +86,7 @@ export function UserRoleListPage(props) {
 UserRoleListPage.propTypes = {
   getUserRolesBegin: PropTypes.func.isRequired,
   userRoles: PropTypes.object,
+  permissions: PropTypes.object,
   userRoleTotal: PropTypes.number,
   isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
