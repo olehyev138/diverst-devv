@@ -24,7 +24,7 @@ RSpec.describe UserRolePolicy, type: :policy do
     context 'when manage_all is false' do
       context 'when users_manage are true' do
         before { user.policy_group.update users_manage: true }
-        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index]) }
       end
 
       context 'when users_index is true' do
