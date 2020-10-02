@@ -76,6 +76,7 @@ class ApplicationPolicy
       @permission = permission
       @params = params
       @policy_group = @user.policy_group
+      @action = action
 
       policy_class = self.class.parent
       @policy = policy_class.new(user, scope.all.klass, params)
