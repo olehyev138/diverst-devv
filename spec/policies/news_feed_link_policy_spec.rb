@@ -22,6 +22,11 @@ RSpec.describe NewsFeedLinkPolicy, type: :policy do
 
   describe 'for users with access' do
     context 'when manage_all is false' do
+      context 'when auto_archive_manage is true' do
+        before { user.policy_group.update auto_archive_manage: true }
+        it { is_expected.to permit_action(:archived) }
+      end
+
       context 'index?' do
         context 'when group.latest_news_visibility is set to public' do
           before { group.latest_news_visibility = 'public' }
