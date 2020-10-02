@@ -33,7 +33,7 @@ export function SystemUsersLinks(props) {
           { permission(props, 'users_create') && (
             <Tab
               component={WrappedNavLink}
-              to={ROUTES.admin.system.users.index.path()}
+              to={ROUTES.admin.system.users.list.path()}
               label={<DiverstFormattedMessage {...messages.tab.users} />}
               value='users'
             />

@@ -45,7 +45,7 @@ const SystemUsersLayout = (props) => {
     currentPage = 'import';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.policy_templates.index.path() }))
     currentPage = 'templates';
-  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path() }))
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.list.path() }))
     currentPage = 'users';
 
   const [tab, setTab] = useState(SystemUsersPages[currentPage] || SystemUsersPages[0]);
@@ -53,7 +53,7 @@ const SystemUsersLayout = (props) => {
   useEffect(() => {
     if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
       if (permission(props, 'users_create'))
-        redirectAction(ROUTES.admin.system.users.index.path());
+        redirectAction(ROUTES.admin.system.users.list.path());
       else if (permission(props, 'policy_templates_view'))
         redirectAction(ROUTES.admin.system.users.roles.index.path());
       else if (permission(props, 'policy_templates_create'))
