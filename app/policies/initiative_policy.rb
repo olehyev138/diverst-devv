@@ -119,7 +119,7 @@ class InitiativePolicy < GroupBasePolicy
     def resolve
       if index? && action == :index
         super(policy.base_index_permission)
-      elsif archived?  && action == :archived
+      elsif archived? && action == :archived
         scope.archived.left_joins(:enterprise).where(enterprises: { id: user.enterprise.id })
       end
     end
