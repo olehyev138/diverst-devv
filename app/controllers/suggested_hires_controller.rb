@@ -71,6 +71,8 @@ class SuggestedHiresController < ApplicationController
                                            :manager_email,
                                            :message_to_manager,
                                            :resume,
-                                           :text)
+                                           :text,
+                                           :linkedin_profile_url
+                                          )
   end
 end
