@@ -110,6 +110,7 @@ module BaseSearcher
       rescue NameError => e
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
+        warn(e) if Rails.env.development?
         warn(
           '---------------------------------------',
           '! WARNING !',

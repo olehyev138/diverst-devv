@@ -6,6 +6,10 @@ class EnterpriseResourcePolicy < ApplicationPolicy
     @policy_group.enterprise_resources_index?
   end
 
+  def archived?
+    policy_group.manage_all? || policy_group.auto_archive_manage?
+  end
+
   def create?
     return true if update?
     return true if basic_group_leader_permission?('enterprise_resources_create')
@@ -37,9 +41,24 @@ class EnterpriseResourcePolicy < ApplicationPolicy
       EnterpriseResourcePolicy.new(user, nil).index?
     end
 
+    delegate :archived?, to: :policy
+
+    def all_or_enterprise
+      if params[:all]
+        scope.left_joins(:enterprise, :group, :initiative, initiative: :group).where(enterprise_id: user.enterprise_id).or(
+            scope.left_joins(:enterprise, :group, :initiative, initiative: :group).where(groups: { enterprise_id: user.enterprise_id }).or(
+                scope.left_joins(:enterprise, :group, :initiative, initiative: :group).where(groups_initiatives: { enterprise_id: user.enterprise_id })
+              ))
+      else
+        scope.where(enterprise_id: user.enterprise_id)
+      end
+    end
+
     def resolve
       if index?
-        scope.where(enterprise_id: user.enterprise_id)
+        all_or_enterprise
+      elsif archived?
+        all_or_enterprise.archived
       else
         scope.none
       end

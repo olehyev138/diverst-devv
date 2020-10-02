@@ -15,6 +15,10 @@ class NewsFeedLinkPolicy < GroupBasePolicy
     'latest_news_visibility'
   end
 
+  def archived?
+    policy_group.manage_all? || policy_group.auto_archive_manage?
+  end
+
   def update?
     (record.author == user if NewsFeedLink === record) || super
   end
@@ -55,8 +59,14 @@ class NewsFeedLinkPolicy < GroupBasePolicy
       group.news_feed_links.custom_or(group.shared_news_feed_links)
     end
 
+    delegate :archived?, to: :policy
+
     def resolve
-      super(policy.base_index_permission)
+      if index?
+        super(policy.base_index_permission)
+      elsif archived?
+        scope.archived.left_joins(:enterprise).where(enterprises: { id: user.enterprise.id })
+      end
     end
   end
 end

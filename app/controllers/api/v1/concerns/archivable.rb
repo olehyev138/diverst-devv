@@ -43,6 +43,17 @@ module Api::V1::Concerns::Archivable
     end
   end
 
+  def archived
+    base_authorize(klass)
+
+    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy, base: klass.archived)
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   private def action_map(action)
     case action
     when :archive then 'archive'
