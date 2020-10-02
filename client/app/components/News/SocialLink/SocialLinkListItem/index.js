@@ -104,7 +104,7 @@ export function SocialLinkListItem(props) {
         />
       )}
       {props.pinNewsItemBegin && (
-        <Permission show={permission(props.currentGroup, 'events_manage?')}>
+        <Permission show={permission(props.currentGroup, 'news_manage?')}>
           <IconButton
             size='small'
             onClick={() => {
