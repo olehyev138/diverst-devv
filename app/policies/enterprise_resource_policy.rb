@@ -57,9 +57,9 @@ class EnterpriseResourcePolicy < ApplicationPolicy
     end
 
     def resolve
-      if index?
+      if index? && action == :index
         all_or_enterprise
-      elsif archived?
+      elsif archived? && action == :archived
         all_or_enterprise.archived
       else
         scope.none

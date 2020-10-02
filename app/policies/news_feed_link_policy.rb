@@ -62,9 +62,9 @@ class NewsFeedLinkPolicy < GroupBasePolicy
     delegate :archived?, to: :policy
 
     def resolve
-      if index?
+      if index? && action == :index
         super(policy.base_index_permission)
-      elsif archived?
+      elsif archived? && action == :archived
         scope.archived.left_joins(:enterprise).where(enterprises: { id: user.enterprise.id })
       end
     end
