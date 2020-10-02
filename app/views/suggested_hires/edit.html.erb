@@ -5,10 +5,15 @@
         <%= f.hidden_field :user_id, value: current_user.id %>
         <%= f.hidden_field :group_id, value: @group.id %>
         <div class="custom-user-select">
-          <%= f.input :name %>
-          <%= f.input :email%> 
+          <%= f.input :candidate_name, label: "candidate's name", required: true %>
+          <%= f.input :candidate_email, label: "candidate's email", required: true %> 
+          <%= f.input :linkedin_profile_url, label: "candidate's linkedin profile" %>
         </div>
         <%= f.input :resume, as: :attachment_preview %>
+        <div class="custom-user-select">
+          <%= f.input :manager_email, label: "Manager's email", required: true %>
+          <%= f.input :message_to_manager, label: 'Comments', required: true %>
+        </div>
         <%= f.button :submit, 'Update suggested hire' %>
       </div>
     </div>

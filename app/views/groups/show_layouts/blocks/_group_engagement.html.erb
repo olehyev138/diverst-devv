@@ -51,4 +51,8 @@
           })
       })
   });
+  
+  $('#usersToInviteToGroup').on('hidden.bs.modal', function () {
+   setTimeout(function(){$('[data-target="#usersToInviteToGroup"]').blur();}, 0);
+  });
 </script>
