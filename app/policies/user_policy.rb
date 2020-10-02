@@ -31,6 +31,7 @@ class UserPolicy < ApplicationPolicy
 
   def destroy?
     return false if @user === @record
+    return false unless @user.can_be_destroyed
 
     update?
   end
