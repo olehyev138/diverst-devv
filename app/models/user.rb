@@ -733,7 +733,7 @@ class User < ApplicationRecord
   end
 
   def can_be_destroyed
-    created_at < 14.days.ago
+    created_at > 14.days.ago
   end
 
   private
