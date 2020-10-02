@@ -15,7 +15,6 @@ RSpec.describe NewsLink::Actions, type: :model do
               ]
           }
       ]
-
     end
 
     it { expect(NewsLink.base_preloads).to eq base_preloads }

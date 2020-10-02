@@ -27,29 +27,29 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
           :views,
           :likes,
           {
-              :group_message => [
+              group_message: [
                   :owner,
                   :group,
                   :comments,
                   {
-                      :comments => [
+                      comments: [
                           :author
                       ]
                   }
               ],
-              :news_link => [
+              news_link: [
                   :author,
                   :group,
                   :comments,
                   :photos,
                   :picture_attachment,
                   {
-                      :comments => [
+                      comments: [
                           :author
                       ]
                   }
               ],
-              :social_link => [
+              social_link: [
                   :author
               ]
           }
