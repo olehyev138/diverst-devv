@@ -128,7 +128,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def members_create?
-    GroupMemberPolicy.new(self, UserGroup).create?
+    GroupMemberPolicy.new(self, UserGroup).add_members?
   end
 
   def message_create?
