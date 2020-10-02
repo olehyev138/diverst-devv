@@ -15,6 +15,10 @@ class GroupResourcePolicy < GroupBasePolicy
     update?
   end
 
+  def archived?
+    policy_group.manage_all? || policy_group.auto_archive_manage?
+  end
+
   alias_method :un_archive?, :archived?
 
   class Scope < Scope
