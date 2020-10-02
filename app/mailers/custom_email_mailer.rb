@@ -10,7 +10,7 @@ class CustomEmailMailer < ApplicationMailer
     current_user = User.find_by_id current_user_id
 
     # TODO check emails are unique
-    mail(from: @from_address, to: current_user, bcc: emails, subject: @custom_email.subject)
+    mail(from: @from_address, to: current_user.email, bcc: emails, subject: @custom_email.subject)
   end
 
   def members_from_groups(custom_email_id, group_ids)
@@ -24,7 +24,7 @@ class CustomEmailMailer < ApplicationMailer
       members_emails << g.members.active.map(&:email)
     end
 
-    members_emails
+    members_emails.uniq
   end
 
   def variables
