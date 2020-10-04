@@ -36,21 +36,12 @@
 </div>
 
 <script>
-  function validateForm(){
+  function validateForm(email, fieldId){
     var candidateName = $('#suggested_hire_candidate_name').val();
     var candidateEmail = $('#suggested_hire_candidate_email').val();
     var candidateResume = $('#suggested_hire_resume').val();
     var managerEmail = $('#suggested_hire_manager_email').val();
     var messageToManager = $('#suggested_hire_message_to_manager').val();
-
-    if(candidateName == 0 || candidateEmail==0 || candidateResume==0 || managerEmail==0 || messageToManager==0) {
-      $('input[type="submit"]').prop('disabled', true);
-    } else if(candidateName!= 0 && candidateEmail!= 0 && candidateResume!=0 && managerEmail!=0 && messageToManager!=0) {
-      $('input[type="submit"]').prop('disabled', false);
-    }
-  }
-
-  function emailValidation(email, fieldId) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/; 
     var candidateEmailValidationMessage = document.getElementById('candidate-email-validation-message');
     var managerEmailValidationMessage = document.getElementById('manager-email-validation-message');
@@ -68,19 +59,19 @@
         managerEmailValidationMessage.innerText = 'invalid email input!'
       }
     }
+
+    if(candidateName == 0 || candidateEmail==0 || candidateResume==0 || managerEmail==0 || messageToManager==0 || !regex.test(candidateEmail) || !regex.test(managerEmail)) {
+      $('input[type="submit"]').prop('disabled', true);
+    } else if(candidateName!= 0 && candidateEmail!= 0 && candidateResume!=0 && managerEmail!=0 && messageToManager!=0 && regex.test(candidateEmail) && regex.test(managerEmail)) {
+      $('input[type="submit"]').prop('disabled', false);
+    }
   }
 
   $('#suggestHireToGroup').on('shown.bs.modal', function(){
-    validateForm();
+    $('input[type="submit"]').prop('disabled', true);
 
     $('#suggested_hire_candidate_name, #suggested_hire_candidate_email, #suggested_hire_resume, #suggested_hire_manager_email, #suggested_hire_message_to_manager').on('keyup change', function() {
-      validateForm();
-      
-      if(this.id=='suggested_hire_candidate_email'){
-        emailValidation($(this).val(), this.id);
-      }else if(this.id=='suggested_hire_manager_email'){
-        emailValidation($(this).val(), this.id)
-      }
+      validateForm($(this).val(), this.id);      
     });
   });
 
