@@ -196,7 +196,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def leave?
-    UserGroupPolicy.new(self, UserGroup).destroy?
+    UserGroupPolicy.new(self, UserGroup).leave?
   end
 
   # ========================================
