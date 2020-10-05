@@ -70,7 +70,7 @@ class ApplicationPolicy
   class Scope
     attr_reader :user, :scope, :permission, :policy, :params, :action
 
-    def initialize(user, scope, permission = nil, params: {}, action: nil)
+    def initialize(user, scope, permission = nil, params: {}, action: :index)
       @user = user
       @scope = scope
       @permission = permission
