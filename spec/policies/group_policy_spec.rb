@@ -32,12 +32,13 @@ RSpec.describe GroupPolicy, type: :policy do
       before { user.policy_group.update manage_all: true }
 
       it 'shows only groups belonging to enterprise' do
-        expect(policy_scope).to eq [group]
+        expected = [group]
+        expect(policy_scope).to eq expected
       end
 
       it 'shows even with with no members' do
-        new_group = create(:group, members: [], enterprise: enterprise)
-        expect(policy_scope).to eq [group, new_group]
+        expected = [group, create(:group, members: [], enterprise: enterprise)]
+        expect(policy_scope).to eq expected
       end
     end
   end

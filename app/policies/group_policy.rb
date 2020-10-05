@@ -275,7 +275,13 @@ class GroupPolicy < ApplicationPolicy
   def parent_group_permissions?
     return false if @record.parent.nil?
 
-    ::GroupPolicy.new(@user, @record.parent).send(caller_locations(1, 1)&.first&.label)
+    parent_policy = ::GroupPolicy.new(@user, @record.parent)
+    caller = caller_locations(1, 1)&.first&.label
+    if parent_policy.respond_to?(caller)
+      parent_policy.send(caller)
+    else
+      parent_policy.manage?
+    end
   end
 
   def destroy?
