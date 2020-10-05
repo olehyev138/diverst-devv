@@ -259,6 +259,10 @@ class GroupPolicy < ApplicationPolicy
     @group_leader.present?
   end
 
+  def is_owner?
+    @user == @record
+  end
+
   delegate :private?, to: :record
 
   def update?
@@ -271,7 +275,7 @@ class GroupPolicy < ApplicationPolicy
   def parent_group_permissions?
     return false if @record.parent.nil?
 
-    ::GroupPolicy.new(@user, @record.parent).manage?
+    ::GroupPolicy.new(@user, @record.parent).send(caller_locations(1, 1)&.first&.label)
   end
 
   def destroy?
@@ -306,9 +310,10 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_layouts_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_layouts_manage')
-
     # group member
-    is_a_member? && @policy_group.groups_layouts_manage?
+    return true if is_a_member? && @policy_group.groups_layouts_manage?
+
+    is_owner?
   end
 
   def settings?
@@ -319,9 +324,10 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
     # group leader
     return true if has_group_leader_permissions?('group_settings_manage')
-
     # group member
-    is_a_member? && @policy_group.group_settings_manage?
+    return true if is_a_member? && @policy_group.group_settings_manage?
+
+    is_owner?
   end
 
   def has_group_leader_permissions?(permission)
