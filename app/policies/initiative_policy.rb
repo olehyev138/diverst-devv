@@ -1,10 +1,6 @@
 class InitiativePolicy < GroupBasePolicy
-  def initialize(user, context, params = {})
-    if Class === context && User === user
-      super(user, [Group.find_by_id(params[:owner_group_id] || params[:group_id]), context], params)
-    else
-      super(user, context, params)
-    end
+  def get_group_id(context = nil)
+    super || params[:owner_group_id] || Pillar.find(params.dig(:initiative, :pillar_id)).group_id
   end
 
   def base_index_permission
@@ -25,6 +21,10 @@ class InitiativePolicy < GroupBasePolicy
 
   def group_visibility_setting
     'upcoming_events_visibility'
+  end
+
+  def attendees?
+    InitiativeUserPolicy.new(self, InitiativeUser).index?
   end
 
   def update?

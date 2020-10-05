@@ -469,6 +469,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.boolean "required", default: false
     t.string "field_type"
     t.boolean "add_to_member_list", default: false
+    t.integer "position"
     t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 

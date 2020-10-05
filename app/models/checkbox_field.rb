@@ -1,6 +1,16 @@
 class CheckboxField < Field
   include Optionnable
 
+  def operators
+    [
+        Field::OPERATORS[:equals],
+        Field::OPERATORS[:is_not],
+        Field::OPERATORS[:contains_any_of],
+        Field::OPERATORS[:contains_all_of],
+        Field::OPERATORS[:does_not_contain]
+    ]
+  end
+
   def string_value(values)
     return '-' unless values
 
@@ -14,7 +24,14 @@ class CheckboxField < Field
   end
 
   def serialize_value(value)
-    value.present? ? value.to_json : nil
+    case value
+    when Array then value.to_json
+    when Enumerable then value.to_a.to_json
+    # If the string represents a JSON Array, then its already serialized,
+    # Otherwise wrap it in a Array and convert to json
+    when String then (JSON.parse(value).is_a?(Array) rescue false) ? value : [value].to_json
+    else nil
+    end if value.present?
   end
 
   def deserialize_value(value)

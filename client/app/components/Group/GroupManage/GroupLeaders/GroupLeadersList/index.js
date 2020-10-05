@@ -34,8 +34,8 @@ export function GroupLeadersList(props) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.leader.column_name), field: 'user.name' },
-    { title: intl.formatMessage(messages.leader.column_position), field: 'position_name' }
+    { title: intl.formatMessage(messages.leader.column_name), field: 'user.name', query_field: 'users.last_name' },
+    { title: intl.formatMessage(messages.leader.column_position), field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
@@ -58,9 +58,16 @@ export function GroupLeadersList(props) {
     });
   }
 
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'group_leaders.id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <React.Fragment>
-      <Permission show={permission(props.group, 'leaders_manage?')}>
+      <Permission show={permission(props.group, 'leaders_create?')}>
         <Grid container spacing={3} justify='flex-end'>
           <Grid item>
             <Button
@@ -81,6 +88,7 @@ export function GroupLeadersList(props) {
         <Grid item xs>
           <DiverstTable
             title={intl.formatMessage(messages.leader.title)}
+            onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingGroupLeaders}
             dataArray={props.groupLeaderList}

@@ -15,6 +15,7 @@ import {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  SSOLandingPage,
   ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
@@ -27,7 +28,7 @@ import {
   GroupCategorizePage,
   SegmentListPage,
   SegmentPage,
-  FieldsPage,
+  AdminFieldsPage,
   UsersPage,
   UsersImportPage,
   UserCreatePage,
@@ -174,6 +175,8 @@ export default function Routes(props) {
         <Route path={expandRouteIntoPathArray(ROUTES.session)}>
           <SessionLayout>
             <SwitchWithProps>
+              {/* SSO Landing */}
+              <RouteWithProps path={ROUTES.session.ssoLanding.path()}><SSOLandingPage /></RouteWithProps>
               {/* Login */}
               <RouteWithProps path={ROUTES.session.login.path()}><LoginPage /></RouteWithProps>
               {/* Forgot password */}
@@ -549,7 +552,7 @@ export default function Routes(props) {
                       <GlobalSettingsLayout>
                         <Switch>
                           { /* Fields */}
-                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.fields.index.path()}><FieldsPage /></RouteWithProps>
+                          <RouteWithProps exact path={ROUTES.admin.system.globalSettings.fields.index.path()}><AdminFieldsPage /></RouteWithProps>
                           { /* Custom Text Edit */}
                           <RouteWithProps exact path={ROUTES.admin.system.globalSettings.customText.edit.path()}><CustomTextEditPage /></RouteWithProps>
                           { /* Enterprise Configuration */}

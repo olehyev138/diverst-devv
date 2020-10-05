@@ -27,9 +27,11 @@ import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const GroupSelector = (props) => {
   const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
+
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
@@ -74,10 +76,12 @@ const GroupSelector = (props) => {
   };
 
   useEffect(() => {
-    groupSelectAction();
+    if (props.permissions.groups_view) groupSelectAction();
 
     return () => groupListUnmount();
   }, []);
+
+  if (!props.permissions.groups_view) return <React.Fragment />;
 
   return (
     <Grid container alignContent='center' alignItems='center' spacing={2}>
@@ -159,6 +163,7 @@ const GroupSelector = (props) => {
 };
 
 GroupSelector.propTypes = {
+  permissions: PropTypes.object,
   dialogSelector: PropTypes.bool,
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogNoChildren: PropTypes.bool,
@@ -198,6 +203,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {

@@ -7,9 +7,14 @@ class FieldData < ApplicationRecord
   validates_presence_of :field
   validates_presence_of :field_user
   validate :validate_numeric_limit, if: -> { field.is_a? NumericField }
+  validate :validate_presence_field_data
 
-  def deserialized_data
+  def value
     field.deserialize_value(data)
+  end
+
+  def data=(a)
+    field_id.present? ? super(field.serialize_value(a)) : super
   end
 
   private
@@ -21,10 +26,19 @@ class FieldData < ApplicationRecord
   end
 
   def validate_numeric_limit
-    if data.to_i > field.max
+    if field.max.present? && data.to_i > field.max
       errors.add(:data, "can't be greater than the max value")
-    elsif data.to_i < field.min
+    elsif field.min.present? && data.to_i < field.min
       errors.add(:data, "can't be less than the min value")
+    end
+  end
+
+  # Sets an error if data is blank while field is required
+  def validate_presence_field_data
+    if field&.required && (data.blank? || value.blank?)
+      key = field.title.parameterize.underscore.to_sym
+      field_user.errors.add(key, "can't be blank")
+      errors.add(:data, "can't be blank")
     end
   end
 end

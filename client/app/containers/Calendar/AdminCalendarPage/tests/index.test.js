@@ -1,6 +1,6 @@
 /**
  *
- * Tests for FieldListPage
+ * Tests for AdminCalendarPage
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -9,18 +9,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import 'utils/mockReactRouterHooks';
-import { FieldListPage } from '../index';
+import { AdminCalendarPage } from '../index';
 
-const props = {
-  getFieldsBegin: jest.fn(),
-  createFieldBegin: jest.fn(),
-  updateFieldBegin: jest.fn(),
-  fieldUnmount: jest.fn(),
-};
-describe('<FieldListPage />', () => {
+describe('<AdminCalendarPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<FieldListPage classes={{}} {...props} />);
+    const wrapper = shallow(<AdminCalendarPage classes={{}} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

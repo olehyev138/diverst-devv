@@ -20,6 +20,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import SSOLandingPage from 'containers/Session/SSOLandingPage/Loadable';
 import SignUpPage from 'containers/User/SignUpPage/Loadable';
 import PasswordResetPage from 'containers/User/PasswordResetPage/Loadable';
 import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
@@ -83,7 +84,7 @@ import PollShowPage from 'containers/Poll/PollShowPage/Loadable';
 import PollResponsePage from 'containers/Poll/PollResponsePage/Loadable';
 
 /* Admin - System - Global Settings */
-import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
+import AdminFieldsPage from 'containers/GlobalSettings/Field/AdminFieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
@@ -223,6 +224,7 @@ export {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  SSOLandingPage,
   ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
@@ -235,7 +237,7 @@ export {
   GroupCategorizePage,
   SegmentListPage,
   SegmentPage,
-  FieldsPage,
+  AdminFieldsPage,
   UsersPage,
   UsersImportPage,
   UserCreatePage,

@@ -52,11 +52,11 @@ class NumericField < Field
   end
 
   def serialize_value(value)
-    value.to_s
+    value.to_s if value.present?
   end
 
   def deserialize_value(value)
-    value.to_i
+    value.to_i unless value.nil?
   end
 
   def match_score_between(e1, e2, users)

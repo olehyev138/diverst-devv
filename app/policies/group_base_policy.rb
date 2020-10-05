@@ -21,7 +21,7 @@ class GroupBasePolicy < ApplicationPolicy
       elsif context.is_a?(Class) # Class
         # Set group using params if context is a class as this will be for
         # nested model actions such as index and create, which require a group
-        self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
+        self.group = ::Group.find(get_group_id(context)) rescue nil
       elsif context.present?
         self.group = context.group
         self.record = context
@@ -33,6 +33,10 @@ class GroupBasePolicy < ApplicationPolicy
         @group_leader_role_id = group_leader&.user_role_id
       end
     end
+  end
+
+  def get_group_id(context)
+    params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)
   end
 
   def is_a_member?
@@ -78,7 +82,21 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_permission(permission)
-    policy_group[permission] || has_group_leader_permissions?(permission)
+    manage_all? || policy_group[permission] || has_group_leader_permissions?(permission)
+  end
+
+  def has_at_least_permission(permission)
+    permissions = Rails.cache.fetch(permission) do
+      if permission.include? 'index'
+        [permission, permission.gsub('index', 'create'), permission.gsub('index', 'manage'), 'manage_all']
+      elsif permission.include? 'create'
+        [permission, permission.gsub('create', 'manage'), 'manage_all']
+      else
+        [permission, 'manage_all']
+      end & PolicyGroup.attribute_names
+    end
+
+    permissions.any? { |per| has_permission(per) }
   end
 
   def basic_group_leader_permission?(permission)

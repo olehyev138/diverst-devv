@@ -36,6 +36,9 @@ const styles = theme => ({
   cardContent: {
     paddingBottom: 0,
   },
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 export function SocialLinkListItem(props) {
@@ -153,13 +156,14 @@ export function SocialLinkListItem(props) {
             <Permission show={permission(newsItem, 'destroy?')}>
               <Button
                 size='small'
+                className={classes.errorButton}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm('Delete social link?'))
                     props.deleteSocialLinkBegin(newsItem.social_link);
                 }}
               >
-                Delete
+                <DiverstFormattedMessage {...messages.delete} />
               </Button>
             </Permission>
           </React.Fragment>

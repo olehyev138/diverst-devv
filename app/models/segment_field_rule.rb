@@ -22,19 +22,15 @@ class SegmentFieldRule < ApplicationRecord
 
     return false unless field_data
 
-    field.evaluate(field_data.deserialized_data, deserialized_data, operator)
+    field.evaluate(field_data.value, value, operator)
   end
 
-  def deserialized_data
-    case field.type
-    when 'SelectField'
-      # TODO: multi select - assume single element array for now
-      JSON.parse(data)
-    when 'NumericField'
-      data.to_i
-    else
-      data
-    end
+  def value
+    field.deserialize_value(data)
+  end
+
+  def data=(a)
+    field_id.present? ? super(field.serialize_value(a)) : super
   end
 
   #
