@@ -50,6 +50,7 @@ export function SessionProfilePage(props) {
         buttonText={type === 'edit'
           ? props.intl.formatMessage(messages.form.update, props.customTexts)
           : props.intl.formatMessage(messages.form.create, props.customTexts)}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

@@ -112,7 +112,7 @@ export function NewsFeed(props) {
 
   const handleSpeedDialOpen = () => setSpeedDialOpen(true);
   const handleSpeedDialClose = () => setSpeedDialOpen(false);
-
+  // TODO : Add customText to intl.formatMessage
   return (
     <React.Fragment>
       {!props.readonly && (

@@ -27,7 +27,7 @@ import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
 
 /* eslint-disable object-curly-newline */
 export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
+  const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day], props.customTexts), value: day }));
   return (
     <React.Fragment>
       { props.user && props.userSession.user_id === props.user.id && (
@@ -264,7 +264,8 @@ MentorshipUserFormInner.propTypes = {
   typeOptions: PropTypes.array,
   links: PropTypes.shape({
     usersIndex: PropTypes.string
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

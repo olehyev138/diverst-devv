@@ -16,6 +16,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
 import { getResponsesBegin, responsesUnmount } from 'containers/Poll/Response/actions';
 import { selectIsCommitting, selectIsFetchingPoll, selectPoll } from 'containers/Poll/selectors';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
@@ -116,6 +117,7 @@ export function PollShowPage(props) {
           fieldOptions={textFieldOptions}
           handlePagination={handlePagination(responseParams, setResponseParams)}
           handleOrdering={handleOrdering(responseParams, setResponseParams)}
+          customTexts={props.customTexts}
         />
       );
     if (tab === 'graphs')
@@ -170,6 +172,7 @@ PollShowPage.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   responsesLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -179,6 +182,7 @@ const mapStateToProps = createStructuredSelector({
   responses: selectPaginatedResponses(),
   responsesTotal: selectResponsesTotal(),
   responsesLoading: selectIsFetchingResponses(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

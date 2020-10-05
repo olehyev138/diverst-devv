@@ -35,6 +35,7 @@ const styles = theme => ({
 
 export function NewsComment(props) {
   const { classes, comment, newsItem, intl } = props;
+  // TODO : Add customText to intl.formatMessage
   return (
     <Card className={classes.margin}>
       <CardHeader

@@ -71,7 +71,7 @@ export function PollResponses(props, context) {
   ];
 
   const detailPanel = [{
-    tooltip: props.intl.formatMessage(messages.responses.show),
+    tooltip: props.intl.formatMessage(messages.responses.show, props.customTexts),
     render: rowData => rowData.field_data && rowData.field_data.map((fieldDatum, i) => (
       <div key={fieldDatum.id}>
         <CardContent>
@@ -154,7 +154,8 @@ PollResponses.propTypes = {
   links: PropTypes.shape({
     pollNew: PropTypes.string,
     pollEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 PollResponses.defaultProps = {

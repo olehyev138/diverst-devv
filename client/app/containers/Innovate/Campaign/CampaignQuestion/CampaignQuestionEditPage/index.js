@@ -17,7 +17,7 @@ import campaignSaga from 'containers/Innovate/Campaign/saga';
 import {
   selectIsCommitting, selectQuestion, selectIsFormLoading
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
-
+import { selectCustomText } from '../../../../Shared/App/selectors';
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
@@ -56,6 +56,7 @@ export function CampaignQuestionEditPage(props) {
       buttonText={messages.update}
       question={props.question}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -71,13 +72,14 @@ CampaignQuestionEditPage.propTypes = {
   isCommitting: PropTypes.bool,
   campaignId: PropTypes.array,
   questionId: PropTypes.array,
-
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   question: selectQuestion(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

@@ -22,6 +22,7 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { getCampaignBegin } from 'containers/Innovate/Campaign/actions';
 import { selectCampaign, selectIsFormLoading } from 'containers/Innovate/Campaign/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionCreatePage(props) {
@@ -48,6 +49,7 @@ export function CampaignQuestionCreatePage(props) {
       buttonText={messages.create}
       isCommitting={props.isCommitting}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -58,13 +60,15 @@ CampaignQuestionCreatePage.propTypes = {
   getCampaignBegin: PropTypes.func,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
-  campaign: PropTypes.object
+  campaign: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   campaign: selectCampaign(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
