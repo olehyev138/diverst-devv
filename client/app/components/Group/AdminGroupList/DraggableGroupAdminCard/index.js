@@ -244,35 +244,41 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   </Grid>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    size='small'
-                    color='primary'
-                    to={{
-                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
-                      state: { id: childGroup.id }
-                    }}
-                    component={WrappedNavLink}
-                  >
-                    <DiverstFormattedMessage {...messages.edit} />
-                  </Button>
-                  <Button
-                    size='small'
-                    color='primary'
-                    onClick={() => handleDialogOpen(childGroup.id)}
-                  >
+                  <Permission show={permission(childGroup, 'update?')}>
+                    <Button
+                      size='small'
+                      color='primary'
+                      to={{
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
+                        state: { id: childGroup.id }
+                      }}
+                      component={WrappedNavLink}
+                    >
+                      <DiverstFormattedMessage {...messages.edit} />
+                    </Button>
+                  </Permission>
+                  <Permission show={permission(childGroup, 'add_members?')}>
+                    <Button
+                      size='small'
+                      color='primary'
+                      onClick={() => handleDialogOpen(childGroup.id)}
+                    >
                     Import Users
-                  </Button>
-                  <Button
-                    size='small'
-                    className={classes.errorButton}
-                    onClick={() => {
+                    </Button>
+                  </Permission>
+                  <Permission show={permission(childGroup, 'destroy?')}>
+                    <Button
+                      size='small'
+                      className={classes.errorButton}
+                      onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete group?'))
-                        deleteGroupBegin(childGroup.id);
-                    }}
-                  >
-                    <DiverstFormattedMessage {...messages.delete} />
-                  </Button>
+                        if (confirm('Delete group?'))
+                          deleteGroupBegin(childGroup.id);
+                      }}
+                    >
+                      <DiverstFormattedMessage {...messages.delete} />
+                    </Button>
+                  </Permission>
                 </CardActions>
               </Card>
             </Grid>
