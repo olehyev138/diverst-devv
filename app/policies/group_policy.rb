@@ -272,10 +272,18 @@ class GroupPolicy < ApplicationPolicy
     @record.owner == @user
   end
 
+  # Gets the parent permission based on what method this was called from
+  # @example
+  # def show?
+  #   # checks if user has `show` permission in parent group
+  #   parent_group_permissions?
+  # end
   def parent_group_permissions?
     return false if @record.parent.nil?
 
     parent_policy = ::GroupPolicy.new(@user, @record.parent)
+
+    # Gets the method name which this method was called from
     caller = caller_locations(1, 1)&.first&.label
     if parent_policy.respond_to?(caller)
       parent_policy.send(caller)
