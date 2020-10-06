@@ -60,23 +60,27 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def fields?
-    update?
+    return true if manage_all?
+    return true if @policy_group.groups_manage?
+    return true if has_group_leader_permissions?('groups_insights_manage')
+
+    @policy_group.groups_insights_manage
   end
 
   def create_field?
-    update?
+    fields?
   end
 
   def updates?
-    update?
+    fields?
   end
 
   def update_prototype?
-    updates?
+    fields?
   end
 
   def create_update?
-    update?
+    fields?
   end
 
   def update_all_sub_groups?
@@ -124,7 +128,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def members_create?
-    GroupMemberPolicy.new(self, UserGroup).create?
+    GroupMemberPolicy.new(self, UserGroup).add_members?
   end
 
   def message_create?
@@ -192,7 +196,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def leave?
-    UserGroupPolicy.new(self, UserGroup).destroy?
+    UserGroupPolicy.new(self, UserGroup).leave?
   end
 
   # ========================================
@@ -255,6 +259,10 @@ class GroupPolicy < ApplicationPolicy
     @group_leader.present?
   end
 
+  def is_owner?
+    @user == @record
+  end
+
   delegate :private?, to: :record
 
   def update?
@@ -264,10 +272,24 @@ class GroupPolicy < ApplicationPolicy
     @record.owner == @user
   end
 
+  # Gets the parent permission based on what method this was called from
+  # @example
+  # def show?
+  #   # checks if user has `show` permission in parent group
+  #   parent_group_permissions?
+  # end
   def parent_group_permissions?
     return false if @record.parent.nil?
 
-    ::GroupPolicy.new(@user, @record.parent).manage?
+    parent_policy = ::GroupPolicy.new(@user, @record.parent)
+
+    # Gets the method name which this method was called from
+    caller = caller_locations(1, 1)&.first&.label
+    if parent_policy.respond_to?(caller)
+      parent_policy.send(caller)
+    else
+      parent_policy.manage?
+    end
   end
 
   def destroy?
@@ -302,9 +324,10 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_layouts_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_layouts_manage')
-
     # group member
-    is_a_member? && @policy_group.groups_layouts_manage?
+    return true if is_a_member? && @policy_group.groups_layouts_manage?
+
+    is_owner?
   end
 
   def settings?
@@ -315,9 +338,10 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
     # group leader
     return true if has_group_leader_permissions?('group_settings_manage')
-
     # group member
-    is_a_member? && @policy_group.group_settings_manage?
+    return true if is_a_member? && @policy_group.group_settings_manage?
+
+    is_owner?
   end
 
   def has_group_leader_permissions?(permission)
@@ -334,7 +358,7 @@ class GroupPolicy < ApplicationPolicy
       if manage?
         scope.where(enterprise_id: user.enterprise_id)
       elsif index?
-        scope.joins(:user_groups)
+        scope.left_joins(:user_groups)
             .where(enterprise_id: user.enterprise_id)
             .where('user_groups.user_id = ? OR groups.private = FALSE', user.id).all
       else

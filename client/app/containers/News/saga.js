@@ -202,7 +202,7 @@ export function* updateNewsLink(action) {
     const response = yield call(api.newsLinks.update.bind(api.newsLinks), payload.news_link.id, payload);
 
     yield put(updateNewsLinkSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_news_link), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateNewsLinkError(err));
@@ -270,7 +270,7 @@ export function* updateSocialLink(action) {
     const response = yield call(api.socialLinks.update.bind(api.socialLinks), payload.social_link.id, payload);
 
     yield put(updateSocialLinkSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_social_link), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSocialLinkError(err));
