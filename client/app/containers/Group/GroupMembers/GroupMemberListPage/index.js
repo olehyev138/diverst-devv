@@ -18,7 +18,7 @@ import {
 } from 'containers/Group/GroupMembers/actions';
 import {
   selectPaginatedMembers, selectMemberTotal,
-  selectIsFetchingMembers
+  selectIsFetchingMembers, selectHasChanged,
 } from 'containers/Group/GroupMembers/selectors';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
@@ -164,6 +164,15 @@ export function GroupMemberListPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getMembersBegin(params);
+
+    return () => {
+      props.groupMembersUnmount();
+    };
+  }, [props.hasChanged]);
+
   const links = {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
@@ -218,13 +227,15 @@ GroupMemberListPage.propTypes = {
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedMembers(),
   memberTotal: selectMemberTotal(),
-  isFetchingMembers: selectIsFetchingMembers()
+  isFetchingMembers: selectIsFetchingMembers(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = {
