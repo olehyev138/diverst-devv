@@ -68,14 +68,15 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope, :permission, :policy, :params
+    attr_reader :user, :scope, :permission, :policy, :params, :action
 
-    def initialize(user, scope, permission = nil, params: {})
+    def initialize(user, scope, permission = nil, params: {}, action: :index)
       @user = user
       @scope = scope
       @permission = permission
       @params = params
       @policy_group = @user.policy_group
+      @action = action
 
       policy_class = self.class.parent
       @policy = policy_class.new(user, scope.all.klass, params)

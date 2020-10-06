@@ -159,7 +159,7 @@ export function GroupMessageListItem(props) {
                 >
                   <DiverstFormattedMessage {...messages.edit} />
                 </Button>
-                <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                <Permission show={permission(props.currentGroup, 'news_manage?')}>
                   <Button
                     size='small'
                     color='primary'
@@ -185,7 +185,7 @@ export function GroupMessageListItem(props) {
                 <DiverstFormattedMessage {...messages.delete} />
               </Button>
             </Permission>
-            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
+            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'news_manage?')}>
               <Button
                 size='small'
                 onClick={() => {

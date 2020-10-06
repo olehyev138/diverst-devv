@@ -22,6 +22,7 @@ const NameToPathMap = Object.freeze({
   logs_view: ROUTES.admin.system.logs.index,
   edit_posts: null,
   enterprise_manage: ROUTES.admin.system.globalSettings.enterpriseConfiguration.index,
+  archive_manage: ROUTES.admin.manage.archived.index,
 });
 
 const GlobalSettingsPaths = Object.freeze([
@@ -58,6 +59,7 @@ const RootManagePaths = Object.freeze([
   'polls_create',
   'mentoring_interests_manage',
   ...GlobalSettingsPaths,
+  'archive_manage',
 ]);
 
 export function resolveRootManagePath(permission) {
