@@ -37,8 +37,8 @@ RSpec.describe GroupPolicy, type: :policy do
       end
 
       it 'shows even with with no members' do
-        expected = [group, create(:group, members: [], enterprise: enterprise)]
-        expect(policy_scope).to eq expected
+        expected = [group, create(:group, members: [], enterprise: enterprise)].sort_by(&:id)
+        expect(policy_scope.order(id: :asc)).to eq expected
       end
     end
   end
