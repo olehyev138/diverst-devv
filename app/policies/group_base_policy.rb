@@ -179,7 +179,13 @@ class GroupBasePolicy < ApplicationPolicy
     return true if user.policy_group.manage_posts?
     return true if is_a_leader?
 
-    record.user == user
+    if record.respond_to?(:user)
+      record.user == user
+    elsif record.respond_to?(:author)
+      record.author == user
+    else
+      false
+    end
   end
 
   def base_index_permission
