@@ -296,6 +296,7 @@ Rails.application.routes.draw do
           post 'approve'
           patch 'pin'
           patch 'unpin'
+          get 'pending_comments'
         end
       end
 
