@@ -5,7 +5,6 @@ class Users::SessionsController < Devise::SessionsController
   after_filter :after_login, only: :create
 
   def new
-    ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] = '1'
     @enterprise = Enterprise.find_by(id: ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])
     @sso_button_text = @enterprise&.idp_portal_name || 'SSO'
     if session[:saml_for_enterprise].present?
