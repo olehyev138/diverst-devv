@@ -3,7 +3,7 @@ module ApplicationHelper
   end
 
   def default_login_text
-    'NOTE: Those with Aramark.net access should click the “Login with Aramark.net” button to access the system. Those without Aramark.net access can activate their account by clicking the “Activate Account” button below.'
+    'Users with SSO access should click the SSO button. Users using email and password for access should fill in their email and password and click the login button.'
   end
 
   def linkedin_logo_for_connected_users(user)
