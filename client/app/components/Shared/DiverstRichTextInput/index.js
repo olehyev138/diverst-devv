@@ -9,7 +9,7 @@ import htmlToDraft from 'html-to-draftjs';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 export function DiverstRichTextInput(props) {
-  const { label, value, ...rest } = props;
+  const { label, value, fullWidth, ...rest } = props;
 
   const wrapperStyle = {
     border: '1px solid lightgray',
@@ -63,9 +63,9 @@ export function DiverstRichTextInput(props) {
   };
 
   return (
-    <FormControl {...props}>
+    <FormControl {...rest}>
       <Box pt={2} />
-      <FormLabel {...props}>
+      <FormLabel {...rest}>
         {label}
       </FormLabel>
       <Box mb={1} />
@@ -86,6 +86,7 @@ DiverstRichTextInput.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
   height: PropTypes.number,
+  fullWidth: PropTypes.bool,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
