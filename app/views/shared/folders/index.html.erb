@@ -2,9 +2,11 @@
   <h2 class="heading1-styling">Folders</h2>
   
   <% if @group %>
-    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@group]).create? %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary hidden-xs" if GroupFolderPolicy.new(current_user, [@group]).create? %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn-primary visible-xs" if GroupFolderPolicy.new(current_user, [@group]).create? %>
   <% else %>
-    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).create? %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary hidden-xs" if EnterpriseFolderPolicy.new(current_user, nil).create? %>
+    <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn-primary visible-xs" if EnterpriseFolderPolicy.new(current_user, nil).create? %>
   <% end %>
   
 </div>

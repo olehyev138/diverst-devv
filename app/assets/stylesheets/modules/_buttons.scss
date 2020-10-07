@@ -57,10 +57,6 @@
   background-color: $primary-color;
 }
 
-.btn-primary {
-  background-color: $primary-color;
-}
-
 .btn--primary:hover {
   color: $diverst-white;
   background-color: $primary-color;
@@ -107,6 +103,11 @@
 
 .btn--danger { 
   @include button($diverst-red);
+}
+
+.btn-danger { 
+  color: white;
+  background-color: $diverst-red;
 }
 
 .btn--large {

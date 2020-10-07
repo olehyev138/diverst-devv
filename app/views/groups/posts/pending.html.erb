@@ -1,6 +1,7 @@
 <div class="content__header">
     <%= link_to group_posts_path(@group) do %>
-      <button class="btn btn--primary">Posts(<%= @posts_count %>)</button>
+      <button class="btn btn--primary hidden-xs">Posts(<%= @posts_count %>)</button>
+      <button class="btn btn-primary visible-xs">Posts(<%= @posts_count %>)</button>
     <% end %>
   <h1>/Pending(<%= @pending_posts.size %>)</h1>
 </div>

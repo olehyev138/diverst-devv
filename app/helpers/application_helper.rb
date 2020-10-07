@@ -2,6 +2,10 @@ module ApplicationHelper
   class MissingKeyError < StandardError
   end
 
+  def default_login_text
+    'Users with SSO access should click the SSO button. Users using email and password for access should fill in their email and password and click the login button.'
+  end
+
   def linkedin_logo_for_connected_users(user)
     inline_svg('icons/linkedin', size: '17px*17px') if user.linkedin_profile_url.present?
   end

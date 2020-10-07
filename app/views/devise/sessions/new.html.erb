@@ -49,7 +49,7 @@
 <div class="desktop">
   <% if @enterprise&.has_enabled_saml? %>
     <p>
-      NOTE: Those with Aramark.net access should click the “Login with Aramark.net” button to access the system. Those without Aramark.net access can activate their account by clicking the “Activate Account” button below.
+      <%= @enterprise.login_text.blank? ? default_login_text : raw(@enterprise.login_text) %>
     </p>
   <% end %>  
   <div class="col sm-12 md-5">

@@ -16,20 +16,16 @@
           <%= f.hidden_field :user_id, value: current_user.id %>
           <%= f.hidden_field :group_id, value: @group.id %>
           <div class="custom-user-select">
-            <%= f.input :candidate_name %>
-            <%= f.input :candidate_email %> 
+            <%= f.input :candidate_name, label: "candidate's name", required: true %>
+            <span id="candidate-email-validation-message" class="error"></span>
+            <%= f.input :candidate_email, label: "candidate's email", required: true %> 
+            <%= f.input :linkedin_profile_url, label: "candidate's linkedin profile" %>
           </div>
           <%= f.input :resume, as: :attachment_preview %>
           <div class="custom-user-select">
-            <%= f.input :manager_email, label: "Manager's email" %>
-            <%= f.input :message_to_manager, label: 'Email content',
-            placeholder: "Dear %Name%
-
-Attached please find the resume of XXXXX. I think he/she will be an excellent candidate for the position of XXXX.
-
-Sincerly,
-
-XXXXX" %>
+            <span id="manager-email-validation-message" class="error"></span>
+            <%= f.input :manager_email, label: "Manager's email", required: true %>
+            <%= f.input :message_to_manager, label: 'Comments', required: true %>
           </div>
           <br>
           <%= f.button :submit, 'Suggest a hire' %>
@@ -38,5 +34,50 @@ XXXXX" %>
     </div>
   </div>
 </div>
+
+<script>
+  function validateForm(email, fieldId){
+    var candidateName = $('#suggested_hire_candidate_name').val();
+    var candidateEmail = $('#suggested_hire_candidate_email').val();
+    var candidateResume = $('#suggested_hire_resume').val();
+    var managerEmail = $('#suggested_hire_manager_email').val();
+    var messageToManager = $('#suggested_hire_message_to_manager').val();
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/; 
+    var candidateEmailValidationMessage = document.getElementById('candidate-email-validation-message');
+    var managerEmailValidationMessage = document.getElementById('manager-email-validation-message');
+
+    if(fieldId=="suggested_hire_candidate_email"){
+      if(regex.test(email)){
+        candidateEmailValidationMessage.innerText = ''
+      }else{
+        candidateEmailValidationMessage.innerText = 'invalid email input!'
+      }
+    }else if(fieldId=="suggested_hire_manager_email"){
+      if(regex.test(email)){
+        managerEmailValidationMessage.innerText = ''
+      }else{
+        managerEmailValidationMessage.innerText = 'invalid email input!'
+      }
+    }
+
+    if(candidateName == 0 || candidateEmail==0 || candidateResume==0 || managerEmail==0 || messageToManager==0 || !regex.test(candidateEmail) || !regex.test(managerEmail)) {
+      $('input[type="submit"]').prop('disabled', true);
+    } else if(candidateName!= 0 && candidateEmail!= 0 && candidateResume!=0 && managerEmail!=0 && messageToManager!=0 && regex.test(candidateEmail) && regex.test(managerEmail)) {
+      $('input[type="submit"]').prop('disabled', false);
+    }
+  }
+
+  $('#suggestHireToGroup').on('shown.bs.modal', function(){
+    $('input[type="submit"]').prop('disabled', true);
+
+    $('#suggested_hire_candidate_name, #suggested_hire_candidate_email, #suggested_hire_resume, #suggested_hire_manager_email, #suggested_hire_message_to_manager').on('keyup change', function() {
+      validateForm($(this).val(), this.id);      
+    });
+  });
+
+  $('#suggestHireToGroup').on('hidden.bs.modal', function () {
+   setTimeout(function(){$('[data-target="#suggestHireToGroup"]').blur();}, 0);
+  });
+</script>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
