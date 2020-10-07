@@ -3,7 +3,8 @@
   <div class="flex-row flex-row--middle">
     <% if UserPolicy.new(current_user, @user).update? %>
       <div class="flex-row__cell">
-        <%= link_to "Edit User", edit_group_group_member_path(@group, @user), class: "btn btn--primary" %>
+        <%= link_to "Edit User", edit_group_group_member_path(@group, @user), class: "btn btn--primary hidden-xs" %>
+        <%= link_to "Edit User", edit_group_group_member_path(@group, @user), class: "btn btn-primary visible-xs" %>
       </div>
     <% end %>
     <% if  @user.has_answered_group_survey? %>

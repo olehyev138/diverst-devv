@@ -6,6 +6,14 @@ video#recorded-video {
   width: 500px;
   height: 300px;
 }
+
+video#recorded--video--mobile {
+  width: 100%;
+}
+
+#record-video-mobile {
+  margin-bottom: 5px;
+}
 </style>
 <div class="content__header">
   <h1>
@@ -104,12 +112,22 @@ video#recorded-video {
           <h5>Video</h5>
           <img src="https://s3.amazonaws.com/diverst-demo/camera.svg" alt="" id="video-contribution" style="cursor: pointer;" width="50px" height="50px">
           <div id="video-upload-options" style="display:none">
-            <button id="record-video" class="btn btn-danger btn--small">
-              Record Video
-            </button>
-            <button id="upload-video" class="btn  btn--primary btn--small">
-              Upload Video
-            </button>
+            <span class="hidden-xs">
+              <button id="record-video" class="btn btn--danger btn--small">
+                Record Video
+              </button>
+              <button id="upload-video" class="btn btn--primary btn--small">
+                Upload Video
+              </button>
+            </span>  
+            <span class="visible-xs">
+              <button id="record-video-mobile" class="btn btn-danger btn--extra--small">
+                Record Video
+              </button>
+              <button id="upload-video-mobile" class="btn btn-primary btn--extra--small">
+                Upload Video
+              </button>
+            </div>
           </div>  
         </div>
       </div>
@@ -155,7 +173,8 @@ video#recorded-video {
                     <input class="field__input attachment_preview optional " type="file" name="answer[supporting_document]" 
                     id="answer_supporting_document_video">
                   </div>
-                  <video id="recorded-video" autoplay muted></video>
+                  <video id="recorded-video" class="hidden-xs" autoplay muted></video>
+                  <video id="recorded--video--mobile" class="visible-xs" autoplay muted></video>
                 </div>  
               </div>
 
@@ -265,7 +284,7 @@ video#recorded-video {
       video.srcObject = null;
   });
 
-  $('#record-video').on('click', function(){
+  $('#record-video, #record-video-mobile').on('click', function(){
     $('#recording-controls').show();
     $('#video-controls').show();
     $('#video-upload-options').hide();
@@ -288,7 +307,7 @@ video#recorded-video {
     }
   }
 
-  $('#upload-video').on('click', function(){
+  $('#upload-video, #upload-video-mobile').on('click', function(){
     $('#answer_supporting_video').show();
     $('#video-upload-options').hide();
 
@@ -304,7 +323,13 @@ video#recorded-video {
     video: { width: 1280 , height: 720 }, 
     audio: true
   };
-  var video = document.querySelector('video#recorded-video');
+   
+  if(window.screen.orientation.type == "landscape-primary") {
+    var video = document.querySelector('video#recorded-video');
+  } else {
+    var video = document.querySelector('video#recorded--video--mobile');
+  }
+  
   var startRecordingButton = document.querySelector('#start-recording');
   var theMediaRecorder;
 

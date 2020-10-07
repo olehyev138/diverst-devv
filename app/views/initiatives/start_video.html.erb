@@ -1,13 +1,55 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Diverst</title>
-    <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
-    <%= javascript_include_tag 'twilio_video' %>
-    <link rel="icon" type="image/png" href="/favicon.png">
     <style>
+    /* mobile */
+    @media(max-width: 800px) {
+      video {
+        width: 100%;
+        position: relative;
+        display: inline-block;
+      }
+
+      #video-grid-mobile {
+        display: grid;
+        grid-template-columns: 35% 35% 35%;
+        grid-template-rows: auto auto auto;
+        max-height: 300px;
+        margin: auto;
+      }
+
+      .content {
+        overflow-x: hidden;
+      }
+
+      .content__inner { 
+        padding: 0px;
+        margin-left: 0px;
+        max-width: initial;
+      }
+
+      #main-participant-mobile {
+        position: absolute;
+        z-index: 999;
+        max-height: 100%;
+        min-width: 100%;
+      }
+
+      #control-panel {
+        margin-left: 20%;
+      }
+
+      #mute-mic-mobile, #mute-video-mobile, #screen-share, #leave-call, #end-virtual-event {
+        width: 12%;
+        background: #fff;
+        border-radius: 100%;
+        margin-right: 10%;
+      }
+
+      #mute-video {
+        margin-right: 50px;
+      }
+    }
+
+    /* desktop */
+    @media(min-width: 800px){
       video {
         width: 100%;
         position: relative;
@@ -50,98 +92,120 @@
       #mute-video {
         margin-right: 50px;
       }
+    }
     </style>
-  </head>
   <body onload="init()" data-env="<%= Rails.env %>">
     <%= render 'partials/js_branding_color_variables' %>
 
-    <header class="primary-header" style="height: 40px; position: fixed; top: 130px;">
-      <span style="font-size: 25px; margin-left: 8%;">Documents</span>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xs-12" style="padding-top:2%;">
-            <span id="control-panel">
-            <span style="font-size: 25px; float: left; margin-top: -1%;">
-              <%= @initiative.name.truncate(29) %>
-            </span>
-              <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
-              <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
-              <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
-              
-              <% if @initiative.owner_id == current_user.id %>
-                <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
-              <% else %>  
-                <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
-              <% end %>
+    <div class="hidden-xs">
+      <header class="primary-header" style="height: 40px; position: fixed; top: 130px;">
+        <span style="font-size: 25px; margin-left: 8%;">Documents</span>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-12" style="padding-top:2%;">
+              <span id="control-panel">
+              <span style="font-size: 25px; float: left; margin-top: -1%;">
+                <%= @initiative.name.truncate(29) %>
+              </span>
+                <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
+                <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
+                <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
+                
+                <% if @initiative.owner_id == current_user.id %>
+                  <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
+                <% else %>  
+                  <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
+                <% end %>
 
-            </span>
-          </div>
-        </div>
-      </div>
-      <span style="font-size: 25px; margin-right: 12%;">Chat</span>
-    </header>
-    
-    <div class="row" style="overflow-x: scroll; margin-top: -35px;">
-      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 0px;">
-        <div id="screen-share-area"></div>
-      </div>
-      <div class="col-xs-6" style="padding-left: auto;">
-        <div class="row">
-          <div class="col-xs-12" style="padding: 0px;">
-            <div id="main-participant"></div>
-            <div id="video-grid"></div>
-          </div>
-        </div>
-        <div class="row" style="position: relative; top: 75px;">
-          <div class="col-xs-12">
-            <div id="firepad"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
-        <div class="row">
-          <div class="col-xs-12">
-          </div>
-        </div>
-        <div class="row" style="height: 475px;">
-          <div class="col-xs-12" id="chat" style="overflow: scroll; height: inherit;">
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Send a message..." id="message">
-                <span class="input-group-btn">
-                  <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
-                </span>
-              </div><!-- /input-group -->
+              </span>
             </div>
+          </div>
+        </div>
+        <span style="font-size: 25px; margin-right: 12%;">Chat</span>
+      </header>
+      
+      <div class="row" style="overflow-x: scroll; margin-top: -35px;">
+        <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 0px;">
+          <div id="screen-share-area"></div>
+        </div>
+        <div class="col-xs-6" style="padding-left: auto;">
+          <div class="row">
+            <div class="col-xs-12" style="padding: 0px;">
+              <div id="main-participant"></div>
+              <div id="video-grid"></div>
+            </div>
+          </div>
+          <div class="row" style="position: relative; top: 75px;">
+            <div class="col-xs-12">
+              <div id="firepad"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3" style="background-color: white; height: 550px; margin-top: 75px;">
+          <div class="row">
+            <div class="col-xs-12">
+            </div>
+          </div>
+          <div class="row" style="height: 475px;">
+            <div class="col-xs-12" id="chat" style="overflow: scroll; height: inherit;">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Send a message..." id="message">
+                  <span class="input-group-btn">
+                    <button class="btn" style="background-color: <%= current_user.enterprise.theme&.primary_color ||  "#7B77C9" %>;" type="button" id="send">Send!</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div>
+          </div>
         </div>
       </div>
-    </div>
+  </div>  
 
+  <div class="visible-xs">
+    <div class="row">
+      <div id="main-participant-mobile"></div>
+      <div id="video-grid-mobile"></div>
+    </div>
+    <div class="row" style="position: absolute;
+                                        bottom: 3%;">
+      <span id="control-panel">
+        <%#= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
+        <%= inline_svg('icons/mic0.svg', id: 'mute-mic-mobile', title: 'mute mic', class: 'svg-color') %>
+        <%= inline_svg('icons/cam0.svg', id: 'mute-video-mobile', title: 'turn off video', class: 'svg-color') %>
+              
+        <% if @initiative.owner_id == current_user.id %>
+          <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
+        <% else %>  
+          <%= inline_svg('icons/phone0.svg', id: "leave-call", title: "end video call", class: 'svg-color') %>
+        <% end %>
+
+      </span>
+    </div>
+  </div>  
 
       <!-- Modal -->
-  <div class="modal fade" id="virtualEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to end this virtual meeting for all participants?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" id="end-virtual-meeting" class="btn btn-primary">End Virtual Meeting</button>
+    <div class="modal fade" id="virtualEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to end this virtual meeting for all participants?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" id="end-virtual-meeting" class="btn btn-primary">End Virtual Meeting</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  </body>
   <script>
   $(document).ready(function(){
     var token= '<%= @token %>';
@@ -154,17 +218,32 @@
     var previewTracks;
     var identity = '<%= current_user.email %>';
     var primaryColor = '<%= current_user.enterprise.theme&.primary_color %>';
+    var videoGridId;
+    var mainParticipantId;
+    var muteMic;
+    var muteVideo;
 
+    if(window.screen.orientation.type == "landscape-primary"){
+      videoGridId = 'video-grid';
+      mainParticipantId = 'main-participant';
+      muteMic = 'mute-mic';
+      muteVideo = 'mute-video';
+    }else{
+       videoGridId = 'video-grid-mobile';
+       mainParticipantId = 'main-participant-mobile';
+       muteMic = 'mute-mic-mobile';
+       muteVideo = 'mute-video-mobile';
+    }
     // enlarge video trackmain participant
     function enlargeParticipantVideoTrack() {
-      var x = document.getElementById('main-participant');
-      var y = document.getElementById('video-grid');
+      var x = document.getElementById(mainParticipantId);
+      var y = document.getElementById(videoGridId);
       var z = document.getElementById('screen-share-area');
 
       if (this.id == 'screen-share-video') {
         if (this.parentElement.id == 'screen-share-area') {
           x.appendChild(this);
-        }else if (this.parentElement.id == 'main-participant') {
+        }else if (this.parentElement.id == mainParticipantId) {
           z.appendChild(this);
         }
       }else{
@@ -185,7 +264,7 @@
 
     function muteAudioOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      var svgElement = document.getElementById('mute-mic');
+      var svgElement = document.getElementById(muteMic);
       localParticipant.audioTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
@@ -201,7 +280,7 @@
 
     function muteVideoOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      var svgElement = document.getElementById('mute-video');
+      var svgElement = document.getElementById(muteVideo);
       localParticipant.videoTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
@@ -240,11 +319,11 @@
       })
     }
 
-    $('#mute-mic').on('click', function(){
+    $('#mute-mic, #mute-mic-mobile').on('click', function(){
       muteAudioOfLocalParticipant();
     });
 
-    $('#mute-video').on('click', function(){
+    $('#mute-video, #mute-video-mobile').on('click', function(){
       muteVideoOfLocalParticipant();
     });
 
@@ -385,7 +464,7 @@
 
       registerRoomInDatabase(room);
       // Attach LocalParticipant's Tracks, if not already attached.
-      var previewContainer = document.getElementById('video-grid');
+      var previewContainer = document.getElementById(videoGridId);
       if (!previewContainer.querySelector('video')) {
         attachParticipantTracks(room.localParticipant, previewContainer);
       }
@@ -393,7 +472,7 @@
       // Attach the Tracks of the Room's Participants.
       room.participants.forEach(function(participant) {
         log("Already in Room: '" + participant.identity + "'");
-        var previewContainer = document.getElementById('video-grid');
+        var previewContainer = document.getElementById(videoGridId);
         attachParticipantTracks(participant, previewContainer);
       });
 
@@ -402,14 +481,14 @@
         log("Joining: '" + participant.identity + "'");
         // console.log(room.participants.size, room.sid);
 
-        var previewContainer = document.getElementById('video-grid');
+        var previewContainer = document.getElementById(videoGridId);
         attachParticipantTracks(participant, previewContainer);
       });
 
       // When a Participant adds a Track, attach it to the DOM.
       room.on('trackSubscribed', function(track, participant) {
         //log(participant.identity + " added track: " + track.kind);
-        var previewContainer = document.getElementById('video-grid');
+        var previewContainer = document.getElementById(videoGridId);
         var screenShareArea = document.getElementById('screen-share-area');
         
         participant.on('networkQualityLevelChanged', printNetworkQualityStats);
