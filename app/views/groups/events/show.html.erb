@@ -47,7 +47,7 @@
               <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if GroupEventsPolicy.new(current_user, [@group, @event]).edit? %>
               <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if GroupEventsPolicy.new(current_user, [@group, @event]).destroy? %>
               <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
-              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave" : "Join" %></a>
+              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave Event" : "Join Event" %></a>
               <% end %>
             </div>
           </div>

@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Diverst</title>
-    <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
-    <%= javascript_include_tag 'twilio_video' %>
-    <link rel="icon" type="image/png" href="/favicon.png">
     <style>
     /* mobile */
     @media(max-width: 800px) {
@@ -24,6 +15,10 @@
         margin: auto;
       }
 
+      .content {
+        overflow-x: hidden;
+      }
+
       .content__inner { 
         padding: 0px;
         margin-left: 0px;
@@ -38,13 +33,14 @@
       }
 
       #control-panel {
-        margin-left: 70px;
+        margin-left: 20%;
       }
 
-      #mute-mic, #mute-video, #screen-share, #leave-call, #end-virtual-event {
+      #mute-mic-mobile, #mute-video-mobile, #screen-share, #leave-call, #end-virtual-event {
         width: 12%;
         background: #fff;
         border-radius: 100%;
+        margin-right: 10%;
       }
 
       #mute-video {
@@ -98,7 +94,6 @@
       }
     }
     </style>
-  </head>
   <body onload="init()" data-env="<%= Rails.env %>">
     <%= render 'partials/js_branding_color_variables' %>
 
@@ -178,9 +173,9 @@
     <div class="row" style="position: absolute;
                                         bottom: 3%;">
       <span id="control-panel">
-        <%= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
-        <%= inline_svg('icons/mic0.svg', id: 'mute-mic', title: 'mute mic', class: 'svg-color') %>
-        <%= inline_svg('icons/cam0.svg', id: 'mute-video', title: 'turn off video', class: 'svg-color') %>
+        <%#= inline_svg('icons/share0.svg', id: 'screen-share', title: 'screen share', class: 'svg-color') %>
+        <%= inline_svg('icons/mic0.svg', id: 'mute-mic-mobile', title: 'mute mic', class: 'svg-color') %>
+        <%= inline_svg('icons/cam0.svg', id: 'mute-video-mobile', title: 'turn off video', class: 'svg-color') %>
               
         <% if @initiative.owner_id == current_user.id %>
           <%= inline_svg('icons/phone0.svg', id: "end-virtual-event", title: "end virtual event", class: 'svg-color', data: { toggle: 'modal', target: '#virtualEventModal' }) %>
@@ -211,7 +206,6 @@
         </div>
       </div>
     </div>
-  </body>
   <script>
   $(document).ready(function(){
     var token= '<%= @token %>';
@@ -226,13 +220,19 @@
     var primaryColor = '<%= current_user.enterprise.theme&.primary_color %>';
     var videoGridId;
     var mainParticipantId;
+    var muteMic;
+    var muteVideo;
 
     if(window.screen.orientation.type == "landscape-primary"){
       videoGridId = 'video-grid';
       mainParticipantId = 'main-participant';
+      muteMic = 'mute-mic';
+      muteVideo = 'mute-video';
     }else{
        videoGridId = 'video-grid-mobile';
        mainParticipantId = 'main-participant-mobile';
+       muteMic = 'mute-mic-mobile';
+       muteVideo = 'mute-video-mobile';
     }
     // enlarge video trackmain participant
     function enlargeParticipantVideoTrack() {
@@ -264,7 +264,7 @@
 
     function muteAudioOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      var svgElement = document.getElementById('mute-mic');
+      var svgElement = document.getElementById(muteMic);
       localParticipant.audioTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
@@ -280,7 +280,7 @@
 
     function muteVideoOfLocalParticipant() {
       var localParticipant = window.room.localParticipant;
-      var svgElement = document.getElementById('mute-video');
+      var svgElement = document.getElementById(muteVideo);
       localParticipant.videoTracks.forEach(function(track){
         if (track.mediaStreamTrack.enabled==true){
           track.disable();
@@ -319,11 +319,11 @@
       })
     }
 
-    $('#mute-mic').on('click', function(){
+    $('#mute-mic, #mute-mic-mobile').on('click', function(){
       muteAudioOfLocalParticipant();
     });
 
-    $('#mute-video').on('click', function(){
+    $('#mute-video, #mute-video-mobile').on('click', function(){
       muteVideoOfLocalParticipant();
     });
 
