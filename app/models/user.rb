@@ -154,7 +154,7 @@ class User < ApplicationRecord
 
   before_destroy :check_lifespan_of_user
 
-  before_save :set_default_policy_group, if: :will_save_change_to_user_role_id?
+  before_update :set_default_policy_group, if: :will_save_change_to_user_role_id?
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
