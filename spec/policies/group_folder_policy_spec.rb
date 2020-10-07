@@ -22,7 +22,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
     context 'when manage_all is false' do
       context 'when groups_manage and group_resources_manage are true' do
         before { user.policy_group.update groups_manage: true, group_resources_manage: true }
-        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
       end
 
       context 'user has group leader permission for group_resources_manage' do
@@ -33,7 +33,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
       end
 
       context 'user is group member and group_resources_manage is true' do
@@ -42,7 +42,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
           user.policy_group.update group_resources_manage: true
         end
 
-        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
       end
 
       context 'when groups_manage and group_resources_create are true' do
@@ -76,7 +76,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
           user.policy_group.update group_resources_manage: true
         end
 
-        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
       end
 
       context 'when groups_manage and group_resources_index are true' do
@@ -107,11 +107,11 @@ RSpec.describe GroupFolderPolicy, type: :policy do
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-      it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+      it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
     end
   end
 
   context 'for users with no access' do
-    it { is_expected.to forbid_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
+    it { is_expected.to forbid_actions([:index, :show, :new, :create, :edit, :update, :archive, :destroy]) }
   end
 end

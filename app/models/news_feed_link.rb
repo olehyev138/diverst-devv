@@ -4,6 +4,7 @@ class NewsFeedLink < ApplicationRecord
 
   belongs_to :news_feed
   has_one :group, through: :news_feed
+  has_one :enterprise, through: :group
 
   belongs_to :group_message, dependent: :delete
   belongs_to :news_link, dependent: :delete

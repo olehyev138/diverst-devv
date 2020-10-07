@@ -11,8 +11,6 @@ module NewsLink::Actions
           :comments,
           :photos,
           :picture_attachment,
-          author: User.base_preloads,
-          group: [:enterprise],
           comments: GroupMessageComment.base_preloads
       ]
     end

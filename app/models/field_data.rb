@@ -26,9 +26,9 @@ class FieldData < ApplicationRecord
   end
 
   def validate_numeric_limit
-    if data.to_i > field.max
+    if field.max.present? && data.to_i > field.max
       errors.add(:data, "can't be greater than the max value")
-    elsif data.to_i < field.min
+    elsif field.min.present? && data.to_i < field.min
       errors.add(:data, "can't be less than the min value")
     end
   end

@@ -54,7 +54,7 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
 
       context 'when enterprise_resources_manage is true' do
         before { user.policy_group.update enterprise_resources_manage: true }
-        it { is_expected.to permit_actions([:index, :show, :new, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :new, :update, :archive, :destroy]) }
       end
 
       context 'user has basic group leader permission for enterprise_resources_manage' do
@@ -66,17 +66,17 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to forbid_actions([:index, :show, :new, :update, :destroy]) }
+        it { is_expected.to forbid_actions([:index, :show, :new, :update, :archive, :destroy]) }
       end
     end
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-      it { is_expected.to permit_actions([:index, :show, :new, :update, :destroy]) }
+      it { is_expected.to permit_actions([:index, :show, :new, :update, :archive, :destroy]) }
     end
   end
 
   describe 'for users with no access' do
-    it { is_expected.to forbid_actions([:index, :show, :new, :update, :destroy]) }
+    it { is_expected.to forbid_actions([:index, :show, :new, :update, :archive, :destroy]) }
   end
 end

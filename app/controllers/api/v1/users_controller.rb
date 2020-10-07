@@ -15,7 +15,30 @@ class Api::V1::UsersController < DiverstController
   def index
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: get_base), use_serializer: serializer(params)
+    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: serializer(params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def budget_approvers
+    raise InvalidInputException.new(
+        {
+            message: 'Cannot look for budget approver with a group id',
+            attribute: :group_id
+        }) unless params[:group_id]
+
+    base_authorize(klass)
+
+    base = User.left_joins(:policy_group, :group_leaders, :user_groups)
+                .where(
+                    [
+                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
+                        '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
+                        '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
+                        '(`policy_groups`.`manage_all` = TRUE)',
+                    ].join(' OR '), params[:group_id], params[:group_id])
+
+    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: base)
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -100,27 +123,6 @@ class Api::V1::UsersController < DiverstController
     render status: 200, json: klass.create_prototype(item)
   rescue => e
     raise BadRequestException.new(e.message)
-  end
-
-  def get_base
-    case params[:type]
-    when 'budget_approval'
-      raise InvalidInputException.new(
-          {
-              message: 'Cannot look for budget approver with a group id',
-              attribute: :group_id
-          }) unless params[:group_id]
-      User.left_joins(:policy_group, :group_leaders, :user_groups)
-          .where(
-              [
-                  '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
-                  '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
-                  '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
-                  '(`policy_groups`.`manage_all` = TRUE)',
-              ].join(' OR '), params[:group_id], params[:group_id])
-    else
-      User
-    end
   end
 
   # ===============================================

@@ -1,7 +1,6 @@
 class GroupMessageSerializer < ApplicationRecordSerializer
-  attributes :comments_count, :news_feed_link_id
+  attributes :comments_count, :news_feed_link_id, :owner
 
-  has_one :owner
   has_many :comments
 
   def news_feed_link_id
