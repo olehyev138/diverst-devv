@@ -39,7 +39,7 @@
 			<% end %>
 			<% end %>
 		</ol>
-		<% @group.children.where(group_category_id: nil).each do |sub_erg_with_no_category| %>
+		<% @group.children.where(group_category_id: nil).each do |sub_group_with_no_category| %>
 		  <%= link_to sub_group_with_no_category.name, group_url(sub_group_with_no_category), 'data-trackable-id': sub_group_with_no_category.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %><br>
 		<% end %>
 	</div>

@@ -8,6 +8,7 @@ class Email < BaseClass
   belongs_to :enterprise
 
   attr_accessor :receivers
+  attr_accessor :receiver_groups_ids
 
   has_many :variables, class_name: 'EmailVariable', dependent: :destroy
 
