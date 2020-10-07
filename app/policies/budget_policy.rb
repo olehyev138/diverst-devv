@@ -11,19 +11,24 @@ class BudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def visibility
+    'group'
+  end
+
   def update?
     false
   end
 
   def approve?
-    policy_group.budget_approval ||
     manage_group_resource(base_manage_permission) ||
     manage_group_resource('budget_approval')
   end
 
-  def decline?
-    approve?
+  def index?
+    super || approve?
   end
+
+  alias_method :decline?, :approve?
 
   def manage_all_budgets?
     return true if user.policy_group.manage_all?

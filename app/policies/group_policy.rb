@@ -23,7 +23,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def current_annual_budget?
-    update?
+    update? || annual_budgets_view?
   end
 
   def carryover_annual_budget?
