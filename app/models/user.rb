@@ -15,6 +15,7 @@ class User < ApplicationRecord
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
   belongs_to :user_role
+  has_one :policy_group_template, through: :user_role
 
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
@@ -153,9 +154,10 @@ class User < ApplicationRecord
 
   before_destroy :check_lifespan_of_user
 
+  before_save :set_default_policy_group, if: :will_save_change_to_user_role_id?
+
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
-  after_save :set_default_policy_group, if: :user_role_id_changed?
   after_update :add_to_default_mentor_group
 
   accepts_nested_attributes_for :policy_group
