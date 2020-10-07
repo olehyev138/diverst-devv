@@ -183,6 +183,8 @@ class GroupBasePolicy < ApplicationPolicy
       record.user == user
     elsif record.respond_to?(:author)
       record.author == user
+    elsif record.respond_to?(:owner)
+      record.owner == user
     else
       false
     end
