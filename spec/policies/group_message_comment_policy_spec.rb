@@ -10,7 +10,7 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
   let(:no_access) { create(:user) }
   let!(:user) { no_access }
 
-  subject { described_class.new(user.reload, [group_message, group_message_comment]) }
+  subject { described_class.new(user.reload, group_message_comment) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -18,6 +18,7 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
     no_access.policy_group.groups_budgets_index = false
     no_access.policy_group.groups_budgets_manage = false
     no_access.policy_group.groups_budgets_request = false
+    no_access.policy_group.manage_posts = false
     no_access.policy_group.save!
   }
 
@@ -26,7 +27,7 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
       context 'update?' do
         context 'when user is the record author' do
           before do
-            create(:group_message_comment, author_id: user.id, message: group_message)
+            group_message_comment.update author: user
           end
           it 'returns true' do
             expect(subject.update?).to eq true
@@ -44,6 +45,12 @@ RSpec.describe GroupMessageCommentPolicy, type: :policy do
           before { user.policy_group.update manage_posts: true }
           it 'returns true for #update?' do
             expect(subject.update?).to eq true
+          end
+        end
+
+        context 'when user has not permissions' do
+          it 'returns false for #update?' do
+            expect(subject.update?).to eq false
           end
         end
       end
