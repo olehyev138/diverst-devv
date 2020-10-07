@@ -142,7 +142,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               <Divider />
               <Box mb={2} />
               <Typography variant='h6'>
-                Admin Settings
+                <DiverstFormattedMessage {...messages.admin_fields} />
               </Typography>
               <FormControl>
                 <FormControlLabel
