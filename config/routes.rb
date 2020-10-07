@@ -115,6 +115,9 @@ Diverst::Application.routes.draw do
         end
       end
       resources :initiatives do
+        collection do
+          get 'archived'
+        end
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
 
@@ -184,6 +187,9 @@ Diverst::Application.routes.draw do
       resources :mobile_fields
       resources :news_feeds
       resources :news_feed_links do
+        collection do
+          get 'archived'
+        end
         member do
           post 'archive'
           put 'un_archive'
@@ -220,6 +226,9 @@ Diverst::Application.routes.draw do
       resources :polls_segments
       resources :questions
       resources :resources do
+        collection do
+          get 'archived'
+        end
         member do
           post 'archive'
           put 'un_archive'

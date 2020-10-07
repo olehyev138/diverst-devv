@@ -1,3 +1,4 @@
+require 'open-uri'
 class NewsLink < ApplicationRecord
   include PublicActivity::Common
   include NewsLink::Actions
@@ -30,11 +31,13 @@ class NewsLink < ApplicationRecord
   validates :title,           presence: true
   validates :description,     presence: true
   validates :author_id,       presence: true
+  validates :url,             presence: true
   validates :url,             length: { maximum: 191 }
 
   # ActiveStorage
   has_one_attached :picture
   validates :picture, content_type: AttachmentHelper.common_image_types
+  validate :valid_url
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :picture_paperclip, s3_permissions: 'private'
@@ -82,6 +85,13 @@ class NewsLink < ApplicationRecord
 
   def have_protocol?
     url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
+  end
+
+  def valid_url
+    open(self.url)
+    true
+  rescue => e
+    errors.add(:url, 'Invalid URL')
   end
 
   def build_default_link

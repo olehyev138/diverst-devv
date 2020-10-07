@@ -35,6 +35,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be nil
     expect(serializer.serializable_hash[:initiative]).to be nil
     expect(serializer.serializable_hash[:mentoring_session]).to be nil
+    expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
 
   it 'returns fields and folder but not other associations' do
@@ -47,6 +48,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be nil
     expect(serializer.serializable_hash[:initiative]).to be nil
     expect(serializer.serializable_hash[:mentoring_session]).to be nil
+    expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
 
   it 'returns fields and group but not other associations' do
@@ -59,6 +61,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to_not be nil
     expect(serializer.serializable_hash[:initiative]).to be nil
     expect(serializer.serializable_hash[:mentoring_session]).to be nil
+    expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
 
   it 'returns fields and initiative but not other associations' do
@@ -71,6 +74,7 @@ RSpec.describe ResourceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be nil
     expect(serializer.serializable_hash[:initiative]).to_not be nil
     expect(serializer.serializable_hash[:mentoring_session]).to be nil
+    expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
 
   it 'returns fields and mentoring_session but not other associations' do
@@ -83,5 +87,6 @@ RSpec.describe ResourceSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be nil
     expect(serializer.serializable_hash[:initiative]).to be nil
     expect(serializer.serializable_hash[:mentoring_session]).to_not be nil
+    expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
 end

@@ -131,7 +131,7 @@ export function NewsLinkListItem(props) {
                   />
                 )}
                 { props.pinNewsItemBegin && (
-                  <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                  <Permission show={permission(props.currentGroup, 'news_manage?')}>
                     <IconButton
                       size='small'
                       onClick={() => {
@@ -179,7 +179,7 @@ export function NewsLinkListItem(props) {
                 >
                   <DiverstFormattedMessage {...messages.edit} />
                 </Button>
-                <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                <Permission show={permission(props.currentGroup, 'news_manage?')}>
                   <Button
                     size='small'
                     color='primary'
@@ -205,7 +205,7 @@ export function NewsLinkListItem(props) {
                 </Permission>
               </React.Fragment>
             )}
-            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
+            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'news_manage?')}>
               <Button
                 size='small'
                 onClick={() => {

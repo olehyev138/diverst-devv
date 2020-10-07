@@ -9,6 +9,7 @@ RSpec.describe NewsLink, type: :model do
     it { expect(news_link).to validate_presence_of(:title) }
     it { expect(news_link).to validate_presence_of(:description) }
     it { expect(news_link).to validate_presence_of(:author_id) }
+    it { expect(news_link).to validate_presence_of(:url) }
 
     it { expect(news_link).to belong_to(:group) }
     it { expect(news_link).to belong_to(:author).class_name('User').counter_cache(:own_news_links_count) }
@@ -54,6 +55,7 @@ RSpec.describe NewsLink, type: :model do
 
       payload = {
         news_link: {
+          url: 'http://google.com',
           title: 'Test',
           group_id: group.id,
           author_id: user.id,
@@ -184,6 +186,18 @@ RSpec.describe NewsLink, type: :model do
     it 'has protocol' do
       news_link = build(:news_link, url: 'http://google.com')
       expect(news_link.have_protocol?).to_not be nil
+    end
+  end
+
+  describe 'valid_url' do
+    it 'returns error message' do
+      news_link = build(:news_link, url: 'test')
+      expect(news_link.valid_url[0]).to eq 'Invalid URL'
+    end
+
+    it 'returns true' do
+      news_link = build(:news_link, url: 'http://google.com')
+      expect(news_link.valid_url).to be true
     end
   end
 

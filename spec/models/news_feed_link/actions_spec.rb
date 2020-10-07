@@ -18,7 +18,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
   end
 
   describe 'base_preloads' do
-    let(:base_preloads) {
+    let(:base_preloads) do
       [
           :group_message,
           :news_link,
@@ -26,113 +26,35 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
           :news_feed,
           :views,
           :likes,
-          group_message: [:owner,
-                          :group,
-                          :comments,
-                          comments: [
-                              :author,
-                              author: [:field_data,
-                                       :enterprise,
-                                       :user_groups,
-                                       :user_role,
-                                       :news_links,
-                                       :avatar_attachment,
-                                       :avatar_blob,
-                                       enterprise: [
-                                           :theme,
-                                           :mobile_fields
-                                       ],
-                                       field_data: [
-                                           :field,
-                                           field: [:field_definer]
-                                       ]
-                              ]
-                          ],
-                          group: [:enterprise],
-                          owner: [
-                              :field_data,
-                              :enterprise,
-                              :user_groups,
-                              :user_role,
-                              :news_links,
-                              :avatar_attachment,
-                              :avatar_blob,
-                              enterprise: [
-                                  :theme,
-                                  :mobile_fields
-                              ],
-                              field_data: [
-                                  :field,
-                                  field: [:field_definer]
-                              ]
-                          ]
-          ],
-          news_link: [
-              :author,
-              :group,
-              :comments,
-              :photos,
-              :picture_attachment,
-              author: [
-                  :field_data,
-                  :enterprise,
-                  :user_groups,
-                  :user_role,
-                  :news_links,
-                  :avatar_attachment,
-                  :avatar_blob,
-                  enterprise: [
-                      :theme,
-                      :mobile_fields
-                  ],
-                  field_data: [
-                      :field,
-                      field: [:field_definer]
-                  ]
-              ],
-              comments: [
-                  :author,
-                  author: [
-                      :field_data,
-                      :enterprise,
-                      :user_groups,
-                      :user_role,
-                      :news_links,
-                      :avatar_attachment,
-                      :avatar_blob,
-                      enterprise: [
-                          :theme,
-                          :mobile_fields
-                      ],
-                      field_data: [
-                          :field,
-                          field: [:field_definer]
+          {
+              group_message: [
+                  :owner,
+                  :group,
+                  :comments,
+                  {
+                      comments: [
+                          :author
                       ]
-                  ]
+                  }
               ],
-              group: [:enterprise]
-          ],
-          social_link: [
-              :author,
-              author: [:field_data,
-                       :enterprise,
-                       :user_groups,
-                       :user_role,
-                       :news_links,
-                       :avatar_attachment,
-                       :avatar_blob,
-                       enterprise: [
-                           :theme,
-                           :mobile_fields
-                       ],
-                       field_data: [
-                           :field,
-                           field: [:field_definer]
-                       ]
+              news_link: [
+                  :author,
+                  :group,
+                  :comments,
+                  :photos,
+                  :picture_attachment,
+                  {
+                      comments: [
+                          :author
+                      ]
+                  }
+              ],
+              social_link: [
+                  :author
               ]
-          ]
+          }
       ]
-    }
+    end
 
     it { expect(NewsFeedLink.base_preloads).to eq base_preloads }
   end
