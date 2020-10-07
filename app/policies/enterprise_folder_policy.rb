@@ -43,6 +43,10 @@ class EnterpriseFolderPolicy < ApplicationPolicy
     update?
   end
 
+  def archive?
+    update?
+  end
+
   class Scope < Scope
     def index?
       EnterpriseFolderPolicy.new(user, nil).index?
