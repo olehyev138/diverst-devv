@@ -61,7 +61,7 @@ const GlobalSettingsLayout = (props) => {
       else if (permission(props, 'fields_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.fields.index.path());
       else if (permission(props, 'custom_text_manage'))
-        redirectAction(ROUTES.admin.system.globalSettings.customText.index.path());
+        redirectAction(ROUTES.admin.system.globalSettings.customText.edit.path());
       else if (permission(props, 'sso_authentication'))
         redirectAction(ROUTES.admin.system.globalSettings.ssoSettings.index.path());
       else if (permission(props, 'emails_manage'))
