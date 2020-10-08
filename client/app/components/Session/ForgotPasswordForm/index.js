@@ -151,6 +151,7 @@ ForgotPasswordForm.propTypes = {
   email: PropTypes.string,
   enterprise: PropTypes.object,
   forgotPasswordBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 ForgotPasswordForm.contextTypes = {

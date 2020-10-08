@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectUser, selectEnterprise, customTexts } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal, selectIsFolderLoading,
@@ -292,7 +292,7 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFolderFormLoading(),
   valid: selectValid(),
   hasChanged: selectHasChanged(),
-  customTexts: selectCustomTexts(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

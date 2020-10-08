@@ -44,7 +44,7 @@ import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 import { selectIsCommitting } from 'containers/Event/selectors';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   eventListItem: {
@@ -300,6 +300,7 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   withStyles(styles),
   memo,
 )(EventsList);

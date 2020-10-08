@@ -114,7 +114,6 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl
 )(Conditional(
   ResourceCreatePage,
   ['currentGroup.permissions.resources_create?'],

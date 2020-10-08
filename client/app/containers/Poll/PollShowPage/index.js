@@ -125,6 +125,10 @@ export function PollShowPage(props) {
     return <React.Fragment />;
   };
 
+  subPage.propTypes = {
+    customTexts: PropTypes.object,
+  };
+
   return (
     poll && (
       <React.Fragment>
@@ -160,6 +164,7 @@ export function PollShowPage(props) {
 }
 
 PollShowPage.propTypes = {
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
@@ -172,7 +177,6 @@ PollShowPage.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   responsesLoading: PropTypes.bool,
-  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
