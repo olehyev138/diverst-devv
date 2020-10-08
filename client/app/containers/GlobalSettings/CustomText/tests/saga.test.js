@@ -86,7 +86,7 @@ describe('CustomText saga', () => {
 
       expect(api.customText.update).toHaveBeenCalledWith(initialAction.payload.id, { custom_text: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 });

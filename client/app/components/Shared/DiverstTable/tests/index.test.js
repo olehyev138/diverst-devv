@@ -19,7 +19,8 @@ const props = {
   columns: [],
   handlePagination: jest.fn(),
   intl,
-  classes: {}
+  classes: {},
+  title: { id: 'diverst.containers.App.texts.erg' }
 };
 describe('<DiverstTable />', () => {
   it('Expect to not log errors in console', () => {

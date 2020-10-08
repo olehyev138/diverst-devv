@@ -5,9 +5,10 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { snackbar } from '../../GroupMembers/messages';
+
 
 export const scope = 'diverst.containers.AnnualBudget';
+export const snackbar = 'diverst.snackbars.Group.AnnualBudget';
 
 export default defineMessages({
   links: {

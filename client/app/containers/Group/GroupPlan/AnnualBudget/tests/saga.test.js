@@ -73,7 +73,7 @@ describe('AnnualBudget Saga', () => {
 
       expect(api.groups.currentAnnualBudget).toHaveBeenCalledWith(initialAction.payload.groupId, {});
       expect(dispatched).toEqual(results);
-      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.currentBudget, options: { variant: 'warning' } });
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.currentAnnualBudget, options: { variant: 'warning' } });
     });
   });
 
