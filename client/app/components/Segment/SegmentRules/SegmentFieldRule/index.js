@@ -79,7 +79,7 @@ const SegmentFieldRule = (props) => {
 
   const onFieldSelectChange = (value) => {
     // fetch field object & deserialize options text for select
-    const newField = props.fields[value.value];
+    const newField = props.fields.find(field => field.id === value.value);
 
     // wipe data & operator values
     props.formik.setFieldValue(`${ruleLocation}.data`, newField.type === 'DateField' ? null : '');
@@ -141,7 +141,7 @@ SegmentFieldRule.propTypes = {
   rule: PropTypes.object,
   getFieldsBegin: PropTypes.func,
   selectFields: PropTypes.array,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   formik: PropTypes.object,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,

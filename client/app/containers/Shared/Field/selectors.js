@@ -13,7 +13,7 @@ const selectPaginatedFields = () => createSelector(
 
 const selectPaginatedOptionsSelectFields = () => createSelector(
   selectFieldsDomain,
-  fieldsState => objectMap(fieldsState.fieldList, field => produce(field, (draft) => {
+  fieldsState => fieldsState.fieldList.map(field => produce(field, (draft) => {
     draft.options = deserializeOptionsText(field);
   }))
 );
