@@ -1,4 +1,4 @@
-class EmailPolicy < CampaignPolicy
+class EmailPolicy < ApplicationPolicy
   def index?
     manage?
   end
@@ -19,9 +19,13 @@ class EmailPolicy < CampaignPolicy
     false
   end
 
+  def manage?
+    EnterprisePolicy.new(user, Enterprise).manage_branding?
+  end
+
   class Scope < Scope
     def index?
-      ExpensePolicy.new(user, nil).index?
+      EmailPolicy.new(user, nil).index?
     end
 
     def resolve
