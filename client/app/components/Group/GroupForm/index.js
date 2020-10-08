@@ -226,7 +226,7 @@ GroupFormInner.propTypes = {
   edit: PropTypes.bool,
   group: PropTypes.object,
   classes: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
