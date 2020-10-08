@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -95,7 +94,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function UserRoleForm(props) {
-  const userRole = dig(props, 'userRole');
+  const userRole = props?.userRole;
 
   const initialValues = buildValues(userRole, {
     id: { default: undefined },

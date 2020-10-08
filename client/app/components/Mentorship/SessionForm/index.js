@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -110,7 +109,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               margin='normal'
               label={props.intl.formatMessage(messages.form.users)}
               value={values.user_ids}
-              options={dig(props, 'user', 'mentees')}
+              options={props?.user?.mentees}
               onChange={value => setFieldValue('user_ids', value)}
             />
           </CardContent>
@@ -126,7 +125,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
 }
 
 export function SessionForm(props) {
-  const session = dig(props, 'session');
+  const session = props?.session;
 
 
   const initialValues = buildValues(session, {

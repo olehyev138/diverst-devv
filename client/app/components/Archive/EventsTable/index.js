@@ -32,7 +32,7 @@ export function EventsTable(props) {
     },
     {
       title: intl.formatMessage(messages.group),
-      field: 'group_name',
+      field: 'group.name',
       query_field: 'groups.name'
     },
     {

@@ -1,5 +1,4 @@
 import React, { memo, useEffect } from 'react';
-import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -45,8 +44,8 @@ export function BudgetPage(props) {
   useInjectReducer({ key: 'budgetItems', reducer: itemReducer });
   useInjectSaga({ key: 'budgetItems', saga: itemSaga });
 
-  const groupId = dig(props, 'budget', 'group_id');
-  const annualBudgetId = dig(props, 'budget', 'annual_budget_id');
+  const groupId = props?.budget?.group_id;
+  const annualBudgetId = props?.budget?.annual_budget_id;
 
   const links = {
     back: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
@@ -55,7 +54,7 @@ export function BudgetPage(props) {
   const { budget_id: budgetId } = useParams();
   const location = useLocation();
 
-  const budget = dig(props, 'budget') || location.budget;
+  const budget = props?.budget || location.budget;
 
   useEffect(() => {
     if (!budget || budget.id !== budgetId)

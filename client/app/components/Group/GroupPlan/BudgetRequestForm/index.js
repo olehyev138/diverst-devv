@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -276,7 +275,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
 }
 
 export function BudgetForm(props) {
-  const budget = dig(props, 'budget');
+  const budget = props?.budget;
 
   const initialValues = buildValues(budget, {
     description: { default: '' },
