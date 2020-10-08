@@ -1,7 +1,7 @@
 class Api::V1::ResourcesController < DiverstController
   prepend Api::V1::Concerns::Archivable
 
-  before_action :set_policy, only: [:index, :create]
+  before_action :set_policy, only: [:index, :create, :archived]
 
   private
 

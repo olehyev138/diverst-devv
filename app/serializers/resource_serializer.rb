@@ -2,6 +2,10 @@ class ResourceSerializer < ApplicationRecordSerializer
   attributes :enterprise, :folder, :initiative, :group, :owner, :mentoring_session, :file_location, :permissions,
              :file, :file_file_name, :file_file_path
 
+  def policies
+    super + [:archive?]
+  end
+
   def serialize_all_fields
     true
   end

@@ -44,6 +44,7 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 
 
 api.users.all = jest.fn();
+api.users.budgetApprovers = jest.fn();
 api.users.create = jest.fn();
 api.users.update = jest.fn();
 api.users.destroy = jest.fn();
@@ -83,6 +84,22 @@ describe('saga tests for users', () => {
       expect(dispatched).toEqual(results);
     });
 
+    it('Should return approverList', async () => {
+      api.users.budgetApprovers.mockImplementation(() => Promise.resolve({ data: { page: { ...user } } }));
+      const results = [getUsersSuccess(user)];
+
+      const initialAction = { payload: {
+        count: 5, type: 'budget_approval'
+      } };
+
+      const dispatched = await recordSaga(
+        getUsers,
+        initialAction
+      );
+      expect(api.users.budgetApprovers).toHaveBeenCalledWith({ count: 5 });
+      expect(dispatched).toEqual(results);
+    });
+
     it('Should return error from the API', async () => {
       const response = { response: { data: 'ERROR!' } };
       api.users.all.mockImplementation(() => Promise.reject(response));
@@ -103,7 +120,7 @@ describe('saga tests for users', () => {
         initialAction
       );
 
-      expect(api.users.all).toHaveBeenCalledWith(initialAction.payload);
+      expect(api.users.all).toHaveBeenCalledWith({});
       expect(dispatched).toEqual(results);
       expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.users, options: { variant: 'warning' } });
     });

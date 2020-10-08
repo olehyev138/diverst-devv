@@ -56,7 +56,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
         </CardContent>
         <Divider />
         <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting} disabled={values.member_ids.length === 0}>
+          <DiverstSubmit isCommitting={props.isCommitting} disabled={(values.member_ids?.length || 0) === 0}>
             <DiverstFormattedMessage {...messages.create} />
           </DiverstSubmit>
           <DiverstCancel

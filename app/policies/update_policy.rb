@@ -42,8 +42,8 @@ class UpdatePolicy < ApplicationPolicy
       end
     end
 
-    def self.new(user, scope, permission = nil, params: {})
-      parent_scope(params)&.new(user, scope, permission, params: params) || super
+    def self.new(user, scope, permission = nil, params: {}, action: :index)
+      parent_scope(params)&.new(user, scope, permission, params: params, action: action) || super
     end
   end
 end

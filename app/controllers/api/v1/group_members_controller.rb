@@ -32,7 +32,7 @@ class Api::V1::GroupMembersController < DiverstController
 
     UserGroup.transaction do
       payload[:member_ids].each do |user_id|
-        user_group = UserGroup.find_by(user_id: user_id)
+        user_group = UserGroup.find_by(user_id: user_id, group: group)
         base_authorize(user_group)
 
         if user_group && user_group.group.enterprise == diverst_request.user.enterprise

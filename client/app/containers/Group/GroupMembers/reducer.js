@@ -9,13 +9,14 @@ import {
   GET_MEMBERS_BEGIN, GET_MEMBERS_ERROR,
   GET_MEMBERS_SUCCESS, GROUP_MEMBERS_UNMOUNT,
   CREATE_MEMBERS_BEGIN, CREATE_MEMBERS_SUCCESS, CREATE_MEMBERS_ERROR,
-  EXPORT_MEMBERS_BEGIN, EXPORT_MEMBERS_ERROR, EXPORT_MEMBERS_SUCCESS
+  EXPORT_MEMBERS_BEGIN, EXPORT_MEMBERS_ERROR, EXPORT_MEMBERS_SUCCESS, DELETE_MEMBER_BEGIN, DELETE_MEMBER_SUCCESS
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
   isCommitting: false,
   memberList: [],
   memberTotal: null,
+  hasChanged: false,
   isFetchingMembers: true
 };
 
@@ -44,6 +45,12 @@ function membersReducer(state = initialState, action) {
       case EXPORT_MEMBERS_SUCCESS:
       case EXPORT_MEMBERS_ERROR:
         draft.isCommitting = false;
+        break;
+      case DELETE_MEMBER_BEGIN:
+        draft.hasChanged = false;
+        break;
+      case DELETE_MEMBER_SUCCESS:
+        draft.hasChanged = true;
         break;
       case GROUP_MEMBERS_UNMOUNT:
         return initialState;

@@ -21,6 +21,7 @@ export function GlobalSettingsLinks(props) {
   const { classes } = props;
   const { currentTab } = props;
 
+  console.log(permission(props, 'fields_manage'));
   return (
     <React.Fragment>
       <Paper>

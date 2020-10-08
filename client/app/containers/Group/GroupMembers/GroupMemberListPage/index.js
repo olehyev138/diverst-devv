@@ -18,7 +18,7 @@ import {
 } from 'containers/Group/GroupMembers/actions';
 import {
   selectPaginatedMembers, selectMemberTotal,
-  selectIsFetchingMembers
+  selectIsFetchingMembers, selectHasChanged,
 } from 'containers/Group/GroupMembers/selectors';
 import { selectCustomText } from '../../../Shared/App/selectors';
 
@@ -165,6 +165,15 @@ export function GroupMemberListPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getMembersBegin(params);
+
+    return () => {
+      props.groupMembersUnmount();
+    };
+  }, [props.hasChanged]);
+
   const links = {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
@@ -220,6 +229,7 @@ GroupMemberListPage.propTypes = {
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   currentGroup: PropTypes.object,
   customTexts: PropTypes.object,
 };
@@ -229,6 +239,7 @@ const mapStateToProps = createStructuredSelector({
   memberTotal: selectMemberTotal(),
   isFetchingMembers: selectIsFetchingMembers(),
   customTexts: selectCustomText(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = {

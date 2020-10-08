@@ -55,6 +55,7 @@ class Initiative < ApplicationRecord
   belongs_to :pillar
   has_one :outcome, through: :pillar
   has_one :group, through: :outcome
+  has_one :enterprise, through: :group
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }

@@ -139,7 +139,7 @@ export function FolderListItem(props) {
                 </Button>
               </Permission>
               {(isResource) && (
-                <Permission show={permission(props.currentGroup, 'resources_manage?')}>
+                <Permission show={permission(item, 'archive?')}>
                   <Button
                     className={classes.folderLink}
                     color='primary'

@@ -80,6 +80,7 @@ export function AdminGroupListPage(props) {
         updateGroupPositionBegin={props.updateGroupPositionBegin}
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
+        permissions={props.permissions}
         intl={intl}
         customTexts={props.customTexts}
       />
@@ -97,6 +98,7 @@ AdminGroupListPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
+  permissions: PropTypes.object,
   intl: intlShape.isRequired,
   customTexts: PropTypes.object
 };

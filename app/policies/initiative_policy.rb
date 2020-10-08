@@ -23,6 +23,10 @@ class InitiativePolicy < GroupBasePolicy
     'upcoming_events_visibility'
   end
 
+  def archived?
+    policy_group.manage_all? || policy_group.auto_archive_manage?
+  end
+
   def attendees?
     InitiativeUserPolicy.new(self, InitiativeUser).index?
   end
@@ -59,9 +63,7 @@ class InitiativePolicy < GroupBasePolicy
     update?
   end
 
-  def un_archive?
-    update?
-  end
+  alias_method :un_archive?, :archived?
 
   # Miscellaneous
 
@@ -112,8 +114,14 @@ class InitiativePolicy < GroupBasePolicy
       group.initiatives.custom_or(group.participating_initiatives)
     end
 
+    delegate :archived?, to: :policy
+
     def resolve
-      super(policy.base_index_permission)
+      if index? && action == :index
+        super(policy.base_index_permission)
+      elsif archived? && action == :archived
+        scope.archived.left_joins(:enterprise).where(enterprises: { id: user.enterprise.id })
+      end
     end
   end
 end

@@ -67,7 +67,7 @@ export function GroupLeadersList(props) {
 
   return (
     <React.Fragment>
-      <Permission show={permission(props.group, 'leaders_manage?')}>
+      <Permission show={permission(props.group, 'leaders_create?')}>
         <Grid container spacing={3} justify='flex-end'>
           <Grid item>
             <Button
