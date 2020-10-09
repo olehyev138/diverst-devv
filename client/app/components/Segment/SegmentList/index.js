@@ -55,7 +55,7 @@ export function SegmentList(props, context) {
     Object.keys(props.segments).map((id, i) => initialExpandedSegments[id] = false); // eslint-disable
     setExpandedSegments(initialExpandedSegments);
   }
-
+  console.log(props.customTexts);
   const columns = [
     {
       title: intl.formatMessage(messages.list.name, props.customTexts),
