@@ -161,7 +161,7 @@ SessionForm.propTypes = {
   currentSession: PropTypes.object,
   user: PropTypes.object,
   isCommitting: PropTypes.bool,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
 };
 
 SessionFormInner.propTypes = {
@@ -173,7 +173,7 @@ SessionFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   interestOptions: PropTypes.array.isRequired,

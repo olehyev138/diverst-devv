@@ -195,7 +195,7 @@ CampaignFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectUsers: PropTypes.array,
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,

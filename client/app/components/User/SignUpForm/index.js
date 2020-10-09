@@ -386,7 +386,7 @@ SignUpForm.propTypes = {
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
   token: PropTypes.string,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   errors: PropTypes.object,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,

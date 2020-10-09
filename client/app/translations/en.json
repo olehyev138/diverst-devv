@@ -518,7 +518,7 @@
   "diverst.containers.Group.Manage.settings.visibility.managers": "Leaders only",
   "diverst.containers.Group.Manage.settings.visibility.non_member": "Non member",
   "diverst.containers.Group.Manage.settings.visibility.public": "Public",
-  "diverst.containers.Group.Outcome.empty": "There are no {outcome_p} yet.",
+  "diverst.containers.Group.Outcome.empty": "There are no {segment_p} yet.",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
   "diverst.containers.Group.Outcome.form.button.create": "Create",
   "diverst.containers.Group.Outcome.form.button.update": "Update",

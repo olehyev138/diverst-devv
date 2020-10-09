@@ -186,7 +186,7 @@ InviteFormInner.propTypes = {
     setFieldValue: PropTypes.func,
     setFieldTouched: PropTypes.func,
   }),
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   admin: PropTypes.bool,
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,

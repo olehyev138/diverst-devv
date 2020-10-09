@@ -40,7 +40,6 @@ const styles = theme => ({
 
 export function OutcomesList(props, context) {
   const { classes, intl } = props;
-
   return (
     <React.Fragment>
       <Grid container spacing={2} justify='space-between'>

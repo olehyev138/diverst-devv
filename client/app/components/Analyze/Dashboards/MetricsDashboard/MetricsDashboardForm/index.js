@@ -143,7 +143,7 @@ MetricsDashboardFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   getGroupsBegin: PropTypes.func,

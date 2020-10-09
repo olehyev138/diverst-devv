@@ -145,7 +145,7 @@ PollResponseFormInner.propTypes = {
   formikProps: PropTypes.object,
   errors: PropTypes.object,
   response: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
   links: PropTypes.shape({
