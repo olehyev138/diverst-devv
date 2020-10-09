@@ -46,11 +46,11 @@ export function PostsTable(props) {
       title: intl.formatMessage(messages.type, props.customTexts),
       render: (rowData) => {
         if (rowData.group_message)
-          return messages.group_message;
+          return intl.formatMessage(messages.group_message, props.customTexts);
         if (rowData.news_link)
-          return messages.news_link;
+          return intl.formatMessage(messages.news_link, props.customTexts);
         if (rowData.social_link)
-          return messages.social_link;
+          return intl.formatMessage(messages.social_link, props.customTexts);
         return messages.error;
       },
       query_field: '(CASE '
