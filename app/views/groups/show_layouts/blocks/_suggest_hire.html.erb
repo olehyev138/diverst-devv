@@ -16,10 +16,10 @@
           <%= f.hidden_field :user_id, value: current_user.id %>
           <%= f.hidden_field :group_id, value: @group.id %>
           <div class="custom-user-select">
-            <%= f.input :candidate_name, label: "candidate's name", required: true %>
+            <%= f.input :candidate_name, label: "Candidate's name", required: true %>
             <span id="candidate-email-validation-message" class="error"></span>
-            <%= f.input :candidate_email, label: "candidate's email", required: true %> 
-            <%= f.input :linkedin_profile_url, label: "candidate's linkedin profile" %>
+            <%= f.input :candidate_email, label: "Candidate's email", required: true %> 
+            <%= f.input :linkedin_profile_url, label: "Candidate's linkedin profile" %>
           </div>
           <%= f.input :resume, as: :attachment_preview %>
           <div class="custom-user-select">
