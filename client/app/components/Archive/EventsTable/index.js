@@ -53,7 +53,7 @@ export function EventsTable(props) {
 
   return (
     <DiverstTable
-      title={messages.title}
+      title={props.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -85,6 +85,7 @@ EventsTable.propTypes = {
   columns: PropTypes.array,
   isLoading: PropTypes.bool,
   customTexts: PropTypes.object,
+  title: PropTypes.object
 };
 
 export default compose(

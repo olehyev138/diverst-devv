@@ -55,7 +55,7 @@ export function ArchiveList(props) {
           <Grid item xs>
             {props.currentTab === ArchiveTypes.events && (
               <EventsTable
-                title={messages.tableName}
+                title={messages.events}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -69,7 +69,7 @@ export function ArchiveList(props) {
 
             {props.currentTab === ArchiveTypes.resources && (
               <ResourcesTable
-                title={messages.tableName}
+                title={messages.resources}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -83,7 +83,7 @@ export function ArchiveList(props) {
 
             {props.currentTab === ArchiveTypes.posts && (
               <PostsTable
-                title={messages.tableName}
+                title={messages.posts}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}

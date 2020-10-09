@@ -52,7 +52,7 @@ export function ResourcesTable(props) {
 
   return (
     <DiverstTable
-      title={messages.title}
+      title={props.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -83,7 +83,8 @@ ResourcesTable.propTypes = {
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
   isLoading: PropTypes.bool,
-  customTexts: PropTypes.object
+  customTexts: PropTypes.object,
+  title: PropTypes.object
 };
 
 export default compose(

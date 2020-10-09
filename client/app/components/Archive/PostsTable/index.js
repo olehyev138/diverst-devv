@@ -67,10 +67,9 @@ export function PostsTable(props) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
-
   return (
     <DiverstTable
-      title={messages.title}
+      title={props.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -102,6 +101,7 @@ PostsTable.propTypes = {
   columns: PropTypes.array,
   isLoading: PropTypes.bool,
   customTexts: PropTypes.object,
+  title: PropTypes.object
 };
 
 export default compose(
