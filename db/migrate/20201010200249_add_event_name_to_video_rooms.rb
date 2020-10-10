@@ -4,7 +4,7 @@ class AddEventNameToVideoRooms < ActiveRecord::Migration[5.2]
     ## Legacy migration
     #
     unless column_exists? :video_rooms, :event_name
-      add_column :annual_budgets, :start_date, :datetime
+      add_column :annual_budgets, :event_name, :datetime
     end
   end
 end

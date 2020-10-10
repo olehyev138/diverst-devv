@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_185836) do
+ActiveRecord::Schema.define(version: 2020_10_10_205601) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.datetime "updated_at", null: false
     t.datetime "start_date"
     t.datetime "end_date"
+    t.datetime "event_name"
     t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
     t.index ["group_id"], name: "index_annual_budgets_on_group_id"
   end
@@ -107,6 +108,16 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.datetime "supporting_document_updated_at"
     t.bigint "contributing_group_id"
     t.integer "likes_count"
+    t.string "title"
+    t.integer "idea_category_id"
+    t.string "video_upload_file_name"
+    t.string "video_upload_content_type"
+    t.integer "video_upload_file_size"
+    t.datetime "video_upload_updated_at"
+    t.string "supporting_document_from_sponsor_file_name"
+    t.string "supporting_document_from_sponsor_content_type"
+    t.integer "supporting_document_from_sponsor_file_size"
+    t.datetime "supporting_document_from_sponsor_updated_at"
     t.index ["author_id"], name: "index_answers_on_author_id"
     t.index ["contributing_group_id"], name: "index_answers_on_contributing_group_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
@@ -701,6 +712,14 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.index ["poll_id"], name: "index_groups_polls_on_poll_id"
   end
 
+  create_table "idea_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name"
+    t.bigint "enterprise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enterprise_id"], name: "index_idea_categories_on_enterprise_id"
+  end
+
   create_table "initiative_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "initiative_id"
     t.bigint "user_id"
@@ -1026,6 +1045,10 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
+    t.bigint "author_id_id"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
+    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1731,15 +1754,25 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
     t.index ["user_id"], name: "index_users_segments_on_user_id"
   end
 
+  create_table "video_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.datetime "timestamp"
+    t.string "identity"
+    t.integer "duration", default: 0
+    t.bigint "video_room_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["video_room_id"], name: "index_video_participants_on_video_room_id"
+  end
+
   create_table "video_rooms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "sid"
     t.string "type"
     t.string "name"
     t.string "status"
-    t.integer "duration"
+    t.integer "duration", default: 0
     t.datetime "start_date"
     t.datetime "end_date"
-    t.integer "participants"
+    t.integer "participants", default: 0
     t.bigint "enterprise_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1795,6 +1828,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
   add_foreign_key "groups", "group_categories"
   add_foreign_key "groups", "group_category_types"
   add_foreign_key "groups", "groups", column: "parent_id"
+  add_foreign_key "idea_categories", "enterprises"
   add_foreign_key "initiative_comments", "initiatives"
   add_foreign_key "initiative_comments", "users"
   add_foreign_key "initiative_expenses", "annual_budgets", column: "deprecated_annual_budget_id"
@@ -1829,6 +1863,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_185836) do
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+  add_foreign_key "video_participants", "video_rooms"
   add_foreign_key "video_rooms", "enterprises"
   add_foreign_key "video_rooms", "initiatives"
   add_foreign_key "views", "enterprises"
