@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_10_205601) do
+ActiveRecord::Schema.define(version: 2020_10_11_203819) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.integer "upvote_count", default: 0
     t.text "outcome"
     t.integer "value"
-    t.integer "benefit_type"
+    t.string "benefit_type"
     t.string "supporting_document_file_name"
     t.string "supporting_document_content_type"
     t.integer "supporting_document_file_size"
@@ -118,6 +118,9 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.string "supporting_document_from_sponsor_content_type"
     t.integer "supporting_document_from_sponsor_file_size"
     t.datetime "supporting_document_from_sponsor_updated_at"
+    t.text "benefits"
+    t.integer "duration", default: 0
+    t.string "unit_of_duration", default: ""
     t.index ["author_id"], name: "index_answers_on_author_id"
     t.index ["contributing_group_id"], name: "index_answers_on_contributing_group_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
@@ -173,6 +176,14 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.index ["annual_budget_id"], name: "fk_rails_81cba7294a"
     t.index ["approver_id"], name: "fk_rails_a057b1443a"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
+  end
+
+  create_table "business_impacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name"
+    t.bigint "enterprise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enterprise_id"], name: "index_business_impacts_on_enterprise_id"
   end
 
   create_table "campaign_invitations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -314,6 +325,14 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.string "sub_erg", default: "Sub-Group", null: false
     t.string "privacy_statement", default: "Privacy Statement", null: false
     t.index ["enterprise_id"], name: "index_custom_texts_on_enterprise_id"
+  end
+
+  create_table "departments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name"
+    t.bigint "enterprise_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enterprise_id"], name: "index_departments_on_enterprise_id"
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1340,6 +1359,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.datetime "solved_at"
     t.text "conclusion"
     t.integer "answers_count"
+    t.integer "department_id"
+    t.integer "business_impact_id"
     t.index ["campaign_id"], name: "index_questions_on_campaign_id"
   end
 
@@ -1521,6 +1542,24 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.index ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id"
   end
 
+  create_table "suggested_hires", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "resume_file_name"
+    t.string "resume_content_type"
+    t.integer "resume_file_size"
+    t.datetime "resume_updated_at"
+    t.string "candidate_email"
+    t.string "candidate_name"
+    t.string "manager_email"
+    t.text "message_to_manager"
+    t.string "linkedin_profile_url"
+    t.index ["group_id"], name: "index_suggested_hires_on_group_id"
+    t.index ["user_id"], name: "index_suggested_hires_on_user_id"
+  end
+
   create_table "survey_managers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "survey_id"
     t.integer "user_id"
@@ -1641,6 +1680,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
     t.integer "answer_upvote_id"
     t.integer "answer_id"
     t.integer "poll_response_id"
+    t.integer "user_group_id"
+    t.integer "suggested_hire_id"
     t.index ["operation"], name: "index_user_reward_actions_on_operation"
     t.index ["reward_action_id"], name: "index_user_reward_actions_on_reward_action_id"
     t.index ["user_id"], name: "index_user_reward_actions_on_user_id"
@@ -1815,10 +1856,12 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
   add_foreign_key "budgets", "annual_budgets"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
+  add_foreign_key "business_impacts", "enterprises"
   add_foreign_key "checklists", "users", column: "author_id"
   add_foreign_key "csvfiles", "groups"
   add_foreign_key "csvfiles", "users"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "departments", "enterprises"
   add_foreign_key "folders", "folders", column: "parent_id"
   add_foreign_key "group_categories", "enterprises"
   add_foreign_key "group_categories", "group_category_types"
@@ -1858,6 +1901,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_205601) do
   add_foreign_key "shared_metrics_dashboards", "users"
   add_foreign_key "social_network_posts", "groups"
   add_foreign_key "social_network_posts", "users", column: "author_id"
+  add_foreign_key "suggested_hires", "groups"
+  add_foreign_key "suggested_hires", "users"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
