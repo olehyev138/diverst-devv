@@ -48,7 +48,7 @@
 
 <div class="desktop">
   <% if @enterprise&.has_enabled_saml? %>
-    <p>
+    <p style="color:white;">
       <%= @enterprise.login_text.blank? ? default_login_text : raw(@enterprise.login_text) %>
     </p>
   <% end %>  
