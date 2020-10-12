@@ -10,9 +10,36 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li><%= active_link_to "Overview", metrics_overview_index_path %></li>
+      <li><%= active_link_to "Users", metrics_users_path %></li>
+      <% if GroupPolicy.new(current_user, Group).create? %>
+        <li><%= active_link_to "Overview", metrics_groups_path %></li>
+        <% if InitiativePolicy.new(current_user, Initiative).create? %>
+          <li><%= active_link_to "Events", initiatives_metrics_groups_path %></li>
+        <% end %>
+        <% if NewsLinkPolicy.new(current_user, NewsLink).create? %>
+          <li><%= active_link_to "Social Media", social_media_metrics_groups_path %></li>
+        <% end %>
+        <% if EnterpriseFolderPolicy.new(current_user, Folder).index? %>
+          <li><%= active_link_to "Resources", resources_metrics_groups_path %> </li>
+        <% end %>
+        <% if SegmentPolicy.new(current_user, Segment).index? %>
+          <li><%= active_link_to c_t(:segment).pluralize, metrics_segments_path %></li>
+        <% end %>
+        <% if CampaignPolicy.new(current_user, Campaign).create? %>
+          <li><%= active_link_to 'Innovation', metrics_campaigns_path %></li>
+        <% end %>
+        <% if PollPolicy.new(current_user, Poll).create? %>
+          <li><%= active_link_to 'Surveys', polls_path %></li>
+        <% end %>
+        <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
+          <li><%= active_link_to 'Mentorship', metrics_mentorships_path %></li>
+        <% end %>
+          <li><%= active_link_to 'Custom', metrics_metrics_dashboards_path %></li>
+      <% end %>
     </ul>
   </nav>
 </div>
+
 <div class="menu menu--desktop">
   <%= active_link_to "Overview", metrics_overview_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics/overview_graphs'], []] %>
   <%= active_link_to 'Users', metrics_users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
@@ -35,11 +62,11 @@
             <%= active_link_to "Social Media", social_media_metrics_groups_path, class: "secondary-header__tab" %>
           </li>
         <% end %>
-        <li>
-          <% if EnterpriseFolderPolicy.new(current_user, Folder).index? %>
+        <% if EnterpriseFolderPolicy.new(current_user, Folder).index? %>
+          <li>
             <%= active_link_to "Resources", resources_metrics_groups_path, class: "secondary-header__tab" %>
-          <% end %>
-        </li>
+          </li>
+        <% end %>
       </ul>
     </nav>
   <% end %>
