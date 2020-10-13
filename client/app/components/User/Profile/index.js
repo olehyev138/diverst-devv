@@ -20,7 +20,7 @@ import DiverstImg from 'components/Shared/DiverstImg';
 
 import LocaleToggle from 'containers/Shared/LocaleToggle';
 import Permission from 'components/Shared/DiverstPermission';
-import {permission} from "utils/permissionsHelpers";
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   padding: {
