@@ -30,10 +30,7 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const [tab, setTab] = useState('general');
-
-
-  const generalForm = (
+  return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
       <Card>
         <Form>
@@ -170,6 +167,41 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
       </Card>
     </DiverstFormLoader>
   );
+}
+
+export function UserForm(props) {
+  const [tab, setTab] = useState('general');
+
+  const user = props?.user;
+  const defaultRole = (user?.available_roles || []).find(item => item.default);
+
+  const initialValues = buildValues(user, {
+    first_name: { default: '' },
+    email: { default: '' },
+    last_name: { default: '' },
+    biography: { default: '' },
+    time_zone: { default: null },
+    user_role_id: { default: defaultRole },
+    id: { default: undefined },
+    active: { default: false },
+    avatar: { default: null },
+  });
+
+  const basicForm = (
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        const payload = mapFields(values, ['time_zone', 'user_role_id']);
+        payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
+        // eslint-disable-next-line no-unused-expressions
+        !props.permissions.users_manage && delete payload.email;
+        props.userAction(payload);
+      }}
+    >
+      {formikProps => <UserFormInner {...props} {...formikProps} />}
+    </Formik>
+  );
 
   const fieldForm = (
     <React.Fragment>
@@ -212,42 +244,9 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           <Box mb={2} />
         </React.Fragment>
       )}
-      {tab === 'general' && generalForm}
+      {tab === 'general' && basicForm}
       {tab === 'fields' && fieldForm}
     </React.Fragment>
-  );
-}
-
-export function UserForm(props) {
-  const user = props?.user;
-  const defaultRole = (user?.available_roles || []).find(item => item.default);
-
-  const initialValues = buildValues(user, {
-    first_name: { default: '' },
-    email: { default: '' },
-    last_name: { default: '' },
-    biography: { default: '' },
-    time_zone: { default: null },
-    user_role_id: { default: defaultRole },
-    id: { default: undefined },
-    active: { default: false },
-    avatar: { default: null },
-  });
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone', 'user_role_id']);
-        payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
-        // eslint-disable-next-line no-unused-expressions
-        !props.permissions.users_manage && delete payload.email;
-        props.userAction(payload);
-      }}
-    >
-      {formikProps => <UserFormInner {...props} {...formikProps} />}
-    </Formik>
   );
 }
 
@@ -259,6 +258,8 @@ UserForm.propTypes = {
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  fieldData: PropTypes.array,
+  updateFieldDataBegin: PropTypes.func,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
