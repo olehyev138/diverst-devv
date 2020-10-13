@@ -67,6 +67,9 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
 };
 
 // simple wrapper for `intl`'s getNumberFormat method used to format currency values
-export const toCurrencyString = (intl, amount, currency = 'USD', localeOverride = null) => intl
-  ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
-  : new Intl.NumberFormat(localeOverride, { style: 'currency', currency }).format(amount);
+export const toCurrencyString = (intl, amount, currency = null, localeOverride = null) => {
+  const currency_default = currency || 'USD';
+  return intl
+    ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency_default }).format(amount)
+    : new Intl.NumberFormat(localeOverride, { style: 'currency', currency_default }).format(amount);
+};
