@@ -24,6 +24,7 @@ const currencies = [
   'EUR',
   'GBP',
   'JPY',
+  null
 ];
 
 const invalidCurrency = 'FAKE';
