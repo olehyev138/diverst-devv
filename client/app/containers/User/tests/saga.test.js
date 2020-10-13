@@ -179,7 +179,7 @@ describe('saga tests for users', () => {
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [createUserSuccess(), push(ROUTES.admin.system.users.index.path()), notified];
+      const results = [createUserSuccess(), push(ROUTES.admin.system.users.list.path()), notified];
       const initialAction = { payload: {
         id: '',
       } };
@@ -229,7 +229,7 @@ describe('saga tests for users', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [updateUserSuccess(), push(ROUTES.admin.system.users.index.path()), notified];
+      const results = [updateUserSuccess(), push(ROUTES.admin.system.users.list.path()), notified];
       const initialAction = { payload: {
         id: 1,
       } };
@@ -282,7 +282,7 @@ describe('saga tests for users', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [deleteUserSuccess(), push(ROUTES.admin.system.users.index.path()), notified];
+      const results = [deleteUserSuccess(), push(ROUTES.admin.system.users.list.path()), notified];
 
       const initialAction = { payload: {
         id: 1,

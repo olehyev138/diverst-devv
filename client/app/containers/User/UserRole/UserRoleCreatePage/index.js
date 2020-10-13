@@ -83,6 +83,6 @@ export default compose(
 )(Conditional(
   UserRoleCreatePage,
   ['permissions.policy_templates_create'],
-  (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
+  (props, params) => ROUTES.admin.system.users.roles.index.path(),
   permissionMessages.user.userRole.createPage
 ));

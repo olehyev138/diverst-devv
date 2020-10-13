@@ -28,6 +28,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   userRoleListItem: {
@@ -52,20 +53,22 @@ export function UserRoleList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            to={links.userRoleNew}
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
+      <Permission show={permission(props, 'policy_templates_create')}>
+        <Grid container spacing={3} justify='flex-end'>
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              to={links.userRoleNew}
+              component={WrappedNavLink}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.new} />
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </Permission>
       <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>

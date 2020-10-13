@@ -863,6 +863,9 @@ const ROUTES = {
             titleMessage: messages.admin.system.users,
           }
         },
+        list: {
+          path: () => '/admin/system/users/list',
+        },
         new: {
           path: () => '/admin/system/users/new',
         },

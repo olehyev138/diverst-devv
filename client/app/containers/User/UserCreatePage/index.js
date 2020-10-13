@@ -40,7 +40,7 @@ export function UserCreatePage(props) {
   const { intl } = props;
 
   const links = {
-    usersIndex: ROUTES.admin.system.users.index.path(),
+    usersIndex: ROUTES.admin.system.users.list.path(),
   };
 
   return (
