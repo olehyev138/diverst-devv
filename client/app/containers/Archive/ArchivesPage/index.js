@@ -22,7 +22,6 @@ const defaultParams = Object.freeze({
   page: 0,
   order: 'asc',
   orderBy: 'id',
-  query_scopes: ['archived']
 });
 
 const ArchiveTypes = Object.freeze({
@@ -144,9 +143,8 @@ export default compose(
   memo,
 )(Conditional(
   ArchivePage,
-  ['permissions.archive_manage', 'permissions.posts_manage'],
+  ['permissions.archive_manage'],
   (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.archive.indexPage,
   false,
-  a => a.every(v => v)
 ));

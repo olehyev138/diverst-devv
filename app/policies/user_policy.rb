@@ -6,6 +6,10 @@ class UserPolicy < ApplicationPolicy
     @policy_group.users_index?
   end
 
+  def budget_approvers?
+    BudgetPolicy.new(@user, AnnualBudget, @params).create?
+  end
+
   def show?
     return true if index?
 
@@ -31,6 +35,7 @@ class UserPolicy < ApplicationPolicy
 
   def destroy?
     return false if @user === @record
+    return false unless @record.can_be_destroyed
 
     update?
   end
@@ -77,6 +82,8 @@ class UserPolicy < ApplicationPolicy
 
     def resolve
       if index?
+        scope.where(enterprise_id: user.enterprise_id)
+      elsif policy.budget_approvers?
         scope.where(enterprise_id: user.enterprise_id)
       else
         scope.none

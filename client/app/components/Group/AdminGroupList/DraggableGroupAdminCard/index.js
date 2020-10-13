@@ -24,7 +24,7 @@ import { Formik } from 'formik';
 
 import { ImportForm } from 'components/User/UserImport';
 import { intlShape } from 'react-intl';
-import { getListDrop, getListDrag } from '../../../../utils/DragAndDropHelpers';
+import { getListDrop, getListDrag } from 'utils/DragAndDropHelpers';
 
 
 export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin }, props) {
@@ -87,6 +87,76 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
     </CardContent>
   );
 
+  const cardActions = (
+    <CardActions>
+      <Permission show={permission(group, 'update?')}>
+        <Button
+          size='small'
+          color='primary'
+          to={{
+            pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+            state: { id: group.id }
+          }}
+          component={WrappedNavLink}
+        >
+          <DiverstFormattedMessage {...messages.edit} />
+        </Button>
+      </Permission>
+      <Permission show={permission(group, 'destroy?')}>
+        <Button
+          size='small'
+          className={classes.errorButton}
+          onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            if (confirm(intl.formatMessage(messages.delete_confirm)))
+              deleteGroupBegin(group.id);
+          }}
+        >
+          <DiverstFormattedMessage {...messages.delete} />
+        </Button>
+      </Permission>
+      {children.length > 0 && (
+        <React.Fragment>
+          <Button
+            size='small'
+            onClick={() => {
+              setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+            }}
+          >
+            {expandedGroups[group.id] ? (
+              <DiverstFormattedMessage {...messages.children_collapse} />
+            ) : (
+              <DiverstFormattedMessage {...messages.children_expand} />
+            )}
+
+          </Button>
+          <Permission show={permission(group, 'update?')}>
+            <Button
+              size='small'
+              color='primary'
+              to={{
+                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
+                state: { id: group.id }
+              }}
+              component={WrappedNavLink}
+            >
+              Categorize Subgroups
+            </Button>
+          </Permission>
+        </React.Fragment>
+      )}
+      <Permission show={permission(group, 'add_members?')}>
+        <Button
+          size='small'
+          color='primary'
+          onClick={() => handleDialogOpen(group.id)}
+        >
+          Import Users
+        </Button>
+      </Permission>
+    </CardActions>
+  );
+
   const importDialog = (
     <Dialog
       open={importGroup !== 0}
@@ -121,148 +191,13 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
   return (
     <Grid item key={group.id} xs={12}>
       { importDialog }
-      { draggable ? (
-        <Card
-          ref={ref}
-          className={classes.draggableCard}
-        >
-          {cardContent}
-          <Permission show={permission(group, 'update?')}>
-            <CardActions>
-              <Button
-                size='small'
-                color='primary'
-                to={{
-                  pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                  state: { id: group.id }
-                }}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-              <Permission show={permission(group, 'destroy?')}>
-                <Button
-                  size='small'
-                  className={classes.errorButton}
-                  onClick={() => {
-                    /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
-                      deleteGroupBegin(group.id);
-                  }}
-                >
-                  <DiverstFormattedMessage {...messages.delete} />
-                </Button>
-              </Permission>
-              {children.length > 0 && (
-                <React.Fragment>
-                  <Button
-                    size='small'
-                    onClick={() => {
-                      setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                    }}
-                  >
-                    {expandedGroups[group.id] ? (
-                      <DiverstFormattedMessage {...messages.children_collapse} />
-                    ) : (
-                      <DiverstFormattedMessage {...messages.children_expand} />
-                    )}
-
-                  </Button>
-                  <Button
-                    size='small'
-                    color='primary'
-                    to={{
-                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
-                      state: { id: group.id }
-                    }}
-                    component={WrappedNavLink}
-                  >
-                    Categorize Subgroups
-                  </Button>
-                </React.Fragment>
-              )}
-              <Button
-                size='small'
-                color='primary'
-                onClick={() => handleDialogOpen(group.id)}
-              >
-                Import Users
-              </Button>
-            </CardActions>
-          </Permission>
-        </Card>
-
-      ) : (
-        <Card
-          ref={ref}
-          className={classes.groupCard}
-        >
-          {cardContent}
-          <Permission show={permission(group, 'update?')}>
-            <CardActions>
-              <Button
-                size='small'
-                color='primary'
-                to={{
-                  pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                  state: { id: group.id }
-                }}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-              <Permission show={permission(group, 'destroy?')}>
-                <Button
-                  size='small'
-                  className={classes.errorButton}
-                  onClick={() => {
-                    /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
-                      deleteGroupBegin(group.id);
-                  }}
-                >
-                  <DiverstFormattedMessage {...messages.delete} />
-                </Button>
-              </Permission>
-              {children.length > 0 && (
-                <React.Fragment>
-                  <Button
-                    size='small'
-                    onClick={() => {
-                      setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                    }}
-                  >
-                    {expandedGroups[group.id] ? (
-                      <DiverstFormattedMessage {...messages.children_collapse} />
-                    ) : (
-                      <DiverstFormattedMessage {...messages.children_expand} />
-                    )}
-
-                  </Button>
-                  <Button
-                    size='small'
-                    color='primary'
-                    to={{
-                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
-                      state: { id: group.id }
-                    }}
-                    component={WrappedNavLink}
-                  >
-                    Categorize Subgroups
-                  </Button>
-                </React.Fragment>
-              )}
-              <Button
-                size='small'
-                color='primary'
-                onClick={() => handleDialogOpen(group.id)}
-              >
-                Import Users
-              </Button>
-            </CardActions>
-          </Permission>
-        </Card>
-      )}
+      <Card
+        ref={ref}
+        className={draggable ? classes.draggableCard : classes.groupCard}
+      >
+        {cardContent}
+        {cardActions}
+      </Card>
       <Collapse in={expandedGroups[`${group.id}`]}>
         <Box mt={1} />
         <Grid container spacing={2} justify='flex-end'>
@@ -309,35 +244,41 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                   </Grid>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    size='small'
-                    color='primary'
-                    to={{
-                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
-                      state: { id: childGroup.id }
-                    }}
-                    component={WrappedNavLink}
-                  >
-                    <DiverstFormattedMessage {...messages.edit} />
-                  </Button>
-                  <Button
-                    size='small'
-                    color='primary'
-                    onClick={() => handleDialogOpen(childGroup.id)}
-                  >
+                  <Permission show={permission(childGroup, 'update?')}>
+                    <Button
+                      size='small'
+                      color='primary'
+                      to={{
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
+                        state: { id: childGroup.id }
+                      }}
+                      component={WrappedNavLink}
+                    >
+                      <DiverstFormattedMessage {...messages.edit} />
+                    </Button>
+                  </Permission>
+                  <Permission show={permission(childGroup, 'add_members?')}>
+                    <Button
+                      size='small'
+                      color='primary'
+                      onClick={() => handleDialogOpen(childGroup.id)}
+                    >
                     Import Users
-                  </Button>
-                  <Button
-                    size='small'
-                    className={classes.errorButton}
-                    onClick={() => {
+                    </Button>
+                  </Permission>
+                  <Permission show={permission(childGroup, 'destroy?')}>
+                    <Button
+                      size='small'
+                      className={classes.errorButton}
+                      onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete group?'))
-                        deleteGroupBegin(childGroup.id);
-                    }}
-                  >
-                    <DiverstFormattedMessage {...messages.delete} />
-                  </Button>
+                        if (confirm('Delete group?'))
+                          deleteGroupBegin(childGroup.id);
+                      }}
+                    >
+                      <DiverstFormattedMessage {...messages.delete} />
+                    </Button>
+                  </Permission>
                 </CardActions>
               </Card>
             </Grid>

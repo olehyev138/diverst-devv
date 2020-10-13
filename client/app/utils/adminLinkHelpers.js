@@ -10,7 +10,7 @@ const NameToPathMap = Object.freeze({
   campaigns_create: ROUTES.admin.innovate.campaigns.index,
   polls_create: ROUTES.admin.include.polls.index,
   mentoring_interests_manage: null,
-  users_create: ROUTES.admin.system.users.index,
+  users_create: ROUTES.admin.system.users.list,
   sso_authentication: ROUTES.admin.system.globalSettings.ssoSettings.edit,
   policy_templates_manage: ROUTES.admin.system.users.policy_templates.index,
   fields_manage: ROUTES.admin.system.globalSettings.fields.index,
@@ -22,11 +22,12 @@ const NameToPathMap = Object.freeze({
   logs_view: ROUTES.admin.system.logs.index,
   edit_posts: null,
   enterprise_manage: ROUTES.admin.system.globalSettings.enterpriseConfiguration.index,
+  archive_manage: ROUTES.admin.manage.archived.index,
 });
 
 const GlobalSettingsPaths = Object.freeze([
   'enterprise_manage',
-  'users_manage',
+  'users_create',
   'sso_authentication',
   'policy_templates_manage',
   'fields_manage',
@@ -58,6 +59,7 @@ const RootManagePaths = Object.freeze([
   'polls_create',
   'mentoring_interests_manage',
   ...GlobalSettingsPaths,
+  'archive_manage',
 ]);
 
 export function resolveRootManagePath(permission) {

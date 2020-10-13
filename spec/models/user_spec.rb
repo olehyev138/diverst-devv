@@ -304,7 +304,7 @@ RSpec.describe User do
     context 'presence of fields' do
       let!(:mandatory_field) { build(:field, title: 'Test', required: true) }
       let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
-      let(:user) { build(:user, enterprise: enterprise) }
+      let(:user) { create(:user, enterprise: enterprise) }
 
       context 'with mandatory fields not filled' do
         it 'should have an error on user' do

@@ -52,7 +52,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUsers(action) {
   try {
-    const response = yield call(api.users.all.bind(api.users), action.payload);
+    const { type, ...payload } = action.payload || { };
+    const response = yield (() => {
+      switch (type) {
+        case 'budget_approval':
+          return call(api.users.budgetApprovers.bind(api.users), payload);
+        default:
+          return call(api.users.all.bind(api.users), payload);
+      }
+    })();
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
@@ -115,7 +123,7 @@ export function* createUser(action) {
     const response = yield call(api.users.create.bind(api.users), payload);
 
     yield put(createUserSuccess());
-    yield put(push(ROUTES.admin.system.users.index.path()));
+    yield put(push(ROUTES.admin.system.users.list.path()));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserError(err));
@@ -129,7 +137,7 @@ export function* updateUser(action) {
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 
     yield put(updateUserSuccess());
-    yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
+    yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.list.path()));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
@@ -142,7 +150,7 @@ export function* deleteUser(action) {
     yield call(api.users.destroy.bind(api.users), action.payload);
 
     yield put(deleteUserSuccess());
-    yield put(push(ROUTES.admin.system.users.index.path()));
+    yield put(push(ROUTES.admin.system.users.list.path()));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserError(err));

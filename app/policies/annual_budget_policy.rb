@@ -11,6 +11,10 @@ class AnnualBudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def index?
+    super || BudgetPolicy.new(user, [group, Budget]).index?
+  end
+
   class Scope < Scope
     def group_base
       group.annual_budgets

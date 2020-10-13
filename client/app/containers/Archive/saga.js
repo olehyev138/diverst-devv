@@ -30,15 +30,15 @@ export function* getArchives(action) {
     let response = null;
     switch (resource) {
       case ArchiveTypes.resources:
-        response = yield call(api.resources.all.bind(api.resources), rest);
+        response = yield call(api.resources.archived.bind(api.resources), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case ArchiveTypes.posts:
-        response = yield call(api.newsFeedLinks.all.bind(api.newsFeedLinks), rest);
+        response = yield call(api.newsFeedLinks.archived.bind(api.newsFeedLinks), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case ArchiveTypes.events:
-        response = yield call(api.initiatives.all.bind(api.initiatives), rest);
+        response = yield call(api.initiatives.archived.bind(api.initiatives), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       default:

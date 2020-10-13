@@ -44,7 +44,7 @@ export function UserEditPage(props) {
   const location = useLocation();
 
   const links = {
-    usersIndex: ROUTES.admin.system.users.index.path(),
+    usersIndex: ROUTES.admin.system.users.list.path(),
     usersPath: id => ROUTES.user.show.path(id),
   };
 

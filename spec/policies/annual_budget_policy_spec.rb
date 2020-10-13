@@ -16,6 +16,7 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
     no_access.policy_group.groups_budgets_index = false
     no_access.policy_group.groups_budgets_manage = false
     no_access.policy_group.groups_budgets_request = false
+    no_access.policy_group.budget_approval = false
     no_access.policy_group.save!
   }
 
@@ -28,6 +29,25 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
 
             it 'returns true' do
               expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when is a member with ONLY budget_approval is true' do
+            before do
+              create(:user_group, user: user, group: group)
+              user.policy_group.update budget_approval: true
+            end
+
+            it 'returns true' do
+              expect(subject.index?).to eq true
+            end
+          end
+
+          context 'when is not a member when ONLY budget_approval is true' do
+            before { user.policy_group.update budget_approval: true }
+
+            it 'returns false' do
+              expect(subject.index?).to eq false
             end
           end
 

@@ -34,6 +34,11 @@ RSpec.describe InitiativePolicy, type: :policy do
 
   describe 'for users with access' do
     context 'when manage_all is false' do
+      context 'when auto_archive_manage is true' do
+        before { user.policy_group.update auto_archive_manage: true }
+        it { is_expected.to permit_action(:archived) }
+      end
+
       context 'when current user IS NOT owner' do
         before { initiative.owner = create(:user) }
 

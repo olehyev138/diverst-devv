@@ -80,7 +80,7 @@ function deserializeDatum(fieldDatum) {
         /* Certain fields have there data json serialized as a single item array  */
         return { label: (parsed || [])[0], value: (parsed || [])[0] };
       case 'DateField':
-        return DateTime.fromSeconds(parsed).toISO().split('T')[0];
+        return parsed ? DateTime.fromSeconds(parsed).toISO().split('T')[0] : null;
       default:
         return datum || '';
     }
