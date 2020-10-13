@@ -19,6 +19,8 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import DiverstImg from 'components/Shared/DiverstImg';
 
 import LocaleToggle from 'containers/Shared/LocaleToggle';
+import Permission from 'components/Shared/DiverstPermission';
+import {permission} from "utils/permissionsHelpers";
 
 const styles = theme => ({
   padding: {
@@ -70,19 +72,21 @@ export function Profile(props) {
                   </CardContent>
                 </Paper>
               </Grid>
-              <Grid item sm>
-                <Button
-                  component={WrappedNavLink}
-                  to={props.links.userEdit(user.id)}
-                  variant='contained'
-                  size='large'
-                  color='primary'
-                  className={classes.buttons}
-                  startIcon={<EditIcon />}
-                >
-                  <DiverstFormattedMessage {...messages.edit} />
-                </Button>
-              </Grid>
+              <Permission show={permission(user, 'update?')}>
+                <Grid item sm>
+                  <Button
+                    component={WrappedNavLink}
+                    to={props.links.userEdit(user.id)}
+                    variant='contained'
+                    size='large'
+                    color='primary'
+                    className={classes.buttons}
+                    startIcon={<EditIcon />}
+                  >
+                    <DiverstFormattedMessage {...messages.edit} />
+                  </Button>
+                </Grid>
+              </Permission>
             </Grid>
           </Box>
           <Paper>
