@@ -25,7 +25,7 @@ admin view comes from users_controller %>
 <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
   <h2>Hidden info</h2>
   <h4>Only D&I Management can see hidden fields</h4>
-  <% @user.enterprise.fields.where(private: false).each do |cf| %>
+  <% @user.enterprise.fields.non_private.each do |cf| %>
     <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user %>
   <% end %>
 <% end %>
