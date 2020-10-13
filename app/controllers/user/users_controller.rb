@@ -27,7 +27,8 @@ class User::UsersController < ApplicationController
     authorize @user
 
     @user.assign_attributes(user_params)
-    @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
+    enterprise_fields = @user.enterprise.fields.non_private
+    @user.info.merge(fields: enterprise_fields, form_data: params['custom-fields'])
 
     if @user.save
       flash[:notice] = 'Your user was updated'

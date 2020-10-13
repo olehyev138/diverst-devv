@@ -16,6 +16,8 @@ class Field < BaseClass
   validates :title, uniqueness: { scope: :enterprise_id },
                     unless: :is_segment_or_group_field?, if: :container_type_is_enterprise?
 
+  scope :non_private,       -> { where(private: false) }
+
   def container_type_is_enterprise?
     enterprise_id.present?
   end
