@@ -12,12 +12,12 @@ class UserSerializer < ApplicationRecordSerializer
 
   def field_data
     field_objects = if object.field_data.loaded?
-                      object.field_data.select { |fd| !fd.field.private || (scope && UserPolicy.new(scope.dig(:current_user), User).manage?) }
-                    elsif scope && UserPolicy.new(scope.dig(:current_user), User).manage?
-                      object.field_data
-                    else
-                      object.field_data.includes(:field).where(fields: { private: false })
-                    end
+      object.field_data.select { |fd| !fd.field.private || (scope && UserPolicy.new(scope.dig(:current_user), User).manage?) }
+    elsif scope && UserPolicy.new(scope.dig(:current_user), User).manage?
+      object.field_data
+    else
+      object.field_data.includes(:field).where(fields: { private: false })
+    end
     field_objects.map do |field_datum|
       FieldDataSerializer.new(field_datum, **instance_options).as_json
     end
