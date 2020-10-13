@@ -37,6 +37,7 @@ class Api::V1::UserController < DiverstController
 
             enterprise_folders_view: EnterpriseFolderPolicy.new(current_user, Folder).index?,
             enterprise_folders_create: EnterpriseFolderPolicy.new(current_user, Folder).create?,
+            enterprise_folders_manage: EnterpriseFolderPolicy.new(current_user, Folder).update?,
 
             mentoring_interests_view: MentoringInterestPolicy.new(current_user, MentoringInterest).index?,
             mentoring_interests_create: MentoringInterestPolicy.new(current_user, MentoringInterest).create?,

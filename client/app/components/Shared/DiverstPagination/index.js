@@ -139,6 +139,16 @@ export function DiverstPagination(props) {
     }
   }, [props.isLoading]);
 
+  useEffect(() => {
+    if (props.page != null && props.page !== page)
+      setPage(props.page);
+  }, [props.page]);
+
+  useEffect(() => {
+    if (props.rowsPerPage != null && props.rowsPerPage !== page)
+      setRowsPerPage(props.rowsPerPage);
+  }, [props.rowsPerPage]);
+
   if (props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0)
     return <React.Fragment />;
 

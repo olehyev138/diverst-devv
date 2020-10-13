@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/GlobalSettings/Field/FieldsPage/index'));
+export default loadable(() => import('containers/GlobalSettings/Field/AdminFieldsPage/index'));

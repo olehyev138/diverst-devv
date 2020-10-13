@@ -72,6 +72,12 @@ jobs:
             - ./client/node_modules
           key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
+      ## Run Danger.js
+      #
+      - run:
+          name: 'Run Danger'
+          command: npx danger ci
+      #
       ## Run linter
       #
       - run:

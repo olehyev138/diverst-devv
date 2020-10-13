@@ -53,6 +53,8 @@ Diverst::Application.routes.draw do
           get 'get_auth_enterprise', to: 'enterprises#get_auth_enterprise'
           get 'get_enterprise', to: 'enterprises#get_enterprise'
           post 'update_enterprise', to: 'enterprises#update_enterprise'
+          put 'update_sso', to: 'enterprises#update_sso'
+          patch 'update_sso', to: 'enterprises#update_sso'
         end
         member do
           post '/sso_login',    to: 'enterprises#sso_login'
@@ -113,6 +115,9 @@ Diverst::Application.routes.draw do
         end
       end
       resources :initiatives do
+        collection do
+          get 'archived'
+        end
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
 
@@ -182,6 +187,9 @@ Diverst::Application.routes.draw do
       resources :mobile_fields
       resources :news_feeds
       resources :news_feed_links do
+        collection do
+          get 'archived'
+        end
         member do
           post 'archive'
           put 'un_archive'
@@ -218,6 +226,9 @@ Diverst::Application.routes.draw do
       resources :polls_segments
       resources :questions
       resources :resources do
+        collection do
+          get 'archived'
+        end
         member do
           post 'archive'
           put 'un_archive'
@@ -265,6 +276,7 @@ Diverst::Application.routes.draw do
       end
       resources :users do
         collection do
+          get 'budget_approvers'
           get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
           post '/sign_up_token', to: 'users#sign_up_token'

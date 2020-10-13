@@ -1,6 +1,7 @@
 {
   "session": {
     "login": "/login",
+    "ssoLanding": "/login/landing",
     "ssoBypass": "/login/credentials",
     "forgotPassword": "/forgot",
     "passwordReset": "/password_reset/:token"
@@ -225,6 +226,7 @@
     "system": {
       "users": {
         "index": "/admin/system/users",
+        "list": "/admin/system/users/list",
         "new": "/admin/system/users/new",
         "edit": "/admin/system/users/:user_id/edit",
         "import": "/admin/system/users/import",

@@ -14,12 +14,25 @@ import { connect, FastField, Field, getIn } from 'formik';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const CustomDateField = (props) => {
-  const { fieldDatum, fieldDatumIndex, formik, ...rest } = props;
-  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
+  const { fieldDatum, fieldDatumIndex, formik, dataLocation: oldDataLocation, fieldType, ...rest } = props;
+  const dataLocation = oldDataLocation || `fieldData.${fieldDatumIndex}.data`;
+
+  const UsedField = ((type) => {
+    switch (type) {
+      case 'FastField':
+        return FastField;
+      case 'Field':
+        return Field;
+      default:
+        // eslint-disable-next-line no-console
+        console.error('Invalid Field Type');
+        return Field;
+    }
+  })(fieldType);
 
   return (
     <React.Fragment>
-      <FastField
+      <UsedField
         component={KeyboardDatePicker}
         format='yyyy/MM/dd'
         mask='____/__/__'
@@ -42,7 +55,13 @@ const CustomDateField = (props) => {
 CustomDateField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
+  dataLocation: PropTypes.string,
+  fieldType: PropTypes.oneOf(['FastField', 'Field']),
   formik: PropTypes.object
+};
+
+CustomDateField.defaultProps = {
+  fieldType: 'FastField'
 };
 
 export default connect(CustomDateField);

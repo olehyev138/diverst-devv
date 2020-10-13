@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -28,6 +28,8 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import { DroppableGroupList } from './DroppableGroupList';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 
 const styles = theme => ({
@@ -76,68 +78,78 @@ export function AdminGroupList(props, context) {
   const [order, setOrder] = useState(false);
   const [save, setSave] = useState(false);
 
+  useEffect(() => {
+    setSave(false);
+  }, [defaultParams.page]);
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
-          <Button
-            variant='contained'
-            to={ROUTES.admin.manage.groups.new.path()}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-            className={classes.optionButton}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
-          <Button
-            variant='contained'
-            to={ROUTES.admin.manage.groups.categories.index.path()}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            className={classes.optionButton}
-          >
-            <DiverstFormattedMessage {...messages.allcategories} />
-          </Button>
-          { order ? (
+          <Permission show={permission(props, 'groups_create')}>
             <Button
               variant='contained'
+              to={ROUTES.admin.manage.groups.new.path()}
               color='primary'
               size='large'
-              startIcon={<ReorderIcon />}
+              component={WrappedNavLink}
+              startIcon={<AddIcon />}
               className={classes.optionButton}
-              onClick={() => {
-                setSave(true);
-                setOrder(false);
-              }
-              }
             >
-              <DiverstFormattedMessage {...messages.set_order} />
+              <DiverstFormattedMessage {...messages.new} />
             </Button>
-          ) : (
+          </Permission>
+          <Permission show={permission(props, 'groups_manage')}>
             <Button
               variant='contained'
+              to={ROUTES.admin.manage.groups.categories.index.path()}
               color='primary'
               size='large'
-              startIcon={<ReorderIcon />}
+              component={WrappedNavLink}
               className={classes.optionButton}
-              onClick={() => {
-                setSave(false);
-                setOrder(true);
-              }}
             >
-              <DiverstFormattedMessage {...messages.change_order} />
+              <DiverstFormattedMessage {...messages.allcategories} />
             </Button>
-          )
-          }
+          </Permission>
+          <Permission show={permission(props, 'groups_manage')}>
+            { order ? (
+              <Button
+                variant='contained'
+                color='primary'
+                size='large'
+                startIcon={<ReorderIcon />}
+                className={classes.optionButton}
+                onClick={() => {
+                  setSave(true);
+                  setOrder(false);
+                }
+                }
+              >
+                <DiverstFormattedMessage {...messages.set_order} />
+              </Button>
+            ) : (
+              <Button
+                variant='contained'
+                color='primary'
+                size='large'
+                startIcon={<ReorderIcon />}
+                className={classes.optionButton}
+                onClick={() => {
+                  setSave(false);
+                  setOrder(true);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.change_order} />
+              </Button>
+            )}
+          </Permission>
         </Grid>
       </Grid>
       <Box mb={1} />
       <DiverstLoader isLoading={props.isLoading}>
         <DroppableGroupList
           items={props.groups}
+          positions={props.positions}
           classes={classes}
           draggable={order}
           save={save}
@@ -146,6 +158,7 @@ export function AdminGroupList(props, context) {
           currentPage={defaultParams.page}
           importAction={props.importAction}
           intl={props.intl}
+          rowsPerPage={defaultParams.count}
         />
       </DiverstLoader>
       <DiverstPagination
@@ -168,6 +181,7 @@ AdminGroupList.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   handlePagination: PropTypes.func,
+  positions: PropTypes.array,
   importAction: PropTypes.func,
 };
 

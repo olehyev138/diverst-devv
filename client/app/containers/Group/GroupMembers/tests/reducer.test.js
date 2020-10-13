@@ -12,7 +12,8 @@ describe('membersReducer', () => {
       isCommitting: false,
       memberList: [],
       memberTotal: null,
-      isFetchingMembers: true
+      isFetchingMembers: true,
+      hasChanged: false,
     };
   });
 

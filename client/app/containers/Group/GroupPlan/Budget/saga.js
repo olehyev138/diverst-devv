@@ -53,7 +53,7 @@ export function* createBudgetRequest(action) {
     const payload = { group_id: groupId, budget: rest };
     const response = yield call(api.budgets.create.bind(api.budgets), payload);
 
-    yield put(createBudgetRequestSuccess({}));
+    yield put(createBudgetRequestSuccess());
     yield put(push(path));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.budget_request), options: { variant: 'success' } }));
   } catch (err) {
@@ -93,7 +93,7 @@ export function* deleteBudget(action) {
     const { id } = action.payload;
     yield call(api.budgets.destroy.bind(api.budgets), id);
 
-    yield put(deleteBudgetSuccess({}));
+    yield put(deleteBudgetSuccess());
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteBudgetError(err));

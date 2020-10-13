@@ -11,6 +11,7 @@ RSpec.describe PolicyGroupTemplatePolicy, type: :policy do
   before {
     no_access.policy_group.manage_all = false
     no_access.policy_group.permissions_manage = false
+    no_access.policy_group.users_manage = false
     no_access.policy_group.save!
   }
 

@@ -18,9 +18,9 @@ import api from 'api/api';
 import messages from '../messages';
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
-api.resources.all = jest.fn();
-api.newsFeedLinks.all = jest.fn();
-api.initiatives.all = jest.fn();
+api.resources.archived = jest.fn();
+api.newsFeedLinks.archived = jest.fn();
+api.initiatives.archived = jest.fn();
 api.resources.un_archive = jest.fn();
 api.newsFeedLinks.un_archive = jest.fn();
 api.initiatives.un_archive = jest.fn();
@@ -34,9 +34,6 @@ const archiveNews = {
   page: 0,
   order: 'asc',
   orderBy: 'id',
-  query_scopes: [
-    'archived'
-  ],
   resource: 'posts'
 };
 
@@ -45,9 +42,6 @@ const archiveResources = {
   page: 0,
   order: 'asc',
   orderBy: 'id',
-  query_scopes: [
-    'archived'
-  ],
   resource: 'resources'
 };
 
@@ -56,9 +50,6 @@ const archiveEvents = {
   page: 0,
   order: 'asc',
   orderBy: 'id',
-  query_scopes: [
-    'archived'
-  ],
   resource: 'events'
 };
 
@@ -79,9 +70,9 @@ const unArchiveResource = {
 
 describe('Get archives Saga', () => {
   it('Should return archivesList', async () => {
-    api.newsFeedLinks.all.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
-    api.resources.all.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
-    api.initiatives.all.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
+    api.newsFeedLinks.archived.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
+    api.resources.archived.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
+    api.initiatives.archived.mockImplementation(() => Promise.resolve({ data: { page: 'abc' } }));
     const results = [getArchivesSuccess('abc')];
 
     const newsAction = { payload: archiveNews };
@@ -90,7 +81,7 @@ describe('Get archives Saga', () => {
       newsAction
     );
     const { resource, ...newsCall } = newsAction.payload;
-    expect(api.newsFeedLinks.all).toHaveBeenCalledWith(newsCall);
+    expect(api.newsFeedLinks.archived).toHaveBeenCalledWith(newsCall);
     expect(newsDispatched).toEqual(results);
 
     const resourcesAction = { payload: archiveResources };
@@ -101,7 +92,7 @@ describe('Get archives Saga', () => {
 
     const { resourcesResource, ...resourcesCall } = newsAction.payload;
     delete resourcesCall.resource;
-    expect(api.resources.all).toHaveBeenCalledWith(resourcesCall);
+    expect(api.resources.archived).toHaveBeenCalledWith(resourcesCall);
     expect(resourcesDispatched).toEqual(results);
 
     const eventsAction = { payload: archiveEvents };
@@ -112,15 +103,15 @@ describe('Get archives Saga', () => {
 
     const { eventsResource, ...eventsCall } = newsAction.payload;
     delete eventsCall.resource;
-    expect(api.initiatives.all).toHaveBeenCalledWith(eventsCall);
+    expect(api.initiatives.archived).toHaveBeenCalledWith(eventsCall);
     expect(eventsDispatched).toEqual(results);
   });
 
-  it('Should return error from the API for all resources possible', async () => {
+  it('Should return error from the API for archived resources possible', async () => {
     const response = { response: { data: 'ERROR!' } };
-    api.resources.all.mockImplementation(() => Promise.reject(response));
-    api.newsFeedLinks.all.mockImplementation(() => Promise.reject(response));
-    api.initiatives.all.mockImplementation(() => Promise.reject(response));
+    api.resources.archived.mockImplementation(() => Promise.reject(response));
+    api.newsFeedLinks.archived.mockImplementation(() => Promise.reject(response));
+    api.initiatives.archived.mockImplementation(() => Promise.reject(response));
     const notified = {
       notification: {
         key: 1590092641484,
@@ -139,7 +130,7 @@ describe('Get archives Saga', () => {
       newsAction
     );
     const { resource, ...newsCall } = newsAction.payload;
-    expect(api.newsFeedLinks.all).toHaveBeenCalledWith(newsCall);
+    expect(api.newsFeedLinks.archived).toHaveBeenCalledWith(newsCall);
     expect(newsDispatched).toEqual(result);
 
     const resourcesAction = { payload: archiveResources };
@@ -150,7 +141,7 @@ describe('Get archives Saga', () => {
 
     const { resourcesResource, ...resourcesCall } = newsAction.payload;
     delete resourcesCall.resource;
-    expect(api.resources.all).toHaveBeenCalledWith(resourcesCall);
+    expect(api.resources.archived).toHaveBeenCalledWith(resourcesCall);
     expect(resourcesDispatched).toEqual(result);
 
     const eventsAction = { payload: archiveEvents };
@@ -161,7 +152,7 @@ describe('Get archives Saga', () => {
 
     const { eventsResource, ...eventsCall } = newsAction.payload;
     delete eventsCall.resource;
-    expect(api.initiatives.all).toHaveBeenCalledWith(eventsCall);
+    expect(api.initiatives.archived).toHaveBeenCalledWith(eventsCall);
     expect(eventsDispatched).toEqual(result);
     expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.load);
   });

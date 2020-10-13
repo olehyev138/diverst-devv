@@ -28,6 +28,7 @@ import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 import messages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   title: {
@@ -110,9 +111,9 @@ export function GroupHome({ classes, ...props }) {
     });
     handleClose();
   };
-  const joinBtn = (
-    isJoined
-      ? (
+  const joinBtn = (() => {
+    if (isJoined && permission(props.currentGroup, 'leave?'))
+      return (
         <Button
           variant='contained'
           size='large'
@@ -128,8 +129,9 @@ export function GroupHome({ classes, ...props }) {
         >
           {intl.formatMessage(messages.leave)}
         </Button>
-      )
-      : (
+      );
+    if (!isJoined && permission(props.currentGroup, 'join?'))
+      return (
         <div>
           <Button
             variant='contained'
@@ -174,8 +176,9 @@ export function GroupHome({ classes, ...props }) {
             )
           }
         </div>
-      )
-  );
+      );
+    return <React.Fragment />;
+  })();
 
   const family = (
     <GroupHomeFamily

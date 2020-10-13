@@ -85,6 +85,8 @@ class GroupSerializer < ApplicationRecordSerializer
         :carryover_annual_budget?,
         :reset_annual_budget?,
         :members_destroy?,
+        :join?,
+        :leave?,
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,

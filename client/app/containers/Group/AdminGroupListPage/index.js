@@ -64,17 +64,23 @@ export function AdminGroupListPage(props) {
     setParams(newParams);
   };
 
+  const positions = [];
+  for (let i = 0; i < props.groups.length; i += 1)
+    positions[i] = { id: props.groups[i].id, position: props.groups[i].position };
+
   return (
     <React.Fragment>
       <GroupList
         isLoading={props.isLoading}
         groups={props.groups}
+        positions={positions}
         groupTotal={props.groupTotal}
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
         updateGroupPositionBegin={props.updateGroupPositionBegin}
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
+        permissions={props.permissions}
         intl={intl}
       />
     </React.Fragment>
@@ -91,6 +97,7 @@ AdminGroupListPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
   createCsvFileBegin: PropTypes.func,
+  permissions: PropTypes.object,
   intl: intlShape.isRequired,
 };
 

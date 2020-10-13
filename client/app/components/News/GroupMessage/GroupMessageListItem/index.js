@@ -44,7 +44,10 @@ const styles = theme => ({
   },
   embedTwitter: {
     width: '75%'
-  }
+  },
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 export function GroupMessageListItem(props) {
@@ -156,7 +159,7 @@ export function GroupMessageListItem(props) {
                 >
                   <DiverstFormattedMessage {...messages.edit} />
                 </Button>
-                <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                <Permission show={permission(props.currentGroup, 'news_manage?')}>
                   <Button
                     size='small'
                     color='primary'
@@ -172,6 +175,7 @@ export function GroupMessageListItem(props) {
             <Permission show={!props.readonly && permission(newsItem, 'destroy?')}>
               <Button
                 size='small'
+                className={classes.errorButton}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.group_delete_confirm)))
@@ -181,7 +185,7 @@ export function GroupMessageListItem(props) {
                 <DiverstFormattedMessage {...messages.delete} />
               </Button>
             </Permission>
-            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
+            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'news_manage?')}>
               <Button
                 size='small'
                 onClick={() => {

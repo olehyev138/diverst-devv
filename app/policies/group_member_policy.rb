@@ -28,4 +28,10 @@ class GroupMemberPolicy < GroupBasePolicy
 
     super
   end
+
+  def add_members?
+    create? && has_at_least_permission('users_index')
+  end
+
+  alias_method :remove_members?, :destroy?
 end

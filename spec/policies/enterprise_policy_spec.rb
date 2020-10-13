@@ -24,9 +24,14 @@ RSpec.describe EnterprisePolicy, type: :policy do
         it { is_expected.to permit_action(:update) }
       end
 
+      context 'user has user create permissions' do
+        before { user.policy_group.update users_manage: true }
+        it { is_expected.to permit_actions([:fields]) }
+      end
+
       context 'when sso_manage is true' do
         before { user.policy_group.update sso_manage: true }
-        it { is_expected.to permit_actions([:edit_auth, :edit_fields, :edit_mobile_fields]) }
+        it { is_expected.to permit_actions([:edit_auth, :edit_fields, :edit_mobile_fields, :update_sso]) }
       end
 
       context 'when branding_manage is true' do
