@@ -51,7 +51,6 @@ describe('Test Currency Helpers', () => {
           describe(`With currency ${currency}`, () => {
             values.forEach((value) => {
               const intlString = toCurrencyString(null, value, currency, locale);
-              // const intlString = toCurrencyString(null, 1111111111.11, 'USD', 'en-IN')
               it(`\`number-formatting\` props for ${value} should result in ${intlString}`, () => {
                 const formatProps = getCurrencyProps(null, currency, locale);
                 const formatComponent = <NumberFormat displayType='text' value={value} {...formatProps} />;
