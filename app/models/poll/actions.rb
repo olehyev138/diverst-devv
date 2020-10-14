@@ -19,8 +19,8 @@ module Poll::Actions
 
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then []
-      when 'show' then [:fields, :groups, :segments, :enterprise]
+      when 'index' then [:fields, :poll_responses]
+      when 'show' then [:fields, :poll_responses, :groups, :segments]
       else []
       end
     end
