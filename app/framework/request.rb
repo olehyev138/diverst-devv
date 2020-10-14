@@ -6,7 +6,7 @@ class Request
   attr_accessor :options
 
   def initialize
-    options = {}
+    @options = {}
   end
 
   def self.create_request(user)

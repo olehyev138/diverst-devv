@@ -107,7 +107,7 @@ module BaseSearcher
         raise NameError if policy_scope.parent != policy
 
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, base, params: params, action: current_action).resolve
+        @items = policy_scope.new(current_user, base, params: params, action: current_action.to_sym).resolve
       rescue NameError => e
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
