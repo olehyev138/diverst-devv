@@ -4,7 +4,8 @@
     <%= simple_form_for @enterprise, :url => enable_rewards_path(@enterprise), method: :put do |f| %>
       <%= f.hidden_field :enable_rewards, value: 0 %>
       <%= f.input :enable_rewards, id: 'enable_rewards', label: 'Enable Rewards' %>
-      <%= f.button :submit, "Save" %>
+      <%= f.submit "Save", class: 'btn btn--primary hidden-xs' %>
+      <%= f.submit "Save", class: 'btn btn-primary visible-xs' %>
     <% end %>
   </div>
   <% if @enterprise.enable_rewards? %>
@@ -31,7 +32,8 @@
   <div class="content__main">
     <div class="content__header">
       <h2 class="heading1-styling"><%= c_t(:badge).pluralize %></h2>
-      <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary" %>
+      <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary hidden-xs" %>
+      <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn-primary visible-xs" %>
     </div>
     <div class="card">
       <div class="card__section">
@@ -68,7 +70,8 @@
   <div class="content__main">
     <div class="content__header">
       <h2 class="heading1-styling">Rewards</h2>
-      <%= link_to "New reward", new_reward_path, class: "btn btn--primary" %>
+      <%= link_to "New reward", new_reward_path, class: "btn btn--primary hidden-xs" %>
+      <%= link_to "New reward", new_reward_path, class: "btn btn-primary visible-xs" %>
     </div>
     <div class="card">
       <div class="card__section">

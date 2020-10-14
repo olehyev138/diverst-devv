@@ -3,8 +3,11 @@
 <div class="content__header">
   <h1>Social Media</h1>
 
-  <button type="button" class="btn btn--primary btn--small" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize %></button>
-  <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
+  <button type="button" class="btn btn--primary btn--small hidden-xs" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize %></button>
+  <button type="button" class="btn btn--secondary btn--small hidden-xs" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
+
+  <button type="button" class="btn btn-primary visible-xs" style="margin-right: 8px; margin-bottom: 4px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize %></button>
+  <button type="button" class="btn btn-secondary visible-xs" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
 </div>
 
 <div class="content__main">
