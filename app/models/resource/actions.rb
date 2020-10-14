@@ -9,8 +9,8 @@ module Resource::Actions
 
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then [:file_attachment]
-      when 'show' then [:folder, :file_attachment]
+      when 'index' then [:owner, :file_attachment]
+      when 'show' then [:owner, :folder, :file_attachment]
       else []
       end
     end
