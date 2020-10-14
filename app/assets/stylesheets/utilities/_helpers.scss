@@ -8,6 +8,10 @@
   color: $inverted-primary-hover!important;
 }
 
+.title_bar:focus {
+  color: white;
+}
+
 .accent {
   color: $primary-color;
 }
