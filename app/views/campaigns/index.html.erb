@@ -1,9 +1,10 @@
 <div class="content__header">
   <h1>Innovate Campaigns</h1>
-  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
-  
+  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary hidden-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
+  <%= link_to "New campaign", new_campaign_path, class: "btn btn-primary visible-xs", style: "margin-bottom: 4px;" if CampaignPolicy.new(current_user, Campaign).new? %>
   <div class="flex-row__cell">
-    <%= link_to "View Campaign Stats", campaign_stats_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
+    <%= link_to "View Campaign Stats", campaign_stats_path, class: "btn btn--primary hidden-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
+    <%= link_to "View Campaign Stats", campaign_stats_path, class: "btn btn-primary visible-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
   </div>
 </div>
 

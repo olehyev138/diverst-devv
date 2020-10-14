@@ -1,6 +1,7 @@
 <div class="content__header">
   <h1>Item categories</h1>
-  <%= link_to "New Category", new_expense_category_path, class: "btn btn--primary" if ExpenseCategoryPolicy.new(current_user, ExpenseCategory).new? %>
+  <%= link_to "New Category", new_expense_category_path, class: "btn btn-primary hidden-xs" if ExpenseCategoryPolicy.new(current_user, ExpenseCategory).new? %>
+  <%= link_to "New Category", new_expense_category_path, class: "btn btn-primary visible-xs" if ExpenseCategoryPolicy.new(current_user, ExpenseCategory).new? %>
 </div>
 
 <div class="content__main">

@@ -1,6 +1,7 @@
 <div class="content__header">
   <h1>Surveys</h1>
-  <%= link_to "New Survey", new_poll_path, class: "btn btn--primary" if PollPolicy.new(current_user, Poll).new? %>
+  <%= link_to "New Survey", new_poll_path, class: "btn btn--primary hidden-xs" if PollPolicy.new(current_user, Poll).new? %>
+  <%= link_to "New Survey", new_poll_path, class: "btn btn-primary visible-xs" if PollPolicy.new(current_user, Poll).new? %>
 </div>
 
 <div class="content__main">

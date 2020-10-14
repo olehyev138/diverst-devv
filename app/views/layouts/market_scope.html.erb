@@ -2,11 +2,11 @@
   
    <div class="menu menu--mobile">
     <button
-      class="m-hamburger"
+      class="m-hamburger pull-left"
       aria-label="Menu"
       aria-controls="navigation"
       data-jq-dropdown="#navigation">
-      <span>Menu</span>
+      <%= inline_svg('icons/list.svg', class: "icon card__icon", title: 'hamburger menu') %>
     </button>
     <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
@@ -20,7 +20,7 @@
         <% end %>
         <% if current_user.enterprise.plan_module_enabled %>
           <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
-            <%= active_link_to "Budgeting", close_budgets_groups_path %>
+            <li><%= active_link_to "Budgeting", close_budgets_groups_path %></li>
           <% end %>
         <% end %>
         <% if CampaignPolicy.new(current_user, Campaign).index? %>

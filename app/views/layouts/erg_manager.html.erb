@@ -1,11 +1,11 @@
 <% content_for :secondary_nav do %>
   <div class="menu menu--mobile">
     <button
-      class="m-hamburger"
+      class="m-hamburger pull-left"
       aria-label="Menu"
       aria-controls="navigation"
       data-jq-dropdown="#navigation">
-      <span>Menu</span>
+      <%= inline_svg('icons/list.svg', class: "icon card__icon", title: 'hamburger menu') %>
     </button>
     <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">

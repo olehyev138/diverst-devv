@@ -9,7 +9,7 @@
 
 <div class="content__main">
   <%= search_form_for @q, url: logs_path, builder: SimpleForm::FormBuilder do |f| %>
-    <div class="card">
+    <div class="card hidden-xs">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <% if GroupPolicy.new(current_user, nil).index? %>
@@ -41,6 +41,42 @@
           </div>
           <div class="col sm-1" style="padding-top: 15px;">
             <%= f.button :submit, value: "Filter" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card visible-xs">
+      <div class="card__section card__section--border calendar-filters">
+        <div class="row">
+          <% if GroupPolicy.new(current_user, nil).index? %>
+            <div class="col sm-6">
+              <%= f.input :trackable_id_in,
+                    as: :select,
+                    collection: @groups,
+                    input_html: { class: "select2-field-groups", multiple: true },
+                    label: "Filter by group",
+                    required: false
+              %>
+            </div>
+          <% end %>
+          <div class="col sm-6">
+            <div class="col sm-6">
+              <%= f.input :created_at_gteq,
+                    as: :date_picker,
+                    label: "Logs from",
+                    required: false
+              %>
+            </div>
+            <div class="col sm-6">
+              <%= f.input :created_at_lteq,
+                    as: :date_picker,
+                    label: "Logs to",
+                    required: false
+              %>
+            </div>
+          </div>
+          <div class="col sm-1" style="padding-top: 15px;">
+            <%= f.submit "Filter", class: 'btn btn-primary' %>
           </div>
         </div>
       </div>
