@@ -3,7 +3,7 @@ class UserSerializer < ApplicationRecordSerializer
              :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type,
              :permissions, :available_roles, :name_with_status
 
-  attributes :field_data, :user_role, if: :show_action?
+  attributes_with_permission :field_data, :user_role, if: :show_action?
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
   def serialize_all_fields
