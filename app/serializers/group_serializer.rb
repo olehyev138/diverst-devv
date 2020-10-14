@@ -4,18 +4,17 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes_with_permission :name, :short_description, :private, :logo, :logo_file_name, :logo_data, :logo_content_type, if: :family?
 
   attributes_with_permission :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
-                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
-                             :annual_budget, :annual_budget_leftover, :active,
+                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility, :active,
                              :private, :home_message, :default_mentor_group, :position,
                              :enterprise_id, :event_attendance_visibility, :get_calendar_color, :auto_archive,
-                             :banner, :banner_file_name, :banner_data, :banner_content_type,
                              :unit_of_expiry_age, :expiry_age_for_resources, :expiry_age_for_news, :expiry_age_for_events,
                              :logo, :logo_file_name, :logo_data, :logo_content_type, if: :show?
 
   attributes_with_permission :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
                              :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
 
-  attributes_with_permission :group_category, :group_category_type, :news_feed, if: :show_action?
+  attributes_with_permission :group_category, :group_category_type, :news_feed,
+                             :banner, :banner_file_name, :banner_data, :banner_content_type, if: :show_action?
 
   attributes_with_permission :children, if: :with_children?
   attributes_with_permission :parent, if: :with_parent?
