@@ -131,4 +131,8 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   def permissions
     policies.reduce({}) { |sum, m| sum[m] = (policy.send(m)); sum }
   end
+
+  def show_action?
+    ['show', 'index'].include? scope[:action]
+  end
 end

@@ -238,7 +238,7 @@ module User::Actions
             :avatar_blob,
             # :enterprise,
             # :user_groups,
-            # :user_role,
+            :user_role,
             # :news_links,
             field_data: [
                 :field,
