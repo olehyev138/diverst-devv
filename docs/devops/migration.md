@@ -144,6 +144,12 @@ _Notes & Known Issues_:
 
 _TODO_
 
+#### Frontend
+
+While the app is still in beta, we need a frontend bucket prefixed with `beta-<env>`, ie `beta-kp-staging.diverst.com`
+
+In the S3 console of the new account, manually create a new bucket. Choose the frontend bucket created by terraform (ie, `kp-staging.diverst.com`) to copy settings from. You may need to be in the old S3 console for this option. Create bucket and then deploy to it as normal.
+
 #### DNS
 
 Finally, run the DNS step in the environment initialization document to complete the process.
