@@ -34,7 +34,7 @@ module Group::Actions
       "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
     end
 
-    def base_left_joins
+    def base_left_joins(diverst_request)
       :children
     end
 
@@ -44,7 +44,7 @@ module Group::Actions
 
     # List of all attributes to preload.
     # Used when serializing a group itself
-    def base_preloads
+    def base_preloads(diverst_request)
       base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
     end
 

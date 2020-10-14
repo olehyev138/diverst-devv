@@ -6,11 +6,11 @@ module UsersSegment::Actions
   end
 
   module ClassMethods
-    def base_includes
+    def base_includes(diverst_request)
       [ :user, :segment ]
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [ user: User.base_preloads, segment: Segment.base_preloads ]
     end
   end

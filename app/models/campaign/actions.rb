@@ -4,7 +4,7 @@ module Campaign::Actions
   end
 
   module ClassMethods
-    def base_preloads
+    def base_preloads(diverst_request)
       [ :questions, :image_attachment, :banner_attachment, :groups, groups: Group.base_preloads ]
     end
   end

@@ -7,7 +7,7 @@ module Resource::Actions
       ['not_archived', 'archived']
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [:folder, :file_attachment]
     end
   end

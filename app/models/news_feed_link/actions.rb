@@ -4,7 +4,7 @@ module NewsFeedLink::Actions
   end
 
   module ClassMethods
-    def base_left_joins
+    def base_left_joins(diverst_request)
       [:group_message, :news_link, :social_link]
     end
 
@@ -12,7 +12,7 @@ module NewsFeedLink::Actions
       ['approved', 'pending', 'combined_news_links', 'not_archived', 'archived', 'pinned', 'not_pinned']
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [
           :group_message,
           :news_link,

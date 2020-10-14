@@ -4,7 +4,7 @@ module MentoringSession::Actions
   end
 
   module ClassMethods
-    def base_preloads
+    def base_preloads(diverst_request)
       [:creator, :users, :mentoring_interests, creator: User.mentor_includes, users: User.mentor_lite_includes]
     end
 

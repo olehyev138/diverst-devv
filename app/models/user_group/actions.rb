@@ -122,11 +122,11 @@ module UserGroup::Actions
       ].map { |scope| scope.to_s }
     end
 
-    def base_includes
+    def base_includes(diverst_request)
       [ :user, :group ]
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [ :group, :user, group: Group.base_attributes_preloads, user: User.base_attribute_preloads ]
     end
   end

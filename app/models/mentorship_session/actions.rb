@@ -20,7 +20,7 @@ module MentorshipSession::Actions
       ['user', 'mentoring_session']
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [:mentoring_session, :user, mentoring_session: MentoringSession.base_preloads, user: User.mentor_lite_includes]
     end
 

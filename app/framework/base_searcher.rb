@@ -20,7 +20,7 @@ module BaseSearcher
       []
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       []
     end
 
@@ -87,8 +87,8 @@ module BaseSearcher
       where_not = {}
 
       # get the base includes/joins and base query
-      includes = get_includes(params)
-      preloads = get_preloads(params)
+      includes = get_includes(diverst_request, params)
+      preloads = get_preloads(diverst_request, params)
       joins = get_joins
       left_joins = get_left_joins
       query = get_base_query
@@ -157,9 +157,9 @@ module BaseSearcher
       self.base_query
     end
 
-    def get_includes(params)
+    def get_includes(diverst_request, params)
       base_includes = if self.respond_to? :base_includes
-        self.base_includes
+        self.base_includes(diverst_request)
       else
         []
       end
@@ -168,11 +168,11 @@ module BaseSearcher
       base_includes | param_includes
     end
 
-    def get_preloads(params)
+    def get_preloads(diverst_request, params)
       if params[:preload].present? && (self.respond_to? "base_preloads_#{params[:preload]}")
         self.send("base_preloads_#{params[:preload]}")
       elsif self.respond_to? :base_preloads
-        self.base_preloads
+        self.base_preloads(diverst_request)
       else
         []
       end

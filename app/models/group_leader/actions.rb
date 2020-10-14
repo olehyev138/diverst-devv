@@ -10,11 +10,11 @@ module GroupLeader::Actions
       'LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
     end
 
-    def base_includes
+    def base_includes(diverst_request)
       [ :user, :group ]
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [ :group, :user, group: Group.base_attributes_preloads, user: User.base_attribute_preloads ]
     end
   end

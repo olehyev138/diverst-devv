@@ -228,7 +228,7 @@ module User::Actions
       [:avatar]
     end
 
-    def base_preloads
+    def base_preloads(diverst_request)
       [
           :field_data,
           :enterprise,
