@@ -5,7 +5,7 @@ class PollSerializer < ApplicationRecordSerializer
 
   def fields
     object.fields.map do |field|
-      FieldSerializer.new(field, **instance_options)
+      FieldSerializer.new(field, **instance_options).as_json
     end
   end
 

@@ -5,7 +5,7 @@ class NewsLinkSerializer < ApplicationRecordSerializer
 
   def comments
     object.comments.map do |comment|
-      NewsLinkCommentSerializer.new(comment, **instance_options)
+      NewsLinkCommentSerializer.new(comment, **instance_options).as_json
     end
   end
 
@@ -15,7 +15,7 @@ class NewsLinkSerializer < ApplicationRecordSerializer
 
   def photos
     object.photos.map do |photo|
-      NewsLinkPhotoSerializer.new(photo, scope: scope, root: false)
+      NewsLinkPhotoSerializer.new(photo, scope: scope, root: false).as_json
     end
   end
 

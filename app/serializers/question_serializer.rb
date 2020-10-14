@@ -5,7 +5,7 @@ class QuestionSerializer < ApplicationRecordSerializer
 
   def answers
     object.answers.map do |ans|
-      AnswerSerializer.new(ans, **instance_options)
+      AnswerSerializer.new(ans, **instance_options).as_json
     end
   end
 

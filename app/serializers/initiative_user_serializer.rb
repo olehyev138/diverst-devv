@@ -1,6 +1,5 @@
 class InitiativeUserSerializer < ApplicationRecordSerializer
-  attributes :user
-  attributes_with_permission :initiative, if: :show_action?
+  attributes :user, :initiative
 
   def serialize_all_fields
     true

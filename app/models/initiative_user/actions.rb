@@ -35,11 +35,7 @@ module InitiativeUser::Actions
     end
 
     def base_includes(diverst_request)
-      case diverst_request.action
-      when 'index' then [:user]
-      when 'show' then [:user, :initiative]
-      else []
-      end
+      [:user, :initiative]
     end
   end
 end

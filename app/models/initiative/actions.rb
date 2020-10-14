@@ -35,19 +35,20 @@ module Initiative::Actions
 
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then [:owner, :group]
+      when 'index' then [:owner, :group, :picture_attachment]
       when 'show' then
         preloads =  [
             :pillar,
             :owner,
             :outcome,
             :group,
-            :picture_attachment,
+            :participating_group,
             :qr_code_attachment,
+            :initiative_users,
         ]
-        preloads.append(:budget, :expenses) if diverst_request.options[:with_budget]
+        preloads.append(:budget_item, :budget, :expenses) if diverst_request.options[:with_budget]
         preloads.append(:comments) if diverst_request.options[:with_comments]
-        preloads.append(:initiative_users) if diverst_request.policy.attendees?
+        # preloads.append(:initiative_users) if diverst_request.policy.attendees?
         preloads
       else []
       end
