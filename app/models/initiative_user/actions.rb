@@ -33,5 +33,13 @@ module InitiativeUser::Actions
       file_name = parts.map { |part| part.split(/[ .]/).join('_') }.join('_')
       ActiveStorage::Filename.new(file_name).sanitized
     end
+
+    def base_includes(diverst_request)
+      case diverst_request.action
+      when 'index' then [:user]
+      when 'show' then [:user, :initiative]
+      else []
+      end
+    end
   end
 end
