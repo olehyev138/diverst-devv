@@ -5,7 +5,7 @@ module PollResponse::Actions
 
   module ClassMethods
     def base_preloads(diverst_request)
-      [:poll, :user, :field_data, field_data: FieldData.base_preloads]
+      [:poll, :user, :field_data, field_data: FieldData.base_preloads(diverst_request)]
     end
   end
 end

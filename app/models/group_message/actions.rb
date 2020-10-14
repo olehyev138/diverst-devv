@@ -5,7 +5,7 @@ module GroupMessage::Actions
 
   module ClassMethods
     def base_preloads(diverst_request)
-      [ :owner, :group, :comments, comments: GroupMessageComment.base_preloads ]
+      [ :owner, :group, :comments, comments: GroupMessageComment.base_preloads(diverst_request) ]
     end
   end
 end

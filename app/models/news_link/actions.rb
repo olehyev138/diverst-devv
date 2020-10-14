@@ -11,7 +11,7 @@ module NewsLink::Actions
           :comments,
           :photos,
           :picture_attachment,
-          comments: GroupMessageComment.base_preloads
+          comments: GroupMessageComment.base_preloads(diverst_request)
       ]
     end
   end

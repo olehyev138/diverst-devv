@@ -89,8 +89,8 @@ module BaseSearcher
       # get the base includes/joins and base query
       includes = get_includes(diverst_request, params)
       preloads = get_preloads(diverst_request, params)
-      joins = get_joins
-      left_joins = get_left_joins
+      joins = get_joins(diverst_request)
+      left_joins = get_left_joins(diverst_request)
       query = get_base_query
 
       add_custom_args(where, where_not, params, includes, joins)
@@ -178,16 +178,16 @@ module BaseSearcher
       end
     end
 
-    def get_joins
+    def get_joins(diverst_request)
       return [] unless self.respond_to? :base_joins
 
-      self.base_joins
+      self.base_joins(diverst_request)
     end
 
-    def get_left_joins
+    def get_left_joins(diverst_request)
       return [] unless self.respond_to? :base_left_joins
 
-      self.base_left_joins
+      self.base_left_joins(diverst_request)
     end
 
     def query_arguments

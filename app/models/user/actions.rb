@@ -89,7 +89,7 @@ module User::Actions
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
-                  .preload(NewsFeedLink.base_preloads)
+                  .preload(NewsFeedLink.base_preloads(diverst_request))
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
 
@@ -239,7 +239,7 @@ module User::Actions
           :avatar_blob,
           field_data: [
                   :field,
-                  { field: Field.base_preloads }
+                  { field: Field.base_preloads(diverst_request) }
               ],
           enterprise: [
                   :theme,

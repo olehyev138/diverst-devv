@@ -11,7 +11,7 @@ module UsersSegment::Actions
     end
 
     def base_preloads(diverst_request)
-      [ user: User.base_preloads, segment: Segment.base_preloads ]
+      [ user: User.base_preloads(diverst_request), segment: Segment.base_preloads(diverst_request) ]
     end
   end
 end

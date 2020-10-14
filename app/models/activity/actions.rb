@@ -73,7 +73,7 @@ module Activity::Actions
     end
 
     def base_preloads(diverst_request)
-      [ :owner, owner: User.base_preloads ]
+      [ :owner, owner: User.base_preloads(diverst_request) ]
     end
   end
 end

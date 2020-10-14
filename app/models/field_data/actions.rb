@@ -5,7 +5,7 @@ module FieldData::Actions
 
   module ClassMethods
     def base_preloads(diverst_request)
-      [:field, field: Field.base_preloads]
+      [:field, field: Field.base_preloads(diverst_request)]
     end
   end
 end

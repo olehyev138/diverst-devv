@@ -21,7 +21,7 @@ module MentorshipSession::Actions
     end
 
     def base_preloads(diverst_request)
-      [:mentoring_session, :user, mentoring_session: MentoringSession.base_preloads, user: User.mentor_lite_includes]
+      [:mentoring_session, :user, mentoring_session: MentoringSession.base_preloads(diverst_request), user: User.mentor_lite_includes]
     end
 
     def valid_scopes
