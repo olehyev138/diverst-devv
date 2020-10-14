@@ -73,7 +73,7 @@ module Group::Actions
     def base_attributes_preloads(diverst_request)
       preloads = [ :logo_attachment ]
       preloads.append(:news_feed, :banner_attachment) if diverst_request.action == 'show'
-      preloads.append(:annual_budgets) if diverst_request.options[:with_budget]
+      preloads.append(:annual_budgets) if diverst_request.options[:budget]
       preloads
     end
 
