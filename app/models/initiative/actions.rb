@@ -33,19 +33,25 @@ module Initiative::Actions
       ]
     end
 
-    def base_preloads(diverst_request)
-      [
-          :pillar,
-          :owner,
-          :budget,
-          :outcome,
-          :group,
-          :expenses,
-          :picture_attachment,
-          :qr_code_attachment,
-          :initiative_users,
-          :comments
-      ]
+    def base_preloads(diverst_request) ##
+      case diverst_request.action
+      when 'index' then [:owner, :group]
+      when 'show' then
+        preloads =  [
+            :pillar,
+            :owner,
+            :outcome,
+            :group,
+            :picture_attachment,
+            :qr_code_attachment,
+        ]
+        preloads.append(:budget, :expenses) if diverst_request.options[:with_budget]
+        preloads.append(:comments) if diverst_request.options[:with_comments]
+        preloads.append(:initiative_users) if diverst_request.policy.attendees?
+        preloads
+      else []
+      end
+
     end
 
     def generate_qr_code(diverst_request, params)

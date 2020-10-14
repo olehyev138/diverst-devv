@@ -27,7 +27,7 @@ module Budget::Actions
   end
 
   module ClassMethods
-    def base_includes(diverst_request)
+    def base_includes(diverst_request) ##
       [ :budget_items ]
     end
   end

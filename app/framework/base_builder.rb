@@ -45,7 +45,7 @@ module BaseBuilder
 
       # get the item
       item = self
-      item = item.preload(base_preloads) if respond_to? 'base_preloads'
+      item = item.preload(base_preloads(diverst_request)) if respond_to? 'base_preloads'
       item = item.find(params[:id])
 
       # check if the user can read it

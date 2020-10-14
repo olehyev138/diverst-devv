@@ -3,6 +3,11 @@ class Request
   attr_accessor :action
   attr_accessor :user
   attr_accessor :policy_group
+  attr_accessor :options
+
+  def initialize
+    options = {}
+  end
 
   def self.create_request(user)
     request = Request.new

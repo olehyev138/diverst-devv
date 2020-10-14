@@ -4,7 +4,7 @@ module ClockworkDatabaseEvent::Actions
   end
 
   module ClassMethods
-    def base_preloads(diverst_request)
+    def base_preloads(diverst_request) ##
       [:frequency_period]
     end
   end

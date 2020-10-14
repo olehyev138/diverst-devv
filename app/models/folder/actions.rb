@@ -27,8 +27,12 @@ module Folder::Actions
       "LOWER(#{self.table_name}.name) LIKE :search"
     end
 
-    def base_preloads(diverst_request)
-      [:parent]
+    def base_preloads(diverst_request) ##
+      case diverst_request.action
+      when 'index' then []
+      when 'show' then [:parent]
+      else []
+      end
     end
   end
 end

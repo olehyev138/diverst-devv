@@ -8,8 +8,12 @@ module Field::Actions
       "LOWER(#{self.table_name}.title) LIKE :search"
     end
 
-    def base_preloads(diverst_request)
-      [:field_definer]
+    def base_preloads(diverst_request) ##
+      case diverst_request.action
+      when 'index' then []
+      when 'show' then [:field_definer]
+      else []
+      end
     end
   end
 end

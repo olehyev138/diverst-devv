@@ -7,8 +7,12 @@ module Resource::Actions
       ['not_archived', 'archived']
     end
 
-    def base_preloads(diverst_request)
-      [:folder, :file_attachment]
+    def base_preloads(diverst_request) ##
+      case diverst_request.action
+      when 'index' then [:file_attachment]
+      when 'show' then [:folder, :file_attachment]
+      else []
+      end
     end
   end
 end

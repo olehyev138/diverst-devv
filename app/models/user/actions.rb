@@ -228,38 +228,35 @@ module User::Actions
       [:avatar]
     end
 
-    def base_preloads(diverst_request)
-      [
-          :field_data,
-          :enterprise,
-          :user_groups,
-          :user_role,
-          :news_links,
-          :avatar_attachment,
-          :avatar_blob,
-          field_data: [
-                  :field,
-                  { field: Field.base_preloads(diverst_request) }
-              ],
-          enterprise: [
-                  :theme,
-                  :mobile_fields
-              ]
-      ]
+    def base_preloads(diverst_request) ##
+      case diverst_request.action
+      when 'index' then [:avatar_attachment, :avatar_blob]
+      when 'show'
+        [
+            :field_data,
+            :avatar_attachment,
+            :avatar_blob,
+            # :enterprise,
+            # :user_groups,
+            # :user_role,
+            # :news_links,
+            field_data: [
+                :field,
+                { field: Field.base_preloads(diverst_request) }
+            ],
+            # enterprise: [
+            #     :theme,
+            #     :mobile_fields
+            # ]
+        ]
+      else []
+      end
     end
 
     def base_attribute_preloads
       [
           :user_role,
-          :enterprise,
-          :news_links,
           :avatar_attachment,
-          {
-              enterprise: [
-                  :theme,
-                  :mobile_fields
-              ]
-          }
       ]
     end
 

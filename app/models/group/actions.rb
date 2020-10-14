@@ -34,9 +34,9 @@ module Group::Actions
       "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
     end
 
-    def base_left_joins(diverst_request)
-      :children
-    end
+    # def base_left_joins(diverst_request) ##
+    #   :children
+    # end
 
     def valid_scopes
       ['all_children', 'possible_children', 'all_parents', 'no_children', 'is_private', 'replace_with_children', 'except_id', 'joined_groups']
@@ -44,26 +44,37 @@ module Group::Actions
 
     # List of all attributes to preload.
     # Used when serializing a group itself
-    def base_preloads(diverst_request)
-      base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
+    def base_preloads(diverst_request) ##
+      preloads = base_preload_no_recursion(diverst_request)
+      associations = {}
+      associations[:children] = base_preload_no_recursion(diverst_request) if diverst_request.options[:with_children]
+      associations[:parent] = base_preload_no_recursion(diverst_request) if diverst_request.options[:with_parent]
+      preloads.append(associations)
+      preloads
     end
 
     # List of all attributes to preload when dealing with annual budgets.
     # Used when getting the list of budgets for all groups
-    def base_preloads_budget
+    def base_preloads_budget ##
       [ :annual_budgets ]
     end
 
     # List of non-recursive attributes to preload.
     # Used as the preload fields for a groups children/parent as to prevent infinite recursion of base_preloads
-    def base_preload_no_recursion
-      base_attributes_preloads | [ :user_groups, :group_leaders, :children, :parent, :enterprise ]
+    def base_preload_no_recursion(diverst_request)
+      preloads = base_attributes_preloads(diverst_request)
+      preloads.append(:children) if diverst_request.options[:with_children]
+      preloads.append(:parent) if diverst_request.options[:with_parent]
+      preloads
     end
 
     # List of basic attributes to preload.
     # Used when preloading groups field for other serializers (Like UserGroupSerializer)
-    def base_attributes_preloads
-      [ :news_feed, :annual_budgets, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
+    def base_attributes_preloads(diverst_request)
+      preloads = [ :logo_attachment ]
+      preloads.append(:news_feed, :banner_attachment) if diverst_request.action == 'show'
+      preloads.append(:annual_budgets) if diverst_request.options[:with_budget]
+      preloads
     end
 
     def update_child_categories(diverst_request, params)
