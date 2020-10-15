@@ -14,7 +14,7 @@ export const currencyOptions = Object.freeze([
 const currencyLocaleProps = {};
 
 // Used to get the Select Field format from a currency code
-export const getCurrency = code => currencyOptions.find(curr => curr.value === code) || { value: code, label: code };
+export const getCurrency = code => currencyOptions.find(curr => curr.value === code) || { value: code || 'USD', label: code || '$ (USD)' };
 
 // Used to calculate the keys for the Locale Props
 const currPropsKey = (locale, currency) => `${locale}::${currency}`;
@@ -67,6 +67,9 @@ export const getCurrencyProps = (intl, currency, localeOverride = null) => {
 };
 
 // simple wrapper for `intl`'s getNumberFormat method used to format currency values
-export const toCurrencyString = (intl, amount, currency = 'USD', localeOverride = null) => intl
-  ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
-  : new Intl.NumberFormat(localeOverride, { style: 'currency', currency }).format(amount);
+export const toCurrencyString = (intl, amount, currency_or_null = null, localeOverride = null) => {
+  const currency = currency_or_null || 'USD';
+  return intl
+    ? intl.formatters.getNumberFormat(localeOverride || intl.locale, { style: 'currency', currency }).format(amount)
+    : new Intl.NumberFormat(localeOverride, { style: 'currency', currency }).format(amount);
+};
