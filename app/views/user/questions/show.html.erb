@@ -16,11 +16,11 @@ video#recorded--video--mobile {
 }
 </style>
 <div class="content__header">
-  <h1>
+  <h2>
     <%= link_to "My Campaigns", user_user_campaigns_path %> /
     <%= link_to @question.campaign.title, user_user_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
-  </h1>
+  </h2>
 </div>
 
 <div class="content__main">
@@ -58,10 +58,10 @@ video#recorded--video--mobile {
           <div class="answer">
             <div class="answer__metadata">
               <span class="highlight"><%= answer.author.name_with_status %></span>
-              <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
+              <span><%= time_ago_in_words(answer.created_at) %> ago</span>
             </div>
             <div class="answer__content">
-              <h3><%= answer.title %></h3>
+              <h4 class="h2-styling"><%= answer.title %></h4>
               <p><%= answer.content if answer.content.present? %></p>
               <section aria-label='<%= answer.video_description %>'><%= video_tag(answer.video_upload.expiring_url(3600), controls: true, size: '200x200', alt: 'hello World') if answer.video_upload.present? %></section>                
               <p><%= link_to answer.supporting_document_file_name, answer.supporting_document.expiring_url(3600) unless answer.supporting_document.blank? %></p>
@@ -83,8 +83,7 @@ video#recorded--video--mobile {
               <% if @question.solved_at.nil? %>
                 <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>
                   <%= f.input :content,
-                        label: false,
-                        placeholder: "Enter a comment...",
+                        label: 'Enter a comment',
                         input_html: { rows: 2, class: "comment__input submit-on-return" } %>
                   <%= f.button :submit, value: "Submit" %>
                 <% end %>
@@ -103,13 +102,13 @@ video#recorded--video--mobile {
 
       <div class="row">
         <div class="col-xs-4">
-          <h5>Text</h5>
+          <h3 class="h5-styling">Text</h3>
           <img src="https://s3.amazonaws.com/diverst-demo/text.svg" alt="" style="cursor: pointer;" id="text-submit-picture" width="50px" height="50px">
         </div>
         
 
         <div class="col-xs-4">
-          <h5>Video</h5>
+          <h3 class="h5-styling">Video</h3>
           <img src="https://s3.amazonaws.com/diverst-demo/camera.svg" alt="" id="video-contribution" style="cursor: pointer;" width="50px" height="50px">
           <div id="video-upload-options" style="display:none">
             <span class="hidden-xs">
@@ -138,10 +137,13 @@ video#recorded--video--mobile {
             <br>
             <div class="col-sm-12" id="answer_content_wrapper" style="display: none;">
               <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
-                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] } %>
+                <%= f.label :idea_category, 'Idea Category', for: 'idea_category_id_answer_content_wrapper', style: 'margin-bottom: 5.3px; font-size: 14px;' %>
+                <%= f.association :idea_category, label: false, input_html: { id: 'idea_category_id_answer_content_wrapper' }, collection: @categories.map { |category| [category.name, category.id] } %>
                 <%= f.input :title, label: 'Name/Title of idea' %>
-                <%= f.input :content, label: "<h3>Write out your idea</h3>".html_safe, placeholder: "Type an answer here..." %>
-                <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
+                <%= f.label :content, 'Write out your idea', for: 'content_id_answer_content_wrapper', style: 'margin-bottom: 5.3px; font-size: 14px;' %>
+                <%= f.input :content, label: false, input_html: { id: 'content_id_answer_content_wrapper' }, placeholder: "Type an answer here..." %>
+                <%= f.label :contributing_group, 'Contributing Group', for: 'contributing_group_id_answer_content_wrapper', style: 'margin-bottom: 5.3px; font-size: 14px;' %>
+                <%= f.association :contributing_group, label: false, input_html: { id: 'contributing_group_id_answer_content_wrapper' }, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
                 <%= f.button :submit, value: "Submit" %>
               <% end %>
             </div>
@@ -151,24 +153,25 @@ video#recorded--video--mobile {
               <div class="row">
                 <div class="col-sm-6">
                   <div class="field select optional answer_idea_category">
-                    <label class="field__label select optional" for="answer_idea_category_id">Idea category</label>
                     <div class="field__input-wrapper">
                       <span class="field__add-on field__add-on--right">
                       <span class="icon icon--chevron-down"></span></span>
-                      <select class="field__input field__input--right-add-on select optional " name="answer[idea_category_id]" id="answer_video_category_id"><option value=""></option>
+                      <label class="field__label select optional" for="answer_video_category_id">Idea category</label>
+                      <select class="field__input field__input--right-add-on select optional " name="answer[idea_category_id]" id="answer_video_category_id">
                           <option value="1">Product</option>
                           <option value="2">Technical</option>
                           <option value="3">Business Model</option>
-                          <option value="4">Process</option></select>
+                          <option value="4">Process</option>
+                      </select>
                     </div>
                   </div>
 
-                  <label class="field__label text optional" for="answer_content"><h3>Idea name/title</h3></label>
+                  <label class="field__label text optional" for="answer_title_video"><h3>Idea name/title</h3></label>
                   <div class="field__input-wrapper">
                     <input class="field__input string optional " 
                     type="text" name="answer[title]" id="answer_title_video">
                   </div>
-                  <label class="field__label text optional" for="answer_content"><h3>Attach Supporting Document</h3></label>
+                  <label class="field__label text optional" for="answer_supporting_document_video"><h3>Attach Supporting Document</h3></label>
                   <div class="field__input-wrapper">
                     <input class="field__input attachment_preview optional " type="file" name="answer[supporting_document]" 
                     id="answer_supporting_document_video">
@@ -193,7 +196,8 @@ video#recorded--video--mobile {
             
             <div class="col-sm-6" id="answer_supporting_video" style="display: none;">
               <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
-                <%= f.association :idea_category, collection: @categories.map { |category| [category.name, category.id] }, input_html: { id: 'answer_idea_category_id_video_upload' } %>
+                <%= f.label :idea_category, 'Idea Category', for: 'answer_idea_category_id_video_upload', style: 'margin-bottom: 5.3px; font-size: 14px;' %>
+                <%= f.association :idea_category, label: false, input_html: { id: 'answer_idea_category_id_video_upload' }, collection: @categories.map { |category| [category.name, category.id] } %>
                 <%= f.input :title, label: 'Name/Title of idea', input_html: { id: 'answer_title_video_upload' } %>
                 <%= f.input :video_upload, as: :attachment_preview %>
                 <%= f.input :video_upload_alt_text_desc, label: 'video description' %>
