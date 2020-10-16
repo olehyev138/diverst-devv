@@ -73,18 +73,34 @@
             </div>
           <% end %>
           <div class="col xs-6">
+          <% if @group.pending_members_enabled? %>
+            <%= f.input :user_groups_updated_at_gteq,
+                  as: :date_picker,
+                  label: "Users joined group from",
+                  required: false
+            %>
+          <% else %>
             <%= f.input :user_groups_created_at_gteq,
                   as: :date_picker,
                   label: "Users joined group from",
                   required: false
             %>
+          <% end %>
           </div>
           <div class="col xs-6">
+          <% if @group.pending_members_enabled? %> 
+            <%= f.input :user_groups_updated_at_lteq,
+                  as: :date_picker,
+                  label: "Users joined group to",
+                  required: false
+            %> 
+          <% else %>
             <%= f.input :user_groups_created_at_lteq,
                   as: :date_picker,
                   label: "Users joined group to",
                   required: false
             %>
+          <% end %>  
           </div>
           <div class="col xs-2" style="padding-top: 15px;">
             <%= f.submit value: "Filter", class: 'btn btn--primary hidden-xs' %>

@@ -99,11 +99,11 @@ class UserGroup < BaseClass
     end
   end
 
-  def type_of_group_membership
+  def date_joined
     if self.created_at == self.updated_at
-      'direct'
+      self.created_at
     else
-      'indirect'
+      self.updated_at
     end
   end
 
