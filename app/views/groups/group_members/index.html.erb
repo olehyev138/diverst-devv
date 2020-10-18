@@ -7,11 +7,11 @@
       <%= active_link_to 'Export Group Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"ExportGroupMembers", "aria-control": "navigation", "data-jq-dropdown": "#export_group_members", class: "btn btn--secondary hidden-xs", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
           <nav id="export_group_members" class="jq-dropdown jq-dropdown-tip">
             <ul class="jq-dropdown-menu">
-              <li><%= link_to "Export All Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "all_members") %></li>
-              <li><%= link_to "Export Active Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "active_members") %></li>
-              <li><%= link_to "Export Inactive Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "inactive_members") %></li>
+              <li><a href="#" id="all_members">Export All Members</a></li>
+              <li><a href="#" id="active_members">Export Active Members</a></li>
+              <li><a href="#" id="inactive_members">Export Inactive Members</a></li>
               <% if @group.pending_users.enabled? %>
-                <li><%= link_to "Export Pending Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "pending_members") %></li>
+                <li><a href="#" id="pending_members">Export Pending Members</a></li>
               <% end %>
               
               <% if @group.is_parent_group?%>
@@ -23,7 +23,7 @@
               <% end %>
 
               <% if @group.is_sub_group? %>
-                <li><%= link_to "Export Members of #{c_t(:parent)}",  export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
+                <li><a href="#" id="parent_group_members">Export Members of <%= c_t(:parent) %></a></li>
               <% end %>
             </ul>
           </nav>
@@ -140,6 +140,33 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  $(document).on('ready page:load', function() {
+    var pending_members_enabled = '<%= @group.pending_members_enabled? %>';
+    if(pending_members_enabled){
+      var filter_to = document.getElementById('q_user_groups_updated_at_lteq').value;
+      var filter_from = document.getElementById('q_user_groups_updated_at_gteq').value;
+    }else{
+      var filter_to = document.getElementById('q_user_groups_created_at_lteq').value;
+      var filter_from = document.getElementById('q_user_groups_created_at_gteq').value;
+    }
+
+    function export_group_members(event) {
+      $.ajax({
+        method: 'get',
+        url: '<%= export_group_members_list_csv_group_group_members_path(@group) %>',
+        data: {
+          export_csv_params: this.id,
+          filter_from: event.data.filter_from,
+          filter_to: event.data.filter_to,
+        }
+      })
+    }
+    
+    $('#all_members, #active_members, #inactive_members, #pending_members, #parent_group_members').on('click', { filter_from: filter_from, filter_to: filter_to }, export_group_members);
+  });
+</script>
 
 <%= render 'groups/group_members/sub_groups_list_modal' %>
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
