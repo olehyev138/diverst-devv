@@ -4,6 +4,7 @@ class GroupMessageComment < ApplicationRecord
   belongs_to :author, class_name: 'User', counter_cache: :message_comments_count
   belongs_to :message, class_name: 'GroupMessage'
   has_one :news_feed_link, through: :message
+  has_one :group, through: :news_feed_link
 
   has_many :user_reward_actions
 
@@ -14,8 +15,4 @@ class GroupMessageComment < ApplicationRecord
 
   scope :unapproved, -> { where(approved: false) }
   scope :approved, -> { where(approved: true) }
-
-  def group
-    message.group
-  end
 end

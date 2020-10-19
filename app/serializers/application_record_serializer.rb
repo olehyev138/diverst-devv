@@ -21,8 +21,6 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
-  ActiveRecordQueryTrace.enabled = false
-
   def self.inherited(subclass)
     super
     class << subclass
@@ -81,11 +79,11 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     super(object, options)
     if @scope.nil?
       def self.scope
-        if Rails.env.test?
-          raise SerializerScopeNotDefinedException
-        else
+        if Rails.env.production?
           Rollbar.error(SerializerScopeNotDefinedException.new)
           nil
+        else
+          raise SerializerScopeNotDefinedException
         end
       end
     end

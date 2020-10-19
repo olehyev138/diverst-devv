@@ -5,7 +5,7 @@ class GroupMessageSerializer < ApplicationRecordSerializer
 
   def comments
     object.comments.map do |comment|
-      GroupMessageCommentSerializer.new(comment).as_json
+      GroupMessageCommentSerializer.new(comment, **instance_options).as_json
     end
   end
 

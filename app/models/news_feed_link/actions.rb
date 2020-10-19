@@ -20,9 +20,10 @@ module NewsFeedLink::Actions
           :news_feed,
           :views,
           :likes,
+          :group,
           group_message: GroupMessage.base_preloads(diverst_request),
           news_link: NewsLink.base_preloads(diverst_request),
-          social_link: SocialLink.base_preloads(diverst_request)
+          social_link: SocialLink.base_preloads(diverst_request),
       ]
     end
 

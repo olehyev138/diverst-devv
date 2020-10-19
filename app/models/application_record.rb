@@ -12,6 +12,8 @@ class ApplicationRecord < ActiveRecord::Base
 
   scope :except_id, -> (id) { where.not(id: id.presence) }
 
+  ActiveRecordQueryTrace.enabled = false
+
   def time_since_creation
     time_ago_in_words created_at
   end
