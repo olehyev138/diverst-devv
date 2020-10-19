@@ -35,6 +35,7 @@ export function GroupManageLinks(props) {
               component={WrappedNavLink}
               to={ROUTES.group.manage.settings.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.settings} />}
+              value='settings'
             />
           ) }
           { permission(currentGroup, 'leaders_view?') && (
@@ -42,6 +43,7 @@ export function GroupManageLinks(props) {
               component={WrappedNavLink}
               to={ROUTES.group.manage.leaders.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.leaders} />}
+              value='leaders'
             />
           ) }
 
@@ -50,6 +52,7 @@ export function GroupManageLinks(props) {
               component={WrappedNavLink}
               to={ROUTES.group.manage.sponsors.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.sponsors} />}
+              value='sponsors'
             />
           ) }
         </ResponsiveTabs>
