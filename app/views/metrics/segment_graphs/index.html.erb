@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1><%= c_t(:segment).capitalize.pluralize %></h1>
+  <h2 class="h1-styling"><%= c_t(:segment).capitalize.pluralize %></h2>
 </div>
 
 <div class="content__main">
@@ -9,7 +9,7 @@
         <div class="col sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Total <%= c_t(:segment).capitalize.pluralize %></strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @data[:segment_count] %></b></p></div>
+            <div class="panel-data"><h3 class="h1-styling"><b class="accent"><%= @data[:segment_count] %></b></h3></div>
           </div>
         </div>
       </div>
@@ -19,7 +19,7 @@
     <div class="card__section">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4><%= c_t(:segment).capitalize %> Population (All Users)</h4>
+          <h2 class="h4-styling"><%= c_t(:segment).capitalize %> Population (All Users)</h2>
           <div class="card__action">
             <%= link_to "Export CSV", segment_population_metrics_segments_path(format: :csv), class: "hidden-xs" %>
           </div>

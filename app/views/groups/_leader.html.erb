@@ -1,10 +1,10 @@
 <div class="card__section">
-  <h4 style="overflow: auto;">
+  <h2 class="h4-styling" style="overflow: auto;">
     <span class="inline-block fleft">
       <%= position %>
     </span>
     <%= link_to image_tag('linkedin.png'), leader.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if leader.linkedin_profile_url %>
-  </h4>
+  </h2>
   <div style="overflow: auto; clear: both;">
     <%= image_tag(leader.avatar.expiring_url(3600), class: "avatar avatar--round info", id: leader.id, style: "float: left; margin-right: 1em; cursor: pointer;") %>
     <div style="float: left;">

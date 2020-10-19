@@ -1,8 +1,8 @@
 <div class="content__header">
-  <h1>
+  <h2 class="h1-styling">
     <%= inline_svg('icons/brand.svg', size: '25px*25px', class: 'play__back') if @event.virtual? && @event.past? %><%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
-  </h1>
+  </h2>
   <% unless @event.archived? %>
     <div class="flex-row hidden-xs">
       <div class="flex-row__cell">
@@ -71,24 +71,24 @@
             </div>
           <% end %>
 
-          <h4>Date &amp; time</h4>
+          <h3 class="h4-styling">Date &amp; time</h3>
           <p>
             <%= @event.time_string %>
             <%= "(#{current_user.default_time_zone} timezone)" %>
           </p>
-          <h4>Description</h4>
+          <h3 class="h4-styling">Description</h3>
           <p><%= sanitize @event.description %></p>
-          <h4>Location</h4>
+          <h3 class="h4-styling">Location</h3>
           <p><%= @event.location %></p>
-          <h4>Co-hosted/Participating Groups</h4>
+          <h3 class="h4-styling">Co-hosted/Participating Groups</h3>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col-sm-4 col-xs-12">
           <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
-            <h4>Attendees (<span id="attendees_count"><%= @event.attendees.size %>
+            <h3 class="h4-styling">Attendees (<span id="attendees_count"><%= @event.attendees.size %>
               <% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)
               <% if @event.full? %> <b>Full</b>
-              <% end %></h4>
+              <% end %></h3>
             <p>
               <% @event.attendees.limit(10).each do |attendee| %>
                 <%= attendee.name_with_status %><br>
@@ -119,7 +119,7 @@
 
 <% if current_user.is_group_leader_of?(@group) %>
 <div class="content__header" style="margin-top: 30px;">
-  <h1><%= pluralize(@all_comments.count, "Comment") %></h1>
+  <h2 class="h1-styling"><%= pluralize(@all_comments.count, "Comment") %></h2>
 </div>
 
   <% if @all_comments.any? %>

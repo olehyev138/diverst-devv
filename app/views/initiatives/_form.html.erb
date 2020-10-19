@@ -2,7 +2,7 @@
   <%= simple_form_for [@group, @initiative], html: { class: "disable-enter-submit" } do |f| %>
     
     <% if current_user.enterprise.virtual_events_enabled? %>
-      <div class="pull-right" id="virtualToggle" >
+      <div class="pull-right" id="virtualToggle">
         <%= f.hidden_field :virtual, value: 0 %>
         <%= f.input :virtual, label: 'enable virtual event' %>
       </div>
