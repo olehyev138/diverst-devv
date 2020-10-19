@@ -5,7 +5,7 @@ module GroupCategory::Actions
 
   module ClassMethods
     def base_includes(diverst_request) ##
-      [ :group ]
+      [ :group, :group_category ]
     end
   end
 end
