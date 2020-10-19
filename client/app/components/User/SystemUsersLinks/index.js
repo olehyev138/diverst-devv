@@ -26,7 +26,7 @@ export function SystemUsersLinks(props) {
     <React.Fragment>
       <Paper>
         <ResponsiveTabs
-          value={currentTab}
+          value={currentTab || 'users'}
           indicatorColor='primary'
           textColor='primary'
         >
