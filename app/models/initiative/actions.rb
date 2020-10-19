@@ -37,7 +37,7 @@ module Initiative::Actions
       case diverst_request.action
       when 'index' then [:owner, :group, :picture_attachment]
       when 'show' then
-        preloads =  [
+        preloads = [
             :pillar,
             :owner,
             :outcome,
@@ -52,7 +52,6 @@ module Initiative::Actions
         preloads
       else []
       end
-
     end
 
     def generate_qr_code(diverst_request, params)

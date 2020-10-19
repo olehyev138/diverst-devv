@@ -244,10 +244,10 @@ module User::Actions
                 :field,
                 { field: Field.base_preloads(diverst_request) }
             ],
-            # enterprise: [
-            #     :theme,
-            #     :mobile_fields
-            # ]
+          # enterprise: [
+          #     :theme,
+          #     :mobile_fields
+          # ]
         ]
       else []
       end
