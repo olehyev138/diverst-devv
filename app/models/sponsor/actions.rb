@@ -7,6 +7,10 @@ module Sponsor::Actions
       ['group_sponsor', 'enterprise_sponsor']
     end
 
+    def base_preloads(diverst_action)
+      [:sponsor_media_attachment]
+    end
+
     def base_attributes_preloads
       [ :sponsor_media_attachment ]
     end
