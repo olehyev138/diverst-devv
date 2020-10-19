@@ -28,7 +28,7 @@ module Budget::Actions
 
   module ClassMethods
     def base_includes(diverst_request) ##
-      [ :budget_items ]
+      [ :approver, :requester, :budget_items ]
     end
   end
 end
