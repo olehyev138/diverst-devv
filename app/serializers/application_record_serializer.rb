@@ -21,6 +21,8 @@
 class ApplicationRecordSerializer < ActiveModel::Serializer
   include BaseSerializer
 
+  ActiveRecordQueryTrace.enabled = false
+
   def self.inherited(subclass)
     super
     class << subclass
