@@ -5,7 +5,7 @@ module GroupMessageComment::Actions
 
   module ClassMethods
     def base_preloads(diverst_request) ##
-      [ :author, :group ]
+      [ :author, :group, author: :avatar_attachment ]
     end
   end
 end
