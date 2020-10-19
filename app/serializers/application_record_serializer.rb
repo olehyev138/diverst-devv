@@ -133,6 +133,6 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   def show_action?
-    scope[:action] == 'show'
+    ['show', 'prototype'].include?(scope[:action])
   end
 end

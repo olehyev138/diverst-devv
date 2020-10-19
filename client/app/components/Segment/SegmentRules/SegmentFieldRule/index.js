@@ -141,7 +141,7 @@ SegmentFieldRule.propTypes = {
   rule: PropTypes.object,
   getFieldsBegin: PropTypes.func,
   selectFields: PropTypes.array,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   formik: PropTypes.object,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,

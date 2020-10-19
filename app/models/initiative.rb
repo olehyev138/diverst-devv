@@ -52,10 +52,18 @@ class Initiative < ApplicationRecord
   has_many :attendees, through: :initiative_users, source: :user
 
   belongs_to :owner_group, class_name: 'Group'
-  belongs_to :pillar
+  belongs_to :pillar, inverse_of: :initiatives
   has_one :outcome, through: :pillar
   has_one :group, through: :outcome
   has_one :enterprise, through: :group
+
+  def group
+    if association(:group).loaded? || !association(:pillar).loaded?
+      super
+    else
+      pillar.group
+    end
+  end
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }

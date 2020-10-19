@@ -8,7 +8,7 @@ module Answer::Actions
       [ :author ]
     end
 
-    def base_preload(diverst_request)
+    def base_preloads(diverst_request)
       if diverst_request.action == 'show'
         [ :question, :likes, :comments, comments: [ :author ] ]
       else

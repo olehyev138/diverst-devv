@@ -42,7 +42,7 @@ module Initiative::Actions
             :owner,
             :outcome,
             :group,
-            :participating_group,
+            :participating_groups,
             :qr_code_attachment,
             :initiative_users,
         ]

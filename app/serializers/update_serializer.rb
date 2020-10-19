@@ -10,7 +10,9 @@ class UpdateSerializer < ApplicationRecordSerializer
   end
 
   def field_data
-    data = if object.field_data.loaded
+    data = if object.new_record?
+             object.field_data
+           elsif object.field_data.loaded
              object.field_data.sort(&:field_id)
            else
              object.field_data.order(:field_id)

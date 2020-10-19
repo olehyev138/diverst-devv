@@ -100,7 +100,7 @@ SegmentPage.propTypes = {
   getFieldsBegin: PropTypes.func,
   groups: PropTypes.array,
   selectFields: PropTypes.array,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
   segmentUnmount: PropTypes.func,
