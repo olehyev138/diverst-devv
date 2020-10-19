@@ -78,7 +78,7 @@ module User::Actions
     end
   end
 
-  def posts(params)
+  def posts(diverst_request, params)
     count = (params[:count] || 5).to_i
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :desc
@@ -116,7 +116,7 @@ module User::Actions
     Page.new(paged, total)
   end
 
-  def downloads(params)
+  def downloads(diverst_request, params)
     count = (params[:count] || 10).to_i
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :desc
