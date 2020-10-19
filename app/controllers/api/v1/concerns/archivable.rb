@@ -46,7 +46,7 @@ module Api::V1::Concerns::Archivable
   def archived
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy, base: klass.archived, action: :archived)
+    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy, base: klass.archived)
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise

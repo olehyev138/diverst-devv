@@ -22,7 +22,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(id: record&.id).exists?
+    index?
   end
 
   def create?
@@ -44,7 +44,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    scope.where(id: record&.id).exists?
+    update?
   end
 
   def manage_all?
