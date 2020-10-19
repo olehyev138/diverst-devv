@@ -6,7 +6,7 @@ class Api::V1::UserController < DiverstController
             action: nil,
         }
     }
-    
+
     render json: {
         user_id: current_user.id,
         enterprise: AuthenticatedEnterpriseSerializer.new(current_user.enterprise, **instance_options).as_json,
