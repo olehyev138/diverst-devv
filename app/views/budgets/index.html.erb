@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1><%= @group.name%> budgets</h1>
+  <h2 class="h1-styling"><%= @group.name%> budgets</h2>
   <div class="flex-row">
     <div class="flex-row__cell">
       <%= link_to "Export CSV", export_csv_group_budgets_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV"  if GroupBudgetPolicy.new(current_user, [@group]).create? %>
@@ -27,7 +27,7 @@
             <th>Requested at</th>
             <th># of events</th>
             <th>Description</th>
-            <th></th>
+            <th>Action</th>
           </thead>
           <tbody>
             <% @budgets.each do |budget| %>

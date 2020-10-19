@@ -1,7 +1,7 @@
 // Colors
 
 .title_bar {
-  color: $inverted-primary;
+  color: white;
 }
 
 .title_bar:hover{
@@ -159,4 +159,8 @@
 
 .margin-top-0 {
   margin-top: 0 !important;
+}
+
+.nav-text {
+  color: white;
 }

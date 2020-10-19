@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Departments</h1>
+  <h2 class="h1-styling">Departments</h2>
   <%= link_to "New department", new_department_path, class: "btn btn--primary" if DepartmentPolicy.new(current_user, Department).new? %>
 </div>
 

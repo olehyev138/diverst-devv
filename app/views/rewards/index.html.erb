@@ -1,6 +1,6 @@
 <div class="content__main">
   <div class="content__header">
-    <h2 class="heading1-styling">Actions</h2>
+    <h2 class="h1-styling">Actions</h2>
     <%= simple_form_for @enterprise, :url => enable_rewards_path(@enterprise), method: :put do |f| %>
       <%= f.hidden_field :enable_rewards, value: 0 %>
       <%= f.input :enable_rewards, id: 'enable_rewards', label: 'Enable Rewards' %>
@@ -10,7 +10,7 @@
   </div>
   <% if @enterprise.enable_rewards? %>
     <div class="content__main">
-    You need to specify how many <strong>points</strong> users will earn for each action
+    You need to specify how many points users will earn for each action
 
     <%= simple_form_for @enterprise, :url => reward_actions_path, method: :patch do |f| %>
       <div class="card">
@@ -31,7 +31,7 @@
 <% if @enterprise.enable_rewards? %>
   <div class="content__main">
     <div class="content__header">
-      <h2 class="heading1-styling"><%= c_t(:badge).pluralize %></h2>
+      <h2 class="h1-styling"><%= c_t(:badge).pluralize %></h2>
       <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary hidden-xs" %>
       <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn-primary visible-xs" %>
     </div>
