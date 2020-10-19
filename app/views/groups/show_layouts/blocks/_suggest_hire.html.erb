@@ -1,7 +1,8 @@
-<button type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#suggestHireToGroup">
-  Suggest a Hire
-</button>
-
+<% if current_user.enterprise.suggest_hire_enabled? %>
+  <button type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#suggestHireToGroup">
+    Suggest a Hire
+  </button>
+<% end %>
 <div class="modal fade" id="suggestHireToGroup" role="dialog" aria-labelledby="suggestHireToGroup" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
