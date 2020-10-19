@@ -1132,7 +1132,7 @@ RSpec.describe Group, type: :model do
     end
 
     it 'calls resolve_auto_archive_state as after_update callback' do
-      expect((group)._update_callbacks.select {|callback| callback.filter == :resolve_auto_archive_state}).to_not be nil
+      expect((group)._update_callbacks.select { |callback| callback.filter == :resolve_auto_archive_state }).to_not be nil
     end
   end
 
