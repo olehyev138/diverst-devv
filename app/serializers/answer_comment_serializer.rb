@@ -1,5 +1,5 @@
 class AnswerCommentSerializer < ApplicationRecordSerializer
-  attributes :author, :answer
+  attributes :author
 
   def serialize_all_fields
     true

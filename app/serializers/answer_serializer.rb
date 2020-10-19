@@ -1,7 +1,13 @@
 class AnswerSerializer < ApplicationRecordSerializer
-  attributes :question, :content, :total_likes, :author
+  attributes :author
+  attributes_with_permission :question, :total_likes,
+                             :comments, if: :show_action?
 
-  has_many :comments
+  def comments
+    object.comments.map do |comment|
+      AnswerCommentSerializer.new(comment, **instance_options).as_json
+    end
+  end
 
   def serialize_all_fields
     true
