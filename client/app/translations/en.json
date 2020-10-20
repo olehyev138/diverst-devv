@@ -1157,6 +1157,7 @@
   "diverst.containers.User.list.members": "Members",
   "diverst.containers.User.profile.fields": "Hidden info",
   "diverst.containers.User.profile.fields.form.save": "Save",
+  "diverst.containers.User.profile.form.admin_fields": "Admin Settings",
   "diverst.containers.User.profile.privacy": "Only D&I Management can see hidden fields",
   "diverst.containers.User.scope.all": "All",
   "diverst.containers.User.scope.inactive": "Inactive Users",
