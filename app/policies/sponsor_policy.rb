@@ -23,11 +23,12 @@ class SponsorPolicy < ApplicationPolicy
   end
 
   def create?
-    case params[:sponsorable_type]
+    create_params = params[:sponsor]
+    case create_params[:sponsorable_type]
     when 'Group'
-      GroupPolicy.new(user, Group.find(params[:sponsorable_id]), params).update?
+      GroupPolicy.new(user, Group.find(create_params[:sponsorable_id]), params).update?
     when 'Enterprise'
-      EnterprisePolicy.new(user, Enterprise.find(params[:sponsorable_id]), params).update_branding?
+      EnterprisePolicy.new(user, Enterprise.find(create_params[:sponsorable_id]), params).update_branding?
     else
       false
     end

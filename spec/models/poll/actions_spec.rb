@@ -5,7 +5,7 @@ RSpec.describe Poll::Actions, type: :model do
     let(:base_preloads) {
       [
           :fields,
-          :poll_responses,
+          :responses,
           :groups,
           :segments,
       ]
