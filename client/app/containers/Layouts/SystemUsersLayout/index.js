@@ -77,7 +77,7 @@ const SystemUsersLayout = (props) => {
         redirectAction(ROUTES.user.home.path());
       }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage]);
 
