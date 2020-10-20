@@ -125,6 +125,13 @@ RSpec.configure do |config|
     Faker::UniqueGenerator.clear
   end
 
+  # TODO Create tests for each type of action
+  # Treat all serialization/base_preloads to assume the show action
+  config.before(:each) do
+    allow_any_instance_of(Request).to receive(:action).and_return('show')
+    allow_any_instance_of(ApplicationRecordSerializer).to receive(:show_action?).and_return(true)
+  end
+
   config.after(:all) do |x|
     check_for_leftovers
   rescue
