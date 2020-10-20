@@ -27,7 +27,6 @@ const GlobalSettingsPages = Object.freeze([
   'custom_texts',
   'sso',
   'email',
-  'policy_templates',
 ]);
 
 const GlobalSettingsLayout = (props) => {
@@ -38,7 +37,22 @@ const GlobalSettingsLayout = (props) => {
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
   const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage || GlobalSettingsPages[0]);
+
+  const defaultTab = (() => {
+    if (permission(props, 'enterprise_manage'))
+      return GlobalSettingsPages[0];
+    if (permission(props, 'fields_manage'))
+      return GlobalSettingsPages[1];
+    if (permission(props, 'custom_text_manage'))
+      return GlobalSettingsPages[2];
+    if (permission(props, 'sso_authentication'))
+      return GlobalSettingsPages[3];
+    if (permission(props, 'emails_manage'))
+      return GlobalSettingsPages[4];
+    return null;
+  });
+
+  const [tab, setTab] = useState(currentPage || defaultTab);
 
   useEffect(() => {
     if (isRoot)

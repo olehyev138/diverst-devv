@@ -14,7 +14,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 
 import { permission } from 'utils/permissionsHelpers';
-import WithPermission from 'components/Compositions/WithPermission';
 
 const styles = theme => ({});
 
@@ -46,7 +45,6 @@ export function GroupManageLinks(props) {
               value='leaders'
             />
           ) }
-
           { permission(currentGroup, 'update?') && (
             <Tab
               component={WrappedNavLink}
