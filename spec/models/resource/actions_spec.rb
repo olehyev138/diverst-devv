@@ -20,6 +20,6 @@ RSpec.describe Resource::Actions, type: :model do
       ]
     }
 
-    it { expect(Resource.base_preloads).to eq base_preloads }
+    it { expect(Resource.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

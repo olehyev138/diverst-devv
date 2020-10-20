@@ -4,7 +4,7 @@ RSpec.describe Enterprise::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) { [:theme] }
 
-    it { expect(Enterprise.base_preloads).to eq base_preloads }
+    it { expect(Enterprise.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   # Todo

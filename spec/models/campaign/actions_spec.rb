@@ -47,6 +47,6 @@ RSpec.describe Campaign::Actions, type: :model do
       ]
     }
 
-    it { expect(Campaign.base_preloads).to eq base_preloads }
+    it { expect(Campaign.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

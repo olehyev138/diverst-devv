@@ -73,7 +73,7 @@ RSpec.describe User::Actions, type: :model do
           :avatar_blob,
           field_data: [
               :field,
-              field: Field.base_preloads
+              field: Field.base_preloads(Request.create_request(nil))
           ],
           enterprise: [
               :theme,
@@ -82,7 +82,7 @@ RSpec.describe User::Actions, type: :model do
       ]
     }
 
-    it { expect(User.base_preloads).to eq base_preloads }
+    it { expect(User.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_attribute_preloads' do

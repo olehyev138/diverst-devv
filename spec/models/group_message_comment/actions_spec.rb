@@ -6,6 +6,6 @@ RSpec.describe GroupMessageComment::Actions, type: :model do
       [:author]
     }
 
-    it { expect(GroupMessageComment.base_preloads).to eq base_preloads }
+    it { expect(GroupMessageComment.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

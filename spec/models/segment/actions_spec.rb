@@ -14,6 +14,6 @@ RSpec.describe Segment::Actions, type: :model do
       ]
     }
 
-    it { expect(Segment.base_preloads).to eq base_preloads }
+    it { expect(Segment.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

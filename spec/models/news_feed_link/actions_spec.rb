@@ -56,7 +56,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
       ]
     end
 
-    it { expect(NewsFeedLink.base_preloads).to eq base_preloads }
+    it { expect(NewsFeedLink.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_left_joins' do

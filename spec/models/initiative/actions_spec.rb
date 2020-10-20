@@ -17,7 +17,7 @@ RSpec.describe Initiative::Actions, type: :model do
       ]
     }
 
-    it { expect(Initiative.base_preloads).to eq base_preloads }
+    it { expect(Initiative.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'valid_scopes' do

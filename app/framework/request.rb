@@ -12,7 +12,7 @@ class Request
   def self.create_request(user)
     request = Request.new
     request.user = user
-    request.policy_group = user.policy_group
+    request.policy_group = user&.policy_group
     request
   end
 end

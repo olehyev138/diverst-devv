@@ -28,7 +28,7 @@ RSpec.describe UserGroup::Actions, type: :model do
       ]
     }
 
-    it { expect(UserGroup.base_preloads).to eq base_preloads }
+    it { expect(UserGroup.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_includes' do
@@ -39,7 +39,7 @@ RSpec.describe UserGroup::Actions, type: :model do
       ]
     }
 
-    it { expect(UserGroup.base_includes).to eq base_includes }
+    it { expect(UserGroup.base_includes(Request.create_request(nil))).to eq base_includes }
   end
 
   describe 'valid_scopes' do

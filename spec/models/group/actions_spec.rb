@@ -62,7 +62,7 @@ RSpec.describe Group::Actions, type: :model do
       ]
     }
 
-    it { expect(Group.base_preloads).to eq base_preloads }
+    it { expect(Group.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_preloads_budget' do

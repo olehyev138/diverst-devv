@@ -30,7 +30,7 @@ RSpec.describe UsersSegment::Actions, type: :model do
       ]
     }
 
-    it { expect(UsersSegment.base_preloads).to eq base_preloads }
+    it { expect(UsersSegment.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_includes' do
@@ -41,6 +41,6 @@ RSpec.describe UsersSegment::Actions, type: :model do
       ]
     }
 
-    it { expect(UsersSegment.base_includes).to eq base_includes }
+    it { expect(UsersSegment.base_includes(Request.create_request(nil))).to eq base_includes }
   end
 end

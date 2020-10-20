@@ -21,7 +21,7 @@ RSpec.describe Update::Actions, type: :model do
       ]
     }
 
-    it { expect(Update.base_preloads).to eq base_preloads }
+    it { expect(Update.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'lesser_preloads' do
