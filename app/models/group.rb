@@ -266,7 +266,7 @@ class Group < ApplicationRecord
 
   def self.load_sums
     select(
-        'groups.*,'\
+        '`groups`.*,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
         ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')

@@ -15,6 +15,7 @@ RSpec.describe Resource::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) {
       [
+          :owner,
           :folder,
           :file_attachment
       ]

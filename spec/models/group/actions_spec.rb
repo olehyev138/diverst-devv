@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Group::Actions, type: :model do
+  let(:request) do
+    r = Request.create_request(nil)
+    r.options = { with_children: true, with_parent: true }
+    r
+  end
+
   describe 'base_query' do
     it { expect(Group.base_query).to eq 'LOWER(groups.name) LIKE :search OR LOWER(children_groups.name) LIKE :search' }
   end
@@ -25,44 +31,31 @@ RSpec.describe Group::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) {
       [
-          :news_feed,
-          :annual_budgets,
           :logo_attachment,
-          :banner_attachment,
-          { enterprise: [ :theme ] },
           :user_groups,
           :group_leaders,
+          :news_feed,
+          :banner_attachment,
           :children,
           :parent,
-          :enterprise,
           children: [
-              :news_feed,
-              :annual_budgets,
               :logo_attachment,
-              :banner_attachment,
-              { enterprise: [:theme] },
               :user_groups,
               :group_leaders,
-              :children,
-              :parent,
-              :enterprise
+              :news_feed,
+              :banner_attachment,
           ],
           parent: [
-              :news_feed,
-              :annual_budgets,
               :logo_attachment,
-              :banner_attachment,
-              { enterprise: [:theme] },
               :user_groups,
               :group_leaders,
-              :children,
-              :parent,
-              :enterprise
+              :news_feed,
+              :banner_attachment,
           ]
       ]
     }
 
-    it { expect(Group.base_preloads(Request.create_request(nil))).to eq base_preloads }
+    it { expect(Group.base_preloads(request)).to eq base_preloads }
   end
 
   describe 'base_preloads_budget' do
@@ -74,34 +67,31 @@ RSpec.describe Group::Actions, type: :model do
   describe 'base_preload_no_recursion' do
     let(:base_preload_no_recursion) {
       [
-          :news_feed,
-          :annual_budgets,
           :logo_attachment,
-          :banner_attachment,
-          { enterprise: [ :theme ] },
           :user_groups,
           :group_leaders,
+          :news_feed,
+          :banner_attachment,
           :children,
-          :parent,
-          :enterprise,
+          :parent
       ]
     }
 
-    it { expect(Group.base_preload_no_recursion).to eq base_preload_no_recursion }
+    it { expect(Group.base_preload_no_recursion(request)).to eq base_preload_no_recursion }
   end
 
   describe 'base_attributes_preloads' do
     let(:base_attributes_preloads) {
       [
-          :news_feed,
-          :annual_budgets,
           :logo_attachment,
-          :banner_attachment,
-          enterprise: [ :theme ]
+          :user_groups,
+          :group_leaders,
+          :news_feed,
+          :banner_attachment
       ]
     }
 
-    it { expect(Group.base_attributes_preloads).to eq base_attributes_preloads }
+    it { expect(Group.base_attributes_preloads(request)).to eq base_attributes_preloads }
   end
 
   describe 'update_child_categories' do

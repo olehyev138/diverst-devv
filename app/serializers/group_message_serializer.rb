@@ -1,7 +1,7 @@
 class GroupMessageSerializer < ApplicationRecordSerializer
   attributes :news_feed_link_id, :owner
 
-  attributes_with_permission :comments, if: :show_action?
+  attributes_with_permission :comments, :comments_count, if: :show_action?
 
   def comments
     object.comments.map do |comment|

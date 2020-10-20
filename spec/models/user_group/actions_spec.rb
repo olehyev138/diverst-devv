@@ -6,25 +6,6 @@ RSpec.describe UserGroup::Actions, type: :model do
       [
           :group,
           :user,
-          group: [
-              :news_feed,
-              :annual_budgets,
-              :logo_attachment,
-              :banner_attachment,
-              enterprise: [
-                  :theme
-              ]
-          ],
-          user: [
-              :user_role,
-              :enterprise,
-              :news_links,
-              :avatar_attachment,
-              enterprise: [
-                  :theme,
-                  :mobile_fields
-              ]
-          ]
       ]
     }
 

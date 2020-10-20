@@ -14,7 +14,7 @@ RSpec.describe NewsLinkSerializer, type: :serializer do
     expect(serializer.serializable_hash[:photos].empty?).to_not be(true)
 
     photo_serializer = serializer.serializable_hash[:photos][0]
-    expect(photo_serializer.serializable_hash[:file_location]).to_not be nil
+    expect(photo_serializer[:file_location]).to_not be nil
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
 end

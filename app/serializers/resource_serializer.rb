@@ -2,7 +2,8 @@ class ResourceSerializer < ApplicationRecordSerializer
   attributes :owner, :file_location, :permissions,
              :file, :file_file_name, :file_file_path
 
-  attributes_with_permission :folder, if: :show_action?
+  attributes_with_permission :group, :folder, :enterprise,
+                             :initiative, :mentoring_session, if: :show_action?
 
   def policies
     super + [:archive?]

@@ -6,14 +6,11 @@ RSpec.describe Initiative::Actions, type: :model do
       [
           :pillar,
           :owner,
-          :budget,
           :outcome,
           :group,
-          :expenses,
-          :picture_attachment,
+          :participating_groups,
           :qr_code_attachment,
-          :initiative_users,
-          :comments
+          :initiative_users
       ]
     }
 

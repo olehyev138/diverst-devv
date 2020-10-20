@@ -14,7 +14,7 @@ class GroupSerializer < ApplicationRecordSerializer
                              :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
 
   attributes_with_permission :group_category, :group_category_type, :news_feed,
-                             :banner, :banner_file_name, :banner_data, :banner_content_type, if: :show_action?
+                             :banner, :banner_file_name, :banner_data, :banner_content_type, if: :not_budgets?
 
   attributes_with_permission :parent, if: :with_parent?
 
@@ -28,6 +28,10 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def budgets?
     instance_options[:budgets]
+  end
+
+  def not_budgets?
+    !budgets? && show_action?
   end
 
   def family?

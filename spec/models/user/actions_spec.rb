@@ -65,20 +65,13 @@ RSpec.describe User::Actions, type: :model do
     let(:base_preloads) {
       [
           :field_data,
-          :enterprise,
-          :user_groups,
-          :user_role,
-          :news_links,
           :avatar_attachment,
           :avatar_blob,
+          :user_role,
           field_data: [
               :field,
               field: Field.base_preloads(Request.create_request(nil))
           ],
-          enterprise: [
-              :theme,
-              :mobile_fields
-          ]
       ]
     }
 
@@ -89,13 +82,7 @@ RSpec.describe User::Actions, type: :model do
     let(:base_attribute_preloads) {
       [
           :user_role,
-          :enterprise,
-          :news_links,
           :avatar_attachment,
-          enterprise: [
-              :theme,
-              :mobile_fields
-          ]
       ]
     }
 
@@ -316,14 +303,14 @@ RSpec.describe User::Actions, type: :model do
       NewsLink.first.news_feed_link.update(approved: false)
     }
 
-    it { expect(user.posts({}).total).to eq 4 }
+    it { expect(user.posts(Request.create_request(user), {}).total).to eq 4 }
   end
 
   describe 'downloads' do
     it 'gets download files' do
       user = create(:user)
       csv_files = create_list(:csv_file_download, 3, user: user)
-      downloads = Request.create_request(user).user.downloads({})
+      downloads = user.downloads(Request.create_request(user), {})
       expect(downloads.total).to eq csv_files.count
     end
   end

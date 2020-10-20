@@ -171,7 +171,7 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
         context 'while not in testing env' do
           let(:serializer_instance) { serializer_class.new(model.new) }
           it 'returns nil' do
-            allow(Rails.env).to receive(:test?).and_return(false)
+            allow(Rails.env).to receive(:production?).and_return(true)
             expect(serializer_instance.scope).to be(nil)
           end
         end

@@ -11,7 +11,9 @@ RSpec.describe NewsLink::Actions, type: :model do
           :picture_attachment,
           {
               comments: [
-                  :author
+                  :author,
+                  :group,
+                  author: :avatar_attachment
               ]
           }
       ]
