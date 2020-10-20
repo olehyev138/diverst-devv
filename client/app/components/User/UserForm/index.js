@@ -12,7 +12,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper, Tooltip, Grid
+  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper, Tooltip, Grid, Typography
 } from '@material-ui/core';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
@@ -27,6 +27,8 @@ import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -135,24 +137,45 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               onChange={value => setFieldValue('time_zone', value)}
               onBlur={() => setFieldTouched('time_zone', true)}
             />
-            <FormControl>
-              <FormControlLabel
-                labelPlacement='end'
-                label={<DiverstFormattedMessage {...messages.active} />}
-                control={(
-                  <Field
-                    component={Switch}
-                    onChange={handleChange}
-                    color='primary'
-                    id='active'
-                    name='active'
-                    margin='normal'
-                    checked={values.active}
-                    value={values.active}
-                  />
-                )}
+            <Permission show={permission(props, 'users_manage')}>
+              <Box mb={2} />
+              <Divider />
+              <Box mb={2} />
+              <Typography variant='h6'>
+                <DiverstFormattedMessage {...messages.admin_fields} />
+              </Typography>
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='end'
+                  label={<DiverstFormattedMessage {...messages.active} />}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={handleChange}
+                      color='primary'
+                      id='active'
+                      name='active'
+                      margin='normal'
+                      checked={values.active}
+                      value={values.active}
+                    />
+                  )}
+                />
+              </FormControl>
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='user_role_id'
+                name='user_role_id'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.user_role} />}
+                value={values.user_role_id}
+                options={props?.user?.available_roles || []}
+                onChange={value => setFieldValue('user_role_id', value)}
+                onBlur={() => setFieldTouched('user_role_id', true)}
               />
-            </FormControl>
+            </Permission>
           </CardContent>
           <Divider />
           <CardActions>
