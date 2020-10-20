@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -170,6 +170,11 @@ export function AdminLinks(props) {
   const handleSystemClick = () => {
     setState({ ...state, system: { open: !state.system.open } });
   };
+
+  useEffect(() => {
+    if (!props?.enterprise?.plan_module_enabled)
+      setState({ ...state, plan: { open: false } });
+  }, [props?.enterprise?.plan_module_enabled]);
 
   const drawer = classes => (
     <React.Fragment>

@@ -106,7 +106,7 @@ UserImportPage.propTypes = {
   currentEnterprise: PropTypes.object.isRequired,
   getFieldsBegin: PropTypes.func.isRequired,
   createCsvFileBegin: PropTypes.func.isRequired,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   isFetchingFields: PropTypes.bool,
   fieldUnmount: PropTypes.func.isRequired,
   getSampleImportBegin: PropTypes.func.isRequired,

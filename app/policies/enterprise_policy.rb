@@ -20,7 +20,7 @@ class EnterprisePolicy < ApplicationPolicy
   end
 
   def fields?
-    edit_fields?
+    edit_fields? || UserPolicy.new(user, User).create?
   end
 
   def edit_auth?
