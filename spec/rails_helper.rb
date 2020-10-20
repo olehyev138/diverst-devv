@@ -127,8 +127,11 @@ RSpec.configure do |config|
 
   # TODO Create tests for each type of action
   # Treat all serialization/base_preloads to assume the show action
-  config.before(:each, type: [:serializer, :model]) do
+  config.before(:each, type: :model) do
     allow_any_instance_of(Request).to receive(:action).and_return('show')
+  end
+
+  config.before(:each, type: :serializer) do
     allow_any_instance_of(ApplicationRecordSerializer).to receive(:show_action?).and_return(true)
   end
 
