@@ -98,6 +98,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
             state: { id: group.id }
           }}
           component={WrappedNavLink}
+          disabled={draggable}
         >
           <DiverstFormattedMessage {...messages.edit} />
         </Button>
@@ -111,6 +112,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
             if (confirm(intl.formatMessage(messages.delete_confirm)))
               deleteGroupBegin(group.id);
           }}
+          disabled={draggable}
         >
           <DiverstFormattedMessage {...messages.delete} />
         </Button>
@@ -122,6 +124,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
             onClick={() => {
               setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
             }}
+            disabled={draggable}
           >
             {expandedGroups[group.id] ? (
               <DiverstFormattedMessage {...messages.children_collapse} />
@@ -139,8 +142,9 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                 state: { id: group.id }
               }}
               component={WrappedNavLink}
+              disabled={draggable}
             >
-              Categorize Subgroups
+              <DiverstFormattedMessage {...messages.categorizeCollapsable} />
             </Button>
           </Permission>
         </React.Fragment>
@@ -198,7 +202,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
         {cardContent}
         {cardActions}
       </Card>
-      <Collapse in={expandedGroups[`${group.id}`]}>
+      <Collapse in={!draggable && expandedGroups[`${group.id}`]}>
         <Box mt={1} />
         <Grid container spacing={2} justify='flex-end'>
           {children && children.map((childGroup, i) => (
