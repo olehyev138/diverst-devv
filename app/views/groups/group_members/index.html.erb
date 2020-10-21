@@ -145,7 +145,7 @@
   $(document).on('ready page:load', function() {
     var pending_members_enabled = '<%= @group.pending_members_enabled? %>';
     var p_notice = document.getElementsByClassName('content__inner');
-    if(pending_members_enabled){
+    if(pending_members_enabled == 'true'){
       var filter_to = document.getElementById('q_user_groups_updated_at_lteq').value;
       var filter_from = document.getElementById('q_user_groups_updated_at_gteq').value;
     }else{
