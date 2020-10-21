@@ -48,7 +48,7 @@ export function UserGroupListPage(props) {
     page: 0,
     orderBy: 'position',
     order: 'asc',
-    query_scopes: [['joined_groups', props.user.user_id]],
+    query_scopes: [['joined_groups', props.user?.user_id]],
   }), [props.user?.user_id]);
 
   useEffect(() => {

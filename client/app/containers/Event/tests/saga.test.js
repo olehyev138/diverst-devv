@@ -134,7 +134,7 @@ describe('Get Event Saga', () => {
       getEvent,
       initialAction
     );
-    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id, {});
     expect(dispatched).toEqual(results);
   });
 
@@ -158,7 +158,7 @@ describe('Get Event Saga', () => {
       initialAction
     );
 
-    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id, {});
     expect(dispatched).toEqual(results);
     expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.load_event);
   });
