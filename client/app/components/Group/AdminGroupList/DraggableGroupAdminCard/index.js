@@ -192,6 +192,11 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
     </Dialog>
   );
 
+  // If a group has the sub-groups list open ensure the open state is wiped
+  if (draggable && (Object.entries(expandedGroups).length !== 0))
+    setExpandedGroups({});
+
+
   return (
     <Grid item key={group.id} xs={12}>
       { importDialog }
