@@ -392,7 +392,7 @@ class Group < BaseClass
     fields.map(&:title)
 
     CSV.generate do |csv|
-      first_row = %w(first_name last_name email_address)
+      first_row = %w(first_name last_name email_address date_joined)
       first_row += %w(mentor mentee) if mentorship_module_enabled
       first_row += fields.map(&:title)
 
@@ -400,7 +400,7 @@ class Group < BaseClass
 
       group_members.each do |member|
         membership_list_row = []
-        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.first_name, member.last_name, member.email, UserGroup.find_by(user_id: member.id, group_id: self.id).date_joined.strftime('%Y-%m-%d') ]
         membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
 
         member_info = member.info
