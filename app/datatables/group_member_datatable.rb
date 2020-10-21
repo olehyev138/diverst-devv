@@ -27,6 +27,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
       [
         generate_view_link(record),
         record.active ? 'Yes' : 'No',
+        UserGroup.find_by(user_id: record.id, group_id: @group.id).date_joined.strftime('%Y-%m-%d'),
         generate_destroy_link(record)
       ]
     end

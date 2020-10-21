@@ -99,6 +99,14 @@ class UserGroup < BaseClass
     end
   end
 
+  def date_joined
+    if self.created_at == self.updated_at
+      self.created_at
+    else
+      self.updated_at
+    end
+  end
+
   private
 
   def remove_leader_role
