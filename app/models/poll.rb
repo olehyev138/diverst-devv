@@ -66,6 +66,7 @@ class Poll < BaseClass
 
     target = target.for_segments(segments) unless segments.empty?
 
+    target = filter_by_initiative(target) if self.initiative
     target.uniq { |u| u.id }
   end
 
@@ -145,5 +146,9 @@ class Poll < BaseClass
 
   def remove_associated_fields
     fields.delete_all if fields.any?
+  end
+
+  def filter_by_initiative(users)
+    users.joins(:initiatives).where(initiatives: { id: self.initiative.id })
   end
 end

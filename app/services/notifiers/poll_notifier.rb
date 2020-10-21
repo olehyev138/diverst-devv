@@ -27,11 +27,6 @@ class Notifiers::PollNotifier
 
   def targeted_users
     users = @poll.targeted_users
-    users = filter_by_initiative(users) if @initiative
     User.where(id: users.map(&:id))
-  end
-
-  def filter_by_initiative(users)
-    users.select { |u| u.initiatives.where(id: @initiative.id).any? }
   end
 end
