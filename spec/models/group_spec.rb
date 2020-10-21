@@ -1144,7 +1144,7 @@ RSpec.describe Group, type: :model do
         expect((group)._create_callbacks.select { |callback| callback.filter == :set_position }).to_not be nil
       end
 
-      it 'position set to id 'do
+      it 'position set to id ' do
         enterprise = create(:enterprise)
         group = create(:group, enterprise: enterprise)
         expect(group.position).to be(group.id)

@@ -87,7 +87,7 @@ RSpec.describe Field do
           expect((field)._create_callbacks.select { |callback| callback.filter == :set_position }).to_not be nil
         end
 
-        it 'position set to id 'do
+        it 'position set to id ' do
           field = create(:field)
           expect(field.position).to be(field.id)
         end
