@@ -9,7 +9,7 @@ RSpec.describe Initiative::Actions, type: :model do
           :outcome,
           :group,
           :participating_groups,
-          :qr_code_attachment,
+          :qr_code_attachment, :qr_code_blob,
           :initiative_users
       ]
     }

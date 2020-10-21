@@ -6,14 +6,14 @@ module NewsLink::Actions
   module ClassMethods
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then [:author, :picture_attachment, :photos, :group]
+      when 'index' then [:author, :picture_attachment, :picture_blob, :photos, :group]
       when 'show'
         [
             :author,
             :group,
             :comments,
             :photos,
-            :picture_attachment,
+            :picture_attachment, :picture_blob,
             comments: GroupMessageComment.base_preloads(diverst_request)
         ]
       else []

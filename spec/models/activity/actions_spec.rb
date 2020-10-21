@@ -24,7 +24,7 @@ RSpec.describe Activity::Actions, type: :model do
       [
           :owner,
           owner: [:field_data,
-                  :avatar_attachment,
+                  :avatar_attachment, :avatar_blob,
                   :avatar_blob,
                   :user_role,
                   field_data: [

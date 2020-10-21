@@ -65,7 +65,7 @@ RSpec.describe User::Actions, type: :model do
     let(:base_preloads) {
       [
           :field_data,
-          :avatar_attachment,
+          :avatar_attachment, :avatar_blob,
           :avatar_blob,
           :user_role,
           field_data: [
@@ -82,7 +82,7 @@ RSpec.describe User::Actions, type: :model do
     let(:base_attribute_preloads) {
       [
           :user_role,
-          :avatar_attachment,
+          :avatar_attachment, :avatar_blob,
       ]
     }
 

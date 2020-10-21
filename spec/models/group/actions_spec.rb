@@ -31,26 +31,26 @@ RSpec.describe Group::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) {
       [
-          :logo_attachment,
+          :logo_attachment, :logo_blob,
           :user_groups,
           :group_leaders,
           :news_feed,
-          :banner_attachment,
+          :banner_attachment, :banner_blob,
           :children,
           :parent,
           children: [
-              :logo_attachment,
+              :logo_attachment, :logo_blob,
               :user_groups,
               :group_leaders,
               :news_feed,
-              :banner_attachment,
+              :banner_attachment, :banner_blob,
           ],
           parent: [
-              :logo_attachment,
+              :logo_attachment, :logo_blob,
               :user_groups,
               :group_leaders,
               :news_feed,
-              :banner_attachment,
+              :banner_attachment, :banner_blob,
           ]
       ]
     }
@@ -67,11 +67,11 @@ RSpec.describe Group::Actions, type: :model do
   describe 'base_preload_no_recursion' do
     let(:base_preload_no_recursion) {
       [
-          :logo_attachment,
+          :logo_attachment, :logo_blob,
           :user_groups,
           :group_leaders,
           :news_feed,
-          :banner_attachment,
+          :banner_attachment, :banner_blob,
           :children,
           :parent
       ]
@@ -83,11 +83,11 @@ RSpec.describe Group::Actions, type: :model do
   describe 'base_attributes_preloads' do
     let(:base_attributes_preloads) {
       [
-          :logo_attachment,
+          :logo_attachment, :logo_blob,
           :user_groups,
           :group_leaders,
           :news_feed,
-          :banner_attachment
+          :banner_attachment, :banner_blob
       ]
     }
 

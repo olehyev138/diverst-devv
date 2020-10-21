@@ -256,7 +256,7 @@ module User::Actions
     def base_attribute_preloads
       [
           :user_role,
-          :avatar_attachment,
+          :avatar_attachment, :avatar_blob,
       ]
     end
 

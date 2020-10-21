@@ -36,7 +36,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
                       comments: [
                           :author,
                           :group,
-                          author: :avatar_attachment
+                          author: [ :avatar_attachment, :avatar_blob ]
                       ]
                   }
               ],
@@ -45,12 +45,12 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
                   :group,
                   :comments,
                   :photos,
-                  :picture_attachment,
+                  :picture_attachment, :picture_blob,
                   {
                       comments: [
                           :author,
                           :group,
-                          author: :avatar_attachment
+                          author: [:avatar_attachment, :avatar_blob]
                       ]
                   }
               ],

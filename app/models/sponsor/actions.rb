@@ -8,11 +8,11 @@ module Sponsor::Actions
     end
 
     def base_preloads(diverst_action)
-      [:sponsor_media_attachment, :sponsorable]
+      [:sponsor_media_attachment, :sponsor_media_blob, :sponsorable]
     end
 
     def base_attributes_preloads
-      [ :sponsor_media_attachment ]
+      [ :sponsor_media_attachment, :sponsor_media_blob ]
     end
   end
 end

@@ -35,7 +35,7 @@ module Initiative::Actions
 
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then [:initiative_users, :owner, :group, :picture_attachment, group: :user_groups]
+      when 'index' then [:initiative_users, :owner, :group, :picture_attachment, :picture_blob, group: :user_groups]
       when 'show' then
         preloads = [
             :pillar,
@@ -43,7 +43,7 @@ module Initiative::Actions
             :outcome,
             :group,
             :participating_groups,
-            :qr_code_attachment,
+            :qr_code_attachment, :qr_code_blob,
             :initiative_users,
         ]
         preloads.append(:budget_item, :budget, :expenses) if diverst_request.options[:with_budget]

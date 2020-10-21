@@ -4,15 +4,15 @@ RSpec.describe Campaign::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) {
       [
-          :image_attachment,
-          :banner_attachment,
+          :image_attachment, :image_blob,
+          :banner_attachment, :banner_blob,
           :groups,
           groups: [
-              :logo_attachment,
+              :logo_attachment, :logo_blob,
               :user_groups,
               :group_leaders,
               :news_feed,
-              :banner_attachment,
+              :banner_attachment, :banner_blob,
               {}
           ]
       ]

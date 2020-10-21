@@ -17,7 +17,7 @@ RSpec.describe Resource::Actions, type: :model do
       [
           :owner,
           :folder,
-          :file_attachment
+          :file_attachment, :file_blob
       ]
     }
 
