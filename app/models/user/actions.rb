@@ -214,7 +214,7 @@ module User::Actions
       end
     end
 
-    def base_query
+    def base_query(diverst_request)
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search"\
       " OR LOWER(#{ self.table_name }.email) LIKE :search"
     end

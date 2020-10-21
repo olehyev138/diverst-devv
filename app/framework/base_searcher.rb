@@ -4,7 +4,7 @@ module BaseSearcher
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       "#{self.table_name}.id LIKE :search"
     end
 
@@ -91,7 +91,7 @@ module BaseSearcher
       preloads = get_preloads(diverst_request, params)
       joins = get_joins(diverst_request)
       left_joins = get_left_joins(diverst_request)
-      query = get_base_query
+      query = get_base_query(diverst_request)
 
       add_custom_args(where, where_not, params, includes, joins)
 
@@ -151,10 +151,10 @@ module BaseSearcher
       end
     end
 
-    def get_base_query
+    def get_base_query(diverst_request)
       return {} unless self.respond_to? :base_query
 
-      self.base_query
+      self.base_query(diverst_request)
     end
 
     def get_includes(diverst_request, params)

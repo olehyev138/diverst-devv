@@ -13,7 +13,7 @@ module Poll::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       "LOWER(#{self.table_name}.title) LIKE :search"
     end
 

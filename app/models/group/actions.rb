@@ -30,13 +30,17 @@ module Group::Actions
   end
 
   module ClassMethods
-    def base_query
-      "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
+    def base_query(diverst_request)
+      if diverst_request.options[:with_children]
+        "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
+      else
+        "LOWER(#{self.table_name}.name) LIKE :search"
+      end
     end
 
-    # def base_left_joins(diverst_request) ##
-    #   :children
-    # end
+    def base_left_joins(diverst_request) ##
+      :children if diverst_request.options[:with_children]
+    end
 
     def valid_scopes
       ['all_children', 'possible_children', 'all_parents', 'no_children', 'is_private', 'replace_with_children', 'except_id', 'joined_groups']

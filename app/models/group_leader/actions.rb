@@ -6,7 +6,7 @@ module GroupLeader::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       'LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
     end
 

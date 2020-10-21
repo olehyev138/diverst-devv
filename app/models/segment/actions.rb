@@ -4,7 +4,7 @@ module Segment::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       "LOWER(#{self.table_name}.name) LIKE :search"
     end
 
