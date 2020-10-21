@@ -144,6 +144,7 @@
 <script>
   $(document).on('ready page:load', function() {
     var pending_members_enabled = '<%= @group.pending_members_enabled? %>';
+    var p_notice = document.getElementsByClassName('content__inner');
     if(pending_members_enabled){
       var filter_to = document.getElementById('q_user_groups_updated_at_lteq').value;
       var filter_from = document.getElementById('q_user_groups_updated_at_gteq').value;
@@ -160,6 +161,10 @@
           export_csv_params: this.id,
           filter_from: event.data.filter_from,
           filter_to: event.data.filter_to,
+        }, 
+        success: function(){
+         $(p_notice).append('<p class="notice">Please check your Secure Downloads section in a couple of minutes</p>');
+         $(document.getElementsByClassName('notice')).delay(2000).fadeOut('slow');
         }
       })
     }
