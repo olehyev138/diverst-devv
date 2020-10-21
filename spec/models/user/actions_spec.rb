@@ -31,7 +31,10 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'base_query' do
-    it { expect(User.base_query(Request.create_request(nil))).to eq 'users.id LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search' }
+    it { expect(User.base_query(Request.create_request(nil))).to(
+        eq 'users.id LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
+      )
+    }
   end
 
   describe 'valid_scopes' do

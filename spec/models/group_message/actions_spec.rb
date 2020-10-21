@@ -11,7 +11,7 @@ RSpec.describe GroupMessage::Actions, type: :model do
               comments: [
                   :author,
                   :group,
-                  author: :avatar_attachment, :avatar_blob
+                  author: [:avatar_attachment, :avatar_blob]
               ]
           }
       ]

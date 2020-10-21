@@ -19,11 +19,11 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes_with_permission :parent, if: :with_parent?
 
   def with_children?
-    (instance_options[:with_children] || show_action?)  && show? && !family?
+    (instance_options[:with_children] || show_action?) && show? && !family?
   end
 
   def with_parent?
-    (instance_options[:with_parent] || show_action?)  && show? && !family?
+    (instance_options[:with_parent] || show_action?) && show? && !family?
   end
 
   def budgets?
