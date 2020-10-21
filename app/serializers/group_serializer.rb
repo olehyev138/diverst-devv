@@ -17,14 +17,13 @@ class GroupSerializer < ApplicationRecordSerializer
                              :banner, :banner_file_name, :banner_data, :banner_content_type, if: :not_budgets?
 
   attributes_with_permission :parent, if: :with_parent?
-  attributes_with_permission :children, if: :with_children?
 
   def with_children?
-    (instance_options[:with_children?] || show_action?)  && show? && !family?
+    (instance_options[:with_children] || show_action?)  && show? && !family?
   end
 
   def with_parent?
-    (instance_options[:with_parent?] || show_action?)  && show? && !family?
+    (instance_options[:with_parent] || show_action?)  && show? && !family?
   end
 
   def budgets?
@@ -58,7 +57,7 @@ class GroupSerializer < ApplicationRecordSerializer
       if with_children?
         object.children.map { |child| GroupSerializer.new(child, **instance_options, with_children: false, with_parent: false).as_json }
       end
-    elsif show_action?
+    elsif with_children?
       object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
     else
       []
