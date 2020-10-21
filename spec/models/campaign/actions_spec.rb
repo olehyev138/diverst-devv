@@ -14,22 +14,20 @@ RSpec.describe Campaign::Actions, type: :model do
               :news_feed,
               :banner_attachment, :banner_blob,
               {
-                  :children =>
-                         [:logo_attachment,
-                                  :logo_blob,
-                                  :user_groups,
-                                  :group_leaders,
-                                  :news_feed,
-                                  :banner_attachment,
-                                  :banner_blob],
-                    :parent =>
-                         [:logo_attachment,
-                                  :logo_blob,
-                                  :user_groups,
-                                  :group_leaders,
-                                  :news_feed,
-                                  :banner_attachment,
-                                  :banner_blob]
+                  children: [:logo_attachment,
+                             :logo_blob,
+                             :user_groups,
+                             :group_leaders,
+                             :news_feed,
+                             :banner_attachment,
+                             :banner_blob],
+                  parent: [:logo_attachment,
+                           :logo_blob,
+                           :user_groups,
+                           :group_leaders,
+                           :news_feed,
+                           :banner_attachment,
+                           :banner_blob]
               }
           ]
       ]
