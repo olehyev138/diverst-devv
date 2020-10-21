@@ -17,13 +17,14 @@ class GroupSerializer < ApplicationRecordSerializer
                              :banner, :banner_file_name, :banner_data, :banner_content_type, if: :not_budgets?
 
   attributes_with_permission :parent, if: :with_parent?
+  attributes_with_permission :children, if: :with_children?
 
   def with_children?
-    instance_options[:with_children?] && show? && show_action? && !family?
+    (instance_options[:with_children?] || show_action?)  && show? && !family?
   end
 
   def with_parent?
-    instance_options[:with_parent?] && show? && show_action? && !family?
+    (instance_options[:with_parent?] || show_action?)  && show? && !family?
   end
 
   def budgets?

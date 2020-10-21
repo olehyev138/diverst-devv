@@ -47,8 +47,8 @@ module Group::Actions
     def base_preloads(diverst_request) ##
       preloads = base_preload_no_recursion(diverst_request)
       associations = {}
-      associations[:children] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_children]
-      associations[:parent] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_parent]
+      associations[:children] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_children] || diverst_request.action == 'show'
+      associations[:parent] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_parent] || diverst_request.action == 'show'
       preloads.append(associations)
       preloads
     end
