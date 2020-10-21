@@ -222,6 +222,8 @@ class EnterprisesController < ApplicationController
         :virtual_events_enabled,
         :banner_alt_text_desc,
         :login_text,
+        :invite_member_enabled,
+        :suggest_hire_enabled,
         theme: [
           :id,
           :primary_color,

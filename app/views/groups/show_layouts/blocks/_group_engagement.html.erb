@@ -1,9 +1,12 @@
+<% if current_user.enterprise.invite_member_enabled? || current_user.enterprise.suggest_hire_enabled? %>
 <div class="card card--secondary">
   <div class="card__section">
     <ol>
-      <button href="#" type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#usersToInviteToGroup">
-        Invite Users to <%= c_t(:erg) =%>
-      </button>
+      <% if current_user.enterprise.invite_member_enabled? %>
+        <button href="#" type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#usersToInviteToGroup">
+          Invite Members to <%= c_t(:erg) =%>
+        </button>
+      <% end %>
     </ol>
   </div>
   <div class="card__section">
@@ -12,13 +15,13 @@
     </ol>
   </div>
 </div>
-
+<% end %>
 <!-- Modal -->
 <div class="modal fade" style="overflow-x: auto;" id="usersToInviteToGroup" tabindex="-1" role="dialog" aria-labelledby="usersToInviteToGroupTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="usersToInviteToGroupTitle">Invite User(s) To Group</h2>
+        <h2 class="modal-title" id="usersToInviteToGroupTitle">Invite Member(s) To Group</h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">X</span>
         </button>
