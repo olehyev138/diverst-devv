@@ -8,7 +8,7 @@ RSpec.describe Group::Actions, type: :model do
   end
 
   describe 'base_query' do
-    it { expect(Group.base_query(Request.create_request(nil))).to eq 'LOWER(groups.name) LIKE :search OR LOWER(children_groups.name) LIKE :search' }
+    it { expect(Group.base_query(Request.create_request(nil))).to eq 'LOWER(groups.name) LIKE :search' }
   end
 
   describe 'valid_scopes' do
