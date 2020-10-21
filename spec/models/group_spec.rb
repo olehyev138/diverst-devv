@@ -1136,6 +1136,22 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#set_position' do
+    context 'position has been set' do
+      it 'callback has been called' do
+        enterprise = create(:enterprise)
+        group = create(:group, enterprise: enterprise)
+        expect((group)._create_callbacks.select { |callback| callback.filter == :set_position }).to_not be nil
+      end
+
+      it 'position set to id 'do
+        enterprise = create(:enterprise)
+        group = create(:group, enterprise: enterprise)
+        expect(group.position).to be(group.id)
+      end
+    end
+  end
+
   describe '#membership_list_csv' do
     it 'returns correct headers when mentorship_module_enabled is false' do
       enterprise = create(:enterprise, mentorship_module_enabled: false)
