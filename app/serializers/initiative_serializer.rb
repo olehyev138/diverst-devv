@@ -3,7 +3,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
              :full?, :permissions, :picture, :picture_file_name, :picture_data,
              :is_attending, :group, :group_id
 
-  attributes_with_permission :pillar, :outcome, :participating_groups, :initiative_users,
+  attributes_with_permission :pillar, :outcome, :initiative_users, :budget_item,
                              :qr_code, :qr_code_file_name, :qr_code_data, if: :show_action?
 
   attributes_with_permission :budget, :budget_status, :expenses_status, :current_expenses_sum,
@@ -14,11 +14,11 @@ class InitiativeSerializer < ApplicationRecordSerializer
   attributes_with_permission :total_attendees, if: :view_attendees?
 
   def with_budget?
-    instance_options[:with_budget?] && show_action?
+    instance_options[:with_budget] && show_action?
   end
 
   def with_comments?
-    instance_options[:with_budget?] && show_action?
+    instance_options[:with_comments] && show_action?
   end
 
   def view_attendees?

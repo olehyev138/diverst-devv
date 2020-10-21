@@ -60,7 +60,8 @@ export function* getEvents(action) {
 
 export function* getEvent(action) {
   try {
-    const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id);
+    const { id, ...payload } = action.payload;
+    const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id, payload);
     yield put(getEventSuccess(response.data));
   } catch (err) {
     yield put(getEventError(err));

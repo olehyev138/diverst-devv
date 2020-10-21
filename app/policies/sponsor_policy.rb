@@ -5,7 +5,8 @@ class SponsorPolicy < ApplicationPolicy
 
   def index?
     if params[:query_scopes]&.include?('group_sponsor')
-      Group.find(params[:sponsorable_id]).show?
+      group = Group.find(params[:sponsorable_id])
+      GroupPolicy.new(user, group).show?
     else
       true
     end

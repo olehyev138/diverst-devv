@@ -35,14 +35,13 @@ module Initiative::Actions
 
     def base_preloads(diverst_request) ##
       case diverst_request.action
-      when 'index' then [:initiative_users, :owner, :group, :picture_attachment, :picture_blob, group: :user_groups]
+      when 'index' then [:initiative_users, :owner, :group, :participating_groups, :picture_attachment, :picture_blob, group: :user_groups]
       when 'show' then
         preloads = [
             :pillar,
             :owner,
             :outcome,
             :group,
-            :participating_groups,
             :qr_code_attachment, :qr_code_blob,
             :initiative_users,
         ]
