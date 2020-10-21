@@ -11,7 +11,7 @@ class ExpenseCategory < BaseClass
   validates :enterprise,  presence: true
 
   def icon_description
-    value = "image of #{category.name} expense category"
+    value = "image of #{self.name} expense category"
     return value if self[:icon_alt_text_desc].nil? 
 
     self[:icon_alt_text_desc]
