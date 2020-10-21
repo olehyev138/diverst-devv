@@ -8,7 +8,7 @@ RSpec.describe Folder::Actions, type: :model do
   end
 
   describe 'base_query' do
-    it { expect(Folder.base_query).to eq 'LOWER(folders.name) LIKE :search' }
+    it { expect(Folder.base_query(Request.create_request(nil))).to eq 'LOWER(folders.name) LIKE :search' }
   end
 
   describe 'validate_password' do
