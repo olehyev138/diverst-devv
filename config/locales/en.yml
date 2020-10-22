@@ -61,3 +61,5 @@ en:
       one: "Sorry, the resource you are looking for does not exist.",
       other: "Sorry, the resources you are looking for don't exist."
     }
+    timed_out: "Your request timed out. Please try again later."
+    invalid_route: "Invalid route"
