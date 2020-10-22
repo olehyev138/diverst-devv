@@ -10,7 +10,7 @@ RSpec.describe UserSerializer, type: :serializer do
             public_field,
             private_field
         ]
-    )
+      )
   end
 
   let(:user) do
@@ -19,7 +19,7 @@ RSpec.describe UserSerializer, type: :serializer do
         avatar: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
         enterprise: enterprise,
         policy_group: create(:policy_group, :no_permissions),
-    )
+      )
   end
 
   let(:admin_user) do
@@ -27,7 +27,7 @@ RSpec.describe UserSerializer, type: :serializer do
         :user,
         avatar: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
         enterprise: enterprise
-    )
+      )
   end
 
   let(:serializer) { UserSerializer.new(user, scope: serializer_scopes(user)) }
