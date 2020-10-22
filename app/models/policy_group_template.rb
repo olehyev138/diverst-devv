@@ -1,5 +1,15 @@
 class PolicyGroupTemplate < ApplicationRecord
   include PublicActivity::Common
+  INFINITE_FALSE = Enumerator.new do |yielder|
+    loop do
+      yielder.yield false
+    end
+  end
+
+  POLICIES = attribute_names - ['id', 'name', 'enterprise_id', 'role', 'default', 'created_at', 'updated_at', 'user_role_id']
+  GROUP_LEADER_POLICIES = POLICIES & GroupLeader.attribute_names
+  EMPTY_POLICY_ATTRIBUTES = (POLICIES.zip(INFINITE_FALSE)).to_h
+  EMPTY_GROUP_LEADER_ATTRIBUTES = (GROUP_LEADER_POLICIES.zip(INFINITE_FALSE)).to_h
 
   # associations
   belongs_to :user_role, inverse_of: :policy_group_template, dependent: :destroy
@@ -19,7 +29,11 @@ class PolicyGroupTemplate < ApplicationRecord
   # to user object to create policy_group
 
   def create_new_policy
-    attributes.except('id', 'name', 'enterprise_id', 'role', 'default', 'created_at', 'updated_at', 'user_role_id')
+    attributes.slice(POLICIES)
+  end
+
+  def create_new_group_leader
+    attributes.slice(GROUP_LEADER_POLICIES)
   end
 
   after_update :update_user_roles
