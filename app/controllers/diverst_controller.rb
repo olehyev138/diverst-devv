@@ -109,19 +109,27 @@ class DiverstController < ApplicationController
   end
 
   rescue_from Rack::Timeout::RequestTimeoutException do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   rescue_from Rack::Timeout::RequestExpiryError do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   rescue_from Rack::Timeout::RequestTimeoutError do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   def routing_error
-    render status: :forbidden, json: { message: 'Invalid route' }
+    apply_locale do
+      render status: :forbidden, json: { message: t('errors.invalid_route') }
+    end
   end
 
   # for active model serializers
