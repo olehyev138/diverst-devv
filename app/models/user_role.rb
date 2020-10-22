@@ -58,12 +58,12 @@ class UserRole < ApplicationRecord
   # we don't want to delete any group roles or the default role
   def can_destroy?
     if default
-      errors[:base] << 'Cannot destroy default user role'
-      return false
+      errors.add(:base, 'Cannot destroy default user role')
+      throw(:abort)
     elsif role_type === 'group'
       if group_leaders.size > 0
-        errors[:base] << 'Cannot delete because there are users with this group role.'
-        return false
+        errors.add(:base, 'Cannot delete because there are users with this group role.')
+        throw(:abort)
       end
     end
     true
