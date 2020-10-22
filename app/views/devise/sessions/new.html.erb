@@ -47,11 +47,11 @@
 </style>
 
 <div class="desktop">
-  <% if @enterprise&.has_enabled_saml? %>
-    <p style="color:white;">
-      <%= @enterprise.login_text.blank? ? default_login_text : sanitize(@enterprise.login_text) %>
-    </p>
-  <% end %>  
+  <p style="color:white;">
+    <% if @enterprise&.has_enabled_saml? %>
+      <%= @enterprise.login_text.blank? ? default_login_text : strip_tags(@enterprise.login_text) %>
+    <% end %>  
+  </p>
   <div class="col sm-12 md-5">
     <div class="card" style= "<%= @enterprise&.has_enabled_saml? ? "" : "left: 80%;" %>">
       <div class="card__section">
