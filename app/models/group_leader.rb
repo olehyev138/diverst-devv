@@ -25,10 +25,10 @@ class GroupLeader < ApplicationRecord
 
   def set_admin_permissions
     attributes = if policy_group_template.present?
-                   policy_group_template.create_new_group_leader
-                 else
-                   PolicyGroupTemplate::EMPTY_GROUP_LEADER_ATTRIBUTES.dup
-                 end
+      policy_group_template.create_new_group_leader
+    else
+      PolicyGroupTemplate::EMPTY_GROUP_LEADER_ATTRIBUTES.dup
+    end
 
     attributes.delete(:manage_all)
     assign_attributes(attributes)

@@ -9,8 +9,8 @@ class UserRole < ApplicationRecord
   # associations
   belongs_to  :enterprise, inverse_of: :user_roles
   has_one     :policy_group_template, inverse_of: :user_role, dependent: :delete
-  has_many     :group_leaders, inverse_of: :user_role, dependent: :restrict_with_exception
-  has_many     :users, inverse_of: :user_role, dependent: :restrict_with_exception
+  has_many     :group_leaders, inverse_of: :user_role
+  has_many     :users, inverse_of: :user_role, dependent: :nullify
 
   # validations
   validates_length_of :role_type, maximum: 191
@@ -61,7 +61,7 @@ class UserRole < ApplicationRecord
       errors[:base] << 'Cannot destroy default user role'
       return false
     elsif role_type === 'group'
-      if GroupLeader.joins(group: :enterprise).where(groups: { enterprise_id: enterprise.id }, user_role_id: id).count > 0
+      if group_leaders.size > 0
         errors[:base] << 'Cannot delete because there are users with this group role.'
         return false
       end
