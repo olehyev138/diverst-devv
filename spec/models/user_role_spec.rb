@@ -88,7 +88,7 @@ RSpec.describe UserRole do
       expect(user_role.can_destroy?).to be(true)
     end
 
-    it 'returns true when role is not the default not a group role' do
+    it 'returns true when role is not the default' do
       enterprise = create(:enterprise)
       user_role = enterprise.user_roles.where.not(default: true).first
       expect(user_role.can_destroy?).to be(true)
