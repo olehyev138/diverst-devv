@@ -8,7 +8,7 @@ RSpec.describe PolicyGroupTemplate, type: :model do
     let(:policy_group_template) { user_role.policy_group_template }
 
     it { expect(policy_group_template).to belong_to(:user_role).inverse_of(:policy_group_template) }
-    it { expect(policy_group_template).to has_one(:enterprise).through(:user_role) }
+    it { expect(policy_group_template).to have_one(:enterprise).through(:user_role) }
 
     it { expect(policy_group_template).to validate_length_of(:name).is_at_most(191) }
 

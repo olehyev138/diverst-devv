@@ -4,6 +4,6 @@ FactoryBot.define do
     default false
     role_name { Faker::Lorem.sentence(3) }
     role_type 'group'
-    priority { Faker::Number.number(2) }
+    priority { Faker::Number.number(9) }
   end
 end
