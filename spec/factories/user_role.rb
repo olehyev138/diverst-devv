@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :user_role do
     enterprise
     default false
-    role_name 'group_treasurer'
+    role_name { Faker::Lorem.sentence(3) }
     role_type 'group'
-    priority 99
+    priority { Faker::Number.number(2) }
   end
 end
