@@ -7,7 +7,9 @@
 # TODO: pull from param key store
 clients = [{ env_name: 'devops', bucket: 'devops-inmvlike', role_arn: 'arn:aws:iam::151631753575:role/cli-bot-devops-administrator-access' }]
 
-# Authenticate with STS using given role, use `cli-assume-role` bash script
+#
+## Authenticate with env account using STS with, use `cli-assume-role` bash script
+#
 def auth_env(role_arn)
   # Returns 'export <SECRET_NAME>=<SECERT_VALUE>\n...'
   secrets = %x('./devops/scripts/cli-assume-role #{role_arn}')
@@ -24,7 +26,9 @@ def auth_env(role_arn)
 end
 
 clients.each do |client|
-  # auth with env account
+  # set access keys & auth with env account using STS
+  ENV['AWS_ACCESS_KEY_ID'] = ENV['CCI_AWS_ACCESS_KEY_ID']
+  ENV['AWS_SECRET_ACCESS_KEY'] = ENV['CCI_AWS_SECRET_ACCESS_KEY']
   auth_env(client[:role_arn])
 
   # deploy backend
@@ -33,11 +37,8 @@ clients.each do |client|
   %x("./devops/scripts/deploy-app-version #{client[:env]}  #{version_label}")
 
   # deploy frontend
-
   %x("./devops/scripts/load-client-env #{client[:env]}")
   %x("./devops/scripts/deploy-frontend #{client[:frontend_bucket]})
 
-  # deploy analytics
-
-  # unset
+  # deploy analytics - TODO
 end
