@@ -8,9 +8,9 @@ class UserRole < ApplicationRecord
 
   # associations
   belongs_to  :enterprise, inverse_of: :user_roles
-  has_one     :policy_group_template, inverse_of: :user_role, dependent: :delete
-  has_many     :group_leaders, inverse_of: :user_role
-  has_many     :users, inverse_of: :user_role, dependent: :nullify
+  has_one     :policy_group_template, inverse_of: :user_role, dependent: :destroy
+  has_many    :group_leaders, inverse_of: :user_role
+  has_many    :users, inverse_of: :user_role, dependent: :nullify
 
   # validations
   validates_length_of :role_type, maximum: 191

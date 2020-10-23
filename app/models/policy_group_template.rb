@@ -12,7 +12,7 @@ class PolicyGroupTemplate < ApplicationRecord
   EMPTY_GROUP_LEADER_ATTRIBUTES = (GROUP_LEADER_POLICIES.zip(INFINITE_FALSE)).to_h
 
   # associations
-  belongs_to :user_role, inverse_of: :policy_group_template, dependent: :destroy
+  belongs_to :user_role, inverse_of: :policy_group_template
   has_one :enterprise, through: :user_role
 
   # validations

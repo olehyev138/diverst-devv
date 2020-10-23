@@ -8,7 +8,7 @@ RSpec.describe UserRole do
 
     context 'test associations' do
       it { expect(user_role).to belong_to(:enterprise).inverse_of(:user_roles) }
-      it { expect(user_role).to have_one(:policy_group_template).inverse_of(:user_role).dependent(:delete) }
+      it { expect(user_role).to have_one(:policy_group_template).inverse_of(:user_role).dependent(:destroy) }
     end
 
     context 'test validations' do

@@ -296,7 +296,7 @@ class User < ApplicationRecord
 
   def user_role_presence
     if user_role_id.nil?
-      self.user_role_id = enterprise.default_user_role
+      self.user_role_id = enterprise.default_user_role_id
     end
   end
 

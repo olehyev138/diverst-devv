@@ -19,7 +19,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:polls).inverse_of(:enterprise).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mobile_fields).inverse_of(:enterprise).dependent(:destroy) }
     it { expect(enterprise).to have_many(:metrics_dashboards).inverse_of(:enterprise).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:user_roles).inverse_of(:enterprise).dependent(:delete_all) }
+    it { expect(enterprise).to have_many(:user_roles).inverse_of(:enterprise).dependent(:destroy) }
     it { expect(enterprise).to have_many(:graphs).through(:metrics_dashboards) }
     it { expect(enterprise).to have_many(:poll_graphs).through(:polls).source(:graphs) }
     it { expect(enterprise).to have_many(:campaigns).dependent(:destroy) }
@@ -45,7 +45,7 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to have_many(:mentoring_requests).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_sessions).dependent(:destroy) }
     it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
-    it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:policy_group_templates).through(:user_roles) }
     it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy).through(:groups) }
 
     it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
@@ -207,7 +207,7 @@ RSpec.describe Enterprise, type: :model do
     it 'return default_user_role_id' do
       enterprise = build(:enterprise)
       default_user_role_id = create(:user_role, default: true, enterprise: enterprise).id
-      expect(enterprise.default_user_role).to eq default_user_role_id
+      expect(enterprise.default_user_role_id).to eq default_user_role_id
     end
   end
 
