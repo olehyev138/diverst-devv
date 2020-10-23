@@ -272,40 +272,28 @@ jobs:
     shell: /bin/bash --login
     steps:
       - checkout
-      - run:
-          name: 'POC'
-          command: echo 'works'
-#      - run:
-#          name: Authenticate with AWS
-#          command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
-#      - run:
-#          name: Deploy backend
-#          command: |
-#            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
-#            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
-#            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
       #
       ## Install node modules for frontend building
       #
-#      - restore_cache:
-#          keys:
-#            # when lock file changes, use increasingly general patterns to restore cache
-#            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-#            - v1-node-cache-{{ .Branch }}-
-#            - v1-node-cache-
-#      - run:
-#          name: Install node modules
-#          command: cd client && npm install
-#      - save_cache:
-#          paths:
-#            - ./client/node_modules
-#          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
-#      #
-      ## Build & deploy frontend
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
       #
-#      - run:
-#          name: Build & deploy frontend
-#          command: |
-#            ./devops/scripts/load-client-env testing
-#            ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
-#
+      ## Deploy backend & frontend to production envs
+      #
+      - run:
+          name: Production Deploy
+          command: |
+            ./devops/scripts/load-client-env testing
+            ruby ./devops/scripts/deploy-prod
+
