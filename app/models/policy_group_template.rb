@@ -13,7 +13,7 @@ class PolicyGroupTemplate < ApplicationRecord
 
   # associations
   belongs_to :user_role, inverse_of: :policy_group_template, dependent: :destroy
-  belongs_to :enterprise
+  has_one :enterprise, through: :user_role
 
   # validations
   validates_length_of :name, maximum: 191
@@ -29,11 +29,11 @@ class PolicyGroupTemplate < ApplicationRecord
   # to user object to create policy_group
 
   def create_new_policy
-    attributes.slice(POLICIES)
+    attributes.slice(*POLICIES)
   end
 
   def create_new_group_leader
-    attributes.slice(GROUP_LEADER_POLICIES)
+    attributes.slice(*GROUP_LEADER_POLICIES)
   end
 
   after_update :update_user_roles
