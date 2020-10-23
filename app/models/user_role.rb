@@ -26,7 +26,7 @@ class UserRole < ApplicationRecord
   # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
   validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
-  before_destroy  :can_destroy?, prepend: true
+  before_destroy  -> { throw :abort unless can_destroy? }, prepend: true
 
   after_destroy   :reset_user_roles
 
@@ -59,11 +59,11 @@ class UserRole < ApplicationRecord
   def can_destroy?
     if default
       errors.add(:base, 'Cannot destroy default user role')
-      throw(:abort)
+      return false
     elsif role_type === 'group'
       if group_leaders.size > 0
         errors.add(:base, 'Cannot delete because there are users with this group role.')
-        throw(:abort)
+        return false
       end
     end
     true

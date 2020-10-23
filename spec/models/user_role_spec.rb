@@ -69,16 +69,35 @@ RSpec.describe UserRole do
   end
 
   describe '#can_destroy?' do
-    it 'returns false when role is the default' do
+    it 'throws :abort when role is the default' do
       enterprise = create(:enterprise)
       user_role = enterprise.user_roles.where(default: true).first
       expect(user_role.can_destroy?).to be(false)
     end
 
-    it 'returns true when role is not the default' do
+    it 'throws :abort when role is a group role in use' do
+      enterprise = create(:enterprise)
+      user_role = create(:user_role, enterprise: enterprise, role_type: 'group')
+      create(:group_leader, user_role: user_role)
+      expect(user_role.can_destroy?).to be(false)
+    end
+
+    it 'returns true when role is a group role not in use' do
+      enterprise = create(:enterprise)
+      user_role = create(:user_role, enterprise: enterprise, role_type: 'group')
+      expect(user_role.can_destroy?).to be(true)
+    end
+
+    it 'returns true when role is not the default not a group role' do
       enterprise = create(:enterprise)
       user_role = enterprise.user_roles.where.not(default: true).first
       expect(user_role.can_destroy?).to be(true)
+    end
+
+    it 'prevents deletion if can_destroy? is false' do
+      allow_any_instance_of(UserRole).to receive(:can_destroy?).and_return(false)
+      user_role = create(:user_role)
+      expect(user_role.destroy).to be(false)
     end
   end
 
