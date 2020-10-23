@@ -5,7 +5,7 @@
 #
 
 # TODO: pull from param key store
-clients = [{ env_name: 'devops',
+clients = [{ env: 'devops',
              bucket: 'devops-inmvlike',
              frontend: 'devops.diverst.com',
              role_arn: 'arn:aws:iam::151631753575:role/cli-bot-devops-administrator-access' }]
@@ -15,7 +15,7 @@ clients = [{ env_name: 'devops',
 #
 def auth_env(role_arn)
   # Returns 'export <SECRET_NAME>=<SECERT_VALUE>\n...'
-  secrets = %x('./devops/scripts/cli-assume-role #{role_arn}')
+  secrets = `./devops/scripts/cli-assume-role #{role_arn}`
   return unless secrets
 
   # Loop through secret name & value pair
@@ -35,13 +35,13 @@ clients.each do |client|
   auth_env(client[:role_arn])
 
   # deploy backend
-  version_label = '0123'
-  %x("./devops/scripts/create-app-version #{client[:env]} #{version_label} #{client[:bucket]}")
-  %x("./devops/scripts/deploy-app-version #{client[:env]}  #{version_label}")
+  version_label = 'test-0123'
+  `./devops/scripts/create-app-version #{client[:env]} #{version_label} #{client[:bucket]}`
+  `./devops/scripts/deploy-app-version #{client[:env]} #{version_label}`
 
   # deploy frontend
-  %x("./devops/scripts/load-client-env #{client[:env]}")
-  %x("./devops/scripts/deploy-frontend #{client[:frontend]})
+  `./devops/scripts/load-client-env #{client[:env]}`
+  `./devops/scripts/deploy-frontend #{client[:frontend]}`
 
   # deploy analytics - TODO
 end
