@@ -69,13 +69,13 @@ RSpec.describe UserRole do
   end
 
   describe '#can_destroy?' do
-    it 'throws :abort when role is the default' do
+    it 'returns false when role is the default' do
       enterprise = create(:enterprise)
       user_role = enterprise.user_roles.where(default: true).first
       expect(user_role.can_destroy?).to be(false)
     end
 
-    it 'throws :abort when role is a group role in use' do
+    it 'returns false when role is a group role in use' do
       enterprise = create(:enterprise)
       user_role = create(:user_role, enterprise: enterprise, role_type: 'group')
       create(:group_leader, user_role: user_role)
