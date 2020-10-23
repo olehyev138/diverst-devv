@@ -90,8 +90,6 @@ class User < ApplicationRecord
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
 
-  has_many :budget_requests, class_name: 'Budget', inverse_of: :requester, dependent: :nullify
-
   # ActiveStorage
   has_one_attached :avatar
 
