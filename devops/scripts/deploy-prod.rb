@@ -5,7 +5,10 @@
 #
 
 # TODO: pull from param key store
-clients = [{ env_name: 'devops', bucket: 'devops-inmvlike', role_arn: 'arn:aws:iam::151631753575:role/cli-bot-devops-administrator-access' }]
+clients = [{ env_name: 'devops',
+             bucket: 'devops-inmvlike',
+             frontend: 'devops.diverst.com',
+             role_arn: 'arn:aws:iam::151631753575:role/cli-bot-devops-administrator-access' }]
 
 #
 ## Authenticate with env account using STS with, use `cli-assume-role` bash script
@@ -38,7 +41,7 @@ clients.each do |client|
 
   # deploy frontend
   %x("./devops/scripts/load-client-env #{client[:env]}")
-  %x("./devops/scripts/deploy-frontend #{client[:frontend_bucket]})
+  %x("./devops/scripts/deploy-frontend #{client[:frontend]})
 
   # deploy analytics - TODO
 end
