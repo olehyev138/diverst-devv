@@ -1,8 +1,19 @@
 class InvitedUserSerializer < ApplicationRecordSerializer
   attributes :email, :enterprise, :first_name, :biography, :group_ids,
-             :last_name, :fields, :name, :last_initial, :timezones, :time_zone
+             :last_name, :name, :last_initial, :timezones, :time_zone, :field_data
 
-  has_many :field_data
+  def field_data
+    field_objects = if object.field_data.loaded?
+                      object.field_data.select { |fd| !fd.field.private || (scope.present? && UserPolicy.new(scope.dig(:current_user), User).manage?) }
+                    elsif scope.present? && UserPolicy.new(scope.dig(:current_user), User).manage?
+                      object.field_data
+                    else
+                      object.field_data.includes(:field).where(fields: { private: false })
+                    end
+    field_objects.map do |field_datum|
+      FieldDataSerializer.new(field_datum, **instance_options).as_json
+    end
+  end
 
   def excluded_keys
     [:password_digest]

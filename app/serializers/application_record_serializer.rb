@@ -27,13 +27,13 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       def permission_module
         @module ||= begin
                        temp = Module.new do
-                         def self.attr_conditions
-                           @attr_conditions ||= Hash.new do |hash, key|
-                             hash[key] = []
-                           end
-                         end
-
                          class << self
+                           def attr_conditions
+                             @attr_conditions ||= Hash.new do |hash, key|
+                               hash[key] = []
+                             end
+                           end
+
                            delegate :[], to: :attr_conditions
                          end
                        end
@@ -79,12 +79,20 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     super(object, options)
     if @scope.nil?
       def self.scope
-        if Rails.env.production?
-          Rollbar.error(SerializerScopeNotDefinedException.new)
-          nil
-        else
-          raise SerializerScopeNotDefinedException
+        scope = Object.new
+        def scope.method_missing(*args)
+          if Rails.env.production?
+            Rollbar.error(SerializerScopeNotDefinedException.new)
+            nil
+          else
+            Clipboard.copy caller_locations
+            raise SerializerScopeNotDefinedException
+          end
         end
+        def scope.blank?
+          true
+        end
+        scope
       end
     end
   end
