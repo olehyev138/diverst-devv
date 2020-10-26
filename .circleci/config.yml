@@ -4,9 +4,12 @@ workflows:
   version: 2.1
   lint-test-deploy:
     jobs:
+      - request-prod-deploy:
+          type: approval
       - deploy-prod-test:
           context: aws-context
-          type: approval
+          requires:
+            - request-prod-deploy
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
