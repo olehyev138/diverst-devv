@@ -189,7 +189,7 @@
           </li>
         <% end %>
         
-        <% if SuggestedHirePolicy.new(current_user, [@group]).index? %>
+        <% if SuggestedHirePolicy.new(current_user, [@group]).index? && current_user.enterprise.suggest_hire_enabled? %>
           <li>
             <%= active_link_to "Suggested Hires", suggested_hires_path(group_id: @group.id) %>
           </li>
