@@ -34,6 +34,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true
     });
   };
 
