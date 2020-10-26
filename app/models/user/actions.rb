@@ -214,6 +214,10 @@ module User::Actions
       end
     end
 
+    def base_select
+      %w[`users`.`id` `users`.`first_name` `users`.`last_name`]
+    end
+
     def base_query(diverst_request)
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search"\
       " OR LOWER(#{ self.table_name }.email) LIKE :search"
@@ -236,18 +240,11 @@ module User::Actions
             :field_data,
             :avatar_attachment,
             :avatar_blob,
-            # :enterprise,
-            # :user_groups,
             :user_role,
-            # :news_links,
             field_data: [
                 :field,
                 { field: Field.base_preloads(diverst_request) }
             ],
-          # enterprise: [
-          #     :theme,
-          #     :mobile_fields
-          # ]
         ]
       else []
       end

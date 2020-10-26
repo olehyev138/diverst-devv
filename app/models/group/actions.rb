@@ -30,6 +30,10 @@ module Group::Actions
   end
 
   module ClassMethods
+    def base_select
+      %w[`groups`.`id` `groups`.`name`]
+    end
+
     def base_query(diverst_request)
       if diverst_request.options[:with_children]
         "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"

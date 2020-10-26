@@ -1,4 +1,6 @@
 class Pillar < ApplicationRecord
+  include Pillar::Actions
+
   belongs_to :outcome, inverse_of: :pillars
   has_one :group, through: :outcome
   has_many :initiatives, dependent: :destroy, inverse_of: :pillar

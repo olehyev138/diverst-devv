@@ -9,7 +9,7 @@ module BaseSearcher
     end
 
     def base_select
-      [:id]
+      ["`#{self.table_name}`.`id`"]
     end
 
     def valid_scopes
@@ -128,7 +128,11 @@ module BaseSearcher
       # Attempt to ensure that we can only retrieve items from the current user's enterprise
       @items = @items.where(enterprise_id: current_user.enterprise.id) if @items.has_attribute?(:enterprise_id) unless [Resource, Folder].include? @items.all.klass
 
-      @items = @items.select(*self.base_select) if diverst_request.minimal
+      @items = if diverst_request.minimal
+        @items.select(*self.base_select)
+      else
+        @items.preload(preloads)
+      end
 
       # search the system
       if searchValue.present?
@@ -136,7 +140,6 @@ module BaseSearcher
             .joins(joins)
             .left_joins(left_joins)
             .includes(includes)
-            .preload(preloads)
             .send_chain(query_scopes)
             .where(query, search: "%#{searchValue}%".downcase)
             .where(where)
@@ -148,7 +151,6 @@ module BaseSearcher
             .joins(joins)
             .left_joins(left_joins)
             .includes(includes)
-            .preload(preloads)
             .send_chain(query_scopes)
             .where(where)
             .where.not(where_not)

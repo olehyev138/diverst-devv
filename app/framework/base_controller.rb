@@ -5,7 +5,10 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy), **diverst_request.options
+    response = klass.index(self.diverst_request, params, policy: @policy)
+    response = { page: response.as_json } if diverst_request.minimal
+
+    render status: 200, json: response, **diverst_request.options
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise
