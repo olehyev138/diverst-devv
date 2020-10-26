@@ -30,7 +30,7 @@ module Folder::Actions
     def base_preloads(diverst_request) ##
       case diverst_request.action
       when 'index' then []
-      when 'show' then [:parent]
+      when 'show', 'create', 'update' then [:parent]
       else []
       end
     end

@@ -5,6 +5,8 @@ class ResourceSerializer < ApplicationRecordSerializer
   attributes_with_permission :group, :folder, :enterprise,
                              :initiative, :mentoring_session, if: :show_action?
 
+  attributes_with_permission :folder, if: :commit_action?
+
   def policies
     super + [:archive?]
   end

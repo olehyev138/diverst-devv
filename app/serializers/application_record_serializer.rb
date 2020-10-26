@@ -143,4 +143,17 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   def show_action?
     ['show', 'prototype'].include?(scope[:action])
   end
+
+  def commit_action?
+    ['create', 'update'].include?(scope[:action])
+  end
+
+  private def method_missing(symbol, *args)
+    case symbol.to_s
+    when /([a-zA-Z_]+)_action\?/
+      scope[:action] == $1
+    else
+      super
+    end
+  end
 end

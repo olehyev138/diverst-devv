@@ -11,6 +11,7 @@ module Resource::Actions
       case diverst_request.action
       when 'index' then [:owner, :file_attachment, :file_blob]
       when 'show' then [:owner, :folder, :file_attachment, :file_blob]
+      when 'create', 'update' then [:folder]
       else []
       end
     end
