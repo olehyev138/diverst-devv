@@ -23,12 +23,20 @@ jest.mock('containers/Shared/LanguageProvider/GlobalLanguageProvider', () => (
 ));
 
 describe('<LanguageProvider />', () => {
+  let store;
+
+  beforeAll(() => {
+    store = configureStore({}, browserHistory);
+  });
+
   it('should render its children', () => {
     const children = <h1>Test</h1>;
     const { container } = render(
-      <LanguageProvider messages={messages} locale='en'>
-        {children}
-      </LanguageProvider>,
+      <Provider store={store}>
+        <LanguageProvider messages={messages} locale='en'>
+          {children}
+        </LanguageProvider>
+      </Provider>,
     );
 
     expect(container.firstChild).not.toBeNull();

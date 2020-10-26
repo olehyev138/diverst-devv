@@ -60,8 +60,8 @@ const styles = theme => ({
 export function NewsFeed(props) {
   useEffect(() => {
     addScript('https://platform.twitter.com/widgets.js');
-    addScript('http://www.instagram.com/embed.js');
-    addScript('http://cdn.embedly.com/widgets/platform.js');
+    addScript('https://www.instagram.com/embed.js');
+    addScript('https://cdn.embedly.com/widgets/platform.js');
     addScript(
       'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0',
       { async: 1, defer: 1, crossorigin: 'anonymous' }
