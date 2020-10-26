@@ -8,14 +8,14 @@ class Api::V1::GroupsController < DiverstController
   end
 
   def index
-    diverst_request.options[:with_children] = JSON.parse(params[:with_children] || 'null')
-    diverst_request.options[:with_parent] = JSON.parse(params[:with_parent] || 'null')
+    diverst_request.options[:with_children] = to_bool(params[:with_children])
+    diverst_request.options[:with_parent] = to_bool(params[:with_parent])
     super
   end
 
   def show
-    diverst_request.options[:with_children] = JSON.parse(params[:with_children] || 'null')
-    diverst_request.options[:with_parent] = JSON.parse(params[:with_parent] || 'null')
+    diverst_request.options[:with_children] = to_bool(params[:with_children])
+    diverst_request.options[:with_parent] = to_bool(params[:with_parent])
     super
   end
 

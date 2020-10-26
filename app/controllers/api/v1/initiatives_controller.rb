@@ -29,8 +29,8 @@ class Api::V1::InitiativesController < DiverstController
   end
 
   def show
-    diverst_request.options[:with_budget] = params[:with_budget]
-    diverst_request.options[:with_comments] = params[:with_comments]
+    diverst_request.options[:with_budget] = to_bool(params[:with_budget])
+    diverst_request.options[:with_comments] = to_bool(params[:with_comments])
     super
   end
 

@@ -53,7 +53,11 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             permission_module.define_method(attr) do
               if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
                 if defined?(super)
-                  super() rescue nil
+                  begin
+                    super()
+                  rescue NoMethodError
+                    nil
+                  end
                 else
                   object&.send(attr)
                 end
@@ -130,6 +134,12 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                     end
                   end.new
                 end
+  end
+
+  def new_action_instance_options(new_action)
+    new = instance_options.dup
+    new[:scope][:action] = new_action
+    new
   end
 
   def policies

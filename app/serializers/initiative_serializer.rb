@@ -27,7 +27,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
 
   def comments
     object.comments.map do |comment|
-      InitiativeCommentSerializer.new(comment, **instance_options).as_json
+      InitiativeCommentSerializer.new(comment, **new_action_instance_options('index')).as_json
     end
   end
 
