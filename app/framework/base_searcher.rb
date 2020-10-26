@@ -211,18 +211,6 @@ module BaseSearcher
         {}
       end
     end
-
-    # def add_custom_args(where, where_not, params, includes, joins)
-    #   # check if the argument is defined in the class as a query argument
-    #   params.each do |arg|
-    #     if query_arguments.include?(arg.first.to_s)
-    #       where.merge!(query_arguments_hash(arg.first.to_s, params[arg.first.to_sym]))
-    #     elsif query_arguments.include?(arg)
-    #       where.merge!(query_arguments_hash(arg, params[arg]))
-    #     end
-    #   end
-    # end
-
     def add_custom_args(where, where_not, params, includes, joins)
       # check if the argument is defined in the class as a query argument
       params.each do |arg|

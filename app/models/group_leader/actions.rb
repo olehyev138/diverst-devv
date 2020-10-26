@@ -13,9 +13,5 @@ module GroupLeader::Actions
     def base_includes(diverst_request)
       [ :user, :group ]
     end
-
-    # def base_preloads(diverst_request)
-    #   [ :group, :user ]
-    # end
   end
 end
