@@ -6,7 +6,7 @@ module UsersSegment::Actions
   end
 
   module ClassMethods
-    def base_includes(diverst_request) ##
+    def base_includes(diverst_request)
       [ :user, :segment ]
     end
 

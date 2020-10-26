@@ -68,11 +68,11 @@ module Activity::Actions
       ].map { |scope| scope.to_s }
     end
 
-    def base_includes(diverst_request) ##
+    def base_includes(diverst_request)
       [ :owner ]
     end
 
-    def base_preloads(diverst_request) ##
+    def base_preloads(diverst_request)
       [ :owner, owner: User.base_preloads(diverst_request) ]
     end
   end

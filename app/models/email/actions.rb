@@ -4,7 +4,7 @@ module Email::Actions
   end
 
   module ClassMethods
-    def base_preloads(diverst_request) ##
+    def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then []
       when 'show' then [:email_variables, :variables]

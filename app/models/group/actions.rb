@@ -42,7 +42,7 @@ module Group::Actions
       end
     end
 
-    def base_left_joins(diverst_request) ##
+    def base_left_joins(diverst_request)
       :children if diverst_request.options[:with_children]
     end
 
@@ -52,7 +52,7 @@ module Group::Actions
 
     # List of all attributes to preload.
     # Used when serializing a group itself
-    def base_preloads(diverst_request) ##
+    def base_preloads(diverst_request)
       preloads = base_preload_no_recursion(diverst_request)
       associations = {}
       associations[:children] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_children] || diverst_request.action == 'show'
@@ -63,7 +63,7 @@ module Group::Actions
 
     # List of all attributes to preload when dealing with annual budgets.
     # Used when getting the list of budgets for all groups
-    def base_preloads_budget ##
+    def base_preloads_budget
       [ :annual_budgets ]
     end
 

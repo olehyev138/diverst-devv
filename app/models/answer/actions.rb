@@ -4,7 +4,7 @@ module Answer::Actions
   end
 
   module ClassMethods
-    def base_includes(diverst_request) ##
+    def base_includes(diverst_request)
       [ :author ]
     end
 

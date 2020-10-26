@@ -232,7 +232,7 @@ module User::Actions
       [:avatar]
     end
 
-    def base_preloads(diverst_request) ##
+    def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then [:avatar_attachment, :avatar_blob]
       when 'show'
