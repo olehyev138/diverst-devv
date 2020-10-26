@@ -21,7 +21,7 @@ class Api::V1::EnterprisesController < DiverstController
         :sponsors,
         theme: [:logo_attachment, :logo_blob],
         sponsors: [:sponsor_media_attachment, :sponsor_media_blob]
-    )
+      )
     if params[:enterprise_id].blank?
       enterprise = preloaded_enterprise.first
     else

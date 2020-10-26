@@ -54,7 +54,7 @@ class InviteTokenService < TokenService
             :field,
             { field: Field.base_preloads(Request.create_request(nil, action: 'index')) }
         ]
-    ).find_by(invitation_token: payload['invite_token']), payload]
+      ).find_by(invitation_token: payload['invite_token']), payload]
   end
 
   private

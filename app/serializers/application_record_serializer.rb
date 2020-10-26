@@ -93,6 +93,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             raise SerializerScopeNotDefinedException
           end
         end
+
         def scope.blank?
           true
         end

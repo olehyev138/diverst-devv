@@ -133,12 +133,12 @@ class Api::V1::UsersController < DiverstController
     token, user = token_service.form_token(params[:token])
 
     groups_scope = if groups
-                     Group
-                         .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
-                         .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id)
-                   else
-                     Group.none
-                   end
+      Group
+          .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
+          .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id)
+    else
+      Group.none
+    end
 
     render status: 200, json: {
         token: token,
