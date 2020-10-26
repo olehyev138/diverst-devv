@@ -17,7 +17,7 @@ fi
 cd client/
 
 # Build frontend (npm install is handled separately)
-npm run build
+npm run --silent build
 
 # Sync app build files with S3
 #  - delete flag deletes files on bucket if deleted locally
