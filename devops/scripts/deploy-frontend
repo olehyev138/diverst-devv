@@ -27,6 +27,7 @@ aws s3 sync \
   --cache-control max-age=604800 \
   --exclude index.html \
   --exclude sw.js \
+  --quiet \
   build/ "s3://$FRONTEND_BUCKET"
 
 # Upload index & service worker to S3 separately with no caching for proper cache busting

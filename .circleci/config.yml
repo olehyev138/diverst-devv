@@ -6,6 +6,7 @@ workflows:
     jobs:
       - deploy-prod-test:
           context: aws-context
+          type: approval
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -292,7 +293,7 @@ jobs:
       ## Deploy backend & frontend to production envs
       #
       - run:
-          name: Production Deploy
+          name: Deploy to production instances
           command: |
             ruby ./devops/scripts/deploy-prod.rb
 

@@ -49,7 +49,7 @@ clients.each do |client|
   auth_env(client[:role_arn])
 
   # deploy backend
-  version_label = 'test-0123'
+  version_label = 'test-0130'
   `./devops/scripts/create-app-version #{client[:env]} #{version_label} #{client[:master_bucket]}`
   `./devops/scripts/deploy-app-version #{client[:env]} #{version_label}`
 
