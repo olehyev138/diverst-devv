@@ -17,7 +17,7 @@ class Api::V1::UsersController < DiverstController
 
     response = klass.index(self.diverst_request, params, policy: @policy)
     response = { page: response.as_json } if diverst_request.minimal
-    options = diverst_request.minimal ? { } : { use_serializer: serializer(params) }
+    options = diverst_request.minimal ? {} : { use_serializer: serializer(params) }
 
     render status: 200, json: response, **options
   rescue => e
