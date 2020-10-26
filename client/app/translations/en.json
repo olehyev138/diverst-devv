@@ -431,7 +431,6 @@
   "diverst.containers.Group.categorize.button.allcategories": "All Categories",
   "diverst.containers.Group.categorize.button.categorize": "Categorize {sub_erg_p} of",
   "diverst.containers.Group.categorize.button.save": "Save",
-  "diverst.containers.Group.categorize.button.collapsable": "Categorize Subgroups",
   "diverst.containers.Group.customgraph.delete_confirm": "Delete metricsDashboard?",
   "diverst.containers.Group.family.areMember": "Are a member",
   "diverst.containers.Group.family.notMember": "Not a member",
