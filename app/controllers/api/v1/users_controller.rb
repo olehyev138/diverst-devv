@@ -129,15 +129,21 @@ class Api::V1::UsersController < DiverstController
   # TOKEN CODE
   # ===============================================
 
-  private def token(token_service)
+  private def token(token_service, with_associations: false, groups: false)
     token, user = token_service.form_token(params[:token])
+
+    groups_scope = if groups
+                     Group
+                         .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
+                         .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id)
+                   else
+                     Group.none
+                   end
 
     render status: 200, json: {
         token: token,
-        user: InvitedUserSerializer.new(user).as_json,
-        groups: Group
-                    .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
-                    .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id).map do |group|
+        user: InvitedUserSerializer.new(user, with_associations: with_associations).as_json,
+        groups: groups_scope.map do |group|
           GroupOnboardingSerializer.new(group, scope: { current_user: user }).as_json
         end
     }
@@ -150,7 +156,7 @@ class Api::V1::UsersController < DiverstController
   # ================================================
 
   def sign_up_token
-    token(InviteTokenService)
+    token(InviteTokenService, groups: true, with_associations: true)
   end
 
   def sign_up

@@ -1,6 +1,12 @@
 class InvitedUserSerializer < ApplicationRecordSerializer
-  attributes :email, :enterprise, :first_name, :biography, :group_ids,
+  attributes :email, :first_name, :biography,
              :last_name, :name, :last_initial, :timezones, :time_zone, :field_data
+
+  attributes_with_permission :group_ids, :field_data, if: :with_associations?
+
+  def with_associations?
+    instance_options[:with_associations]
+  end
 
   def field_data
     field_objects = if object.field_data.loaded?
