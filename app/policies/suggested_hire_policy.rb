@@ -13,6 +13,7 @@ class SuggestedHirePolicy < GroupBasePolicy
   end
 
   def index?
+    return false if !group.enterprise.suggest_hire_enabled?
     return true if group.suggested_hires.any?
 
     super
