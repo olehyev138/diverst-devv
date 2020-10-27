@@ -102,7 +102,9 @@ const SegmentFieldRule = (props) => {
             id={`${ruleLocation}.field`}
             label={<DiverstFormattedMessage {...messages.rule.field} />}
             options={props.selectFields}
-            value={(currentField) ? { value: currentField.id, label: currentField.title } : {}}
+            value={
+              (currentField) ? { value: currentField.id, label: currentField.title } : { value: -1, label: '' }
+            }
             onChange={onFieldSelectChange}
             onInputChange={value => fieldSelectAction(value)}
           />
