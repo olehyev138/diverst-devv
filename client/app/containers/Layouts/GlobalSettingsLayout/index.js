@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useCallback } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { useLocation, useRouteMatch } from 'react-router-dom';
@@ -38,7 +38,7 @@ const GlobalSettingsLayout = (props) => {
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
   const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
 
-  const defaultTab = (() => {
+  const defaultTab = useCallback(() => {
     if (permission(props, 'enterprise_manage'))
       return GlobalSettingsPages[0];
     if (permission(props, 'fields_manage'))
@@ -50,9 +50,9 @@ const GlobalSettingsLayout = (props) => {
     if (permission(props, 'emails_manage'))
       return GlobalSettingsPages[4];
     return null;
-  });
+  }, [props?.permissions]);
 
-  const [tab, setTab] = useState(currentPage || defaultTab);
+  const [tab, setTab] = useState(currentPage || defaultTab());
 
   useEffect(() => {
     if (isRoot)
