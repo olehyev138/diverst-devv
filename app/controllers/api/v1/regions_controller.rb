@@ -1,5 +1,4 @@
 class Api::V1::RegionsController < DiverstController
-
   private
 
   def payload
