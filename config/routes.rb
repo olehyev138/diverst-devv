@@ -225,6 +225,7 @@ Diverst::Application.routes.draw do
       end
       resources :polls_segments
       resources :questions
+      resources :regions
       resources :resources do
         collection do
           get 'archived'
