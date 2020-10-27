@@ -343,7 +343,6 @@ class User < ApplicationRecord
   def inactive_cleanup
     unless active
       group_leaders.destroy_all
-      user_groups.destroy_all
       initiative_users
           .left_joins(:initiative)
           .where('`initiatives`.start > ? AND `initiatives`.archived_at IS NULL', Time.current)
