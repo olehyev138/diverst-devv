@@ -28,8 +28,10 @@ class UserRole < ApplicationRecord
 
   before_destroy -> { throw :abort unless can_destroy? }, prepend: true
   before_update -> {
-    errors.add(:role_type, "can't be changed") if role_type_changed?
-    throw :abort
+    if role_type_changed?
+      errors.add(:role_type, "can't be changed")
+      throw :abort
+    end
   }
 
   after_destroy :reset_user_roles

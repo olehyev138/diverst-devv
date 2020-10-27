@@ -66,7 +66,7 @@ module BaseBuilder
       if item.update_attributes(params[symbol].permit!)
         item
       else
-        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first&.first })
       end
     end
 
