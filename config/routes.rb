@@ -55,6 +55,8 @@ Diverst::Application.routes.draw do
           post 'update_enterprise', to: 'enterprises#update_enterprise'
           put 'update_sso', to: 'enterprises#update_sso'
           patch 'update_sso', to: 'enterprises#update_sso'
+          put 'update_branding', to: 'enterprises#update_branding'
+          patch 'update_branding', to: 'enterprises#update_branding'
         end
         member do
           post '/sso_login',    to: 'enterprises#sso_login'

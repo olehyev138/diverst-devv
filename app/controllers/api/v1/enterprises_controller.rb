@@ -83,6 +83,22 @@ class Api::V1::EnterprisesController < DiverstController
     end
   end
 
+  def update_branding
+    params[klass.symbol] = branding_payload
+    params[:id] = diverst_request.user.enterprise.id
+    item = Enterprise.find(diverst_request.user.enterprise.id)
+    base_authorize(item)
+
+    updated_item = klass.update(self.diverst_request, params)
+    track_activity(updated_item)
+    render status: 200, json: updated_item
+  rescue => e
+    case e
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   def sso_payload
     params
         .require(klass.symbol)
@@ -94,6 +110,25 @@ class Api::V1::EnterprisesController < DiverstController
             :idp_cert,
             :saml_first_name_mapping,
             :saml_last_name_mapping,
+          )
+  end
+
+  def branding_payload
+    params
+        .require(klass.symbol)
+        .permit(
+            :banner,
+            :home_message,
+            :onboarding_consent_enabled,
+            :onboarding_consent_message,
+            :privacy_statement,
+            theme_attributes: [
+                :logo,
+                :logo_redirect_url,
+                :primary_color,
+                :secondary_color,
+                :use_secondary_color,
+            ]
           )
   end
 
