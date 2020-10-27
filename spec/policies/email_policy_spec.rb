@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EmailPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
-  let(:no_access) { create(:user) }
+  let(:no_access) { create(:user, :no_permissions, enterprise: enterprise) }
   let!(:user) { no_access }
 
   subject { EmailPolicy.new(user.reload, enterprise, Email) }
@@ -13,28 +13,23 @@ RSpec.describe EmailPolicy, type: :policy do
   }
 
   describe 'for users with access' do
-    # Enterprise policy tests
-
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:update, :index, :show]) }
+      it { is_expected.to forbid_actions([:create, :destroy]) }
+    end
 
-      it 'returns true for #index?' do
-        expect(subject.manage?).to eq true
-      end
-
-      it 'returns true for #show?' do
-        expect(subject.show?).to eq true
-      end
-
-      it 'returns true for #update?' do
-        expect(subject.update?).to eq true
-      end
+    context 'when branding manage is true' do
+      before { user.policy_group.update branding_manage: true }
+      it { is_expected.to permit_actions([:update, :index, :show]) }
+      it { is_expected.to forbid_actions([:create, :destroy]) }
     end
   end
 
   describe 'for users without access' do
-    describe 'for users with no access' do
-      it { is_expected.to forbid_actions([:create, :destroy]) }
+    context 'when everything is false' do
+      before { user.policy_group.update branding_manage: true }
+      it { is_expected.to forbid_actions([:create, :destroy, :update, :index, :show]) }
     end
   end
 end
