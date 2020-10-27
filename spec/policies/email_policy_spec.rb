@@ -7,11 +7,6 @@ RSpec.describe EmailPolicy, type: :policy do
 
   subject { EmailPolicy.new(user.reload, enterprise, Email) }
 
-  before {
-    no_access.policy_group.manage_all = false
-    no_access.policy_group.save!
-  }
-
   describe 'for users with access' do
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
@@ -28,7 +23,6 @@ RSpec.describe EmailPolicy, type: :policy do
 
   describe 'for users without access' do
     context 'when everything is false' do
-      before { user.policy_group.update branding_manage: true }
       it { is_expected.to forbid_actions([:create, :destroy, :update, :index, :show]) }
     end
   end
