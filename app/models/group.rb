@@ -69,6 +69,10 @@ class Group < ApplicationRecord
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
+  # Regions
+  belongs_to :region
+  has_many :regions, foreign_key: :parent_id
+
   has_one :news_feed, dependent: :destroy
 
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
