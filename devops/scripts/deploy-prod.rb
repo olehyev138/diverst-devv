@@ -3,7 +3,7 @@
 require 'json'
 
 #
-## Deploy Diverst app to production environments
+## Deploy Diverst app to all production environments
 #
 
 #
@@ -38,18 +38,16 @@ def auth_env(role_arn)
   end
 end
 
-# TODO:
-#   - build once, upload to main s3 bucket & copy to prod environments
-
+version_label = 'test-04599'
 clients = load_clients
+
 clients.each do |client|
-  # set access keys & auth with env account using STS
+  # reset access keys to main account & auth with env account using STS
   ENV['AWS_ACCESS_KEY_ID'] = ENV['CCI_AWS_ACCESS_KEY_ID']
   ENV['AWS_SECRET_ACCESS_KEY'] = ENV['CCI_AWS_SECRET_ACCESS_KEY']
   auth_env(client[:role_arn])
 
   # deploy backend
-  version_label = 'test-0130'
   `./devops/scripts/create-app-version #{client[:env]} #{version_label} #{client[:master_bucket]}`
   `./devops/scripts/deploy-app-version #{client[:env]} #{version_label}`
 

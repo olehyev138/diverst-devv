@@ -1,30 +1,24 @@
 #!/bin/bash
 
-# Create an backend Elasticbeanstalk app version
-#   - bundle API, upload to S3 & create a EB app version
+# Create a backend Elastic Beanstalk app version
+#   - assumes app has been bundled via `bundle-backend` script using same version label
+#   - upload backend bundle to S3 & create an EB app version
 # Usage: ./create-app-version <env-name> <app-version-label> <bucket-name>
 
 ENV_NAME=$1
 VERSION_LABEL=$2
 BUNDLE_BUCKET_NAME=$3
 APP_NAME="api-diverst-$VERSION_LABEL.zip"
-RELEASE_BRANCH='HEAD'
 
 # Exit on error
 set -e
 
-if [ ! -d '.git' ]; then
-  echo 'Error - not in app root'
+if [ ! -d '.git' ] || [ ! -d 'build' ]; then
+  echo 'Error - not in app root or build directory missing'
   exit 1
 fi
 
-# Create build directory if it doesnt exist
-mkdir -p build
-
-# Create app bundle with git archive
-git archive --format=zip --output="./build/$APP_NAME" "$RELEASE_BRANCH"
-
-# Copy app bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
+# Upload app bundle to S3 - assumes bucket exists
 aws s3 cp "./build/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME"
 
 # Create app version

@@ -212,8 +212,7 @@ jobs:
           name: Deploy backend
           command: |
             VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
-            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
-            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+            ./devops/scripts/deploy-backend "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
       #
       ## Install node modules for frontend building
       #
@@ -236,6 +235,7 @@ jobs:
       - run:
           name: Build & deploy frontend
           command: |
+            ./devops/scripts/build-frontend
             ./devops/scripts/load-client-env testing
             ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
 
@@ -298,5 +298,8 @@ jobs:
       - run:
           name: Deploy to production instances
           command: |
-            ruby ./devops/scripts/deploy-prod.rb
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
 
+            ./devops/scripts/bundle-backend "$VERSION_LABEL"
+            ./devops/scripts/build-frontend
+            ruby ./devops/scripts/deploy-prod.rb
