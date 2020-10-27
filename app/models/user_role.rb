@@ -26,13 +26,13 @@ class UserRole < ApplicationRecord
   # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
   validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
-  before_destroy  -> { throw :abort unless can_destroy? }, prepend: true
+  before_destroy -> { throw :abort unless can_destroy? }, prepend: true
   before_update -> {
     errors.add(:role_type, "can't be changed") if role_type_changed?
     throw :abort
   }
 
-  after_destroy   :reset_user_roles
+  after_destroy :reset_user_roles
 
   # scopes
   scope :user_type,   ->  { where(role_type: 'user') }
