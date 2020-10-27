@@ -41,7 +41,19 @@ const GroupPlanLayout = (props) => {
   if (!currentPage && location.pathname.includes('outcomes'))
     currentPage = 'events';
 
-  const [tab, setTab] = useState(currentPage || PlanPages[0]);
+  const defaultTab = (() => {
+    if (permission(rest.currentGroup, 'kpi_manage?'))
+      return PlanPages[0];
+    if ((permission(rest.currentGroup, 'annual_budgets_view?')
+      || permission(rest.currentGroup, 'budgets_create?')
+      || permission(rest.currentGroup, 'annual_budgets_index?')))
+      return PlanPages[2];
+    if (permission(rest.currentGroup, 'events_manage?'))
+      return PlanPages[2];
+    return null;
+  });
+
+  const [tab, setTab] = useState(currentPage || defaultTab);
 
   useEffect(() => {
     if (rest.currentGroup && matchPath(location.pathname, { path: ROUTES.group.plan.index.path(), exact: true }))
