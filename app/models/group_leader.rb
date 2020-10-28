@@ -1,10 +1,15 @@
 class GroupLeader < ApplicationRecord
   include GroupLeader::Actions
 
-  belongs_to :group
+  belongs_to :leader_of, polymorphic: true
   belongs_to :user
   belongs_to :user_role
   has_one :policy_group_template, through: :user_role
+
+  alias_method :group, :leader_of
+  alias_method :group=, :leader_of=
+  alias_method :region, :leader_of
+  alias_method :region=, :leader_of=
 
   validates_length_of :position_name, maximum: 191
   validates_presence_of :position_name
