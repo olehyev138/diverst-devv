@@ -9,6 +9,9 @@ import {
   GET_REGIONS_BEGIN,
   GET_REGIONS_SUCCESS,
   GET_REGIONS_ERROR,
+  GET_GROUP_REGIONS_BEGIN,
+  GET_GROUP_REGIONS_SUCCESS,
+  GET_GROUP_REGIONS_ERROR,
   GET_REGION_BEGIN,
   GET_REGION_SUCCESS,
   GET_REGION_ERROR,
@@ -56,16 +59,19 @@ function regionsReducer(state = initialState, action) {
         break;
 
       case GET_REGIONS_BEGIN:
+      case GET_GROUP_REGIONS_BEGIN:
         draft.isLoading = true;
         break;
 
       case GET_REGIONS_SUCCESS:
+      case GET_GROUP_REGIONS_SUCCESS:
         draft.regionList = action.payload.items;
         draft.regionTotal = action.payload.total;
         draft.isLoading = false;
         break;
 
       case GET_REGIONS_ERROR:
+      case GET_GROUP_REGIONS_ERROR:
         draft.isLoading = false;
         break;
 
