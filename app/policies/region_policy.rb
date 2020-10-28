@@ -5,6 +5,7 @@ class RegionPolicy < GroupBasePolicy
   end
 
   def group_association; :parent end
+
   def group_id_param; :parent_id end
 
   private def method_missing(symbol, *args)

@@ -37,7 +37,7 @@ class GroupBasePolicy < ApplicationPolicy
     end
   end
 
-  def  group_of(object)
+  def group_of(object)
     object.send(group_association)
   end
 

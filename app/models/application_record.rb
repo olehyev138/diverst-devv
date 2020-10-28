@@ -43,6 +43,7 @@ class ApplicationRecord < ActiveRecord::Base
     end
     define_method "#{model.model_name.singular}=" do |arg|
       raise ArgumentError, "Must pass a #{model.model_name.name}" unless arg.is_a? model
+
       send("#{field}=", arg)
     end
     define_method "#{model.model_name.singular}_id=" do |id|
