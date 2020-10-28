@@ -7,14 +7,6 @@ class RegionPolicy < GroupBasePolicy
   def group_association; :parent end
   def group_id_param; :parent_id end
 
-  def index?
-    @parent_policy.update?
-  end
-  alias_method :show?, :index?
-  alias_method :create?, :index?
-  alias_method :update?, :index?
-  alias_method :destroy?, :index?
-
   private def method_missing(symbol, *args)
     if @parent_policy.respond_to?(symbol)
       @parent_policy.send(symbol, *args)
