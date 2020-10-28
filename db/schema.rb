@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_26_185402) do
+ActiveRecord::Schema.define(version: 2020_10_28_143033) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -443,6 +443,7 @@ ActiveRecord::Schema.define(version: 2020_10_26_185402) do
     t.boolean "enable_outlook", default: false
     t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
+    t.boolean "force_parent_child_coupling"
   end
 
   create_table "expense_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -574,7 +575,8 @@ ActiveRecord::Schema.define(version: 2020_10_26_185402) do
   end
 
   create_table "group_leaders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
+    t.bigint "leader_of_id"
+    t.string "leader_of_type"
     t.bigint "user_id"
     t.string "position_name"
     t.datetime "created_at", null: false
@@ -615,7 +617,7 @@ ActiveRecord::Schema.define(version: 2020_10_26_185402) do
     t.boolean "manage_posts", default: false
     t.boolean "initiatives_index", default: false
     t.integer "position"
-    t.index ["group_id"], name: "fk_rails_582d7a722f"
+    t.index ["leader_of_id"], name: "fk_rails_582d7a722f"
     t.index ["user_id"], name: "fk_rails_9d1f0af75f"
   end
 
@@ -1880,7 +1882,7 @@ ActiveRecord::Schema.define(version: 2020_10_26_185402) do
   add_foreign_key "group_categories", "enterprises"
   add_foreign_key "group_categories", "group_category_types"
   add_foreign_key "group_category_types", "enterprises"
-  add_foreign_key "group_leaders", "groups"
+  add_foreign_key "group_leaders", "groups", column: "leader_of_id"
   add_foreign_key "group_leaders", "users"
   add_foreign_key "groups", "group_categories"
   add_foreign_key "groups", "group_category_types"

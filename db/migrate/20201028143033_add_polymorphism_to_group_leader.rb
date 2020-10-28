@@ -1,10 +1,10 @@
 class AddPolymorphismToGroupLeader < ActiveRecord::Migration[5.2]
   def up
     rename_column :group_leaders, :group_id, :leader_of_id
-    add_column :group_leaders, :leader_of_type, :string
+    add_column :group_leaders, :leader_of_type, :string, after: :leader_of_id
 
-    Group.column_reload!
-    Group.where(leader_of_type: nil).update_all(leader_of_type: 'Group')
+    GroupLeader.column_reload!
+    GroupLeader.where(leader_of_type: nil).update_all(leader_of_type: 'Group')
   end
 
   def down
