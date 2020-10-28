@@ -6,6 +6,7 @@ class Region < ApplicationRecord
   has_many :children, class_name: 'Group', foreign_key: :region_id
 
   validates :name, presence: true
+  validates :parent, presence: true
   validates_length_of :name, maximum: 191
   validates_length_of :home_message, maximum: 65535
   validates_length_of :short_description, maximum: 65535
