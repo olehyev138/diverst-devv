@@ -23,7 +23,7 @@ class UsersToInviteToGroupDatatable < AjaxDatatablesRails::Base
   private
 
   def link_text(record)
-    if @group.user_groups.invited_users.pluck(:user_id).include?(record.id)
+    if UserGroup.invited_users(@group.id).pluck(:user_id).include?(record.id)
       'Invite Sent!'
     else 
       "Send Invite"
