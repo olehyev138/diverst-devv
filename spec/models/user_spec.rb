@@ -149,7 +149,7 @@ RSpec.describe User do
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
         it { expect(user).to have_many(:group_leaders).dependent(:destroy) }
-        it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
+        it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:leader_of) }
         it { expect(user).to have_many(:user_reward_actions).dependent(:destroy) }
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
         it { expect(user).to have_many(:user_rewards) }

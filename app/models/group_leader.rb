@@ -11,10 +11,10 @@ class GroupLeader < ApplicationRecord
 
   validates_length_of :position_name, maximum: 191
   validates_presence_of :position_name
-  validates_presence_of :group
+  validates_presence_of :leader_of
   validates_presence_of :user
   validates_presence_of :user_role
-  validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: :leader_of }
+  validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: [:leader_of_id, :leader_of_type] }
 
   scope :visible,   -> { where(visible: true) }
   scope :role_ids,  -> { distinct.pluck(:user_role_id) }

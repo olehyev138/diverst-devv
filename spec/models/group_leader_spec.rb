@@ -5,13 +5,13 @@ RSpec.describe GroupLeader, type: :model do
     let(:group_leader) { build(:group_leader) }
 
     it { expect(group_leader).to validate_presence_of(:position_name) }
-    it { expect(group_leader).to validate_presence_of(:group) }
+    it { expect(group_leader).to validate_presence_of(:leader_of) }
     it { expect(group_leader).to validate_presence_of(:user) }
     it { expect(group_leader).to validate_presence_of(:user_role) }
-    it { expect(group_leader).to validate_uniqueness_of(:user_id).with_message('already exists as a group leader').scoped_to(:group_id) }
+    it { expect(group_leader).to validate_uniqueness_of(:user_id).with_message('already exists as a group leader').scoped_to(:leader_of_id, :leader_of_type) }
     it { expect(group_leader).to validate_length_of(:position_name).is_at_most(191) }
     it { expect(group_leader).to belong_to(:user) }
-    it { expect(group_leader).to belong_to(:group) }
+    it { expect(group_leader).to belong_to(:leader_of) }
     it { expect(group_leader).to belong_to(:user_role) }
     it { expect(group_leader).to have_one(:policy_group_template).through(:user_role) }
   end
