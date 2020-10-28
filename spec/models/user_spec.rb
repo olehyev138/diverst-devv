@@ -662,7 +662,7 @@ RSpec.describe User do
     it 'when there is a matching policy for the provided group' do
       user = create(:user)
       group = create(:group)
-      group_leader = create(:group_leader, user: user, group: group)
+      group_leader = create(:group_leader, user: user, leader_of: group)
       expect(user.policy_group_leader(group.id)).to eq group_leader
     end
   end
@@ -742,7 +742,7 @@ RSpec.describe User do
     it 'when user is a leader of the provided group' do
       user = create(:user)
       group = create(:group)
-      group_leader = create(:group_leader, group: group, user: user)
+      group_leader = create(:group_leader, leader_of: group, user: user)
       expect(user.is_group_leader_of?(group)).to eq true
     end
   end
@@ -1218,7 +1218,7 @@ RSpec.describe User do
       initiative_user = create(:initiative_user, user: user)
       initiative_invitee = create(:initiative_invitee, user: user)
       # sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, user: user, group: user_group.group)
+      group_leader = create(:group_leader, user: user, leader_of: user_group.group)
       user_reward_action = create(:user_reward_action, user: user)
       # reward = create(:reward, :responsible_id => user.id)
 

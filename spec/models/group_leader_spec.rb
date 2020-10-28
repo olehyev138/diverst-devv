@@ -38,17 +38,17 @@ RSpec.describe GroupLeader, type: :model do
       create(:user_group, group: group_2, user: user)
 
       # validate that the first group leader is valid
-      group_leader = create(:group_leader, user: user, group: group)
+      group_leader = create(:group_leader, user: user, leader_of: group)
       expect(group_leader.valid?).to be(true)
 
       # validate that the second group leader is not valid since a user cannot be
       # a group leader in 1 group twice
-      group_leader_2 = build(:group_leader, user: user, group: group)
+      group_leader_2 = build(:group_leader, user: user, leader_of: group)
       expect(group_leader_2.valid?).to_not be(true)
 
       # validate that the second group leader is valid since a user can be
       # a group leader in 2 groups once
-      group_leader_3 = create(:group_leader, user: user, group: group_2)
+      group_leader_3 = create(:group_leader, user: user, leader_of: group_2)
       expect(group_leader_3.valid?).to be(true)
     end
 
@@ -56,7 +56,7 @@ RSpec.describe GroupLeader, type: :model do
       user = create(:user)
       group = create(:group, enterprise: user.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
-      group_leader = build(:group_leader, user: user, group: group)
+      group_leader = build(:group_leader, user: user, leader_of: group)
 
       expect(group_leader.valid?).to be(true)
     end
