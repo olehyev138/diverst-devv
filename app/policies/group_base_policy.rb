@@ -290,7 +290,7 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def group_has_permission(permission)
-      GroupLeader.attribute_names.include?(permission)
+      PolicyGroupTemplate::GROUP_LEADER_POLICIES.include?(permission)
     end
 
     delegate :index?, to: :policy
@@ -302,12 +302,20 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def joined_with_group
-      scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+      scope.left_joins(group: [:enterprise, :user_groups, :regions]).joins(
+          'LEFT OUTER JOIN `group_leaders` '\
+          'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
+          'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
+      )
     end
 
     def non_group_base(permission)
       if scope <= Group
-        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups, :regions).joins(
+            'LEFT OUTER JOIN `group_leaders` '\
+            'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
+            'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
+        )
       elsif scope.instance_methods.include?(:group)
         scoped = joined_with_group
       else
