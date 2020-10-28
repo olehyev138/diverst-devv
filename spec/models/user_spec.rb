@@ -271,11 +271,21 @@ RSpec.describe User do
         end
       end
 
-      describe 'after_save callbacks' do
+      describe 'before_save callbacks' do
         context 'set_default_policy_group' do
           it 'create policy_group when policy_group is not set' do
-            new_user.save
-            expect(new_user.policy_group.present?).to eq true
+            user.update(custom_policy_group: false)
+            template1 = create(:policy_group_template, users_manage: true, enterprise: user.enterprise)
+            template2 = create(:policy_group_template, users_index: true, enterprise: user.enterprise)
+            user.update(user_role: template1.user_role)
+
+            expect(user.policy_group.users_manage).to be true
+            expect(user.policy_group.users_index).to be false
+
+            user.update(user_role: template2.user_role)
+
+            expect(user.policy_group.users_manage).to be false
+            expect(user.policy_group.users_index).to be true
           end
         end
       end
@@ -304,7 +314,7 @@ RSpec.describe User do
     context 'presence of fields' do
       let!(:mandatory_field) { build(:field, title: 'Test', required: true) }
       let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
-      let(:user) { build(:user, enterprise: enterprise) }
+      let(:user) { create(:user, enterprise: enterprise) }
 
       context 'with mandatory fields not filled' do
         it 'should have an error on user' do

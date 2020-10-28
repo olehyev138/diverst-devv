@@ -6,7 +6,7 @@ module ContainsFieldData
     before_validation :transfer_info_to_data
 
     # Only validate that all required field data is present if the user is actually trying to change field data
-    validate :validate_presence_field_data, if: -> { field_data.any?(&:changed?) }
+    validate :validate_presence_field_data, if: -> { field_data.any?(&:changed?) && (self.class != User || !new_record?) }
 
     if self.get_association(self::FIELD_DEFINER_NAME).polymorphic?
       define_method self::FIELD_ASSOCIATION_NAME do

@@ -4,7 +4,7 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
-  let(:initiative_comment) { create(:initiative_comment, user: user) }
+  let(:initiative_comment) { create(:initiative_comment) }
   let!(:group) { initiative_comment.initiative.owner_group }
 
   subject { described_class.new(user.reload, initiative_comment) }
@@ -37,16 +37,22 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
         context 'when manage_comments is true' do
           before { user.policy_group.update manage_posts: true }
 
-          it 'returns true for #index?' do
+          it 'returns true for #update?' do
             expect(subject.update?).to eq true
           end
         end
 
         context 'when user is the creator' do
-          before { create(:initiative_comment, user_id: user.id) }
+          before { initiative_comment.update(user: user) }
 
-          it 'returns true for #index?' do
+          it 'returns true for #update?' do
             expect(subject.update?).to eq true
+          end
+        end
+
+        context 'when user is NOT the creator' do
+          it 'returns false for #update?' do
+            expect(subject.update?).to eq false
           end
         end
       end

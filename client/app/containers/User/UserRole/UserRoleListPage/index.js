@@ -76,6 +76,7 @@ export function UserRoleListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitUserRoleEdit={props.handleVisitUserRoleEdit}
+        permissions={props.permissions}
         links={links}
       />
     </React.Fragment>
@@ -85,6 +86,7 @@ export function UserRoleListPage(props) {
 UserRoleListPage.propTypes = {
   getUserRolesBegin: PropTypes.func.isRequired,
   userRoles: PropTypes.object,
+  permissions: PropTypes.object,
   userRoleTotal: PropTypes.number,
   isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
@@ -116,7 +118,7 @@ export default compose(
   memo,
 )(Conditional(
   UserRoleListPage,
-  ['permissions.policy_templates_create'],
+  ['permissions.policy_templates_view'],
   (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
   permissionMessages.user.userRole.listPage
 ));

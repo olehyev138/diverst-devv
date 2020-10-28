@@ -524,7 +524,7 @@ export default function Routes(props) {
                       <SystemUserLayout>
                         <Switch>
                           { /* Users */}
-                          <RouteWithProps exact path={ROUTES.admin.system.users.index.path()}><UsersPage /></RouteWithProps>
+                          <RouteWithProps exact path={ROUTES.admin.system.users.list.path()}><UsersPage /></RouteWithProps>
                           { /* Users Import */}
                           <RouteWithProps path={ROUTES.admin.system.users.import.path()}><UsersImportPage /></RouteWithProps>
                           { /* User Create */}

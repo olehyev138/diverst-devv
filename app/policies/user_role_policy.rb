@@ -4,9 +4,11 @@ class UserRolePolicy < ApplicationPolicy
     return true if basic_group_leader_permission?('users_index')
     return true if basic_group_leader_permission?('group_leader_manage')
     return true if user.group_leaders.any?(&:group_leader_manage?)
+    return true if basic_group_leader_permission?('users_manage')
+    return true if @policy_group.users_manage?
+    return true if @policy_group.group_leader_manage?
 
     @policy_group.users_index?
-    @policy_group.group_leader_manage?
   end
 
   def new?
@@ -15,9 +17,9 @@ class UserRolePolicy < ApplicationPolicy
 
   def create?
     return true if manage_all?
-    return true if basic_group_leader_permission?('users_manage')
+    return true if basic_group_leader_permission?('permissions_manage')
 
-    @policy_group.users_manage?
+    @policy_group.permissions_manage?
   end
 
   def update?
