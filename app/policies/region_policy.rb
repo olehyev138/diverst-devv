@@ -7,6 +7,7 @@ class RegionPolicy < GroupBasePolicy
   end
 
   def group_association; :parent end
+
   def group_id_param; :parent_id end
 
   delegate :index?, :show?, :create?, :update?, :destroy?, :manage?, to: :parent_policy
