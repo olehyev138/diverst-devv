@@ -280,7 +280,7 @@ class GroupPolicy < ApplicationPolicy
   #   parent_permissions?
   # end
   def parent_permissions?
-    parent_permission_prototype(:group, ::GroupPolicy) ||
+    parent_permission_prototype(:parent, ::GroupPolicy) ||
     parent_permission_prototype(:region, ::RegionPolicy)
   end
 

@@ -29,14 +29,17 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
+    region_id = Region.find_by(group_id: params[:group_idd])
+
     base = User.left_joins(:policy_group, :group_leaders, :user_groups)
                 .where(
                     [
-                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
+                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Group")',
+                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Region")',
                         '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
                         '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
                         '(`policy_groups`.`manage_all` = TRUE)',
-                    ].join(' OR '), params[:group_id], params[:group_id])
+                    ].join(' OR '), params[:group_id], region_id, params[:group_id])
 
     render status: 200, json: klass.index(self.diverst_request, params.permit!, base: base)
   rescue => e
