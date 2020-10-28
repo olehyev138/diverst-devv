@@ -21,7 +21,7 @@ class GroupBasePolicy < ApplicationPolicy
       elsif context.is_a?(Class) # Class
         # Set group using params if context is a class as this will be for
         # nested model actions such as index and create, which require a group
-        self.group = ::Group.find(get_group_id(context)) rescue nil
+        self.group = ::Group.find(get_group_id(context), get_group_id(context, group_id_param)) rescue nil
       elsif context.present?
         self.group = group_of(context)
         self.record = context
@@ -49,7 +49,7 @@ class GroupBasePolicy < ApplicationPolicy
     :group_id
   end
 
-  def get_group_id(context, param = group_id_param)
+  def get_group_id(context, param = :group_id)
     params[param] || params.dig(context.model_name.param_key.to_sym, param)
   end
 

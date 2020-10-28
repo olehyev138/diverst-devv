@@ -1,8 +1,4 @@
 class InitiativePolicy < GroupBasePolicy
-  def get_group_id(context = nil)
-    super(context, :group_id) || super
-  end
-
   def group_id_param
     :owner_group_id
   end
