@@ -38,7 +38,7 @@ def auth_env(role_arn)
   end
 end
 
-version_label = 'test-04599'
+version_label = ARGV[0]
 clients = load_clients
 
 clients.each do |client|

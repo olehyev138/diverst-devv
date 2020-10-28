@@ -302,4 +302,4 @@ jobs:
 
             ./devops/scripts/bundle-backend "$VERSION_LABEL"
             ./devops/scripts/build-frontend
-            ruby ./devops/scripts/deploy-prod.rb
+            ruby ./devops/scripts/deploy-prod.rb "$VERSION_LABEL"
