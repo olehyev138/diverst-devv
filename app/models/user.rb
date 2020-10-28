@@ -224,6 +224,10 @@ class User < ApplicationRecord
     group_leaders.find { |gl| gl.group_id == group_id }
   end
 
+  def policy_region_leader(region_id)
+    group_leaders.find { |gl| gl.region_id == region_id }
+  end
+
   def policy_initiative_user(event_id)
     initiative_users.find { |iu| iu.initiative_id == event_id }
   end

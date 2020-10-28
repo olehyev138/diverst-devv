@@ -1,5 +1,5 @@
 class GroupBasePolicy < ApplicationPolicy
-  attr_accessor :user, :group, :record, :group_leader_role_id, :group_leader, :user_group
+  attr_accessor :user, :group, :region, :record, :group_leader_role_id, :group_leader, :region_leader, :user_group
 
   def initialize(user, context, params = {})
     case user
@@ -28,7 +28,9 @@ class GroupBasePolicy < ApplicationPolicy
       end
 
       if group
+        @region = group.region
         @group_leader = user.policy_group_leader(group.id)
+        @region_leader = user.policy_region_leader(region.id) if region
         @user_group = user.policy_user_group(group.id)
         @group_leader_role_id = group_leader&.user_role_id
       end
@@ -48,7 +50,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def is_a_leader?
-    group_leader.present?
+    group_leader.present? || region_leader.present?
   end
 
   alias_method :is_active_member?, :is_an_accepted_member?
@@ -104,7 +106,11 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_group_leader_permissions?(permission)
-    (is_a_leader? && group_leader[permission]) || false
+    if is_a_leader?
+      (group_leader&.[](permission) || region_leader&.[](permission))
+    else
+      false
+    end
   end
 
   def view_group_resource(permission)
