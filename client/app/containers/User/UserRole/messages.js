@@ -19,6 +19,12 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  delete_group_in_use: {
+    id: `${scope}.index.button.delete_group_in_use`,
+  },
+  delete_default_role: {
+    id: `${scope}.index.button.delete_default_role`,
+  },
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
   },
