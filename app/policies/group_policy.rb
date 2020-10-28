@@ -1,11 +1,13 @@
 class GroupPolicy < ApplicationPolicy
-  attr_reader :user_group, :group_leader
+  attr_reader :user_group, :group_leader, :region, :region_leader
 
   def initialize(user, record, params = nil)
     super(user, record, params)
     if Group === record
       @user_group = record.user_groups.find { |ug| ug.user_id == user.id }
       @group_leader = record.group_leaders.find { |gl| gl.user_id == user.id }
+      @region = record.region
+      @region_leader = region.region_leaders.find_by(user_id: user.id) if region
     end
   end
 
@@ -238,6 +240,7 @@ class GroupPolicy < ApplicationPolicy
 
   def manage?
     return true if manage_all?
+    return true if parent_permission_prototype(:region, ::RegionPolicy)
     return true if has_group_leader_permissions?('groups_manage')
 
     @policy_group.groups_manage?
@@ -248,7 +251,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_an_accepted_member?
-    is_a_member? && @user_group.accepted_member == true
+    (is_a_member? && @user_group.accepted_member == true) || region_leader.present?
   end
 
   def is_a_member?

@@ -11,6 +11,8 @@ class GroupBasePolicy < ApplicationPolicy
       @group_leader_role_id = user.group_leader_role_id
       @policy_group = user.policy_group
       @group_leader = user.group_leader
+      @region = user.region
+      @region_leader = user.region_leader
       @user_group = user.user_group
     else
       super(user, context, params)
