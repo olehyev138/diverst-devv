@@ -59,7 +59,7 @@ class UserRole < ApplicationRecord
       errors[:base] << 'Cannot destroy default user role'
       return false
     elsif role_type === 'group'
-      if GroupLeader.joins(group: :enterprise).where(groups: { enterprise_id: enterprise.id }, user_role_id: id).count > 0
+      if GroupLeader.joins(user_role: :enterprise).where(user_roles: { enterprise_id: enterprise.id }, user_role_id: id).count > 0
         errors[:base] << 'Cannot delete because there are users with this group role.'
         return false
       end
