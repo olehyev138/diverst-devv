@@ -119,7 +119,7 @@ class GroupBasePolicy < ApplicationPolicy
 
   def has_group_leader_permissions?(permission)
     if is_a_leader?
-      (group_leader&.[](permission) || region_leader&.[](permission))
+      (group_leader&.[](permission) || region_leader&.[](permission) || false)
     else
       false
     end

@@ -1,4 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe RegionLeadersController, type: :controller do
+RSpec.describe Api::V1::RegionLeadersController, type: :controller do
 end

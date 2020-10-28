@@ -11,7 +11,7 @@ class PolicyGroupTemplateUpdateJob < ActiveJob::Base
       user.set_default_policy_group
     end
 
-    GroupLeader.joins(group: :enterprise).where(groups: { enterprise_id: enterprise.id }, user_role_id: user_role.id).find_each do |leader|
+    GroupLeader.joins(user_role: :enterprise).where(user_roles: { enterprise_id: enterprise.id }, user_role_id: user_role.id).find_each do |leader|
       # budgets
       leader.groups_budgets_index = template.groups_budgets_index
       leader.groups_budgets_request = template.groups_budgets_request
