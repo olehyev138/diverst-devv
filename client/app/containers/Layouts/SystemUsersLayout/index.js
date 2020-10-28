@@ -48,7 +48,19 @@ const SystemUsersLayout = (props) => {
   else if (!matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
     currentPage = 'users';
 
-  const [tab, setTab] = useState(SystemUsersPages[currentPage] || SystemUsersPages[0]);
+  const defaultTab = (() => {
+    if (permission(props, 'users_create'))
+      return SystemUsersPages[0];
+    if (permission(props, 'policy_templates_view'))
+      return SystemUsersPages[1];
+    if (permission(props, 'policy_templates_manage'))
+      return SystemUsersPages[2];
+    if (permission(props, 'users_create'))
+      return SystemUsersPages[3];
+    return null;
+  });
+
+  const [tab, setTab] = useState(SystemUsersPages[currentPage] || defaultTab);
 
   useEffect(() => {
     if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path(), exact: true }))
@@ -65,7 +77,7 @@ const SystemUsersLayout = (props) => {
         redirectAction(ROUTES.user.home.path());
       }
 
-    if (tab !== currentPage)
+    if (tab !== currentPage && currentPage)
       setTab(currentPage);
   }, [currentPage]);
 
