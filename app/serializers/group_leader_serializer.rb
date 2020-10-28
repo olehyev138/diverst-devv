@@ -4,7 +4,6 @@ class GroupLeaderSerializer < ApplicationRecordSerializer
              :default_group_contact
 
   belongs_to :user
-  belongs_to :group
 
   def serialize_all_fields
     true

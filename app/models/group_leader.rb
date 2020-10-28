@@ -6,23 +6,22 @@ class GroupLeader < ApplicationRecord
   belongs_to :user_role
   has_one :policy_group_template, through: :user_role
 
-  alias_method :group, :leader_of
-  alias_method :group=, :leader_of=
-  alias_method :region, :leader_of
-  alias_method :region=, :leader_of=
+  polymorphic_alias :leader_of, Group
+  polymorphic_alias :leader_of, Region
 
   validates_length_of :position_name, maximum: 191
   validates_presence_of :position_name
   validates_presence_of :group
   validates_presence_of :user
   validates_presence_of :user_role
-  validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: :group_id }
+  validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: :leader_of }
 
   scope :visible,   -> { where(visible: true) }
   scope :role_ids,  -> { distinct.pluck(:user_role_id) }
 
   before_save :set_admin_permissions
-  validate :validate_group_membership_of_group_leader
+  validate :validate_group_membership_of_group_leader, if: -> { leader_of_type == 'Group' }
+  validate :validate_group_membership_of_parent_of_region, if: -> { leader_of_type == 'Region' }
 
 
   # we want to make sure the group_leader can access certain
@@ -91,5 +90,9 @@ class GroupLeader < ApplicationRecord
 
   def validate_group_membership_of_group_leader
     errors.add(:user, 'Selected user is not a member of this group') unless UserGroup.find_by(user_id: user_id, group_id: group_id)&.is_accepted?
+  end
+
+  def validate_group_membership_of_parent_of_region
+    errors.add(:user, 'Selected user is not a member of this regions parent group') unless UserGroup.find_by(user_id: user_id, group_id: region.parent_id)&.is_accepted?
   end
 end

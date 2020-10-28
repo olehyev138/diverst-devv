@@ -35,6 +35,18 @@ class ApplicationRecord < ActiveRecord::Base
     self.reset_column_information
   end
 
+  def self.polymorphic_alias(field, model)
+    alias_method model.model_name.singular, field
+    alias_method "#{model.model_name.singular}=", "#{field}="
+    define_method "#{model.model_name.singular}_id=" do |id|
+      send("#{field}_id=", id)
+      send("#{field}_type=", model.model_name.name)
+    end
+    define_method "#{model.model_name.singular}_id" do
+      send("#{field}_id") if model.model_name.name == send("#{field}_type")
+    end
+  end
+
   ActiveRecord::Associations::Association.class_eval do
     def target_scope
       ActiveRecord::AssociationRelation.create(klass, self).merge!(klass.scope_for_association)
