@@ -275,14 +275,18 @@ RSpec.describe User do
         context 'set_default_policy_group' do
           it 'create policy_group when policy_group is not set' do
             user.update(custom_policy_group: false)
-            template1 = create(:policy_group_template, users_manage: true, enterprise: user.enterprise)
-            template2 = create(:policy_group_template, users_index: true, enterprise: user.enterprise)
-            user.update(user_role: template1.user_role)
+            role1 = create(:user_role, role_type: 'user', enterprise: user.enterprise)
+            role2 = create(:user_role, role_type: 'user', enterprise: user.enterprise)
+
+            role1.policy_group_template.update(users_manage: true)
+            role2.policy_group_template.update(users_index: true)
+
+            user.update(user_role: role1)
 
             expect(user.policy_group.users_manage).to be true
             expect(user.policy_group.users_index).to be false
 
-            user.update(user_role: template2.user_role)
+            user.update(user_role: role2)
 
             expect(user.policy_group.users_manage).to be false
             expect(user.policy_group.users_index).to be true

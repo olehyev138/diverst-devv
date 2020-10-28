@@ -138,7 +138,6 @@ class User < ApplicationRecord
 
   validates_format_of :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
-  validate :user_role_presence
   validate :group_leader_role
   validate :policy_group
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
@@ -146,6 +145,7 @@ class User < ApplicationRecord
   validates :points, numericality: { only_integer: true }
   validates :credits, numericality: { only_integer: true }
 
+  before_validation :user_role_presence
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -300,7 +300,7 @@ class User < ApplicationRecord
 
   def user_role_presence
     if user_role_id.nil?
-      self.user_role_id = enterprise.default_user_role
+      self.user_role_id = enterprise.default_user_role_id
     end
   end
 
@@ -327,10 +327,12 @@ class User < ApplicationRecord
   end
 
   def set_default_policy_group
-    template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
-    return unless template
+    attributes = if policy_group_template.present?
+      policy_group_template.create_new_policy
+    else
+      PolicyGroupTemplate::EMPTY_POLICY_ATTRIBUTES.dup
+    end
 
-    attributes = template.create_new_policy
     attributes.delete(:manage_all)
     if policy_group.nil?
       create_policy_group(attributes)

@@ -28,62 +28,14 @@ class GroupLeader < ApplicationRecord
   # resources in the admin view
 
   def set_admin_permissions
-    # update the permissions for this group_leader
+    attributes = if policy_group_template.present?
+      policy_group_template.create_new_group_leader
+    else
+      PolicyGroupTemplate::EMPTY_GROUP_LEADER_ATTRIBUTES.dup
+    end
 
-    # budgets
-    self.groups_budgets_index = policy_group_template.groups_budgets_index
-    self.groups_budgets_request = policy_group_template.groups_budgets_request
-    self.budget_approval = policy_group_template.budget_approval
-    self.groups_budgets_manage = policy_group_template.groups_budgets_manage
-
-    # events
-    self.initiatives_index = policy_group_template.initiatives_index
-    self.initiatives_manage = policy_group_template.initiatives_manage
-    self.initiatives_create = policy_group_template.initiatives_create
-
-    # manage group in entirety - this permission supersedes all other permissions
-    self.groups_manage = policy_group_template.groups_manage
-
-    # members
-    self.groups_members_index = policy_group_template.groups_members_index
-    self.groups_members_manage = policy_group_template.groups_members_manage
-
-    # leaders
-    self.group_leader_index = policy_group_template.group_leader_index
-    self.group_leader_manage = policy_group_template.group_leader_manage
-
-    # insights
-    self.groups_insights_manage = policy_group_template.groups_insights_manage
-
-    # layouts
-    self.groups_layouts_manage = policy_group_template.groups_layouts_manage
-
-    # settings
-    self.group_settings_manage = policy_group_template.group_settings_manage
-
-    # news
-    self.news_links_index = policy_group_template.news_links_index
-    self.news_links_create = policy_group_template.news_links_create
-    self.news_links_manage = policy_group_template.news_links_manage
-
-    # messages
-    self.group_messages_manage = policy_group_template.group_messages_manage
-    self.group_messages_index = policy_group_template.group_messages_index
-    self.group_messages_create = policy_group_template.group_messages_create
-
-    # social links
-    self.social_links_manage = policy_group_template.social_links_manage
-    self.social_links_index = policy_group_template.social_links_index
-    self.social_links_create = policy_group_template.social_links_create
-
-    # resources
-    self.group_resources_manage = policy_group_template.group_resources_manage
-    self.group_resources_index = policy_group_template.group_resources_index
-    self.group_resources_create = policy_group_template.group_resources_create
-
-    # posts
-    self.group_posts_index = policy_group_template.group_posts_index
-    self.manage_posts = policy_group_template.manage_posts
+    attributes.delete(:manage_all)
+    assign_attributes(attributes)
   end
 
   private
