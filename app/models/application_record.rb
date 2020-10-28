@@ -36,8 +36,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.polymorphic_alias(field, model)
-    alias_method model.model_name.singular, field
-    alias_method "#{model.model_name.singular}=", "#{field}="
+    define_method model.model_name.singular do
+      if model.model_name.name == send("#{field}_type")
+        send(field)
+      end
+    end
+    define_method "#{model.model_name.singular}=" do |arg|
+      raise ArgumentError, "Must pass a #{model.model_name.name}" unless arg.is_a? model
+      send("#{field}=", arg)
+    end
     define_method "#{model.model_name.singular}_id=" do |id|
       send("#{field}_id=", id)
       send("#{field}_type=", model.model_name.name)

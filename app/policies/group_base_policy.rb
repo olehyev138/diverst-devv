@@ -23,7 +23,7 @@ class GroupBasePolicy < ApplicationPolicy
         # nested model actions such as index and create, which require a group
         self.group = ::Group.find(get_group_id(context)) rescue nil
       elsif context.present?
-        self.group = context.send(group_association)
+        self.group = group_of(context)
         self.record = context
       end
 
@@ -35,6 +35,10 @@ class GroupBasePolicy < ApplicationPolicy
         @group_leader_role_id = group_leader&.user_role_id
       end
     end
+  end
+
+  def  group_of(object)
+    object.send(group_association)
   end
 
   def group_association
