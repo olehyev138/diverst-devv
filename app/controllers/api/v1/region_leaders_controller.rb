@@ -14,7 +14,7 @@ class Api::V1::RegionLeadersController < DiverstController
     polymorphize_leader_of_query(params[:group_leader])
   end
 
-  def polymorphize_leader_of_query(temp_params)
+  def polymorphize_leader_of_query(temp_params = params)
     if temp_params[:region_id]
       temp_params[:leader_of_type] ||= 'Region'
       temp_params[:leader_of_id] ||= temp_params[:region_id]
