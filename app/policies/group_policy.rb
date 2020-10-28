@@ -268,6 +268,7 @@ class GroupPolicy < ApplicationPolicy
   def update?
     return true if manage?
     return true if has_group_leader_permissions?('group_settings_manage')
+    return true if policy_group.group_settings_manage
 
     @record.owner == @user
   end
