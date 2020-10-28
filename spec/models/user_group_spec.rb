@@ -77,7 +77,7 @@ RSpec.describe UserGroup do
     let(:user_group2) { create :user_group, user: user2, group: group, accepted_member: false }
 
     it 'return invited users' do
-      expect(group.user_groups.invited_users).to eq([user_group1])
+      expect(UserGroup.invited_users(group.id)).to eq([user_group1])
     end
   end
 
