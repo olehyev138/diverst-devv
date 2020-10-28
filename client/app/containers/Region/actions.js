@@ -8,6 +8,9 @@ import {
   GET_REGIONS_BEGIN,
   GET_REGIONS_SUCCESS,
   GET_REGIONS_ERROR,
+  GET_GROUP_REGIONS_BEGIN,
+  GET_GROUP_REGIONS_SUCCESS,
+  GET_GROUP_REGIONS_ERROR,
   GET_REGION_BEGIN,
   GET_REGION_SUCCESS,
   GET_REGION_ERROR,
@@ -44,6 +47,28 @@ export function getRegionsSuccess(payload) {
 export function getRegionsError(error) {
   return {
     type: GET_REGIONS_ERROR,
+    error,
+  };
+}
+
+/* Region listing given a parent group */
+export function getGroupRegionsBegin(payload) {
+  return {
+    type: GET_GROUP_REGIONS_BEGIN,
+    payload,
+  };
+}
+
+export function getGroupRegionsSuccess(payload) {
+  return {
+    type: GET_GROUP_REGIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function getGroupRegionsError(error) {
+  return {
+    type: GET_GROUP_REGIONS_ERROR,
     error,
   };
 }
