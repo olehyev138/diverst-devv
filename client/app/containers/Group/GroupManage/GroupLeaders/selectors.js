@@ -64,7 +64,7 @@ function mapForm(leader) {
   if (!leader) return null;
   return produce(leader, (draft) => {
     draft.user = { value: leader.user.id, label: leader.user.name };
-    draft.user_role = { value: leader.user_role.id, label: leader.user_role.role_name };
+    draft.user_role = leader.user_role ? { value: leader.user_role.id, label: leader.user_role.role_name } : null;
   });
 }
 
