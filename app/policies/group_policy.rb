@@ -217,7 +217,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def manage_all_groups?
-    # return true if parent_group_permissions?
+    # return true if parent_permissions?
     # super admin
     return true if manage_all?
     return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('group_settings_manage')
@@ -227,7 +227,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def manage_all_group_budgets?
-    # return true if parent_group_permissions?
+    # return true if parent_permissions?
     # super admin
     return true if manage_all?
     return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('groups_budgets_manage')
@@ -276,12 +276,17 @@ class GroupPolicy < ApplicationPolicy
   # @example
   # def show?
   #   # checks if user has `show` permission in parent group
-  #   parent_group_permissions?
+  #   parent_permissions?
   # end
-  def parent_group_permissions?
-    return false if @record.parent.nil?
+  def parent_permissions?
+    parent_permission_prototype(:group, ::GroupPolicy) ||
+    parent_permission_prototype(:region, ::RegionPolicy)
+  end
 
-    parent_policy = ::GroupPolicy.new(@user, @record.parent)
+  def parent_permission_prototype(field, policy)
+    return false if @record.send(field).nil?
+
+    parent_policy = policy.new(@user, @record.send(field))
 
     # Gets the method name which this method was called from
     caller = caller_locations(1, 1)&.first&.label
@@ -304,7 +309,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def insights?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager
@@ -317,7 +322,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def layouts?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager
@@ -331,7 +336,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def settings?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager

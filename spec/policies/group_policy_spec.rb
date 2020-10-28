@@ -237,10 +237,10 @@ RSpec.describe GroupPolicy, type: :policy do
         end
       end
 
-      describe '#parent_group_permissions?' do
+      describe '#parent_permissions?' do
         context 'when group has no parent' do
           it 'returns false' do
-            expect(subject.parent_group_permissions?).to eq false
+            expect(subject.parent_permissions?).to eq false
           end
         end
 
@@ -248,7 +248,7 @@ RSpec.describe GroupPolicy, type: :policy do
           before { group.parent = create(:group, enterprise: user.enterprise) }
 
           it 'returns true' do
-            expect(subject.parent_group_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
+            expect(subject.parent_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
           end
         end
       end
@@ -544,10 +544,10 @@ RSpec.describe GroupPolicy, type: :policy do
         end
       end
 
-      describe '#parent_group_permissions?' do
+      describe '#parent_permissions?' do
         context 'when group has no parent' do
           it 'returns false' do
-            expect(subject.parent_group_permissions?).to eq false
+            expect(subject.parent_permissions?).to eq false
           end
         end
 
@@ -555,7 +555,7 @@ RSpec.describe GroupPolicy, type: :policy do
           before { group.parent = create(:group, enterprise: user.enterprise) }
 
           it 'returns false' do
-            expect(subject.parent_group_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
+            expect(subject.parent_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
           end
         end
       end
