@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
+import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import messages from './messages';
@@ -16,12 +17,14 @@ import {
 
 import {
   getRegionsSuccess, getRegionsError,
-  getGroupRegionsSuccess, getGroupRegionsError,
+  getGroupRegionsBegin, getGroupRegionsSuccess, getGroupRegionsError,
   getRegionSuccess, getRegionError,
   createRegionSuccess, createRegionError,
   updateRegionSuccess, updateRegionError,
   deleteRegionSuccess, deleteRegionError,
 } from 'containers/Region/actions';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 
 export function* getRegions(action) {
@@ -60,11 +63,11 @@ export function* createRegion(action) {
     const response = yield call(api.regions.create.bind(api.regions), payload);
 
     yield put(createRegionSuccess());
-    // yield put(push(ROUTES.region.home.path(response.data.region.id)));
+    yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createRegionError(err));
-    // yield put(push(ROUTES.admin.manage.regions.index.path()));
+    yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
   }
 }
@@ -75,20 +78,21 @@ export function* updateRegion(action) {
     const response = yield call(api.regions.update.bind(api.regions), payload.region.id, payload);
 
     yield put(updateRegionSuccess());
-    // yield put(push(ROUTES.admin.manage.regions.index.path()));
+    yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateRegionError(err));
+    yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
   }
 }
 
 export function* deleteRegion(action) {
   try {
-    yield call(api.regions.destroy.bind(api.regions), action.payload);
+    yield call(api.regions.destroy.bind(api.regions), action.payload.region_id);
 
     yield put(deleteRegionSuccess());
-    // yield put(push(ROUTES.admin.manage.regions.index.path()));
+    yield put(getGroupRegionsBegin({ group_id: action.payload.group_id }));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionError(err));
