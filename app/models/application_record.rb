@@ -35,6 +35,23 @@ class ApplicationRecord < ActiveRecord::Base
     self.reset_column_information
   end
 
+  # Defines alias to access polymorphic data as if it weren't
+  #
+  # For example
+  # class GroupLeader
+  #   belongs_to :leader_of, polymorphic: true
+  #   polymorphic_alias :leader_of, Group
+  #   polymorphic_alias :leader_of, Region
+  # end
+  #
+  # gl = GroupLeader.first
+  #
+  # gl.group // if leader_of is a group, return it
+  # gl.group = Group.first // sets leader_ofK
+  # gl.group = Region.first // ArgumentError "Must pass a Group"
+  #
+  # gl.group_id // if leader_of is a group, return leader_of_id
+  # gl.group_id = 1 // sets leader_of_id to 1 and leader_of_type to 'Group'
   def self.polymorphic_alias(field, model)
     define_method model.model_name.singular do
       if model.model_name.name == send("#{field}_type")
