@@ -1,7 +1,19 @@
 es:
-  login: 
-    title: "Iniciar Sesión"
-    email: "Correo Electrónico"
-    password: "Contraseña"
-    remember_me: "Recuérdame"
-    forgot_password: "¿Olvidaste tu contraseña?"
+  custom_text:
+    erg: Group
+    program: Goal
+    structure: Structure
+    outcome: Focus Areas
+    badge: Badge
+    segment: Segment
+    dci_full_title: Engagement
+    dci_abbreviation: Engagement
+    member_preference: Member Survey
+    parent: Parent
+    sub_erg: Sub-Group
+    privacy_statement: Privacy Statement
+  errors:
+    not_found: {
+      one: "Lo sentimos, el recurso que busca no existe.",
+      other: "Lo sentimos, el recurso que busca no existe."
+    }
