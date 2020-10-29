@@ -16,6 +16,10 @@ module Region::Actions
       []
     end
 
+    def base_attributes_preloads
+      []
+    end
+
     # List of all attributes to preload.
     # Used when serializing a region itself
     def base_preloads

@@ -62,6 +62,9 @@ export default defineMessages({
     categorizePage: {
       id: `${scope}.group.groupCategorizePage`
     },
+    manageRegionsPage: {
+      id: `${scope}.group.manageRegionsPage`
+    },
     outcome: {
       editPage: {
         id: `${scope}.group.outcome.outcomeEditPage`

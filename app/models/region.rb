@@ -1,4 +1,5 @@
 class Region < ApplicationRecord
+  include ActionView::Helpers::TranslationHelper
   include PublicActivity::Common
   include Region::Actions
 
@@ -7,10 +8,13 @@ class Region < ApplicationRecord
   has_many :region_leaders, class_name: 'GroupLeader', as: :leader_of
 
   validates :name, presence: true
+  validates :parent, presence: true
   validates_length_of :name, maximum: 191
   validates_length_of :home_message, maximum: 65535
   validates_length_of :short_description, maximum: 65535
   validates_length_of :description, maximum: 65535
+
+  validate :ensure_parent_isnt_a_child_group
 
   after_create :set_position
 
@@ -29,5 +33,11 @@ class Region < ApplicationRecord
 
   def set_position
     self.position = self.id
+  end
+
+  def ensure_parent_isnt_a_child_group
+    if parent.is_sub_group?
+      errors.add(:parent, t('errors.region.parent_cant_be_child_group'))
+    end
   end
 end

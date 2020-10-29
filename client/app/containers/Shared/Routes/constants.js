@@ -669,6 +669,17 @@ const ROUTES = {
             path: () => '/admin/manage/groups/category_types/edit',
           },
         },
+        regions: {
+          index: {
+            path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/regions`,
+          },
+          new: {
+            path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/regions/new`,
+          },
+          edit: {
+            path: (groupId = ':group_id', regionId = ':region_id') => `/admin/manage/groups/${groupId}/regions/${regionId}/edit`,
+          },
+        },
       },
       segments: {
         pathPrefix: '/admin/manage/segments',

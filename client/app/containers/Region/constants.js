@@ -8,6 +8,10 @@ export const GET_REGIONS_BEGIN = 'app/Region/GET_REGIONS_BEGIN';
 export const GET_REGIONS_SUCCESS = 'app/Region/GET_REGIONS_SUCCESS';
 export const GET_REGIONS_ERROR = 'app/Region/GET_REGIONS_ERROR';
 
+export const GET_GROUP_REGIONS_BEGIN = 'app/Region/GET_GROUP_REGIONS_BEGIN';
+export const GET_GROUP_REGIONS_SUCCESS = 'app/Region/GET_GROUP_REGIONS_SUCCESS';
+export const GET_GROUP_REGIONS_ERROR = 'app/Region/GET_GROUP_REGIONS_ERROR';
+
 export const GET_REGION_BEGIN = 'app/Region/GET_REGION_BEGIN';
 export const GET_REGION_SUCCESS = 'app/Region/GET_REGION_SUCCESS';
 export const GET_REGION_ERROR = 'app/Region/GET_REGION_ERROR';

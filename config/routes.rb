@@ -225,7 +225,11 @@ Diverst::Application.routes.draw do
       end
       resources :polls_segments
       resources :questions
-      resources :regions
+      resources :regions do
+        collection do
+          get 'group_regions'
+        end
+      end
       resources :region_leaders
       resources :resources do
         collection do

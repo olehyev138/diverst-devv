@@ -10,6 +10,9 @@ export const scope = 'diverst.containers.Region';
 export const snackbar = 'diverst.snackbars.Region';
 
 export default defineMessages({
+  regions: {
+    id: `${scope}.index.regions`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
@@ -21,6 +24,9 @@ export default defineMessages({
   },
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
+  },
+  empty: {
+    id: `${scope}.index.empty`
   },
   change_order: {
     id: `${scope}.index.button.change_order`,

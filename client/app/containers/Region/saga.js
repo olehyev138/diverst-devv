@@ -1,6 +1,5 @@
-import { all, call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
-import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import messages from './messages';
@@ -8,6 +7,7 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 
 import {
   GET_REGIONS_BEGIN,
+  GET_GROUP_REGIONS_BEGIN,
   GET_REGION_BEGIN,
   CREATE_REGION_BEGIN,
   UPDATE_REGION_BEGIN,
@@ -16,13 +16,12 @@ import {
 
 import {
   getRegionsSuccess, getRegionsError,
+  getGroupRegionsSuccess, getGroupRegionsError,
   getRegionSuccess, getRegionError,
   createRegionSuccess, createRegionError,
   updateRegionSuccess, updateRegionError,
   deleteRegionSuccess, deleteRegionError,
 } from 'containers/Region/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 
 export function* getRegions(action) {
@@ -31,6 +30,16 @@ export function* getRegions(action) {
     yield put(getRegionsSuccess(response.data.page));
   } catch (err) {
     yield put(getRegionsError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions), options: { variant: 'warning' } }));
+  }
+}
+
+export function* getGroupRegions(action) {
+  try {
+    const response = yield call(api.regions.groupRegions.bind(api.regions), action.payload);
+    yield put(getGroupRegionsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getGroupRegionsError(err));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions), options: { variant: 'warning' } }));
   }
 }
@@ -90,6 +99,7 @@ export function* deleteRegion(action) {
 
 export default function* regionsSaga() {
   yield takeLatest(GET_REGIONS_BEGIN, getRegions);
+  yield takeLatest(GET_GROUP_REGIONS_BEGIN, getGroupRegions);
   yield takeLatest(GET_REGION_BEGIN, getRegion);
   yield takeLatest(CREATE_REGION_BEGIN, createRegion);
   yield takeLatest(UPDATE_REGION_BEGIN, updateRegion);
