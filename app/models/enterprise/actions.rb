@@ -25,7 +25,7 @@ module Enterprise::Actions
 
         unless user = enterprise.users.find_by_email(nameid)
           user = enterprise.users.new(auth_source: 'saml', enterprise: enterprise)
-          user.user_role_id = enterprise.default_user_role
+          user.user_role_id = enterprise.default_user_role_id
           user.set_info_from_saml(nameid, attrs, enterprise)
 
           enterprise.users << user

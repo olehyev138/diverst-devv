@@ -80,7 +80,7 @@ const SegmentFieldRule = (props) => {
 
   const onFieldSelectChange = (value) => {
     // fetch field object & deserialize options text for select
-    const newField = props.fields[value.value];
+    const newField = props.fields.find(field => field.id === value.value);
 
     // wipe data & operator values
     props.formik.setFieldValue(`${ruleLocation}.data`, newField.type === 'DateField' ? null : '');
@@ -103,7 +103,9 @@ const SegmentFieldRule = (props) => {
             id={`${ruleLocation}.field`}
             label={<DiverstFormattedMessage {...messages.rule.field} />}
             options={props.selectFields}
-            value={(currentField) ? { value: currentField.id, label: currentField.title } : {}}
+            value={
+              (currentField) ? { value: currentField.id, label: currentField.title } : { value: -1, label: '' }
+            }
             onChange={onFieldSelectChange}
             onInputChange={value => fieldSelectAction(value)}
           />
