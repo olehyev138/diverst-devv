@@ -18,10 +18,10 @@ class Api::V1::RegionsController < DiverstController
       :short_description,
       :description,
       :home_message,
-      :private,
       :parent_id,
-      :position,
       child_ids: [],
+      #:position,
+      #:private
     )
   end
 end
