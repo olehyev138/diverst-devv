@@ -101,7 +101,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
         user_role.policy_group_template.update groups_members_index: true
         create(:region_leader, region_id: region.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
+                               user_role_id: user_role.id)
       end
 
       it { is_expected.to permit_actions([:index, :show]) }
