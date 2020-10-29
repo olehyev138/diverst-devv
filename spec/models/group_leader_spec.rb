@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe GroupLeader, type: :model do
   describe 'test validations and associations' do
     let(:group_leader) { build(:group_leader) }
+    let(:region_leader) { build(:region_leader) }
 
     it { expect(group_leader).to validate_presence_of(:position_name) }
     it { expect(group_leader).to validate_presence_of(:leader_of) }
     it { expect(group_leader).to validate_presence_of(:user) }
     it { expect(group_leader).to validate_presence_of(:user_role) }
     it { expect(group_leader).to validate_uniqueness_of(:user_id).with_message('already exists as a group leader').scoped_to(:leader_of_id, :leader_of_type) }
+    it { expect(region_leader).to validate_uniqueness_of(:user_id).with_message('already exists as a region leader').scoped_to(:leader_of_id, :leader_of_type) }
     it { expect(group_leader).to validate_length_of(:position_name).is_at_most(191) }
     it { expect(group_leader).to belong_to(:user) }
     it { expect(group_leader).to belong_to(:leader_of) }
