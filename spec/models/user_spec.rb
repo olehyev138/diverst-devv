@@ -382,20 +382,18 @@ RSpec.describe User do
 
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
-    let!(:active_user) { create :user, enterprise: enterprise }
-    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
 
-    describe '#active' do
-      it 'only returns active users' do
+    describe '#active and #inactive' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      it '#active only returns active users' do
         active_users = enterprise.users.active
 
         expect(active_users).to include active_user
         expect(active_users).to_not include inactive_user
       end
-    end
 
-    describe '#inactive' do
-      it 'only returns inactive user' do
+      it '#inactive only returns inactive user' do
         inactive_users = enterprise.users.inactive
 
         expect(inactive_users).to include inactive_user
@@ -562,6 +560,51 @@ RSpec.describe User do
       end
       it 'returns enterprise_mentees' do
         expect(User.enterprise_mentees(user_ids = [1]).count).to eq 2
+      end
+    end
+
+    describe 'budget_approvers' do
+      let(:user_role1) { create(:user_role, enterprise: enterprise, role_type: 'group') }
+      let(:user_role2) { create(:user_role, enterprise: enterprise, role_type: 'group') }
+      let(:parent) { create(:group, enterprise: enterprise) }
+      let(:group) { create(:group, parent: parent, enterprise: enterprise) }
+      let(:region) { create(:region, parent: parent, children: [group]) }
+      let(:users) { create_list(:user, 11, :no_permissions, custom_policy_group: true) }
+      before do
+        user_role1.policy_group_template.update(budget_approval: true)
+
+        group_leader1, group_leader2, region_leader1, region_leader2,
+            groups_manager1, groups_manager2, group_member1, group_member2,
+            super_user, other1, other2, = users
+
+        create(:user_group, group: group, user: group_leader1)
+        create(:user_group, group: group, user: group_leader2)
+        create(:user_group, group: group, user: region_leader1)
+        create(:user_group, group: group, user: region_leader2)
+        create(:user_group, group: group, user: group_member1)
+        create(:user_group, group: group, user: group_member2)
+
+        create(:group_leader, group: group, user: group_leader1, user_role: user_role1)
+        create(:group_leader, group: group, user: group_leader2, user_role: user_role2)
+
+        create(:region_leader, region: region, user: region_leader1, user_role: user_role1)
+        create(:region_leader, region: region, user: region_leader2, user_role: user_role2)
+
+        groups_manager1.policy_group.update(groups_manage: true, budget_approval: true)
+        groups_manager2.policy_group.update(groups_manage: true)
+
+        group_member1.policy_group.update(budget_approval: true)
+
+        super_user.policy_group.update(manage_all: true)
+      end
+      it 'returns only approvers' do
+        expect(Set.new(User.budget_approvers(group).pluck(:id))).to eq Set.new([
+                                                                                   users[0].id, # group leader with approval
+                                                                                   users[2].id, # region leader with approval
+                                                                                   users[4].id, # group manager with approval
+                                                                                   users[6].id, # group member with approval
+                                                                                   users[8].id, # super user
+                                                                               ])
       end
     end
   end

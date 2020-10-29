@@ -185,6 +185,17 @@ class User < ApplicationRecord
   scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
   scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
   scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
+  scope :budget_approvers, -> (group) {
+    left_joins(:policy_group, :group_leaders, :user_groups)
+        .where(
+            [
+                '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Group")',
+                '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Region")',
+                '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
+                '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
+                '(`policy_groups`.`manage_all` = TRUE)',
+            ].join(' OR '), group.id, group.region_id, group)
+  }
 
   def as_json(options = {})
     super.merge({ name: name })
