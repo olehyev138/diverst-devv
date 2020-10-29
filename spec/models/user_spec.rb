@@ -402,6 +402,7 @@ RSpec.describe User do
     end
 
     describe '#for_segments' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:segment) { create(:segment, enterprise_id: enterprise.id) }
       let!(:user_segment) { create(:users_segment, user_id: active_user.id, segment_id: segment.id) }
 
@@ -412,6 +413,7 @@ RSpec.describe User do
     end
 
     describe '#for_groups' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:user_group) { create(:user_group, user_id: active_user.id, group_id: group.id) }
 
@@ -422,6 +424,7 @@ RSpec.describe User do
     end
 
     describe '#answered_poll' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:poll) { create(:poll, enterprise_id: enterprise.id) }
       let!(:response) { create(:poll_response, user_id: active_user.id, poll_id: poll.id) }
 
@@ -431,6 +434,8 @@ RSpec.describe User do
     end
 
     describe '#invitation_sent' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+
       it 'returns invitation_sent' do
         expect(User.active.invitation_sent).to eq [active_user]
       end
@@ -518,17 +523,19 @@ RSpec.describe User do
 
     describe 'accepting_mentor_requests' do
       let!(:accepting_mentor_requests) { create_list(:user, 3, accepting_mentor_requests: true) }
+      let!(:not_accepting_mentor_requests) { create_list(:user, 3, accepting_mentor_requests: false) }
 
       it 'returns accepting_mentor_requests' do
-        expect(User.accepting_mentor_requests.count).to eq 5
+        expect(User.accepting_mentor_requests.count).to eq 3
       end
     end
 
     describe 'accepting_mentee_requests' do
       let!(:accepting_mentee_requests) { create_list(:user, 3, accepting_mentee_requests: true) }
+      let!(:not_accepting_mentee_requests) { create_list(:user, 3, accepting_mentee_requests: false) }
 
       it 'returns accepting_mentor_requests' do
-        expect(User.accepting_mentee_requests.count).to eq 5
+        expect(User.accepting_mentee_requests.count).to eq 3
       end
     end
 
