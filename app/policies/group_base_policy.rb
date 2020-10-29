@@ -304,7 +304,7 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def joined_with_group
-      scope.eager_load(group: [:enterprise, :user_groups, :regions]).joins(
+      scope.eager_load(policy.group_association => [:enterprise, :user_groups, :regions]).joins(
           'LEFT OUTER JOIN `group_leaders` '\
           'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
           'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
@@ -318,7 +318,7 @@ class GroupBasePolicy < ApplicationPolicy
             'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
             'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
           )
-      elsif scope.instance_methods.include?(:group)
+      elsif scope.instance_methods.include?(policy.group_association)
         scoped = joined_with_group
       else
         scoped = scope.none

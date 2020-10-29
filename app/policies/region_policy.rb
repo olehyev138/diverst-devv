@@ -1,6 +1,11 @@
 class RegionPolicy < GroupBasePolicy
   attr_reader :parent_policy
 
+  # Hack for Scoping
+  def group_visibility_setting
+    'DEFINED'
+  end
+
   def initialize(*args)
     super
     @parent_policy = GroupPolicy.new(@user, @group || Group)
@@ -31,8 +36,24 @@ class RegionPolicy < GroupBasePolicy
       group.regions
     end
 
-    def non_group_base(*args)
-      scope.none
+    def joined_with_group
+      scope.left_joins(policy.group_association => [:enterprise, :user_groups, :group_leaders])
+    end
+
+    def publicly_visible
+      '`groups`.`private` = FALSE AND `regions`.`private` = FALSE'
+    end
+
+    def group_visible
+      '`groups`.`private` = TRUE AND `regions`.`private` = FALSE'
+    end
+
+    def leader_visible
+      'TRUE'
+    end
+
+    def general_permission(permission)
+      'TRUE'
     end
 
     def resolve
