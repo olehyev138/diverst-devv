@@ -62,6 +62,16 @@ RSpec.describe GroupLeader, type: :model do
 
       expect(group_leader.valid?).to be(true)
     end
+
+    it 'validates that user selected as region leader is a member of parent of region' do
+      user = create(:user)
+      group = create(:group, enterprise: user.enterprise)
+      create(:user_group, user: user, group: group, accepted_member: true)
+      region = create(:region, parent: group)
+      region_leader = build(:region_leader, user: user, leader_of: region)
+
+      expect(region_leader.valid?).to be(true)
+    end
   end
 
   describe 'set_admin_permissions' do
