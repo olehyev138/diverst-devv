@@ -46,6 +46,12 @@ export default defineMessages({
   page: {
     id: `${scope}.index.button.page`,
   },
+  new_header: {
+    id: `${scope}.form.header.new`,
+  },
+  edit_header: {
+    id: `${scope}.form.header.edit`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
@@ -92,10 +98,10 @@ export default defineMessages({
   },
   snackbars: {
     errors: {
-      group: {
+      region: {
         id: `${snackbar}.errors.region`
       },
-      groups: {
+      regions: {
         id: `${snackbar}.errors.regions`
       },
       create: {

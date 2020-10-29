@@ -65,6 +65,12 @@ export default defineMessages({
     manageRegionsPage: {
       id: `${scope}.group.manageRegionsPage`
     },
+    createRegionsPage: {
+      id: `${scope}.group.createRegionsPage`
+    },
+    editRegionsPage: {
+      id: `${scope}.group.editRegionsPage`
+    },
     outcome: {
       editPage: {
         id: `${scope}.group.outcome.outcomeEditPage`

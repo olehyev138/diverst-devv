@@ -5,6 +5,7 @@ class Region < ApplicationRecord
 
   belongs_to :parent, class_name: 'Group'
   has_many :children, class_name: 'Group', foreign_key: :region_id, dependent: :nullify
+
   has_many :region_leaders, class_name: 'GroupLeader', as: :leader_of
 
   validates :name, presence: true

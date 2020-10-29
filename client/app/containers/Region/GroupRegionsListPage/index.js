@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import { useParams } from 'react-router-dom';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,10 +13,12 @@ import reducer from 'containers/Region/reducer';
 import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
 
-import { getGroupRegionsBegin, regionListUnmount } from 'containers/Region/actions';
+import { getGroupRegionsBegin, deleteRegionBegin, regionListUnmount } from 'containers/Region/actions';
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import { selectPaginatedRegions, selectRegionTotal, selectRegionIsLoading } from 'containers/Region/selectors';
+import { selectPermissions } from 'containers/Shared/App/selectors';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -53,10 +56,13 @@ export function GroupRegionsListPage(props) {
       group={props.group}
       regions={props.regions}
       regionTotal={props.regionTotal}
+      deleteRegionBegin={props.deleteRegionBegin}
       isLoading={props.isGroupLoading}
       isRegionsLoading={props.isRegionsLoading}
       handlePagination={handlePagination}
       params={params}
+      permissions={props.permissions}
+      intl={props.intl}
     />
   );
 }
@@ -64,6 +70,7 @@ export function GroupRegionsListPage(props) {
 GroupRegionsListPage.propTypes = {
   getGroupBegin: PropTypes.func,
   getGroupRegionsBegin: PropTypes.func,
+  deleteRegionBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
   regionListUnmount: PropTypes.func,
   group: PropTypes.object,
@@ -71,6 +78,8 @@ GroupRegionsListPage.propTypes = {
   regionTotal: PropTypes.number,
   isGroupLoading: PropTypes.bool,
   isRegionsLoading: PropTypes.bool,
+  permissions: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -79,11 +88,13 @@ const mapStateToProps = createStructuredSelector({
   regionTotal: selectRegionTotal(),
   isGroupLoading: selectGroupIsFormLoading(),
   isRegionsLoading: selectRegionIsLoading(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
   getGroupBegin,
   getGroupRegionsBegin,
+  deleteRegionBegin,
   groupFormUnmount,
   regionListUnmount,
 };
@@ -95,10 +106,11 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(Conditional(
   GroupRegionsListPage,
-  ['group.permissions.update?', 'isFormLoading'],
+  ['permissions.groups_view'],
   (props, params) => ROUTES.admin.manage.groups.index.path(),
   permissionMessages.group.manageRegionsPage
 ));

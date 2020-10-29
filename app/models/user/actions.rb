@@ -278,7 +278,7 @@ module User::Actions
 
       # find the user
       user = User.find_by(email: email.downcase)
-      raise BadRequestException.new 'User does not exist' if user.nil?
+      raise BadRequestException.new 'User does not exist' if user.nil? || !user.active
 
       # verify the password
       unless user.valid_password?(password)
