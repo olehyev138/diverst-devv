@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Importers::Users do
   let!(:enterprise) { create(:enterprise) }
-  let!(:manager) { create(:user, enterprise: enterprise, user_role_id: enterprise.default_user_role) }
+  let!(:manager) { create(:user, enterprise: enterprise, user_role_id: enterprise.default_user_role_id) }
   let(:importer) { Importers::Users.new(file, manager) }
   let(:admin_role) { enterprise.user_roles.where(role_type: 'admin').first }
 

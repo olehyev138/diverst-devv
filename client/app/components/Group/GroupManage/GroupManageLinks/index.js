@@ -14,7 +14,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 
 import { permission } from 'utils/permissionsHelpers';
-import WithPermission from 'components/Compositions/WithPermission';
 
 const styles = theme => ({});
 
@@ -35,6 +34,7 @@ export function GroupManageLinks(props) {
               component={WrappedNavLink}
               to={ROUTES.group.manage.settings.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.settings} />}
+              value='settings'
             />
           ) }
           { permission(currentGroup, 'leaders_view?') && (
@@ -42,14 +42,15 @@ export function GroupManageLinks(props) {
               component={WrappedNavLink}
               to={ROUTES.group.manage.leaders.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.leaders} />}
+              value='leaders'
             />
           ) }
-
           { permission(currentGroup, 'update?') && (
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.sponsors.index.path(currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.sponsors} />}
+              value='sponsors'
             />
           ) }
         </ResponsiveTabs>

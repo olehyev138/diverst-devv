@@ -1175,6 +1175,8 @@
   "diverst.containers.UserRole.form.input.role_name": "Role name",
   "diverst.containers.UserRole.form.input.role_type": "Role type",
   "diverst.containers.UserRole.index.button.delete": "Delete User Role",
+  "diverst.containers.UserRole.index.button.delete_default_role": "Can't Delete Default Role",
+  "diverst.containers.UserRole.index.button.delete_group_in_use": "Can't Delete Group Role in Use",
   "diverst.containers.UserRole.index.button.delete_confirm": "Delete user role?",
   "diverst.containers.UserRole.index.button.edit": "Edit User Role",
   "diverst.containers.UserRole.index.button.new": "Add user role",

@@ -240,7 +240,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
       end
 
       it 'returns true' do
-        expect(subject.basic_group_leader_permission?('groups_manage')).to eq true
+        expect(subject.has_group_leader_permissions?('groups_manage')).to eq true
       end
 
       context 'group leader permissions are group specific' do
