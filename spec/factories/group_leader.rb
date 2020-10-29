@@ -15,7 +15,7 @@ FactoryBot.define do
 
   factory :region_leader, class: GroupLeader do
     user { create(:user) }
-    leader_of { create(:region, group: create(:group, enterprise: user.enterprise)) }
+    leader_of { create(:region, parent: create(:group, enterprise: user.enterprise)) }
     position_name { Faker::Company.profession }
     user_role { region.parent.enterprise.user_roles.where(role_name: 'group_leader').first }
     trait :default_group_contact do
