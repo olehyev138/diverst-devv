@@ -8,7 +8,7 @@ RSpec.describe UserRole do
 
     context 'test associations' do
       it { expect(user_role).to belong_to(:enterprise).inverse_of(:user_roles) }
-      it { expect(user_role).to have_one(:policy_group_template).inverse_of(:user_role).dependent(:delete) }
+      it { expect(user_role).to have_one(:policy_group_template).inverse_of(:user_role).dependent(:destroy) }
     end
 
     context 'test validations' do
@@ -75,10 +75,29 @@ RSpec.describe UserRole do
       expect(user_role.can_destroy?).to be(false)
     end
 
+    it 'returns false when role is a group role in use' do
+      enterprise = create(:enterprise)
+      user_role = create(:user_role, enterprise: enterprise, role_type: 'group')
+      create(:group_leader, user_role: user_role)
+      expect(user_role.can_destroy?).to be(false)
+    end
+
+    it 'returns true when role is a group role not in use' do
+      enterprise = create(:enterprise)
+      user_role = create(:user_role, enterprise: enterprise, role_type: 'group')
+      expect(user_role.can_destroy?).to be(true)
+    end
+
     it 'returns true when role is not the default' do
       enterprise = create(:enterprise)
       user_role = enterprise.user_roles.where.not(default: true).first
       expect(user_role.can_destroy?).to be(true)
+    end
+
+    it 'prevents deletion if can_destroy? is false' do
+      allow_any_instance_of(UserRole).to receive(:can_destroy?).and_return(false)
+      user_role = create(:user_role)
+      expect(user_role.destroy).to be(false)
     end
   end
 

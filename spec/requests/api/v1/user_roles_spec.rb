@@ -52,7 +52,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     it 'updates an item' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes.except('role_type', 'default') }, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
