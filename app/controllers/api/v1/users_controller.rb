@@ -29,7 +29,7 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
-    region_id = Region.find_by(group_id: params[:group_idd])
+    region_id = Region.find_by(group_id: params[:group_id])
 
     base = User.left_joins(:policy_group, :group_leaders, :user_groups)
                 .where(
