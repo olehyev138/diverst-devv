@@ -39,7 +39,6 @@ RSpec.describe 'RegionLeaders', type: :request do
   describe '#show' do
     it 'gets a item' do
       get "/api/v1/#{route}/#{item.id}", headers: headers
-      Clipboard.copy response.body
       expect(response).to have_http_status(:ok)
     end
 

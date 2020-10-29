@@ -13,8 +13,8 @@ class RegionPolicy < GroupBasePolicy
   delegate :index?, :show?, :create?, :update?, :destroy?, :manage?, to: :parent_policy
 
   private def method_missing(symbol, *args)
-    if @parent_policy.respond_to?(symbol)
-      @parent_policy.send(symbol, *args)
+    if parent_policy.respond_to?(symbol)
+      parent_policy.send(symbol, *args)
     end
   end
 
