@@ -4,7 +4,7 @@ class Region < ApplicationRecord
   include Region::Actions
 
   belongs_to :parent, class_name: 'Group'
-  has_many :children, class_name: 'Group', foreign_key: :region_id
+  has_many :children, class_name: 'Group', foreign_key: :region_id, dependent: :nullify
 
   validates :name, presence: true
   validates :parent, presence: true
