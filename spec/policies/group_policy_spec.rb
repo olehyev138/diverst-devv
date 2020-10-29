@@ -2,30 +2,12 @@ require 'rails_helper'
 
 RSpec.describe GroupPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
-  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:no_access) { create(:user, :no_permissions, enterprise: enterprise) }
   let(:user) { no_access }
   let(:group) { create(:group, owner: user, enterprise_id: enterprise.id, pending_users: 'enabled') }
   let(:policy_scope) { GroupPolicy::Scope.new(user, Group).resolve }
 
   subject { described_class.new(user, group) }
-
-  before {
-    no_access.policy_group.manage_all = false
-    no_access.policy_group.groups_index = false
-    no_access.policy_group.groups_create = false
-    no_access.policy_group.groups_manage = false
-    no_access.policy_group.groups_budgets_index = false
-    no_access.policy_group.groups_budgets_manage = false
-    no_access.policy_group.groups_members_index = false
-    no_access.policy_group.groups_budgets_request = false
-    no_access.policy_group.budget_approval = false
-    no_access.policy_group.groups_manage = false
-    no_access.policy_group.global_calendar = false
-    no_access.policy_group.groups_layouts_manage = false
-    no_access.policy_group.group_settings_manage = false
-    no_access.policy_group.groups_insights_manage = false
-    no_access.policy_group.save!
-  }
 
   permissions '.scope' do
     context 'when manage_all is true' do
@@ -247,8 +229,21 @@ RSpec.describe GroupPolicy, type: :policy do
         context 'when group has parent' do
           before { group.parent = create(:group, enterprise: user.enterprise) }
 
-          it 'returns true' do
+          it 'returns the parent\'s permission' do
             expect(subject.parent_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
+          end
+        end
+
+        context 'when group is part of a region' do
+          before do
+            parent = create(:group, enterprise: user.enterprise)
+            group.parent = parent
+            group.region = create(:region, parent: parent)
+          end
+
+          it 'returns true' do
+            allow_any_instance_of(RegionPolicy).to receive(:manage?).and_return(true)
+            expect(subject.parent_permissions?).to be true
           end
         end
       end
