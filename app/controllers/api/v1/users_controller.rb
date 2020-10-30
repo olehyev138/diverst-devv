@@ -42,7 +42,10 @@ class Api::V1::UsersController < DiverstController
                         '(`policy_groups`.`manage_all` = TRUE)',
                     ].join(' OR '), params[:group_id], params[:group_id])
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: base)
+    response = klass.index(self.diverst_request, params.permit!, base: base)
+    response = { page: response.as_json } if diverst_request.minimal
+
+    render status: 200, json: response
   rescue => e
     raise BadRequestException.new(e.message)
   end
