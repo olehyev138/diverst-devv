@@ -28,6 +28,7 @@ import {
   GroupCategorizePage,
   GroupRegionsListPage,
   GroupRegionsCreatePage,
+  GroupRegionsEditPage,
   SegmentListPage,
   SegmentPage,
   AdminFieldsPage,
@@ -478,7 +479,7 @@ export default function Routes(props) {
                     { /* Manage - Group Region Create */ }
                     <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.new.path()}><GroupRegionsCreatePage /></RouteWithProps>
                     { /* Manage - Group Region Edit */ }
-                    <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.edit.path()}><React.Fragment /></RouteWithProps>
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.edit.path()}><GroupRegionsEditPage /></RouteWithProps>
 
                     { /* Manage - Segments */ }
                     <RouteWithProps exact path={ROUTES.admin.manage.segments.index.path()}><SegmentListPage /></RouteWithProps>
