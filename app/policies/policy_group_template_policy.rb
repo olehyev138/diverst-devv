@@ -25,4 +25,14 @@ class PolicyGroupTemplatePolicy < ApplicationPolicy
   def show?
     index?
   end
+
+  class Scope < Scope
+    def resolve
+      if index?
+        scope.left_joins(:user_role).where(user_roles: { enterprise_id: user.enterprise_id })
+      else
+        scope.none
+      end
+    end
+  end
 end
