@@ -392,7 +392,7 @@ class Group < BaseClass
     fields.map(&:title)
 
     CSV.generate do |csv|
-      first_row = %w(first_name last_name email_address)
+      first_row = %w(first_name last_name email_address date_joined)
       first_row += %w(mentor mentee) if mentorship_module_enabled
       first_row += fields.map(&:title)
 
@@ -400,7 +400,7 @@ class Group < BaseClass
 
       group_members.each do |member|
         membership_list_row = []
-        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.first_name, member.last_name, member.email, UserGroup.find_by(user_id: member.id, group_id: self.id).date_joined.strftime('%Y-%m-%d') ]
         membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
 
         member_info = member.info
@@ -479,8 +479,13 @@ class Group < BaseClass
     end
     segments.select! { |seg| seg.present? }
 
-    from = params['user_groups_created_at_gteq']
-    to = params['user_groups_created_at_lteq']
+    if self.pending_members_enabled?
+      from = params['user_groups_updated_at_gteq']
+      to = params['user_groups_updated_at_lteq']
+    else
+      from = params['user_groups_created_at_gteq']
+      to = params['user_groups_created_at_lteq']
+    end
 
     users = User.joins(:user_groups)
     users = users.joins(:users_segments) if segments.present?
@@ -491,8 +496,14 @@ class Group < BaseClass
               .where('`users`.`active` = 1')
 
     users = users.where('`users_segments`.`segment_id` IN (?)', segments) if segments.present?
-    users = users.where('`user_groups`.`created_at` >= ?', from) if from.present?
-    users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
+
+    if self.pending_members_enabled?
+      users = users.where('`user_groups`.`updated_at` >= ?', from) if from.present?
+      users = users.where('`user_groups`.`updated_at` <= ?', to) if to.present?
+    else
+      users = users.where('`user_groups`.`created_at` >= ?', from) if from.present?
+      users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
+    end
     users.distinct
   end
 

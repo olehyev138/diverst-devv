@@ -7,7 +7,7 @@ class User::QuestionsController < ApplicationController
   layout 'user'
 
   def index
-    @questions = @campaign.questions.order(created_at: :desc)
+    @questions = @campaign.questions.order(created_at: :asc)
     @sponsors = @campaign.sponsors
   end
 

@@ -18,4 +18,8 @@ class Question < BaseClass
   validates :campaign,        presence: true
 
   scope :solved, -> { where.not(solved_at: nil) }
+
+  def closed?
+    solved_at.present?
+  end
 end

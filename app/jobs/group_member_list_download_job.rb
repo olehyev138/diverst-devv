@@ -1,7 +1,7 @@
 class GroupMemberListDownloadJob < ActiveJob::Base
   queue_as :default
 
-  def perform(user_id, group_id, export_csv_params)
+  def perform(user_id, group_id, export_csv_params, filter_from, filter_to)
     user = User.find_by_id(user_id)
     return if user.nil?
 
@@ -19,6 +19,18 @@ class GroupMemberListDownloadJob < ActiveJob::Base
                       group.parent.members
                     else
                       group.members
+    end
+
+    if group.pending_members_enabled?
+      group_members = group.user_groups.where(user_id: group_members.ids)
+      group_members = group_members.where('`user_groups`.`updated_at` >= ?', filter_from) if filter_from.present?
+      group_members = group_members.where('`user_groups`.`updated_at` <= ?', filter_to) if filter_to.present?
+      group_members = group_members.map { |ug| [ug.user] }.flatten
+    else
+      group_members = group.user_groups.where(user_id: group_members.ids)
+      group_members = group_members.where('`user_groups`.`created_at` >= ?', filter_from) if filter_from.present?
+      group_members = group_members.where('`user_groups`.`created_at` <= ?', filter_to) if filter_to.present?
+      group_members = group_members.map { |ug| [ug.user] }.flatten
     end
 
     csv = group.membership_list_csv(group_members)

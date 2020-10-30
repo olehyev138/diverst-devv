@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
 
   def index
     authorize @campaign
-    @questions = @campaign.questions.order(created_at: :desc)
+    @questions = @campaign.questions.order(created_at: :asc)
   end
 
   def new

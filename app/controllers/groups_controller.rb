@@ -430,7 +430,7 @@ class GroupsController < ApplicationController
 
   def set_users_to_invite
     # get users except members of this group to avoid sending invites to users with group membership already
-    User.where(id: (UserGroup.where(group_id: current_user.enterprise.groups.ids).pluck(:user_id) - (UserGroup.invited_users.where(group_id: @group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
+    User.where(id: ((current_user.enterprise.users.ids) - (UserGroup.invited_users(@group.id).pluck(:user_id) + UserGroup.where(group_id: @group.id).pluck(:user_id))).uniq)
   end
 
   def should_show_event?(group)

@@ -1234,14 +1234,13 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'GET#users_to_invite_to_group' do
     let!(:user1) { create(:user, enterprise: enterprise) }
-    let!(:group_membership) { create(:user_group, user_id: user1.id, group_id: different_group.id) }
 
     context 'with logged in user' do
       login_user_from_let
 
       it 'returns users to invite' do 
         get :users_to_invite_to_group, id: group.id
-        expect(assigns[:users_to_invite]).to eq([user1])
+        expect(assigns[:users_to_invite]).to eq([user1, user])
       end
 
       it 'renders no template' do

@@ -18,7 +18,13 @@ class UserGroup < BaseClass
 
   scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
   scope :with_answered_survey, -> { where.not(data: nil) }
-  scope :invited_users, -> { where.not(invitation_sent_at: nil, invited_by: nil) }
+  scope :invited_users, ->(group_id = nil) {
+    if group_id
+      where('invitation_sent_at IS NOT NULL AND invited_by_id IS NOT NULL AND group_id = ?', group_id)
+    else
+      where('invitation_sent_at IS NOT NULL AND invited_by_id IS NOT NULL')
+    end
+  }
 
   before_destroy :remove_leader_role
 
@@ -96,6 +102,14 @@ class UserGroup < BaseClass
       user.mentee = boolean
       user.mentor = boolean
       user.save!
+    end
+  end
+
+  def date_joined
+    if self.created_at == self.updated_at
+      self.created_at
+    else
+      self.updated_at
     end
   end
 

@@ -77,7 +77,15 @@
               <%= f.input :virtual_events_enabled, label: 'Enable virtual events' %>
             <% end %>  
             <br>
-            
+
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+              <%= f.hidden_field :suggest_hire_enabled, value: 0 %>
+              <%= f.input :suggest_hire_enabled, label: 'Enable suggest a hire' %>
+              <br>
+              <%= f.hidden_field :invite_member_enabled, value: 0 %>
+              <%= f.input :invite_member_enabled, label: 'Enable invite a member' %>
+              <br>
+            <% end %>
             <%= f.button :submit %>
           <% end %>
         </div>
