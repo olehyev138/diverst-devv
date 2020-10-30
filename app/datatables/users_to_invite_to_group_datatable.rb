@@ -25,17 +25,17 @@ class UsersToInviteToGroupDatatable < AjaxDatatablesRails::Base
   def link_text(record)
     if UserGroup.invited_users(@group.id).pluck(:user_id).include?(record.id)
       'Invite Sent!'
-    else 
-      "Send Invite"
+    else
+      'Send Invite'
     end
   end
 
   def send_invite_link(record)
     link_to "#{link_text(record)}", invite_users_to_join_group_path(@group, user_id: record.id),
-                           id: record.id, 
-                           class: 'send-invite',
-                           method: :post, 
-                           remote: true
+            id: record.id,
+            class: 'send-invite',
+            method: :post,
+            remote: true
   end
 
   def data
