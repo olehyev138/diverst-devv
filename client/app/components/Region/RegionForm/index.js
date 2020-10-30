@@ -46,7 +46,7 @@ export function RegionFormInner({ classes, formikProps, buttonText, parentGroup,
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      query_scopes: [['non_regioned_children', parentGroupId]]
+      query_scopes: [['non_regioned_children', parentGroupId, values.id || null]]
     });
   };
 
