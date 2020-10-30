@@ -89,6 +89,16 @@ class Api::V1::EnterprisesController < DiverstController
     item = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(item)
 
+    item.banner.purge_later if params[:enterprise].key?(:banner) && params[:enterprise][:banner].blank? && item.banner.attached?
+
+    if item.theme.present? &&
+        params[:enterprise].key?(:theme_attributes) &&
+        params[:enterprise][:theme_attributes].key?(:logo) &&
+        params[:enterprise][:theme_attributes][:logo].blank? &&
+        item.theme.logo.attached?
+      item.theme.logo.purge_later
+    end
+
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
     render status: 200, json: updated_item
