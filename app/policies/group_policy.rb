@@ -91,6 +91,10 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
+  def group_regions?
+    index?
+  end
+
   # VIEW PERMISSIONS
 
   def events_view?
