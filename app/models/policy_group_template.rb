@@ -25,6 +25,8 @@ class PolicyGroupTemplate < ApplicationRecord
   validates_uniqueness_of :user_role,     scope: [:enterprise_id]
   validates_uniqueness_of :default,       scope: [:enterprise_id], conditions: -> { where(default: true) }
 
+  delegate :enterprise_id, :enterprise_id=, to: :user_role
+
   # retrieves fields for policy and returns them
   # to user object to create policy_group
 
