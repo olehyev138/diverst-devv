@@ -47,7 +47,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:build).and_raise(BadRequestException)
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'captures the error' do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end
