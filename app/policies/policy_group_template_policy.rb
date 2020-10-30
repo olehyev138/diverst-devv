@@ -1,6 +1,6 @@
 class PolicyGroupTemplatePolicy < ApplicationPolicy
   def index?
-    create? || UserPolicy.new(user, User).create?
+    UserRolePolicy.new(user, UserRole).index?
   end
 
   def new?
@@ -8,18 +8,15 @@ class PolicyGroupTemplatePolicy < ApplicationPolicy
   end
 
   def create?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('permissions_manage')
-
-    @policy_group.permissions_manage?
+    false
   end
 
   def update?
-    create?
+    UserRolePolicy.new(user, UserRole).update?
   end
 
   def destroy?
-    create?
+    false
   end
 
   def show?

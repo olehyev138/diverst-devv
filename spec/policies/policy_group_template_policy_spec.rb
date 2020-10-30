@@ -19,13 +19,13 @@ RSpec.describe PolicyGroupTemplatePolicy, type: :policy do
     context 'when manage_all is false' do
       context 'when permissions_manage is true' do
         before { user.policy_group.update permissions_manage: true }
-        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :update]) }
       end
     end
 
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-      it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
+      it { is_expected.to permit_actions([:index, :update]) }
     end
   end
 
