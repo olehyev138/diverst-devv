@@ -246,7 +246,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unauth_user_redirect_destination
-    if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] && ENV['FORCE_DIVERST_LOGIN_PAGE_OVER_SSO_REDIRECT']
+    if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'] && !ENV['FORCE_DIVERST_LOGIN_PAGE_OVER_SSO_REDIRECT']
       session[:previous_url] = request.original_url
 
       enterprise = Enterprise.find_by_id ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
