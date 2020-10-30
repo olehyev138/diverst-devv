@@ -15,6 +15,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'gets all items' do
       get "/api/v1/#{route}", headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['page']['items'].size).to be > 0
     end
 
     it 'captures the error' do

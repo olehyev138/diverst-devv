@@ -23,7 +23,6 @@ class UserRole < ApplicationRecord
 
   validates_uniqueness_of :role_name,             scope: [:enterprise_id]
   validates_uniqueness_of :priority,              scope: [:enterprise_id]
-  # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
   validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
   before_destroy -> { throw :abort unless can_destroy? }, prepend: true
@@ -48,7 +47,7 @@ class UserRole < ApplicationRecord
   before_create :build_default_policy_group_template
 
   def build_default_policy_group_template
-    build_policy_group_template(name: "#{role_name} Policy Template", enterprise: enterprise, default: default)
+    build_policy_group_template(name: "#{role_name} Policy Template", default: default)
     true
   end
 

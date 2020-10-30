@@ -21,9 +21,9 @@ class PolicyGroupTemplate < ApplicationRecord
   validates :user_role,   presence: true
   validates :enterprise,  presence: true
 
-  validates_uniqueness_of :name,          scope: [:enterprise_id]
-  validates_uniqueness_of :user_role,     scope: [:enterprise_id]
-  validates_uniqueness_of :default,       scope: [:enterprise_id], conditions: -> { where(default: true) }
+  validates_uniqueness_of :name,          scope: [:enterprise]
+  validates_uniqueness_of :user_role,     scope: [:enterprise]
+  validates_uniqueness_of :default,       scope: [:enterprise], conditions: -> { where(default: true) }
 
   delegate :enterprise_id, :enterprise_id=, to: :user_role
 
