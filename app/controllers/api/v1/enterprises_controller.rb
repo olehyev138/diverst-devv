@@ -75,7 +75,7 @@ class Api::V1::EnterprisesController < DiverstController
 
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
-    render status: 200, json: updated_item
+    render status: 200, json: updated_item, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
@@ -101,7 +101,7 @@ class Api::V1::EnterprisesController < DiverstController
 
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
-    render status: 200, json: updated_item
+    render status: 200, json: updated_item, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
