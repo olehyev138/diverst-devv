@@ -50,7 +50,7 @@ class PolicyGroupTemplate < ApplicationRecord
   private
 
   def check_uniqueness_of_name
-    if enterprise.policy_group_templates.where.not(id: self.id).where(name: self.name).exists?
+    if enterprise && enterprise.policy_group_templates.where.not(id: self.id).where(name: self.name).exists?
       errors.add(:name, 'name already taken')
     end
   end
