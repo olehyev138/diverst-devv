@@ -1,6 +1,6 @@
 class PolicyGroupTemplatePolicy < ApplicationPolicy
   def index?
-    create? || UserPolicy.new(user, User).create?
+    UserRolePolicy.new(user, UserRole).index?
   end
 
   def new?
@@ -8,21 +8,28 @@ class PolicyGroupTemplatePolicy < ApplicationPolicy
   end
 
   def create?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('permissions_manage')
-
-    @policy_group.permissions_manage?
+    false
   end
 
   def update?
-    create?
+    UserRolePolicy.new(user, UserRole).update?
   end
 
   def destroy?
-    create?
+    false
   end
 
   def show?
     index?
+  end
+
+  class Scope < Scope
+    def resolve
+      if policy.index?
+        scope.left_joins(:user_role).where(user_roles: { enterprise_id: user.enterprise_id })
+      else
+        scope.none
+      end
+    end
   end
 end

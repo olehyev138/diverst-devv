@@ -8,7 +8,9 @@ class UserRole < ApplicationRecord
 
   # associations
   belongs_to  :enterprise, inverse_of: :user_roles
-  has_one     :policy_group_template, inverse_of: :user_role, dependent: :delete
+  has_one     :policy_group_template, inverse_of: :user_role, dependent: :destroy
+  has_many    :group_leaders, inverse_of: :user_role
+  has_many    :users, inverse_of: :user_role, dependent: :nullify
 
   # validations
   validates_length_of :role_type, maximum: 191
@@ -21,12 +23,17 @@ class UserRole < ApplicationRecord
 
   validates_uniqueness_of :role_name,             scope: [:enterprise_id]
   validates_uniqueness_of :priority,              scope: [:enterprise_id]
-  # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
   validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
-  before_destroy  :can_destroy?, prepend: true
+  before_destroy -> { throw :abort unless can_destroy? }, prepend: true
+  before_update -> {
+    if role_type_changed?
+      errors.add(:role_type, "can't be changed")
+      throw :abort
+    end
+  }
 
-  after_destroy   :reset_user_roles
+  after_destroy :reset_user_roles
 
   # scopes
   scope :user_type,   ->  { where(role_type: 'user') }
@@ -40,7 +47,7 @@ class UserRole < ApplicationRecord
   before_create :build_default_policy_group_template
 
   def build_default_policy_group_template
-    build_policy_group_template(name: "#{role_name} Policy Template", enterprise: enterprise, default: default)
+    build_policy_group_template(name: "#{role_name} Policy Template")
     true
   end
 
@@ -56,11 +63,11 @@ class UserRole < ApplicationRecord
   # we don't want to delete any group roles or the default role
   def can_destroy?
     if default
-      errors[:base] << 'Cannot destroy default user role'
+      errors.add(:base, 'Cannot destroy default user role')
       return false
     elsif role_type === 'group'
-      if GroupLeader.joins(group: :enterprise).where(groups: { enterprise_id: enterprise.id }, user_role_id: id).count > 0
-        errors[:base] << 'Cannot delete because there are users with this group role.'
+      if group_leaders.size > 0
+        errors.add(:base, 'Cannot delete because there are users with this group role.')
         return false
       end
     end
