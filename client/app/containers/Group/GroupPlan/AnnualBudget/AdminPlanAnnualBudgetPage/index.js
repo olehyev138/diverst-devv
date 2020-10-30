@@ -23,7 +23,7 @@ import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
@@ -92,6 +92,7 @@ AdminAnnualBudgetPage.propTypes = {
   resetBudgetBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
   isFetchingAnnualBudgets: PropTypes.bool,
+  enterprise: PropTypes.object,
   hasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
@@ -100,6 +101,7 @@ AdminAnnualBudgetPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isFetchingAnnualBudgets: selectGroupIsLoading(),
+  enterprise: selectEnterprise(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
@@ -124,7 +126,9 @@ export default compose(
   memo,
 )(Conditional(
   AdminAnnualBudgetPage,
-  ['permissions.manage_all_budgets'],
+  ['permissions.manage_all_budgets', 'enterprise.plan_module_enabled'],
   (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
-  permissionMessages.group.groupPlan.annualBudget.adminPlanPage
+  permissionMessages.group.groupPlan.annualBudget.adminPlanPage,
+  false,
+  permissions => permissions.every(a => a)
 ));

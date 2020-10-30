@@ -4,6 +4,8 @@ class DiverstController < ApplicationController
   include BaseAuthentication
   include ActionController::Serialization
 
+  around_action :apply_locale
+
   serialization_scope :get_serialization_scope
 
   before_action :init_response
@@ -12,6 +14,20 @@ class DiverstController < ApplicationController
 
   # skip filter for routing errors
   skip_before_action :verify_jwt_token, only: [:routing_error]
+
+  # Locale is pulled from the 'Diverst-Locale' header (this is how it works with our frontend), but the locale can also be passed via params
+  # Silently falls back to default locale if the passed locale is not valid
+  def apply_locale(&action)
+    locale = (params[:locale] || request.headers['Diverst-Locale'] || I18n.default_locale).to_s.downcase
+    I18n.with_locale(is_supported_locale?(locale) ? locale : I18n.default_locale, &action)
+  end
+
+  # Checks if the passed locale string is a valid locale & is an available locale, returns true if so, false otherwise
+  def is_supported_locale?(locale)
+    I18n.available_locales.map(&:to_s).include?(locale)
+  rescue
+    false
+  end
 
   def error_json(e)
     json = { message: e.message }
@@ -66,7 +82,9 @@ class DiverstController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :not_found, json: { message: 'Sorry, the resource you are looking for does not exist.' }
+    apply_locale do
+      render status: :not_found, json: { message: t('errors.not_found', count: 1) }
+    end
   end
 
   rescue_from ActiveRecord::StatementInvalid do |e|
@@ -91,19 +109,27 @@ class DiverstController < ApplicationController
   end
 
   rescue_from Rack::Timeout::RequestTimeoutException do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   rescue_from Rack::Timeout::RequestExpiryError do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   rescue_from Rack::Timeout::RequestTimeoutError do |e|
-    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+    apply_locale do
+      render status: :request_timeout, json: { message: t('errors.timed_out') }
+    end
   end
 
   def routing_error
-    render status: :forbidden, json: { message: 'Invalid route' }
+    apply_locale do
+      render status: :forbidden, json: { message: t('errors.invalid_route') }
+    end
   end
 
   # for active model serializers

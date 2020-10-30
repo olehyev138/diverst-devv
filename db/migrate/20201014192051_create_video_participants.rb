@@ -1,6 +1,9 @@
 class CreateVideoParticipants < ActiveRecord::Migration[5.2]
   def change
-    unless table_exists? :video_rooms
+    #
+    ## Legacy Migration
+    #
+    unless table_exists? :video_participants
       create_table :video_participants do |t|
         t.datetime :timestamp
         t.string :identity

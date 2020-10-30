@@ -40,7 +40,16 @@ const GroupManageLayout = (props) => {
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPage = ManagePages.find(page => location.pathname.includes(page));
 
-  const [tab, setTab] = useState(currentPage || ManagePages[0]);
+  // eslint-disable-next-line no-nested-ternary
+  const defaultTab = (() => {
+    if (permission(currentGroup, 'update?'))
+      return ManagePages[0];
+    if (permission(currentGroup, 'leaders_view?'))
+      return ManagePages[1];
+    return null;
+  });
+
+  const [tab, setTab] = useState(currentPage || defaultTab);
 
   useEffect(() => {
     if (matchPath(location.pathname, { path: ROUTES.group.manage.index.path(), exact: true }))

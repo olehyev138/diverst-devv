@@ -271,11 +271,25 @@ RSpec.describe User do
         end
       end
 
-      describe 'after_save callbacks' do
+      describe 'before_save callbacks' do
         context 'set_default_policy_group' do
           it 'create policy_group when policy_group is not set' do
-            new_user.save
-            expect(new_user.policy_group.present?).to eq true
+            user.update(custom_policy_group: false)
+            role1 = create(:user_role, role_type: 'user', enterprise: user.enterprise)
+            role2 = create(:user_role, role_type: 'user', enterprise: user.enterprise)
+
+            role1.policy_group_template.update(users_manage: true)
+            role2.policy_group_template.update(users_index: true)
+
+            user.update(user_role: role1)
+
+            expect(user.policy_group.users_manage).to be true
+            expect(user.policy_group.users_index).to be false
+
+            user.update(user_role: role2)
+
+            expect(user.policy_group.users_manage).to be false
+            expect(user.policy_group.users_index).to be true
           end
         end
       end
