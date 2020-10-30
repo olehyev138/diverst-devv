@@ -117,7 +117,7 @@ module BaseSearcher
           "It is likely that a policy scope was not found for #{self}. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)",
           '---------------------------------------'
         )
-        @items = self
+        @items = base
       end
 
       # Attempt to ensure that we can only retrieve items from the current user's enterprise
