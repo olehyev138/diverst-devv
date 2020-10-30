@@ -10,7 +10,7 @@
   </div>
   <% if @enterprise.enable_rewards? %>
     <div class="content__main">
-    You need to specify how many points users will earn for each action
+    <p>You need to specify how many points users will earn for each action</p>
 
     <%= simple_form_for @enterprise, :url => reward_actions_path, method: :patch do |f| %>
       <div class="card">
@@ -42,17 +42,16 @@
         <% else %>
           <table class="table--has-border">
             <thead>
-              <th></th>
               <th>Label</th>
               <th>Points</th>
             </thead>
             <tbody>
               <% @badges.to_a.each do |badge| %>
                 <tr>
-                  <td class="icon-column">
-                    <a href="<%= badge.image.expiring_url(3600) %>" class="icon icon--bg icon--large", aria-label='<%= badge.image_description %>', style="background-image: url(<%= badge.image.expiring_url(3600) %>)"></a>
+                  <td>
+                    <a href="<%= badge.image.expiring_url(3600) %>" class="icon icon--bg icon--large", aria-label='<%= badge.image_description %>', style="background-image: url(<%= badge.image.expiring_url(3600) %>); margin-right: 3%;"></a>
+                    <%= badge.label %>
                   </td>
-                  <td><%= badge.label %></td>
                   <td><%= badge.points %></td>
                   <td>
                     <%= link_to "Edit", edit_badge_path(badge) %> -
@@ -80,7 +79,6 @@
         <% else %>
           <table class="table--has-border">
             <thead>
-              <th></th>
               <th>Label</th>
               <th>Points</th>
               <th>Responsible</th>
@@ -89,10 +87,10 @@
             <tbody>
               <% @rewards.to_a.each do |reward| %>
                 <tr>
-                  <td class="icon-column">
-                    <a href="<%= reward.picture.expiring_url(3600) %>" aria-label='<%= reward.picture_description %>' class="icon icon--bg icon--large" style="background-image: url(<%= reward.picture.expiring_url(3600) %>)"></a>
+                  <td>
+                    <a href="<%= reward.picture.expiring_url(3600) %>" aria-label='<%= reward.picture_description %>' class="icon icon--bg icon--large" style="background-image: url(<%= reward.picture.expiring_url(3600) %>); margin-right: 3%;"></a>
+                    <%= reward.label %>
                   </td>
-                  <td><%= reward.label %></td>
                   <td><%= reward.points %></td>
                   <td><%= reward.responsible.name %></td>
                   <td>
