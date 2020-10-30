@@ -19,7 +19,7 @@ RSpec.describe PolicyGroupTemplate, type: :model do
     it { expect(policy_group_template).to validate_uniqueness_of(:user_role_id) }
   end
 
-  describe "#check_uniqueness_of_name" do
+  describe '#check_uniqueness_of_name' do
     let(:user_role) { create(:user_role) }
     let(:policy_group_template) { user_role.policy_group_template }
     let(:new_role) { create(:user_role, enterprise: user_role.enterprise) }
