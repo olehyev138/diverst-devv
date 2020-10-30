@@ -19,5 +19,12 @@ RSpec.describe UserTokenService, type: :service do
       user.reload.destroy
       expect { UserTokenService.verify_jwt_token token }.to raise_error BadRequestException
     end
+
+    it 'raises an error because user is inactive' do
+      user = create(:user, active: false)
+      token = UserTokenService.create_jwt user
+      user.reload
+      expect { UserTokenService.verify_jwt_token token }.to raise_error BadRequestException
+    end
   end
 end
