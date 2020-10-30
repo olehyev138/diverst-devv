@@ -218,8 +218,12 @@ class Group < ApplicationRecord
   scope :all_children,      -> { where.not(parent_id: nil) }
   scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
 
-  # regions
-  scope :non_regioned_children, -> (id) { where(parent_id: id, region_id: nil) }
+  # Regions
+  # Pass a group ID to get all the children of the group that are not in regions,
+  # intended for retrieving the options when assigning children into a region.
+  # Optionally pass a region ID to include children from that region,
+  # intended for including children of the region when editing it
+  scope :non_regioned_children, -> (id, region_id = nil) { where(parent_id: id, region_id: [nil, region_id]) }
 
   # This scope acts as an alternative to `all_parents` which ignore a given list of groups, while getting the
   # children of said groups and adding them to the result of the query
