@@ -47,7 +47,7 @@ class UserRole < ApplicationRecord
   before_create :build_default_policy_group_template
 
   def build_default_policy_group_template
-    build_policy_group_template(name: "#{role_name} Policy Template", default: default)
+    build_policy_group_template(name: "#{role_name} Policy Template")
     true
   end
 

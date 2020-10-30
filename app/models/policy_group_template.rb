@@ -6,7 +6,7 @@ class PolicyGroupTemplate < ApplicationRecord
     end
   end
 
-  POLICIES = attribute_names - ['id', 'name', 'enterprise_id', 'role', 'default', 'created_at', 'updated_at', 'user_role_id']
+  POLICIES = attribute_names - ['id', 'name', 'deprecated_enterprise_id', 'role', 'default', 'created_at', 'updated_at', 'user_role_id']
   GROUP_LEADER_POLICIES = POLICIES & GroupLeader.attribute_names
   EMPTY_POLICY_ATTRIBUTES = (POLICIES.zip(INFINITE_FALSE)).to_h
   EMPTY_GROUP_LEADER_ATTRIBUTES = (GROUP_LEADER_POLICIES.zip(INFINITE_FALSE)).to_h
@@ -21,11 +21,9 @@ class PolicyGroupTemplate < ApplicationRecord
   validates :user_role,   presence: true
   validates :enterprise,  presence: true
 
-  validates_uniqueness_of :name,          scope: [:enterprise]
-  validates_uniqueness_of :user_role,     scope: [:enterprise]
-  validates_uniqueness_of :default,       scope: [:enterprise], conditions: -> { where(default: true) }
-
-  delegate :enterprise_id, :enterprise_id=, to: :user_role
+  validates_uniqueness_of :user_role_id
+  validate :check_uniqueness_of_name
+  delegate :enterprise_id, :enterprise_id=, :default, :default=, to: :user_role
 
   # retrieves fields for policy and returns them
   # to user object to create policy_group
@@ -46,6 +44,14 @@ class PolicyGroupTemplate < ApplicationRecord
       PolicyGroupTemplateUpdateJob.perform_now(id)
     else
       PolicyGroupTemplateUpdateJob.perform_later(id)
+    end
+  end
+
+  private
+
+  def check_uniqueness_of_name
+    if enterprise.policy_group_templates.where.not(id: self.id).where(name: self.name).exists?
+      errors.add(:name, 'name already taken')
     end
   end
 end
