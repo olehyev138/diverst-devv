@@ -444,6 +444,7 @@
   "diverst.containers.Region.form.input.description": "Description",
   "diverst.containers.Region.form.input.children": "Region {sub_erg_p}",
   "diverst.containers.Region.form.button.create": "Create",
+  "diverst.containers.Region.form.button.update": "Update",
   "diverst.containers.Region.form.button.cancel": "Cancel",
   "diverst.containers.Group.customgraph.delete_confirm": "Delete metricsDashboard?",
   "diverst.containers.Group.family.areMember": "Are a member",
