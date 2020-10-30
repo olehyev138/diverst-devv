@@ -80,6 +80,14 @@
           <p><%= sanitize @event.description %></p>
           <h4>Location</h4>
           <p><%= @event.location %></p>
+          <h4>Event Url</h4>
+          <p>
+            <% if @event.event_url.present? %>
+              <%= link_to @event.event_url, @event.event_url %>
+            <% else %> 
+              N/A 
+            <% end %>  
+          </p>
           <h4>Co-hosted/Participating Groups</h4>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
@@ -216,6 +224,10 @@
 
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count + 1;
+      
+      if('<%= @event.event_url %>'){
+        window.location.href = '<%= @event.event_url %>';
+      }
     }
   });
 </script>
