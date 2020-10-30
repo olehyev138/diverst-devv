@@ -31,10 +31,10 @@ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB8
 curl -sSL https://get.rvm.io | sudo bash -s stable
 ```
 2. Relogin to your system/terminal.  
-3. Install Ruby 2.3.0 and use it by default:  
+3. Install Ruby 2.4.10 and use it by default:  
 ```
-rvm install 2.3.0
-rvm use 2.3.0 --default
+rvm install 2.4.10
+rvm use 2.4.10 --default
 ```
 4. Verify it:  
 `ruby -v`
