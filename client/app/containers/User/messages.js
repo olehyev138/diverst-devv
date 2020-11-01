@@ -85,6 +85,9 @@ export default defineMessages({
   fields_save: {
     id: `${scope}.profile.fields.form.save`
   },
+  admin_fields: {
+    id: `${scope}.profile.form.admin_fields`
+  },
   scopes: {
     all: {
       id: `${scope}.scope.all`,

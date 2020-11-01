@@ -37,7 +37,13 @@ class Enterprise < ApplicationRecord
   has_many :polls, inverse_of: :enterprise, dependent: :destroy
   has_many :mobile_fields, inverse_of: :enterprise, dependent: :destroy
   has_many :metrics_dashboards, inverse_of: :enterprise, dependent: :destroy
-  has_many :user_roles, inverse_of: :enterprise, dependent: :delete_all
+  has_many :user_roles, inverse_of: :enterprise, dependent: :destroy
+  before_destroy -> do
+    dur = default_user_role
+    dur.policy_group_template.delete
+    dur.delete
+  end, prepend: true
+
   delegate :leaders, to: :groups
   has_many :graphs, through: :metrics_dashboards
   has_many :poll_graphs, through: :polls, source: :graphs
@@ -64,7 +70,7 @@ class Enterprise < ApplicationRecord
   has_many :mentoring_types, dependent: :destroy
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
-  has_many :policy_group_templates, dependent: :destroy
+  has_many :policy_group_templates, through: :user_roles
   has_many :rewards, dependent: :destroy
   has_many :reward_actions, dependent: :destroy
   has_many :badges, dependent: :destroy
@@ -161,8 +167,12 @@ class Enterprise < ApplicationRecord
     ActiveSupport::TimeZone.find_tzinfo('UTC').name
   end
 
+  def default_user_role_id
+    default_user_role.id
+  end
+
   def default_user_role
-    user_roles.find_by(default: true).id
+    user_roles.find_by(default: true)
   end
 
   def iframe_calendar_token
