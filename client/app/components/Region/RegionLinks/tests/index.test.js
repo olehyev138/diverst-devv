@@ -11,10 +11,14 @@ import { shallow } from 'enzyme';
 import 'utils/mockReactRouterHooks';
 import { RegionLinks } from '../index';
 
+const props = {
+  currentRegion: {}
+};
+
 describe('<RegionLinks />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<RegionLinks classes={{}} />);
+    const wrapper = shallow(<RegionLinks classes={{}} {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
