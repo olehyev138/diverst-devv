@@ -108,11 +108,11 @@ module BaseSearcher
 
         # Raise error if Policy exists but Scope doesn't
         # When scope is not defined it defers to ApplicationPolicy::Scope which has logic we don't necessarily want
-        raise NameError if policy_scope.parent != policy
+        raise PolicyScopeNotFoundException "#{policy}::Scope not defined" if policy_scope.parent != policy
 
         # Apply the associated policy scope for the model to filter based on authorization
         @items = policy_scope.new(current_user, base, params: params, action: current_action.to_sym).resolve
-      rescue NameError => e
+      rescue NameError, PolicyScopeNotFoundException => e
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
         warn(e) if Rails.env.development?
@@ -122,7 +122,7 @@ module BaseSearcher
           "It is likely that a policy scope was not found for #{self}. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)",
           '---------------------------------------'
         )
-        @items = self
+        @items = base
       end
 
       # Attempt to ensure that we can only retrieve items from the current user's enterprise

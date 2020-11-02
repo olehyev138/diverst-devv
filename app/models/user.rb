@@ -160,6 +160,8 @@ class User < ApplicationRecord
   after_create :set_default_policy_group
   after_update :add_to_default_mentor_group
 
+  before_save :inactive_cleanup, if: :will_save_change_to_active?
+
   accepts_nested_attributes_for :policy_group
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
@@ -337,6 +339,16 @@ class User < ApplicationRecord
       return if custom_policy_group
 
       policy_group.update_attributes(attributes)
+    end
+  end
+
+  def inactive_cleanup
+    unless active
+      group_leaders.destroy_all
+      initiative_users
+          .left_joins(:initiative)
+          .where('`initiatives`.start > ? AND `initiatives`.archived_at IS NULL', Time.current)
+          .destroy_all
     end
   end
 

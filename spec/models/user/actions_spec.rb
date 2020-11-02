@@ -138,6 +138,11 @@ RSpec.describe User::Actions, type: :model do
       expect { User.signin('test@gmail.com', 'testPassword') }.to raise_error(BadRequestException, 'User does not exist')
     end
 
+    it 'raises an exception if user is inactive' do
+      user = create(:user, active: false, password: '123456789', password_confirmation: '123456789')
+      expect { User.signin(user.email, '123456789') }.to raise_error(BadRequestException, 'User does not exist')
+    end
+
     it 'raises an exception if password is incorrect' do
       create(:user, email: 'test@gmail.com')
       expect { User.signin('test@gmail.com', 'testPassword') }.to raise_error(BadRequestException, 'Incorrect password')
