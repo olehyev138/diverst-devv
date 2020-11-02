@@ -1,5 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :last_name, :user_role, :name,
+  attributes :last_name, :name,
              :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type,
              :permissions, :available_roles, :name_with_status
 

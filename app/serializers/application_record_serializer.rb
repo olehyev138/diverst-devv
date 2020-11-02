@@ -30,11 +30,13 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       def initialize(object, user: nil, action:, options: {}, path: ['object'])
         @klass = object.class
         @path = path
-        @object = object
+        @head = path.size == 1
+        @object = @head ? @klass.preload_all(action: action, user: user).find(object.id) : object
         @user = user
         @action = action
+        @options = options
         @serializer = self.class.parent.new(
-            @klass.preload_all(action: action, user: user).find(object.id),
+            @object,
             options.merge({ scope: { current_user: user, action: action } })
         )
       end
@@ -43,22 +45,27 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         @@parent = self.class.parent
       end
 
-      def associations
-        parent._attributes.map do |attr|
+      def attributes
+        @attributes ||= parent._attributes.map do |attr|
           [attr, (object.association(attr) rescue nil)]
-        end.filter(&:second).to_h
+        end.filter(&:second).filter { |attr| serializer.validate(attr.first) }
       end
 
       def reflections
-        parent._reflections
+        @reflections ||= parent._reflections.map do |attr, ref|
+          [attr, (object.association(attr) rescue nil)]
+        end.filter(&:second)
+      end
+
+      def associations
+        @associations ||= (attributes + reflections).to_h
       end
 
       def preloaded?
-        associations.all? do |attr, assoc|
+        attributes.all? do |attr, assoc|
           loaded?(attr, assoc) && recursive?(attr, assoc)
         end &&
-        reflections.all? do |attr, reflection|
-          assoc = object.association(attr)
+        reflections.all? do |attr, assoc|
           loaded?(attr, assoc) && recursive?(attr, assoc, with_singular: true)
         end
       end
@@ -68,21 +75,21 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       end
 
       def recursive?(attr, assoc, with_singular: false)
-        return true unless assoc <= ActiveRecord::Associations::HasManyAssociation
+        serializer = @options[:use_serializer]
 
-        serializer = options[:use_serializer]
+        sub_object = case assoc
+                     when ActiveRecord::Associations::CollectionAssociation
+                       object.send(attr).first
+                     when ActiveRecord::Associations::SingularAssociation
+                       object.send(attr) if with_singular
+                     else nil
+                     end
 
-        if assoc.is_a? ActiveRecord::Associations::CollectionAssociation
-          serializer ||= ActiveModel::Serializer.serializer_for(object.send(attr).first)
-          object.send(attr).all? do |sub|
-            serializer::Tester.new(sub, user: user, action: 'index', options: options, path: [*@path, "#{attr}[]"]).preloaded?
-          end
-        elsif !with_singular && assoc.is_a?(ActiveRecord::Associations::SingularAssociation)
-          serializer ||= ActiveModel::Serializer.serializer_for(object.send(attr).first, path: [*@path, attr])
-          serializer::Tester.new(sub, user: user, action: 'index', options: options).preloaded?
-        else
-          true
-        end
+        serializer ||= ActiveModel::Serializer.serializer_for(sub_object)
+
+        return true unless sub_object
+
+        serializer::Tester.new(sub_object, user: user, action: action, options: @options, path: [*@path, "#{attr}[]"]).preloaded?
       end
     end)
 
@@ -114,7 +121,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
           unless permission_module.instance_methods(false).include? attr
             permission_module.define_method(attr) do
-              if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+              if validate(__method__)
                 if defined?(super)
                   begin
                     super()
@@ -163,6 +170,10 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         scope
       end
     end
+  end
+
+  def validate(field)
+    self.class.permission_module.attr_conditions[field].any? { |pred| send(pred) }
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result

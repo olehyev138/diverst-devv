@@ -79,7 +79,7 @@ module Group::Actions
     # List of basic attributes to preload.
     # Used when preloading groups field for other serializers (Like UserGroupSerializer)
     def base_attributes_preloads(diverst_request)
-      preloads = [ :logo_attachment, :logo_blob, :user_groups, :group_leaders ]
+      preloads = [ :logo_attachment, :logo_blob, :user_groups, :group_leaders, :group_category, :group_category_type ]
       preloads.append(:news_feed, :banner_attachment, :banner_blob) if diverst_request.action == 'show'
       preloads.append(:annual_budgets) if diverst_request.options[:budget]
       preloads
