@@ -11,7 +11,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { intlShape } from 'react-intl';
 
 import {
-  Grid, Box, Typography, CardContent, CardActions, Button, Collapse,
+  Grid, Box, Typography, CardContent, CardActions, Button, Collapse, Link
 } from '@material-ui/core';
 
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
@@ -40,7 +40,12 @@ export function GroupRegionsListItem(props) {
     <React.Fragment>
       <CardContent>
         <Typography color='primary' variant='h6'>
-          {region.name}
+          <Link
+            component={WrappedNavLink}
+            to={ROUTES.region.home.path(region.id)}
+          >
+            {region.name}
+          </Link>
         </Typography>
         {region.short_description && (
           <React.Fragment>
