@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import messages from 'containers/Region/messages';
 
 import {
-  Button, Card, CardContent, CardActions, Grid, Divider, Box, Typography,
+  Button, Card, Grid, Divider, Box, Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -27,6 +27,8 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+
+import GroupRegionsListItem from 'components/Region/GroupRegionsListItem';
 
 const styles = theme => ({
   pageTitle: {
@@ -38,13 +40,10 @@ const styles = theme => ({
   emptyText: {
     fontSize: '1.25rem',
   },
-  errorButton: {
-    color: theme.palette.error.main,
-  },
 });
 
 export function GroupRegionsList(props) {
-  const { classes, group, regions, isLoading, isRegionsLoading, intl } = props;
+  const { classes, group, regions, isLoading, isRegionsLoading, deleteRegionBegin, intl } = props;
 
   return (
     <React.Fragment>
@@ -82,46 +81,12 @@ export function GroupRegionsList(props) {
                 <Grid container>
                   {regions && regions.map((region, i) => (
                     <Grid item key={region.id} xs={12}>
-                      <CardContent>
-                        <Box pt={1} pb={1}>
-                          <Typography color='primary' variant='h6'>
-                            {region.name}
-                          </Typography>
-                          {region.short_description && (
-                            <React.Fragment>
-                              <Box pt={1} />
-                              <Typography color='textSecondary'>
-                                {region.short_description}
-                              </Typography>
-                            </React.Fragment>
-                          )}
-                        </Box>
-                      </CardContent>
-                      <CardActions>
-                        <Permission show={permission(group, 'update?')}>
-                          <Button
-                            size='small'
-                            color='primary'
-                            to={ROUTES.admin.manage.groups.regions.edit.path(group.id, region.id)}
-                            component={WrappedNavLink}
-                          >
-                            <DiverstFormattedMessage {...messages.edit} />
-                          </Button>
-                        </Permission>
-                        <Permission show={permission(group, 'destroy?')}>
-                          <Button
-                            size='small'
-                            className={classes.errorButton}
-                            onClick={() => {
-                              /* eslint-disable-next-line no-alert, no-restricted-globals */
-                              if (confirm(intl.formatMessage(messages.delete_confirm)))
-                                props.deleteRegionBegin({ region_id: region.id, group_id: group.id });
-                            }}
-                          >
-                            <DiverstFormattedMessage {...messages.delete} />
-                          </Button>
-                        </Permission>
-                      </CardActions>
+                      <GroupRegionsListItem
+                        region={region}
+                        group={group}
+                        deleteRegionBegin={deleteRegionBegin}
+                        intl={intl}
+                      />
                       {i < regions.length - 1 && (
                         <Divider />
                       )}
