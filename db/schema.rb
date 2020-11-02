@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_29_202350) do
+ActiveRecord::Schema.define(version: 2020_10_30_135052) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1186,7 +1186,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_202350) do
     t.string "name", null: false
     t.boolean "default", default: false
     t.integer "user_role_id"
-    t.integer "enterprise_id"
+    t.integer "deprecated_enterprise_id"
     t.boolean "campaigns_index", default: false
     t.boolean "campaigns_create", default: false
     t.boolean "campaigns_manage", default: false
@@ -1246,7 +1246,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_202350) do
     t.boolean "group_posts_index", default: false
     t.boolean "mentorship_manage", default: false
     t.boolean "auto_archive_manage", default: false
-    t.index ["enterprise_id"], name: "index_policy_group_templates_on_enterprise_id"
+    t.index ["deprecated_enterprise_id"], name: "index_policy_group_templates_on_deprecated_enterprise_id"
     t.index ["user_role_id"], name: "index_policy_group_templates_on_user_role_id"
   end
 
