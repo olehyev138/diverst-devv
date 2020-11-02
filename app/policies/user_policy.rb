@@ -11,7 +11,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    return true if index?
+    return true if manage?
 
     @record === @user
   end
@@ -28,7 +28,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    return true if create?
+    return true if manage?
 
     @record === @user
   end

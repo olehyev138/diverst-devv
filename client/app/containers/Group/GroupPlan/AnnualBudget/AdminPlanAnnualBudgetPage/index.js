@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
-import { selectCustomText, selectPermissions } from '../../../../Shared/App/selectors';
+import { selectCustomText, selectPermissions, selectEnterprise } from '../../../../Shared/App/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
@@ -94,6 +94,7 @@ AdminAnnualBudgetPage.propTypes = {
   resetBudgetBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
   isFetchingAnnualBudgets: PropTypes.bool,
+  enterprise: PropTypes.object,
   hasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
@@ -103,6 +104,7 @@ AdminAnnualBudgetPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isFetchingAnnualBudgets: selectGroupIsLoading(),
+  enterprise: selectEnterprise(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
@@ -128,7 +130,9 @@ export default compose(
   memo,
 )(Conditional(
   AdminAnnualBudgetPage,
-  ['permissions.manage_all_budgets'],
+  ['permissions.manage_all_budgets', 'enterprise.plan_module_enabled'],
   (props, params) => props.permissions.adminPath || ROUTES.user.home.path(),
-  permissionMessages.group.groupPlan.annualBudget.adminPlanPage
+  permissionMessages.group.groupPlan.annualBudget.adminPlanPage,
+  false,
+  permissions => permissions.every(a => a)
 ));

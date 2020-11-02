@@ -63,14 +63,36 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     remove_foreign_key "views", "folders" if foreign_key_exists?("views", "folders")
     remove_foreign_key "views", "resources" if foreign_key_exists?("views", "resources")
 
-    # New table - check exists first, will exist for legacy db's
+    # New table - check exists first, will exist for legacy db's - video_rooms
     if table_exists? :video_rooms
       remove_foreign_key "video_rooms", "enterprises" if foreign_key_exists?("video_rooms", "enterprises")
       remove_foreign_key "video_rooms", "initiatives" if foreign_key_exists?("video_rooms", "initiatives")
     end
 
+    # New table - check exists first, will exist for legacy db's - video participants
     if table_exists? :video_participants
       remove_foreign_key :video_participants, :video_rooms if foreign_key_exists?(:video_participants, :video_rooms)
+    end
+
+    # New table - check exists first, will exist for legacy db's - idea_categories
+    if table_exists? :idea_categories
+      remove_foreign_key "idea_categories", "enterprises" if foreign_key_exists?("idea_categories", "enterprises")
+    end
+
+    # New table - check exists first, will exist for legacy db's - departments
+    if table_exists? :departments
+      remove_foreign_key "departments", "enterprises" if foreign_key_exists?("departments", "enterprises")
+    end
+
+    # New table - check exists first, will exist for legacy db's - suggested_hires
+    if table_exists? :suggested_hires
+      remove_foreign_key "suggested_hires", "users" if foreign_key_exists?("suggested_hires", "users")
+      remove_foreign_key "suggested_hires", "groups" if foreign_key_exists?("suggested_hires", "groups")
+    end
+
+    # New table - check exists first, will exist for legacy db's - business_impacts
+    if table_exists? :business_impacts
+      remove_foreign_key "business_impacts", "enterprises" if foreign_key_exists?("business_impacts", "enterprises")
     end
 
     ### Primary keys
@@ -82,6 +104,11 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     if table_exists? :video_participants
       change_column :video_rooms, :id, :bigint, auto_increment: true
     end
+
+    change_column :idea_categories, :id, :bigint, auto_increment: true if table_exists? :idea_categories
+    change_column :departments, :id, :bigint, auto_increment: true if table_exists? :departments
+    change_column :suggested_hires, :id, :bigint, auto_increment: true if table_exists? :suggested_hires
+    change_column :business_impacts, :id, :bigint, auto_increment: true if table_exists? :business_impacts
 
     change_column :activities, :id, :bigint, auto_increment: true
     change_column :answer_comments, :id, :bigint, auto_increment: true
@@ -342,6 +369,15 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
       change_column :video_participants, :video_room_id, :bigint
     end
 
+    if table_exists? :suggested_hires
+      change_column :suggested_hires, :user_id, :bigint
+      change_column :suggested_hires, :group_id, :bigint
+    end
+
+    change_column :idea_categories, :enterprise_id, :bigint if table_exists? :idea_categories
+    change_column :departments, :enterprise_id, :bigint if table_exists? :departments
+    change_column :business_impacts, :enterprise_id, :bigint if table_exists? :business_impacts
+
     add_foreign_key "answers", "groups", column: "contributing_group_id"
     add_foreign_key "badges", "enterprises"
     add_foreign_key "budget_items", "budgets"
@@ -408,6 +444,14 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
       add_foreign_key :video_participants, :video_rooms
     end
 
+    if table_exists? :suggested_hires
+      add_foreign_key :suggested_hires, :users
+      add_foreign_key :suggested_hires, :groups
+    end
+
+    add_foreign_key :idea_categories, :enterprises if table_exists? :idea_categories
+    add_foreign_key :departments, :enterprises if table_exists? :departments
+    add_foreign_key :business_impacts, :enterprises if table_exists? :business_impacts
 
     # Re-enable foreign key checks
     # execute 'SET FOREIGN_KEY_CHECKS = 1'

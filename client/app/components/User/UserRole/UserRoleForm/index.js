@@ -52,7 +52,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               <Field
                 component={Select}
                 fullWidth
-                disabled={props.isCommitting}
+                disabled={props.edit || props.isCommitting}
                 id='role_type'
                 name='role_type'
                 margin='normal'

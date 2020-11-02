@@ -28,6 +28,8 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
 
     transaction do
       models.each do |model|
+        next unless ActiveRecord::Base.connection.table_exists? model.table_name
+
         attachments = model.column_names.map do |c|
           if c =~ /(.+)_content_type$/
             $1

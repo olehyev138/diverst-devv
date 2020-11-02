@@ -28,7 +28,7 @@ RSpec.describe UserPolicy, type: :policy do
       context 'when users_index is true but users_manage is false' do
         before { user.policy_group.update(users_index: true) }
 
-        it { is_expected.to permit_actions([:index, :show]) }
+        it { is_expected.to permit_actions([:index]) }
       end
 
       context 'when user is able to create a budget' do

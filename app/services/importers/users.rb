@@ -82,7 +82,7 @@ class Importers::Users
   end
 
   def user_attributes(row, user)
-    id = user.present? ? user.user_role_id : @enterprise.default_user_role # default_user_role returns the ID of the default role
+    id = user.present? ? user.user_role_id : @enterprise.default_user_role_id # default_user_role returns the ID of the default role
 
     {
       first_name: row['first name'],

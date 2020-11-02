@@ -70,7 +70,7 @@ export function SegmentList(props, context) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
-
+  
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>

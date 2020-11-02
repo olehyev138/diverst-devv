@@ -154,8 +154,8 @@ export default defineMessages({
       create: {
         id: `${snackbar}.success.create.annualBudget`
       },
-      delete: {
-        id: `${snackbar}.success.delete.annualBudget`
+      update: {
+        id: `${snackbar}.success.update.annualBudget`
       },
     },
   }
