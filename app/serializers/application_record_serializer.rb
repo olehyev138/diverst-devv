@@ -27,8 +27,9 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     subclass.const_set('Tester', Class.new do
       attr_reader :serializer, :user, :action, :klass, :object
 
-      def initialize(object, user: nil, action:, options: {})
+      def initialize(object, user: nil, action:, options: {}, path: ['object'])
         @klass = object.class
+        @path = path
         @object = object
         @user = user
         @action = action
@@ -54,27 +55,33 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
       def preloaded?
         associations.all? do |attr, assoc|
-          assoc.loaded? && recursive?(attr, assoc)
+          loaded?(attr, assoc) && recursive?(attr, assoc)
         end &&
         reflections.all? do |attr, reflection|
           assoc = object.association(attr)
-          assoc.loaded? && recursive?(attr, assoc)
+          loaded?(attr, assoc) && recursive?(attr, assoc, with_singular: true)
         end
       end
 
-      def recursive?(attr, assoc)
+      def loaded?(attr, assoc)
+        assoc.loaded? || (raise StandardError, "#{[*@path, attr].join('.')} Is not preloaded")
+      end
+
+      def recursive?(attr, assoc, with_singular: false)
         return true unless assoc <= ActiveRecord::Associations::HasManyAssociation
 
-        serializer_tester = if klass == assoc.klass
-                              self.class
-                            else
-                              serializer = @instance_options[:use_serializer] ||
-                                  ActiveModel::Serializer.serializer_for(object.items.first)
-                              serializer::Tester
-                            end
+        serializer = options[:use_serializer]
 
-        object.send(attr).all? do |sub|
-          serializer_tester.new(sub, user: user, action: 'index', options: options).preloaded?
+        if assoc.is_a? ActiveRecord::Associations::CollectionAssociation
+          serializer ||= ActiveModel::Serializer.serializer_for(object.send(attr).first)
+          object.send(attr).all? do |sub|
+            serializer::Tester.new(sub, user: user, action: 'index', options: options, path: [*@path, "#{attr}[]"]).preloaded?
+          end
+        elsif !with_singular && assoc.is_a?(ActiveRecord::Associations::SingularAssociation)
+          serializer ||= ActiveModel::Serializer.serializer_for(object.send(attr).first, path: [*@path, attr])
+          serializer::Tester.new(sub, user: user, action: 'index', options: options).preloaded?
+        else
+          true
         end
       end
     end)
