@@ -60,6 +60,11 @@ const selectIsFormLoading = () => createSelector(
   groupLeadersState => groupLeadersState.isFormLoading
 );
 
+const selectHasChanged = () => createSelector(
+  selectGroupLeadersDomain,
+  groupLeadersState => groupLeadersState.hasChanged
+);
+
 function mapForm(leader) {
   if (!leader) return null;
   return produce(leader, (draft) => {
@@ -72,5 +77,6 @@ function mapForm(leader) {
 export {
   selectFormGroupLeaders, selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
   selectGroupLeaderTotal, selectIsFetchingGroupLeaders, selectIsCommitting,
-  selectFormGroupLeader, selectPaginatedSelectGroupLeaders, selectIsFormLoading
+  selectFormGroupLeader, selectPaginatedSelectGroupLeaders, selectIsFormLoading,
+  selectHasChanged
 };
