@@ -140,7 +140,10 @@
     }
   },
   "region": {
-    "home": "/regions/:region_id"
+    "home": "/regions/:region_id",
+    "leaders": {
+      "index": "/regions/:region_id/leaders"
+    }
   },
   "admin": {
     "root": "/admin/manage/groups",
