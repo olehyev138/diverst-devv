@@ -50,9 +50,17 @@
   $('#usersToInviteToGroup').on('shown.bs.modal', function(){
       $('a.send-invite').on('ajax:success', function(){
           $(this).fadeOut('slow', function(){
-              this.replaceWith('Sent!');
+              $(this).replaceWith('Sent!');
           })
       })
+
+      $('input[type="search"]').on('change', function(){
+        $('a.send-invite').on('ajax:success', function(){
+          $(this).fadeOut('slow', function(){
+              $(this).replaceWith('Sent!');
+          })
+        })
+      });
   });
   
   $('#usersToInviteToGroup').on('hidden.bs.modal', function () {
