@@ -82,6 +82,14 @@
           <p><%= @event.location %></p>
           <h3 class="h4-styling">Co-hosted/Participating Groups</h3>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
+          <h3 class="h4-styling">Event Url</h3>
+          <p>
+            <% if @event.event_url.present? %>
+              <%= link_to @event.event_url, @event.event_url %>
+            <% else %> 
+              N/A 
+            <% end %>  
+          </p>
         </div>
         <div class="col-sm-4 col-xs-12">
           <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
@@ -216,6 +224,10 @@
 
       var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML);
       document.getElementById('attendees_count').innerHTML = attendees_count + 1;
+      
+      if('<%= @event.event_url %>'){
+        window.location.href = '<%= @event.event_url %>';
+      }
     }
   });
 </script>
