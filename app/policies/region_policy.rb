@@ -25,6 +25,18 @@ class RegionPolicy < GroupBasePolicy
     parent_policy.update?
   end
 
+  def leaders_view?
+    GroupLeaderPolicy.new(self, GroupLeader).index?
+  end
+
+  def leaders_create?
+    GroupLeaderPolicy.new(self, GroupLeader).create?
+  end
+
+  def leaders_manage?
+    GroupLeaderPolicy.new(self, GroupLeader).manage?
+  end
+
   private def method_missing(symbol, *args)
     if parent_policy.respond_to?(symbol)
       parent_policy.send(symbol, *args)
