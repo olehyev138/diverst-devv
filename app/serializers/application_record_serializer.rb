@@ -25,7 +25,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     super
 
     subclass.const_set('Tester', Class.new do
-      attr_reader :serializer, :user, :action, :klass
+      attr_reader :serializer, :user, :action, :klass, :object
 
       def initialize(object, user: nil, action:, options: {})
         @klass = object.class
@@ -43,20 +43,19 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       end
 
       def associations
-        @@associations ||= parent._attributes.map do |attr|
+        parent._attributes.map do |attr|
           [attr, (object.association(attr) rescue nil)]
         end.filter(&:second).to_h
       end
 
       def reflections
-        @@reflections ||= parent._reflections
+        parent._reflections
       end
 
       def preloaded?
         associations.all? do |attr, assoc|
           assoc.loaded? && recursive?(attr, assoc)
-        end
-
+        end &&
         reflections.all? do |attr, reflection|
           assoc = object.association(attr)
           assoc.loaded? && recursive?(attr, assoc)

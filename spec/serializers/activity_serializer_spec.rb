@@ -9,4 +9,8 @@ RSpec.describe ActivitySerializer, type: :serializer do
     expect(serializer.serializable_hash[:owner_id]).to_not be nil
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
+
+  describe 'conditional preloading' do
+
+  end
 end
