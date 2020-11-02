@@ -23,6 +23,63 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
   def self.inherited(subclass)
     super
+
+    subclass.const_set('Tester', Class.new do
+      attr_reader :serializer, :user, :action, :klass
+
+      def initialize(object, user: nil, action:, options: {})
+        @klass = object.class
+        @object = object
+        @user = user
+        @action = action
+        @serializer = self.class.parent.new(
+            @klass.preload_all(action: action, user: user).find(object.id),
+            options.merge({ scope: { current_user: user, action: action } })
+        )
+      end
+
+      def parent
+        @@parent = self.class.parent
+      end
+
+      def associations
+        @@associations ||= parent._attributes.map do |attr|
+          [attr, (object.association(attr) rescue nil)]
+        end.filter(&:second).to_h
+      end
+
+      def reflections
+        @@reflections ||= parent._reflections
+      end
+
+      def preloaded?
+        associations.all? do |attr, assoc|
+          assoc.loaded? && recursive?(attr, assoc)
+        end
+
+        reflections.all? do |attr, reflection|
+          assoc = object.association(attr)
+          assoc.loaded? && recursive?(attr, assoc)
+        end
+      end
+
+      def recursive?(attr, assoc)
+        return true unless assoc <= ActiveRecord::Associations::HasManyAssociation
+
+        serializer_tester = if klass == assoc.klass
+                              self.class
+                            else
+                              serializer = @instance_options[:use_serializer] ||
+                                  ActiveModel::Serializer.serializer_for(object.items.first)
+                              serializer::Tester
+                            end
+
+        object.send(attr).all? do |sub|
+          serializer_tester.new(sub, user: user, action: 'index', options: options).preloaded?
+        end
+      end
+    end)
+
     class << subclass
       def permission_module
         @module ||= begin
