@@ -12,9 +12,12 @@ import PropTypes from 'prop-types';
 
 import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
+import LeadersIcon from '@material-ui/icons/EmojiPeople';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
@@ -153,6 +156,20 @@ export function RegionLinks(props) {
             </Hidden>
             <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
+
+          <Permission show={permission(props.currentRegion, 'leaders_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.region.leaders.index.path(currentRegion.id)}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <LeadersIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.region.leaders.index.data.titleMessage} />
+            </Button>
+          </Permission>
         </Toolbar>
       </PerfectScrollbar>
     </div>
