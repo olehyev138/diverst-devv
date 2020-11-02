@@ -38,7 +38,16 @@ const BudgetLayout = (props) => {
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/budgets/1/edit/ -> budgets */
   const currentPage = BudgetPages.find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(currentPage || BudgetPages[0]);
+
+  const defaultTab = (() => {
+    if (permission(currentGroup, 'annual_budgets_view?'))
+      return BudgetPages[0];
+    if (permission(currentGroup, 'annual_budgets_manage?'))
+      return BudgetPages[1];
+    return null;
+  });
+
+  const [tab, setTab] = useState(currentPage || defaultTab);
 
   useEffect(() => {
     if (!currentGroup) return;
