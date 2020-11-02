@@ -34,6 +34,9 @@ class RegionSerializer < ApplicationRecordSerializer
       :show?,
       :destroy?,
       :update?,
+      :leaders_view?,
+      :leaders_create?,
+      :leaders_manage?,
     ]
   end
 end
