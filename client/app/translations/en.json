@@ -1075,6 +1075,7 @@
   "diverst.containers.Routes.group.resources.new": "New Resource",
   "diverst.containers.Routes.region.back": "Back To Dashboard",
   "diverst.containers.Routes.region.home": "Home",
+  "diverst.containers.Routes.region.leaders.index": "Regional Leaders",
   "diverst.containers.Routes.user.downloads": "Downloads",
   "diverst.containers.Routes.user.edit": "Profile Edit",
   "diverst.containers.Routes.user.events": "Events",

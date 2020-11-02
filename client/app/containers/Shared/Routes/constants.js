@@ -586,6 +586,14 @@ const ROUTES = {
         titleMessage: messages.regions.home,
       }
     },
+    leaders: {
+      index: {
+        path: (regionId = ':region_id') => `/regions/${regionId}/leaders`,
+        data: {
+          titleMessage: messages.regions.leaders.index,
+        }
+      },
+    },
   },
 
   // Admin
