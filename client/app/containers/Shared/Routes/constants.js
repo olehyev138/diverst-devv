@@ -167,6 +167,7 @@ const ROUTES = {
     },
   },
 
+  // Group
   group: {
     pathPrefix: (groupId = ':group_id') => `/groups/${groupId}`,
     back: {
@@ -568,6 +569,22 @@ const ROUTES = {
           }
         },
       },
+    },
+  },
+
+  // Region
+  region: {
+    pathPrefix: (regionId = ':region_id') => `/regions/${regionId}`,
+    back: {
+      data: {
+        titleMessage: messages.regions.back,
+      }
+    },
+    home: {
+      path: (regionId = ':region_id') => `/regions/${regionId}`,
+      data: {
+        titleMessage: messages.regions.home,
+      }
     },
   },
 

@@ -18,7 +18,10 @@ export default defineMessages({
     },
     group: {
       id: `${scope}.layouts.groupLayout`
-    }
+    },
+    region: {
+      id: `${scope}.layouts.regionLayout`
+    },
   },
   globalSettings: {
     email: {
