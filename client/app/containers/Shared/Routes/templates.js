@@ -3,6 +3,7 @@ import ApplicationLayout from 'containers/Layouts/ApplicationLayout/Loadable';
 import AuthenticatedLayout from 'containers/Layouts/AuthenticatedLayout/Loadable';
 import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
+import RegionLayout from 'containers/Layouts/RegionLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import AnonymousLayout from 'containers/Layouts/AnonymousLayout/Loadable';
@@ -185,6 +186,9 @@ import GroupSponsorsListPage from 'containers/Group/GroupManage/GroupSponsors/Gr
 import GroupSponsorsCreatePage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsCreatePage/Loadable';
 import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsEditPage/Loadable';
 
+/* Region */
+import RegionHomePage from 'containers/Region/RegionHomePage/Loadable';
+
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
 import FolderCreatePage from 'containers/Resource/GroupFolder/FolderCreatePage/Loadable';
@@ -221,6 +225,7 @@ export {
   PasswordResetPage,
   UserLayout,
   GroupLayout,
+  RegionLayout,
   AdminLayout,
   SessionLayout,
   AnonymousLayout,
@@ -270,6 +275,7 @@ export {
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  RegionHomePage,
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,

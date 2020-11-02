@@ -9,6 +9,7 @@ import {
   PasswordResetPage,
   UserLayout,
   GroupLayout,
+  RegionLayout,
   AdminLayout,
   SessionLayout,
   AnonymousLayout,
@@ -48,6 +49,7 @@ import {
   GroupMessageCreatePage,
   GroupMessageEditPage,
   GroupPlanUpdateCreatePage,
+  RegionHomePage,
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
@@ -432,6 +434,16 @@ export default function Routes(props) {
                     </RouteWithProps>
                   </SwitchWithProps>
                 </GroupLayout>
+              </Route>
+
+              {/* Region */}
+              <Route path={ROUTES.region.pathPrefix()}>
+                <RegionLayout>
+                  <SwitchWithProps>
+                    {/* Home */}
+                    <RouteWithProps exact path={ROUTES.region.home.path()}><RegionHomePage /></RouteWithProps>
+                  </SwitchWithProps>
+                </RegionLayout>
               </Route>
 
               {/* Admin */}
