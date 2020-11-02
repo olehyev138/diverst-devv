@@ -195,7 +195,7 @@ RSpec.describe UserGroup do
 
         expect(basic_user.user_role.role_name).to eq('user')
         user_group = create(:user_group, user: basic_user, group: group)
-        create(:group_leader, user_role: enterprise.user_roles.where(role_name: 'group_leader').first, user: basic_user, group: group)
+        create(:group_leader, user_role: enterprise.user_roles.where(role_name: 'group_leader').first, user: basic_user, leader_of: group)
 
         # expect the user role to not change
         expect(basic_user.user_role.role_name).to eq('user')

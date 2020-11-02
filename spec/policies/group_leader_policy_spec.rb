@@ -5,7 +5,7 @@ RSpec.describe GroupLeaderPolicy, type: :policy do
   let(:group) { create(:group, enterprise: enterprise) }
   let(:annual_budget) { create(:annual_budget, group: group) }
   let(:budget) { create(:budget, annual_budget: annual_budget) }
-  let(:group_leader) { create(:group_leader, group: group) }
+  let(:group_leader) { create(:group_leader, leader_of: group) }
   let(:no_access) { create(:user, :no_permissions) }
   let!(:user) { no_access }
 

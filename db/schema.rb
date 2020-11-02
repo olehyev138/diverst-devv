@@ -575,7 +575,8 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   end
 
   create_table "group_leaders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
+    t.bigint "leader_of_id"
+    t.string "leader_of_type"
     t.bigint "user_id"
     t.string "position_name"
     t.datetime "created_at", null: false
@@ -616,7 +617,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
     t.boolean "manage_posts", default: false
     t.boolean "initiatives_index", default: false
     t.integer "position"
-    t.index ["group_id"], name: "fk_rails_582d7a722f"
+    t.index ["leader_of_id"], name: "fk_rails_582d7a722f"
     t.index ["user_id"], name: "fk_rails_9d1f0af75f"
   end
 
@@ -1877,7 +1878,6 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   add_foreign_key "group_categories", "enterprises"
   add_foreign_key "group_categories", "group_category_types"
   add_foreign_key "group_category_types", "enterprises"
-  add_foreign_key "group_leaders", "groups"
   add_foreign_key "group_leaders", "users"
   add_foreign_key "groups", "group_categories"
   add_foreign_key "groups", "group_category_types"

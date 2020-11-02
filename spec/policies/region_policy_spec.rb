@@ -1,29 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe GroupPolicy, type: :policy do
+RSpec.describe RegionPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, :no_permissions, enterprise: enterprise) }
   let(:user) { no_access }
   let(:group) { create(:group, owner: user, enterprise_id: enterprise.id, pending_users: 'enabled') }
-  let(:policy_scope) { GroupPolicy::Scope.new(user, Group).resolve }
+  let(:region) { create(:region, parent: group) }
 
-  subject { described_class.new(user, group) }
-
-  permissions '.scope' do
-    context 'when manage_all is true' do
-      before { user.policy_group.update manage_all: true }
-
-      it 'shows only groups belonging to enterprise' do
-        expected = [group]
-        expect(policy_scope).to eq expected
-      end
-
-      it 'shows even with with no members' do
-        expected = [group, create(:group, members: [], enterprise: enterprise)].sort_by(&:id)
-        expect(policy_scope.order(id: :asc)).to eq expected
-      end
-    end
-  end
+  subject { described_class.new(user, [group, region]) }
 
   describe 'for users with access' do
     let!(:user) { no_access }
@@ -215,35 +199,6 @@ RSpec.describe GroupPolicy, type: :policy do
 
           it 'returns true' do
             expect(subject.insights?).to eq true
-          end
-        end
-      end
-
-      describe '#parent_permissions?' do
-        context 'when group has no parent' do
-          it 'returns false' do
-            expect(subject.parent_permissions?).to eq false
-          end
-        end
-
-        context 'when group has parent' do
-          before { group.parent = create(:group, enterprise: user.enterprise) }
-
-          it 'returns the parent\'s permission' do
-            expect(subject.parent_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
-          end
-        end
-
-        context 'when group is part of a region' do
-          before do
-            parent = create(:group, enterprise: user.enterprise)
-            group.parent = parent
-            group.region = create(:region, parent: parent)
-          end
-
-          it 'returns true' do
-            allow_any_instance_of(RegionPolicy).to receive(:manage?).and_return(true)
-            expect(subject.parent_permissions?).to be true
           end
         end
       end
@@ -535,22 +490,6 @@ RSpec.describe GroupPolicy, type: :policy do
 
           it 'returns false' do
             expect(subject.insights?).to eq false
-          end
-        end
-      end
-
-      describe '#parent_permissions?' do
-        context 'when group has no parent' do
-          it 'returns false' do
-            expect(subject.parent_permissions?).to eq false
-          end
-        end
-
-        context 'when group has parent' do
-          before { group.parent = create(:group, enterprise: user.enterprise) }
-
-          it 'returns false' do
-            expect(subject.parent_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
           end
         end
       end

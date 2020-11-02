@@ -23,13 +23,7 @@ module Region::Actions
     # List of all attributes to preload.
     # Used when serializing a region itself
     def base_preloads
-      base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
-    end
-
-    # List of non-recursive attributes to preload.
-    # Used as the preload fields for a groups children/parent as to prevent infinite recursion of base_preloads
-    def base_preload_no_recursion
-      base_attributes_preloads | [ :children, :parent ]
+      [ children: Group.base_preload_no_recursion, parent: Group.base_preload_no_recursion ]
     end
   end
 end

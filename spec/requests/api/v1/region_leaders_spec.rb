@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 model = 'GroupLeader'
-RSpec.describe 'GroupLeaders', type: :request do
+RSpec.describe 'RegionLeaders', type: :request do
   let(:remove_leader_of) {
     -> (attrs) {
-      attrs['group_id'] = attrs['leader_of_id']
+      attrs['region_id'] = attrs['leader_of_id']
       attrs.delete('leader_of_id')
       attrs.delete('leader_of_type')
       attrs
@@ -14,12 +14,13 @@ RSpec.describe 'GroupLeaders', type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let(:item) { create(:group_leader, leader_of: group) }
-  let(:route) { 'group_leaders' }
+  let(:region) { create(:region, parent: group) }
+  let(:item) { create(:region_leader, leader_of: region) }
+  let(:route) { 'region_leaders' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
   let(:params) { { group_id: group.id } }
-  let(:build_params) { remove_leader_of[build(route.singularize.to_sym).attributes.dup] }
+  let(:build_params) { remove_leader_of[build(:region_leader).attributes.dup] }
   let(:attr_params) { remove_leader_of[item.attributes.dup] }
 
   describe '#index' do

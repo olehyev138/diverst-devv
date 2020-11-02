@@ -50,13 +50,6 @@ class UserPolicy < ApplicationPolicy
     create?
   end
 
-  def join_or_leave_groups?
-    return true if @record == @user
-    return true if GroupMemberPolicy.new(@user, [@record]).update?
-
-    false
-  end
-
   def user_not_current_user?
     @user != @record
   end

@@ -1,11 +1,13 @@
 class GroupPolicy < ApplicationPolicy
-  attr_reader :user_group, :group_leader
+  attr_reader :user_group, :group_leader, :region, :region_leader
 
   def initialize(user, record, params = nil)
     super(user, record, params)
     if Group === record
       @user_group = record.user_groups.find { |ug| ug.user_id == user.id }
       @group_leader = record.group_leaders.find { |gl| gl.user_id == user.id }
+      @region = record.region
+      @region_leader = region.region_leaders.find_by(user_id: user.id) if region
     end
   end
 
@@ -221,7 +223,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def manage_all_groups?
-    # return true if parent_group_permissions?
+    # return true if parent_permissions?
     # super admin
     return true if manage_all?
     return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('group_settings_manage')
@@ -231,7 +233,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def manage_all_group_budgets?
-    # return true if parent_group_permissions?
+    # return true if parent_permissions?
     # super admin
     return true if manage_all?
     return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('groups_budgets_manage')
@@ -242,6 +244,7 @@ class GroupPolicy < ApplicationPolicy
 
   def manage?
     return true if manage_all?
+    return true if parent_permission_prototype(:region, ::RegionPolicy)
     return true if has_group_leader_permissions?('groups_manage')
 
     @policy_group.groups_manage?
@@ -252,7 +255,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_an_accepted_member?
-    is_a_member? && @user_group.accepted_member == true
+    (is_a_member? && @user_group.accepted_member == true) || region_leader.present?
   end
 
   def is_a_member?
@@ -280,12 +283,17 @@ class GroupPolicy < ApplicationPolicy
   # @example
   # def show?
   #   # checks if user has `show` permission in parent group
-  #   parent_group_permissions?
+  #   parent_permissions?
   # end
-  def parent_group_permissions?
-    return false if @record.parent.nil?
+  def parent_permissions?
+    parent_permission_prototype(:parent, ::GroupPolicy) ||
+    parent_permission_prototype(:region, ::RegionPolicy)
+  end
 
-    parent_policy = ::GroupPolicy.new(@user, @record.parent)
+  def parent_permission_prototype(field, policy)
+    return false if @record.send(field).nil?
+
+    parent_policy = policy.new(@user, @record.send(field))
 
     # Gets the method name which this method was called from
     caller = caller_locations(1, 1)&.first&.label
@@ -308,7 +316,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def insights?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager
@@ -321,7 +329,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def layouts?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager
@@ -335,7 +343,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def settings?
-    return true if parent_group_permissions?
+    return true if parent_permissions?
     # super admin
     return true if @policy_group.manage_all?
     # groups manager

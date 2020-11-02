@@ -230,6 +230,7 @@ Diverst::Application.routes.draw do
           get 'group_regions'
         end
       end
+      resources :region_leaders
       resources :resources do
         collection do
           get 'archived'
