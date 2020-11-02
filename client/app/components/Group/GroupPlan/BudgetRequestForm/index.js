@@ -316,7 +316,7 @@ BudgetFormInner.propTypes = {
 
   formikProps: PropTypes.object,
 
-  buttonText: PropTypes.object.isRequired,
+  buttonText: PropTypes.string.isRequired,
 
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,

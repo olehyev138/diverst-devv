@@ -40,7 +40,7 @@ export function UserRoleCreatePage(props) {
     <UserRoleForm
       admin
       userRoleAction={props.createUserRoleBegin}
-      buttonText={intl.formatMessage(messages.create, props.customTexts)}
+      buttonText={messages.create}
       getUserRolesBegin={props.getUserRolesBegin}
       selectUserRoles={props.userRoles}
       links={links}
