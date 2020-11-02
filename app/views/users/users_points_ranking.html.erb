@@ -1,5 +1,5 @@
-<h1>Users By Engagement Points <%= link_to "Export Users Points Csv", users_points_csv_users_path, class: "btn btn--primary hidden-xs pull-right" %>
-<%= link_to "Export Users Points Csv", users_points_csv_users_path, class: "btn btn-primary visible-xs" %></h1>
+<h2 class="h1-styling">Users By Engagement Points <%= link_to "Export Users Points Csv", users_points_csv_users_path, class: "btn btn--primary hidden-xs pull-right" %>
+<%= link_to "Export Users Points Csv", users_points_csv_users_path, class: "btn btn-primary visible-xs" %></h2>
 
 <br>
 <%= render "user_points", source: users_points_ranking_users_path(format: :json) %>

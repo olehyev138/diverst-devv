@@ -1,6 +1,6 @@
 <% if GroupPolicy.new(current_user, @group).is_a_member? %>
   <% if GroupPolicy.new(current_user, @group).is_a_pending_member? && @group.pending_users.enabled? %>
-    <p class="pending-message">
+    <p>
       * Please wait for group administrators to process your membership request.
     </p>
   <% end %>

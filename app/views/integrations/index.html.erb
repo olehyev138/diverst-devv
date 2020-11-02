@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Integrations</h1>
+  <h2 class="h1-styling">Integrations</h2>
 </div>
 
 <div class="content__main">
@@ -8,7 +8,7 @@
       <div class="media-object">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
-            <h4>Embeddable calendar</h4>
+            <h3 class="h4-styling">Embeddable calendar</h3>
             <div class="field__input-wrapper">
               <input class="field__input string required " name="calendar_code" value="<%=  events_calendar_iframe_code(current_user.enterprise) %>" >
             </div>
@@ -29,7 +29,7 @@
             <%= image_tag "integrations/yammer.png", class: "media-object__image" %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow">
-            <h4>Yammer</h4>
+            <h3 class="h4-styling">Yammer</h3>
             <p>Sync users and groups, notify your users through Yammer messages and post Diverst content directly to Yammer communities.</p>
           </div>
           <div class="flex-row__cell">
