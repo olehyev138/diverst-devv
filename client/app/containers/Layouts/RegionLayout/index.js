@@ -104,7 +104,7 @@ export default compose(
   memo,
 )(Conditional(
   RegionLayout,
-  ['currentRegion.permissions.show?', 'isFormLoading'],
+  ['currentRegion.permissions.show?'],
   (props, params) => ROUTES.user.root.path(),
   permissionMessages.layouts.region
 ));
