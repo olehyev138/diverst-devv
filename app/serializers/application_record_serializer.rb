@@ -69,11 +69,12 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         end
         reflections.each do |attr, assoc|
           loaded?(attr, assoc)
-          recursive?(attr, asso)
+          recursive?(attr, assoc)
         end
         if @head && @failures.present?
           raise StandardError, "#{@failures.join('; ')} #{@failures.size == 1 ? 'is' : 'are'} not preloaded"
         end
+
         true
       end
 
@@ -103,7 +104,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
             options: @options,
             path: [*@path, "#{attr}[]"],
             failures: @failures
-        ).preloaded?
+          ).preloaded?
       end
     end)
 

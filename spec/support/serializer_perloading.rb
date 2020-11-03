@@ -7,7 +7,7 @@ RSpec.shared_examples 'preloads serialized data' do |*factory_args, actions: ['i
         let!(:object) { create(*factory_args) }
         let!(:tester) { described_class::Tester.new(object, action: action, options: options) }
 
-        it {expect(tester.preloaded?).to be true}
+        it { expect(tester.preloaded?).to be true }
       end
     end
   end
