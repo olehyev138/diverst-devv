@@ -17,4 +17,6 @@ RSpec.describe BudgetSerializer, type: :serializer do
     expect(serializer.serializable_hash[:requester]).to_not be nil
     expect(serializer.serializable_hash[:group_id]).to_not be nil
   end
+
+  include_examples 'preloads serialized data', :budget
 end

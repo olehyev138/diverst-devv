@@ -150,7 +150,8 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.preload_all(action: 'show', user: nil)
-    preload(base_preloads(Request.create_request(user, action: action)) || [])
+    request = Request.create_request(user, action: action)
+    preload(base_preloads(request)).includes(base_includes(request))
   end
 
   protected

@@ -28,6 +28,10 @@ module BaseSearcher
       []
     end
 
+    def base_includes(diverst_request)
+      []
+    end
+
     def set_query_scopes(params)
       if params[:query_scopes].presence
         case params[:query_scopes].class.name

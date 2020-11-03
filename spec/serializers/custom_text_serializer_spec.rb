@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe CustomTextSerializer, type: :serializer do
-  it 'returns custom text' do
-    custom_text = create(:custom_text)
-    serializer = CustomTextSerializer.new(custom_text, scope: serializer_scopes(create(:user)))
+  let(:custom_text) { create(:custom_text) }
+  let(:serializer) { CustomTextSerializer.new(custom_text, scope: serializer_scopes(create(:user))) }
 
+  it 'returns custom text' do
     expect(serializer.serializable_hash[:id]).to eq custom_text.id
     expect(serializer.serializable_hash[:erg]).to eq custom_text.erg
     expect(serializer.serializable_hash[:program]).to eq custom_text.program
@@ -14,4 +14,6 @@ RSpec.describe CustomTextSerializer, type: :serializer do
     expect(serializer.serializable_hash[:plural].key?('enterprise_id')).to eq false
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
+
+  include_examples 'preloads serialized data', :custom_text
 end
