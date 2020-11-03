@@ -52,7 +52,7 @@ describe('regionLeaderReducer', () => {
       regionLeaderReducer(
         state,
         getRegionLeaderSuccess({
-          region_leader: { id: 4, name: 'dummy' },
+          group_leader: { id: 4, name: 'dummy' },
         })
       )
     ).toEqual(expected);
