@@ -593,6 +593,18 @@ const ROUTES = {
           titleMessage: messages.regions.leaders.index,
         }
       },
+      new: {
+        path: (regionId = 'region_id') => `/regions/${regionId}/leaders/new`,
+        data: {
+          titleMessage: messages.regions.leaders.new,
+        }
+      },
+      edit: {
+        path: (regionId = 'region_id', leaderId = 'leader_id') => `/regions/${regionId}/leaders/${leaderId}/edit`,
+        data: {
+          titleMessage: messages.regions.leaders.edit,
+        }
+      },
     },
   },
 
