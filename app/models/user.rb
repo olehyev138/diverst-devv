@@ -60,11 +60,11 @@ class User < ApplicationRecord
   has_many :campaigns, through: :invitations
 
   has_many :news_links, through: :groups
-  has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
+  has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :nullify
   has_many :messages, through: :groups
-  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id
+  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id, dependent: :nullify
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
-  has_many :social_links, foreign_key: :author_id, dependent: :destroy
+  has_many :social_links, foreign_key: :author_id, dependent: :nullify
 
   has_many :initiative_users, dependent: :destroy
   has_many :initiatives, through: :initiative_users, source: :initiative
