@@ -142,7 +142,9 @@
   "region": {
     "home": "/regions/:region_id",
     "leaders": {
-      "index": "/regions/:region_id/leaders"
+      "index": "/regions/:region_id/leaders",
+      "new": "/regions/region_id/leaders/new",
+      "edit": "/regions/region_id/leaders/leader_id/edit"
     }
   },
   "admin": {
