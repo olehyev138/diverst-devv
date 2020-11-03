@@ -49,7 +49,7 @@ export function* createRegionLeader(action) {
     const payload = { region_leader: action.payload };
     const response = yield call(api.regionLeaders.create.bind(api.regionLeaders), payload);
     yield put(createRegionLeaderSuccess());
-    yield put(push(ROUTES.region.manage.leaders.index.path(action.payload.region_id)));
+    yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createRegionLeaderError(err));
@@ -62,7 +62,7 @@ export function* deleteRegionLeader(action) {
   try {
     yield call(api.regionLeaders.destroy.bind(api.regionLeaders), action.payload.id);
     yield put(deleteRegionLeaderSuccess());
-    yield put(push(ROUTES.region.manage.leaders.index.path(action.payload.region_id)));
+    yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionLeaderError(err));
@@ -76,7 +76,7 @@ export function* updateRegionLeader(action) {
     const payload = { region_leader: action.payload };
     const response = yield call(api.regionLeaders.update.bind(api.regionLeaders), payload.region_leader.id, payload);
     yield put(updateRegionLeaderSuccess());
-    yield put(push(ROUTES.region.manage.leaders.index.path(action.payload.region_id)));
+    yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
     yield put(showSnackbar({
       message: intl.formatMessage(messages.snackbars.success.update),
       options: { variant: 'success' }

@@ -141,7 +141,7 @@ describe('Tests for regionLeaders saga', () => {
         type: 'app/Notifier/ENQUEUE_SNACKBAR'
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-      const results = [createRegionLeaderSuccess(), push(ROUTES.region.manage.leaders.index.path()), notified];
+      const results = [createRegionLeaderSuccess(), push(ROUTES.region.leaders.index.path()), notified];
       const initialAction = { payload: {
         id: '',
       } };
@@ -191,7 +191,7 @@ describe('Tests for regionLeaders saga', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [updateRegionLeaderSuccess(), push(ROUTES.region.manage.leaders.index.path()), notified];
+      const results = [updateRegionLeaderSuccess(), push(ROUTES.region.leaders.index.path()), notified];
       const initialAction = { payload: {
         id: 1,
       } };
@@ -244,7 +244,7 @@ describe('Tests for regionLeaders saga', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [deleteRegionLeaderSuccess(), push(ROUTES.region.manage.leaders.index.path()), notified];
+      const results = [deleteRegionLeaderSuccess(), push(ROUTES.region.leaders.index.path()), notified];
 
       const initialAction = { payload: {
         id: 1,
