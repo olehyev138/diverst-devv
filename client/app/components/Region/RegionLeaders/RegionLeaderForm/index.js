@@ -14,7 +14,7 @@ import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupManage/messages';
+import messages from 'containers/Region/RegionLeaders/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 import { buildValues, mapFields } from 'utils/formHelpers';
