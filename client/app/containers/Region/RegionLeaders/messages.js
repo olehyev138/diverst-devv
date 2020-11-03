@@ -24,6 +24,17 @@ export default defineMessages({
   delete: {
     id: `${scope}.delete`
   },
+  form: {
+    select: {
+      id: `${scope}.form.select`
+    },
+    role: {
+      id: `${scope}.form.role`
+    },
+    position: {
+      id: `${scope}.form.position`
+    },
+  },
   table: {
     title: {
       id: `${scope}.table.title`
