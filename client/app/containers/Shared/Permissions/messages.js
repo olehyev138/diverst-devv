@@ -180,6 +180,19 @@ export default defineMessages({
       id: `${scope}.group.adminGroupListPage`
     }
   },
+  region: {
+    leaders: {
+      listPage: {
+        id: `${scope}.region.leaders.listPage`
+      },
+      editPage: {
+        id: `${scope}.region.leaders.editPage`
+      },
+      createPage: {
+        id: `${scope}.region.leaders.createPage`
+      },
+    },
+  },
   analyze: {
     dashboards: {
       userPage: {

@@ -255,6 +255,12 @@ const messages = defineMessages({
       index: {
         id: `${scope}.region.leaders.index`
       },
+      new: {
+        id: `${scope}.region.leaders.new`
+      },
+      edit: {
+        id: `${scope}.region.leaders.edit`
+      },
     },
   },
   admin: {
