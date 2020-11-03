@@ -35,7 +35,10 @@ export default defineMessages({
       id: `${scope}.form.role`
     },
     position: {
-      id: `${scope}.form.position`
+      id: `${scope}.form.position`,
+      default: {
+        id: `${scope}.form.position.default`,
+      },
     },
   },
   table: {
