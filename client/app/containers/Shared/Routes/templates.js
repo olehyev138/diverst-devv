@@ -189,6 +189,11 @@ import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/Gr
 /* Region */
 import RegionHomePage from 'containers/Region/RegionHomePage/Loadable';
 
+/* Region - Region Leaders */
+import RegionLeadersListPage from 'containers/Region/RegionLeaders/RegionLeadersListPage/Loadable';
+import RegionLeaderCreatePage from 'containers/Region/RegionLeaders/RegionLeaderCreatePage/Loadable';
+import RegionLeaderEditPage from 'containers/Region/RegionLeaders/RegionLeaderEditPage/Loadable';
+
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
 import FolderCreatePage from 'containers/Resource/GroupFolder/FolderCreatePage/Loadable';
@@ -276,6 +281,9 @@ export {
   GroupMemberListPage,
   GroupMemberCreatePage,
   RegionHomePage,
+  RegionLeadersListPage,
+  RegionLeaderCreatePage,
+  RegionLeaderEditPage,
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
