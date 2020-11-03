@@ -8,10 +8,15 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone, :privacy_statement,
              :onboarding_consent_enabled, :onboarding_consent_message
 
+  attributes_with_permission :sponsors, if: :show_action?
+
   belongs_to :theme
-  has_many :sponsors
 
   # Custom Attributes
+
+  def sponsors
+    object.sponsors.map { |sp| SponsorSerializer.new(sp, **instance_options).as_json }
+  end
 
   def timezones
     TimeZoneHelpers.timezones
