@@ -10,4 +10,6 @@ RSpec.describe AnswerCommentSerializer, type: :serializer do
     expect(serializer.serializable_hash[:answer]).to be nil
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
+
+  include_examples 'preloads serialized data', :answer_comment
 end
