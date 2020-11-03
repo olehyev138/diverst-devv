@@ -48,7 +48,7 @@ function regionLeadersReducer(state = initialState, action) {
         draft.isFormLoading = true;
         break;
       case GET_REGION_LEADER_SUCCESS:
-        draft.currentRegionLeader = action.payload.region_leader;
+        draft.currentRegionLeader = action.payload.group_leader;
         draft.isFormLoading = false;
         break;
       case GET_REGION_LEADER_ERROR:
