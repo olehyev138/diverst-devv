@@ -11,9 +11,7 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :unit_of_expiry_age, :auto_archive, :theme, :timezones, :time_zone,
              :banner, :banner_file_name, :banner_data, :banner_content_type, :onboarding_consent_enabled, :onboarding_consent_message
 
-  has_one :custom_text
-  has_many :mentoring_interests
-  has_many :mentoring_types
+  attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, if: :show_action?
 
   def banner
     AttachmentHelper.attachment_signed_id(object.banner)

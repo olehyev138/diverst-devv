@@ -8,7 +8,7 @@ module Enterprise::Actions
   module ClassMethods
     def base_preloads(diverst_request)
       case diverst_request.action
-      when 'index' then []
+      when 'index' then [:theme]
       when 'show' then [:theme, :custom_text, :sponsors, :mentoring_interests, :mentoring_types]
       else []
       end

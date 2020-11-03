@@ -27,7 +27,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     subclass.const_set('Tester', Class.new do
       attr_reader :serializer, :user, :action, :klass, :object
 
-      def initialize(object, user: nil, action:, options: {}, path: ['object'])
+      def initialize(object, user: nil, action:, options: {}, path: ['object'], failures: [])
         @klass = object.class
         @path = path
         @head = path.size == 1
@@ -35,6 +35,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         @user = user
         @action = action
         @options = options
+        @failures = failures
         @serializer = self.class.parent.new(
             @object,
             options.merge({ scope: { current_user: user, action: action } })
@@ -62,26 +63,32 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       end
 
       def preloaded?
-        attributes.all? do |attr, assoc|
-          loaded?(attr, assoc) && recursive?(attr, assoc)
-        end &&
-        reflections.all? do |attr, assoc|
-          loaded?(attr, assoc) && recursive?(attr, assoc, with_singular: true)
+        attributes.each do |attr, assoc|
+          loaded?(attr, assoc)
+          recursive?(attr, assoc) if parent.instance_methods(false).include? attr
         end
+        reflections.each do |attr, assoc|
+          loaded?(attr, assoc)
+          recursive?(attr, asso)
+        end
+        if @head && @failures.present?
+          raise StandardError, "#{@failures.join('; ')} #{@failures.size == 1 ? 'is' : 'are'} not preloaded"
+        end
+        true
       end
 
       def loaded?(attr, assoc)
-        assoc.loaded? || (raise StandardError, "#{[*@path, attr].join('.')} is not preloaded")
+        @failures.append([*@path, attr].join('.')) unless assoc.loaded?
       end
 
-      def recursive?(attr, assoc, with_singular: false)
+      def recursive?(attr, assoc)
         serializer = @options[:use_serializer]
 
         sub_object = case assoc
                      when ActiveRecord::Associations::CollectionAssociation
                        object.send(attr).first
                      when ActiveRecord::Associations::SingularAssociation
-                       object.send(attr) if with_singular
+                       object.send(attr)
                      else nil
         end
 
@@ -89,7 +96,14 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
         return true unless sub_object
 
-        serializer::Tester.new(sub_object, user: user, action: action, options: @options, path: [*@path, "#{attr}[]"]).preloaded?
+        serializer::Tester.new(
+            sub_object,
+            user: user,
+            action: action,
+            options: @options,
+            path: [*@path, "#{attr}[]"],
+            failures: @failures
+        ).preloaded?
       end
     end)
 
