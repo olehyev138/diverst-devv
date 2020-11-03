@@ -24,6 +24,9 @@ export default defineMessages({
   delete: {
     id: `${scope}.delete`
   },
+  cancel: {
+    id: `${scope}.cancel`
+  },
   form: {
     select: {
       id: `${scope}.form.select`
