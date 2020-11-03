@@ -48,6 +48,7 @@ export function GroupRegionEditPage(props) {
 
   return (
     <RegionForm
+      edit
       isFormLoading={props.parentGroupIsLoading && props.regionIsLoading}
       parentGroup={props.parentGroup}
       region={props.region}
