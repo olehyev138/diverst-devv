@@ -89,6 +89,7 @@ class User < ApplicationRecord
   has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :views, dependent: :nullify
 
   # ActiveStorage
   has_one_attached :avatar

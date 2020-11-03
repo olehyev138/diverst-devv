@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_135052) do
+ActiveRecord::Schema.define(version: 2020_11_03_175354) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1821,7 +1821,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   end
 
   create_table "views", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "news_feed_link_id"
     t.bigint "enterprise_id"
     t.datetime "created_at", null: false
