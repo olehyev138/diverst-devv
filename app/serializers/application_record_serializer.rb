@@ -71,7 +71,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
       end
 
       def loaded?(attr, assoc)
-        assoc.loaded? || (raise StandardError, "#{[*@path, attr].join('.')} Is not preloaded")
+        assoc.loaded? || (raise StandardError, "#{[*@path, attr].join('.')} is not preloaded")
       end
 
       def recursive?(attr, assoc, with_singular: false)
@@ -104,7 +104,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                              end
                            end
 
-                           delegate :[], to: :attr_conditions
+                           delegate :[], :key?, :inspect, to: :attr_conditions
                          end
                        end
                        prepend(temp)
@@ -173,7 +173,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   def validate(field)
-    self.class.permission_module.attr_conditions[field].any? { |pred| send(pred) }
+    !self.class.permission_module.key?(field) || self.class.permission_module[field].any? { |pred| send(pred) }
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
