@@ -7,13 +7,11 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import Interweave from 'interweave';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
+  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box
 } from '@material-ui/core';
 
 import messages from 'containers/GlobalSettings/Email/Email/messages';
@@ -23,6 +21,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -56,15 +55,7 @@ export function EmailFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const regex = /%{(.*?)}/g;
-  const variables = props?.email?.variables || {};
-  const replace = (whole, grouped) => {
-    const example = variables?.[grouped]?.example;
-    return example || whole;
-  };
-
   const { intl } = props;
-
 
   return (
     <React.Fragment>
