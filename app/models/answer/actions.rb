@@ -10,9 +10,9 @@ module Answer::Actions
 
     def base_preloads(diverst_request)
       if diverst_request.action == 'show'
-        [ :question, :likes, :comments, comments: [ :author ] ]
+        [ :author, :question, :likes, :comments, comments: [ :author ] ]
       else
-        [ :question, :likes ]
+        [ :author, :question, :likes ]
       end
     end
   end

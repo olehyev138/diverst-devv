@@ -131,10 +131,6 @@ RSpec.configure do |config|
     allow_any_instance_of(Request).to receive(:action).and_return('show')
   end
 
-  config.before(:each, type: :serializer) do
-    allow_any_instance_of(ApplicationRecordSerializer).to receive(:show_action?).and_return(true)
-  end
-
   config.after(:all) do |x|
     check_for_leftovers
   rescue

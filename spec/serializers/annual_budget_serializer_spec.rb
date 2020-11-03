@@ -13,4 +13,6 @@ RSpec.describe AnnualBudgetSerializer, type: :serializer do
     expect(serializer.serializable_hash[:group]).to be nil
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
+
+  include_examples 'preloads serialized data', :annual_budget
 end

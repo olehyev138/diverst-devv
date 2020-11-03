@@ -12,4 +12,6 @@ RSpec.describe AnswerSerializer, type: :serializer do
     expect(serializer.serializable_hash[:total_likes]).to eq 10
     expect(serializer.serializable_hash[:permissions]).to be nil
   end
+
+  include_examples 'preloads serialized data', :answer
 end
