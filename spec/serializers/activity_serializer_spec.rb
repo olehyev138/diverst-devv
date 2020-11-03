@@ -11,6 +11,5 @@ RSpec.describe ActivitySerializer, type: :serializer do
   end
 
   describe 'conditional preloading' do
-
   end
 end

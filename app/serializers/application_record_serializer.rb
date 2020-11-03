@@ -38,7 +38,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
         @serializer = self.class.parent.new(
             @object,
             options.merge({ scope: { current_user: user, action: action } })
-        )
+          )
       end
 
       def parent
@@ -83,7 +83,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                      when ActiveRecord::Associations::SingularAssociation
                        object.send(attr) if with_singular
                      else nil
-                     end
+        end
 
         serializer ||= ActiveModel::Serializer.serializer_for(sub_object)
 
