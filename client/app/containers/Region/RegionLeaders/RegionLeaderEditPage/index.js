@@ -129,5 +129,5 @@ export default compose(
   RegionLeaderEditPage,
   ['currentRegion.permissions.leaders_manage?'],
   (props, params) => ROUTES.region.leaders.index.path(params.region_id),
-  permissionMessages.region.regionLeaders.editPage
+  permissionMessages.region.leaders.editPage
 ));

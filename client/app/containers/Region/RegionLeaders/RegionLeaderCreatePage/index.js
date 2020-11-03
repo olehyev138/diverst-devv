@@ -127,5 +127,5 @@ export default compose(
   RegionLeaderCreatePage,
   ['currentRegion.permissions.leaders_create?'],
   (props, params) => ROUTES.region.leaders.index.path(params.region_id),
-  permissionMessages.group.region.regionLeaders.createPage
+  permissionMessages.region.leaders.createPage
 ));
