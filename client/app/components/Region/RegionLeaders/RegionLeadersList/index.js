@@ -44,7 +44,7 @@ export function RegionLeadersList(props) {
       icon: () => <EditIcon />,
       tooltip: intl.formatMessage(messages.edit),
       onClick: (_, rowData) => {
-        props.handleVisitRegionLeaderEdit(rowData.region_id, rowData.id);
+        props.handleVisitRegionLeaderEdit(rowData.leader_of_id, rowData.id);
       }
     });
     actions.push({
@@ -53,7 +53,7 @@ export function RegionLeadersList(props) {
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to delete this region leader?'))
-          props.deleteRegionLeaderBegin({ region_id: rowData.region_id, id: rowData.id });
+          props.deleteRegionLeaderBegin({ region_id: rowData.leader_of_id, id: rowData.id });
       }
     });
   }
