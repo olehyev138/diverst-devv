@@ -80,16 +80,18 @@ export function GroupRegionsListItem(props) {
             <DiverstFormattedMessage {...messages.delete} />
           </Button>
         </Permission>
-        <Button
-          size='small'
-          onClick={() => setChildrenExpanded(!childrenExpanded)}
-        >
-          {childrenExpanded ? (
-            <DiverstFormattedMessage {...messages.children_collapse} />
-          ) : (
-            <DiverstFormattedMessage {...messages.children_expand} />
-          )}
-        </Button>
+        {region.children && region.children.length > 0 && (
+          <Button
+            size='small'
+            onClick={() => setChildrenExpanded(!childrenExpanded)}
+          >
+            {childrenExpanded ? (
+              <DiverstFormattedMessage {...messages.children_collapse} />
+            ) : (
+              <DiverstFormattedMessage {...messages.children_expand} />
+            )}
+          </Button>
+        )}
       </CardActions>
       <Collapse in={childrenExpanded}>
         <Box mb={1} ml={1} mr={1}>
