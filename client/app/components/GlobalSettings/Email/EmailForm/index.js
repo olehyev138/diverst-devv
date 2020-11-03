@@ -22,6 +22,7 @@ import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -84,18 +85,14 @@ export function EmailFormInner({
                 value={values.subject}
               />
               <Field
-                component={TextField}
-                onChange={handleChange}
-                disabled={props.isCommitting}
+                component={DiverstRichTextInput}
                 required
+                onChange={value => setFieldValue('content', value)}
                 fullWidth
                 id='content'
                 name='content'
-                multiline
-                rows={8}
-                variant='outlined'
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.form.content} />}
+                label={intl.formatMessage(messages.form.content)}
                 value={values.content}
               />
             </CardContent>
@@ -115,22 +112,6 @@ export function EmailFormInner({
               </DiverstCancel>
             </CardActions>
           </Form>
-        </Card>
-        <Box mb={2} />
-        <Card>
-          <CardHeader
-            title={intl.formatMessage(messages.preview.title)}
-            subheader={intl.formatMessage(messages.preview.subTitle)}
-          />
-          <CardContent>
-            <Interweave
-              content={values.subject.replace(regex, replace)}
-            />
-            <Divider />
-            <Interweave
-              content={values.content.replace(regex, replace)}
-            />
-          </CardContent>
         </Card>
         <Box mb={2} />
         <Card>
