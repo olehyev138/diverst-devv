@@ -29,7 +29,7 @@ class User < ApplicationRecord
   has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
   has_many :menteeships, class_name: 'Mentoring', foreign_key: 'mentee_id'
   has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
-  has_many :availabilities,   class_name: 'MentorshipAvailability'
+  has_many :availabilities,   class_name: 'MentorshipAvailability', dependent: :destroy
   has_many :mentorship_ratings
 
   # many to many
@@ -82,6 +82,7 @@ class User < ApplicationRecord
 
   has_many :likes, dependent: :destroy
   has_many :csv_files
+  has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
   has_many :urls_visited, dependent: :destroy, class_name: 'PageVisitationData'
