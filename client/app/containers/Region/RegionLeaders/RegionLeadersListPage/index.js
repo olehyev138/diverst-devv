@@ -68,7 +68,7 @@ export function RegionLeadersListPage(props) {
       regionLeaderList={props.regionLeaderList}
       regionLeaderTotal={props.regionLeaderTotal}
       isFetchingRegionLeaders={props.isFetchingRegionLeaders}
-      deleteGroupRegionBegin={props.deleteRegionLeaderBegin}
+      deleteRegionLeaderBegin={props.deleteRegionLeaderBegin}
       handleVisitRegionLeaderEdit={props.handleVisitRegionLeaderEdit}
       links={links}
       setParams={params}
