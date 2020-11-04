@@ -188,7 +188,7 @@
   "diverst.containers.BudgetItem.index.actions.close": "Close Budget",
   "diverst.containers.BudgetItem.index.actions.closeConfirm": "Are you sure you want to close this budget?\nThis cannot be undone!",
   "diverst.containers.BudgetItem.index.buttons.approve": "Approve",
-  "diverst.containers.BudgetItem.index.buttons.back": "Back to Annual Budget",
+  "diverst.containers.BudgetItem.index.buttons.back": "Back to Budget Requests",
   "diverst.containers.BudgetItem.index.buttons.decline": "Decline",
   "diverst.containers.BudgetItem.index.columns.available": "Available",
   "diverst.containers.BudgetItem.index.columns.endDate": "Estimated End Date",
