@@ -326,6 +326,19 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe 'event_url_validation' do
+    it 'invalid event url' do
+      initiative = build(:initiative, start: Date.today, end: Date.tomorrow, event_url: 'http:/')
+      expect(initiative.valid?).to eq(false)
+      expect(initiative.errors.full_messages.first).to eq('Event url not valid')
+    end
+
+    it 'valid event url' do
+      initiative = build(:initiative, start: Date.today, end: Date.tomorrow, event_url: 'https://www.newscientist.com')
+      expect(initiative.valid?).to eq(true)
+    end
+  end
+
   describe '#expenses_status' do
     it 'returns Expenses in progress' do
       initiative = build(:initiative)
