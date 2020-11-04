@@ -41,8 +41,8 @@ class BudgetItem < ApplicationRecord
   end
 
   def available_for_event(event)
-    event_offset = event.estimated_funding if event&.budget_item_id == id
-    available_amount + (event_offset || 0)
+    event_offset = event&.budget_item_id == id ? event.estimated_funding : 0
+    available_amount + event_offset
   end
 
   def title_with_amount(event = nil)
