@@ -391,6 +391,7 @@
   "diverst.containers.GlobalSettings.CustomText.form.custom_text.segment": "Segment",
   "diverst.containers.GlobalSettings.CustomText.form.custom_text.structure": "Structure",
   "diverst.containers.GlobalSettings.CustomText.form.custom_text.sub_erg": "Sub ERG",
+  "diverst.containers.GlobalSettings.CustomText.form.custom_text.region": "Region",
   "diverst.containers.GlobalSettings.EmailEvents.everyday": "Every Day",
   "diverst.containers.GlobalSettings.EmailEvents.form.at": "Run At",
   "diverst.containers.GlobalSettings.EmailEvents.form.cancel": "Cancel",
