@@ -28,16 +28,16 @@ class BudgetItem < ApplicationRecord
 
   def close!
     if is_done?
-      errors.add(:is_done, 'Budget Item is already closed')
+      errors.add(:base, 'Budget Item is already closed')
       return false
     end
 
     if initiatives.active.any?
-      errors.add(:initiatives, 'There are still events using this budget item')
+      errors.add(:base, 'There are still events using this budget item')
       return false
     end
 
-    self.update(is_done: true)
+    self.update(is_done: true, estimated_amount: reserved)
   end
 
   def available_for_event(event)
