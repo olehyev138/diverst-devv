@@ -52,7 +52,7 @@ export function RegionLeadersList(props) {
       tooltip: intl.formatMessage(messages.delete),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to delete this region leader?'))
+        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts(props.customTexts))))
           props.deleteRegionLeaderBegin({ region_id: rowData.leader_of_id, id: rowData.id });
       }
     });

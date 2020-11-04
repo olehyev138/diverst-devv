@@ -24,6 +24,9 @@ export default defineMessages({
   delete: {
     id: `${scope}.delete`
   },
+  delete_confirm: {
+    id: `${scope}.delete_confirm`
+  },
   cancel: {
     id: `${scope}.cancel`
   },
