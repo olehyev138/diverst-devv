@@ -17,10 +17,10 @@ FactoryBot.define do
       estimated_amount { 0 }
     end
 
-    after(:create) do |budget, evaluator|
+    before(:create) do |budget, evaluator|
       evaluator.estimated_amount ?
-          create_list(:budget_item, 3, budget: budget, estimated_amount: evaluator.estimated_amount) :
-          create_list(:budget_item, 3, budget: budget)
+          budget.budget_items = build_list(:budget_item, 3, budget: nil, estimated_amount: evaluator.estimated_amount) :
+          budget.budget_items = build_list(:budget_item, 3, budget: nil)
     end
   end
 end

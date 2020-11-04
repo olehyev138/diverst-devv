@@ -24,6 +24,12 @@ RSpec.describe Budget::Actions, type: :model do
       expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
     end
 
+    it 'it returns true if budget is exactly the annual budget' do
+      budget.annual_budget.update(amount: 100, closed: false)
+      budget.budget_items[0].update(estimated_amount: 100)
+      expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
+    end
+
     it 'returns nil' do
       budget.annual_budget.update(amount: 100, closed: false)
       budget.budget_items.update_all(estimated_amount: 0)
