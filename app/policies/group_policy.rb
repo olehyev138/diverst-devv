@@ -244,7 +244,6 @@ class GroupPolicy < ApplicationPolicy
 
   def manage?
     return true if manage_all?
-    return true if parent_permission_prototype(:region, ::RegionPolicy)
     return true if has_group_leader_permissions?('groups_manage')
 
     @policy_group.groups_manage?
@@ -263,7 +262,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_a_leader?
-    @group_leader.present?
+    @group_leader.present? || @region_leader.present?
   end
 
   def is_owner?
@@ -286,19 +285,20 @@ class GroupPolicy < ApplicationPolicy
   #   parent_permissions?
   # end
   def parent_permissions?
-    parent_permission_prototype(:parent, ::GroupPolicy) ||
-    parent_permission_prototype(:region, ::RegionPolicy)
+    # Gets the method name which this method was called from
+    caller = caller_locations(1, 1)&.first&.label
+    parent_permission_prototype(:parent, caller, ::GroupPolicy) ||
+    parent_permission_prototype(:region, caller, ::RegionPolicy)
   end
 
-  def parent_permission_prototype(field, policy)
+  def parent_permission_prototype(field, method, policy)
     return false if @record.send(field).nil?
 
     parent_policy = policy.new(@user, @record.send(field))
 
     # Gets the method name which this method was called from
-    caller = caller_locations(1, 1)&.first&.label
     if parent_policy.respond_to?(caller)
-      parent_policy.send(caller)
+      parent_policy.send(method)
     else
       parent_policy.manage?
     end
@@ -359,7 +359,7 @@ class GroupPolicy < ApplicationPolicy
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
 
-    group_leader[permission] || false
+    region_leader&.[](permission) || group_leader&.[](permission) || false
   end
 
   class Scope < Scope

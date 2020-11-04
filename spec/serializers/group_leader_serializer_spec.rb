@@ -9,9 +9,13 @@ RSpec.describe GroupLeaderSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:group]).to_not be_nil
     expect(serializer.serializable_hash[:region]).to be_nil
+    expect(serializer.serializable_hash[:group_id]).to_not be_nil
+    expect(serializer.serializable_hash[:region_id]).to be_nil
 
     expect(region_serializer.serializable_hash[:group]).to be_nil
     expect(region_serializer.serializable_hash[:region]).to_not be_nil
+    expect(region_serializer.serializable_hash[:group_id]).to be_nil
+    expect(region_serializer.serializable_hash[:region_id]).to_not be_nil
 
     expect(serializer.serializable_hash[:user]).to_not be_nil
     expect(serializer.serializable_hash[:user_role]).to_not be_nil
