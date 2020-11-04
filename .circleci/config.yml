@@ -4,12 +4,48 @@ workflows:
   version: 2.1
   lint-test-deploy:
     jobs:
-      - request-prod-deploy:
-          type: approval
-      - deploy-prod-test:
+      - lint
+      - frontend-test:
+          requires:
+            - lint
+      - backend-test:
+          requires:
+            - lint
+            - frontend-test
+      - deploy-testing:
           context: aws-context
           requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
+      - deploy-analytics:
+          context: aws-context
+          requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
+      - request-prod-deploy:
+          type: approval
+          requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: beta_staging
+      - deploy-prod:
+          context: aws-context
+          requires:
+            - backend-test
+            - frontend-test
             - request-prod-deploy
+          filters:
+            branches:
+              only: beta_staging
+
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -266,7 +302,7 @@ jobs:
             VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
             ./devops/scripts/deploy-analytics "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
 
-  deploy-prod-test:
+  deploy-prod:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
       - image: awsdiverst/cci-primary:0.0.3
