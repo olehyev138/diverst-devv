@@ -20,6 +20,7 @@ import DiverstCancel from 'components/Shared/DiverstCancel';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { injectIntl, intlShape } from 'react-intl';
 
+import { customTexts } from 'utils/customTextHelpers';
 
 export function RegionLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
@@ -108,7 +109,7 @@ export function RegionLeaderForm(props) {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     region_id: { default: props.regionId },
-    position_name: { default: intl.formatMessage(messages.form.position.default) },
+    position_name: { default: intl.formatMessage(messages.form.position.default, customTexts(props.customTexts)) },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },
@@ -143,6 +144,7 @@ RegionLeaderForm.propTypes = {
   isLoadingMembers: PropTypes.bool,
   regionLeader: PropTypes.object,
   regionLeaderAction: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 RegionLeaderFormInner.propTypes = {

@@ -28,6 +28,8 @@ import { getRegionLeaderBegin, updateRegionLeaderBegin, regionLeadersUnmount } f
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
 import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
+import { selectCustomText } from 'containers/Shared/App/selectors';
+
 import RegionLeaderForm from 'components/Region/RegionLeaders/RegionLeaderForm';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -82,6 +84,7 @@ export function RegionLeaderEditPage(props) {
       isFormLoading={isFormLoading}
       buttonText={intl.formatMessage(messages.update)}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -103,6 +106,7 @@ RegionLeaderEditPage.propTypes = {
   regionLeader: PropTypes.object,
   regionLeaderId: PropTypes.string,
   currentRegion: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -111,6 +115,7 @@ const mapStateToProps = createStructuredSelector({
   userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
