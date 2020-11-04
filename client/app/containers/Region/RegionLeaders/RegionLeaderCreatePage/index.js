@@ -71,6 +71,7 @@ export function RegionLeaderCreatePage(props) {
     <RegionLeaderForm
       regionLeaderAction={props.createRegionLeaderBegin}
       buttonText={intl.formatMessage(messages.create)}
+      region={currentRegion}
       regionId={regionId}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}

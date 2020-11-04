@@ -27,7 +27,7 @@ export function RegionLeaderFormInner({ handleSubmit, handleChange, handleBlur, 
   const membersSelectAction = (searchKey = '') => {
     props.getMembersBegin({
       count: 25, page: 0, order: 'asc',
-      group_id: props.regionId,
+      group_id: props.region.parent_id,
       query_scopes: ['active', ['user_search', searchKey]]
     });
   };
@@ -154,6 +154,7 @@ RegionLeaderFormInner.propTypes = {
   handleBlur: PropTypes.func,
   values: PropTypes.object,
   regionLeader: PropTypes.object,
+  region: PropTypes.object,
   regionId: PropTypes.string,
   buttonText: PropTypes.string,
   selectMembers: PropTypes.array,

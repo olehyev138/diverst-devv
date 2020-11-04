@@ -36,7 +36,7 @@ import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function RegionLeaderEditPage(props) {
-  const { intl, members, regionLeader, isCommitting, isFormLoading, ...rest } = props;
+  const { intl, members, regionLeader, currentRegion, isCommitting, isFormLoading, ...rest } = props;
 
   useInjectReducer({ key: 'regionLeaders', reducer });
   useInjectSaga({ key: 'regionLeaders', saga });
@@ -53,6 +53,11 @@ export function RegionLeaderEditPage(props) {
 
   useEffect(() => {
     props.getRegionLeaderBegin({ region_id: regionId, id: regionLeaderId });
+    props.getMembersBegin({
+      count: 25, page: 0, order: 'asc',
+      group_id: currentRegion.parent_id,
+      query_scopes: ['active', 'accepted_users', ['user_search', '']]
+    });
     props.getUserRolesBegin({ role_type: 'group' });
 
     return () => {
@@ -71,6 +76,7 @@ export function RegionLeaderEditPage(props) {
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
       userRoles={props.userRoles}
+      region={currentRegion}
       regionId={regionId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
@@ -96,6 +102,7 @@ RegionLeaderEditPage.propTypes = {
   isFormLoading: PropTypes.bool,
   regionLeader: PropTypes.object,
   regionLeaderId: PropTypes.string,
+  currentRegion: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
