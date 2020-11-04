@@ -24,6 +24,7 @@ const currencies = [
   'EUR',
   'GBP',
   'JPY',
+  null
 ];
 
 const invalidCurrency = 'FAKE';
@@ -50,9 +51,8 @@ describe('Test Currency Helpers', () => {
           describe(`With currency ${currency}`, () => {
             values.forEach((value) => {
               const intlString = toCurrencyString(null, value, currency, locale);
-              // const intlString = toCurrencyString(null, 1111111111.11, 'USD', 'en-IN')
               it(`\`number-formatting\` props for ${value} should result in ${intlString}`, () => {
-                const formatProps = getCurrencyProps(null, currency, locale);
+                const formatProps = getCurrencyProps(null, currency || 'USD', locale);
                 const formatComponent = <NumberFormat displayType='text' value={value} {...formatProps} />;
                 const formatHTML = ReactDOMServer.renderToString(formatComponent);
                 const [_, formatString] = formatHTML.match(/<span .*?>(.*)<\/span>/);
@@ -89,7 +89,7 @@ describe('Test Currency Helpers', () => {
           });
           it('The value should equal the currency code', () => {
             const select = getCurrency(currency);
-            expect(select.value).toBe(currency);
+            expect(select.value).toBe(currency || 'USD');
           });
         });
       });

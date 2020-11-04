@@ -68,7 +68,7 @@ class Api::V1::UsersController < DiverstController
 
   def update
     if current_user.policy_group.users_manage
-      params[klass.symbol] = payload
+      params[klass.symbol] = admin_payload
     else
       params[klass.symbol] = profile_update_payload
     end

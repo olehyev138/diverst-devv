@@ -77,7 +77,7 @@ RSpec.describe NewsLinkPolicy, type: :policy do
       context 'and manage_posts is true' do
         before { user_role.policy_group_template.update manage_posts: true }
 
-        it { is_expected.to forbid_actions ([:index, :create, :update, :destroy]) }
+        it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
       end
     end
 
@@ -108,7 +108,7 @@ RSpec.describe NewsLinkPolicy, type: :policy do
       context 'and manage_posts is true' do
         before { user_role.policy_group_template.update manage_posts: true }
 
-        it { is_expected.to permit_actions ([:index, :show, :create, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
       end
     end
   end
