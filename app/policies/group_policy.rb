@@ -297,7 +297,7 @@ class GroupPolicy < ApplicationPolicy
     parent_policy = policy.new(@user, @record.send(field))
 
     # Gets the method name which this method was called from
-    if parent_policy.respond_to?(caller)
+    if parent_policy.respond_to?(method)
       parent_policy.send(method)
     else
       parent_policy.manage?
