@@ -97,7 +97,8 @@ RSpec.describe BudgetItem, type: :model do
           is_approved: true,
           group: group,
           budget_items: [build(:budget_item, estimated_amount: 200)]
-      )}
+        )
+      }
       let!(:budget_item) { budget.budget_items.first }
       let!(:initiative) { create(
           :initiative,
@@ -106,7 +107,8 @@ RSpec.describe BudgetItem, type: :model do
           pillar: group.outcomes.first.pillars.first,
           start: 10.days.ago,
           end: 5.days.ago,
-      )}
+        )
+      }
       let!(:initiatives_expenses) { create(:initiative_expense, initiative: initiative, amount: 50) }
       it 'allows closing and refunds approved budget' do
         ab = budget_item.annual_budget
