@@ -71,7 +71,7 @@ class Group < ApplicationRecord
 
   # Regions
   belongs_to :region
-  has_many :regions, foreign_key: :parent_id
+  has_many :regions, foreign_key: :parent_id, dependent: :destroy
 
   has_one :news_feed, dependent: :destroy
 
