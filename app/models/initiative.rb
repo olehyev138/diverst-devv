@@ -1,4 +1,5 @@
 class Initiative < BaseClass
+  URL_REGEXP = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
   include PublicActivity::Common
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
@@ -18,7 +19,7 @@ class Initiative < BaseClass
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
-
+  validate :event_url_must_be_valid
   # Ported from Event
   # todo: check events controller views and forms to work
   # update admin fields to save new fields as well
@@ -589,6 +590,12 @@ class Initiative < BaseClass
   end
 
   private
+
+  def event_url_must_be_valid
+    unless URL_REGEXP =~ event_url || event_url.blank?
+      errors.add(:event_url, 'not valid')
+    end
+  end
 
   def post_new_event_to_slack
     pk, _ = enterprise.get_colours
