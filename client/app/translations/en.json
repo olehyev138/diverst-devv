@@ -1515,7 +1515,7 @@
   "diverst.snackbars.Poll.success.delete.poll": "Successfully deleted poll",
   "diverst.snackbars.Poll.success.publish": "Successfully published poll",
   "diverst.snackbars.Poll.success.update.poll": "Successfully updated poll",
-  "diverst.snackbars.Poll.success.update.public.poll": "Succesfully updated and published poll",
+  "diverst.snackbars.Poll.success.update.publish.poll": "Succesfully updated and published poll",
   "diverst.snackbars.Resource.errors.archive": "Failed to archive resource",
   "diverst.snackbars.Resource.errors.create.folder": "Failed to create folder",
   "diverst.snackbars.Resource.errors.create.resource": "Failed to create resource",
