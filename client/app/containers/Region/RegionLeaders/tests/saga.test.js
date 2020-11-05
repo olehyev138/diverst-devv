@@ -11,6 +11,7 @@ import {
 } from 'containers/Region/RegionLeaders/saga';
 
 import {
+  getRegionLeadersBegin,
   getRegionLeaderError,
   getRegionLeaderSuccess,
   getRegionLeadersError,
@@ -41,7 +42,8 @@ api.regionLeaders.get = jest.fn();
 
 const regionLeader = {
   id: 1,
-  title: 'abc'
+  title: 'abc',
+  region_id: 1,
 };
 
 describe('Tests for regionLeaders saga', () => {
@@ -244,10 +246,11 @@ describe('Tests for regionLeaders saga', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [deleteRegionLeaderSuccess(), push(ROUTES.region.leaders.index.path()), notified];
+      const results = [deleteRegionLeaderSuccess(), getRegionLeadersBegin({ region_id: regionLeader.region_id }), notified];
 
       const initialAction = { payload: {
         id: 1,
+        region_id: 1,
       } };
 
       const dispatched = await recordSaga(

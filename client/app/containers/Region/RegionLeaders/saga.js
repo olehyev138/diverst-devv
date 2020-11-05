@@ -13,6 +13,7 @@ import {
 } from './constants';
 
 import {
+  getRegionLeadersBegin,
   getRegionLeadersSuccess, getRegionLeadersError, deleteRegionLeaderSuccess,
   createRegionLeaderError, deleteRegionLeaderError, createRegionLeaderSuccess,
   updateRegionLeaderBegin, updateRegionLeaderSuccess, updateRegionLeaderError, getRegionLeaderSuccess, getRegionLeaderError,
@@ -62,7 +63,7 @@ export function* deleteRegionLeader(action) {
   try {
     yield call(api.regionLeaders.destroy.bind(api.regionLeaders), action.payload.id);
     yield put(deleteRegionLeaderSuccess());
-    yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
+    yield put(getRegionLeadersBegin({ region_id: action.payload.region_id }));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionLeaderError(err));
