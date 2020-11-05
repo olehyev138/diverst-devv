@@ -34,6 +34,12 @@ export default defineMessages({
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },
+  sub_erg: {
+    id: `${scope}.home.sub_erg`,
+  },
+  groupParent: {
+    id: `${scope}.home.parent`,
+  },
   children_expand: {
     id: `${scope}.index.button.children_expand`,
   },
