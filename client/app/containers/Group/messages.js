@@ -82,6 +82,9 @@ export default defineMessages({
   welcome: {
     id: `${scope}.home.span.welcome`,
   },
+  categorize_subgroups: {
+    id: `${scope}.categorize`,
+  },
   allcategories: {
     id: `${scope}.categorize.button.allcategories`,
   },

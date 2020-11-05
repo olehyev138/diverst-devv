@@ -140,7 +140,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               }}
               component={WrappedNavLink}
             >
-              Categorize Subgroups
+              <DiverstFormattedMessage {...messages.categorize_subgroups} />
             </Button>
           </Permission>
         </React.Fragment>

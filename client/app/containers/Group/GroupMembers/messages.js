@@ -116,6 +116,9 @@ export default defineMessages({
   logs: {
     id: `${scope}.logs`
   },
+  filterByGroup: {
+    id: `${scope}.filter.group`
+  },
   snackbars: {
     errors: {
       members: {

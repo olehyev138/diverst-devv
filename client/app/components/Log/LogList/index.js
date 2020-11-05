@@ -102,7 +102,7 @@ export function LogList(props, context) {
             <CardContent>
               <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
                 <Grid item xs={4}>
-                  <Typography>Filter by group</Typography>
+                  <DiverstFormattedMessage {...messages.filterByGroup} />
                 </Grid>
                 <Grid item xs={3}>
                   <Typography>From</Typography>
