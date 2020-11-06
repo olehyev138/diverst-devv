@@ -615,7 +615,7 @@ RSpec.describe Group, type: :model do
       user = create(:user)
       group = create(:group, enterprise: user.enterprise, owner: user)
       create(:user_group, user: user, group: group, accepted_member: true)
-      create(:group_leader, group: group, user: user)
+      create(:group_leader, leader_of: group, user: user)
 
       expect(group.managers.length).to eq(2)
     end
@@ -1025,7 +1025,7 @@ RSpec.describe Group, type: :model do
       survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
-      group_leader = create(:group_leader, group: group, user: user)
+      group_leader = create(:group_leader, leader_of: group, user: user)
       child = create(:group, parent: group)
 
       group.fields.reload

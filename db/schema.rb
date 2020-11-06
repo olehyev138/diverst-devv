@@ -575,7 +575,8 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   end
 
   create_table "group_leaders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
+    t.bigint "leader_of_id"
+    t.string "leader_of_type"
     t.bigint "user_id"
     t.string "position_name"
     t.datetime "created_at", null: false
@@ -616,7 +617,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
     t.boolean "manage_posts", default: false
     t.boolean "initiatives_index", default: false
     t.integer "position"
-    t.index ["group_id"], name: "fk_rails_582d7a722f"
+    t.index ["leader_of_id"], name: "fk_rails_582d7a722f"
     t.index ["user_id"], name: "fk_rails_9d1f0af75f"
   end
 
@@ -716,9 +717,11 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
     t.integer "views_count"
     t.string "slack_webhook"
     t.text "slack_auth_data"
+    t.bigint "region_id"
     t.index ["group_category_id"], name: "fk_rails_d2e3c28a2f"
     t.index ["group_category_type_id"], name: "fk_rails_3d4b617e77"
     t.index ["parent_id"], name: "fk_rails_be49f097d1"
+    t.index ["region_id"], name: "index_groups_on_region_id"
   end
 
   create_table "groups_metrics_dashboards", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1362,6 +1365,17 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
     t.index ["campaign_id"], name: "index_questions_on_campaign_id"
   end
 
+  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "short_description"
+    t.text "description"
+    t.text "home_message"
+    t.integer "position"
+    t.boolean "private", default: false
+    t.bigint "parent_id", null: false
+    t.index ["parent_id"], name: "index_regions_on_parent_id"
+  end
+
   create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -1864,11 +1878,11 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   add_foreign_key "group_categories", "enterprises"
   add_foreign_key "group_categories", "group_category_types"
   add_foreign_key "group_category_types", "enterprises"
-  add_foreign_key "group_leaders", "groups"
   add_foreign_key "group_leaders", "users"
   add_foreign_key "groups", "group_categories"
   add_foreign_key "groups", "group_category_types"
   add_foreign_key "groups", "groups", column: "parent_id"
+  add_foreign_key "groups", "regions"
   add_foreign_key "idea_categories", "enterprises"
   add_foreign_key "initiative_comments", "initiatives"
   add_foreign_key "initiative_comments", "users"
@@ -1892,6 +1906,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_135052) do
   add_foreign_key "news_links", "users", column: "author_id"
   add_foreign_key "policy_groups", "users"
   add_foreign_key "polls", "initiatives"
+  add_foreign_key "regions", "groups", column: "parent_id"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"

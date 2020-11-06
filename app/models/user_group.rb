@@ -129,6 +129,6 @@ class UserGroup < ApplicationRecord
   private
 
   def remove_leader_role
-    GroupLeader.where(group_id: group_id, user_id: user_id).destroy_all
+    GroupLeader.where(leader_of: group, user_id: user_id).destroy_all
   end
 end

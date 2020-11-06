@@ -6,12 +6,14 @@ class InitiativeBasePolicy < GroupBasePolicy
     when InitiativePolicy
       @user = user.user
       @initiative = user.record
-      @group = @initiative.group
+      @group = user.group
+      @region = user.region
       @record = context
       @params = user.params
       @group_leader_role_id = user.group_leader_role_id
       @policy_group = user.policy_group
       @group_leader = user.group_leader
+      @region_leader = user.region_leader
       @user_group = user.user_group
     else
       @user = user
@@ -38,8 +40,11 @@ class InitiativeBasePolicy < GroupBasePolicy
         @initiative_user = user.policy_initiative_user(initiative.id)
       end
       if group
+        @region = group.region
         @group_leader = user.policy_group_leader(group.id)
+        @region_leader = user.policy_region_leader(region.id) if region
         @user_group = user.policy_user_group(group.id)
+        @group_leader_role_id = group_leader&.user_role_id
       end
     end
   end

@@ -139,6 +139,14 @@
       }
     }
   },
+  "region": {
+    "home": "/regions/:region_id",
+    "leaders": {
+      "index": "/regions/:region_id/leaders",
+      "new": "/regions/:region_id/leaders/new",
+      "edit": "/regions/:region_id/leaders/:leader_id/edit"
+    }
+  },
   "admin": {
     "root": "/admin/manage/groups",
     "analyze": {
@@ -169,6 +177,11 @@
         },
         "category_types": {
           "edit": "/admin/manage/groups/category_types/edit"
+        },
+        "regions": {
+          "index": "/admin/manage/groups/:group_id/regions",
+          "new": "/admin/manage/groups/:group_id/regions/new",
+          "edit": "/admin/manage/groups/:group_id/regions/:region_id/edit"
         }
       },
       "segments": {
