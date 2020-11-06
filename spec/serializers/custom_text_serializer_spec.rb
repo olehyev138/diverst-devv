@@ -10,6 +10,7 @@ RSpec.describe CustomTextSerializer, type: :serializer do
     expect(serializer.serializable_hash[:program]).to eq custom_text.program
     expect(serializer.serializable_hash[:parent]).to eq custom_text.parent
     expect(serializer.serializable_hash[:sub_erg]).to eq custom_text.sub_erg
+    expect(serializer.serializable_hash[:region]).to eq custom_text.region
     expect(serializer.serializable_hash[:plural].key?('id')).to eq false
     expect(serializer.serializable_hash[:plural].key?('enterprise_id')).to eq false
     expect(serializer.serializable_hash[:permissions]).to be nil
