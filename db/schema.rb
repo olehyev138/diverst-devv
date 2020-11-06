@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200727164222) do
+ActiveRecord::Schema.define(version: 20201030185837) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -74,8 +74,8 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "question_id",                                   limit: 4
     t.integer  "author_id",                                     limit: 4
     t.text     "content",                                       limit: 65535
-    t.datetime "created_at",                                                              null: false
-    t.datetime "updated_at",                                                              null: false
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
     t.boolean  "chosen"
     t.integer  "upvote_count",                                  limit: 4,     default: 0
     t.text     "outcome",                                       limit: 65535
@@ -97,20 +97,25 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.string   "supporting_document_from_sponsor_content_type", limit: 191
     t.integer  "supporting_document_from_sponsor_file_size",    limit: 4
     t.datetime "supporting_document_from_sponsor_updated_at"
+    t.text     "benefits",                                      limit: 65535
+    t.integer  "duration",                                      limit: 4,     default: 0
+    t.string   "unit_of_duration",                              limit: 191,   default: ""
+    t.string   "video_upload_alt_text_desc",                    limit: 191
   end
 
   add_index "answers", ["contributing_group_id"], name: "index_answers_on_contributing_group_id", using: :btree
 
   create_table "badges", force: :cascade do |t|
-    t.integer  "enterprise_id",      limit: 4,   null: false
-    t.integer  "points",             limit: 4,   null: false
-    t.string   "label",              limit: 191
-    t.string   "image_file_name",    limit: 191
-    t.string   "image_content_type", limit: 191
-    t.integer  "image_file_size",    limit: 4,   null: false
-    t.datetime "image_updated_at",               null: false
+    t.integer  "enterprise_id",       limit: 4,   null: false
+    t.integer  "points",              limit: 4,   null: false
+    t.string   "label",               limit: 191
+    t.string   "image_file_name",     limit: 191
+    t.string   "image_content_type",  limit: 191
+    t.integer  "image_file_size",     limit: 4,   null: false
+    t.datetime "image_updated_at",                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_alt_text_desc", limit: 191
   end
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
@@ -144,6 +149,15 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
   add_index "budgets", ["requester_id"], name: "fk_rails_d21f6fbcce", using: :btree
 
+  create_table "business_impacts", force: :cascade do |t|
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "business_impacts", ["enterprise_id"], name: "index_business_impacts_on_enterprise_id", using: :btree
+
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
     t.integer  "user_id",     limit: 4
@@ -154,25 +168,27 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   end
 
   create_table "campaigns", force: :cascade do |t|
-    t.string   "title",               limit: 191
-    t.text     "description",         limit: 65535
+    t.string   "title",                limit: 191
+    t.text     "description",          limit: 65535
     t.datetime "start"
     t.datetime "end"
-    t.integer  "nb_invites",          limit: 4
-    t.integer  "enterprise_id",       limit: 4
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.string   "image_file_name",     limit: 191
-    t.string   "image_content_type",  limit: 191
-    t.integer  "image_file_size",     limit: 4
+    t.integer  "nb_invites",           limit: 4
+    t.integer  "enterprise_id",        limit: 4
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.string   "image_file_name",      limit: 191
+    t.string   "image_content_type",   limit: 191
+    t.integer  "image_file_size",      limit: 4
     t.datetime "image_updated_at"
-    t.string   "banner_file_name",    limit: 191
-    t.string   "banner_content_type", limit: 191
-    t.integer  "banner_file_size",    limit: 4
+    t.string   "banner_file_name",     limit: 191
+    t.string   "banner_content_type",  limit: 191
+    t.integer  "banner_file_size",     limit: 4
     t.datetime "banner_updated_at"
-    t.integer  "owner_id",            limit: 4
-    t.integer  "status",              limit: 4,     default: 0
-    t.integer  "questions_count",     limit: 4
+    t.integer  "owner_id",             limit: 4
+    t.integer  "status",               limit: 4,     default: 0
+    t.integer  "questions_count",      limit: 4
+    t.string   "image_alt_text_desc",  limit: 191
+    t.string   "banner_alt_text_desc", limit: 191
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -381,17 +397,24 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.boolean  "enable_outlook",                                      default: false
     t.text     "onboarding_pop_up_content",             limit: 65535
     t.boolean  "virtual_events_enabled",                              default: false
+    t.string   "cdo_alt_text_desc",                     limit: 191
+    t.string   "banner_alt_text_desc",                  limit: 191
+    t.string   "idp_portal_name",                       limit: 191
+    t.text     "login_text",                            limit: 65535
+    t.boolean  "invite_member_enabled",                               default: false
+    t.boolean  "suggest_hire_enabled",                                default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
-    t.integer  "enterprise_id",     limit: 4
-    t.string   "name",              limit: 191
-    t.string   "icon_file_name",    limit: 191
-    t.string   "icon_content_type", limit: 191
-    t.integer  "icon_file_size",    limit: 4
+    t.integer  "enterprise_id",      limit: 4
+    t.string   "name",               limit: 191
+    t.string   "icon_file_name",     limit: 191
+    t.string   "icon_content_type",  limit: 191
+    t.integer  "icon_file_size",     limit: 4
     t.datetime "icon_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "icon_alt_text_desc", limit: 191
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -624,6 +647,8 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "views_count",                 limit: 4
     t.string   "slack_webhook",               limit: 191
     t.text     "slack_auth_data",             limit: 65535
+    t.string   "logo_alt_text_desc",          limit: 191
+    t.string   "banner_alt_text_desc",        limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -735,6 +760,8 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.datetime "video_updated_at"
     t.boolean  "virtual",                                                    default: false
     t.string   "stripe_id",            limit: 191
+    t.string   "pic_alt_text_desc",    limit: 191
+    t.string   "event_url",            limit: 191
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -945,13 +972,14 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   end
 
   create_table "news_link_photos", force: :cascade do |t|
-    t.string   "file_file_name",    limit: 191
-    t.string   "file_content_type", limit: 191
-    t.integer  "file_file_size",    limit: 4
+    t.string   "file_file_name",      limit: 191
+    t.string   "file_content_type",   limit: 191
+    t.integer  "file_file_size",      limit: 4
     t.datetime "file_updated_at"
-    t.integer  "news_link_id",      limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "news_link_id",        limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "photo_alt_text_desc", limit: 191
   end
 
   create_table "news_link_segments", force: :cascade do |t|
@@ -973,6 +1001,7 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "picture_file_size",    limit: 4
     t.datetime "picture_updated_at"
     t.integer  "author_id",            limit: 4
+    t.string   "pic_alt_text_desc",    limit: 191
   end
 
   create_table "news_tags", id: false, force: :cascade do |t|
@@ -1196,15 +1225,16 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string   "title",         limit: 191
-    t.text     "description",   limit: 65535
-    t.integer  "campaign_id",   limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.string   "title",              limit: 191
+    t.text     "description",        limit: 65535
+    t.integer  "campaign_id",        limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.datetime "solved_at"
-    t.text     "conclusion",    limit: 65535
-    t.integer  "answers_count", limit: 4
-    t.integer  "department_id", limit: 4
+    t.text     "conclusion",         limit: 65535
+    t.integer  "answers_count",      limit: 4
+    t.integer  "department_id",      limit: 4
+    t.integer  "business_impact_id", limit: 4
   end
 
   create_table "resources", force: :cascade do |t|
@@ -1250,6 +1280,7 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "responsible_id",       limit: 4,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "pic_alt_text_desc",    limit: 191
   end
 
   add_index "rewards", ["enterprise_id"], name: "index_rewards_on_enterprise_id", using: :btree
@@ -1362,7 +1393,27 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "enterprise_id",              limit: 4
     t.integer  "group_id",                   limit: 4
     t.integer  "campaign_id",                limit: 4
+    t.string   "sponsor_alt_text_desc",      limit: 191
   end
+
+  create_table "suggested_hires", force: :cascade do |t|
+    t.integer  "user_id",              limit: 4
+    t.integer  "group_id",             limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "resume_file_name",     limit: 191
+    t.string   "resume_content_type",  limit: 191
+    t.integer  "resume_file_size",     limit: 4
+    t.datetime "resume_updated_at"
+    t.string   "candidate_email",      limit: 191
+    t.string   "candidate_name",       limit: 191
+    t.string   "manager_email",        limit: 191
+    t.text     "message_to_manager",   limit: 65535
+    t.string   "linkedin_profile_url", limit: 191
+  end
+
+  add_index "suggested_hires", ["group_id"], name: "index_suggested_hires_on_group_id", using: :btree
+  add_index "suggested_hires", ["user_id"], name: "index_suggested_hires_on_user_id", using: :btree
 
   create_table "survey_managers", force: :cascade do |t|
     t.integer "survey_id", limit: 4
@@ -1417,13 +1468,16 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",             limit: 4
-    t.integer  "group_id",            limit: 4
+    t.integer  "user_id",                limit: 4
+    t.integer  "group_id",               limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",                   default: false
-    t.integer  "total_weekly_points", limit: 4,     default: 0
-    t.text     "data",                limit: 65535
+    t.boolean  "accepted_member",                      default: false
+    t.integer  "total_weekly_points",    limit: 4,     default: 0
+    t.text     "data",                   limit: 65535
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer  "invited_by_id",          limit: 4
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -1444,6 +1498,8 @@ ActiveRecord::Schema.define(version: 20200727164222) do
     t.integer  "answer_upvote_id",         limit: 4
     t.integer  "answer_id",                limit: 4
     t.integer  "poll_response_id",         limit: 4
+    t.integer  "user_group_id",            limit: 4
+    t.integer  "suggested_hire_id",        limit: 4
   end
 
   add_index "user_reward_actions", ["operation"], name: "index_user_reward_actions_on_operation", using: :btree
@@ -1618,6 +1674,7 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
+  add_foreign_key "business_impacts", "enterprises"
   add_foreign_key "custom_texts", "enterprises"
   add_foreign_key "departments", "enterprises"
   add_foreign_key "idea_categories", "enterprises"
@@ -1634,6 +1691,8 @@ ActiveRecord::Schema.define(version: 20200727164222) do
   add_foreign_key "rewards", "users", column: "responsible_id"
   add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
   add_foreign_key "shared_metrics_dashboards", "users"
+  add_foreign_key "suggested_hires", "groups"
+  add_foreign_key "suggested_hires", "users"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
@@ -1650,13 +1709,13 @@ ActiveRecord::Schema.define(version: 20200727164222) do
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) = 1))
   SQL
   create_view "page_visitation_by_names", sql_definition: <<-SQL
-      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+      select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name` union all select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`
   SQL
   create_view "page_visitations", sql_definition: <<-SQL
       select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
   SQL
   create_view "total_page_visitation_by_names", sql_definition: <<-SQL
-      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+      select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id` union all select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
