@@ -60,7 +60,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def is_an_accepted_member?
-    is_a_member? && user_group.accepted_member?
+    user_group&.accepted_member? || is_a_leader?
   end
 
   def is_a_leader?
