@@ -1,25 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe GroupBasePolicy, type: :policy do
-  let(:no_access) { create(:user) }
+  let(:no_access) { create(:user, :no_permissions) }
   let(:user) { no_access }
-  let(:group) { create(:group, owner: user, enterprise_id: user.enterprise_id, pending_users: 'enabled') }
-
-  subject { described_class.new(user.reload, [group, group]) }
-
-  before do
-    no_access.policy_group.manage_all = false
-    no_access.policy_group.groups_index = false
-    no_access.policy_group.groups_create = false
-    no_access.policy_group.groups_manage = false
-    no_access.policy_group.groups_budgets_index = false
-    no_access.policy_group.groups_members_index = false
-    no_access.policy_group.groups_budgets_request = false
-    no_access.policy_group.budget_approval = false
-    no_access.policy_group.global_calendar = false
-    no_access.policy_group.save!
-
-    class GroupBasePolicy
+  let!(:parent) { create(:group, enterprise_id: user.enterprise_id) }
+  let!(:group) { create(:group, owner: user, enterprise_id: user.enterprise_id, pending_users: 'enabled', parent: parent) }
+  let!(:region) { create(:region, parent: parent, children: [group]) }
+  let(:prototype_policy) {
+    Class.new(GroupBasePolicy) do
       def base_manage_permission
         'groups_manage'
       end
@@ -32,8 +20,9 @@ RSpec.describe GroupBasePolicy, type: :policy do
         'groups_members_index'
       end
     end
-  end
+  }
 
+  subject { prototype_policy.new(user.reload, [group, nil]) }
 
   describe 'for users with access' do
     context 'when manage_all is false' do
@@ -107,6 +96,17 @@ RSpec.describe GroupBasePolicy, type: :policy do
       it { is_expected.to permit_actions([:index, :show]) }
     end
 
+    context 'when user has region leader permissions and groups_members_index is true' do
+      before do
+        user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+        user_role.policy_group_template.update groups_members_index: true
+        create(:region_leader, region_id: region.id, user_id: user.id, position_name: 'Group Leader',
+                               user_role_id: user_role.id)
+      end
+
+      it { is_expected.to permit_actions([:index, :show]) }
+    end
+
     context 'when user is group member and groups_members_index is true' do
       before do
         create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
@@ -124,7 +124,6 @@ RSpec.describe GroupBasePolicy, type: :policy do
       end
     end
   end
-
 
   describe 'for users with no_access' do
     it { is_expected.to forbid_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }

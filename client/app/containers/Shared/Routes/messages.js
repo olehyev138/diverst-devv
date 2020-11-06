@@ -244,6 +244,25 @@ const messages = defineMessages({
       },
     },
   },
+  regions: {
+    back: {
+      id: `${scope}.region.back`
+    },
+    home: {
+      id: `${scope}.region.home`
+    },
+    leaders: {
+      index: {
+        id: `${scope}.region.leaders.index`
+      },
+      new: {
+        id: `${scope}.region.leaders.new`
+      },
+      edit: {
+        id: `${scope}.region.leaders.edit`
+      },
+    },
+  },
   admin: {
     analyze: {
       index: {
