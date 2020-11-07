@@ -23,9 +23,13 @@ import {
   DELETE_REGION_BEGIN,
   DELETE_REGION_SUCCESS,
   DELETE_REGION_ERROR,
+  GET_REGION_MEMBERS_BEGIN,
+  GET_REGION_MEMBERS_SUCCESS,
+  GET_REGION_MEMBERS_ERROR,
   REGION_LIST_UNMOUNT,
   REGION_FORM_UNMOUNT,
   REGION_ALL_UNMOUNT,
+  REGION_MEMBERS_UNMOUNT,
 } from 'containers/Region/constants';
 
 
@@ -157,6 +161,27 @@ export function deleteRegionError(error) {
   };
 }
 
+export function getRegionMembersBegin(payload) {
+  return {
+    type: GET_REGION_MEMBERS_BEGIN,
+    payload,
+  };
+}
+
+export function getRegionMembersSuccess(payload) {
+  return {
+    type: GET_REGION_MEMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function getRegionMembersError(error) {
+  return {
+    type: GET_REGION_MEMBERS_ERROR,
+    error,
+  };
+}
+
 export function regionAllUnmount(payload) {
   return {
     type: REGION_ALL_UNMOUNT,
@@ -174,6 +199,13 @@ export function regionListUnmount(payload) {
 export function regionFormUnmount(payload) {
   return {
     type: REGION_FORM_UNMOUNT,
+    payload,
+  };
+}
+
+export function regionMembersUnmount(payload) {
+  return {
+    type: REGION_MEMBERS_UNMOUNT,
     payload,
   };
 }
