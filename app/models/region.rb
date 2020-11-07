@@ -8,6 +8,9 @@ class Region < ApplicationRecord
 
   has_many :region_leaders, class_name: 'GroupLeader', as: :leader_of, dependent: :destroy
 
+  has_many :user_groups, -> { distinct }, through: :children
+  has_many :members, through: :user_groups, class_name: 'User', source: :user
+
   validates :name, presence: true
   validates :parent, presence: true
   validates_length_of :name, maximum: 191
