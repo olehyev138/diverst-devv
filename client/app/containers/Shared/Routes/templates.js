@@ -188,6 +188,7 @@ import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/Gr
 
 /* Region */
 import RegionHomePage from 'containers/Region/RegionHomePage/Loadable';
+import RegionMembersListPage from 'containers/Region/RegionMembersListPage/Loadable';
 
 /* Region - Region Leaders */
 import RegionLeadersListPage from 'containers/Region/RegionLeaders/RegionLeadersListPage/Loadable';
@@ -281,6 +282,7 @@ export {
   GroupMemberListPage,
   GroupMemberCreatePage,
   RegionHomePage,
+  RegionMembersListPage,
   RegionLeadersListPage,
   RegionLeaderCreatePage,
   RegionLeaderEditPage,
