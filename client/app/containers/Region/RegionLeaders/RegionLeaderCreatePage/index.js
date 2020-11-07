@@ -28,6 +28,8 @@ import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMemb
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
 import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
+import { selectCustomText } from 'containers/Shared/App/selectors';
+
 import RegionLeaderForm from 'components/Region/RegionLeaders/RegionLeaderForm';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -79,6 +81,7 @@ export function RegionLeaderCreatePage(props) {
       isCommitting={isCommitting}
       links={links}
       isLoadingMembers={props.isLoadingMembers}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -97,13 +100,15 @@ RegionLeaderCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   isLoadingMembers: PropTypes.bool,
   currentRegion: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   members: selectPaginatedSelectMembers(),
   userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
-  isLoadingMembers: selectIsFetchingMembers()
+  isLoadingMembers: selectIsFetchingMembers(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

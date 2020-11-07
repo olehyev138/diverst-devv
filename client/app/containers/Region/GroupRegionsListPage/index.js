@@ -17,7 +17,7 @@ import { getGroupRegionsBegin, deleteRegionBegin, regionListUnmount } from 'cont
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import { selectPaginatedRegions, selectRegionTotal, selectRegionIsLoading } from 'containers/Region/selectors';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
@@ -62,6 +62,7 @@ export function GroupRegionsListPage(props) {
       handlePagination={handlePagination}
       params={params}
       permissions={props.permissions}
+      customTexts={props.customTexts}
       intl={props.intl}
     />
   );
@@ -79,6 +80,7 @@ GroupRegionsListPage.propTypes = {
   isGroupLoading: PropTypes.bool,
   isRegionsLoading: PropTypes.bool,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
@@ -89,6 +91,7 @@ const mapStateToProps = createStructuredSelector({
   isGroupLoading: selectGroupIsFormLoading(),
   isRegionsLoading: selectRegionIsLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -33,6 +33,7 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
+import { customTexts } from 'utils/customTextHelpers';
 
 api.regionLeaders.all = jest.fn();
 api.regionLeaders.create = jest.fn();
@@ -86,7 +87,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leaders);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leaders, customTexts({}));
     });
   });
 
@@ -126,7 +127,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leader);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leader, customTexts({}));
     });
   });
 
@@ -154,7 +155,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.create).toHaveBeenCalledWith({ region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create, customTexts({}));
     });
 
     it('Should return error from the API', async () => {
@@ -178,7 +179,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create, customTexts({}));
     });
 
     it('Should update a regionLeader', async () => {
@@ -203,7 +204,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update, customTexts({}));
     });
 
     it('Should return error from the API', async () => {
@@ -228,7 +229,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update, customTexts({}));
     });
   });
 
@@ -259,7 +260,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete, customTexts({}));
     });
 
     it('Should return error from the API', async () => {
@@ -283,7 +284,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete, customTexts({}));
     });
   });
 });

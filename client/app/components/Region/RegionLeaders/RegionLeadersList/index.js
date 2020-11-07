@@ -23,6 +23,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { customTexts } from 'utils/customTextHelpers';
 
 const styles = theme => ({
   errorButton: {
@@ -34,25 +35,25 @@ export function RegionLeadersList(props) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.table.column_name), field: 'user.name', query_field: 'users.last_name' },
-    { title: intl.formatMessage(messages.table.column_position), field: 'position_name', query_field: 'position_name' }
+    { title: intl.formatMessage(messages.table.column_name, customTexts(props.customTexts)), field: 'user.name', query_field: 'users.last_name' },
+    { title: intl.formatMessage(messages.table.column_position, customTexts(props.customTexts)), field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
   if (permission(props.region, 'leaders_manage?')) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(messages.edit),
+      tooltip: intl.formatMessage(messages.edit, customTexts(props.customTexts)),
       onClick: (_, rowData) => {
         props.handleVisitRegionLeaderEdit(rowData.leader_of_id, rowData.id);
       }
     });
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: intl.formatMessage(messages.delete),
+      tooltip: intl.formatMessage(messages.delete, customTexts(props.customTexts)),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to delete this region leader?'))
+        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts(props.customTexts))))
           props.deleteRegionLeaderBegin({ region_id: rowData.leader_of_id, id: rowData.id });
       }
     });
@@ -87,7 +88,7 @@ export function RegionLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.table.title)}
+            title={intl.formatMessage(messages.table.title, customTexts(props.customTexts))}
             onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingRegionLeaders}
@@ -121,6 +122,7 @@ RegionLeadersList.propTypes = {
   edit: PropTypes.bool,
   regionLeader: PropTypes.object,
   handleVisitRegionLeaderEdit: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

@@ -18,6 +18,7 @@ import {
   selectPaginatedRegionLeaders, selectRegionLeaderTotal,
   selectIsFetchingRegionLeaders,
 } from 'containers/Region/RegionLeaders/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -75,6 +76,7 @@ export function RegionLeadersListPage(props) {
       params={params}
       handlePagination={handlePagination}
       handleOrdering={handleOrdering}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -88,12 +90,14 @@ RegionLeadersListPage.propTypes = {
   isFetchingRegionLeaders: PropTypes.bool,
   handleVisitRegionLeaderEdit: PropTypes.func,
   currentRegion: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   regionLeaderList: selectPaginatedRegionLeaders(),
   regionLeaderTotal: selectRegionLeaderTotal(),
   isFetchingRegionLeaders: selectIsFetchingRegionLeaders(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({
