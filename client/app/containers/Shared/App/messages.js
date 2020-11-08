@@ -46,6 +46,9 @@ export default defineMessages({
     privacy_statement: {
       id: `${scope}.texts.privacy_statement`,
     },
+    region: {
+      id: `${scope}.texts.region`,
+    },
   },
   plural_text: {
     erg: {
@@ -84,6 +87,9 @@ export default defineMessages({
     privacy_statement: {
       id: `${scope}.texts.plural.privacy_statement`,
     },
+    region: {
+      id: `${scope}.texts.plural.region`,
+    },
   },
   custom_text: {
     erg: {
@@ -121,6 +127,9 @@ export default defineMessages({
     },
     privacy_statement: {
       id: `${scope}.custom_text.privacy_statement`,
+    },
+    region: {
+      id: `${scope}.custom_text.region`,
     },
   },
   days_of_week: [

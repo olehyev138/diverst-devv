@@ -52,6 +52,9 @@ export default defineMessages({
   privacy_statement: {
     id: `${scope}.form.custom_text.privacy_statement`
   },
+  region: {
+    id: `${scope}.form.custom_text.region`
+  },
   snackbars: {
     errors: {
       update: {

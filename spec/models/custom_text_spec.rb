@@ -18,6 +18,7 @@ RSpec.describe CustomText, type: :model do
     it { expect(custom_text).to validate_length_of(:structure).is_at_most(191) }
     it { expect(custom_text).to validate_length_of(:program).is_at_most(191) }
     it { expect(custom_text).to validate_length_of(:erg).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:region).is_at_most(191) }
   end
 
   describe '#erg_text' do

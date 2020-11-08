@@ -85,6 +85,7 @@ export function GroupRegionsList(props) {
                         region={region}
                         group={group}
                         deleteRegionBegin={deleteRegionBegin}
+                        customTexts={props.customTexts}
                         intl={intl}
                       />
                       {i < regions.length - 1 && (
@@ -132,6 +133,7 @@ GroupRegionsList.propTypes = {
   handlePagination: PropTypes.func,
   params: PropTypes.object,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
