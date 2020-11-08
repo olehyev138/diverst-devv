@@ -18,4 +18,4 @@ BUNDLE_BUCKET_NAME=$3
 
 ./devops/scripts/bundle-backend "$VERSION_LABEL"
 ./devops/scripts/create-app-version "$ENV_NAME" "$VERSION_LABEL" "$BUNDLE_BUCKET_NAME"
-./devops/scripts/deploy-backend "ENV_NAME" "VERSION_LABEL"
+./devops/scripts/deploy-app-version "$ENV_NAME" "$VERSION_LABEL"
