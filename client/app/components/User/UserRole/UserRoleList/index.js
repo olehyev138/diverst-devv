@@ -92,7 +92,13 @@ export function UserRoleList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.delete),
+                tooltip: (() => {
+                  if (rowData.default)
+                    return intl.formatMessage(messages.delete_default_role);
+                  if (!permission(rowData, 'destroy?') && rowData.role_type === 'group')
+                    return intl.formatMessage(messages.delete_group_in_use);
+                  return intl.formatMessage(messages.delete);
+                })(),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm(intl.formatMessage(messages.delete_confirm)))

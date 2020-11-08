@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Bundle backend
+#  - Must be run from app root
+# Usage: ./deploy-backend <app-version-label>
+#
+
+RELEASE_BRANCH='HEAD'
+VERSION_LABEL=$1
+APP_NAME="api-diverst-$VERSION_LABEL.zip"
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+# Create build directory if it doesnt exist
+mkdir -p build
+
+# Create app bundle with git archive
+git archive --format=zip --output="./build/$APP_NAME" "$RELEASE_BRANCH"

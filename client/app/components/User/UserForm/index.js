@@ -12,7 +12,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper, Tooltip, Grid
+  Divider, Box, FormControl, FormControlLabel, Switch, Tab, Paper, Tooltip, Grid, Typography
 } from '@material-ui/core';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
@@ -27,13 +27,12 @@ import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const [tab, setTab] = useState('general');
-
-
-  const generalForm = (
+  return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
       <Card>
         <Form>
@@ -135,24 +134,45 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               onChange={value => setFieldValue('time_zone', value)}
               onBlur={() => setFieldTouched('time_zone', true)}
             />
-            <FormControl>
-              <FormControlLabel
-                labelPlacement='end'
-                label={<DiverstFormattedMessage {...messages.active} />}
-                control={(
-                  <Field
-                    component={Switch}
-                    onChange={handleChange}
-                    color='primary'
-                    id='active'
-                    name='active'
-                    margin='normal'
-                    checked={values.active}
-                    value={values.active}
-                  />
-                )}
+            <Permission show={permission(props, 'users_manage')}>
+              <Box mb={2} />
+              <Divider />
+              <Box mb={2} />
+              <Typography variant='h6'>
+                <DiverstFormattedMessage {...messages.admin_fields} />
+              </Typography>
+              <FormControl>
+                <FormControlLabel
+                  labelPlacement='end'
+                  label={<DiverstFormattedMessage {...messages.active} />}
+                  control={(
+                    <Field
+                      component={Switch}
+                      onChange={handleChange}
+                      color='primary'
+                      id='active'
+                      name='active'
+                      margin='normal'
+                      checked={values.active}
+                      value={values.active}
+                    />
+                  )}
+                />
+              </FormControl>
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='user_role_id'
+                name='user_role_id'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.user_role} />}
+                value={values.user_role_id}
+                options={props?.user?.available_roles || []}
+                onChange={value => setFieldValue('user_role_id', value)}
+                onBlur={() => setFieldTouched('user_role_id', true)}
               />
-            </FormControl>
+            </Permission>
           </CardContent>
           <Divider />
           <CardActions>
@@ -169,6 +189,41 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
         </Form>
       </Card>
     </DiverstFormLoader>
+  );
+}
+
+export function UserForm(props) {
+  const [tab, setTab] = useState('general');
+
+  const user = props?.user;
+  const defaultRole = (user?.available_roles || []).find(item => item.default);
+
+  const initialValues = buildValues(user, {
+    first_name: { default: '' },
+    email: { default: '' },
+    last_name: { default: '' },
+    biography: { default: '' },
+    time_zone: { default: null },
+    user_role_id: { default: defaultRole },
+    id: { default: undefined },
+    active: { default: false },
+    avatar: { default: null },
+  });
+
+  const basicForm = (
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        const payload = mapFields(values, ['time_zone', 'user_role_id']);
+        payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
+        // eslint-disable-next-line no-unused-expressions
+        !props.permissions.users_manage && delete payload.email;
+        props.userAction(payload);
+      }}
+    >
+      {formikProps => <UserFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 
   const fieldForm = (
@@ -212,42 +267,9 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           <Box mb={2} />
         </React.Fragment>
       )}
-      {tab === 'general' && generalForm}
+      {tab === 'general' && basicForm}
       {tab === 'fields' && fieldForm}
     </React.Fragment>
-  );
-}
-
-export function UserForm(props) {
-  const user = props?.user;
-  const defaultRole = (user?.available_roles || []).find(item => item.default);
-
-  const initialValues = buildValues(user, {
-    first_name: { default: '' },
-    email: { default: '' },
-    last_name: { default: '' },
-    biography: { default: '' },
-    time_zone: { default: null },
-    user_role_id: { default: defaultRole },
-    id: { default: undefined },
-    active: { default: false },
-    avatar: { default: null },
-  });
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['time_zone', 'user_role_id']);
-        payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
-        // eslint-disable-next-line no-unused-expressions
-        !props.permissions.users_manage && delete payload.email;
-        props.userAction(payload);
-      }}
-    >
-      {formikProps => <UserFormInner {...props} {...formikProps} />}
-    </Formik>
   );
 }
 
@@ -259,6 +281,8 @@ UserForm.propTypes = {
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  fieldData: PropTypes.array,
+  updateFieldDataBegin: PropTypes.func,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,

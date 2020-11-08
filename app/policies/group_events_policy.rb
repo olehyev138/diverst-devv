@@ -25,13 +25,13 @@ class GroupEventsPolicy < GroupBasePolicy
     case group.event_attendance_visibility
     when 'public'
       return true if user.policy_group.initiatives_manage?
-      return true if basic_group_leader_permission?('initiatives_manage')
+      return true if has_group_leader_permissions?('initiatives_manage')
 
       # Everyone can see users
       user.policy_group.initiatives_index? && user.policy_group.groups_members_index?
     when 'group'
       return true if user.policy_group.initiatives_manage?
-      return true if basic_group_leader_permission?('initiatives_manage')
+      return true if has_group_leader_permissions?('initiatives_manage')
 
       is_an_accepted_member?
     when 'leaders_only'

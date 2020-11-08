@@ -16,6 +16,7 @@ RSpec.describe Group::Actions, type: :model do
           replace_with_children
           except_id
           joined_groups
+          non_regioned_children
       )
     }
 

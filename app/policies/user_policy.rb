@@ -11,7 +11,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    return true if index?
+    return true if manage?
 
     @record === @user
   end
@@ -28,7 +28,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    return true if create?
+    return true if manage?
 
     @record === @user
   end
@@ -48,13 +48,6 @@ class UserPolicy < ApplicationPolicy
     return true if @record == @user
 
     create?
-  end
-
-  def join_or_leave_groups?
-    return true if @record == @user
-    return true if GroupMemberPolicy.new(@user, [@record]).update?
-
-    false
   end
 
   def user_not_current_user?

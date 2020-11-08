@@ -11,11 +11,11 @@ module GroupLeader::Actions
     end
 
     def base_includes
-      [ :user, :group ]
+      [ :user ]
     end
 
     def base_preloads
-      [ :group, :user, group: Group.base_attributes_preloads, user: User.base_attribute_preloads ]
+      [:user, user: User.base_attribute_preloads ]
     end
   end
 end

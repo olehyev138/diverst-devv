@@ -1,5 +1,5 @@
 class GroupBasePolicy < ApplicationPolicy
-  attr_accessor :user, :group, :record, :group_leader_role_id, :group_leader, :user_group
+  attr_accessor :user, :group, :region, :record, :group_leader_role_id, :group_leader, :region_leader, :user_group
 
   def initialize(user, context, params = {})
     case user
@@ -11,6 +11,8 @@ class GroupBasePolicy < ApplicationPolicy
       @group_leader_role_id = user.group_leader_role_id
       @policy_group = user.policy_group
       @group_leader = user.group_leader
+      @region = user.region
+      @region_leader = user.region_leader
       @user_group = user.user_group
     else
       super(user, context, params)
@@ -21,22 +23,36 @@ class GroupBasePolicy < ApplicationPolicy
       elsif context.is_a?(Class) # Class
         # Set group using params if context is a class as this will be for
         # nested model actions such as index and create, which require a group
-        self.group = ::Group.find(get_group_id(context)) rescue nil
+        self.group = ::Group.find(get_group_id(context), get_group_id(context, group_id_param)) rescue nil
       elsif context.present?
-        self.group = context.group
+        self.group = group_of(context)
         self.record = context
       end
 
       if group
+        @region = group.region
         @group_leader = user.policy_group_leader(group.id)
+        @region_leader = user.policy_region_leader(region.id) if region
         @user_group = user.policy_user_group(group.id)
         @group_leader_role_id = group_leader&.user_role_id
       end
     end
   end
 
-  def get_group_id(context)
-    params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)
+  def group_of(object)
+    object.send(group_association)
+  end
+
+  def group_association
+    :group
+  end
+
+  def group_id_param
+    :group_id
+  end
+
+  def get_group_id(context, param = :group_id)
+    params[param] || params.dig(context.model_name.param_key.to_sym, param)
   end
 
   def is_a_member?
@@ -44,11 +60,11 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def is_an_accepted_member?
-    is_a_member? && user_group.accepted_member?
+    user_group&.accepted_member? || is_a_leader?
   end
 
   def is_a_leader?
-    group_leader.present?
+    group_leader.present? || region_leader.present?
   end
 
   alias_method :is_active_member?, :is_an_accepted_member?
@@ -104,7 +120,11 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def has_group_leader_permissions?(permission)
-    (is_a_leader? && group_leader[permission]) || false
+    if is_a_leader?
+      (group_leader&.[](permission) || region_leader&.[](permission) || false)
+    else
+      false
+    end
   end
 
   def view_group_resource(permission)
@@ -179,7 +199,15 @@ class GroupBasePolicy < ApplicationPolicy
     return true if user.policy_group.manage_posts?
     return true if is_a_leader?
 
-    record.user == user
+    if record.respond_to?(:user)
+      record.user == user
+    elsif record.respond_to?(:author)
+      record.author == user
+    elsif record.respond_to?(:owner)
+      record.owner == user
+    else
+      false
+    end
   end
 
   def base_index_permission
@@ -264,7 +292,7 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def group_has_permission(permission)
-      GroupLeader.attribute_names.include?(permission)
+      PolicyGroupTemplate::GROUP_LEADER_POLICIES.include?(permission)
     end
 
     delegate :index?, to: :policy
@@ -276,13 +304,21 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def joined_with_group
-      scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+      scope.eager_load(policy.group_association => [:enterprise, :user_groups, :regions]).joins(
+          'LEFT OUTER JOIN `group_leaders` '\
+          'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
+          'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
+        )
     end
 
     def non_group_base(permission)
       if scope <= Group
-        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
-      elsif scope.instance_methods.include?(:group)
+        scoped = scope.eager_load(:enterprise, :group_leaders, :user_groups, :regions).joins(
+            'LEFT OUTER JOIN `group_leaders` '\
+            'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
+            'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
+          )
+      elsif scope.instance_methods.include?(policy.group_association)
         scoped = joined_with_group
       else
         scoped = scope.none

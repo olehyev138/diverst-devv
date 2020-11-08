@@ -28,7 +28,7 @@ RSpec.describe UserPolicy, type: :policy do
       context 'when users_index is true but users_manage is false' do
         before { user.policy_group.update(users_index: true) }
 
-        it { is_expected.to permit_actions([:index, :show]) }
+        it { is_expected.to permit_actions([:index]) }
       end
 
       context 'when user is able to create a budget' do
@@ -108,33 +108,6 @@ RSpec.describe UserPolicy, type: :policy do
 
         it 'returns true' do
           expect(subject.access_hidden_info?).to eq true
-        end
-      end
-    end
-
-    describe '#join_or_leave_groups?' do
-      context 'when current user IS record' do
-        let(:other_user) { user }
-
-        it 'returns true' do
-          expect(subject.join_or_leave_groups?).to eq true
-        end
-      end
-
-      context 'when current user IS NOT record' do
-        let(:other_user) { create(:user) }
-
-        it 'returns false' do
-          expect(subject.join_or_leave_groups?).to eq true
-        end
-      end
-
-      context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do
-        let(:other_user) { create(:user) }
-        before { user.policy_group.update groups_members_manage: false }
-
-        it 'returns false' do
-          expect(subject.join_or_leave_groups?).to eq false
         end
       end
     end

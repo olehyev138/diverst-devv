@@ -7,7 +7,7 @@ RSpec.describe GroupLeaderMemberNotificationsJob, type: :job do
   let!(:user) { create(:user, enterprise: enterprise, user_role: enterprise.user_roles.where(role_type: 'admin').first) }
   let!(:group) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
   let!(:user_group) { create(:user_group, group: group, user: user, accepted_member: true) }
-  let!(:group_leader) { create(:group_leader, group: group, user: user, user_role: enterprise.user_roles.where(role_type: 'group').first) }
+  let!(:group_leader) { create(:group_leader, leader_of: group, user: user, user_role: enterprise.user_roles.where(role_type: 'group').first) }
 
   context 'with daily frequency' do
     context 'when there are no pending members' do

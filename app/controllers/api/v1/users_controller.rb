@@ -29,16 +29,9 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
-    base = User.left_joins(:policy_group, :group_leaders, :user_groups)
-                .where(
-                    [
-                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
-                        '(`policy_groups`.`manage_all` = TRUE)',
-                    ].join(' OR '), params[:group_id], params[:group_id])
+    group = Group.find(params[:group_id])
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: base)
+    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: User.budget_approvers(group))
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -68,7 +61,7 @@ class Api::V1::UsersController < DiverstController
 
   def update
     if current_user.policy_group.users_manage
-      params[klass.symbol] = payload
+      params[klass.symbol] = admin_payload
     else
       params[klass.symbol] = profile_update_payload
     end

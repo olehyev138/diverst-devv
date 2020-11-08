@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#
+## Deploy the backend application
+# Usage: ./deploy-backend <env-name> <app-version-label> <bucket-name>
+#
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root or build directory missing'
+  exit 1
+fi
+
+ENV_NAME=$1
+VERSION_LABEL=$2
+BUNDLE_BUCKET_NAME=$3
+
+./devops/scripts/bundle-backend "$VERSION_LABEL"
+./devops/scripts/create-app-version "$ENV_NAME" "$VERSION_LABEL" "$BUNDLE_BUCKET_NAME"
+./devops/scripts/deploy-app-version "$ENV_NAME" "$VERSION_LABEL"

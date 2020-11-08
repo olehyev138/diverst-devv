@@ -15,6 +15,7 @@ class CustomText < ApplicationRecord
   validates_length_of :structure, maximum: 191, presence: true, allow_blank: false
   validates_length_of :program, maximum: 191, presence: true, allow_blank: false
   validates_length_of :erg, maximum: 191, presence: true, allow_blank: false
+  validates_length_of :region, maximum: 191, presence: true, allow_blank: false
 
   def self.keys
     @keys ||= I18n.t('.')[:custom_text].keys
