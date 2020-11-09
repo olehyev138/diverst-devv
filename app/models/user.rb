@@ -73,7 +73,7 @@ class User < ApplicationRecord
 
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :group_leaders, dependent: :destroy
-  has_many :leading_groups, through: :group_leaders, source: :group
+  has_many :leading_groups, through: :group_leaders, source: :leader_of, source_type: 'Group'
 
   has_many :user_reward_actions, dependent: :destroy
   has_many :reward_actions, through: :user_reward_actions
@@ -138,7 +138,6 @@ class User < ApplicationRecord
 
   validates_format_of :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
 
-  validate :user_role_presence
   validate :group_leader_role
   validate :policy_group
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
@@ -146,6 +145,7 @@ class User < ApplicationRecord
   validates :points, numericality: { only_integer: true }
   validates :credits, numericality: { only_integer: true }
 
+  before_validation :user_role_presence
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -159,6 +159,8 @@ class User < ApplicationRecord
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
   after_update :add_to_default_mentor_group
+
+  before_save :inactive_cleanup, if: :will_save_change_to_active?
 
   accepts_nested_attributes_for :policy_group
   accepts_nested_attributes_for :availabilities, allow_destroy: true
@@ -185,6 +187,17 @@ class User < ApplicationRecord
   scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
   scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
   scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
+  scope :budget_approvers, -> (group) {
+    left_joins(:policy_group, :group_leaders, :user_groups)
+        .where(
+            [
+                '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Group")',
+                '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`leader_of_id` = ? AND `group_leaders`.`leader_of_type` = "Region")',
+                '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
+                '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
+                '(`policy_groups`.`manage_all` = TRUE)',
+            ].join(' OR '), group.id, group.region_id, group)
+  }
 
   def as_json(options = {})
     super.merge({ name: name })
@@ -222,6 +235,10 @@ class User < ApplicationRecord
 
   def policy_group_leader(group_id)
     group_leaders.find { |gl| gl.group_id == group_id }
+  end
+
+  def policy_region_leader(region_id)
+    group_leaders.find { |gl| gl.region_id == region_id }
   end
 
   def policy_initiative_user(event_id)
@@ -296,7 +313,7 @@ class User < ApplicationRecord
 
   def user_role_presence
     if user_role_id.nil?
-      self.user_role_id = enterprise.default_user_role
+      self.user_role_id = enterprise.default_user_role_id
     end
   end
 
@@ -323,10 +340,12 @@ class User < ApplicationRecord
   end
 
   def set_default_policy_group
-    template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
-    return unless template
+    attributes = if policy_group_template.present?
+      policy_group_template.create_new_policy
+    else
+      PolicyGroupTemplate::EMPTY_POLICY_ATTRIBUTES.dup
+    end
 
-    attributes = template.create_new_policy
     attributes.delete(:manage_all)
     if policy_group.nil?
       create_policy_group(attributes)
@@ -335,6 +354,16 @@ class User < ApplicationRecord
       return if custom_policy_group
 
       policy_group.update_attributes(attributes)
+    end
+  end
+
+  def inactive_cleanup
+    unless active
+      group_leaders.destroy_all
+      initiative_users
+          .left_joins(:initiative)
+          .where('`initiatives`.start > ? AND `initiatives`.archived_at IS NULL', Time.current)
+          .destroy_all
     end
   end
 

@@ -1,4 +1,8 @@
 class GroupLeaderPolicy < GroupBasePolicy
+  def group_of(object)
+    object.group || object.region.parent
+  end
+
   def base_index_permission
     'group_leader_index'
   end

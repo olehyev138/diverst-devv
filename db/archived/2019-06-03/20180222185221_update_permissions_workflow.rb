@@ -126,7 +126,7 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration[5.1]
         ]
       )
       
-      enterprise.users.update_all(:user_role_id => enterprise.default_user_role)
+      enterprise.users.update_all(:user_role_id => enterprise.default_user_role_id)
          
       # create basic policy group for each user
       enterprise.users.find_each do |user|

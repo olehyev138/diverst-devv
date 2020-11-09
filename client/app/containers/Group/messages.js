@@ -37,6 +37,9 @@ export default defineMessages({
   children_expand: {
     id: `${scope}.index.button.children_expand`,
   },
+  manage_regions: {
+    id: `${scope}.index.button.manage_regions`
+  },
   rows: {
     id: `${scope}.index.button.rows`,
   },
