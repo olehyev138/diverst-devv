@@ -112,12 +112,13 @@ export function* deleteRegion(action) {
 }
 
 export function* getMembers(action) {
+  const customText = yield select(selectCustomText());
   try {
     const response = yield call(api.regions.members.bind(api.regions), action.payload.id, action.payload);
     yield put(getRegionMembersSuccess(response.data.page));
   } catch (err) {
     yield put(getRegionMembersError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members, customTexts(customText)), options: { variant: 'warning' } }));
   }
 }
 
