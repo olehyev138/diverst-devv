@@ -37,7 +37,7 @@ class BudgetItem < ApplicationRecord
       return false
     end
 
-    self.update(is_done: true, estimated_amount: reserved)
+    self.update(is_done: true)
   end
 
   def available_for_event(event)
