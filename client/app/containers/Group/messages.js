@@ -152,6 +152,9 @@ export default defineMessages({
       id: `${scope}.selectorDialog.close`,
     },
   },
+  categorizeCollapsable: {
+    id: `${scope}.categorize.button.collapsable`,
+  },
   snackbars: {
     errors: {
       group: {
