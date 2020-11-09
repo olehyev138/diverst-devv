@@ -143,6 +143,17 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               Categorize Subgroups
             </Button>
           </Permission>
+
+          <Permission show={permission(group, 'update?')}>
+            <Button
+              size='small'
+              color='primary'
+              to={ROUTES.admin.manage.groups.regions.index.path(group.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.manage_regions} />
+            </Button>
+          </Permission>
         </React.Fragment>
       )}
       <Permission show={permission(group, 'add_members?')}>

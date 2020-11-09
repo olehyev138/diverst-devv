@@ -3,6 +3,7 @@ import ApplicationLayout from 'containers/Layouts/ApplicationLayout/Loadable';
 import AuthenticatedLayout from 'containers/Layouts/AuthenticatedLayout/Loadable';
 import UserLayout from 'containers/Layouts/UserLayout/Loadable';
 import GroupLayout from 'containers/Layouts/GroupLayout/Loadable';
+import RegionLayout from 'containers/Layouts/RegionLayout/Loadable';
 import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import AnonymousLayout from 'containers/Layouts/AnonymousLayout/Loadable';
@@ -65,6 +66,9 @@ import GroupCategoriesPage from 'containers/Group/GroupCategories/GroupCategorie
 import GroupCategoriesCreatePage from 'containers/Group/GroupCategories/GroupCategoriesCreatePage/Loadable';
 import GroupCategoriesEditPage from 'containers/Group/GroupCategories/GroupCategoriesEditPage/Loadable';
 import GroupCategorizePage from 'containers/Group/GroupCategorizePage/Loadable';
+import GroupRegionsListPage from 'containers/Region/GroupRegionsListPage/Loadable';
+import GroupRegionsCreatePage from 'containers/Region/GroupRegionCreatePage/Loadable';
+import GroupRegionsEditPage from 'containers/Region/GroupRegionEditPage/Loadable';
 
 /* Admin - Manage - Segment */
 import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
@@ -182,6 +186,14 @@ import GroupSponsorsListPage from 'containers/Group/GroupManage/GroupSponsors/Gr
 import GroupSponsorsCreatePage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsCreatePage/Loadable';
 import GroupSponsorsEditPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsEditPage/Loadable';
 
+/* Region */
+import RegionHomePage from 'containers/Region/RegionHomePage/Loadable';
+
+/* Region - Region Leaders */
+import RegionLeadersListPage from 'containers/Region/RegionLeaders/RegionLeadersListPage/Loadable';
+import RegionLeaderCreatePage from 'containers/Region/RegionLeaders/RegionLeaderCreatePage/Loadable';
+import RegionLeaderEditPage from 'containers/Region/RegionLeaders/RegionLeaderEditPage/Loadable';
+
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/GroupFolder/FoldersPage/Loadable';
 import FolderCreatePage from 'containers/Resource/GroupFolder/FolderCreatePage/Loadable';
@@ -218,6 +230,7 @@ export {
   PasswordResetPage,
   UserLayout,
   GroupLayout,
+  RegionLayout,
   AdminLayout,
   SessionLayout,
   AnonymousLayout,
@@ -235,6 +248,9 @@ export {
   GroupCategoriesCreatePage,
   GroupCategoriesEditPage,
   GroupCategorizePage,
+  GroupRegionsListPage,
+  GroupRegionsCreatePage,
+  GroupRegionsEditPage,
   SegmentListPage,
   SegmentPage,
   AdminFieldsPage,
@@ -264,6 +280,10 @@ export {
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  RegionHomePage,
+  RegionLeadersListPage,
+  RegionLeaderCreatePage,
+  RegionLeaderEditPage,
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
