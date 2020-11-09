@@ -586,6 +586,12 @@ const ROUTES = {
         titleMessage: messages.regions.home,
       }
     },
+    members: {
+      path: (regionId = ':region_id') => `/regions/${regionId}/members`,
+      data: {
+        titleMessage: messages.regions.members,
+      },
+    },
     leaders: {
       index: {
         path: (regionId = ':region_id') => `/regions/${regionId}/leaders`,

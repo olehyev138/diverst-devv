@@ -229,6 +229,9 @@ Diverst::Application.routes.draw do
         collection do
           get 'group_regions'
         end
+        member do
+          get 'members'
+        end
       end
       resources :region_leaders
       resources :resources do
