@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# Deploy a given app version for the given environment
+#
+## Deploy a given app version for the given environment
 # Usage: ./deploy-app-version <env-name> <app-version-label>
+#
 
 ENV_NAME=$1
 VERSION_LABEL=$2
 
-# Deploy app version
+# Deploy app version, assumes application version exists
 aws elasticbeanstalk update-environment \
   --environment-name "$ENV_NAME-env" \
   --version-label "$VERSION_LABEL"
