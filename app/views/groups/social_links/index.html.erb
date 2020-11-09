@@ -5,7 +5,7 @@
 
 <div class="content__main">
   <div class="card">
-    <% @posts.each do |post| %>
+    <% @posts.uniq(&:id).each do |post| %>
       <div class="card__section">
         <%= render 'card', post: post %>
       </div>

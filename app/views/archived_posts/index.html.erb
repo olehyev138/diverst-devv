@@ -21,7 +21,7 @@
         <p>No Archived Posts.</p>
       </div>
     <% else %>
-      <% @posts.each do |news| %>
+      <% @posts.uniq(&:id).each do |news| %>
         <% if news.news_link && NewsLinkPolicy.new(current_user, NewsLink).index? %>
           <%= render "archived_news_link", news_link: NewsLink.find(news.link.id) %>
         <% elsif news.group_message && NewsLinkPolicy.new(current_user, NewsLink).index? %>

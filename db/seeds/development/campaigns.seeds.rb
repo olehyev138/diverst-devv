@@ -98,8 +98,16 @@ after 'development:groups' do
           contributing_group = campaign.groups.sample
           author = contributing_group.members.sample
 
-          answer = question.answers.create(content: answer_content[:content], contributing_group: contributing_group, author: author,
-                                           created_at: Faker::Time.between(question.created_at, Time.current - 1.day))
+          answer = question.answers.create(
+              content: answer_content[:content],
+              contributing_group: contributing_group,
+              author: author,
+              title: Faker::Lorem.sentence,
+              idea_category: IdeaCategory.create(
+                  name: Faker::Lorem.sentence,
+              ),
+              created_at: Faker::Time.between(question.created_at, Time.current - 1.day)
+          )
 
           # Create answer votes
           (0..rand(0..11)).each do |i|
