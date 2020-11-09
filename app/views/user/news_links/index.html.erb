@@ -9,7 +9,7 @@
         <p>No posts have been published yet.</p>
       </div>
     <% else %>
-      <% @posts.each do |news| %>
+      <% @posts.uniq(&:id).each do |news| %>
         <% if news.news_link && NewsLinkPolicy.new(current_user, nil).index? %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
         <% elsif news.group_message && UserMessagePolicy.new(current_user, nil).index? %>
