@@ -24,6 +24,8 @@ import messages from 'containers/Region/messages';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 
+import { customTexts } from 'utils/customTextHelpers';
+
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -89,23 +91,23 @@ export function RegionMembersList(props) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.members.table.columns.givenName),
+      title: intl.formatMessage(messages.members.table.columns.givenName, customTexts(props.customTexts)),
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: intl.formatMessage(messages.members.table.columns.familyName),
+      title: intl.formatMessage(messages.members.table.columns.familyName, customTexts(props.customTexts)),
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: intl.formatMessage(messages.members.table.columns.status),
+      title: intl.formatMessage(messages.members.table.columns.status, customTexts(props.customTexts)),
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
-        active: intl.formatMessage(messages.members.table.columns.status.active),
-        inactive: intl.formatMessage(messages.members.table.columns.status.inactive),
+        active: intl.formatMessage(messages.members.table.columns.status.active, customTexts(props.customTexts)),
+        inactive: intl.formatMessage(messages.members.table.columns.status.inactive, customTexts(props.customTexts)),
       }
     },
   ];
@@ -205,7 +207,7 @@ export function RegionMembersList(props) {
       </Grid>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={intl.formatMessage(messages.members.table.title)}
+        title={intl.formatMessage(messages.members.table.title, customTexts(props.customTexts))}
         handlePagination={props.handlePagination}
         handleSearching={props.handleSearching}
         isLoading={props.isLoading}
@@ -259,6 +261,7 @@ RegionMembersList.propTypes = {
   handleChangeTab: PropTypes.func.isRequired,
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
+  customTexts: PropTypes.object,
   currentRegion: PropTypes.object,
 };
 

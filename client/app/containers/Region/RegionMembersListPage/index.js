@@ -19,6 +19,7 @@ import {
 import {
   selectPaginatedMembers, selectMemberTotal, selectMembersIsLoading,
 } from 'containers/Region/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 
@@ -47,9 +48,9 @@ export function RegionMembersListPage(props) {
   };
 
   const [params, setParams] = useState(defaultParams);
-  const [type, setType] = React.useState('active');
-  const [segmentIds, setSegmentIds] = React.useState(null);
-  const [segmentLabels, setSegmentLabels] = React.useState(null);
+  const [type, setType] = useState('active');
+  const [segmentIds, setSegmentIds] = useState(null);
+  const [segmentLabels, setSegmentLabels] = useState(null);
 
   const getScopes = (scopes) => {
     // eslint-disable-next-line no-param-reassign
@@ -149,6 +150,7 @@ export function RegionMembersListPage(props) {
         handleChangeTab={handleChangeTab}
         segmentLabels={segmentLabels || []}
         handleFilterChange={handleFilterChange}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -161,12 +163,14 @@ RegionMembersListPage.propTypes = {
   memberTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   currentRegion: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedMembers(),
   memberTotal: selectMemberTotal(),
   isLoading: selectMembersIsLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
