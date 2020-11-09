@@ -166,6 +166,7 @@
   "diverst.containers.Branding.Theme.input.primarycolor": "Primary Color",
   "diverst.containers.Branding.Theme.input.url": "Logo Redirect URL",
   "diverst.containers.Budget.index.actions.delete": "Delete",
+  "diverst.containers.Budget.index.actions.deleteConfirmation": "Are you sure you want to delete this budget request?",
   "diverst.containers.Budget.index.actions.details": "Details",
   "diverst.containers.Budget.index.buttons.back": "Annual Budget Overview",
   "diverst.containers.Budget.index.buttons.new": "New Budget Request",
