@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_11_203819) do
+ActiveRecord::Schema.define(version: 2020_11_04_220653) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -324,6 +324,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.string "parent", default: "Parent", null: false
     t.string "sub_erg", default: "Sub-Group", null: false
     t.string "privacy_statement", default: "Privacy Statement", null: false
+    t.string "region", default: "Region", null: false
     t.index ["enterprise_id"], name: "index_custom_texts_on_enterprise_id"
   end
 
@@ -443,6 +444,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.boolean "enable_outlook", default: false
     t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
+    t.boolean "force_parent_child_coupling"
   end
 
   create_table "expense_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -574,7 +576,8 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
   end
 
   create_table "group_leaders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
+    t.bigint "leader_of_id"
+    t.string "leader_of_type"
     t.bigint "user_id"
     t.string "position_name"
     t.datetime "created_at", null: false
@@ -615,7 +618,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.boolean "manage_posts", default: false
     t.boolean "initiatives_index", default: false
     t.integer "position"
-    t.index ["group_id"], name: "fk_rails_582d7a722f"
+    t.index ["leader_of_id"], name: "fk_rails_582d7a722f"
     t.index ["user_id"], name: "fk_rails_9d1f0af75f"
   end
 
@@ -715,9 +718,11 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.integer "views_count"
     t.string "slack_webhook"
     t.text "slack_auth_data"
+    t.bigint "region_id"
     t.index ["group_category_id"], name: "fk_rails_d2e3c28a2f"
     t.index ["group_category_type_id"], name: "fk_rails_3d4b617e77"
     t.index ["parent_id"], name: "fk_rails_be49f097d1"
+    t.index ["region_id"], name: "index_groups_on_region_id"
   end
 
   create_table "groups_metrics_dashboards", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1065,10 +1070,6 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
-    t.bigint "author_id_id"
-    t.bigint "author_id"
-    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
-    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1186,7 +1187,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.string "name", null: false
     t.boolean "default", default: false
     t.integer "user_role_id"
-    t.integer "enterprise_id"
+    t.integer "deprecated_enterprise_id"
     t.boolean "campaigns_index", default: false
     t.boolean "campaigns_create", default: false
     t.boolean "campaigns_manage", default: false
@@ -1246,7 +1247,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.boolean "group_posts_index", default: false
     t.boolean "mentorship_manage", default: false
     t.boolean "auto_archive_manage", default: false
-    t.index ["enterprise_id"], name: "index_policy_group_templates_on_enterprise_id"
+    t.index ["deprecated_enterprise_id"], name: "index_policy_group_templates_on_deprecated_enterprise_id"
     t.index ["user_role_id"], name: "index_policy_group_templates_on_user_role_id"
   end
 
@@ -1363,6 +1364,17 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
     t.integer "department_id"
     t.integer "business_impact_id"
     t.index ["campaign_id"], name: "index_questions_on_campaign_id"
+  end
+
+  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "short_description"
+    t.text "description"
+    t.text "home_message"
+    t.integer "position"
+    t.boolean "private", default: false
+    t.bigint "parent_id", null: false
+    t.index ["parent_id"], name: "index_regions_on_parent_id"
   end
 
   create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1867,11 +1879,11 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
   add_foreign_key "group_categories", "enterprises"
   add_foreign_key "group_categories", "group_category_types"
   add_foreign_key "group_category_types", "enterprises"
-  add_foreign_key "group_leaders", "groups"
   add_foreign_key "group_leaders", "users"
   add_foreign_key "groups", "group_categories"
   add_foreign_key "groups", "group_category_types"
   add_foreign_key "groups", "groups", column: "parent_id"
+  add_foreign_key "groups", "regions"
   add_foreign_key "idea_categories", "enterprises"
   add_foreign_key "initiative_comments", "initiatives"
   add_foreign_key "initiative_comments", "users"
@@ -1895,6 +1907,7 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
   add_foreign_key "news_links", "users", column: "author_id"
   add_foreign_key "policy_groups", "users"
   add_foreign_key "polls", "initiatives"
+  add_foreign_key "regions", "groups", column: "parent_id"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
@@ -1926,13 +1939,13 @@ ActiveRecord::Schema.define(version: 2020_10_11_203819) do
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) = 1)
   SQL
   create_view "page_visitation_by_names", sql_definition: <<-SQL
-      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+      select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_name` union all select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`
   SQL
   create_view "page_visitations", sql_definition: <<-SQL
       select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`))
   SQL
   create_view "total_page_visitation_by_names", sql_definition: <<-SQL
-      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+      select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_name`,`c`.`enterprise_id` union all select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`

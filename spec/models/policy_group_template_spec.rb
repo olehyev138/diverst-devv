@@ -16,15 +16,18 @@ RSpec.describe PolicyGroupTemplate, type: :model do
     it { expect(policy_group_template).to validate_presence_of(:user_role) }
     it { expect(policy_group_template).to validate_presence_of(:enterprise) }
 
-    it { expect(policy_group_template).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
-    it { expect(policy_group_template).to validate_uniqueness_of(:user_role).scoped_to(:enterprise_id) }
-    context 'uniqueness' do
-      before do
-        user_role.policy_group_template.update(default: true)
-      end
-      let!(:uniqueness_policy_group_template) { user_role.policy_group_template }
-      it { expect(uniqueness_policy_group_template).to_not be_valid }
+    it { expect(policy_group_template).to validate_uniqueness_of(:user_role_id) }
+  end
+
+  describe '#check_uniqueness_of_name' do
+    let(:user_role) { create(:user_role) }
+    let(:policy_group_template) { user_role.policy_group_template }
+    let(:new_role) { create(:user_role, enterprise: user_role.enterprise) }
+    before do
+      new_role.policy_group_template.name = policy_group_template.name
     end
+
+    it { expect(new_role.policy_group_template).to_not be_valid }
   end
 
   describe '#update_user_roles' do
@@ -62,7 +65,7 @@ RSpec.describe PolicyGroupTemplate, type: :model do
         group = create(:group, enterprise: enterprise)
         user = create(:user, enterprise: enterprise)
         create(:user_group, user: user, group: group, accepted_member: true)
-        group_leader = create(:group_leader, group: group, user: user, user_role: enterprise.user_roles.where(role_name: 'group_leader').first)
+        group_leader = create(:group_leader, leader_of: group, user: user, user_role: enterprise.user_roles.where(role_name: 'group_leader').first)
 
         expect(group_leader.initiatives_manage).to eq(false)
 

@@ -15,6 +15,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
     it 'gets all items' do
       get "/api/v1/#{route}", headers: headers
       expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)['page']['items'].size).to be > 0
     end
 
     it 'captures the error' do
@@ -40,13 +41,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#create' do
     it 'creates an item' do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(201)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:build).and_raise(BadRequestException)
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
@@ -66,13 +67,13 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#destroy' do
     it 'deletes an item' do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it 'captures the error' do
       allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end
