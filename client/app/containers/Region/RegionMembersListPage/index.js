@@ -48,7 +48,6 @@ export function RegionMembersListPage(props) {
 
   const [params, setParams] = useState(defaultParams);
   const [type, setType] = React.useState('active');
-  const [from, setFrom] = React.useState(null);
   const [segmentIds, setSegmentIds] = React.useState(null);
   const [segmentLabels, setSegmentLabels] = React.useState(null);
 
@@ -58,7 +57,7 @@ export function RegionMembersListPage(props) {
     if (scopes.type === undefined) scopes.type = type;
     if (scopes.segmentIds === undefined) scopes.segmentIds = segmentIds;
 
-    const queryScopes = ['active'];
+    const queryScopes = [];
     if (scopes.type)
       queryScopes.push(scopes.type);
     if (scopes.segmentIds && scopes.segmentIds[1].length > 0)
