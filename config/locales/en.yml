@@ -63,3 +63,6 @@ en:
     }
     timed_out: "Your request timed out. Please try again later."
     invalid_route: "Invalid route"
+    region: {
+      parent_cant_be_child_group: "cannot be a child group"
+    }

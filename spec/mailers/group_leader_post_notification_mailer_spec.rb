@@ -4,7 +4,7 @@ require 'rails_helper'
 #  let!(:leader) { create(:user) }
 #  let!(:group) { create(:group, enterprise: leader.enterprise, pending_users: 'enabled') }
 #  let!(:user_group) { create(:user_group, group: group, user: leader, accepted_member: true) }
-#  let!(:group_leader) { create(:group_leader, group: group, user: leader) }
+#  let!(:group_leader) { create(:group_leader, leader_of: group, user: leader) }
 #  let!(:custom_text) { create(:custom_text, erg: 'BRG', enterprise: leader.enterprise) }
 #  let!(:email) { create(:email, enterprise: leader.enterprise, mailer_name: 'group_leader_post_notification_mailer', mailer_method: 'notification', content: "<p>Hello %{user.name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group.name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n", subject: '%{count} Pending Post(s) for %{group.name}') }
 #  let!(:email_variable_1) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name')) }
@@ -42,7 +42,7 @@ require 'rails_helper'
 #      let!(:leader) { create(:user, enterprise: enterprise) }
 #      let!(:group) { create(:group, enterprise: leader.enterprise, pending_users: 'enabled') }
 #      let!(:user_group) { create(:user_group, group: group, user: leader, accepted_member: true) }
-#      let!(:group_leader) { create(:group_leader, group: group, user: leader) }
+#      let!(:group_leader) { create(:group_leader, leader_of: group, user: leader) }
 #      let!(:custom_text) { create(:custom_text, erg: 'BRG', enterprise: leader.enterprise) }
 #      let!(:email) { create(:email, enterprise: leader.enterprise, mailer_name: 'group_leader_post_notification_mailer', mailer_method: 'notification', content: "<p>Hello %{user.name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group.name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n", subject: '%{count} Pending Post(s) for %{group.name}') }
 #      let!(:email_variable_1) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name')) }
@@ -64,7 +64,7 @@ require 'rails_helper'
 #      let!(:leader) { create(:user, enterprise: enterprise) }
 #      let!(:group) { create(:group, enterprise: leader.enterprise, pending_users: 'enabled') }
 #      let!(:user_group) { create(:user_group, group: group, user: leader, accepted_member: true) }
-#      let!(:group_leader) { create(:group_leader, group: group, user: leader) }
+#      let!(:group_leader) { create(:group_leader, leader_of: group, user: leader) }
 #      let!(:custom_text) { create(:custom_text, erg: 'BRG', enterprise: leader.enterprise) }
 #      let!(:email) { create(:email, enterprise: leader.enterprise, mailer_name: 'group_leader_post_notification_mailer', mailer_method: 'notification', content: "<p>Hello %{user.name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group.name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n", subject: '%{count} Pending Post(s) for %{group.name}') }
 #      let!(:email_variable_1) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name')) }
@@ -87,7 +87,7 @@ require 'rails_helper'
 #      let!(:leader) { create(:user, enterprise: enterprise) }
 #      let!(:group) { create(:group, enterprise: leader.enterprise, pending_users: 'enabled') }
 #      let!(:user_group) { create(:user_group, group: group, user: leader, accepted_member: true) }
-#      let!(:group_leader) { create(:group_leader, group: group, user: leader) }
+#      let!(:group_leader) { create(:group_leader, leader_of: group, user: leader) }
 #      let!(:custom_text) { create(:custom_text, erg: 'BRG', enterprise: leader.enterprise) }
 #      let!(:mail) { described_class.notification(group, leader, 1).deliver_now }
 #

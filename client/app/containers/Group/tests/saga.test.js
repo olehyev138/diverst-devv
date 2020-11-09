@@ -7,7 +7,7 @@ import {
   createGroup, categorizeGroup, updateGroup,
   updateGroupSettings, deleteGroup, carryBudget,
   resetBudget, joinGroup, leaveGroup,
-  joinSubgroups
+  joinSubgroups, updateGroupPosition
 } from 'containers/Group/saga';
 
 import {
@@ -20,6 +20,7 @@ import {
   resetBudgetSuccess, resetBudgetError, joinGroupSuccess,
   joinGroupError, leaveGroupSuccess, leaveGroupError,
   joinSubgroupsSuccess, joinSubgroupsError,
+  updateGroupPositionSuccess, updateGroupPositionError
 } from 'containers/Group/actions';
 
 import { push } from 'connected-react-router';
@@ -420,6 +421,58 @@ describe('Update group settings', () => {
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
     expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update_group_settings, options: { variant: 'warning' } });
+  });
+});
+
+describe('Update group position', () => {
+  it('Should update some group positions', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupPositionSuccess(), notified];
+    const initialAction = { payload: {
+      id: 1,
+      position: 3,
+    } };
+    const dispatched = await recordSaga(
+      updateGroupPosition,
+      initialAction
+    );
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_group_position);
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groups.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update group position',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupPositionError(response), notified];
+    const initialAction = { payload: { id: 5, position: 5 } };
+    const dispatched = await recordSaga(
+      updateGroupPosition,
+      initialAction
+    );
+
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_group_position);
   });
 });
 

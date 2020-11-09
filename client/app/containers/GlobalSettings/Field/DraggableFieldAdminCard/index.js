@@ -34,6 +34,9 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
 
+  if (draggable && form)
+    setForm(false);
+
   return (
     <Grid item key={field.id} xs={12}>
       { draggable ? (
@@ -93,7 +96,7 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
           </CardActions>
         </Card>
       )}
-      { !draggable && (
+      { (!draggable) && (
         <Collapse in={form}>
           <FieldForm
             edit

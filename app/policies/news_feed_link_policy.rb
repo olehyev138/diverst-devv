@@ -46,10 +46,13 @@ class NewsFeedLinkPolicy < GroupBasePolicy
               'ON `news_feeds`.`id` = `news_feed_links`.`news_feed_id` OR `news_feeds`.`id` = `shared_news_feed_links`.`news_feed_id`' +
               'LEFT OUTER JOIN `groups` ' +
               'ON `groups`.`id` = `news_feeds`.`group_id` ' +
+              'LEFT OUTER JOIN `regions` ' +
+              'ON `regions`.`parent_id` = `groups`.`id` ' +
               'LEFT OUTER JOIN `enterprises` ' +
               'ON `enterprises`.`id` = `groups`.`enterprise_id` ' +
               'LEFT OUTER JOIN `group_leaders` ' +
-              'ON `group_leaders`.`group_id` = `groups`.`id` ' +
+              'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") ' +
+              'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") ' +
               'LEFT OUTER JOIN `user_groups` ' +
               'ON `user_groups`.`group_id` = `groups`.`id`'
         )

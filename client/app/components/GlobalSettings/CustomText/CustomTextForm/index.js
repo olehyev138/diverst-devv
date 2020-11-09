@@ -45,6 +45,18 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 onChange={handleChange}
                 margin='normal'
                 disabled={props.isCommitting}
+                id='region'
+                name='region'
+                label={<DiverstFormattedMessage {...messages.region} />}
+                value={values.region}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                disabled={props.isCommitting}
                 id='program'
                 name='program'
                 label={<DiverstFormattedMessage {...messages.program} />}
@@ -200,7 +212,8 @@ export function CustomTextForm(props) {
     member_preference: { default: 'Member Survey TEST' },
     parent: { default: 'Parent TEST' },
     sub_erg: { default: 'Sub-Group TEST' },
-    privacy_statement: { default: 'Privacy Statement TEST' }
+    privacy_statement: { default: 'Privacy Statement TEST' },
+    region: { default: 'Region TEST' }
   });
 
   const [open, setOpen] = React.useState(false);

@@ -69,6 +69,10 @@ class Group < ApplicationRecord
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
+  # Regions
+  belongs_to :region
+  has_many :regions, foreign_key: :parent_id, dependent: :destroy
+
   has_one :news_feed, dependent: :destroy
 
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
@@ -107,7 +111,7 @@ class Group < ApplicationRecord
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
 
-  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
+  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
   has_many :leaders, through: :group_leaders, source: :user
 
   has_many :annual_budgets, dependent: :destroy
@@ -214,6 +218,13 @@ class Group < ApplicationRecord
   scope :all_children,      -> { where.not(parent_id: nil) }
   scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
 
+  # Regions
+  # Pass a group ID to get all the children of the group that are not in regions,
+  # intended for retrieving the options when assigning children into a region.
+  # Optionally pass a region ID to include children from that region,
+  # intended for including children of the region when editing it
+  scope :non_regioned_children, -> (id, region_id = nil) { where(parent_id: id, region_id: [nil, region_id]) }
+
   # This scope acts as an alternative to `all_parents` which ignore a given list of groups, while getting the
   # children of said groups and adding them to the result of the query
   scope :replace_with_children, -> (*args) { where.not(id: args).where(parent_id: [nil] + args) }
@@ -266,7 +277,7 @@ class Group < ApplicationRecord
 
   def self.load_sums
     select(
-        'groups.*,'\
+        '`groups`.*,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
         ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
@@ -637,5 +648,6 @@ class Group < ApplicationRecord
 
   def set_position
     self.position = self.id
+    save!
   end
 end

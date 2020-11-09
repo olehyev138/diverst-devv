@@ -133,7 +133,7 @@ export function* updateGroup(action) {
 
 export function* updateGroupPosition(action) {
   try {
-    const payload = { group: action.payload };
+    const payload = { group: { id: action.payload.id, position: action.payload.position } };
     yield call(api.groups.update.bind(api.groups), payload.group.id, payload.group);
 
     yield put(updateGroupPositionSuccess());

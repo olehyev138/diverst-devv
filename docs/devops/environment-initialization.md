@@ -190,3 +190,33 @@ Create the CNAME DNS records with the following naming standards:
 
 - Backend: api-<env_name>-diverst.com
 - Frontend: <env_name>-diverst.com
+
+## 4) Parameter Store Entries for Production Deployment 
+
+For automated production deployment we store production environment info in the parameter store in the main/root Diverst account. Entries are organized in the store by environment like `/<env-name>/entry`. Entries are also encrypted via a key in KMS.
+
+We use chamber to write the data to the parameter store. The main `cli-bot` IAM account we use for STS access into the env accounts also has permissions to access the parameter store. Ensure the shell is authenticated with the `cli-bot` account but _not_ a environment account
+
+To write an entry run the command as follows:
+
+```
+chamber write <env> <entry_name> <entry_value>
+```
+
+The following information in the format as written is required in the store for production environment accounts 
+
+- env 
+
+The environment name for the account, ie `devops`
+
+- frontend_bucket
+
+The name for the S3 bucket serving the frontend application, ie `devops.diverst.com`
+
+- master_bucket
+
+The name for the S3 bucket where we store the backend application bundles, ie `devops-idkdsjsjsjaj`
+
+- role_arn 
+
+The role ARN that the `cli-bot` account uses to authenticate with the environment account

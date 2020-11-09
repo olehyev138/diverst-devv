@@ -167,6 +167,7 @@ const ROUTES = {
     },
   },
 
+  // Group
   group: {
     pathPrefix: (groupId = ':group_id') => `/groups/${groupId}`,
     back: {
@@ -571,6 +572,42 @@ const ROUTES = {
     },
   },
 
+  // Region
+  region: {
+    pathPrefix: (regionId = ':region_id') => `/regions/${regionId}`,
+    back: {
+      data: {
+        titleMessage: messages.regions.back,
+      }
+    },
+    home: {
+      path: (regionId = ':region_id') => `/regions/${regionId}`,
+      data: {
+        titleMessage: messages.regions.home,
+      }
+    },
+    leaders: {
+      index: {
+        path: (regionId = ':region_id') => `/regions/${regionId}/leaders`,
+        data: {
+          titleMessage: messages.regions.leaders.index,
+        }
+      },
+      new: {
+        path: (regionId = ':region_id') => `/regions/${regionId}/leaders/new`,
+        data: {
+          titleMessage: messages.regions.leaders.new,
+        }
+      },
+      edit: {
+        path: (regionId = ':region_id', leaderId = ':leader_id') => `/regions/${regionId}/leaders/${leaderId}/edit`,
+        data: {
+          titleMessage: messages.regions.leaders.edit,
+        }
+      },
+    },
+  },
+
   // Admin
   admin: {
     get root() { return this.manage.groups.index; },
@@ -667,6 +704,17 @@ const ROUTES = {
         category_types: {
           edit: {
             path: () => '/admin/manage/groups/category_types/edit',
+          },
+        },
+        regions: {
+          index: {
+            path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/regions`,
+          },
+          new: {
+            path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/regions/new`,
+          },
+          edit: {
+            path: (groupId = ':group_id', regionId = ':region_id') => `/admin/manage/groups/${groupId}/regions/${regionId}/edit`,
           },
         },
       },
