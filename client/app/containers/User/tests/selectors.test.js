@@ -9,7 +9,7 @@ import {
   selectIsCommitting, selectIsFormLoading,
   selectPaginatedDownloads, selectDownloadsTotal,
   selectIsLoadingDownloads, selectIsDownloadingData,
-  selectDownloadData,
+  selectDownloadData, selectHasChanged
 } from '../selectors';
 
 import { initialState } from '../reducer';
@@ -44,6 +44,15 @@ describe('User selectors', () => {
     it('should select the \'is FormLoading\' flag', () => {
       const mockedState = { isFormLoading: true };
       const selected = selectIsFormLoading().resultFunc(mockedState);
+
+      expect(selected).toEqual(true);
+    });
+  });
+
+  describe('selectHasChanged', () => {
+    it('should select the \'has changed\' flag', () => {
+      const mockedState = { hasChanged: true };
+      const selected = selectHasChanged().resultFunc(mockedState);
 
       expect(selected).toEqual(true);
     });
