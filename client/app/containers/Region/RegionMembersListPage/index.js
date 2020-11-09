@@ -28,6 +28,12 @@ import RegionMembersList from 'components/Region/RegionMembersList';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
+const MemberTypes = Object.freeze([
+  'active',
+  'inactive',
+  'all',
+]);
+
 export function RegionMembersListPage(props) {
   useInjectReducer({ key: 'regions', reducer });
   useInjectSaga({ key: 'regions', saga });
@@ -37,18 +43,24 @@ export function RegionMembersListPage(props) {
   const defaultParams = {
     id: regionId, count: 10, page: 0,
     orderBy: 'id', order: 'asc',
+    query_scopes: ['active'],
   };
 
   const [params, setParams] = useState(defaultParams);
+  const [type, setType] = React.useState('active');
+  const [from, setFrom] = React.useState(null);
   const [segmentIds, setSegmentIds] = React.useState(null);
   const [segmentLabels, setSegmentLabels] = React.useState(null);
 
   const getScopes = (scopes) => {
     // eslint-disable-next-line no-param-reassign
     if (scopes === undefined) scopes = {};
+    if (scopes.type === undefined) scopes.type = type;
     if (scopes.segmentIds === undefined) scopes.segmentIds = segmentIds;
 
-    const queryScopes = [];
+    const queryScopes = ['active'];
+    if (scopes.type)
+      queryScopes.push(scopes.type);
     if (scopes.segmentIds && scopes.segmentIds[1].length > 0)
       queryScopes.push(scopes.segmentIds);
 
@@ -65,6 +77,12 @@ export function RegionMembersListPage(props) {
       props.getRegionMembersBegin(newParams);
       setParams(newParams);
     }
+  };
+
+  const handleChangeTab = (type) => {
+    setType(type);
+    if (MemberTypes.includes(type))
+      getMembers(getScopes({ type }), defaultParams);
   };
 
   const handleFilterChange = (values) => {
@@ -127,6 +145,9 @@ export function RegionMembersListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleSearching={handleSearching}
+        memberType={type}
+        MemberTypes={MemberTypes}
+        handleChangeTab={handleChangeTab}
         segmentLabels={segmentLabels || []}
         handleFilterChange={handleFilterChange}
       />

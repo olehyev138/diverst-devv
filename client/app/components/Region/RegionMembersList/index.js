@@ -4,12 +4,12 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, Grid, Typography, Card, CardContent, CardActions,
+  Button, Box, Grid, Typography, Card, CardContent, CardActions, MenuItem,
 } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -22,6 +22,7 @@ import SegmentSelector from 'components/Shared/SegmentSelector';
 import messages from 'containers/Region/messages';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 
 const styles = theme => ({
   errorButton: {
@@ -67,6 +68,18 @@ const styles = theme => ({
 export function RegionMembersList(props) {
   const { classes, intl } = props;
 
+  // MENU CODE
+  const [anchor, setAnchor] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const handleClose = (type) => {
+    setAnchor(null);
+    props.handleChangeTab(type);
+  };
+
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
       orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
@@ -85,6 +98,16 @@ export function RegionMembersList(props) {
       field: 'last_name',
       query_field: 'last_name'
     },
+    {
+      title: intl.formatMessage(messages.members.table.columns.status),
+      field: 'status',
+      query_field: '(CASE WHEN users.active = false THEN 2 ELSE 1 END)',
+      sorting: true,
+      lookup: {
+        active: intl.formatMessage(messages.members.table.columns.status.active),
+        inactive: intl.formatMessage(messages.members.table.columns.status.inactive),
+      }
+    },
   ];
 
   return (
@@ -94,6 +117,31 @@ export function RegionMembersList(props) {
           <Card>
             <CardContent>
               <Grid container direction='column' spacing={3}>
+                <Grid item>
+                  <Grid
+                    container
+                    justify='space-between'
+                    spacing={3}
+                    alignContent='stretch'
+                    alignItems='center'
+                  >
+                    <Grid item md='auto'>
+                      <Typography align='left' variant='h6' component='h2' color='primary'>
+                        <DiverstFormattedMessage {...messages.members.filter.changeScope} />
+                      </Typography>
+                    </Grid>
+                    <Grid item md='auto'>
+                      <Button
+                        variant='contained'
+                        color='secondary'
+                        size='large'
+                        onClick={handleClick}
+                      >
+                        <DiverstFormattedMessage {...messages.members.scopes[props.memberType]} />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
                 <Grid item>
                   <Grid
                     container
@@ -167,6 +215,29 @@ export function RegionMembersList(props) {
         columns={columns}
         rowsPerPage={props.params.count}
       />
+      <DiverstDropdownMenu
+        anchor={anchor}
+        setAnchor={setAnchor}
+      >
+        <MenuItem
+          onClick={() => handleClose('active')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.members.scopes.active} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleClose('inactive')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.members.scopes.inactive} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleClose('all')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.members.scopes.all} />
+        </MenuItem>
+      </DiverstDropdownMenu>
     </React.Fragment>
   );
 }
@@ -183,6 +254,8 @@ RegionMembersList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleSearching: PropTypes.func,
+  memberType: PropTypes.string.isRequired,
+  MemberTypes: PropTypes.array.isRequired,
   handleChangeTab: PropTypes.func.isRequired,
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
