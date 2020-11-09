@@ -28,6 +28,23 @@ workflows:
           filters:
             branches:
               only: react_update
+      - request-prod-deploy:
+          type: approval
+          requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: beta_staging
+      - deploy-prod:
+          context: aws-context
+          requires:
+            - backend-test
+            - frontend-test
+            - request-prod-deploy
+          filters:
+            branches:
+              only: beta_staging
 
 jobs:
   lint:
@@ -231,8 +248,7 @@ jobs:
           name: Deploy backend
           command: |
             VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
-            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
-            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+            ./devops/scripts/deploy-backend "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
       #
       ## Install node modules for frontend building
       #
@@ -255,6 +271,7 @@ jobs:
       - run:
           name: Build & deploy frontend
           command: |
+            ./devops/scripts/build-frontend
             ./devops/scripts/load-client-env testing
             ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
 
@@ -284,3 +301,41 @@ jobs:
           command: |
             VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
             ./devops/scripts/deploy-analytics "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
+
+  deploy-prod:
+    working_directory: ~/TeamDiverst/diverst-development/
+    docker:
+      - image: awsdiverst/cci-primary:0.0.3
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    steps:
+      - checkout
+      #
+      ## Install node modules for frontend building
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - v1-node-cache-{{ .Branch }}-
+            - v1-node-cache-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Deploy backend & frontend to production envs
+      #
+      - run:
+          name: Deploy to production instances
+          command: |
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+
+            ./devops/scripts/bundle-backend "$VERSION_LABEL"
+            ./devops/scripts/build-frontend
+            ruby ./devops/scripts/deploy-prod.rb "$VERSION_LABEL"

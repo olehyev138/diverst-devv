@@ -74,10 +74,13 @@ after 'development:enterprise' do
           {:role_name => "Admin", :role_type => "user", :priority => 0},
           {:role_name => "Diversity Manager", :role_type => "user", :priority => 1},
           {:role_name => "National Manager", :role_type => "user", :priority => 2},
-          {:role_name => "Group Leader", :role_type => "group", :priority => 3},
-          {:role_name => "Group Treasurer", :role_type => "group", :priority => 4},
-          {:role_name => "Group Content Creator", :role_type => "group", :priority => 5},
-          {:role_name => "User", :role_type => "user", :priority => 6, :default => true}
+          {:role_name => "Region Leader", :role_type => "group", :priority => 3},
+          {:role_name => "Region Treasurer", :role_type => "group", :priority => 4},
+          {:role_name => "Region Content Creator", :role_type => "group", :priority => 5},
+          {:role_name => "Group Leader", :role_type => "group", :priority => 6},
+          {:role_name => "Group Treasurer", :role_type => "group", :priority => 7},
+          {:role_name => "Group Content Creator", :role_type => "group", :priority => 8},
+          {:role_name => "User", :role_type => "user", :priority => 9, :default => true}
         ]
       )
 

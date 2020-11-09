@@ -8,7 +8,7 @@ class GroupSerializer < ApplicationRecordSerializer
                              :private, :home_message, :default_mentor_group, :position,
                              :enterprise_id, :event_attendance_visibility, :get_calendar_color, :auto_archive,
                              :unit_of_expiry_age, :expiry_age_for_resources, :expiry_age_for_news, :expiry_age_for_events,
-                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, if: :show?
+                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :region, :regions, if: :show?
 
   attributes_with_permission :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
                              :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?

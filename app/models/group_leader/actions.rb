@@ -11,7 +11,7 @@ module GroupLeader::Actions
     end
 
     def base_includes(diverst_request)
-      [ :user, :group ]
+      [ :user ]
     end
   end
 end

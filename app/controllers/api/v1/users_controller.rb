@@ -33,14 +33,8 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
-    base = User.left_joins(:policy_group, :group_leaders, :user_groups)
-                .where(
-                    [
-                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
-                        '(`policy_groups`.`manage_all` = TRUE)',
-                    ].join(' OR '), params[:group_id], params[:group_id])
+    group = Group.find(params[:group_id])
+    base = User.budget_approvers(group)
 
     response = klass.index(self.diverst_request, params.permit!, base: base)
     response = { page: response.as_json } if diverst_request.minimal

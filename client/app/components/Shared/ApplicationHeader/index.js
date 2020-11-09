@@ -29,6 +29,7 @@ import {
 } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
+import { selectRegion } from 'containers/Region/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -99,7 +100,7 @@ const styles = theme => ({
 });
 
 export function ApplicationHeader(props) {
-  const { classes, group, user, permissions } = props;
+  const { classes, group, region, user, permissions } = props;
 
   const isAdmin = !!useRouteMatch(ROUTES.admin.pathPrefix);
 
@@ -196,13 +197,16 @@ export function ApplicationHeader(props) {
           <Logo height='55px' withLink />
           <div className={classNames(classes.grow, classes.centerText)}>
             <Hidden xsDown>
-              {!isAdmin && group ? (
+              {!isAdmin && group && (
                 <Typography variant='h5'>
                   {group.name}
                 </Typography>
-              )
-                : (<React.Fragment />)
-              }
+              )}
+              {!isAdmin && !group && region && (
+                <Typography variant='h5'>
+                  {region.name}
+                </Typography>
+              )}
             </Hidden>
           </div>
           <div className={classes.sectionDesktop}>
@@ -272,6 +276,7 @@ ApplicationHeader.propTypes = {
   classes: PropTypes.object,
   user: PropTypes.object,
   group: PropTypes.object,
+  region: PropTypes.object,
   permissions: PropTypes.object,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
@@ -290,6 +295,7 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),
+  region: selectRegion(),
   permissions: selectPermissions(),
 });
 
