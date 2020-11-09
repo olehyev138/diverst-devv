@@ -467,7 +467,7 @@
   "diverst.containers.Region.members.filter.to": "To",
   "diverst.containers.Region.members.filter.toMin": "To Min?",
   "diverst.containers.Region.members.filter.toMax": "To Max?",
-  "diverst.containers.Region.members.filter.segments": "Segments",
+  "diverst.containers.Region.members.filter.segments": "{segment_p}",
   "diverst.containers.Region.members.filter.changeScope": "View:",
   "diverst.containers.Region.members.filter.submit": "Filter",
   "diverst.containers.Region.Leaders.create": "Create",
