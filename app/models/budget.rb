@@ -114,7 +114,7 @@ class Budget < ApplicationRecord
   end
 
   def request_surplus?
-    unless requested_amount.present? && requested_amount <= annual_budget&.amount
+    unless requested_amount.present? && requested_amount <= annual_budget&.free
 
       'This budget exceeds the annual budget'
     end
