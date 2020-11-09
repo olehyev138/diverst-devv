@@ -51,7 +51,7 @@ export function PostsTable(props) {
           return intl.formatMessage(messages.news_link, props.customTexts);
         if (rowData.social_link)
           return intl.formatMessage(messages.social_link, props.customTexts);
-        return messages.error;
+        return intl.formatMessage(messages.error, props.customTexts);
       },
       query_field: '(CASE '
         + 'WHEN group_message_id IS NOT NULL THEN 1 '
@@ -67,6 +67,8 @@ export function PostsTable(props) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
+
+  console.log(props);
   return (
     <DiverstTable
       title={props.title}
