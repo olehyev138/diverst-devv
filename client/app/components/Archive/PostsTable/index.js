@@ -68,7 +68,6 @@ export function PostsTable(props) {
     });
   };
 
-  console.log(props);
   return (
     <DiverstTable
       title={props.title}
