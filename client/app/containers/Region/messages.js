@@ -102,9 +102,6 @@ export default defineMessages({
           inactive: {
             id: `${scope}.members.table.columns.status.inactive`,
           },
-          pending: {
-            id: `${scope}.members.table.columns.status.pending`,
-          },
         },
       },
       count: {
@@ -112,14 +109,11 @@ export default defineMessages({
       },
     },
     scopes: {
-      accepted_users: {
-        id: `${scope}.members.scopes.accepted_users`,
+      active: {
+        id: `${scope}.members.scopes.active`,
       },
       inactive: {
         id: `${scope}.members.scopes.inactive`,
-      },
-      pending: {
-        id: `${scope}.members.scopes.pending`,
       },
       all: {
         id: `${scope}.members.scopes.all`,
