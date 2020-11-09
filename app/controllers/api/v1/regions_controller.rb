@@ -11,8 +11,9 @@ class Api::V1::RegionsController < DiverstController
   def members
     item = klass.find(params[:id])
     authorize item, :members_view?
+    params.delete(:id)
 
-    render status: 200, json: UserGroup.index(self.diverst_request, params.permit!, base: item.members)
+    render status: 200, json: User.index(self.diverst_request, params.permit!, base: item.members)
   end
 
   private
