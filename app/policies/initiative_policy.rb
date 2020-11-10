@@ -1,6 +1,6 @@
 class InitiativePolicy < GroupBasePolicy
-  def get_group_id(context = nil)
-    super || params[:owner_group_id] || Pillar.find(params.dig(:initiative, :pillar_id)).group_id
+  def group_id_param
+    :owner_group_id
   end
 
   def base_index_permission

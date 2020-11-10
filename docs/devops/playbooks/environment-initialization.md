@@ -120,3 +120,16 @@ Create a new _secure note_ in our password manager, under `aws-environments`, th
 
 - Backend: api-<env_name>-diverst.com
 - Frontend: <env_name>-diverst.com
+
+### Parameter Store
+
+While authenticated with `cli-bot` but _not_ with a environment account, write the listed information to the parameter store using the following command
+
+```
+chamber write <env> <entry_name> <entry_value>
+```
+
+- env 
+- frontend_bucket
+- master_bucket
+- role_arn 
