@@ -240,12 +240,8 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     policies.reduce({}) { |sum, m| sum[m] = (policy.send(m)); sum }
   end
 
-  def show_action?
-    ['show', 'prototype'].include?(scope[:action])
-  end
-
-  def commit_action?
-    ['create', 'update'].include?(scope[:action])
+  def singular_action?
+    ['show', 'prototype', 'create', 'update'].include?(scope[:action])
   end
 
   private def method_missing(symbol, *args)

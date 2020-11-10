@@ -1,7 +1,7 @@
 class NewsLinkSerializer < ApplicationRecordSerializer
   attributes :author, :photos, :picture_location, :news_feed_link_id
 
-  attributes_with_permission :comments, if: :show_action?
+  attributes_with_permission :comments, if: :singular_action?
 
   def comments
     object.comments.map do |comment|

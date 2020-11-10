@@ -1,7 +1,7 @@
 class SegmentSerializer < ApplicationRecordSerializer
   attributes :owner, :active_users_filter, :limit, :permissions
 
-  attributes_with_permission :all_rules_count, :field_rules, :order_rules, :group_rules, if: :show_action?
+  attributes_with_permission :all_rules_count, :field_rules, :order_rules, :group_rules, if: :singular_action?
 
   def field_rules
     object.field_rules.map do |fr|

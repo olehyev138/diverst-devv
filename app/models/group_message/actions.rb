@@ -7,7 +7,7 @@ module GroupMessage::Actions
     def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then [:owner, :group]
-      when 'show' then [ :owner, :group, :comments, comments: GroupMessageComment.base_preloads(diverst_request) ]
+      when 'show', 'create', 'update' then [ :owner, :group, :comments, comments: GroupMessageComment.base_preloads(diverst_request) ]
       else []
       end
     end

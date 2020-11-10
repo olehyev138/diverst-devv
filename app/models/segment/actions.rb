@@ -15,7 +15,7 @@ module Segment::Actions
     def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then []
-      when 'show' then [:field_rules, :order_rules, :group_rules, field_rules: [:field, field: Field.base_preloads(diverst_request)]]
+      when 'show', 'create', 'update' then [:field_rules, :order_rules, :group_rules, field_rules: [:field, field: Field.base_preloads(diverst_request)]]
       else []
       end
     end

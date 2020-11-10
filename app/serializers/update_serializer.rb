@@ -1,5 +1,5 @@
 class UpdateSerializer < ApplicationRecordSerializer
-  attributes_with_permission :field_data, :next_id, if: :show_action?
+  attributes_with_permission :field_data, :next_id, if: :singular_action?
 
   def serialize_all_fields
     true

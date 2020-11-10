@@ -7,7 +7,7 @@ module NewsLink::Actions
     def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then [:author, :picture_attachment, :picture_blob, :photos, :group]
-      when 'show'
+      when 'show', 'create', 'update'
         [
             :author,
             :group,

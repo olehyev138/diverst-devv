@@ -235,7 +235,7 @@ module User::Actions
     def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then [:avatar_attachment, :avatar_blob]
-      when 'show'
+      when 'show', 'create', 'update'
         [
             :field_data,
             :avatar_attachment,

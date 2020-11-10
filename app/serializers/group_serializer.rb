@@ -19,11 +19,11 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes_with_permission :parent, if: :with_parent?
 
   def with_children?
-    (instance_options[:with_children] || show_action?) && (show? || budgets?) && !family?
+    (instance_options[:with_children] || singular_action?) && (show? || budgets?) && !family?
   end
 
   def with_parent?
-    (instance_options[:with_parent] || show_action?) && show? && !family?
+    (instance_options[:with_parent] || singular_action?) && show? && !family?
   end
 
   def budgets?
@@ -31,7 +31,7 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def not_budgets?
-    !budgets? && show_action?
+    !budgets? && singular_action?
   end
 
   def family?
@@ -75,7 +75,7 @@ class GroupSerializer < ApplicationRecordSerializer
           :carryover_annual_budget?,
           :reset_annual_budget?,
       ]
-    elsif show_action?
+    elsif singular_action?
       [
           :show?,
           :destroy?,

@@ -1,7 +1,7 @@
 class QuestionSerializer < ApplicationRecordSerializer
   attributes :title, :description, :conclusion, :solved_at, :permissions
 
-  attributes_with_permission :campaign, :answers, if: :show_action?
+  attributes_with_permission :campaign, :answers, if: :singular_action?
 
   def answers
     object.answers.map do |ans|

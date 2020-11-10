@@ -7,7 +7,7 @@ module Campaign::Actions
     def base_preloads(diverst_request)
       case diverst_request.action
       when 'index' then []
-      when 'show' then [ :image_attachment, :image_blob, :banner_attachment, :banner_blob, :groups ]
+      when 'show', 'create', 'update' then [ :image_attachment, :image_blob, :banner_attachment, :banner_blob, :groups ]
       else []
       end
     end

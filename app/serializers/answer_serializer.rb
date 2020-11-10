@@ -1,6 +1,6 @@
 class AnswerSerializer < ApplicationRecordSerializer
   attributes :author
-  attributes_with_permission :question, :total_likes, :comments, if: :show_action?
+  attributes_with_permission :question, :total_likes, :comments, if: :singular_action?
 
   def comments
     object.comments.map do |comment|
