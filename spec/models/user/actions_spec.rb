@@ -52,6 +52,7 @@ RSpec.describe User::Actions, type: :model do
           invitation_sent
           of_role
           not_member_of_group
+          for_segment_ids
       )
     }
 

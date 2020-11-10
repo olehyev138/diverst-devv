@@ -9,6 +9,7 @@ import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider'
 import {
   GET_REGIONS_BEGIN,
   GET_GROUP_REGIONS_BEGIN,
+  GET_REGION_MEMBERS_BEGIN,
   GET_REGION_BEGIN,
   CREATE_REGION_BEGIN,
   UPDATE_REGION_BEGIN,
@@ -18,6 +19,7 @@ import {
 import {
   getRegionsSuccess, getRegionsError,
   getGroupRegionsBegin, getGroupRegionsSuccess, getGroupRegionsError,
+  getRegionMembersSuccess, getRegionMembersError,
   getRegionSuccess, getRegionError,
   createRegionSuccess, createRegionError,
   updateRegionSuccess, updateRegionError,
@@ -109,10 +111,22 @@ export function* deleteRegion(action) {
   }
 }
 
+export function* getMembers(action) {
+  const customText = yield select(selectCustomText());
+  try {
+    const response = yield call(api.regions.members.bind(api.regions), action.payload.id, action.payload);
+    yield put(getRegionMembersSuccess(response.data.page));
+  } catch (err) {
+    yield put(getRegionMembersError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members, customTexts(customText)), options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* regionsSaga() {
   yield takeLatest(GET_REGIONS_BEGIN, getRegions);
   yield takeLatest(GET_GROUP_REGIONS_BEGIN, getGroupRegions);
+  yield takeLatest(GET_REGION_MEMBERS_BEGIN, getMembers);
   yield takeLatest(GET_REGION_BEGIN, getRegion);
   yield takeLatest(CREATE_REGION_BEGIN, createRegion);
   yield takeLatest(UPDATE_REGION_BEGIN, updateRegion);

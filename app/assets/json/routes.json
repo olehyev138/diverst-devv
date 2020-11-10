@@ -141,6 +141,7 @@
   },
   "region": {
     "home": "/regions/:region_id",
+    "members": "/regions/:region_id/members",
     "leaders": {
       "index": "/regions/:region_id/leaders",
       "new": "/regions/:region_id/leaders/new",

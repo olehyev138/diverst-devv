@@ -31,6 +31,21 @@ const selectRegionTotal = () => createSelector(
   regionsState => regionsState.regionTotal
 );
 
+const selectPaginatedMembers = () => createSelector(
+  selectRegionsDomain,
+  regionsState => regionsState.memberList
+);
+
+const selectMemberTotal = () => createSelector(
+  selectRegionsDomain,
+  regionsState => regionsState.memberTotal
+);
+
+const selectMembersIsLoading = () => createSelector(
+  selectRegionsDomain,
+  regionsState => regionsState.isMembersLoading
+);
+
 const selectRegion = () => createSelector(
   selectRegionsDomain,
   regionsState => regionsState.currentRegion
@@ -81,6 +96,9 @@ export {
   selectPaginatedSelectRegions,
   selectPaginatedRegions,
   selectRegionTotal,
+  selectPaginatedMembers,
+  selectMemberTotal,
+  selectMembersIsLoading,
   selectRegion,
   selectFormRegion,
   selectRegionIsLoading,
