@@ -1,13 +1,24 @@
 class UserSerializer < ApplicationRecordSerializer
   attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
              :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type, :permissions, :available_roles,
-             :name_with_status
-
-  has_many :field_data
+             :name_with_status, :field_data, :status
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
   def serialize_all_fields
     true
+  end
+
+  def field_data
+    field_objects = if object.field_data.loaded?
+      object.field_data.select { |fd| !fd.field.private || (scope && UserPolicy.new(scope.dig(:current_user), User).manage?) }
+    elsif scope && UserPolicy.new(scope.dig(:current_user), User).manage?
+      object.field_data
+    else
+      object.field_data.includes(:field).where(fields: { private: false })
+    end
+    field_objects.map do |field_datum|
+      FieldDataSerializer.new(field_datum, **instance_options).as_json
+    end
   end
 
   def avatar_location
@@ -28,6 +39,12 @@ class UserSerializer < ApplicationRecordSerializer
 
   def avatar_content_type
     AttachmentHelper.attachment_content_type(object.avatar)
+  end
+
+  def status
+    return 'inactive' unless object.active
+
+    'active'
   end
 
   def excluded_keys
