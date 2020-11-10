@@ -60,14 +60,14 @@ class Campaign < BaseClass
   scope :valid_campaigns, -> { where(status: [0, 2, 3]) }
 
   def banner_description
-    value = ''
+    value = "#{title} campaign banner"
     return value if self[:banner_alt_text_desc].nil?
 
     self[:banner_alt_text_desc]
   end
 
   def image_description
-    value = ''
+    value = "image of #{title} campaign"
     return value if self[:image_alt_text_desc].nil?
 
     self[:image_alt_text_desc]

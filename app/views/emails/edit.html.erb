@@ -3,7 +3,7 @@
     <div class="col sm-12">
       <div class="card">
         <div class="card__section">
-          <h2 class="h3-styling">Edit <%= @email.name %></h2>
+          <h3>Edit <%= @email.name %></h3>
           <%= simple_form_for @email do |f| %>
             <%= f.input :subject %>
             <%= f.input :content, as: :ckeditor %>
@@ -15,7 +15,7 @@
     <div class="col sm-12">
       <div class="card card--secondary">
         <div class="card__section card__section--border">
-          <h2 class="h3-styling">Email Preview</h2>
+          <h4>Email Preview</h4>
           <p class="text-center">Here is a preview of what this email will look like when sent out.</p>
         </div>
         <div class="card__section card__section--border">
@@ -29,12 +29,12 @@
     <div class="col sm-12">
       <div class="card card--secondary">
         <div class="card__section card__section--border">
-          <h3 class="h4-styling">Variables</h3>
+          <h4>Variables</h4>
           <p>The variables below can be used in your templates.</p>
         </div>
         <% @email.variables.each do |variable| %>
           <div class="card__section card__section--border">
-            <h3 class="accent h4-styling">%{ <%= variable.enterprise_email_variable.key %> }</h3>
+            <h4 class="accent">%{ <%= variable.enterprise_email_variable.key %> }</h4>
             <p><%= variable.enterprise_email_variable.description %></p>
           </div>
         <% end %>

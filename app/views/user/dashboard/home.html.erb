@@ -21,17 +21,17 @@
           <div class="card">
             <div class="card__section">
 
+              <h4>Events You've Joined</h4>
               <% if InitiativePolicy.new(current_user, nil).index? %>
-              <h2>Events You've Joined</h2>
                 <%= link_to calendar_user_events_path, class: "card__action" do %>
-                  <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %><span style="font-size: 18px;">Events Calendar</span>
+                  <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
                 <% end %>
               <% end %>
 
               <% if @upcoming_and_ongoing_events.empty? || !InitiativePolicy.new(current_user, nil).index? %>
-                <h3 class="mtlarge text-center">
+                <h4 class="mtlarge text-center">
                   You have not joined any events yet.
-                </h3>
+                </h4>
               <% else %>
                 <% @upcoming_and_ongoing_events.each do |event| %>
                   <%= render "shared/flippable/event", event: event %>
@@ -46,13 +46,13 @@
           <div class="card">
             <div class="card__section">
 
-              <h2>Latest News</h2>
-              <%= link_to "View all", user_news_links_path, class: "card__action", style: "font-size: 18px;" unless @posts.size < 1 || !NewsLinkPolicy.new(current_user, nil).index? %>
+              <h4>Latest News</h4>
+              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.size < 1 || !NewsLinkPolicy.new(current_user, nil).index? %>
 
               <% if @posts.empty? || !NewsLinkPolicy.new(current_user, nil).index? %>
-                <h3 class="mtlarge text-center">
+                <h4 class="mtlarge text-center">
                   No posts have been published yet.
-                </h3>
+                </h4>
               <% else %>
                 <% @posts.uniq(&:id).each do |news| %>
                   <%= render "shared/flippable/news_link", news: news, small: true %>
@@ -78,7 +78,7 @@
     <% if current_user.enterprise.enable_rewards? %>
         <div class="card card--secondary">
           <div class="card__section">
-            <h2>Most Active this week</h2>
+            <h4>Most Active this week</h4>
             <ol>
               <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
                 <li><%= user_performance_label(member) %></li>
@@ -86,7 +86,7 @@
             </ol>
           </div>
           <div class="card__section">
-            <h2>Top <%= c_t(:erg).pluralize %> this week</h2>
+            <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
             <ol>
               <% current_user.enterprise.groups.non_private.top_participants(10).each do |group| %>
                 <li><%= group_performance_label(group) %></li>

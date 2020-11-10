@@ -1,6 +1,6 @@
 <div class="content__header">
-  <h2 class="h1-styling">Secure Downloads</h2>
-  <h2>Downloads expire after 2 hours</h2>
+  <h1>Secure Downloads</h1>
+  <h3 class="muted">Downloads expire after 2 hours</h3>
 </div>
 
 <div class="content__main">
@@ -17,7 +17,7 @@
               <%= download.download_file_name %>
             </div>
             <div class="flex-row__cell flex-row__cell--grow">
-              <span>Created <%= download.created_at.to_s :datetime %></span>
+              <span class="muted">Created <%= download.created_at.to_s :datetime %></span>
             </div>
             <div class="flex-row__cell link-group">
               <%= link_to "Download", download_user_downloads_path(download_id: download.id), class: 'btn btn--primary' %>

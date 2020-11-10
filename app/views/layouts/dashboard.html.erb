@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html>
 <head>
   <title>Diverst</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -22,7 +22,6 @@
           <img class="primary-header__logo logo hidden-xs" src="<%= logo_url %>" alt="Home">
           <img class="primary-header__logo logo visible-xs" src="<%= small_logo_url %>" alt="Home">
         <% end %>
-        <h1 class="text-center hide-content" aria-label="Admin Dashboard">Admin Dashboard</h1>
       </div>
       <div class="flex-row__cell">
         <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>&nbsp;|&nbsp;
@@ -38,7 +37,7 @@
         <li class="nav__item">
           <%= active_link_to metrics_overview_index_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['metrics/' + controller_name], []] do %>
             <%= inline_svg('icons/baseline-bar_chart-24px.svg', class: "icon nav__icon") %>
-            <span class="nav-text">Analyze</span>
+            <span class="nav__text">Analyze</span>
           <% end %>
         </li>
       <% end %>
@@ -46,7 +45,7 @@
         <li class="nav__item">
           <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_manage_erg_link? do %>
             <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
-            <span class="nav-text">Manage</span>
+            <span class="nav__text">Manage</span>
           <% end %>
         </li>
       <% end %>
@@ -55,7 +54,7 @@
           <li class="nav__item">
             <%= active_link_to manage_erg_budgets_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
               <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
-              <span class="nav-text">Plan</span>
+              <span class="nav__text">Plan</span>
             <% end %>
           </li>
         <% end %>
@@ -64,7 +63,7 @@
         <li class="nav__item">
           <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_engage_link? do %>
             <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
-            <span class="nav-text">Innovate</span>
+            <span class="nav__text">Innovate</span>
           <% end %>
         </li>
       <% end %>
@@ -72,7 +71,7 @@
         <li class="nav__item">
           <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
             <%= inline_svg('icons/scope.svg', class: "icon nav__icon") %>
-            <span class="nav-text">Include</span>
+            <span class="nav__text">Include</span>
           <% end %>
         </li>
       <% end %>
@@ -80,7 +79,7 @@
         <li class="nav__item">
           <%= active_link_to mentoring_interests_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
             <%= inline_svg('icons/harmonize.svg', class: "icon nav__icon") %>
-            <span class="nav-text">Mentorship</span>
+            <span class="nav__text">Mentorship</span>
           <% end %>
         </li>
       <% end %>
@@ -89,13 +88,13 @@
       <% if global_settings_path %>
         <li class="nav__item">
           <%= active_link_to global_settings_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_global_settings_link? do %>
-            <span class="nav-text">Global Settings</span>
+            <span class="nav__text">Global Settings</span>
           <% end %>
         </li>
       <% end %>
       <li class="nav__item">
         <%= link_to destroy_user_session_path, method: :delete, class: "nav__link" do %>
-          <span class="nav-text">Logout</span>
+          <span class="nav__text">Logout</span>
         <% end %>
       </li>
     </ul>

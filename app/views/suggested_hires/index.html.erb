@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h2 class="h1-styling"><%= pluralize(@suggested_hires.size, 'Suggested Hire') %></h2>
+  <h1><%= pluralize(@suggested_hires.size, 'Suggested Hire') %></h1>
 </div>
 <div class="content__main">
   <div class="card">
@@ -7,8 +7,8 @@
       <div class="card__section card__section--border">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
-            <h3><%= suggested_hire.candidate_name %></h3>
-            <h3><%= suggested_hire.candidate_email %></h3>
+            <h4><%= suggested_hire.candidate_name %></h4>
+            <h4><%= suggested_hire.candidate_email %></h4>
             <p><% if suggested_hire.resume.exists? %> (<a href="<%= suggested_hire.resume.expiring_url(3600) %>" class="icon icon--bg" style="background-image: url(<%= thumbnail_for_suggested_hire(suggested_hire) %>)"></a> <%= link_to "resume", suggested_hire.resume.expiring_url(3600) %>)<% end %></p>
             <p><%= link_to "LinkedIn Profile", suggested_hire.linkedin_profile_url unless suggested_hire.linkedin_profile_url.blank? %></p>
           </div>

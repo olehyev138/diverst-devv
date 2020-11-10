@@ -27,7 +27,7 @@
         <% end %>
       </div>
       <div class="col-xs-8">
-        <h3><%= news_link.title %> - <span> <%= news_link.total_views %> views</span></h3>
+        <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
       </div>
     </div>
     <div class="row">
@@ -40,7 +40,7 @@
           </p>
         <% end %>
         <% if news_link.author.present? %>
-          <span>Posted by <%= news_link.author.name_with_status %>
+          <span class="muted">Posted by <%= news_link.author.name_with_status %>
             - <span><%= time_ago_in_words(news_link.created_at) %>
             ago (<%= news_link.created_at.to_formatted_s(:short) %>)</span></span>
         <% end %>

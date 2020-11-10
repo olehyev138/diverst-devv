@@ -90,11 +90,11 @@
 
 .btn-tertiary {
   color: white;
-  background-color: $diverst-grey;
+  background-color: $diverst-grey-light;
 }
 
 .btn--tertiary {
-  @include button($diverst-grey);
+  @include button($diverst-grey-light);
 }
 
 .btn--tertiary:disabled {

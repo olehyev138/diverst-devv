@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h2 class="h1-styling">Campaign Stats</h2>
+  <h1>Campaign Stats</h1>
   <%= link_to "View Graphs", view_all_campaign_graphs_path, class: "btn btn--primary hidden-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
   <%= link_to "View Graphs", view_all_campaign_graphs_path, class: "btn btn-primary visible-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
 </div>

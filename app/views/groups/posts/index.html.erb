@@ -69,7 +69,7 @@
         <%= f.input :search,
                     as: :fake,
                     label: "Search",
-                    input_html: { value:  @search || '', id: 'news_feed_search' } %>
+                    input_html: {value:  @search || ''}%>
         <%= f.button :submit, 'Search', class: 'btn btn-primary btn-sm' %>
       <% end %>
     </div>

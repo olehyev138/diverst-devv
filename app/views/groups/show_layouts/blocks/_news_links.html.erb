@@ -1,4 +1,4 @@
-<h2 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h2>
+<h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
 <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
   <%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.size < 1 %>
   <% if @posts.empty? %>

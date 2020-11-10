@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h2 class="h1-styling">Business Impacts</h2>
+  <h1>Business Impacts</h1>
   <%= link_to "New Business Impact", new_business_impact_path, class: "btn btn--primary" if BusinessImpactPolicy.new(current_user, BusinessImpact).new? %>
 </div>
 

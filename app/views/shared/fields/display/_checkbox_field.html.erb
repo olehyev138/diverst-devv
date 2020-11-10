@@ -1,6 +1,6 @@
 <% if cf.alternative_layout # Select2 %>
   <div class="field">
-    <label for="<%= cf.title.downcase %>_<%= cf.id %>" class="field__label">
+    <label class="field__label">
       <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
       <%= cf.title %>
     </label>
@@ -30,7 +30,7 @@
   </div>
 <% else # Checkboxes %>
   <div class="field">
-    <label for="<%= cf.title.downcase %>_<%= cf.id %>" class="field__label">
+    <label class="field__label">
       <abbr title="required" class="<%= required_class(cf) %>" id="<%= cf.title.downcase %>_<%= cf.id %>">*</abbr>
       <%= cf.title %>
     </label>
