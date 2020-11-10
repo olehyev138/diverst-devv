@@ -61,7 +61,7 @@
         <div class="content__header row">
           <div class="flex-row flex-row--middle full-width col-xs-12">
             <div class="flex-row__cell flex-row__cell--grow">
-              <h2><%= outcome.name %></h2>
+              <h2 class="heading1-styling"><%= outcome.name %></h2>
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@
               <% outcome.pillars.each do |pillar| %>
                 <div class="card">
                   <div class="card__section card__section--border">
-                    <h3 class="no-margin"><%= pillar.name %></h3>
+                    <h2 class="no-margin"><%= pillar.name %></h2>
                     <p><%= pillar.value_proposition %></p>
                   </div>
                   <% initiatives = pillar.initiatives.where(archived_at: nil).starts_between(@filter_from, @filter_to).order_recent %>

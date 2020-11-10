@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <title>Diverst</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -27,7 +27,6 @@
           <img class="primary-header__logo logo hidden-xs" src="<%= logo_url %>" alt="<%= current_user.enterprise.name %> logo">
           <img class="primary-header__logo logo visible-xs" src="<%= small_logo_url %>" alt="<%= current_user.enterprise.name %> logo">
         <% end %>
-        <h1 class="text-center hide-content" aria-label="Employee Dashboard">Employee Dashboard</h1>
       </div>
       <div class="flex-row__cell">
         <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>

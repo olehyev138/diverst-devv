@@ -1,5 +1,5 @@
 <% unless cf.alternative_layout %>
-  <span><%= f.label cf.title, required: cf.required, for: "#{cf.title.downcase}_#{cf.id}" %></span>
+  <span><%= f.label cf.title, required: cf.required %></span>
   <span class="error"><%= field_errors(resource, cf) %></span>
   <%= f.input cf.title.downcase.to_sym,
       label: false,
@@ -9,15 +9,14 @@
         value: resource.info[cf],
         type: "number",
         min: cf.min,
-        max: cf.max,
-        id: "#{cf.title.downcase}_#{cf.id}"
+        max: cf.max
       },
       required: cf.required,
       disabled: !cf.show_on_vcard %>
 <% else %>
   <div class="numeric_slider" style="margin-bottom: 25px;">
     <div class="row">
-      <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'}, required: cf.required, for: "#{cf.title.downcase}_#{cf.id}" %></span>
+      <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'}, required: cf.required%></span>
       <span class="error"><%= field_errors(resource, cf) %></span>
       <b><span class='current_value'></span></b>
     </div>

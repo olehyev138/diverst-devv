@@ -1,5 +1,5 @@
   <label class="field__label">
-    <%= f.label cf.title, required: cf.required, for: "#{cf.title}_" %>
+    <%= f.label cf.title, required: cf.required %>
   </label>
   <span class="error"><%= field_errors(resource, cf) %></span>
   <%= f.input cf.title.downcase.to_sym,
@@ -10,8 +10,7 @@
           name: "custom-fields[#{cf.id}]",
           value: resource.info[cf],
           type: "text",
-          placeholder: "YYYY-MM-DD", 
-          id: "#{cf.title}_"
+          placeholder: "YYYY-MM-DD"
         },
         required: cf.required,
         disabled: !cf.show_on_vcard

@@ -237,7 +237,7 @@ class GroupSelector {
         if (this.multiselect === true) {
             booleanHtml = `
                 <input value="0" type="hidden" class="${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="${GROUP_CLASSES.GROUP_PREFIX}${group.id}">
-                <input type="checkbox" aria-label="${group.name}" class="control__input boolean optional ${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="${GROUP_CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
+                <input type="checkbox" class="control__input boolean optional ${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="${GROUP_CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--checkbox"></span>
             `;
         }
@@ -254,12 +254,12 @@ class GroupSelector {
                     ${childIndicatorHtml}
                     ${groupLogoHtml}
                     <div class="col">
-                        ${booleanHtml}
+                        <label class="control">
+                            ${booleanHtml}
+                        </label>
                     </div>
                     <div class="col">
-                        <label id="${group.name}" class="control">
-                            ${group.name}
-                        </label>
+                        ${group.name}
                     </div>
                     ${expandButtonHtml}
                 </div>
@@ -302,7 +302,7 @@ class GroupSelector {
         else
             title = groupText;
 
-        return closeButton + '<h1 class="modal-title h4-styling">Choose ' + title + '</h1>' + subText;
+        return closeButton + '<h4 class="modal-title">Choose ' + title + '</h4>' + subText;
     }
 
     buildPaginationHtml() {
@@ -315,7 +315,7 @@ class GroupSelector {
             </div>
             <div class="col">
                 <div class="${GROUP_CLASSES.PAGINATION_TEXT}">
-                    <input type="text" aria-label="pagination" class="field__input ${GROUP_CLASSES.CURRENT_PAGE_INPUT}" value="${this.currentPage}"> / <span class="${GROUP_CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
+                    <input type="text" class="field__input ${GROUP_CLASSES.CURRENT_PAGE_INPUT}" value="${this.currentPage}"> / <span class="${GROUP_CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
                 </div>
             </div>
             <div class="col">

@@ -1,7 +1,7 @@
 <div class="field <%= field_error_class(resource, cf) %>">
   <%= render 'shared/fields/display/text_field', resource: resource, f: f, cf: cf if cf.type == 'TextField' %>
   <%= render 'shared/fields/display/select_field', resource: resource, f: f, cf: cf if cf.type == 'SelectField' %>
-  <%#= render 'shared/fields/display/checkbox_field', resource: resource, f: f, cf: cf if cf.type == 'CheckboxField' %>
+  <%= render 'shared/fields/display/checkbox_field', resource: resource, f: f, cf: cf if cf.type == 'CheckboxField' %>
   <%= render 'shared/fields/display/numeric_field', resource: resource, f: f, cf: cf if cf.type == 'NumericField' %>
   <%= render 'shared/fields/display/date_field', resource: resource, f: f, cf: cf if cf.type == 'DateField' %>
 </div>

@@ -9,7 +9,7 @@
                 <%= image_tag group.logo.expiring_url(3600, :thumb), alt: group.logo_description %>
               </div>
               <div class="flex-row__cell flex-row__cell--grow">
-                <h2><%= group.name %></h2>
+                <h4><%= group.name %></h4>
                 <% if group.short_description.present? %>
                 <p><%= group.short_description %></p>
                 <% else %>
@@ -38,7 +38,7 @@
                       <%= image_tag sub_group.logo.expiring_url(3600, :thumb), alt: sub_group.logo_description %>
                     </div>
                     <div class="flex-row__cell flex-row__cell--grow">
-                      <h3><%= sub_group.name %></h3>
+                      <h4><%= sub_group.name %></h4>
                       <% if sub_group.short_description.present? %>
                       <p><%= sub_group.short_description %></p>
                       <% else %>

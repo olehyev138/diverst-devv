@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h2 class="h1-styling"><%= "#{@user.name}'s Usage Stats" %></h2>
+  <h1><%= "#{@user.name}'s Usage Stats" %></h1>
 </div>
 
 <div class="content__main">
@@ -10,13 +10,13 @@
           <div class="col md-6 sm-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Number of <%= @user_metrics[fld.to_sym][:name] %></strong></p></div>
-              <div class="panel-data"><h3 class="h1-styling"><b class="accent"><%= @user_metrics[fld.to_sym][:count] %></b></h3></div>
+              <div class="panel-data"><p><b class="accent"><%= @user_metrics[fld.to_sym][:count] %></b></p></div>
             </div>
           </div>
           <div class="col md-6 sm-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Ranking</strong></p></div>
-              <div class="panel-data"><h3 class="h1-styling"><b class="accent">Top <%= @user_metrics[fld.to_sym][:percentile] %>%</b></h3></div>
+              <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[fld.to_sym][:percentile] %>%</b></p></div>
             </div>
           </div>
         </div>
