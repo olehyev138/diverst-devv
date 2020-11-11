@@ -263,23 +263,25 @@ export function Event(props) {
             event={props.event}
             commentAction={props.createEventCommentBegin}
           />
-          <Box mb={4} />
-          <Typography variant='h6'>
-            {event.total_comments}
-            &ensp;
-            <DiverstFormattedMessage {...messages.comment.total_comments} />
-          </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {event?.comments.sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
-            return (
-              <EventComment
-                key={comment.id}
-                comment={comment}
-                deleteEventCommentBegin={props.deleteEventCommentBegin}
-                currentUserId={props.currentUserId}
-              />
-            );
-          })}
+          {event?.comments && (
+            <React.Fragment>
+              <Box mb={4} />
+              <Typography variant='h6'>
+                {event.total_comments}
+                &ensp;
+                <DiverstFormattedMessage {...messages.comment.total_comments} />
+              </Typography>
+              {event?.comments.sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => (
+                <EventComment
+                  key={comment.id}
+                  comment={comment}
+                  deleteEventCommentBegin={props.deleteEventCommentBegin}
+                  currentUserId={props.currentUserId}
+                />
+              ))}
+            </React.Fragment>
+          )}
         </React.Fragment>
       )}
     </DiverstShowLoader>
