@@ -83,7 +83,7 @@ export function EmailFormInner({
                 id='content'
                 name='content'
                 margin='normal'
-                label={intl.formatMessage(messages.form.content)}
+                label={<DiverstFormattedMessage {...messages.form.content} />}
                 value={values.content}
               />
             </CardContent>
