@@ -5,7 +5,7 @@ module Pillar::Actions
 
   module ClassMethods
     def base_select
-      [:id, :name]
+      ['`pillars`.`id`', '`pillars`.`name`']
     end
   end
 end
