@@ -71,6 +71,12 @@ class Initiative < ApplicationRecord
   scope :of_annual_budget, ->(budget_id) {
     joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
   }
+  scope :with_expenses, ->{
+    new_query = select_values.present? ? self : select('`initiatives`.*')
+    new_query.select("`estimated_funding` AS estimated")
+        .select("@spent := (SELECT SUM(`amount`) FROM `initiative_expenses` WHERE `initiative_id` = `initiatives`.`id`) AS spent")
+        .select("CASE `finished_expenses` WHEN TRUE THEN @spent ELSE `estimated_funding` END AS reserved")
+  }
   scope :joined_events_for_user, ->(user_id) {
     user = User.find user_id
 
