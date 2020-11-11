@@ -25,7 +25,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import {
   selectPaginatedUsers, selectUserTotal,
-  selectIsFetchingUsers
+  selectIsFetchingUsers, selectHasChanged
 } from 'containers/User/selectors';
 import {
   getUsersBegin, userUnmount, deleteUserBegin, exportUsersBegin
@@ -74,7 +74,7 @@ export function UserListPage(props) {
     return () => {
       props.userUnmount();
     };
-  }, []);
+  }, [props.hasChanged]);
 
   const handleChangeScope = (newScope) => {
     if (UserTypes.includes(newScope)) {
@@ -138,7 +138,8 @@ UserListPage.propTypes = {
   deleteUserBegin: PropTypes.func,
   exportUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
-  handleVisitUserEdit: PropTypes.func
+  handleVisitUserEdit: PropTypes.func,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -146,6 +147,7 @@ const mapStateToProps = createStructuredSelector({
   userTotal: selectUserTotal(),
   isFetchingUsers: selectIsFetchingUsers(),
   permissions: selectPermissions(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = dispatch => ({

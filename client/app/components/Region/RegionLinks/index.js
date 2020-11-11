@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 
 import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
+import MembersIcon from '@material-ui/icons/PeopleOutline';
 import LeadersIcon from '@material-ui/icons/EmojiPeople';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -140,7 +141,7 @@ export function RegionLinks(props) {
               <Hidden smDown>
                 <BackIcon className={classes.navIcon} />
               </Hidden>
-              <DiverstFormattedMessage {...ROUTES.group.back.data.titleMessage} />
+              <DiverstFormattedMessage {...ROUTES.region.back.data.titleMessage} />
             </Button>
           </div>
 
@@ -154,8 +155,22 @@ export function RegionLinks(props) {
             <Hidden smDown>
               <HomeIcon className={classes.navIcon} />
             </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.region.home.data.titleMessage} />
           </Button>
+
+          <Permission show={permission(props.currentRegion, 'members_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.region.members.path(currentRegion.id)}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <MembersIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.region.members.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Permission show={permission(props.currentRegion, 'leaders_view?')}>
             <Button

@@ -8,6 +8,9 @@ Object.assign(Regions, {
   groupRegions(payload) {
     return axios.get(appendQueryArgs(`${this.url}/group_regions`, payload));
   },
+  members(id, payload) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/members`, payload));
+  },
 });
 
 export default Regions;

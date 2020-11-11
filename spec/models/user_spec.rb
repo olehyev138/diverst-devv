@@ -412,6 +412,17 @@ RSpec.describe User do
       end
     end
 
+    describe '#for_segment_ids' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+      let!(:segment) { create(:segment, enterprise_id: enterprise.id) }
+      let!(:user_segment) { create(:users_segment, user_id: active_user.id, segment_id: segment.id) }
+
+      it 'returns users with segments' do
+        segments = active_user.segments
+        expect(enterprise.users.for_segment_ids(segments.ids)).to eq [active_user]
+      end
+    end
+
     describe '#for_groups' do
       let!(:active_user) { create :user, enterprise: enterprise }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
