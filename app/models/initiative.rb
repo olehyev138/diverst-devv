@@ -74,7 +74,7 @@ class Initiative < ApplicationRecord
   scope :with_expenses, ->{
     new_query = select_values.present? ? self : select('`initiatives`.*')
     new_query.select("`estimated_funding` AS estimated")
-        .select("@spent := (SELECT SUM(`amount`) FROM `initiative_expenses` WHERE `initiative_id` = `initiatives`.`id`) AS spent")
+        .select("@spent := (SELECT COALESCE(SUM(`amount`), 0) FROM `initiative_expenses` WHERE `initiative_id` = `initiatives`.`id`) AS spent")
         .select("CASE `finished_expenses` WHEN TRUE THEN @spent ELSE `estimated_funding` END AS reserved")
   }
   scope :joined_events_for_user, ->(user_id) {

@@ -26,9 +26,9 @@ class BudgetItem < ApplicationRecord
     new_query
         .joins("LEFT JOIN (#{partial_initiative_query.to_sql}) events_and_expenses ON `budget_item_id` = `budget_items`.`id`")
         .group(*new_query.select_values.flat_map {|a| a.include?('*') ? column_names.map {|b| "`budget_items`.`#{b}`"} : a})
-        .select('SUM(`estimated`) AS estimated')
-        .select('SUM(`spent`) AS spent')
-        .select('SUM(`reserved`) AS reserved')
+        .select('COALESCE(SUM(`estimated`), 0) AS estimated')
+        .select('COALESCE(SUM(`spent`), 0) AS spent')
+        .select('COALESCE(SUM(`reserved`), 0) AS reserved')
   }
 
   delegate :finalized, to: :initiatives, prefix: true
