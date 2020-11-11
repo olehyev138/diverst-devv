@@ -20,6 +20,16 @@ class BudgetItem < ApplicationRecord
   scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
   scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
+  scope :with_expenses, ->{
+    new_query = select_values.present? ? self : select("`budget_items`.*")
+    partial_initiative_query = Initiative.select('budget_item_id').where.not(budget_item_id: nil).with_expenses
+    new_query
+        .joins("LEFT JOIN (#{partial_initiative_query.to_sql}) events_and_expenses ON `budget_item_id` = `budget_items`.`id`")
+        .group(*new_query.select_values.flat_map {|a| a.include?('*') ? column_names.map {|b| "`budget_items`.`#{b}`"} : a})
+        .select('SUM(`estimated`) AS estimated')
+        .select('SUM(`spent`) AS spent')
+        .select('SUM(`reserved`) AS reserved')
+  }
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiatives_expenses, prefix: 'expenses'
