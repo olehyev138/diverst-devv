@@ -227,7 +227,10 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   def new_action_instance_options(new_action)
-    new = instance_options.dup
+    new = {}
+    instance_options.each do |k, v|
+      new[k] = v.dup
+    end
     new[:scope][:action] = new_action
     new
   end
