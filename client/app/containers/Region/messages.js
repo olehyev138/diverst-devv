@@ -82,6 +82,70 @@ export default defineMessages({
   welcome: {
     id: `${scope}.home.span.welcome`,
   },
+  members: {
+    table: {
+      title: {
+        id: `${scope}.members.table.title`,
+      },
+      columns: {
+        givenName: {
+          id: `${scope}.members.table.columns.givenName`,
+        },
+        familyName: {
+          id: `${scope}.members.table.columns.familyName`,
+        },
+        status: {
+          id: `${scope}.members.table.columns.status`,
+          active: {
+            id: `${scope}.members.table.columns.status.active`,
+          },
+          inactive: {
+            id: `${scope}.members.table.columns.status.inactive`,
+          },
+        },
+      },
+      count: {
+        id: `${scope}.members.table.count`,
+      },
+    },
+    scopes: {
+      active: {
+        id: `${scope}.members.scopes.active`,
+      },
+      inactive: {
+        id: `${scope}.members.scopes.inactive`,
+      },
+      all: {
+        id: `${scope}.members.scopes.all`,
+      },
+    },
+    filter: {
+      from: {
+        id: `${scope}.members.filter.from`,
+      },
+      fromMax: {
+        id: `${scope}.members.filter.fromMax`,
+      },
+      to: {
+        id: `${scope}.members.filter.to`,
+      },
+      toMin: {
+        id: `${scope}.members.filter.toMin`,
+      },
+      toMax: {
+        id: `${scope}.members.filter.toMax`,
+      },
+      segments: {
+        id: `${scope}.members.filter.segments`,
+      },
+      changeScope: {
+        id: `${scope}.members.filter.changeScope`,
+      },
+      submit: {
+        id: `${scope}.members.filter.submit`,
+      },
+    },
+  },
   family: {
     showMore: {
       id: `${scope}.family.showMore`,
@@ -112,6 +176,9 @@ export default defineMessages({
       },
       update: {
         id: `${snackbar}.errors.update.region`
+      },
+      members: {
+        id: `${snackbar}.errors.members`
       },
     },
     success: {

@@ -181,6 +181,9 @@ export default defineMessages({
     }
   },
   region: {
+    membersListPage: {
+      id: `${scope}.region.membersListPage`
+    },
     leaders: {
       listPage: {
         id: `${scope}.region.leaders.listPage`
