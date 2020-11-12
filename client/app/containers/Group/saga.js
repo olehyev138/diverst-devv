@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import messages from './messages';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_GROUPS_BEGIN,
