@@ -13,6 +13,10 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
 
   attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, if: :singular_action?
 
+  def singular_action?
+    super || scope[:action] == 'get_enterprise'
+  end
+
   def banner
     AttachmentHelper.attachment_signed_id(object.banner)
   end
