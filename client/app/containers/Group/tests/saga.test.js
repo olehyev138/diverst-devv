@@ -447,7 +447,7 @@ describe('Update group position', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_group_position);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_position, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -472,7 +472,7 @@ describe('Update group position', () => {
 
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_group_position);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update_group_position, options: { variant: 'warning' } });
   });
 });
 
