@@ -28,4 +28,19 @@ module MailHelper
   def method_name
     caller[0] =~ (/`([^']*)'/) && $1
   end
+
+  def enterprise_logo_url(enterprise = nil)
+    enterprise_logo_or_default_('diverst-logo.svg', enterprise)
+  end
+
+
+  private
+
+  def enterprise_logo_or_default_(default_logo_name, enterprise = nil)
+    if enterprise && enterprise.theme.present? && enterprise.theme.logo.present?
+      image_url(enterprise.theme.logo.expiring_url(3601))
+    else
+      image_url(default_logo_name)
+    end
+  end
 end
