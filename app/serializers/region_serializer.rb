@@ -37,6 +37,7 @@ class RegionSerializer < ApplicationRecordSerializer
       :leaders_view?,
       :leaders_create?,
       :leaders_manage?,
+      :members_view?,
     ]
   end
 end

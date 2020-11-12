@@ -251,6 +251,9 @@ const messages = defineMessages({
     home: {
       id: `${scope}.region.home`
     },
+    members: {
+      id: `${scope}.region.members`
+    },
     leaders: {
       index: {
         id: `${scope}.region.leaders.index`

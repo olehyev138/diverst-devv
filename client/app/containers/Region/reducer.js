@@ -24,9 +24,12 @@ import {
   DELETE_REGION_BEGIN,
   DELETE_REGION_SUCCESS,
   DELETE_REGION_ERROR,
+  GET_REGION_MEMBERS_BEGIN,
+  GET_REGION_MEMBERS_SUCCESS,
+  GET_REGION_MEMBERS_ERROR,
   REGION_LIST_UNMOUNT,
   REGION_FORM_UNMOUNT,
-  REGION_ALL_UNMOUNT,
+  REGION_ALL_UNMOUNT, REGION_MEMBERS_UNMOUNT,
 } from './constants';
 
 export const initialState = {
@@ -37,6 +40,9 @@ export const initialState = {
   regionTotal: null,
   currentRegion: null,
   hasChanged: false,
+  memberList: [],
+  memberTotal: null,
+  isMembersLoading: true,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -93,6 +99,26 @@ function regionsReducer(state = initialState, action) {
       case UPDATE_REGION_ERROR:
       case DELETE_REGION_ERROR:
         draft.isCommitting = false;
+        break;
+
+      case GET_REGION_MEMBERS_BEGIN:
+        draft.isMembersLoading = true;
+        break;
+
+      case GET_REGION_MEMBERS_SUCCESS:
+        draft.memberList = action.payload.items;
+        draft.memberTotal = action.payload.total;
+        draft.isMembersLoading = false;
+        break;
+
+      case GET_REGION_MEMBERS_ERROR:
+        draft.isMembersLoading = false;
+        break;
+
+      case REGION_MEMBERS_UNMOUNT:
+        draft.isMembersLoading = true;
+        draft.memberList = [];
+        draft.memberTotal = null;
         break;
 
       case REGION_LIST_UNMOUNT:

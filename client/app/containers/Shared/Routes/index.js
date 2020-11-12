@@ -50,6 +50,7 @@ import {
   GroupMessageEditPage,
   GroupPlanUpdateCreatePage,
   RegionHomePage,
+  RegionMembersListPage,
   RegionLeadersListPage,
   RegionLeaderCreatePage,
   RegionLeaderEditPage,
@@ -445,6 +446,9 @@ export default function Routes(props) {
                   <SwitchWithProps>
                     {/* Home */}
                     <RouteWithProps exact path={ROUTES.region.home.path()}><RegionHomePage /></RouteWithProps>
+
+                    {/* Members */}
+                    <RouteWithProps exact path={ROUTES.region.members.path()}><RegionMembersListPage /></RouteWithProps>
 
                     {/* Leaders */}
                     <RouteWithProps exact path={ROUTES.region.leaders.index.path()}><RegionLeadersListPage /></RouteWithProps>
