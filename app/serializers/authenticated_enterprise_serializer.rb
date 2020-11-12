@@ -14,7 +14,7 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
   attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, if: :singular_action?
 
   def singular_action?
-    super || scope[:action] == 'get_enterprise'
+    super || scope[:action] == 'get_enterprise' || scope[:action].start_with?('update')
   end
 
   def banner
