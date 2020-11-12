@@ -7,12 +7,11 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import Interweave from 'interweave';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
+  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box
 } from '@material-ui/core';
 
 import messages from 'containers/GlobalSettings/Email/Email/messages';
@@ -21,6 +20,8 @@ import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -54,13 +55,6 @@ export function EmailFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const regex = /%{(.*?)}/g;
-  const variables = props?.email?.variables || {};
-  const replace = (whole, grouped) => {
-    const example = variables?.[grouped]?.example;
-    return example || whole;
-  };
-
 
   return (
     <React.Fragment>
@@ -81,16 +75,12 @@ export function EmailFormInner({
                 value={values.subject}
               />
               <Field
-                component={TextField}
-                onChange={handleChange}
-                disabled={props.isCommitting}
+                component={DiverstRichTextInput}
                 required
+                onChange={value => setFieldValue('content', value)}
                 fullWidth
                 id='content'
                 name='content'
-                multiline
-                rows={8}
-                variant='outlined'
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.content} />}
                 value={values.content}
@@ -103,31 +93,12 @@ export function EmailFormInner({
               </DiverstSubmit>
               <DiverstCancel
                 redirectFallback={props.links.emailsIndex}
-                variant='contained'
-                size='large'
-                className={classes.buttons}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
               </DiverstCancel>
             </CardActions>
           </Form>
-        </Card>
-        <Box mb={2} />
-        <Card>
-          <CardHeader
-            title=<DiverstFormattedMessage {...messages.preview.title} />
-            subheader={<DiverstFormattedMessage {...messages.preview.subTitle} />}
-          />
-          <CardContent>
-            <Interweave
-              content={values.subject.replace(regex, replace)}
-            />
-            <Divider />
-            <Interweave
-              content={values.content.replace(regex, replace)}
-            />
-          </CardContent>
         </Card>
         <Box mb={2} />
         <Card>

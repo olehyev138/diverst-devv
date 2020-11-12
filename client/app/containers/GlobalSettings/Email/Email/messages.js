@@ -77,7 +77,7 @@ export default defineMessages({
     },
     success: {
       update: {
-        id: `${snackbar}.success.email`
+        id: `${snackbar}.success.update.email`
       },
     }
   }
