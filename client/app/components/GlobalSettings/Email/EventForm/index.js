@@ -64,7 +64,6 @@ export function EventFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const { intl } = props;
 
   return (
     <React.Fragment>
