@@ -18,7 +18,8 @@ const props = {
   handleChangeTab: jest.fn(),
   handleFilterChange: jest.fn(),
   links: {},
-  params: {}
+  params: {},
+  customTexts: { region: 're' }
 };
 describe('<RegionMembersList />', () => {
   it('Expect to not log errors in console', () => {
