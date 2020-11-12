@@ -3,7 +3,7 @@ class Api::V1::UserController < DiverstController
     instance_options = {
         scope: {
             current_user: current_user,
-            action: nil,
+            action: 'show',
         }
     }
 
