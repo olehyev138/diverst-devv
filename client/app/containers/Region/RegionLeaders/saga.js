@@ -32,7 +32,7 @@ export function* getRegionLeaders(action) {
   } catch (err) {
     yield put(getRegionLeadersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leaders, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leaders, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -44,7 +44,7 @@ export function* getRegionLeader(action) {
   } catch (err) {
     yield put(getRegionLeaderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.leader, customTexts(customText)),
+      message: intl.formatMessage(messages.snackbars.errors.leader, customText),
       options: { variant: 'warning' }
     }));
   }
@@ -57,11 +57,11 @@ export function* createRegionLeader(action) {
     const response = yield call(api.regionLeaders.create.bind(api.regionLeaders), payload);
     yield put(createRegionLeaderSuccess());
     yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create, customText), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createRegionLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -71,11 +71,11 @@ export function* deleteRegionLeader(action) {
     yield call(api.regionLeaders.destroy.bind(api.regionLeaders), action.payload.id);
     yield put(deleteRegionLeaderSuccess());
     yield put(getRegionLeadersBegin({ region_id: action.payload.region_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete, customText), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -87,14 +87,14 @@ export function* updateRegionLeader(action) {
     yield put(updateRegionLeaderSuccess());
     yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update, customTexts(customText)),
+      message: intl.formatMessage(messages.snackbars.success.update, customText),
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateRegionLeaderError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update, customTexts(customText)),
+      message: intl.formatMessage(messages.snackbars.errors.update, customText),
       options: { variant: 'warning' }
     }));
   }

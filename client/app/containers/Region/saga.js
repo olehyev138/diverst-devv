@@ -37,7 +37,7 @@ export function* getRegions(action) {
     yield put(getRegionsSuccess(response.data.page));
   } catch (err) {
     yield put(getRegionsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -48,7 +48,7 @@ export function* getGroupRegions(action) {
     yield put(getGroupRegionsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupRegionsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.regions, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -59,7 +59,7 @@ export function* getRegion(action) {
     yield put(getRegionSuccess(response.data));
   } catch (err) {
     yield put(getRegionError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.region, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.region, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -71,11 +71,11 @@ export function* createRegion(action) {
 
     yield put(createRegionSuccess());
     yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create, customText), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createRegionError(err));
     yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -87,11 +87,11 @@ export function* updateRegion(action) {
 
     yield put(updateRegionSuccess());
     yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update, customText), options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateRegionError(err));
     yield put(push(ROUTES.admin.manage.groups.regions.index.path(action.payload.parent_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update, customText), options: { variant: 'warning' } }));
   }
 }
 
@@ -102,10 +102,10 @@ export function* deleteRegion(action) {
 
     yield put(deleteRegionSuccess());
     yield put(getGroupRegionsBegin({ group_id: action.payload.group_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete, customText), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete, customText), options: { variant: 'warning' } }));
   }
 }
 

@@ -35,25 +35,25 @@ export function RegionLeadersList(props) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.table.column_name, customTexts(props.customTexts)), field: 'user.name', query_field: 'users.last_name' },
-    { title: intl.formatMessage(messages.table.column_position, customTexts(props.customTexts)), field: 'position_name', query_field: 'position_name' }
+    { title: intl.formatMessage(messages.table.column_name, props.customTexts), field: 'user.name', query_field: 'users.last_name' },
+    { title: intl.formatMessage(messages.table.column_position, props.customTexts), field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
   if (permission(props.region, 'leaders_manage?')) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(messages.edit, customTexts(props.customTexts)),
+      tooltip: intl.formatMessage(messages.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.handleVisitRegionLeaderEdit(rowData.leader_of_id, rowData.id);
       }
     });
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: intl.formatMessage(messages.delete, customTexts(props.customTexts)),
+      tooltip: intl.formatMessage(messages.delete, props.customTexts),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts(props.customTexts))))
+        if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
           props.deleteRegionLeaderBegin({ region_id: rowData.leader_of_id, id: rowData.id });
       }
     });
@@ -88,7 +88,7 @@ export function RegionLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.table.title, customTexts(props.customTexts))}
+            title={intl.formatMessage(messages.table.title, props.customTexts)}
             onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingRegionLeaders}
