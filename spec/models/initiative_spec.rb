@@ -433,16 +433,16 @@ RSpec.describe Initiative, type: :model do
     end
 
     it 'returns true' do
-      budget = build(:budget, is_approved: true)
-      budget_item = create(:budget_item, budget: budget)
+      budget = build(:budget, is_approved: true, budget_items: build_list(:budget_item, 1))
+      budget_item = budget.budget_items.first
       initiative = create(:initiative, budget_item_id: budget_item.id)
 
       expect(initiative.approved?).to eq(true)
     end
 
     it 'returns false' do
-      budget = build(:budget, is_approved: false)
-      budget_item = create(:budget_item, budget: budget)
+      budget = create(:budget, is_approved: false, budget_items: build_list(:budget_item, 1))
+      budget_item = budget.budget_items.first
       initiative = build(:initiative, budget_item_id: budget_item.id)
 
       expect(initiative.approved?).to eq(false)
@@ -456,16 +456,16 @@ RSpec.describe Initiative, type: :model do
     end
 
     it 'returns false' do
-      budget = build(:budget, is_approved: true)
-      budget_item = create(:budget_item, budget: budget)
+      budget = create(:budget, is_approved: true, budget_items: build_list(:budget_item, 1))
+      budget_item = budget.budget_items.first
       initiative = create(:initiative, budget_item_id: budget_item.id)
 
       expect(initiative.pending?).to eq(false)
     end
 
     it 'returns false' do
-      budget = build(:budget, is_approved: false)
-      budget_item = create(:budget_item, budget: budget)
+      budget = create(:budget, is_approved: false, budget_items: build_list(:budget_item, 1))
+      budget_item = budget.budget_items.first
       initiative = build(:initiative, budget_item_id: budget_item.id)
 
       expect(initiative.pending?).to eq(true)

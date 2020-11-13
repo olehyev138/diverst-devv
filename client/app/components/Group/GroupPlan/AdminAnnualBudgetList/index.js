@@ -60,7 +60,7 @@ export function AnnualBudgetList(props, context) {
       title: intl.formatMessage(listMessages.columns.budget),
       field: 'annual_budget',
       sorting: false,
-      render: rowData => rowData.leftover ? toCurrencyString(props.intl, rowData.leftover) : intl.formatMessage(listMessages.notSet),
+      render: rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet),
     },
     {
       title: intl.formatMessage(listMessages.columns.leftover),
