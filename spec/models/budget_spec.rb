@@ -176,9 +176,9 @@ RSpec.describe Budget, type: :model do
   describe '#destroy_callbacks' do
     let!(:group) { create(:group) }
     let!(:annual_budget) { create(:annual_budget, group: group, amount: 10000) }
-    let!(:budget) { create(:budget, annual_budget: annual_budget) }
+    let!(:budget) { create(:budget, annual_budget: annual_budget, budget_items: build_list(:budget_item, 1)) }
     let!(:checklist) { create(:checklist, budget: budget) }
-    let!(:budget_item) { create(:budget_item, budget: budget) }
+    let!(:budget_item) { budget.budget_items.first }
 
     it 'removes the child objects' do
       budget.destroy

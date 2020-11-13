@@ -24,6 +24,12 @@ RSpec.describe Budget::Actions, type: :model do
       expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
     end
 
+    it 'it returns true if budget is exactly the annual budget' do
+      budget.annual_budget.update(amount: 100, closed: false)
+      budget.budget_items[0].update(estimated_amount: 100)
+      expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
+    end
+
     it 'returns nil' do
       budget.annual_budget.update(amount: 100, closed: false)
       budget.budget_items.update_all(estimated_amount: 0)
@@ -55,7 +61,7 @@ RSpec.describe Budget::Actions, type: :model do
 
   describe 'decline' do
     let!(:approver) { create(:user) }
-    let!(:budget) { create(:budget) }
+    let!(:budget) { create(:budget, is_approved: true) }
     before do
       budget.decline(approver)
     end
@@ -65,7 +71,7 @@ RSpec.describe Budget::Actions, type: :model do
     end
 
     it 'declines budget_items' do
-      budget.budget_items.each do | item |
+      budget.budget_items.reload.each do | item |
         expect(item.is_done).to eq true
       end
     end

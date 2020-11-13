@@ -15,6 +15,8 @@ RSpec.describe BudgetSerializer, type: :serializer do
     expect(serializer.serializable_hash[:id]).to eq(budget.id)
     expect(serializer.serializable_hash[:approver]).to_not be nil
     expect(serializer.serializable_hash[:requester]).to_not be nil
+    expect(serializer.serializable_hash[:budget_items]).to_not be_empty
+    expect(serializer.serializable_hash[:budget_items].first[:available_amount]).to_not be nil
     expect(serializer.serializable_hash[:group_id]).to_not be nil
   end
 
