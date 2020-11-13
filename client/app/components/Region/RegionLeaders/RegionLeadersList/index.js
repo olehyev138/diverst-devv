@@ -61,7 +61,7 @@ export function RegionLeadersList(props) {
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'region_leaders.id' : `${columns[columnId].query_field}`,
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
