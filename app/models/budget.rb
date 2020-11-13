@@ -22,6 +22,7 @@ class Budget < ApplicationRecord
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
+  validates :budget_items, presence: true
 
   delegate :currency, to: :annual_budget
 
@@ -113,7 +114,7 @@ class Budget < ApplicationRecord
   end
 
   def request_surplus?
-    unless requested_amount.present? && requested_amount < annual_budget&.amount
+    unless requested_amount.present? && requested_amount <= annual_budget&.free
 
       'This budget exceeds the annual budget'
     end
