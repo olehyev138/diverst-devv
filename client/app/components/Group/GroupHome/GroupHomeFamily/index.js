@@ -17,6 +17,7 @@ import Collapse from '@material-ui/core/Collapse';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   groupName: {
@@ -28,6 +29,8 @@ const styles = theme => ({
 });
 
 export function GroupHomeFamily({ classes, ...props }) {
+  const { intl } = props;
+
   const renderGroup = group => (
     <Grid container spacing={1} justify='space-between'>
       <Grid item xs={10}>
@@ -81,7 +84,7 @@ export function GroupHomeFamily({ classes, ...props }) {
         && (
           <React.Fragment>
             <Typography variant='h6'>
-              <DiverstFormattedMessage {...messages.sub_erg} />
+              {intl.formatMessage(messages.sub_erg, props.customTexts)}
               (
               {props.currentGroup.children.length}
               )
@@ -129,9 +132,12 @@ GroupHomeFamily.propTypes = {
   classes: PropTypes.object,
   joinGroup: PropTypes.func,
   leaveGroup: PropTypes.func,
+  intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupHomeFamily);

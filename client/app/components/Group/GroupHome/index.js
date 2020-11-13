@@ -29,6 +29,7 @@ import messages from 'containers/Group/messages';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstFormattedMessage from '../../Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   title: {
@@ -42,6 +43,7 @@ const styles = theme => ({
 });
 
 export function GroupHome({ classes, ...props }) {
+  const { intl } = props;
   const groupImage = props.currentGroup.banner_data && (
     <DiverstImg
       data={props.currentGroup.banner_data}
@@ -234,9 +236,12 @@ GroupHome.propTypes = {
   joinGroup: PropTypes.func,
   leaveGroup: PropTypes.func,
   joinSubgroups: PropTypes.func,
+  intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupHome);
