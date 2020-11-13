@@ -13,6 +13,10 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
 
   attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, if: :singular_action?
 
+  def custom_text
+    CustomTextSerializer.new(object.custom_text).as_json
+  end
+
   def singular_action?
     super || scope[:action] == 'get_enterprise' || scope[:action].start_with?('update')
   end
