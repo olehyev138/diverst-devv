@@ -219,6 +219,17 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
           </CardContent>
         </Paper>
         <Box mb={2} />
+        <FieldArray
+          name='budget_items'
+          render={arrayHelpers => (
+            <BudgetItemFormInner
+              formikProps={formikProps}
+              arrayHelpers={arrayHelpers}
+              {...props}
+            />
+          )}
+        />
+        <Box mb={2} />
         <Paper>
           <CardContent>
             <Typography color='secondary' variant='body1' component='h2'>
@@ -241,17 +252,6 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
             />
           </CardContent>
         </Paper>
-        <Box mb={2} />
-        <FieldArray
-          name='budget_items'
-          render={arrayHelpers => (
-            <BudgetItemFormInner
-              formikProps={formikProps}
-              arrayHelpers={arrayHelpers}
-              {...props}
-            />
-          )}
-        />
         <Box mb={2} />
         <Grid container spacing={2}>
           <Grid item>
