@@ -67,4 +67,57 @@ RSpec.describe BudgetItem, type: :model do
       end
     end
   end
+
+  describe '#close!' do
+    context 'budget item is closed' do
+      let(:budget_item) { create(:budget_item, is_done: true) }
+      it 'prevents budget closing' do
+        budget_item.close!
+        expect(budget_item.errors.size).to_not be 0
+        expect(budget_item.errors.full_messages).to include 'Budget Item is already closed'
+      end
+    end
+
+    context 'budget item having an active event' do
+      let!(:group) { create(:group) }
+      let!(:budget) { create(:budget, is_approved: true, group: group) }
+      let!(:budget_item) { create(:budget_item, budget: budget, estimated_amount: 200) }
+      let!(:initiative) { create(:initiative, budget_item: budget_item, estimated_funding: 100, pillar: group.outcomes.first.pillars.first) }
+      it 'prevents budget closing' do
+        budget_item.close!
+        expect(budget_item.errors.size).to_not be 0
+        expect(budget_item.errors.full_messages).to include 'There are still events using this budget item'
+      end
+    end
+
+    context 'budget item having no active event' do
+      let!(:group) { create(:group) }
+      let!(:budget) { create(
+          :budget,
+          is_approved: true,
+          group: group,
+          budget_items: [build(:budget_item, estimated_amount: 200)]
+        )
+      }
+      let!(:budget_item) { budget.budget_items.first }
+      let!(:initiative) { create(
+          :initiative,
+          budget_item: budget_item,
+          estimated_funding: 100,
+          pillar: group.outcomes.first.pillars.first,
+          start: 10.days.ago,
+          end: 5.days.ago,
+        )
+      }
+      let!(:initiatives_expenses) { create(:initiative_expense, initiative: initiative, amount: 50) }
+      it 'allows closing and refunds approved budget', pending: 'should close budget refund approved amount?' do
+        ab = budget_item.annual_budget
+        expect(ab.reload.approved).to eq 200
+        expect(initiative.finish_expenses!).to be true
+        budget_item.close!
+        expect(budget_item.errors.size).to be 0
+        expect(ab.reload.approved).to eq 50
+      end
+    end
+  end
 end

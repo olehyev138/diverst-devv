@@ -108,8 +108,9 @@ export function BudgetList(props, context) {
     tooltip: intl.formatMessage(messages.actions.delete, props.customTexts),
     disabled: !permission(rowData, 'destroy?'),
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      props.deleteBudgetBegin({ id: rowData.id });
+      // eslint-disable-next-line no-alert,no-restricted-globals
+      if (confirm(intl.formatMessage(messages.actions.deleteConfirmation)))
+        props.deleteBudgetBegin({ id: rowData.id });
     }
   }));
 

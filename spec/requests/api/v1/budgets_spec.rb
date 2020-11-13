@@ -42,7 +42,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      budget = build(route.singularize.to_sym)
+      attributes = budget.attributes
+      attributes[:budget_items] = budget.budget_items.map(&:attributes)
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
       expect(response).to have_http_status(:created)
     end
 
