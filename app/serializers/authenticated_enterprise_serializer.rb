@@ -11,7 +11,7 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :unit_of_expiry_age, :auto_archive, :theme, :timezones, :time_zone,
              :banner, :banner_file_name, :banner_data, :banner_content_type, :onboarding_consent_enabled, :onboarding_consent_message
 
-  attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, if: :singular_action?
+  attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, :sponsors, if: :singular_action?
 
   def custom_text
     CustomTextSerializer.new(object.custom_text).as_json

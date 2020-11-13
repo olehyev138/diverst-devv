@@ -28,7 +28,7 @@ class InvitedUserSerializer < ApplicationRecordSerializer
   # Custom attributes
 
   def enterprise
-    EnterpriseSerializer.new(object.enterprise).attributes
+    EnterpriseSerializer.new(object.enterprise, scope: { action: 'show' }).attributes
   end
 
   def timezones

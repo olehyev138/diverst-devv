@@ -10,6 +10,10 @@ class EnterpriseSerializer < ApplicationRecordSerializer
 
   attributes_with_permission :sponsors, if: :singular_action?
 
+  def singular_action?
+    super || scope[:action] == 'get_auth_enterprise'
+  end
+
   belongs_to :theme
 
   # Custom Attributes
