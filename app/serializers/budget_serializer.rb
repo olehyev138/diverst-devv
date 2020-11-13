@@ -4,6 +4,10 @@ class BudgetSerializer < ApplicationRecordSerializer
 
   attributes_with_permission :budget_items, if: :singular_action?
 
+  def singular_action?
+    super || ['approve', 'decline'].include?(scope[:action])
+  end
+
   def status
     object.approver.present? ? "#{object.status_title} by #{object.approver.name}" : object.status_title
   end
