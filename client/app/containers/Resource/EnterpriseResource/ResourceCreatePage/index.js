@@ -51,7 +51,7 @@ export function ResourceCreatePage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.searchFolders}
       resourceAction={props.createResourceBegin}
-      buttonText={props.intl.formatMessage(messages.create, props.customTexts)}
+      buttonText={messages.create}
       currentUser={currentUser}
       currentEnterprise={currentEnterprise}
       currentFolder={currentFolder}
