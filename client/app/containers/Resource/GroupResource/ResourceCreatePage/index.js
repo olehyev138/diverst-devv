@@ -88,7 +88,8 @@ ResourceCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
