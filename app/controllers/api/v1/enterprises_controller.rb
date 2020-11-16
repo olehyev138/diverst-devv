@@ -87,7 +87,6 @@ class Api::V1::EnterprisesController < DiverstController
     params
         .require(klass.symbol)
         .permit(
-            :id,
             :sp_entity_id,
             :idp_entity_id,
             :idp_sso_target_url,
