@@ -107,7 +107,7 @@ export function FoldersPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <FoldersList
         folders={props.folders}
         foldersTotal={props.foldersTotal}

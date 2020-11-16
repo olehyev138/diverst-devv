@@ -70,7 +70,7 @@ export function EventPage(props) {
   const { currentUser, currentEvent } = props;
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <Event
         currentUserId={currentUser.user_id}
         createEventCommentBegin={props.createEventCommentBegin}

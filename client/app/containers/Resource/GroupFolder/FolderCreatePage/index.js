@@ -52,7 +52,7 @@ export function FolderCreatePage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <FolderForm
         getFoldersBegin={props.getFoldersBegin}
         selectFolders={props.folders}

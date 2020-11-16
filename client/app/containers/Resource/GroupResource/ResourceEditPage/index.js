@@ -63,7 +63,7 @@ export function ResourceEditPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <ResourceForm
         edit
         getFoldersBegin={props.getFoldersBegin}

@@ -12,13 +12,14 @@ import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
 import { selectIsCommitting } from 'containers/Event/selectors';
+
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
@@ -43,7 +44,7 @@ export function EventCreatePage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <EventForm
         eventAction={props.createEventBegin}
         isCommitting={props.isCommitting}
@@ -64,13 +65,15 @@ EventCreatePage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
-  location: PropTypes.object
+  location: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   isCommitting: selectIsCommitting(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

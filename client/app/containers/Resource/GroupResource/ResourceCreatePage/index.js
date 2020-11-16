@@ -57,7 +57,7 @@ export function ResourceCreatePage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <ResourceForm
         getFoldersBegin={props.getFoldersBegin}
         selectFolders={props.searchFolders}

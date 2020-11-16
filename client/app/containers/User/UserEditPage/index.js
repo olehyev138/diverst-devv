@@ -58,7 +58,7 @@ export function UserEditPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts}/>
       <UserForm
         edit
         userAction={props.updateUserBegin}

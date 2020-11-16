@@ -189,7 +189,7 @@ export function GroupMemberListPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <GroupMemberList
         memberList={props.memberList}
         memberTotal={props.memberTotal}
