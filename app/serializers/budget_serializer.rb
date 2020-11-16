@@ -6,6 +6,12 @@ class BudgetSerializer < ApplicationRecordSerializer
     object.approver.present? ? "#{object.status_title} by #{object.approver.name}" : object.status_title
   end
 
+  def budget_items
+    object.budget_items.map do |budget_item|
+      BudgetItemSerializer.new(budget_item, **instance_options).as_json
+    end
+  end
+
   def policies
     super + [:approve?]
   end
