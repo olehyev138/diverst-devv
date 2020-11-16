@@ -208,6 +208,41 @@
     <%= render 'devise/invitations/consent_modal' %>
 
     <script>
+      $(document).on('ready', function(){
+        function formIsNotValid() {
+          let form = document.getElementById('edit_user');
+          $form = $(form)
+          
+          var $password  = $form.find('input#user_password');
+          var $passwordConfirmation = $form.find('input#user_password_confirmation');
+          var $firstName = $form.find('input#user_first_name');
+          var $lastName = $form.find('input#user_last_name');
+
+          if( ($password.val() != $passwordConfirmation.val()) || (($password.val()=='' && $passwordConfirmation.val()=='')) || ($password.val().length < 8) ) {
+            return true;
+          } 
+
+          if($firstName.val()=='' || $lastName.val()=='') {
+            return true;
+          }
+        }
+
+
+        if(formIsNotValid()) {
+          $('input[type="submit"]').prop('disabled', true);
+        }
+
+        $('#user_password, #user_password_confirmation, #user_first_name, #user_last_name').on('keyup change', function(){
+          var formIsValid = formIsNotValid();
+          
+          if(!formIsNotValid()){
+            $('input[type="submit"]').prop('disabled', false);
+          }else{
+            $('input[type="submit"]').prop('disabled', true);
+          }
+        });
+      });
+
       function toggle_calendar() {
         $( "#calendar" ).slideToggle( "slow", function() {
           // Animation complete.
