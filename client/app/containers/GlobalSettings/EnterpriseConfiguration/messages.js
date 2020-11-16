@@ -8,6 +8,7 @@ import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.GlobalSettings.Configurations';
 export const snackbar = 'diverst.snackbars.GlobalSettings.EnterpriseConfiguration';
+
 export default defineMessages({
   update: {
     id: `${scope}.button.update`,
@@ -47,6 +48,12 @@ export default defineMessages({
   },
   scope_module: {
     id: `${scope}.switch.scope_module`,
+  },
+  sso_enable: {
+    id: `${scope}.switch.sso_enable`,
+  },
+  sso_setting: {
+    id: `${scope}.label.sso_setting`,
   },
   onboarding_emails: {
     id: `${scope}.switch.onboarding_emails`,
