@@ -87,6 +87,7 @@ class Api::V1::EnterprisesController < DiverstController
     params
         .require(klass.symbol)
         .permit(
+            :id,
             :sp_entity_id,
             :idp_entity_id,
             :idp_sso_target_url,
@@ -94,6 +95,7 @@ class Api::V1::EnterprisesController < DiverstController
             :idp_cert,
             :saml_first_name_mapping,
             :saml_last_name_mapping,
+            :has_enabled_saml,
           )
   end
 

@@ -27,7 +27,7 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log(values);
+
   return (
     <Card>
       <Form>
