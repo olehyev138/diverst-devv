@@ -49,10 +49,10 @@ export default defineMessages({
   scope_module: {
     id: `${scope}.switch.scope_module`,
   },
-  sso_enable: {
+  saml_enable: {
     id: `${scope}.switch.sso_enable`,
   },
-  sso_setting: {
+  saml_setting: {
     id: `${scope}.label.sso_setting`,
   },
   onboarding_emails: {

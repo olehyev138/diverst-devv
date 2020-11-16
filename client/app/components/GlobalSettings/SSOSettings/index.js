@@ -27,6 +27,7 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values);
   return (
     <Card>
       <Form>
@@ -100,21 +101,21 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
         </CardContent>
         <Card variant='outlined'>
           <CardContent>
-            <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.sso_setting} /></Typography>
+            <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.saml_setting} /></Typography>
             <FormControl>
               <FormControlLabel
                 labelPlacement='end'
-                label={<DiverstFormattedMessage {...messages.sso_enable} />}
+                label={<DiverstFormattedMessage {...messages.saml_enable} />}
                 control={(
                   <Field
                     component={Switch}
                     onChange={handleChange}
                     color='primary'
-                    id='sso_enabled'
-                    name='sso_enabled'
+                    id='has_enabled_saml'
+                    name='has_enabled_saml'
                     margin='normal'
-                    checked={values.sso_enabled}
-                    value={values.sso_enabled}
+                    checked={values.has_enabled_saml}
+                    value={values.has_enabled_saml}
                   />
                 )}
               />
@@ -142,7 +143,7 @@ export function SSOSettings(props) {
     idp_slo_target_url: { default: '' },
     idp_cert: { default: '' },
     sp_entity_id: { default: '' },
-    sso_enabled: { default: false }
+    has_enabled_saml: { default: false }
   });
 
   const [open, setOpen] = React.useState(false);
