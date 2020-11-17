@@ -207,7 +207,7 @@ export function RegionMembersList(props) {
       </Grid>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={intl.formatMessage(messages.members.table.title, props.customTexts)}
+        title={messages.members.table.title}
         handlePagination={props.handlePagination}
         handleSearching={props.handleSearching}
         isLoading={props.isLoading}

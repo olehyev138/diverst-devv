@@ -88,7 +88,7 @@ export function RegionLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.table.title, props.customTexts)}
+            title={messages.table.title}
             onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingRegionLeaders}
