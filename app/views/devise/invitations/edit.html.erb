@@ -217,13 +217,16 @@
           var $passwordConfirmation = $form.find('input#user_password_confirmation');
           var $firstName = $form.find('input#user_first_name');
           var $lastName = $form.find('input#user_last_name');
-
-          if( ($password.val() != $passwordConfirmation.val()) || (($password.val()=='' && $passwordConfirmation.val()=='')) || ($password.val().length < 8) ) {
-            return true;
-          } 
-
+          var enterpriseSamlEnabled = <%= !resource.enterprise.has_enabled_saml? %>;
+          
           if($firstName.val()=='' || $lastName.val()=='') {
             return true;
+          }
+          
+          if(enterpriseSamlEnabled) {
+            if( ($password.val() != $passwordConfirmation.val()) || (($password.val()=='' && $passwordConfirmation.val()=='')) || ($password.val().length < 8) ) {
+              return true;
+            } 
           }
         }
 
@@ -232,9 +235,7 @@
           $('input[type="submit"]').prop('disabled', true);
         }
 
-        $('#user_password, #user_password_confirmation, #user_first_name, #user_last_name').on('keyup change', function(){
-          var formIsValid = formIsNotValid();
-          
+        $('#user_first_name, #user_last_name, #user_password, #user_password_confirmation').on('keyup change', function(){
           if(!formIsNotValid()){
             $('input[type="submit"]').prop('disabled', false);
           }else{
