@@ -154,6 +154,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               color='primary'
               to={ROUTES.admin.manage.groups.regions.index.path(group.id)}
               component={WrappedNavLink}
+              disabled={draggable}
             >
               <DiverstFormattedMessage {...messages.manage_regions} />
             </Button>
