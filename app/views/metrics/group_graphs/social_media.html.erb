@@ -1,7 +1,7 @@
 <%= render partial: 'components/group_selector', locals: { id: "group-scope-selector", classes: "group-selector-graphs", multiselect: true } %>
 
 <div class="content__header">
-  <h1>Social Media</h1>
+  <h2 class="h1-styling">Social Media</h2>
 
   <button type="button" class="btn btn--primary btn--small hidden-xs" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize %></button>
   <button type="button" class="btn btn--secondary btn--small hidden-xs" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
@@ -14,7 +14,7 @@
   <div id="groups-list-container" class="collapse">
     <div class="card">
       <div class="card__section">
-        <h4><b>Filtered <%= c_t(:erg).pluralize %></b></h4>
+        <h3 class="h4-styling"><b>Filtered <%= c_t(:erg).pluralize %></b></h3>
         <div class="groups-list"><h4>No filter</h4></div>
       </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="card__section">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4>Messages per <%= c_t(:erg) %></h4>
+          <h3 class="h4-styling">Messages per <%= c_t(:erg) %></h3>
           <%= render 'components/range_selector' %>
           <div class="card__action">
             <a href="#" class="csv-export-link hidden-xs" data-url="<%= messages_per_group_metrics_groups_path(format: :csv) %>">Export CSV</a>
@@ -42,7 +42,7 @@
     <div class="card__section">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4>Views per News Link</h4>
+          <h3 class="h4-styling">Views per News Link</h3>
           <%= render 'components/range_selector' %>
           <div class="card__action">
             <a href="#" class="csv-export-link hidden-xs" data-url="<%= views_per_news_link_metrics_groups_path(format: :csv) %>">Export CSV</a>

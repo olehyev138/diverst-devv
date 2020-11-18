@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1><%= @poll.title %></h1>
+  <h2 class="h1-styling"><%= @poll.title %></h2>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
       <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary hidden-xs" %>
@@ -21,21 +21,21 @@
       <div class="row">
         <div class="col sm-6 md-3 lg-2">
           <small>Invitations</small>
-          <h2><%= @poll.targeted_users.count %></h2>
+          <h3><%= @poll.targeted_users.count %></h3>
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Responses</small>
-          <h2><%= @poll.responses.count %></h2>
+          <h3><%= @poll.responses.count %></h3>
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Response rate</small>
-          <h2><%= @poll.targeted_users.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_users.count * 100).to_i}%" : "N/A" %></h2>
+          <h3><%= @poll.targeted_users.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_users.count * 100).to_i}%" : "N/A" %></h3>
         </div>
       </div>
     </div>
   </div>
 
-  <h3>Field graphs</h3>
+  <h2>Field graphs</h2>
 
   <% if @graphs.empty? %>
     <div class="card">
@@ -54,7 +54,7 @@
                   <%= link_to "Edit", edit_poll_graph_path(@poll, graph) %> -
                 </div>
               <% end %>
-              <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>
+              <h3 class="no-margin"><%= truncate(graph.title, length: 30) %></h3>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div
                 id="graph_<%= graph.id %>"
@@ -70,7 +70,7 @@
     </div>
   <% end %>
 
-  <h3>Textual answers</h3>
+  <h2>Textual answers</h2>
 
   <div class="card">
     <div class="card__section">
@@ -89,7 +89,7 @@
 
   <% if @poll.responses.any? %>
 
-    <h3>Responses</h3>
+    <h2>Responses</h2>
 
     <div class="card">
       <div class="card__section">

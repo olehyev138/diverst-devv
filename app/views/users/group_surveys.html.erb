@@ -12,7 +12,7 @@
               </div>
             <% end %>
           <% else %>
-            <h3><%= @is_own_survey?'You':'User'%> didn't complete this survey</h3>
+            <h2 class="h3-styling"><%= @is_own_survey?'You':'User'%> didn't complete this survey</h2>
           <% end %>
           <% if @is_own_survey  %>
             <%= link_to "Edit Answers", survey_group_questions_path(user_group.group), class: "btn btn--primary" %>
@@ -20,7 +20,7 @@
         </div>
       <% elsif @individual %>
         <div class="card__section card__section--border">
-          <h3><%= "#{user_group.group.name} does not have a survey" %></h3>
+          <h2 class="h3-styling"><%= "#{user_group.group.name} does not have a survey" %></h2>
         </div>
       <% end %>
     <% end %>

@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Idea categories</h1>
+  <h2 class="h1-styling">Idea categories</h2>
   <%= link_to "New Category", new_idea_category_path, class: "btn btn--primary" if IdeaCategoryPolicy.new(current_user, IdeaCategory).new? %>
 </div>
 
