@@ -213,18 +213,18 @@
           let form = document.getElementById('edit_user');
           $form = $(form)
           
-          var $password  = $form.find('input#user_password');
-          var $passwordConfirmation = $form.find('input#user_password_confirmation');
-          var $firstName = $form.find('input#user_first_name');
-          var $lastName = $form.find('input#user_last_name');
-          var enterpriseSamlEnabled = <%= !resource.enterprise.has_enabled_saml? %>;
+          let password  = $form.find('input#user_password');
+          let passwordConfirmation = $form.find('input#user_password_confirmation');
+          let firstName = $form.find('input#user_first_name');
+          let lastName = $form.find('input#user_last_name');
+          let enterpriseSamlEnabled = <%= !resource.enterprise.has_enabled_saml? %>;
           
-          if($firstName.val()=='' || $lastName.val()=='') {
+          if(firstName.val()==='' || lastName.val()==='') {
             return true;
           }
           
           if(enterpriseSamlEnabled) {
-            if( ($password.val() != $passwordConfirmation.val()) || (($password.val()=='' && $passwordConfirmation.val()=='')) || ($password.val().length < 8) ) {
+            if( (password.val() !== passwordConfirmation.val()) || ((password.val()==='' && passwordConfirmation.val()==='')) || (password.val().length < 8) ) {
               return true;
             } 
           }
