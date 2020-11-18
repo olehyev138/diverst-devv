@@ -1,4 +1,4 @@
-module ReactApplicationHelper
+module ApiHelper
   def to_bool(string)
     case string&.downcase
     when nil then nil
