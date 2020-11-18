@@ -119,7 +119,11 @@ class Initiative < ApplicationRecord
       )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    unscope(:left_joins).joins(
+    new_query = self
+    new_query = new_query.unscope(:left_joins)
+    new_query = new_query.unscope(:joins)
+    new_query.eager_load_values = []
+    new_query.joins(
         'LEFT OUTER JOIN `initiative_participating_groups` '\
           'ON `initiative_participating_groups`.`initiative_id` = `initiatives`.`id` '\
         'LEFT OUTER JOIN `pillars` ' \
@@ -141,7 +145,8 @@ class Initiative < ApplicationRecord
           'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
             'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
 		    'LEFT OUTER JOIN `user_groups` '\
-          'ON `user_groups`.`group_id` = `groups`.`id` '
+          'ON `user_groups`.`group_id` = `groups`.`id` '\
+		    "JOIN policy_groups ON policy_groups.user_id = #{user.id.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")}"
       ).where(valid_ors.join(' OR '))
   }
 
