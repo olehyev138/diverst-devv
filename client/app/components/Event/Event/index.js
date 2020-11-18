@@ -237,24 +237,28 @@ export function Event(props) {
                   </React.Fragment>
                 )}
               </Grid>
-              <Grid item xs={3}>
-                {event.location && (
-                  <React.Fragment>
+              {(event.location || permission(props.event, 'attendees?')) && (
+                <Grid item xs={3}>
+                  {event.location && (
+                    <React.Fragment>
+                      <Typography className={classes.dataHeaders}>
+                        <DiverstFormattedMessage {...messages.inputs.location} />
+                      </Typography>
+                      <Typography color='textSecondary' className={classes.data}>
+                        {event.location}
+                      </Typography>
+                    </React.Fragment>
+                  )}
+                  <Permission show={permission(props.event, 'attendees?')}>
                     <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.location} />
+                      <DiverstFormattedMessage {...messages.inputs.attendee} />
                     </Typography>
                     <Typography color='textSecondary' className={classes.data}>
-                      {event.location}
+                      {event.total_attendees}
                     </Typography>
-                  </React.Fragment>
-                )}
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.inputs.attendee} />
-                </Typography>
-                <Typography color='textSecondary' className={classes.data}>
-                  {event.total_attendees}
-                </Typography>
-              </Grid>
+                  </Permission>
+                </Grid>
+              )}
             </Grid>
           </Paper>
           <Box mb={4} />
