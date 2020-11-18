@@ -207,7 +207,7 @@ module ApplicationHelper
 
   def enterprise_logo_or_default(default_logo_name, enterprise = nil)
     enterprise = enterprise || default_enterprise_for_styling
-
+    
     if enterprise && enterprise.theme.present? && enterprise.theme.logo.present?
       enterprise.theme.logo.expiring_url(3601)
     else
