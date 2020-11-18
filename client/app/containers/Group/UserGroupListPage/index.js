@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -27,12 +27,29 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
 
+const defaultAllGroupsParams = Object.freeze({
+  count: 5,
+  page: 0,
+  orderBy: 'position',
+  order: 'asc',
+  query_scopes: ['all_parents'],
+  with_children: true
+});
+
 export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'], with_children: true });
   const [displayMyGroups, setDisplayMyGroups] = useState(false);
+
+  const defaultJoinedGroupsParams = useMemo(() => Object.freeze({
+    count: 5,
+    page: 0,
+    orderBy: 'position',
+    order: 'asc',
+    query_scopes: [['joined_groups', props.user?.user_id]],
+  }), [props.user?.user_id]);
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -48,7 +65,7 @@ export function UserGroupListPage(props) {
   };
 
   const getJoinedGroups = () => {
-    const newParams = { count: 5, page: 0, order: params.order, query_scopes: [['joined_groups', props.user.user_id]] };
+    const newParams = { ...defaultJoinedGroupsParams, order: params.order, orderBy: params.orderBy };
 
     setParams(newParams);
     props.getGroupsBegin(newParams);
@@ -56,25 +73,11 @@ export function UserGroupListPage(props) {
   };
 
   const getAllGroups = () => {
-    const newParams = { count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] };
+    const newParams = { ...defaultAllGroupsParams, order: params.order, orderBy: params.orderBy };
 
     setParams(newParams);
     props.getGroupsBegin(newParams);
     setDisplayMyGroups(false);
-  };
-
-  // Filter Groups to only contain children who have been joined
-  const filterJoinedGroups = (groupList) => {
-    const parentGroups = [];
-
-    groupList.forEach(parentGroup => (
-      parentGroup.children.length > 0 ? (
-        parentGroups.push(Object.assign(parentGroup, { children: parentGroup.children.filter(child => child.current_user_is_member) }))
-      ) : (
-        parentGroups.push(parentGroup)
-      )
-    ));
-    return parentGroups;
   };
 
   return (
@@ -106,7 +109,7 @@ export function UserGroupListPage(props) {
         <Grid item xs={12}>
           <GroupList
             isLoading={props.isLoading}
-            groups={!displayMyGroups ? props.groups : filterJoinedGroups(props.groups)}
+            groups={props.groups}
             groupTotal={props.groupTotal}
             defaultParams={params}
             deleteGroupBegin={props.deleteGroupBegin}

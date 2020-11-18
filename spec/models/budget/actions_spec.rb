@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Budget::Actions, type: :model do
   describe 'base_includes' do
-    let(:base_includes) { [:budget_items] }
-    it { expect(Budget.base_includes).to eq base_includes }
+    let(:base_includes) { [:approver, :requester, :budget_items] }
+    it { expect(Budget.base_includes(Request.create_request(nil))).to eq base_includes }
   end
 
   describe 'approval_blocker' do

@@ -1,5 +1,5 @@
 class EmailSerializer < ApplicationRecordSerializer
-  attributes :variables
+  attributes_with_permission :variables, if: :singular_action?
 
   def serialize_all_fields
     true

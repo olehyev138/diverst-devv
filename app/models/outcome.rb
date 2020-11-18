@@ -1,6 +1,7 @@
 class Outcome < ApplicationRecord
+  include Outcome::Actions
   belongs_to :group
-  has_many :pillars, dependent: :destroy
+  has_many :pillars, dependent: :destroy, inverse_of: :outcome
 
   accepts_nested_attributes_for :pillars, reject_if: :all_blank, allow_destroy: true
   validates_length_of :name, maximum: 191
