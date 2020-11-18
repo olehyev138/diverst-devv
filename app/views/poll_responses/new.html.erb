@@ -1,8 +1,12 @@
 <div class="content__header">
-  <img class="logo logo--large" src="<%=
+  <h1>
+  <img class="logo logo--large" 
+  alt="company logo"
+  src="<%=
     ((current_user.enterprise.theme.nil? || current_user.enterprise.theme.logo_file_name.nil?) ?
        image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.expiring_url(3600))
   %>">
+  </h1>
 </div>
 
 <div class="content__main">

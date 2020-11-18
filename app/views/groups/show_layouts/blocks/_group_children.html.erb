@@ -6,9 +6,9 @@
 
 			<% if GroupPolicy.new(current_user, @group).manage? %>
 			<div class="dropdown">
-				<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-info-sign"></span>
 				<div class="dropdown-content">
-					<p>Create Categories for <%= c_t(:sub_erg).pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
+					<p><%= link_to "Create Categories for #{c_t(:sub_erg).pluralize}", group_categories_url(parent_id: @group.id) %></p>
 				</div>
 			</div>
 			<% end %>

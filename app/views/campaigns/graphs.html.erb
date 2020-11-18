@@ -1,5 +1,5 @@
 <div class="content__header">
-    <h1><%= @campaign.title %></h1>
+    <h2 class="h1-styling"><%= @campaign.title %></h2>
     <%= link_to "View Stats", campaign_stats_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
 </div>
 

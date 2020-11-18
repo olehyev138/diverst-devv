@@ -91,6 +91,7 @@ gem 'oauth2'
 gem 'microsoft_graph', git: 'https://github.com/TeamDiverst/msgraph-sdk-ruby.git', branch: 'propagate_setting_dirty_flags_upwards'
 gem 'attr_encrypted', '~> 3.1.0'
 gem 'chartkick'
+gem 'premailer-rails'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

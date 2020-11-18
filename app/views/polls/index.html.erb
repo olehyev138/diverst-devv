@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Surveys</h1>
+  <h2 class="h1-styling">Surveys</h2>
   <%= link_to "New Survey", new_poll_path, class: "btn btn--primary hidden-xs" if PollPolicy.new(current_user, Poll).new? %>
   <%= link_to "New Survey", new_poll_path, class: "btn btn-primary visible-xs" if PollPolicy.new(current_user, Poll).new? %>
 </div>
@@ -28,7 +28,7 @@
                 <td><%= poll.created_at.to_s :reversed_slashes %></td>
                 <td>
                   <% if poll.published? %>
-                    <%= link_to "Link", new_poll_poll_response_path(poll), target: '_blank' %>
+                    <%= link_to "Answer Survey", new_poll_poll_response_path(poll), target: '_blank' %>
                     -
                   <% end %>
                   <%= link_to "Edit", edit_poll_path(poll) if PollPolicy.new(current_user, poll).edit? %>

@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Logs</h1>
+  <h2 class="h1-styling">Logs</h2>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
       <%= link_to "Export CSV", logs_path(format: :csv), class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV" %>
@@ -14,28 +14,33 @@
         <div class="row">
           <% if GroupPolicy.new(current_user, nil).index? %>
             <div class="col sm-5">
+              <%= f.label :trackable_id_in, "Filter by group", for: "filter_by_group" %>
               <%= f.input :trackable_id_in,
                     as: :select,
                     collection: @groups,
-                    input_html: { class: "select2-field-groups", multiple: true },
-                    label: "Filter by group",
+                    input_html: { class: "select2-field-groups", multiple: true, id: "filter_by_group" },
+                    label: false,
                     required: false
               %>
             </div>
           <% end %>
           <div class="col sm-5">
             <div class="col sm-6">
+              <%= f.label :created_at_gteq, "Logs from", for: "filter_logs_from" %>
               <%= f.input :created_at_gteq,
                     as: :date_picker,
-                    label: "Logs from",
-                    required: false
+                    label: false,
+                    required: false,
+                    input_html: { id: 'filter_logs_from' }
               %>
             </div>
             <div class="col sm-6">
+              <%= f.label :created_at_lteq, "Logs to", for: "filter_logs_to" %>
               <%= f.input :created_at_lteq,
                     as: :date_picker,
-                    label: "Logs to",
-                    required: false
+                    label: false,
+                    required: false, 
+                    input_html: { id: 'filter_logs_to' }
               %>
             </div>
           </div>

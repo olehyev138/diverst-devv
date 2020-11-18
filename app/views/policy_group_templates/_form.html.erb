@@ -11,29 +11,29 @@
         <h2>Enterprise</h2>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Logs</h4>
+            <h3 class="h4-styling">Logs</h3>
             <%= f.hidden_field :logs_view, value: 0 %>
             <%= f.input :logs_view, wrapper: :boolean_checkbox, label: "View" %>
           </div>
           <div class="col md-3">
-            <h4>Permissions</h4>
+            <h3 class="h4-styling">Permissions</h3>
             <%= f.hidden_field :permissions_manage, value: 0 %>
             <%= f.input :permissions_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4>SSO</h4>
+            <h3 class="h4-styling">SSO</h3>
             <%= f.hidden_field :sso_manage, value: 0 %>
             <%= f.input :sso_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4>Global Calendar</h4>
+            <h3 class="h4-styling">Global Calendar</h3>
             <%= f.hidden_field :global_calendar, value: 0 %>
             <%= f.input :global_calendar, wrapper: :boolean_checkbox, label: "View" %>
           </div>
         </div>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Enterprise resources</h4>
+            <h3 class="h4-styling">Enterprise resources</h3>
             <%= f.hidden_field :enterprise_resources_index, value: 0 %>
             <%= f.input :enterprise_resources_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :enterprise_resources_create, value: 0 %>
@@ -42,17 +42,17 @@
             <%= f.input :enterprise_resources_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Diversity and Culture Index</h4>
+            <h3 class="h4-styling">Diversity and Culture Index</h3>
             <%= f.hidden_field :diversity_manage, value: 0 %>
             <%= f.input :diversity_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4>Branding</h4>
+            <h3 class="h4-styling">Branding</h3>
             <%= f.hidden_field :branding_manage, value: 0 %>
             <%= f.input :branding_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4>Metrics dashboards</h4>
+            <h3 class="h4-styling">Metrics dashboards</h3>
             <%= f.hidden_field :metrics_dashboards_index, value: 0 %>
             <%= f.input :metrics_dashboards_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :metrics_dashboards_create, value: 0 %>
@@ -61,14 +61,14 @@
         </div>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Users</h4>
+            <h3 class="h4-styling">Users</h3>
             <%= f.hidden_field :users_index, value: 0 %>
             <%= f.input :users_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :users_manage, value: 0 %>
             <%= f.input :users_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4><%= c_t(:segment).pluralize %></h4>
+            <h3 class="h4-styling"><%= c_t(:segment).pluralize %></h3>
             <%= f.hidden_field :segments_index, value: 0 %>
             <%= f.input :segments_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :segments_create, value: 0 %>
@@ -77,13 +77,13 @@
             <%= f.input :segments_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Mentorship</h4>
+            <h3 class="h4-styling">Mentorship</h3>
             <%= f.hidden_field :mentorship_manage, value: 0 %>
             <%= f.input :mentorship_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
 
           <div class="col md-3">
-            <h4>Settings</h4>
+            <h3 class="h4-styling">Settings</h3>
             <%= f.hidden_field :auto_archive_manage, value: 0 %>
             <%= f.input :auto_archive_manage, wrapper: :boolean_checkbox, label: 'Manage Auto Archive Settings' %>
 
@@ -97,7 +97,7 @@
         <h2>General</h2>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Campaigns</h4>
+            <h3 class="h4-styling">Campaigns</h3>
             <%= f.hidden_field :campaigns_index, value: 0 %>
             <%= f.input :campaigns_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :campaigns_create, value: 0 %>
@@ -106,7 +106,7 @@
             <%= f.input :campaigns_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Surveys</h4>
+            <h3 class="h4-styling">Surveys</h3>
             <%= f.hidden_field :polls_index, value: 0 %>
             <%= f.input :polls_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :polls_create, value: 0 %>
@@ -115,7 +115,7 @@
             <%= f.input :polls_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4><%= c_t(:erg).pluralize %></h4>
+            <h3 class="h4-styling"><%= c_t(:erg).pluralize %></h3>
             <%= f.hidden_field :groups_index, value: 0 %>
             <%= f.input :groups_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :groups_create, value: 0 %>
@@ -127,10 +127,10 @@
       </div>
 
       <div class="card__section card__section--border">
-        <h2><%= c_t(:erg) %> management</h2>
+        <h3 class="h4-styling"><%= c_t(:erg) %> management</h3>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Events</h4>
+            <h3 class="h4-styling">Events</h3>
             <%= f.hidden_field :initiatives_index, value: 0 %>
             <%= f.input :initiatives_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :initiatives_create, value: 0 %>
@@ -139,7 +139,7 @@
             <%= f.input :initiatives_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Messages</h4>
+            <h3 class="h4-styling">Messages</h3>
             <%= f.hidden_field :group_messages_index, value: 0 %>
             <%= f.input :group_messages_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :group_messages_create, value: 0 %>
@@ -148,14 +148,14 @@
             <%= f.input :group_messages_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Members</h4>
+            <h3 class="h4-styling">Members</h3>
             <%= f.hidden_field :groups_members_index, value: 0 %>
             <%= f.input :groups_members_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :groups_members_manage, value: 0 %>
             <%= f.input :groups_members_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
-            <h4>Budgets</h4>
+            <h3 class="h4-styling">Budgets</h3>
             <%= f.hidden_field :groups_budgets_index, value: 0 %>
             <%= f.input :groups_budgets_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :groups_budgets_request, value: 0 %>
@@ -168,7 +168,7 @@
         </div>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>News</h4>
+            <h3 class="h4-styling">News</h3>
             <%= f.hidden_field :news_links_index, value: 0 %>
             <%= f.input :news_links_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :news_links_create, value: 0 %>
@@ -178,7 +178,7 @@
           </div>
 
           <div class="col md-3">
-            <h4>Leaders</h4>
+            <h3 class="h4-styling">Leaders</h3>
             <%= f.hidden_field :group_leader_index, value: 0 %>
             <%= f.input :group_leader_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :group_leader_manage, value: 0 %>
@@ -186,31 +186,31 @@
           </div>
 
         <div class="col md-3">
-          <h4>Posts</h4>
+          <h3 class="h4-styling">Posts</h3>
           <%= f.hidden_field :group_posts_index, value: 0 %>
           <%= f.input :group_posts_index, wrapper: :boolean_checkbox, label: "View" %>
           <%= f.hidden_field :manage_posts, value: 0 %>
           <%= f.input :manage_posts, wrapper: :boolean_checkbox, label: "Manage" %>
         </div>
         <div class="col md-3">
-            <h4>Layouts</h4>
+            <h3 class="h4-styling">Layouts</h3>
             <%= f.hidden_field :groups_layouts_manage, value: 0 %>
             <%= f.input :groups_layouts_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
         </div>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
-            <h4>Settings</h4>
+            <h3 class="h4-styling">Settings</h3>
             <%= f.hidden_field :group_settings_manage, value: 0 %>
             <%= f.input :group_settings_manage, wrapper: :boolean_checkbox, label: 'Manage Group Settings' %>
           </div>
           <div class="col md-3">
-            <h4>Insights</h4>
+            <h3 class="h4-styling">Insights</h3>
             <%= f.hidden_field :groups_insights_manage, value: 0 %>
             <%= f.input :groups_insights_manage, wrapper: :boolean_checkbox, label: 'Manage Group Insights' %>
           </div>
           <div class="col md-3">
-            <h4>Social Links</h4>
+            <h3 class="h4-styling">Social Links</h3>
             <%= f.hidden_field :social_links_index, value: 0 %>
             <%= f.input :social_links_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :social_links_create, value: 0 %>
@@ -219,7 +219,7 @@
             <%= f.input :social_links_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Resources</h4>
+            <h3 class="h4-styling">Resources</h3>
             <%= f.hidden_field :group_resources_index, value: 0 %>
             <%= f.input :group_resources_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :group_resources_create, value: 0 %>

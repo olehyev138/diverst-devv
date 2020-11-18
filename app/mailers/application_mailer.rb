@@ -1,6 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   helper Rails.application.routes.url_helpers # Allows us to call url helpers
   include MailHelper
+  helper :mail
 
   from_address = Mail::Address.new 'info@diverst.com'
   from_address.display_name = 'Diverst'
