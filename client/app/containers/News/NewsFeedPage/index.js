@@ -22,7 +22,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
@@ -141,6 +141,7 @@ export function NewsFeedPage(props, context) {
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         enableLikes={props.currentEnterprise.enable_likes}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -171,7 +172,8 @@ NewsFeedPage.propTypes = {
   }),
   readonly: PropTypes.bool,
   listComponent: PropTypes.elementType,
-  currentEnterprise: PropTypes.object
+  currentEnterprise: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -179,7 +181,8 @@ const mapStateToProps = createStructuredSelector({
   newsItemsTotal: selectNewsItemsTotal(),
   isLoading: selectIsLoading(),
   hasChanged: selectHasChanged(),
-  currentEnterprise: selectEnterprise()
+  currentEnterprise: selectEnterprise(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -179,7 +179,7 @@ export function GroupMessageListItem(props) {
                 className={classes.errorButton}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.group_delete_confirm, props.customTexts)))
                     props.deleteGroupMessageBegin(newsItem.group_message);
                 }}
               >
@@ -225,6 +225,7 @@ GroupMessageListItem.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   enableLikes: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
