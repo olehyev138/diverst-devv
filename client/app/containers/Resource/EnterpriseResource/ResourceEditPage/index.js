@@ -60,7 +60,7 @@ export function ResourceEditPage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.folders}
       resourceAction={props.updateResourceBegin}
-      buttonText={props.intl.formatMessage(messages.update, props.customTexts)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentEnterprise={currentEnterprise}
       resource={currentResource}
