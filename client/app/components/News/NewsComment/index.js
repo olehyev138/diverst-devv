@@ -46,6 +46,8 @@ export function NewsComment(props) {
               <DiverstImg
                 data={comment.author.avatar_data}
                 contentType={comment.author.avatar_content_type}
+                maxWidth='100%'
+                maxHeight='240px'
               />
             ) : (
               comment.author.first_name[0]

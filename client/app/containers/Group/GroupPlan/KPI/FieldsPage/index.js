@@ -110,7 +110,7 @@ FieldListPage.propTypes = {
   getFieldsBegin: PropTypes.func.isRequired,
   createFieldBegin: PropTypes.func.isRequired,
   updateFieldBegin: PropTypes.func.isRequired,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,

@@ -162,7 +162,7 @@ export function FolderListItem(props) {
                       if (confirm(props.intl.formatMessage(isResource ? resourceMessages.confirm_delete : folderMessages.confirm_delete, props.customTexts)))
                         props.deleteAction({
                           id: item.id,
-                          folder: isResource ? item.folder : item,
+                          folder: isResource ? item.folder || props.folder : item,
                         });
                     }}
                   >
@@ -195,6 +195,7 @@ FolderListItem.propTypes = {
   getFileDataBegin: PropTypes.func,
   fileName: PropTypes.string,
   setFileName: PropTypes.func,
+  folder: PropTypes.object,
   customTexts: PropTypes.object
 };
 

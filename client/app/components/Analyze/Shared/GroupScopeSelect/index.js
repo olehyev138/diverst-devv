@@ -31,6 +31,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
     props.getGroupsBegin({
       count: 30, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
       query_scopes: ['all_parents']
     });
   };

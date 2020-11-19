@@ -234,8 +234,7 @@ export function CustomTextForm(props) {
         onSubmit={(values, actions) => {
           props.customTextAction(values);
           handleClickOpen();
-        }
-        }
+        }}
       >
         {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
       </Formik>

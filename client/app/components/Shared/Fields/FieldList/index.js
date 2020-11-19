@@ -231,7 +231,7 @@ export function FieldList(props, context) {
 
 FieldList.propTypes = {
   classes: PropTypes.object,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   createFieldBegin: PropTypes.func,

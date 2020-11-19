@@ -42,7 +42,7 @@ export function AdminGroupListPage(props) {
 
   const { intl } = props;
 
-  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'], with_children: true });
 
   useEffect(() => {
     props.getGroupsBegin(params);

@@ -1,6 +1,14 @@
 class QuestionSerializer < ApplicationRecordSerializer
-  attributes :title, :description, :campaign, :conclusion, :solved_at, :permissions
-  has_many :answers
+  attributes :title, :description, :conclusion, :solved_at, :permissions
+
+  attributes_with_permission :campaign, :answers, if: :singular_action?
+
+  def answers
+    object.answers.map do |ans|
+      AnswerSerializer.new(ans, **instance_options).as_json
+    end
+  end
+
   def serialize_all_fields
     true
   end

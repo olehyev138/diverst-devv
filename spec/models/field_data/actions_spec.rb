@@ -9,6 +9,6 @@ RSpec.describe FieldData::Actions, type: :model do
       ]
     }
 
-    it { expect(FieldData.base_preloads).to eq base_preloads }
+    it { expect(FieldData.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

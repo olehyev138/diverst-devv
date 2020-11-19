@@ -47,7 +47,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
     {
       title: intl.formatMessage(eventMessages.columns.name, customTexts),
       field: 'name',
-      query_field: 'initiative.name',
+      query_field: 'initiatives.name',
       render: rowData => (
         <Typography color='primary' variant='body1'>
           <Link
@@ -61,7 +61,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
     {
       title: intl.formatMessage(eventMessages.columns.funding, customTexts),
       field: 'estimated_funding',
-      query_field: 'estimated_funding',
+      query_field: 'initiatives.estimated_funding',
       render: rowData => toCurrencyString(intl, rowData.estimated_funding || 0),
     },
     {
@@ -85,7 +85,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 
   const handleOrderChange = (columnId, orderDir) => {
     handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderBy: (columnId === -1) ? '`initiatives`.`id`' : `${columns[columnId].query_field}`,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };

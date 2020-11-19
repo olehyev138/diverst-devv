@@ -62,7 +62,7 @@ export function EventPage(props) {
 
   useEffect(() => {
     // get event specified in path
-    props.getEventBegin({ id: eventId });
+    props.getEventBegin({ id: eventId, with_comments: true });
 
     return () => props.eventsUnmount();
   }, [props.hasChanged]);

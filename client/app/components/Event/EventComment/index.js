@@ -40,6 +40,8 @@ export function EventComment(props) {
               <DiverstImg
                 data={comment.user.avatar_data}
                 contentType={comment.user.avatar_content_type}
+                maxWidth='100%'
+                maxHeight='240px'
               />
             ) : (
               comment.user.first_name[0]

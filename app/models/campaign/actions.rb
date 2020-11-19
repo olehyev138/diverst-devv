@@ -4,8 +4,12 @@ module Campaign::Actions
   end
 
   module ClassMethods
-    def base_preloads
-      [ :questions, :image_attachment, :banner_attachment, :groups, groups: Group.base_preloads ]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then []
+      when 'show', 'create', 'update' then [ :image_attachment, :image_blob, :banner_attachment, :banner_blob, :groups ]
+      else []
+      end
     end
   end
 end

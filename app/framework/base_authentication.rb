@@ -49,5 +49,6 @@ module BaseAuthentication
     self.diverst_request = Request.new
     self.diverst_request.controller = controller_name
     self.diverst_request.action = action_name
+    self.diverst_request.minimal = to_bool(params[:minimal])
   end
 end

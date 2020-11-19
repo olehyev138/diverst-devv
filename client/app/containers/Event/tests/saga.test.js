@@ -134,7 +134,7 @@ describe('Get Event Saga', () => {
       getEvent,
       initialAction
     );
-    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id, {});
     expect(dispatched).toEqual(results);
   });
 
@@ -158,7 +158,7 @@ describe('Get Event Saga', () => {
       initialAction
     );
 
-    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id);
+    expect(api.initiatives.get).toHaveBeenCalledWith(initialAction.payload.id, {});
     expect(dispatched).toEqual(results);
     expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.load_event, options: { variant: 'warning' } });
   });
@@ -329,7 +329,7 @@ describe('Delete comment', () => {
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-    const results = [deleteEventCommentSuccess(), getEventBegin({ id: 2 }), notified];
+    const results = [deleteEventCommentSuccess(), getEventBegin({ id: 2, with_comments: true }), notified];
 
     const initialAction = { payload: {
       id: 1,
@@ -383,7 +383,7 @@ describe('Create comment', () => {
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-    const results = [createEventCommentSuccess(), getEventBegin({ id: 2 }), notified];
+    const results = [createEventCommentSuccess(), getEventBegin({ id: 2, with_comments: true }), notified];
 
     const initialAction = { payload: { attributes: { id: 1, initiative_id: 2 } } };
 

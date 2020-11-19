@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include PublicActivity::Common
+  include Answer::Actions
 
   belongs_to :question, inverse_of: :answers, counter_cache: true
   belongs_to :author, class_name: 'User', inverse_of: :answers

@@ -41,23 +41,6 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
-  const childrenSelectAction = (searchKey = '') => {
-    props.getGroupsSuccess({ items: [] });
-    props.getGroupsBegin({
-      count: 10, page: 0, order: 'asc',
-      search: searchKey,
-      query_scopes: ['all_parents', 'no_children']
-    });
-  };
-
-  const parentSelectAction = (searchKey = '') => {
-    props.getGroupsSuccess({ items: [] });
-    props.getGroupsBegin({
-      count: 10, page: 0, order: 'asc',
-      query_scopes: ['all_parents']
-    });
-  };
-
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>

@@ -6,8 +6,12 @@ module Enterprise::Actions
   end
 
   module ClassMethods
-    def base_preloads
-      [ :theme ]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then [:theme]
+      when 'show', 'create', 'update' then [:theme, :custom_text, :sponsors, :mentoring_interests, :mentoring_types]
+      else []
+      end
     end
 
     def sso_login(diverst_request, params)

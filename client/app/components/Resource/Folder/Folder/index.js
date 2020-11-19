@@ -203,7 +203,7 @@ export function Folder(props) {
                       deleteAction={props.deleteFolderBegin}
                       links={props.links}
                       customTexts={props.customTexts}
-
+                      folder={props.folder}
                     />
                   </Grid>
                 );
@@ -258,6 +258,7 @@ export function Folder(props) {
                       setFileName={setFileName}
                       links={props.links}
                       customTexts={props.customTexts}
+                      folder={props.folder}
                     />
                   </Grid>
                 );

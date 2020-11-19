@@ -78,7 +78,7 @@ module User::Actions
     end
   end
 
-  def posts(params)
+  def posts(diverst_request, params)
     count = (params[:count] || 5).to_i
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :desc
@@ -89,7 +89,7 @@ module User::Actions
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
-                  .preload(NewsFeedLink.base_preloads)
+                  .preload(NewsFeedLink.base_preloads(diverst_request))
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
 
@@ -116,7 +116,7 @@ module User::Actions
     Page.new(paged, total)
   end
 
-  def downloads(params)
+  def downloads(diverst_request, params)
     count = (params[:count] || 10).to_i
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :desc
@@ -214,7 +214,11 @@ module User::Actions
       end
     end
 
-    def base_query
+    def base_select
+      %w[`users`.`id` `users`.`first_name` `users`.`last_name`]
+    end
+
+    def base_query(diverst_request)
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search"\
       " OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
@@ -228,38 +232,28 @@ module User::Actions
       [:avatar]
     end
 
-    def base_preloads
-      [
-          :field_data,
-          :enterprise,
-          :user_groups,
-          :user_role,
-          :news_links,
-          :avatar_attachment,
-          :avatar_blob,
-          field_data: [
-                  :field,
-                  { field: Field.base_preloads }
-              ],
-          enterprise: [
-                  :theme,
-                  :mobile_fields
-              ]
-      ]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then [:avatar_attachment, :avatar_blob]
+      when 'show', 'create', 'update'
+        [
+            :field_data,
+            :avatar_attachment,
+            :avatar_blob,
+            :user_role,
+            field_data: [
+                :field,
+                { field: Field.base_preloads(diverst_request) }
+            ],
+        ]
+      else []
+      end
     end
 
     def base_attribute_preloads
       [
           :user_role,
-          :enterprise,
-          :news_links,
-          :avatar_attachment,
-          {
-              enterprise: [
-                  :theme,
-                  :mobile_fields
-              ]
-          }
+          :avatar_attachment, :avatar_blob,
       ]
     end
 
