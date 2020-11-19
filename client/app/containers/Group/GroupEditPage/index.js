@@ -36,7 +36,7 @@ export function GroupEditPage(props) {
       props.groupFormUnmount();
     };
   }, []);
-
+  console.log(props.group);
   return (
     <React.Fragment>
       <GroupForm
@@ -91,7 +91,7 @@ export default compose(
   memo,
 )(Conditional(
   GroupEditPage,
-  ['group.permissions.update?', 'isFormLoading'],
+  ['group.permissions.update?'],
   (props, params) => ROUTES.admin.manage.groups.index.path(),
   permissionMessages.group.editPage
 ));

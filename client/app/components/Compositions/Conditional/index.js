@@ -67,7 +67,7 @@ export default function Conditional(
         props.redirectAction(path);
         if (message)
           props.showSnackbar({
-            message: typeof message === 'object' ? <DiverstFormattedMessage {...message} /> : message,
+            message,
             options: { variant: 'warning' }
           });
       }

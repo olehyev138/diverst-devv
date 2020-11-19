@@ -54,7 +54,7 @@ export function EventPage(props) {
     if (props.currentEvent && props.currentEvent.group_id != groupId && !props.currentEvent.participating_groups.find(g => g.id == groupId)) {
       props.redirectAction(links.eventsIndex);
       props.showSnackbar({
-        message: props.intl.formatMessage(messages.errors.invalidURL, props.customTexts),
+        message: messages.errors.invalidURL,
         options: { variant: 'warning' }
       });
     }
