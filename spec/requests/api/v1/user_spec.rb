@@ -19,9 +19,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
     it 'has all permissions' do
       body = JSON.parse(response.body)
-      expect(body["permissions"]).to_not be_nil
-      expect(body["permissions"]).to_not be_empty
-      expect(body["permissions"].values).to all( be_truthy )
+      expect(body['permissions']).to_not be_nil
+      expect(body['permissions']).to_not be_empty
+      expect(body['permissions'].values).to all( be_truthy )
     end
   end
 end
