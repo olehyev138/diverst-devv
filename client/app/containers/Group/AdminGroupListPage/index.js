@@ -109,7 +109,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
-  cusomTexts: selectCustomText(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
