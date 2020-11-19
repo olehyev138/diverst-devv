@@ -36,7 +36,6 @@ export function GroupEditPage(props) {
       props.groupFormUnmount();
     };
   }, []);
-  console.log(props.group);
   return (
     <React.Fragment>
       <GroupForm

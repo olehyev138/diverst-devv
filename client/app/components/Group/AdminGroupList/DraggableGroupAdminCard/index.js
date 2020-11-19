@@ -293,7 +293,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                       className={classes.errorButton}
                       onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete group?'))
+                        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
                           deleteGroupBegin(childGroup.id);
                       }}
                     >
