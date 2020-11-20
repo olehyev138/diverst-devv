@@ -9,7 +9,6 @@
           <%= nfl.hidden_field :id, :value => nfl.object.id %>
           <%= nfl.hidden_field :news_feed_id, :value => @group.news_feed.id %>
 
-          <%#= nfl.association :news_tags, label: "Tags", input_html: { class: "select2" } %>
           <%= nfl.association :news_tags, input_html: { class: 'multiple-input', multiple: "multiple" }, collection: @message.news_feed_link.news_tags, label: "Tags" %>
           <%= nfl.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2-field-segments" } %>
           <% if @message.new_record? %>  

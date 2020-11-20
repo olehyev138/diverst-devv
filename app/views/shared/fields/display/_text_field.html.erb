@@ -1,19 +1,19 @@
 <% unless cf.alternative_layout %>
   <label class="field__label">
-    <%= f.label cf.title, required: cf.required %>
+    <%= f.label cf.title, required: cf.required, for:  "#{cf.title.downcase}_#{cf.id}" %>
   </label>
   <span class="error"><%= field_errors(resource, cf) %></span>
   <%= f.input cf.title.downcase.to_sym,
       label: false,
       as: :fake,
       input_html: { name: "custom-fields[#{cf.id}]",
-      value: resource.info[cf], id: "#{cf.title.downcase}_#{cf.id}",
+      value: resource.info[cf], id: "#{cf.title.downcase}_#{cf.id}"
       },
       disabled: !cf.show_on_vcard
   %>
 <% else # Textarea %>
   <div class="field">
-    <label class="field__label">
+    <label class="field__label" for="<%= cf.title.downcase %>_<%= cf.id %>">
       <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
       <%= cf.title %>
     </label>

@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Innovate Campaigns</h1>
+  <h2 class="h1-styling">Innovate Campaigns</h2>
   <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary hidden-xs" if CampaignPolicy.new(current_user, Campaign).new? %>
   <%= link_to "New campaign", new_campaign_path, class: "btn btn-primary visible-xs", style: "margin-bottom: 4px;" if CampaignPolicy.new(current_user, Campaign).new? %>
   <div class="flex-row__cell">
@@ -35,7 +35,7 @@
                 <td><%= campaign.status.capitalize %></td>
                 <td>
                   <% if campaign.published? %>
-                    <%= link_to "Link", user_user_campaign_questions_path(campaign), target: '_blank'  %> -
+                    <%= link_to "View", user_user_campaign_questions_path(campaign), target: '_blank'  %> -
                   <% end %>
                   <%= link_to "Edit", edit_campaign_path(campaign) if CampaignPolicy.new(current_user, campaign).edit? %> -
                   <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if CampaignPolicy.new(current_user, campaign).destroy? %>

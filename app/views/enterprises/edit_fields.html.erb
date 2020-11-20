@@ -1,13 +1,14 @@
 <div class="content__header">
-  <h1>User fields</h1>
+  <h2 class="h1-styling">User fields</h2>
 </div>
 
 <% if @enterprise.has_enabled_saml? %>
   <div class="content__header" style="margin-bottom: 0px;">
-    <h2>Default fields</h2>
+    <h3 class="h2-styling">Default fields</h3>
   </div>
   <%= simple_form_for @enterprise, :url => update_mapping_enterprise_path(@enterprise) do |f| %>
-    For SSO logins, specify which attributes should be mapped to User <strong>First Name</strong> and <strong>Last Name</strong>
+   <br>
+   <p>For SSO logins, specify which attributes should be mapped to User First Name and Last Name</p>
     <div class="card">
       <div class="card__section row">
           <div class="col sm-6">
@@ -23,7 +24,7 @@
 <% end %>
 
 <div class="content__header" style="margin-top: 30px; margin-bottom: 0px;">
-  <h2>Custom fields</h2>
+  <h3 class="h2-styling">Custom fields</h3>
 </div>
 <div class="row">
   <div class="col sm-12">

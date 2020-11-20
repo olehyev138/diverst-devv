@@ -208,6 +208,42 @@
     <%= render 'devise/invitations/consent_modal' %>
 
     <script>
+      $(document).on('ready', function(){
+        function formIsNotValid() {
+          let form = document.getElementById('edit_user');
+          $form = $(form)
+          
+          let password  = $form.find('input#user_password');
+          let passwordConfirmation = $form.find('input#user_password_confirmation');
+          let firstName = $form.find('input#user_first_name');
+          let lastName = $form.find('input#user_last_name');
+          let enterpriseSamlEnabled = <%= !resource.enterprise.has_enabled_saml? %>;
+          
+          if(firstName.val()==='' || lastName.val()==='') {
+            return true;
+          }
+          
+          if(enterpriseSamlEnabled) {
+            if( (password.val() !== passwordConfirmation.val()) || ((password.val()==='' && passwordConfirmation.val()==='')) || (password.val().length < 8) ) {
+              return true;
+            } 
+          }
+        }
+
+
+        if(formIsNotValid()) {
+          $('input[type="submit"]').prop('disabled', true);
+        }
+
+        $('#user_first_name, #user_last_name, #user_password, #user_password_confirmation').on('keyup change', function(){
+          if(!formIsNotValid()){
+            $('input[type="submit"]').prop('disabled', false);
+          }else{
+            $('input[type="submit"]').prop('disabled', true);
+          }
+        });
+      });
+
       function toggle_calendar() {
         $( "#calendar" ).slideToggle( "slow", function() {
           // Animation complete.

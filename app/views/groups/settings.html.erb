@@ -20,7 +20,7 @@
         <%= f.input :banner, as: :attachment_preview, label: false %>
         <%= f.input :banner_alt_text_desc, label: 'banner description' %>
         <%= f.input :calendar_color, input_html: { class: 'jscolor', autofocus: true } %>
-        <h3>Sponsor Details</h3>
+        <h2 class="h3-styling">Sponsor Details</h2>
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
 
         <%= f.simple_fields_for :sponsors do |s| %>
@@ -35,7 +35,7 @@
         
         <%= f.input :yammer_group_link %>
 
-        <h3>Archive Settings</h3>
+        <h2 class="h3-styling">Archive Settings</h2>
         <div id="auto_archive_switch">  
           <%= f.hidden_field :auto_archive, value: 0 %>
           <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
