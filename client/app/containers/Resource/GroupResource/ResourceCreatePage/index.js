@@ -12,7 +12,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   getFolderBegin, createResourceBegin,
@@ -98,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   currentFolder: selectFolder(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -52,7 +52,7 @@ export function GroupLeadersList(props) {
       tooltip: intl.formatMessage(messages.leader.delete, props.customTexts),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to delete this group leader?'))
+        if (confirm(intl.formatMessage(messages.leader.confirm, props.customTexts)))
           props.deleteGroupLeaderBegin({ group_id: rowData.group_id, id: rowData.id });
       }
     });

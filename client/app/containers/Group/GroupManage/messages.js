@@ -19,6 +19,9 @@ export default defineMessages({
     id: `${scope}.form.button.cancel`,
   },
   leader: {
+    confirm: {
+      id: `${scope}.leader.confirm`,
+    },
     select: {
       id: `${scope}.leader.form.select`,
     },
