@@ -325,7 +325,7 @@ class User < ApplicationRecord
   def group_leader_role
     # make sure a user's role cannot be set to group_leader
     if enterprise.user_roles.where(id: user_role_id, role_type: 'group').count > 0 && !erg_leader?
-      errors.add(:user_role_id, 'Cannot set user role to a group role')
+      errors.add(:user_role_id, I18n.t('errors.role_validity'))
     end
   end
 
@@ -780,7 +780,7 @@ class User < ApplicationRecord
     # deletes users 14 days or younger
     return true if can_be_destroyed
 
-    errors.add(:base, 'Users older then 14 days cannot be destroyed')
+    errors.add(:base, I18n.t('errors.destroy_user'))
     throw(:abort)
   end
 
@@ -788,7 +788,7 @@ class User < ApplicationRecord
     enterprise.try(:fields).to_a.each do |field|
       if field.required && self[field].blank?
         key = field.title.parameterize.underscore.to_sym
-        errors.add(key, "can't be blank")
+        errors.add(key, I18n.t('errors.blank'))
       end
     end
   end
@@ -815,17 +815,17 @@ class User < ApplicationRecord
     uri = URI.parse(linkedin_profile_url) rescue nil
 
     if uri == nil
-      errors.add(:user, 'Not a valid URL')
+      errors.add(:user, I18n.t('errors.invalid_url'))
       return
     end
 
     unless uri.host.include?('linkedin.com')
-      errors.add(:user, 'Not a valid LinkedIn URL')
+      errors.add(:user, I18n.t('errors.invalid_linkedin_url'))
       return
     end
 
     unless uri.path.start_with?('/in/')
-      errors.add(:user, 'Not a valid LinkedIn Profile URL')
+      errors.add(:user, I18n.t('errors.invalid_linkedin_profile'))
       return
     end
   end
