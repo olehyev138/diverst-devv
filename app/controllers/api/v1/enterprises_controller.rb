@@ -100,6 +100,7 @@ class Api::V1::EnterprisesController < DiverstController
             :idp_cert,
             :saml_first_name_mapping,
             :saml_last_name_mapping,
+            :has_enabled_saml,
           )
   end
 

@@ -1,27 +1,23 @@
 import React, {
-  memo, useRef, useState, useEffect
+  memo
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
-import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import {
+  Card, CardActions, CardContent, Grid,
+  TextField, Divider, Typography, FormControl, FormControlLabel, Switch,
+} from '@material-ui/core';
+import { Field, Formik, Form } from 'formik';
+import { withStyles } from '@material-ui/core/styles';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
-import {
-  Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
-} from '@material-ui/core';
-
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
-import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
+import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -102,6 +98,29 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
             </Grid>
           </Grid>
         </CardContent>
+        <Card variant='outlined'>
+          <CardContent>
+            <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.saml_setting} /></Typography>
+            <FormControl>
+              <FormControlLabel
+                labelPlacement='end'
+                label={<DiverstFormattedMessage {...messages.saml_enable} />}
+                control={(
+                  <Field
+                    component={Switch}
+                    onChange={handleChange}
+                    color='primary'
+                    id='has_enabled_saml'
+                    name='has_enabled_saml'
+                    margin='normal'
+                    checked={values.has_enabled_saml}
+                    value={values.has_enabled_saml}
+                  />
+                )}
+              />
+            </FormControl>
+          </CardContent>
+        </Card>
         <Divider />
         <CardActions>
           <DiverstSubmit
@@ -123,6 +142,7 @@ export function SSOSettings(props) {
     idp_slo_target_url: { default: '' },
     idp_cert: { default: '' },
     sp_entity_id: { default: '' },
+    has_enabled_saml: { default: false }
   });
 
   const [open, setOpen] = React.useState(false);
