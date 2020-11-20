@@ -123,12 +123,12 @@ class User < ApplicationRecord
   # TODO: Devise has been removed
   # validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :email, presence: true
-  validates :time_zone, presence: true
-  validates :points, presence: true
-  validates :credits, presence: true
+  validates :first_name, presence: { message: I18n.t('errors.blank') }
+  validates :last_name, presence: { message: I18n.t('errors.blank') }
+  validates :email, presence: { message: I18n.t('errors.blank') }
+  validates :time_zone, presence: { message: I18n.t('errors.blank') }
+  validates :points, presence: { message: I18n.t('errors.blank') }
+  validates :credits, presence: { message: I18n.t('errors.blank') }
 
   validates :avatar, content_type: AttachmentHelper.common_image_types
 

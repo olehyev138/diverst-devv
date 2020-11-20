@@ -57,6 +57,7 @@ en:
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
   errors:
+    blank: "can't be blank"
     not_found: {
       one: "Sorry, the resource you are looking for does not exist.",
       other: "Sorry, the resources you are looking for don't exist."
