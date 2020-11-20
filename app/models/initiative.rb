@@ -30,8 +30,9 @@ class Initiative < ApplicationRecord
   # change name in admin to initiatives
 
   belongs_to :budget_item
-  has_one :budget, through: :budget_item
+  belongs_to :budget
   has_one :annual_budget, through: :budget
+  has_one :annual_budget_item, through: :budget_item, source: :annual_budget
 
   has_many :checklists, dependent: :destroy
   has_many :resources, dependent: :destroy

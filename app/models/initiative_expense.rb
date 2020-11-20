@@ -1,7 +1,8 @@
 class InitiativeExpense < ApplicationRecord
   belongs_to :initiative
   belongs_to :owner, class_name: 'User'
-  has_one :annual_budget, through: :initiative
+  belongs_to :budget_item
+  has_one :annual_budget, through: :budget_item
   has_one :group, through: :annual_budget
   has_one :enterprise, through: :group
 
