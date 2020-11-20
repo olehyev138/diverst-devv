@@ -38,7 +38,7 @@ export default defineMessages({
       id: `${scope}.leader.list.edit`,
     },
     delete: {
-      id: `${scope}.leader.list.edit`,
+      id: `${scope}.leader.list.delete`,
     },
     title: {
       id: `${scope}.leader.list.title`,
