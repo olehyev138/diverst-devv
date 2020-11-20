@@ -96,29 +96,31 @@ class User < ApplicationRecord
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :avatar_paperclip, s3_permissions: 'private'
 
-  validates_length_of :mentorship_description, maximum: 65535
-  validates_length_of :unlock_token, maximum: 191
-  validates_length_of :time_zone, maximum: 191
-  validates_length_of :biography, maximum: 65535
-  validates_length_of :linkedin_profile_url, maximum: 191
-  validates_length_of :yammer_token, maximum: 191
-  validates_length_of :firebase_token, maximum: 191
-  validates_length_of :tokens, maximum: 65535
-  validates_length_of :uid, maximum: 191
-  validates_length_of :provider, maximum: 191
-  validates_length_of :invited_by_type, maximum: 191
-  validates_length_of :invitation_token, maximum: 191
-  validates_length_of :last_sign_in_ip, maximum: 191
-  validates_length_of :current_sign_in_ip, maximum: 191
-  validates_length_of :reset_password_token, maximum: 191
-  validates_length_of :email, maximum: 191
-  validates_length_of :encrypted_password, maximum: 191
-  validates_length_of :notifications_email, maximum: 191
-  validates_length_of :auth_source, maximum: 191
-  validates_length_of :data, maximum: 65535
-  validates_length_of :last_name, maximum: 191
-  validates_length_of :first_name, maximum: 191
-  validates_length_of :password, within: 8..128, allow_blank: true
+  validates :password, length: { maximum: 128, too_long: I18n.t('errors.numericality.too_long'), minimum: 8, too_short: I18n.t('errors.numericality.too_short')}
+  validates :mentorship_description, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
+  validates :biography, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
+  validates :tokens, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
+  validates :data, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
+  validates :firebase_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :yammer_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :linkedin_profile_url, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :time_zone, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :unlock_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :last_sign_in_ip, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :invited_by_type, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :invitation_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :provider, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :uid, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :first_name, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :last_name, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :auth_source, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :notifications_email, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :encrypted_password, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :email, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :reset_password_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :current_sign_in_ip, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :last_sign_in_ip, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates :invitation_token, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
 
   # TODO: Devise has been removed
   # validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
@@ -130,20 +132,22 @@ class User < ApplicationRecord
   validates :points, presence: { message: I18n.t('errors.blank') }
   validates :credits, presence: { message: I18n.t('errors.blank') }
 
+  # add custom message?
   validates :avatar, content_type: AttachmentHelper.common_image_types
 
-  validates :password, confirmation: true
+  validates :password, confirmation: {message: I18n.t('errors.confirmation')}
+  validates :password, allow_blank: { message: I18n.t('errors.blank') }
 
-  validates :email, uniqueness: true, allow_blank: false
+  validates :email, uniqueness: { message: I18n.t('errors.unique_email') }, allow_blank: { allow_blank: false, message: I18n.t('errors.blank') }
 
-  validates_format_of :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false
+  validates :email, format: { with: /\A[^@\s]+@[^@\s]+\z/, message: I18n.t('errors.format_email')}
 
   validate :group_leader_role
   validate :policy_group
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
-  validates :points, numericality: { only_integer: true }
-  validates :credits, numericality: { only_integer: true }
+  validates :points, numericality: { only_integer: { message: I18n.t('errors.numericality.integer') } }
+  validates :credits, numericality: { only_integer: { message: I18n.t('errors.numericality.integer') } }
 
   before_validation :user_role_presence
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
