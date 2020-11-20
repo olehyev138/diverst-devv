@@ -154,7 +154,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'captures the error' do
-      allow(model.constantize).to receive(:first).and_raise(BadRequestException)
+      forced_user_load = user
+      allow_any_instance_of(ActiveRecord::Relation).to receive(:first).and_raise(BadRequestException)
       get "/api/v1/#{route}/get_auth_enterprise", headers: headers
       expect(response).to have_http_status(:bad_request)
     end

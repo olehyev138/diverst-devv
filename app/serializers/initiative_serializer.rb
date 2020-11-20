@@ -1,10 +1,35 @@
 class InitiativeSerializer < ApplicationRecordSerializer
-  attributes :pillar, :owner, :budget, :outcome, :budget_status, :participating_groups,
-             :expenses_status, :current_expenses_sum, :leftover, :full?, :permissions,
-             :picture, :picture_file_name, :picture_data, :qr_code, :qr_code_file_name, :qr_code_data,
-             :total_comments, :is_attending, :total_attendees, :currency, :budget_item, :group, :group_id
+  attributes :pillar, :owner, :outcome, :participating_groups,
+             :full?, :permissions, :picture, :picture_file_name, :picture_data,
+             :is_attending, :group, :group_id
 
-  has_many :comments
+  attributes_with_permission :pillar, :outcome, :initiative_users, :budget_item,
+                             :qr_code, :qr_code_file_name, :qr_code_data, if: :singular_action?
+
+  attributes_with_permission :budget, :budget_status, :expenses_status, :current_expenses_sum,
+                             :leftover, :budget_item, if: :with_budget?
+
+  attributes_with_permission :total_comments, :comments, if: :with_comments?
+
+  attributes_with_permission :total_attendees, if: :view_attendees?
+
+  def with_budget?
+    instance_options[:with_budget] && singular_action?
+  end
+
+  def with_comments?
+    instance_options[:with_comments] && singular_action?
+  end
+
+  def view_attendees?
+    policy.attendees? && singular_action?
+  end
+
+  def comments
+    object.comments.map do |comment|
+      InitiativeCommentSerializer.new(comment, **new_action_instance_options('index')).as_json
+    end
+  end
 
   def group
     {

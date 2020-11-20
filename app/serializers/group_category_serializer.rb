@@ -1,7 +1,6 @@
 class GroupCategorySerializer < ApplicationRecordSerializer
-  attributes :group_category_type, :total_groups
+  attributes :group_category_type, :total_groups, :groups
 
-  has_many :groups
   def serialize_all_fields
     true
   end

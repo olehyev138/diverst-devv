@@ -29,6 +29,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
       fieldDefinerId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
       orderBy: 'fields.id',
+      minimal: true,
       search: searchKey,
     });
   };

@@ -64,6 +64,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       group_id: props.currentGroup.id,
+      minimal: true,
     });
   };
 

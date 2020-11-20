@@ -191,6 +191,7 @@ GroupSelector.defaultProps = {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
       query_scopes: props.queryScopes || [],
       ...props.extraParams,
       ...params,

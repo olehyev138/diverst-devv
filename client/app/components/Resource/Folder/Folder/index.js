@@ -202,6 +202,7 @@ export function Folder(props) {
                       currentGroup={props.currentGroup}
                       deleteAction={props.deleteFolderBegin}
                       links={props.links}
+                      folder={props.folder}
                     />
                   </Grid>
                 );
@@ -255,6 +256,7 @@ export function Folder(props) {
                       fileName={fileName}
                       setFileName={setFileName}
                       links={props.links}
+                      folder={props.folder}
                     />
                   </Grid>
                 );

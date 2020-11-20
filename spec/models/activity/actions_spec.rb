@@ -16,7 +16,7 @@ RSpec.describe Activity::Actions, type: :model do
   describe 'base_includes' do
     let(:base_includes) { [:owner] }
 
-    it { expect(Activity.base_includes).to eq base_includes }
+    it { expect(Activity.base_includes(Request.create_request(nil))).to eq base_includes }
   end
 
   describe 'base_preloads' do
@@ -24,16 +24,9 @@ RSpec.describe Activity::Actions, type: :model do
       [
           :owner,
           owner: [:field_data,
-                  :enterprise,
-                  :user_groups,
-                  :user_role,
-                  :news_links,
                   :avatar_attachment,
                   :avatar_blob,
-                  enterprise: [
-                      :theme,
-                      :mobile_fields
-                  ],
+                  :user_role,
                   field_data: [
                       :field,
                       field: [:field_definer]
@@ -42,7 +35,7 @@ RSpec.describe Activity::Actions, type: :model do
       ]
     }
 
-    it { expect(Activity.base_preloads).to eq base_preloads }
+    it { expect(Activity.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'ClassMethods' do

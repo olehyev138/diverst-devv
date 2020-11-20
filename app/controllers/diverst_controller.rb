@@ -3,6 +3,7 @@ class DiverstController < ApplicationController
   include BaseController
   include BaseAuthentication
   include ActionController::Serialization
+  include ApiHelper
 
   around_action :apply_locale
 

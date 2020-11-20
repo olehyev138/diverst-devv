@@ -8,15 +8,17 @@ RSpec.describe NewsLink::Actions, type: :model do
           :group,
           :comments,
           :photos,
-          :picture_attachment,
+          :picture_attachment, :picture_blob,
           {
               comments: [
-                  :author
+                  :author,
+                  :group,
+                  author: [:avatar_attachment, :avatar_blob]
               ]
           }
       ]
     end
 
-    it { expect(NewsLink.base_preloads).to eq base_preloads }
+    it { expect(NewsLink.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

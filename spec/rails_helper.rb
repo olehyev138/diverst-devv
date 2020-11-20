@@ -19,7 +19,7 @@ SimpleCov.start do
 end
 
 def serializer_scopes(user)
-  { current_user: user }
+  { current_user: user, action: 'show' }
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -123,6 +123,12 @@ RSpec.configure do |config|
   # reach its max and throw an error
   config.before(:each) do
     Faker::UniqueGenerator.clear
+  end
+
+  # TODO Create tests for each type of action
+  # Treat all serialization/base_preloads to assume the show action
+  config.before(:each, type: :model) do
+    allow_any_instance_of(Request).to receive(:action).and_return('show')
   end
 
   config.after(:all) do |x|
