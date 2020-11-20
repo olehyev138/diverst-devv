@@ -60,7 +60,8 @@ export function* getEvents(action) {
 
 export function* getEvent(action) {
   try {
-    const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id);
+    const { id, ...payload } = action.payload;
+    const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id, payload);
     yield put(getEventSuccess(response.data));
   } catch (err) {
     yield put(getEventError(err));
@@ -139,7 +140,7 @@ export function* deleteEventComment(action) {
   try {
     yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
     yield put(deleteEventCommentSuccess());
-    yield put(getEventBegin({ id: action.payload.initiative_id }));
+    yield put(getEventBegin({ id: action.payload.initiative_id, with_comments: true }));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_event_comment), options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteEventCommentError(err));
@@ -155,7 +156,7 @@ export function* createEventComment(action) {
     const payload = { initiative_comment: action.payload.attributes };
     const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
     yield put(createEventCommentSuccess());
-    yield put(getEventBegin({ id: payload.initiative_comment.initiative_id }));
+    yield put(getEventBegin({ id: payload.initiative_comment.initiative_id, with_comments: true }));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_event_comment), options: { variant: 'success' } }));
   } catch (err) {
     yield put(createEventCommentError(err));

@@ -5,12 +5,12 @@ RSpec.describe Poll::Actions, type: :model do
     let(:base_preloads) {
       [
           :fields,
+          :responses,
           :groups,
           :segments,
-          :enterprise
       ]
     }
 
-    it { expect(Poll.base_preloads).to eq base_preloads }
+    it { expect(Poll.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

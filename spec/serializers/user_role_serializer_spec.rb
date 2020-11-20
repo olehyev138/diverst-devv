@@ -9,6 +9,6 @@ RSpec.describe UserRoleSerializer, type: :serializer do
   it 'returns fields and enterprise' do
     expect(serializer.serializable_hash[:id]).to_not be nil
     expect(serializer.serializable_hash[:role_name]).to_not be nil
-    expect(serializer.serializable_hash[:enterprise][:id]).to_not be nil
+    expect(serializer.serializable_hash[:enterprise_id]).to_not be nil
   end
 end

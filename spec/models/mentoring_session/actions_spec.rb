@@ -45,6 +45,6 @@ RSpec.describe MentoringSession::Actions, type: :model do
       ]
     }
 
-    it { expect(MentoringSession.base_preloads).to eq base_preloads }
+    it { expect(MentoringSession.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

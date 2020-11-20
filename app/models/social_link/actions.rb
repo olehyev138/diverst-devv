@@ -4,7 +4,7 @@ module SocialLink::Actions
   end
 
   module ClassMethods
-    def base_preloads
+    def base_preloads(diverst_request)
       [ :author ]
     end
   end

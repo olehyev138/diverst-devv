@@ -165,14 +165,14 @@ RSpec.describe ApplicationRecordSerializer, type: :serializer do
         context 'while in testing env' do
           let(:serializer_instance) { serializer_class.new(model.new) }
           it 'raises ScopeNotDefinedException' do
-            expect { serializer_instance.scope }.to raise_error(SerializerScopeNotDefinedException)
+            expect { serializer_instance.scope[:load] }.to raise_error(SerializerScopeNotDefinedException)
           end
         end
         context 'while not in testing env' do
           let(:serializer_instance) { serializer_class.new(model.new) }
           it 'returns nil' do
-            allow(Rails.env).to receive(:test?).and_return(false)
-            expect(serializer_instance.scope).to be(nil)
+            allow(Rails.env).to receive(:production?).and_return(true)
+            expect(serializer_instance.scope.present?).to be(false)
           end
         end
       end

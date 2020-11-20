@@ -26,6 +26,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
           :news_feed,
           :views,
           :likes,
+          :group,
           {
               group_message: [
                   :owner,
@@ -33,7 +34,9 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
                   :comments,
                   {
                       comments: [
-                          :author
+                          :author,
+                          :group,
+                          author: [ :avatar_attachment, :avatar_blob ]
                       ]
                   }
               ],
@@ -42,10 +45,12 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
                   :group,
                   :comments,
                   :photos,
-                  :picture_attachment,
+                  :picture_attachment, :picture_blob,
                   {
                       comments: [
-                          :author
+                          :author,
+                          :group,
+                          author: [:avatar_attachment, :avatar_blob]
                       ]
                   }
               ],
@@ -56,7 +61,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
       ]
     end
 
-    it { expect(NewsFeedLink.base_preloads).to eq base_preloads }
+    it { expect(NewsFeedLink.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_left_joins' do
@@ -68,7 +73,7 @@ RSpec.describe NewsFeedLink::Actions, type: :model do
       ]
     }
 
-    it { expect(NewsFeedLink.base_left_joins).to eq base_left_joins }
+    it { expect(NewsFeedLink.base_left_joins(Request.create_request(nil))).to eq base_left_joins }
   end
 
   describe 'order_string' do

@@ -38,12 +38,12 @@ class BudgetItem < ApplicationRecord
 
   def close!
     if is_done?
-      errors.add(:is_done, 'Budget Item is already closed')
+      errors.add(:base, 'Budget Item is already closed')
       return false
     end
 
     if initiatives.active.any?
-      errors.add(:initiatives, 'There are still events using this budget item')
+      errors.add(:base, 'There are still events using this budget item')
       return false
     end
 
@@ -51,8 +51,8 @@ class BudgetItem < ApplicationRecord
   end
 
   def available_for_event(event)
-    event_offset = event.estimated_funding if event&.budget_item_id == id
-    available_amount + (event_offset || 0)
+    event_offset = event.present? && event.budget_item_id == id ? event.estimated_funding : 0
+    available_amount + event_offset
   end
 
   def title_with_amount(event = nil)

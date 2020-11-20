@@ -4,11 +4,11 @@ RSpec.describe Folder::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) { [:parent] }
 
-    it { expect(Folder.base_preloads).to eq base_preloads }
+    it { expect(Folder.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_query' do
-    it { expect(Folder.base_query).to eq 'LOWER(folders.name) LIKE :search' }
+    it { expect(Folder.base_query(Request.create_request(nil))).to eq 'LOWER(folders.name) LIKE :search' }
   end
 
   describe 'validate_password' do
