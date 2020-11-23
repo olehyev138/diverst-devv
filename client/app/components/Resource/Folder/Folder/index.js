@@ -159,7 +159,7 @@ export function Folder(props) {
                   startIcon={<DeleteIcon />}
                   onClick={() => {
                     // eslint-disable-next-line no-restricted-globals,no-alert
-                    if (confirm(props.intl.formatMessage(messages.confirm_delete)))
+                    if (confirm(props.intl.formatMessage(messages.confirm_delete, props.customTexts)))
                       props.deleteFolderBegin({
                         id: folder.id,
                         folder,
@@ -202,6 +202,8 @@ export function Folder(props) {
                       currentGroup={props.currentGroup}
                       deleteAction={props.deleteFolderBegin}
                       links={props.links}
+                      customTexts={props.customTexts}
+                      folder={props.folder}
                     />
                   </Grid>
                 );
@@ -255,6 +257,8 @@ export function Folder(props) {
                       fileName={fileName}
                       setFileName={setFileName}
                       links={props.links}
+                      customTexts={props.customTexts}
+                      folder={props.folder}
                     />
                   </Grid>
                 );
@@ -305,6 +309,7 @@ Folder.propTypes = {
     resourceNew: PropTypes.string,
   }),
   currentGroup: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

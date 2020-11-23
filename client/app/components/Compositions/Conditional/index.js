@@ -10,6 +10,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { injectIntl, intlShape } from 'react-intl';
 import { redirectAction } from 'utils/reduxPushHelper';
 import config from 'app.config';
+import { DiverstFormattedMessage } from '../../Shared/DiverstFormattedMessage';
 
 function conditionalCheck(props, condition) {
   let parts;
@@ -66,7 +67,7 @@ export default function Conditional(
         props.redirectAction(path);
         if (message)
           props.showSnackbar({
-            message: typeof message === 'object' ? props.intl.formatMessage(message) : message,
+            message,
             options: { variant: 'warning' }
           });
       }

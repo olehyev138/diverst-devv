@@ -88,6 +88,7 @@ function EnterpriseForm(props, context) {
   const { classes } = props;
   const { intl } = context;
 
+  // TODO : Add customTexts to intl.formatMessage
   const EnterpriseFormSchema = Yup.object().shape({
     email: Yup
       .string()

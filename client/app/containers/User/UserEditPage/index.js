@@ -20,7 +20,7 @@ import {
 } from 'containers/User/actions';
 
 import { selectFormUser, selectFieldData, selectIsCommitting, selectIsFormLoading } from 'containers/User/selectors';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import messages from 'containers/User/messages';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -58,7 +58,7 @@ export function UserEditPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <UserForm
         edit
         userAction={props.updateUserBegin}
@@ -66,7 +66,7 @@ export function UserEditPage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={intl.formatMessage(messages.update, props.customTexts)}
         admin={location.pathname.startsWith('/admin')}
         permissions={props.permissions}
         isCommitting={props.isCommitting}
@@ -87,6 +87,7 @@ UserEditPage.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -95,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

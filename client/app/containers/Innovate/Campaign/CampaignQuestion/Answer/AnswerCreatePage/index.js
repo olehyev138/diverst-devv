@@ -45,7 +45,7 @@ export function AnswerCreatePage(props) {
       answerAction={props.createAnswerBegin}
       campaignId={campaignId}
       questionId={questionId}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       isCommitting={props.isCommitting}
       // links={links}
     />

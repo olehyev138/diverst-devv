@@ -39,7 +39,6 @@ export function GroupSponsorCreatePage(props) {
       <SponsorForm
         sponsorAction={props.createSponsorBegin}
         links={links}
-        buttonText={intl.formatMessage(messages.create)}
         sponsorableId={groupId}
       />
     </React.Fragment>

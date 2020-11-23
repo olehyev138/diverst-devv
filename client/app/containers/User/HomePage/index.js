@@ -110,7 +110,6 @@ export class HomePage extends React.PureComponent {
         </Permission>
       </Grid>
     );
-
     const privacyMessage = this.props.enterprise ? this.props.enterprise.privacy_statement !== '' && (
       <React.Fragment>
         <Typography onClick={this.handleClickOpen} className={classes.privacyStatement} color='primary' display='inline'>
@@ -119,7 +118,7 @@ export class HomePage extends React.PureComponent {
         <DiverstDialog
           open={this.state.open}
           handleNo={this.handleClose}
-          textNo={this.props.intl ? this.props.intl.formatMessage(messages.close) : ' '}
+          textNo={messages.close}
           content={(
             <DiverstHTMLEmbedder
               html={
@@ -129,7 +128,7 @@ export class HomePage extends React.PureComponent {
               }
             />
           )}
-          title={this.props.intl ? this.props.intl.formatMessage(messages.privacy) : ' '}
+          title={messages.privacy}
         />
       </React.Fragment>
     ) : null;

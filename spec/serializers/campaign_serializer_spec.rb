@@ -26,4 +26,6 @@ RSpec.describe CampaignSerializer, type: :serializer do
     expect(serializer.serializable_hash[:groups].empty?).to_not be true
     expect(serializer.serializable_hash[:questions].blank?).to be true
   end
+
+  include_examples 'preloads serialized data', :campaign
 end

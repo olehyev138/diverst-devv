@@ -30,7 +30,6 @@ import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/Cust
 
 // messages
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -44,7 +43,6 @@ export function CustomGraphEditPage(props) {
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
-  const { intl } = props;
 
   useEffect(() => {
     props.getCustomGraphBegin({ id: graphId });
@@ -58,7 +56,7 @@ export function CustomGraphEditPage(props) {
       customGraphAction={props.updateCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       customGraph={props.currentCustomGraph}
       currentEnterprise={props.currentEnterprise}
       metricsDashboardId={metricsDashboardId}
@@ -70,7 +68,6 @@ export function CustomGraphEditPage(props) {
 }
 
 CustomGraphEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getCustomGraphBegin: PropTypes.func,
   updateCustomGraphBegin: PropTypes.func,
   currentCustomGraph: PropTypes.object,
@@ -103,7 +100,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

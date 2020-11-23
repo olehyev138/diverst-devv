@@ -31,7 +31,7 @@ export function* getSegments(action) {
     yield put(getSegmentsSuccess(response.data.page));
   } catch (err) {
     yield put(getSegmentsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.segments), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.segments, options: { variant: 'warning' } }));
   }
 }
 
@@ -41,7 +41,7 @@ export function* getSegment(action) {
     yield put(getSegmentSuccess(response.data));
   } catch (err) {
     yield put(getSegmentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.segment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.segment, options: { variant: 'warning' } }));
   }
 }
 
@@ -55,10 +55,10 @@ export function* createSegment(action) {
     yield put(createSegmentSuccess());
     // TODO: get id from response & direct to show/update page
     yield put(push(ROUTES.admin.manage.segments.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSegmentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -69,10 +69,10 @@ export function* updateSegment(action) {
 
     yield put(updateSegmentSuccess());
     yield put(push(ROUTES.admin.manage.segments.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSegmentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -82,10 +82,10 @@ export function* deleteSegment(action) {
 
     yield put(deleteSegmentSuccess());
     yield put(push(ROUTES.admin.manage.segments.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSegmentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -96,7 +96,7 @@ export function* getSegmentMembers(action) {
     yield put(getSegmentMembersSuccess(response.data.page));
   } catch (err) {
     yield put(getSegmentMembersError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.members, options: { variant: 'warning' } }));
   }
 }
 

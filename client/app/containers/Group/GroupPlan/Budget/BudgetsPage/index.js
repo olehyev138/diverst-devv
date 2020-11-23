@@ -32,6 +32,7 @@ import {
   selectHasChanged
 } from 'containers/Group/GroupPlan/Budget/selectors';
 import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -107,6 +108,7 @@ export function BudgetsPage(props) {
         currentGroup={props.currentGroup}
         handleVisitBudgetShow={props.handleVisitBudgetShow}
         links={links}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -125,6 +127,7 @@ BudgetsPage.propTypes = {
   budgetTotal: PropTypes.number,
   deleteBudgetBegin: PropTypes.func,
   handleVisitBudgetShow: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -134,6 +137,7 @@ const mapStateToProps = createStructuredSelector({
   budgetTotal: selectBudgetsTotal(),
   currentAnnualBudget: selectAnnualBudget(),
   currentGroup: selectGroup(),
+  customTexts: selectCustomText(),
 });
 
 const mapPushDispatchToProps = dispatch => ({

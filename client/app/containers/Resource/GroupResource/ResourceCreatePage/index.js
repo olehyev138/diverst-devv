@@ -5,8 +5,6 @@ import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { injectIntl, intlShape } from 'react-intl';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -14,7 +12,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   getFolderBegin, createResourceBegin,
@@ -59,12 +57,12 @@ export function ResourceCreatePage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <ResourceForm
         getFoldersBegin={props.getFoldersBegin}
         selectFolders={props.searchFolders}
         resourceAction={props.createResourceBegin}
-        buttonText={props.intl.formatMessage(messages.create)}
+        buttonText={messages.create}
         currentUser={currentUser}
         currentGroup={currentGroup}
         currentFolder={currentFolder}
@@ -76,7 +74,6 @@ export function ResourceCreatePage(props) {
 }
 
 ResourceCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   path: PropTypes.string,
   getFolderBegin: PropTypes.func,
   getFoldersBegin: PropTypes.func,
@@ -91,7 +88,8 @@ ResourceCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -100,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   currentFolder: selectFolder(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -117,7 +116,6 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl
 )(Conditional(
   ResourceCreatePage,
   ['currentGroup.permissions.resources_create?'],

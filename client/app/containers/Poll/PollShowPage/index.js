@@ -16,6 +16,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { getPollBegin, pollsUnmount, updatePollBegin } from 'containers/Poll/actions';
 import { getResponsesBegin, responsesUnmount } from 'containers/Poll/Response/actions';
 import { selectIsCommitting, selectIsFetchingPoll, selectPoll } from 'containers/Poll/selectors';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
@@ -116,11 +117,16 @@ export function PollShowPage(props) {
           fieldOptions={textFieldOptions}
           handlePagination={handlePagination(responseParams, setResponseParams)}
           handleOrdering={handleOrdering(responseParams, setResponseParams)}
+          customTexts={props.customTexts}
         />
       );
     if (tab === 'graphs')
       return <PollGraphs {...componentProps} />;
     return <React.Fragment />;
+  };
+
+  subPage.propTypes = {
+    customTexts: PropTypes.object,
   };
 
   return (
@@ -158,6 +164,7 @@ export function PollShowPage(props) {
 }
 
 PollShowPage.propTypes = {
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
   updatePollBegin: PropTypes.func,
   pollsUnmount: PropTypes.func,
@@ -179,6 +186,7 @@ const mapStateToProps = createStructuredSelector({
   responses: selectPaginatedResponses(),
   responsesTotal: selectResponsesTotal(),
   responsesLoading: selectIsFetchingResponses(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -4,11 +4,11 @@ module Region::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       "LOWER(#{self.table_name}.name) LIKE :search"
     end
 
-    def base_left_joins
+    def base_left_joins(divert_request)
       :children
     end
 
@@ -22,8 +22,13 @@ module Region::Actions
 
     # List of all attributes to preload.
     # Used when serializing a region itself
-    def base_preloads
-      [ children: Group.base_preload_no_recursion, parent: Group.base_preload_no_recursion ]
+    def base_preloads(diverst_request)
+      [
+          :children,
+          :parent,
+          children: Group.base_preload_no_recursion(diverst_request),
+          parent: Group.base_preload_no_recursion(diverst_request),
+      ]
     end
   end
 end

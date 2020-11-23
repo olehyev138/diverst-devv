@@ -30,7 +30,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleList from 'components/User/UserRole/UserRoleList';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function UserRoleListPage(props) {
@@ -78,6 +78,7 @@ export function UserRoleListPage(props) {
         handleVisitUserRoleEdit={props.handleVisitUserRoleEdit}
         permissions={props.permissions}
         links={links}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -91,7 +92,8 @@ UserRoleListPage.propTypes = {
   isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func.isRequired,
-  handleVisitUserRoleEdit: PropTypes.func
+  handleVisitUserRoleEdit: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -99,6 +101,7 @@ const mapStateToProps = createStructuredSelector({
   userRoleTotal: selectUserRoleTotal(),
   isFetchingUserRoles: selectIsFetchingUserRoles(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

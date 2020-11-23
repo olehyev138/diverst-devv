@@ -74,7 +74,7 @@ export function GroupRegionsListItem(props) {
             className={classes.errorButton}
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.delete_confirm, customTexts(props.customTexts))))
+              if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                 props.deleteRegionBegin({ region_id: region.id, group_id: group.id });
             }}
           >

@@ -56,10 +56,10 @@ export function MentorList(props, context) {
       if (props.currentTab === 0)
         actions.push({
           icon: () => (<DeleteIcon />),
-          tooltip: intl.formatMessage(messages.actions.remove),
+          tooltip: intl.formatMessage(messages.actions.remove, props.customTexts),
           onClick: (_, rowData) => {
             // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
+            if (confirm(intl.formatMessage(messages.actions.deleteWarning, props.customTexts))) {
               const payload = { userId: props.user.id, type };
               payload.mentor_id = rowData.id;
               payload.mentee_id = props.user.id;
@@ -70,7 +70,7 @@ export function MentorList(props, context) {
       else if (props.currentTab === 1)
         actions.push({
           icon: () => (<AssignmentIndIcon />),
-          tooltip: intl.formatMessage(messages.actions.sendRequest),
+          tooltip: intl.formatMessage(messages.actions.sendRequest, props.customTexts),
           onClick: (_, rowData) => {
             handleFormClickOpen(rowData.id);
           }
@@ -79,10 +79,10 @@ export function MentorList(props, context) {
       if (props.currentTab === 0)
         actions.push({
           icon: () => (<DeleteIcon />),
-          tooltip: intl.formatMessage(messages.actions.remove),
+          tooltip: intl.formatMessage(messages.actions.remove, props.customTexts),
           onClick: (_, rowData) => {
             // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
+            if (confirm(intl.formatMessage(messages.actions.deleteWarning, props.customTexts))) {
               const payload = { userId: props.user.id, type };
               payload.mentor_id = props.user.id;
               payload.mentee_id = rowData.id;
@@ -93,7 +93,7 @@ export function MentorList(props, context) {
       else if (props.currentTab === 1)
         actions.push({
           icon: () => (<AssignmentIndIcon />),
-          tooltip: intl.formatMessage(messages.actions.sendRequest),
+          tooltip: intl.formatMessage(messages.actions.sendRequest, props.customTexts),
           onClick: (_, rowData) => {
             handleFormClickOpen(rowData.id);
           }
@@ -102,7 +102,7 @@ export function MentorList(props, context) {
 
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: intl.formatMessage(messages.actions.viewProfile),
+    tooltip: intl.formatMessage(messages.actions.viewProfile, props.customTexts),
     onClick: (_, rowData) => {
       handleProfileClickOpen(rowData);
     }
@@ -148,10 +148,10 @@ export function MentorList(props, context) {
   };
 
   const columns = [
-    { title: intl.formatMessage(appMessages.person.givenName), field: 'first_name' },
-    { title: intl.formatMessage(appMessages.person.familyName), field: 'last_name' },
-    { title: intl.formatMessage(appMessages.person.email), field: 'email' },
-    { title: intl.formatMessage(messages.columns.interests), field: 'interests', sorting: false },
+    { title: intl.formatMessage(appMessages.person.givenName, props.customTexts), field: 'first_name' },
+    { title: intl.formatMessage(appMessages.person.familyName, props.customTexts), field: 'last_name' },
+    { title: intl.formatMessage(appMessages.person.email, props.customTexts), field: 'email' },
+    { title: intl.formatMessage(messages.columns.interests, props.customTexts), field: 'interests', sorting: false },
   ];
 
   const handleOrderChange = (columnId, orderDir) => {
@@ -163,13 +163,13 @@ export function MentorList(props, context) {
 
   let title;
   if (props.currentTab === 0 && type === 'mentors')
-    title = intl.formatMessage(messages.title.current.mentor);
+    title = intl.formatMessage(messages.title.current.mentor, props.customTexts);
   else if (props.currentTab === 0 && type === 'mentees')
-    title = intl.formatMessage(messages.title.current.mentee);
+    title = intl.formatMessage(messages.title.current.mentee, props.customTexts);
   else if (props.currentTab === 1 && type === 'mentors')
-    title = intl.formatMessage(messages.title.available.mentor);
+    title = intl.formatMessage(messages.title.available.mentor, props.customTexts);
   else if (props.currentTab === 1 && type === 'mentees')
-    title = intl.formatMessage(messages.title.available.mentee);
+    title = intl.formatMessage(messages.title.available.mentee, props.customTexts);
 
   return (
     <React.Fragment>
@@ -180,9 +180,9 @@ export function MentorList(props, context) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label={intl.formatMessage(messages.tabs.current)} />
+          <Tab label={intl.formatMessage(messages.tabs.current, props.customTexts)} />
           { props?.user?.id === props.userSession.user_id && (
-            <Tab label={intl.formatMessage(messages.tabs.available)} />
+            <Tab label={intl.formatMessage(messages.tabs.available, props.customTexts)} />
           )}
         </ResponsiveTabs>
       </Paper>
@@ -287,6 +287,7 @@ MentorList.propTypes = {
     userEdit: PropTypes.func
   }),
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

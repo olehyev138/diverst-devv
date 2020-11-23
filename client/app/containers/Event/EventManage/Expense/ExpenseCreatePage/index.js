@@ -67,7 +67,7 @@ export function ExpenseCreatePage({ intl, ...props }) {
         currentGroup={props.currentGroup}
         isCommitting={props.isCommitting}
         expenseAction={props.createExpenseBegin}
-        buttonText={intl.formatMessage(formMessages.create)}
+        buttonText={formMessages.create}
         links={links}
       />
     </React.Fragment>

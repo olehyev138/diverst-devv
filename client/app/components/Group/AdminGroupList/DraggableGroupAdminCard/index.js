@@ -27,7 +27,7 @@ import { intlShape } from 'react-intl';
 import { getListDrop, getListDrag } from 'utils/DragAndDropHelpers';
 
 
-export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin }, props) {
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin, customTexts }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
   const ref = useRef(null);
   const ItemTypes = {
@@ -109,7 +109,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           className={classes.errorButton}
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.delete_confirm)))
+            if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
               deleteGroupBegin(group.id);
           }}
           disabled={draggable}
@@ -154,6 +154,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               color='primary'
               to={ROUTES.admin.manage.groups.regions.index.path(group.id)}
               component={WrappedNavLink}
+              disabled={draggable}
             >
               <DiverstFormattedMessage {...messages.manage_regions} />
             </Button>
@@ -292,7 +293,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                       className={classes.errorButton}
                       onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete group?'))
+                        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
                           deleteGroupBegin(childGroup.id);
                       }}
                     >
@@ -320,4 +321,5 @@ DraggableGroupAdminCard.propTypes = {
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };

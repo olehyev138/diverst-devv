@@ -2,11 +2,11 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 
 
 const styles = theme => ({
@@ -24,19 +24,20 @@ const styles = theme => ({
 
 export function ResourcesTable(props) {
   const { intl } = props;
+
   const columns = [
     {
-      title: intl.formatMessage(messages.title),
+      title: intl.formatMessage(messages.title, props.customTexts),
       field: 'title',
       query_field: 'title'
     },
     {
-      title: intl.formatMessage(messages.url),
+      title: intl.formatMessage(messages.url, props.customTexts),
       field: 'url',
       query_field: 'url',
     },
     {
-      title: intl.formatMessage(messages.creation),
+      title: intl.formatMessage(messages.creation, props.customTexts),
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
@@ -51,7 +52,7 @@ export function ResourcesTable(props) {
 
   return (
     <DiverstTable
-      title='Archives'
+      title={props.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -61,7 +62,7 @@ export function ResourcesTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: 'Restore',
+        tooltip: intl.formatMessage(messages.restore, props.customTexts),
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
@@ -71,21 +72,23 @@ export function ResourcesTable(props) {
 }
 
 ResourcesTable.propTypes = {
+  intl: intlShape.isRequired,
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
+  title: PropTypes.object
 };
 
 export default compose(
-  memo,
   injectIntl,
+  memo,
   withStyles(styles)
 )(ResourcesTable);

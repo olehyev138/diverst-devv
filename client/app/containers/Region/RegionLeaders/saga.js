@@ -22,7 +22,6 @@ import {
 import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { customTexts } from 'utils/customTextHelpers';
 
 export function* getRegionLeaders(action) {
   const customText = yield select(selectCustomText());
@@ -32,7 +31,7 @@ export function* getRegionLeaders(action) {
   } catch (err) {
     yield put(getRegionLeadersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leaders, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.leaders, options: { variant: 'warning' } }));
   }
 }
 
@@ -44,7 +43,7 @@ export function* getRegionLeader(action) {
   } catch (err) {
     yield put(getRegionLeaderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.leader, customTexts(customText)),
+      message: messages.snackbars.errors.leader,
       options: { variant: 'warning' }
     }));
   }
@@ -57,11 +56,11 @@ export function* createRegionLeader(action) {
     const response = yield call(api.regionLeaders.create.bind(api.regionLeaders), payload);
     yield put(createRegionLeaderSuccess());
     yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createRegionLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -71,11 +70,11 @@ export function* deleteRegionLeader(action) {
     yield call(api.regionLeaders.destroy.bind(api.regionLeaders), action.payload.id);
     yield put(deleteRegionLeaderSuccess());
     yield put(getRegionLeadersBegin({ region_id: action.payload.region_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete, customTexts(customText)), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRegionLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete, customTexts(customText)), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -87,14 +86,14 @@ export function* updateRegionLeader(action) {
     yield put(updateRegionLeaderSuccess());
     yield put(push(ROUTES.region.leaders.index.path(action.payload.region_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update, customTexts(customText)),
+      message: messages.snackbars.success.update,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateRegionLeaderError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update, customTexts(customText)),
+      message: messages.snackbars.errors.update,
       options: { variant: 'warning' }
     }));
   }

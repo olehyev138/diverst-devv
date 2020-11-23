@@ -16,6 +16,7 @@ import {
 } from 'containers/User/actions';
 
 import { selectUser, selectFieldData, selectIsFormLoading } from 'containers/User/selectors';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 import saga from 'containers/User/saga';
 import Profile from 'components/User/Profile';
@@ -47,7 +48,7 @@ export function UserProfilePage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={intl.formatMessage(messages.update, props.customTexts)}
         isFormLoading={props.isFormLoading}
       />
     </React.Fragment>
@@ -62,12 +63,14 @@ UserProfilePage.propTypes = {
   getUserBegin: PropTypes.func,
   userUnmount: PropTypes.func,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   fieldData: selectFieldData(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

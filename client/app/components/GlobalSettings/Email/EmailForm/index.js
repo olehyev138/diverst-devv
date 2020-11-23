@@ -55,7 +55,6 @@ export function EmailFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const { intl } = props;
 
   return (
     <React.Fragment>
@@ -104,8 +103,8 @@ export function EmailFormInner({
         <Box mb={2} />
         <Card>
           <CardHeader
-            title={intl.formatMessage(messages.variables.title)}
-            subheader={intl.formatMessage(messages.variables.subTitle)}
+            title=<DiverstFormattedMessage {...messages.variables.title} />
+            subheader=<DiverstFormattedMessage {...messages.variables.subTitle} />
           />
           {/* eslint-disable-next-line array-callback-return */}
           {props.email && Object.values(props.email.variables).map(variable => (
@@ -158,9 +157,7 @@ EmailForm.propTypes = {
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
-
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 EmailFormInner.propTypes = {
@@ -172,7 +169,7 @@ EmailFormInner.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,
@@ -184,11 +181,9 @@ EmailFormInner.propTypes = {
   }),
 
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles),
 )(EmailForm);
