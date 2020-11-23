@@ -19,13 +19,14 @@ import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors, selectHasChanged
 } from 'containers/Shared/Sponsors/selectors';
+import { selectCustomText, selectPermissions } from '../../../Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function SponsorListPage(props) {
@@ -83,6 +84,7 @@ export function SponsorListPage(props) {
         deleteSponsorBegin={props.deleteSponsorBegin}
         handleVisitSponsorEdit={props.handleVisitSponsorEdit}
         handleVisitSponsorShow={props.handleVisitSponsorShow}
+        customTexts={props.customTexts}
         links={links}
         setParams={params}
         params={params}
@@ -104,6 +106,7 @@ SponsorListPage.propTypes = {
   handleVisitSponsorEdit: PropTypes.func,
   handleVisitSponsorShow: PropTypes.func,
   hasChanged: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -112,6 +115,7 @@ const mapStateToProps = createStructuredSelector({
   isFetchingSponsors: selectIsFetchingSponsors(),
   permissions: selectPermissions(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 

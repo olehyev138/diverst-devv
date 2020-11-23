@@ -21,7 +21,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -29,7 +28,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-  const { intl } = props;
 
   const { group_id: groupId } = useParams();
   const links = {
@@ -45,7 +43,7 @@ export function NewsLinkCreatePage(props) {
     <NewsLinkForm
       get
       newsLinkAction={props.createNewsLinkBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -55,7 +53,6 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -80,7 +77,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

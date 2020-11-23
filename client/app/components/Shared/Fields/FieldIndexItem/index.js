@@ -73,7 +73,7 @@ export function FieldList(props, context) {
             className={classes.errorButton}
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.delete_confirm)))
+              if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                 props.deleteFieldBegin(field.id);
             }}
           >
@@ -105,6 +105,7 @@ FieldList.propTypes = {
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

@@ -55,6 +55,7 @@ export function AnnualBudgetList(props) {
               handlePagination={handleInitiativePagination(annualBudget.id)}
               handleOrdering={handleInitiativeOrdering(annualBudget.id)}
               currentGroup={props.currentGroup}
+              customTexts={props.customTexts}
             />
             <Box mb={2} />
           </React.Fragment>
@@ -84,6 +85,7 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.object,
   currentGroup: PropTypes.object,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object
 };
 
 export default compose(

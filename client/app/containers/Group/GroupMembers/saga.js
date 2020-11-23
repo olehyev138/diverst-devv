@@ -27,7 +27,7 @@ export function* getMembers(action) {
   } catch (err) {
     yield put(getMembersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.members), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.members, options: { variant: 'warning' } }));
   }
 }
 
@@ -42,11 +42,11 @@ export function* createMembers(action) {
 
     yield put(createMembersSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createMembersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -61,11 +61,11 @@ export function* deleteMembers(action) {
 
     yield put(deleteMemberSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteMemberError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -74,11 +74,11 @@ export function* exportMembers(action) {
     const response = yield call(api.userGroups.csvExport.bind(api.userGroups), action.payload);
 
     yield put(exportMembersSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export_members), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.export_members, options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportMembersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export_members), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.export_members, options: { variant: 'warning' } }));
   }
 }
 

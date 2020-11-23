@@ -81,7 +81,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
             <Divider />
             <CardActions>
               <DiverstSubmit isCommitting={props.isCommitting} disabled={(props?.update?.field_data || []).length <= 0}>
-                {buttonText}
+                <DiverstFormattedMessage {...buttonText} />
               </DiverstSubmit>
               <DiverstCancel
                 disabled={props.isCommitting}
@@ -144,7 +144,7 @@ UpdateFormInner.propTypes = {
   fieldData: PropTypes.array,
   formikProps: PropTypes.object,
   updateFieldDataBegin: PropTypes.func.isRequired,
-  buttonText: PropTypes.string.isRequired,
+  buttonText: PropTypes.object.isRequired,
   admin: PropTypes.bool,
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,

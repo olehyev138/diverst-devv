@@ -183,7 +183,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.outcomesIndex}
@@ -239,7 +239,7 @@ OutcomeFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,

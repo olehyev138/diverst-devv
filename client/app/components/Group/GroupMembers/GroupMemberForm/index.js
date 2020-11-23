@@ -25,7 +25,7 @@ import DiverstCancel from 'components/Shared/DiverstCancel';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
-export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   const usersSelectAction = (searchKey = '') => {
     props.getUsersBegin({
       count: 10, page: 0, order: 'asc',
@@ -105,7 +105,6 @@ GroupMemberFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
   selectUsers: PropTypes.array,
   getUsersBegin: PropTypes.func,
   currentGroup: PropTypes.object,

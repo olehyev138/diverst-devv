@@ -148,7 +148,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -209,7 +209,7 @@ GroupFormInner.propTypes = {
   edit: PropTypes.bool,
   group: PropTypes.object,
   classes: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
   isCommitting: PropTypes.bool,

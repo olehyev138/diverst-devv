@@ -122,7 +122,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.all).toHaveBeenCalledWith({});
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.users);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.users, options: { variant: 'warning' } });
     });
   });
 
@@ -162,7 +162,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.user, options: { variant: 'warning' } });
     });
   });
 
@@ -190,7 +190,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.create).toHaveBeenCalledWith({ user: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -214,7 +214,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
 
     it('Should update a user', async () => {
@@ -239,7 +239,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.update).toHaveBeenCalledWith(initialAction.payload.id, { user: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -264,7 +264,7 @@ describe('saga tests for users', () => {
 
       expect(api.users.update).toHaveBeenCalledWith(initialAction.payload.id, { user: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -294,7 +294,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -318,7 +318,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.destroy).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 
@@ -361,7 +361,7 @@ describe('saga tests for users', () => {
       );
       expect(api.users.prototype).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.prototype);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.prototype, options: { variant: 'warning' } });
     });
   });
 
@@ -405,7 +405,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getDownloadData).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user_data);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.user_data, options: { variant: 'warning' } });
     });
   });
 
@@ -448,7 +448,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getPosts).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.posts);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.posts, options: { variant: 'warning' } });
     });
   });
 
@@ -509,7 +509,7 @@ describe('saga tests for users', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.events);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.events, options: { variant: 'warning' } });
     });
   });
 
@@ -552,7 +552,7 @@ describe('saga tests for users', () => {
       );
       expect(api.user.getDownloads).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.user_data);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.user_data, options: { variant: 'warning' } });
     });
   });
 
@@ -577,7 +577,7 @@ describe('saga tests for users', () => {
       );
       expect(api.fieldData.updateFieldData).toHaveBeenCalledWith({ field_data: { field_data: {} } });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.fields);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.fields, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -602,7 +602,7 @@ describe('saga tests for users', () => {
 
       expect(api.fieldData.updateFieldData).toHaveBeenCalledWith({ field_data: { field_data: {} } });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.fields);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.fields, options: { variant: 'warning' } });
     });
   });
 });

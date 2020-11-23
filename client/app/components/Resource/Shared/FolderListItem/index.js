@@ -159,7 +159,7 @@ export function FolderListItem(props) {
                     className={classNames(classes.folderLink, classes.deleteButton)}
                     onClick={() => {
                       // eslint-disable-next-line no-restricted-globals,no-alert
-                      if (confirm(props.intl.formatMessage(isResource ? resourceMessages.confirm_delete : folderMessages.confirm_delete)))
+                      if (confirm(props.intl.formatMessage(isResource ? resourceMessages.confirm_delete : folderMessages.confirm_delete, props.customTexts)))
                         props.deleteAction({
                           id: item.id,
                           folder: isResource ? item.folder || props.folder : item,
@@ -196,6 +196,7 @@ FolderListItem.propTypes = {
   fileName: PropTypes.string,
   setFileName: PropTypes.func,
   folder: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

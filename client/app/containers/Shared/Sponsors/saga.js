@@ -33,7 +33,7 @@ export function* getSponsors(action) {
     yield put(getSponsorsSuccess(response.data.page));
   } catch (err) {
     yield put(getSponsorsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.sponsors), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.sponsors, options: { variant: 'warning' } }));
   }
 }
 
@@ -44,7 +44,7 @@ export function* getSponsor(action) {
   } catch (err) {
     yield put(getSponsorError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.sponsor),
+      message: messages.snackbars.errors.sponsor,
       options: { variant: 'warning' }
     }));
   }
@@ -64,10 +64,10 @@ export function* createSponsors(action, sponsorableKey) {
 
     yield put(createSponsorSuccess());
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSponsorError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -81,10 +81,10 @@ export function* deleteSponsors(action) {
       yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
 
     yield put(deleteSponsorSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSponsorError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -100,13 +100,13 @@ export function* updateSponsor(action, sponsorableType) {
 
     yield put(updateSponsorSuccess());
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update),
+      message: messages.snackbars.success.update,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateSponsorError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update),
+      message: messages.snackbars.errors.update,
       options: { variant: 'warning' }
     }));
   }

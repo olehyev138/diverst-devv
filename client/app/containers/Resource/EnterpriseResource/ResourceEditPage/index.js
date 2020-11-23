@@ -13,7 +13,7 @@ import saga from 'containers/Resource/saga';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectPaginatedSelectFolders, selectValid,
   selectFormResource, selectIsCommitting, selectIsResourceFormLoading
@@ -60,7 +60,7 @@ export function ResourceEditPage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.folders}
       resourceAction={props.updateResourceBegin}
-      buttonText={props.intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentEnterprise={currentEnterprise}
       resource={currentResource}
@@ -93,6 +93,7 @@ ResourceEditPage.propTypes = {
   valid: PropTypes.bool,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -105,6 +106,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsResourceFormLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -24,7 +24,6 @@ import {
 
 import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -33,7 +32,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function OutcomeEditPage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
-  const { intl } = props;
 
   const { group_id: groupId, outcome_id: outcomeId } = useParams();
   const links = {
@@ -52,7 +50,7 @@ export function OutcomeEditPage(props) {
     <OutcomeForm
       edit
       outcomeAction={props.updateOutcomeBegin}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentGroup={currentGroup}
       outcome={currentOutcome}
@@ -64,7 +62,6 @@ export function OutcomeEditPage(props) {
 }
 
 OutcomeEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getOutcomeBegin: PropTypes.func,
   updateOutcomeBegin: PropTypes.func,
   outcomesUnmount: PropTypes.func,
@@ -95,7 +92,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

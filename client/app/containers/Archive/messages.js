@@ -52,6 +52,15 @@ export default defineMessages({
   error: {
     id: `${scope}.field.type.error`
   },
+  restore: {
+    id: `${scope}.table.tooltip`
+  },
+  tableName: {
+    id: `${scope}.table.title`
+  },
+  type: {
+    id: `${scope}.table.type`
+  },
   snackbars: {
     load: {
       id: `${snackbar}.errors.load.archives`
