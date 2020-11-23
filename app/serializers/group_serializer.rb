@@ -156,7 +156,7 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def logo_data
-    AttachmentHelper.attachment_data_string(object.logo)
+    AttachmentHelper.image_resize_variant_data_string(object.logo, 175, 175)
   end
 
   def logo_content_type
