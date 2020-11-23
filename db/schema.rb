@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_163221) do
+ActiveRecord::Schema.define(version: 2020_11_23_183438) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -159,6 +159,16 @@ ActiveRecord::Schema.define(version: 2020_11_20_163221) do
     t.decimal "estimated_amount", precision: 20, scale: 4, default: "0.0", null: false
     t.decimal "deprecated_available_amount", precision: 20, scale: 4, default: "0.0"
     t.index ["budget_id"], name: "fk_rails_6135db3849"
+  end
+
+  create_table "budget_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "budgetable_type"
+    t.bigint "budgetable_id"
+    t.bigint "budget_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_item_id"], name: "index_budget_users_on_budget_item_id"
+    t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
   end
 
   create_table "budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -764,8 +774,8 @@ ActiveRecord::Schema.define(version: 2020_11_20_163221) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "deprecated_annual_budget_id"
-    t.bigint "budget_item_id"
-    t.index ["budget_item_id"], name: "index_initiative_expenses_on_budget_item_id"
+    t.bigint "budget_user_id"
+    t.index ["budget_user_id"], name: "index_initiative_expenses_on_budget_user_id"
     t.index ["deprecated_annual_budget_id"], name: "fk_rails_a6322afeec"
     t.index ["initiative_id"], name: "index_initiative_expenses_on_initiative_id"
   end
@@ -852,8 +862,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_163221) do
     t.datetime "video_updated_at"
     t.bigint "deprecated_annual_budget_id"
     t.boolean "virtual", default: false
-    t.bigint "budget_id"
-    t.index ["budget_id"], name: "index_initiatives_on_budget_id"
     t.index ["budget_item_id"], name: "fk_rails_d338eb6e75"
     t.index ["deprecated_annual_budget_id"], name: "fk_rails_ee836e6837"
     t.index ["owner_group_id"], name: "fk_rails_7fe369d121"

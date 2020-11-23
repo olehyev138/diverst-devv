@@ -2,13 +2,14 @@ class InitiativeExpense < ApplicationRecord
   belongs_to :initiative
   belongs_to :owner, class_name: 'User'
   belongs_to :budget_item
-  has_one :annual_budget, through: :budget_item
-  has_one :group, through: :annual_budget
+  belongs_to :budget_user
+  has_one :annual_budget, through: :initiative
+  has_one :group, through: :initiative
   has_one :enterprise, through: :group
 
   validates_length_of :description, maximum: 191
   validates :initiative, presence: true
-  validates :annual_budget, presence: true
+  # validates :annual_budget, presence: true
   validates :owner, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate -> { initiative_is_not_finalized }
