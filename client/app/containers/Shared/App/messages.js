@@ -155,6 +155,9 @@ export default defineMessages({
       id: `${scope}.dayOfWeek.saturday`,
     },
   ],
+  none: {
+    id: `${scope}.none`
+  },
   confirmation: {
     yes: {
       id: `${scope}.confirmation.yes`

@@ -10,6 +10,12 @@ export const scope = 'diverst.containers.MentorshipSession';
 export const snackbar = 'diverst.snackbars.Mentorship.Session';
 
 export default defineMessages({
+  mentorship: {
+    id: `${scope}.Mentorship`
+  },
+  host: {
+    id: `${scope}.host`
+  },
   index: {
     upcoming: {
       id: `${scope}.index.tabs.upcoming`,
@@ -72,6 +78,9 @@ export default defineMessages({
     update: {
       id: `${scope}.form.button.update`,
     },
+    close: {
+      id: `${scope}.form.button.close`
+    }
   },
   show: {
     dateAndTime: {

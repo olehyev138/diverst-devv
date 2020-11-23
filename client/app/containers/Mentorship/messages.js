@@ -118,6 +118,11 @@ export default defineMessages({
     types: {
       id: `${scope}.form.types`
     },
+    button: {
+      submit: {
+        id: `${scope}.form.button.submit`,
+      },
+    },
   },
   menu: {
     profile: {

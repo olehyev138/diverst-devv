@@ -354,7 +354,7 @@ export function Session(props) {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleProfileClose} color='primary'>
-                      Close
+                      <DiverstFormattedMessage {...messages.form.close} />
                     </Button>
                   </DialogActions>
                 </Dialog>
