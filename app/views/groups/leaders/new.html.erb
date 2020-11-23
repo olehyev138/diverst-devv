@@ -62,10 +62,10 @@
 });
     };
 
-    init_select2(".select2-field")
+    init_select2(".select2-field-new-members")
 
     $("form").on("cocoon:after-insert", function(_, row){
-      field = $(row).find(".select2-field")
+      field = $(row).find(".select2-field-new-members")
       init_select2(field);
     });
   });
