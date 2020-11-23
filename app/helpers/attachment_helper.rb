@@ -37,9 +37,9 @@ module AttachmentHelper
     attachment.filename.to_s if attachment.attached?
   end
 
-  # Attachment data encoded in base64, useful for rendering the attachment as an image on deserialization
+  # Attachment data encoded into a string for serialization
   def self.attachment_data_string(attachment)
-    Base64.encode64(attachment.download) if attachment.attached?
+    self.encode_data(attachment.download) if attachment.attached?
   end
 
   # Attachment content type
@@ -57,6 +57,11 @@ module AttachmentHelper
         crop: "#{width}x#{height}+0+0"
     }).processed
 
-    Base64.encode64(processed.service.download(processed.key))
+    self.encode_data(processed.service.download(processed.key))
+  end
+
+  # Encodes the passed in data in base64 for serialization
+  def self.encode_data(data_to_encode)
+    Base64.encode64(data_to_encode) if data_to_encode.present?
   end
 end
