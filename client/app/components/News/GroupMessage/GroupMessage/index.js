@@ -11,6 +11,8 @@ import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCo
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import messages from 'containers/News/messages';
+import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({});
 
@@ -35,7 +37,7 @@ export function GroupMessage(props) {
           />
           <Box mb={4} />
           <Typography variant='h6'>
-            Comments
+            <DiverstFormattedMessage {...messages.comments} />
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
           {groupMessage?.comments && groupMessage.comments.map((comment, i) => {

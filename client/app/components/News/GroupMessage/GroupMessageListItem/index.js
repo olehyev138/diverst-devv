@@ -67,7 +67,6 @@ export function GroupMessageListItem(props) {
     setPinned(false);
   }
 
-  // TODO : Add customText to intl.formatMessage
   return (
     <React.Fragment>
       <CardHeader

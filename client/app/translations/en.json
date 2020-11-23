@@ -807,6 +807,7 @@
   "diverst.containers.News.index.button.social.delete_confirm": "Delete social link?",
   "diverst.containers.News.index.no_news.approved": "No posts",
   "diverst.containers.News.index.no_news.pending": "No pending posts",
+  "diverst.containers.News.leave.comment": "Leave a Comment",
   "diverst.containers.News.tab.approved": "Approved",
   "diverst.containers.News.tab.pending": "Pending Approval",
   "diverst.containers.NotAuthorizedPage.headers.header": "You don't have permission to view this page",

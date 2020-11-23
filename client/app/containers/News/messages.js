@@ -64,6 +64,9 @@ export default defineMessages({
   approved: {
     id: `${scope}.tab.approved`,
   },
+  leave_comment: {
+    id: `${scope}.leave.comment`
+  },
   pending: {
     id: `${scope}.tab.pending`,
   },
