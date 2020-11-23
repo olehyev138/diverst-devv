@@ -46,4 +46,17 @@ module AttachmentHelper
   def self.attachment_content_type(attachment)
     attachment.content_type if attachment.attached?
   end
+
+  def self.image_resize_variant_data_string(image_attachment, width, height)
+    return nil unless image_attachment.attached?
+
+    processed = image_attachment.variant(combine_options: {
+        auto_orient: true,
+        gravity: 'center',
+        resize: "#{width}x#{height}^",
+        crop: "#{width}x#{height}+0+0"
+    }).processed
+
+    Base64.encode64(processed.service.download(processed.key))
+  end
 end
