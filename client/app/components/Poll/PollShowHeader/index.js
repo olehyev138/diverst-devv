@@ -17,6 +17,7 @@ import messages from 'containers/Poll/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { percent } from 'utils/floatRound';
+import { DiverstFormattedMessage } from '../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   PollShowHeaderItem: {
@@ -49,7 +50,7 @@ export function PollShowHeader(props, context) {
             variant='contained'
             color='primary'
           >
-            Back
+            <DiverstFormattedMessage {...messages.back} />
           </Button>
         </Grid>
       </Grid>
@@ -63,7 +64,7 @@ export function PollShowHeader(props, context) {
           <Grid container>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                Invitations
+                <DiverstFormattedMessage {...messages.invitations} />
               </Typography>
               <Typography variant='h6'>
                 {poll.targeted_users_count}
@@ -71,7 +72,7 @@ export function PollShowHeader(props, context) {
             </Grid>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                Responses
+                <DiverstFormattedMessage {...messages.response} />
               </Typography>
               <Typography variant='h6'>
                 {poll.responses_count}
@@ -79,13 +80,13 @@ export function PollShowHeader(props, context) {
             </Grid>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                Response Rate
+                <DiverstFormattedMessage {...messages.rate} />
               </Typography>
               <Typography variant='h6'>
                 {
                   poll.targeted_users_count > 0
                     ? `${percent(poll.responses_count, poll.targeted_users_count)}%`
-                    : 'N/A'
+                    : <DiverstFormattedMessage {...messages.na} />
                 }
               </Typography>
             </Grid>

@@ -41,12 +41,12 @@ export function PollResponses(props, context) {
 
   const responsesColumns = [
     {
-      title: messages.responses.respondent,
+      title: intl.formatMessage(messages.responses.respondent, props.customTexts),
       field: 'respondent',
       sorting: false
     },
     {
-      title: messages.responses.date,
+      title: intl.formatMessage(messages.responses.date, props.customTexts),
       query_field: 'poll_responses.created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
     },
@@ -54,17 +54,17 @@ export function PollResponses(props, context) {
 
   const textColumns = [
     {
-      title: messages.textual.answer,
+      title: intl.formatMessage(messages.textual.answer, props.customTexts),
       render: rowData => rowData?.field_data?.find(fd => fd.field_id === fieldId)?.data,
       sorting: false,
     },
     {
-      title: messages.textual.respondent,
+      title: intl.formatMessage(messages.textual.respondent, props.customTexts),
       field: 'respondent',
       sorting: false
     },
     {
-      title: messages.textual.date,
+      title: intl.formatMessage(messages.textual.date, props.customTexts),
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL),
       query_field: 'poll_responses.created_at',
     },

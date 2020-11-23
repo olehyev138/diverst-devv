@@ -30,6 +30,7 @@ import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function PollResponseFormInner({ formikProps, buttonText, errors, ...props }) {
+  // Translation issue :  Message generated is dependant on a description?
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>

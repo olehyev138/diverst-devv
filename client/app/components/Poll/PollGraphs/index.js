@@ -45,7 +45,7 @@ export function PollGraphs(props, context) {
 
   return (
     <React.Fragment>
-      Polls Graph
+      <DiverstFormattedMessage {...messages.graphs} />
     </React.Fragment>
   );
 }
