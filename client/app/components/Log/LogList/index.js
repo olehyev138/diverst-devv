@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
+import logMessages from 'containers/Log/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
@@ -102,13 +103,13 @@ export function LogList(props, context) {
             <CardContent>
               <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
                 <Grid item xs={4}>
-                  <Typography>Filter by group</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.filter} /></Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>From</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.from} /></Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>To</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.to} /></Typography>
                 </Grid>
                 <Grid item xs={2}>
                 </Grid>
