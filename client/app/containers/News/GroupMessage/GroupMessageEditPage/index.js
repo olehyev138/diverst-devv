@@ -24,7 +24,6 @@ import {
 
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -32,7 +31,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-  const { intl } = props;
 
   const { group_id: groupId, item_id: itemId } = useParams();
   const links = {
@@ -51,7 +49,7 @@ export function GroupMessageEditPage(props) {
     <GroupMessageForm
       edit
       groupMessageAction={props.updateGroupMessageBegin}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}
@@ -63,7 +61,6 @@ export function GroupMessageEditPage(props) {
 }
 
 GroupMessageEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
@@ -94,7 +91,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

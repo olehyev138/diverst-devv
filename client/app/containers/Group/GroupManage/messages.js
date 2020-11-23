@@ -19,6 +19,9 @@ export default defineMessages({
     id: `${scope}.form.button.cancel`,
   },
   leader: {
+    confirm: {
+      id: `${scope}.leader.confirm`,
+    },
     select: {
       id: `${scope}.leader.form.select`,
     },
@@ -35,7 +38,7 @@ export default defineMessages({
       id: `${scope}.leader.list.edit`,
     },
     delete: {
-      id: `${scope}.leader.list.edit`,
+      id: `${scope}.leader.list.delete`,
     },
     title: {
       id: `${scope}.leader.list.title`,

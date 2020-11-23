@@ -24,7 +24,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import CampaignList from 'components/Innovate/Campaign/CampaignList';
 import { push } from 'connected-react-router';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignListPage(props) {
@@ -77,6 +77,7 @@ export function CampaignListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -92,6 +93,7 @@ CampaignListPage.propTypes = {
   campaign: PropTypes.object,
   handleVisitCampaignEdit: PropTypes.func,
   handleVisitCampaignShow: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -100,6 +102,7 @@ const mapStateToProps = createStructuredSelector({
   isFetchingCampaigns: selectIsFetchingCampaigns(),
   campaign: selectFormCampaign(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

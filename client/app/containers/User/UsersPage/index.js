@@ -38,7 +38,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const UserTypes = Object.freeze([
@@ -125,6 +125,7 @@ export function UserListPage(props) {
         links={links}
         userType={type}
         UserTypes={UserTypes}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -139,6 +140,7 @@ UserListPage.propTypes = {
   exportUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
   handleVisitUserEdit: PropTypes.func,
+  customTexts: PropTypes.object,
   hasChanged: PropTypes.bool,
 };
 
@@ -147,6 +149,7 @@ const mapStateToProps = createStructuredSelector({
   userTotal: selectUserTotal(),
   isFetchingUsers: selectIsFetchingUsers(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
   hasChanged: selectHasChanged(),
 });
 

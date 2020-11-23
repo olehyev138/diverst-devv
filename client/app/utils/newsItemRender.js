@@ -22,6 +22,7 @@ export default function renderNewsItem(item, props, small = false) {
         small={small}
         currentGroup={props.currentGroup}
         enableLikes={props.enableLikes}
+        customTexts={props.customTexts}
       />
     );
   else if (item.news_link) // eslint-disable-line no-else-return
@@ -43,6 +44,7 @@ export default function renderNewsItem(item, props, small = false) {
         small={small}
         currentGroup={props.currentGroup}
         enableLikes={props.enableLikes}
+        customTexts={props.customTexts}
       />
     );
   else if (item.social_link)
@@ -64,6 +66,7 @@ export default function renderNewsItem(item, props, small = false) {
         small={small}
         currentGroup={props.currentGroup}
         enableLikes={props.enableLikes}
+        customTexts={props.customTexts}
       />
     );
 

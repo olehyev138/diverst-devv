@@ -18,7 +18,7 @@ import {
   selectIsCommitting,
   selectFormErrors,
 } from './selectors';
-
+import { selectCustomText } from '../../Shared/App/selectors';
 import {
   getQuestionnaireByTokenBegin,
   submitResponseBegin,
@@ -35,7 +35,7 @@ export function PollResponsePage(props) {
   useInjectSaga({ key: 'pollResponse', saga });
 
   const { token } = useParams();
-
+  // TODO : Add missing messages
   useEffect(() => {
     if (token)
       props.getQuestionnaireByTokenBegin({
@@ -58,7 +58,7 @@ export function PollResponsePage(props) {
       isCommitting={props.isCommitting}
       token={props.token}
       errors={props.formErrors}
-
+      customTexts={props.customTexts}
       submitAction={props.submitResponseBegin}
     />
   );
@@ -70,7 +70,7 @@ PollResponsePage.propTypes = {
   pollResponseUnmount: PropTypes.func,
   showSnackbar: PropTypes.func,
   redirectAction: PropTypes.func,
-
+  customTexts: PropTypes.object,
   isCommitting: PropTypes.bool,
   token: PropTypes.string,
   response: PropTypes.object,
@@ -84,6 +84,7 @@ const mapStateToProps = createStructuredSelector({
   response: selectResponse(),
   isLoading: selectIsLoading(),
   formErrors: selectFormErrors(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

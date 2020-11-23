@@ -13,10 +13,14 @@ import { intl } from 'tests/mocks/react-intl';
 
 loadTranslation('./app/translations/en.json');
 
+const props = {
+  customTexts: { region: 'region' },
+};
+
 describe('<RegionLeaderForm />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<RegionLeaderForm intl={intl} />);
+    const wrapper = shallowWithIntl(<RegionLeaderForm intl={intl} {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

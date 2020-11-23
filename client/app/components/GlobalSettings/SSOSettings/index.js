@@ -26,7 +26,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -186,7 +186,6 @@ SSOSettingsInner.propTypes = {
   handleBlur: PropTypes.func,
   values: PropTypes.object,
   isCommitting: PropTypes.bool,
-  buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func
 };

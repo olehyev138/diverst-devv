@@ -31,6 +31,7 @@ import {
   selectMentorshipsTotal,
   selectIsFetchingMentorships,
 } from 'containers/Mentorship/Mentoring/selectors';
+import { selectCustomText } from '../../../Shared/App/selectors';
 import {
   getMentorsBegin,
   getAvailableMentorsBegin,
@@ -184,6 +185,7 @@ export function MentorsPage(props) {
 
         currentTab={tab}
         handleChangeTab={handleChangeTab}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -195,6 +197,7 @@ MentorsPage.propTypes = {
   userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
+  customTexts: PropTypes.object,
 
   getMentorsBegin: PropTypes.func.isRequired,
   getAvailableMentorsBegin: PropTypes.func.isRequired,
@@ -223,6 +226,7 @@ const mapStateToProps = createStructuredSelector({
   mentees: selectPaginatedMentees(),
   mentorshipsTotal: selectMentorshipsTotal(),
   isFetchingMentorships: selectIsFetchingMentorships(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

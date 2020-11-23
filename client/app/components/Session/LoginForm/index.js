@@ -163,6 +163,7 @@ function LoginForm(props, context) {
   const { classes, width } = props;
   const { intl } = context;
 
+  // TODO : Add customTExts to intl.formatMessage
   const LoginFormSchema = Yup.object().shape({
     email: Yup
       .string()

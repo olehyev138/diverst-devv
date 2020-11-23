@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
 
+import { selectCustomText } from '../../Shared/App/selectors';
 import { selectEventsTotal, selectIsLoading, selectPaginatedEvents, selectCalendarEvents } from 'containers/Event/selectors';
 import { eventsUnmount, getEventsBegin } from 'containers/Event/actions';
 
@@ -128,7 +129,7 @@ export function EventsPage(props) {
   return (
     <React.Fragment>
       {!props.readonly && (
-        <DiverstBreadcrumbs />
+        <DiverstBreadcrumbs customTexts={props.customTexts} />
       )}
       <List
         events={props.events}
@@ -165,6 +166,7 @@ EventsPage.propTypes = {
   readonly: PropTypes.bool,
   onlyUpcoming: PropTypes.bool,
   listComponent: PropTypes.elementType,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -172,6 +174,7 @@ const mapStateToProps = createStructuredSelector({
   calendarEvents: selectCalendarEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

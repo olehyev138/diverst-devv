@@ -14,7 +14,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import { getFoldersBegin, createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
 import FolderForm from 'components/Resource/Folder/FolderForm';
@@ -49,7 +49,7 @@ export function FolderCreatePage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.folders}
       folderAction={props.createFolderBegin}
-      buttonText={props.intl.formatMessage(messages.create)}
+      buttonText={props.intl.formatMessage(messages.create, props.customTexts)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -76,7 +76,8 @@ FolderCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -85,6 +86,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

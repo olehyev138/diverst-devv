@@ -20,7 +20,7 @@ import reducer from 'containers/Log/reducer';
 
 import { selectPaginatedLogs, selectLogTotal, selectIsLoading } from 'containers/Log/selectors';
 import { getLogsBegin, logUnmount, exportLogsBegin } from 'containers/Log/actions';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import LogList from 'components/Log/LogList';
 import groupSaga from 'containers/Group/saga';
@@ -133,6 +133,7 @@ export function LogListPage(props) {
         logFrom={from ? from[1] : null}
         logTo={to ? to[1] : null}
         groupLabels={groupLabels || []}
+        customTexts={props.customTexts}
 
       />
     </React.Fragment>
@@ -148,7 +149,8 @@ LogListPage.propTypes = {
   exportLogsBegin: PropTypes.func,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -156,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
   logTotal: selectLogTotal(),
   isLoading: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

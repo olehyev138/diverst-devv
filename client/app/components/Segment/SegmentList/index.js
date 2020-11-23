@@ -58,7 +58,7 @@ export function SegmentList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.list.name),
+      title: intl.formatMessage(messages.list.name, props.customTexts),
       field: 'name',
       query_field: 'name'
     },
@@ -91,7 +91,7 @@ export function SegmentList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.list.title)}
+            title={messages.list.title}
             handlePagination={props.handlePagination}
             handleSearching={props.handleSearching}
             onOrderChange={handleOrderChange}
@@ -103,7 +103,7 @@ export function SegmentList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: intl.formatMessage(messages.list.edit),
+                tooltip: intl.formatMessage(messages.list.edit, props.customTexts),
                 onClick: (_, rowData) => {
                   props.handleSegmentEdit(rowData.id);
                 },
@@ -111,10 +111,10 @@ export function SegmentList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.list.delete),
+                tooltip: intl.formatMessage(messages.list.delete, props.customTexts),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                     props.deleteSegmentBegin(rowData.id);
                 },
                 disabled: !permission(rowData, 'destroy?')
@@ -141,7 +141,8 @@ SegmentList.propTypes = {
   links: PropTypes.shape({
     segmentNew: PropTypes.string,
     segmentEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object
 };
 export default compose(
   injectIntl,

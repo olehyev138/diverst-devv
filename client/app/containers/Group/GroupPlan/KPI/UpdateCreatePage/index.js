@@ -53,7 +53,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectGroup } from 'containers/Group/selectors';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -63,8 +62,6 @@ export function UpdateEditPage(props) {
   useInjectSaga({ key: 'updates', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
-
-  const { intl } = props;
 
   useEffect(() => {
     const updatableId = props?.currentGroup?.id;
@@ -87,7 +84,7 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText={intl.formatMessage(messages.createupdate)}
+      buttonText={messages.createupdate}
       updateAction={payload => props.createUpdateBegin({
         ...payload,
         updatableId: props?.currentGroup?.id
@@ -100,7 +97,6 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getUpdatePrototypeBegin: PropTypes.func.isRequired,
   createUpdateBegin: PropTypes.func.isRequired,
   updateFieldDataBegin: PropTypes.func.isRequired,
@@ -137,7 +133,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

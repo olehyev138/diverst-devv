@@ -20,7 +20,7 @@ import {
   selectIsFetchingPolicies,
   selectPoliciesTotal
 } from 'containers/User/UserPolicy/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   policiesUnmount, getPoliciesBegin,
@@ -83,6 +83,7 @@ export function PolicyTemplatesPage(props) {
       handleOrdering={handleOrdering}
       handlePolicyEdit={props.handlePolicyEdit}
       params={params}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -95,6 +96,7 @@ PolicyTemplatesPage.propTypes = {
   policies: PropTypes.array,
   policiesTotal: PropTypes.number,
   isFetching: PropTypes.bool,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -103,6 +105,7 @@ const mapStateToProps = createStructuredSelector({
   policiesTotal: selectPoliciesTotal(),
   isFetching: selectIsFetchingPolicies(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

@@ -50,7 +50,7 @@ export function GroupSponsorEditPage(props) {
         sponsor={props.sponsor}
         sponsorAction={props.updateSponsorBegin}
         links={links}
-        buttonText={intl.formatMessage(messages.create)}
+        buttonText={messages.create}
         sponsorableId={groupId}
       />
     </React.Fragment>

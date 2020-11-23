@@ -45,6 +45,7 @@ export function NewsLink(props) {
                 comment={comment}
                 deleteCommentAction={props.deleteNewsLinkCommentBegin}
                 newsItem={props.newsItem}
+                customTexts={props.customTexts}
               />
             );
           })}
@@ -64,6 +65,7 @@ NewsLink.propTypes = {
     newsLinkEdit: PropTypes.func
   }),
   deleteNewsLinkCommentBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
