@@ -7,8 +7,12 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.SignUp';
+export const snackbar = 'diverst.snackbars.SignUp';
 
 export default defineMessages({
+  invitation: {
+    id: `${snackbar}.invitation`
+  },
   activate: {
     id: `${scope}.activate`
   },
