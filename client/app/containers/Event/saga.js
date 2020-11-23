@@ -52,7 +52,7 @@ export function* getEvents(action) {
     yield put(getEventsError({ annualBudgetId }));
 
     yield put(showSnackbar({
-      message: err.response.status === 401 ? intl.formatMessage(messages.snackbars.errors.load_events_no_permission) : intl.formatMessage(messages.snackbars.errors.load_events),
+      message: err.response.status === 401 ? messages.snackbars.errors.load_events_no_permission : messages.snackbars.errors.load_events,
       options: { variant: 'warning' }
     }));
   }
@@ -67,7 +67,7 @@ export function* getEvent(action) {
     yield put(getEventError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.load_event),
+      message: messages.snackbars.errors.load_event,
       options: { variant: 'warning' }
     }));
   }
@@ -82,14 +82,14 @@ export function* createEvent(action) {
     yield put(createEventSuccess());
     yield put(push(ROUTES.group.events.show.path(payload.initiative.owner_group_id, response.data.initiative.id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.create_event),
+      message: messages.snackbars.success.create_event,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createEventError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.create_event),
+      message: messages.snackbars.errors.create_event,
       options: { variant: 'warning' }
     }));
   }
@@ -103,14 +103,14 @@ export function* updateEvent(action) {
     yield put(updateEventSuccess());
     yield put(push(ROUTES.group.events.show.path(payload.initiative.owner_group_id, payload.initiative.id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_event),
+      message: messages.snackbars.success.update_event,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateEventError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_event),
+      message: messages.snackbars.errors.update_event,
       options: { variant: 'warning' }
     }));
   }
@@ -122,14 +122,14 @@ export function* deleteEvent(action) {
     yield put(deleteEventSuccess());
     yield put(push(ROUTES.group.events.index.path(action.payload.group_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.delete_event),
+      message: messages.snackbars.success.delete_event,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteEventError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.delete_event),
+      message: messages.snackbars.errors.delete_event,
       options: { variant: 'warning' }
     }));
   }
@@ -141,11 +141,11 @@ export function* deleteEventComment(action) {
     yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
     yield put(deleteEventCommentSuccess());
     yield put(getEventBegin({ id: action.payload.initiative_id, with_comments: true }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_event_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_event_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteEventCommentError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_event_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_event_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -157,11 +157,11 @@ export function* createEventComment(action) {
     const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
     yield put(createEventCommentSuccess());
     yield put(getEventBegin({ id: payload.initiative_comment.initiative_id, with_comments: true }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_event_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_event_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createEventCommentError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_event_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_event_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -176,7 +176,7 @@ export function* archiveEvent(action) {
   } catch (err) {
     yield put(archiveEventError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.archive),
+      message: messages.snackbars.errors.archive,
       options: { variant: 'warning' }
     }));
   }
@@ -186,11 +186,11 @@ export function* finalizeExpenses(action) {
   try {
     const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
     yield put(finalizeExpensesSuccess(response.data));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.finalize_expense), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.finalize_expense, options: { variant: 'success' } }));
   } catch (err) {
     yield put(finalizeExpensesError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.finalize_expense), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.finalize_expense, options: { variant: 'warning' } }));
   }
 }
 
@@ -202,7 +202,7 @@ export function* joinEvent(action) {
   } catch (err) {
     yield put(joinEventError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.join), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.join, options: { variant: 'warning' } }));
   }
 }
 
@@ -214,7 +214,7 @@ export function* leaveEvent(action) {
   } catch (err) {
     yield put(leaveEventError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leave), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.leave, options: { variant: 'warning' } }));
   }
 }
 
@@ -223,11 +223,11 @@ export function* exportAttendees(action) {
     const response = yield call(api.initiativeUsers.csvExport.bind(api.initiativeUsers), action.payload);
 
     yield put(exportAttendeesSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export_attendees), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.export_attendees, options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportAttendeesError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export_attendees), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.export_attendees, options: { variant: 'warning' } }));
   }
 }
 

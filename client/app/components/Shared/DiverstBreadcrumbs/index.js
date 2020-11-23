@@ -51,7 +51,7 @@ export function DiverstBreadcrumbs(props) {
             const [title, isPathPrefix] = findTitleForPath({
               path: to,
               params: Object.values(params),
-              textArguments: customTexts()
+              textArguments: props.customTexts
             });
 
             if (!title)
@@ -84,6 +84,7 @@ DiverstBreadcrumbs.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   title: PropTypes.string,
+  customTexts: PropTypes.object.isRequired,
 };
 
 export default compose(

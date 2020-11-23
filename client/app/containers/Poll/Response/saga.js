@@ -25,7 +25,7 @@ export function* getResponse(action) {
     yield put(getResponseSuccess(response.data));
   } catch (err) {
     yield put(getResponseError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.response), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.response, options: { variant: 'warning' } }));
   }
 }
 
@@ -36,7 +36,7 @@ export function* getResponses(action) {
     yield put(getResponsesSuccess(response.data.page));
   } catch (err) {
     yield put(getResponsesError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.responses), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.responses, options: { variant: 'warning' } }));
   }
 }
 

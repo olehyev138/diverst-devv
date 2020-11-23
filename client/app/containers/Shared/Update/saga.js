@@ -28,7 +28,7 @@ export function* getUpdate(action) {
     yield put(getUpdateSuccess(response.data));
   } catch (err) {
     yield put(getUpdateError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.get_update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.get_update, options: { variant: 'warning' } }));
   }
 }
 
@@ -40,10 +40,10 @@ export function* updateUpdate(action) {
 
     yield put(updateUpdateSuccess({}));
     yield put(push(redirectPath));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUpdateError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -53,10 +53,10 @@ export function* deleteUpdate(action) {
     const response = yield call(api.updates.destroy.bind(api.updates), payload);
 
     yield put(deleteUpdateSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUpdateError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -70,7 +70,7 @@ export function* getUpdates(action, updatableKey) {
     yield put(getUpdatesSuccess(response.data.page));
   } catch (err) {
     yield put(getUpdatesError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.updates), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.updates, options: { variant: 'warning' } }));
   }
 }
 
@@ -84,7 +84,7 @@ export function* getUpdatePrototype(action, updatableKey) {
     yield put(getUpdatePrototypeSuccess(response.data));
   } catch (err) {
     yield put(getUpdatePrototypeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.prototype), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.prototype, options: { variant: 'warning' } }));
   }
 }
 
@@ -98,10 +98,10 @@ export function* createUpdate(action, updatableKey) {
 
     yield put(createUpdateSuccess({}));
     yield put(push(redirectPath));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUpdateError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 

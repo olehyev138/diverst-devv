@@ -159,6 +159,7 @@ export function AdminGroupList(props, context) {
           importAction={props.importAction}
           intl={props.intl}
           rowsPerPage={defaultParams.count}
+          customTexts={props.customTexts}
         />
       </DiverstLoader>
       <DiverstPagination
@@ -183,6 +184,7 @@ AdminGroupList.propTypes = {
   handlePagination: PropTypes.func,
   positions: PropTypes.array,
   importAction: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 export default compose(

@@ -73,7 +73,7 @@ const SystemUsersLayout = (props) => {
       else if (permission(props, 'policy_templates_manage'))
         redirectAction(ROUTES.admin.system.users.roles.index.path());
       else {
-        showSnackbar({ message: 'You do not have permission to see this page', options: { variant: 'warning' } });
+        showSnackbar({ message: 'diverst.containers.App.texts.permissions.system', options: { variant: 'warning' } });
         redirectAction(ROUTES.user.home.path());
       }
 

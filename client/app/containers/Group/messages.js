@@ -34,6 +34,12 @@ export default defineMessages({
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },
+  sub_erg: {
+    id: `${scope}.home.sub_erg`,
+  },
+  groupParent: {
+    id: `${scope}.home.parent`,
+  },
   children_expand: {
     id: `${scope}.index.button.children_expand`,
   },
@@ -78,6 +84,9 @@ export default defineMessages({
   },
   welcome: {
     id: `${scope}.home.span.welcome`,
+  },
+  categorize_subgroups: {
+    id: `${scope}.categorize`,
   },
   allcategories: {
     id: `${scope}.categorize.button.allcategories`,

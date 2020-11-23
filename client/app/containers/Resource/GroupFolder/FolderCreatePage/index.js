@@ -14,7 +14,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import { getFoldersBegin, createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
 import FolderForm from 'components/Resource/Folder/FolderForm';
@@ -52,12 +52,12 @@ export function FolderCreatePage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <FolderForm
         getFoldersBegin={props.getFoldersBegin}
         selectFolders={props.folders}
         folderAction={props.createFolderBegin}
-        buttonText={props.intl.formatMessage(messages.create)}
+        buttonText={props.intl.formatMessage(messages.create, props.customTexts)}
         currentUser={currentUser}
         currentGroup={currentGroup}
         links={links}
@@ -83,7 +83,8 @@ FolderCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -91,6 +92,7 @@ const mapStateToProps = createStructuredSelector({
   folders: selectPaginatedSelectFolders(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

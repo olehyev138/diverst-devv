@@ -27,7 +27,7 @@ export function* getUserRoles(action) {
     yield put(getUserRolesSuccess(response.data.page));
   } catch (err) {
     yield put(getUserRolesError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.roles), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.roles, options: { variant: 'warning' } }));
   }
 }
 
@@ -37,7 +37,7 @@ export function* getUserRole(action) {
     yield put(getUserRoleSuccess(response.data));
   } catch (err) {
     yield put(getUserRoleError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.role), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.role, options: { variant: 'warning' } }));
   }
 }
 
@@ -49,10 +49,10 @@ export function* createUserRole(action) {
 
     yield put(createUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserRoleError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -63,10 +63,10 @@ export function* updateUserRole(action) {
 
     yield put(updateUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserRoleError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -76,10 +76,10 @@ export function* deleteUserRole(action) {
 
     yield put(deleteUserRoleSuccess());
     yield put(push(ROUTES.admin.system.users.roles.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserRoleError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

@@ -38,7 +38,7 @@ export function* getGroupOverviewMetrics(action) {
   } catch (err) {
     yield put(getGroupOverviewMetricsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group_overview), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.group_overview, options: { variant: 'warning' } }));
   }
 }
 
@@ -50,7 +50,7 @@ export function* getGroupSpecificMetrics(action) {
   } catch (err) {
     yield put(getGroupSpecificMetricsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group_overview), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.group_overview, options: { variant: 'warning' } }));
   }
 }
 
@@ -62,7 +62,7 @@ export function* getGroupPopulation(action) {
   } catch (err) {
     yield put(getGroupPopulationError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.population), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.population, options: { variant: 'warning' } }));
   }
 }
 
@@ -74,7 +74,7 @@ export function* getViewsPerGroup(action) {
   } catch (err) {
     yield put(getViewsPerGroupError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.group), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.views.group, options: { variant: 'warning' } }));
   }
 }
 
@@ -86,7 +86,7 @@ export function* getInitiativesPerGroup(action) {
   } catch (err) {
     yield put(getInitiativesPerGroupError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group.initiatives), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.group.initiatives, options: { variant: 'warning' } }));
   }
 }
 
@@ -98,7 +98,7 @@ export function* getNewsPerGroup(action) {
   } catch (err) {
     yield put(getNewsPerGroupError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.group.news), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.group.news, options: { variant: 'warning' } }));
   }
 }
 
@@ -110,7 +110,7 @@ export function* getViewsPerNewsLink(action) {
   } catch (err) {
     yield put(getViewsPerNewsLinkError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.news_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.views.news_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -122,7 +122,7 @@ export function* getViewsPerFolder(action) {
   } catch (err) {
     yield put(getViewsPerFolderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.folders), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.views.folders, options: { variant: 'warning' } }));
   }
 }
 
@@ -134,7 +134,7 @@ export function* getViewsPerResource(action) {
   } catch (err) {
     yield put(getViewsPerResourceError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.views.resources), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.views.resources, options: { variant: 'warning' } }));
   }
 }
 
@@ -146,7 +146,7 @@ export function* getGrowthOfGroups(action) {
   } catch (err) {
     yield put(getGrowthOfGroupsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.groups), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.growth.groups, options: { variant: 'warning' } }));
   }
 }
 
@@ -158,7 +158,7 @@ export function* getGrowthOfResources(action) {
   } catch (err) {
     yield put(getGrowthOfResourcesError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.resources), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.growth.resources, options: { variant: 'warning' } }));
   }
 }
 
@@ -170,7 +170,7 @@ export function* getGrowthOfUsers(action) {
   } catch (err) {
     yield put(getGrowthOfUsersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.growth.users), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.growth.users, options: { variant: 'warning' } }));
   }
 }
 

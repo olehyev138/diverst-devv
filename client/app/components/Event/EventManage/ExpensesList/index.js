@@ -60,18 +60,18 @@ export function ExpenseList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.description),
+      title: intl.formatMessage(messages.columns.description, props.customTexts),
       field: 'description',
       query_field: 'description',
     },
     {
-      title: intl.formatMessage(messages.columns.amount),
+      title: intl.formatMessage(messages.columns.amount, props.customTexts),
       field: 'amount',
       query_field: 'amount',
       render: rowData => toCurrencyString(props.intl, rowData.amount || 0, initiative.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.createdAt),
+      title: intl.formatMessage(messages.columns.createdAt, props.customTexts),
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_MED)
@@ -83,7 +83,7 @@ export function ExpenseList(props, context) {
   if (initiative && !initiative.finished_expenses) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(messages.actions.edit),
+      tooltip: intl.formatMessage(messages.actions.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.links.editExpense(rowData.id);
       }
@@ -91,7 +91,7 @@ export function ExpenseList(props, context) {
 
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: intl.formatMessage(messages.actions.delete),
+      tooltip: intl.formatMessage(messages.actions.delete, props.customTexts),
       onClick: (_, rowData) => {
         props.deleteExpenseBegin({ id: rowData.id });
       }
@@ -129,7 +129,7 @@ export function ExpenseList(props, context) {
                       variant='contained'
                       onClick={() => {
                         // eslint-disable-next-line no-restricted-globals,no-alert
-                        if (intl.formatMessage(messages.buttons.closeConfirm))
+                        if (intl.formatMessage(messages.buttons.closeConfirm, props.customTexts))
                           props.finalizeExpensesBegin({ id: props.initiative.id });
                       }}
                     >
@@ -151,7 +151,7 @@ export function ExpenseList(props, context) {
         <Grid container spacing={3}>
           <Grid item xs>
             <DiverstTable
-              title={intl.formatMessage(messages.title)}
+              title={messages.title}
               handlePagination={props.handlePagination}
               onOrderChange={handleOrderChange}
               isLoading={props.isFetchingExpenses}
@@ -227,7 +227,7 @@ ExpenseList.propTypes = {
   currentGroup: PropTypes.object,
   expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
-  expenseSumTotal: PropTypes.number,
+  expenseSumTotal: PropTypes.string,
   isFetchingExpenses: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
   handlePagination: PropTypes.func,
@@ -241,7 +241,8 @@ ExpenseList.propTypes = {
     newExpense: PropTypes.string,
     initiativeManage: PropTypes.string,
     editExpense: PropTypes.func,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(
