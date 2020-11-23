@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_183438) do
+ActiveRecord::Schema.define(version: 2020_11_23_193450) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -167,6 +167,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_183438) do
     t.bigint "budget_item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "finished_expenses"
+    t.decimal "estimated", precision: 20, scale: 4, default: "0.0"
     t.index ["budget_item_id"], name: "index_budget_users_on_budget_item_id"
     t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
   end
@@ -1949,6 +1951,12 @@ ActiveRecord::Schema.define(version: 2020_11_23_183438) do
   add_foreign_key "views", "resources"
   add_foreign_key "views", "users"
 
+  create_view "budget_users_expenses_sum", sql_definition: <<-SQL
+      select `initiative_expenses`.`budget_user_id` AS `budget_user_id`,coalesce(sum(`initiative_expenses`.`amount`),0) AS `spent` from `initiative_expenses` group by `initiative_expenses`.`budget_user_id`
+  SQL
+  create_view "budget_users_with_expenses", sql_definition: <<-SQL
+      select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,coalesce(`budget_users_expenses_sum`.`spent`,0) AS `spent` from (`budget_users` left join `budget_users_expenses_sum` on((`budget_users`.`id` = `budget_users_expenses_sum`.`budget_user_id`)))
+  SQL
   create_view "duplicate_page_names", sql_definition: <<-SQL
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
   SQL
