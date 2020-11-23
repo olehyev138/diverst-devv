@@ -47,6 +47,11 @@ module AttachmentHelper
     attachment.content_type if attachment.attached?
   end
 
+  # Creates a resized image variant of the passed attachment with the upper limits of the passed width & height
+  # and encodes it into a string for serialization.
+  #
+  # Note: When the variant is processed, ActiveStorage should upload it to the service so that the processing
+  # doesn't happen every single time.
   def self.image_resize_variant_data_string(image_attachment, width, height)
     return nil unless image_attachment.attached?
 
