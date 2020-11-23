@@ -1048,6 +1048,7 @@
   "diverst.containers.Resource.form.input.folder": "Move to a Folder",
   "diverst.containers.Resource.form.input.title": "Title",
   "diverst.containers.Resource.form.input.url": "URL",
+  "diverst.containers.Resource.form.input.url_file": "URL / File",
   "diverst.containers.Resource.index.button.archive": "Archive",
   "diverst.containers.Resource.index.button.confirm_delete": "Delete Resource?",
   "diverst.containers.Resource.index.button.delete": "Delete",
