@@ -7,8 +7,23 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.App';
+export const routes = 'diverst.containers.Routes';
 
 export default defineMessages({
+  budgetRoute: {
+    id: `${routes}.admin.plan.group_budgets`
+  },
+  permissions: {
+    budget: {
+      id: `${scope}.budget`,
+    },
+    global: {
+      id: `${scope}.global`,
+    },
+    system: {
+      id: `${scope}.system`,
+    },
+  },
   texts: {
     erg: {
       id: `${scope}.texts.erg`,

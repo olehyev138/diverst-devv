@@ -16,6 +16,7 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
+import messages from 'containers/Shared/App/messages';
 
 const styles = theme => ({
   content: {
@@ -58,7 +59,7 @@ const GroupManageLayout = (props) => {
       else if (permission(currentGroup, 'leaders_view?'))
         redirectAction(ROUTES.group.manage.leaders.index.path(groupId));
       else {
-        showSnackbar({ message: 'diverst.containers.App.texts.permissions.budget', options: { variant: 'warning' } });
+        showSnackbar({ message: mesasges.permissions.budget, options: { variant: 'warning' } });
         redirectAction(ROUTES.group.home.path(groupId));
       }
 

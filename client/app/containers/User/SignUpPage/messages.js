@@ -31,4 +31,7 @@ export default defineMessages({
   consentAccept: {
     id: `${scope}.consentAccept`
   },
+  token: {
+    id: 'diverst.containers.App.texts.signup'
+  }
 });
