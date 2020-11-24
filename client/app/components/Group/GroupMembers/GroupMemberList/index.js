@@ -202,7 +202,7 @@ export function GroupMemberList(props) {
                   }}
                   color='primary'
                 >
-                  Close
+                  <DiverstFormattedMessage {...messages.close}/>
                 </Button>
               </DialogActions>
             </React.Fragment>

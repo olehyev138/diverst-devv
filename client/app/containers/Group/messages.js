@@ -10,6 +10,15 @@ export const scope = 'diverst.containers.Group';
 export const snackbar = 'diverst.snackbars.Group';
 
 export default defineMessages({
+  importUsers: {
+    id: `${scope}.import.users`,
+  },
+  importDescription: {
+    id: `${scope}.import.description`,
+  },
+  importInstructions: {
+    id: `${scope}.import.instructions`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
