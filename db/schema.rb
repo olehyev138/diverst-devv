@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_160707) do
+ActiveRecord::Schema.define(version: 2020_11_24_161820) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1991,6 +1991,9 @@ ActiveRecord::Schema.define(version: 2020_11_24_160707) do
   SQL
   create_view "budget_users_with_expenses", sql_definition: <<-SQL
       select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,`budget_users`.`finished_expenses` AS `finished_expenses`,`budget_users`.`estimated` AS `estimated`,coalesce(`budget_users_sums`.`spent`,0) AS `spent`,if((`budget_users`.`finished_expenses` = true),coalesce(`budget_users_sums`.`spent`,0),coalesce(`budget_users`.`estimated`,0)) AS `reserved`,if((`budget_users`.`finished_expenses` = true),coalesce(`budget_users_sums`.`spent`,0),0) AS `final_expense` from (`budget_users` left join `budget_users_sums` on((`budget_users`.`id` = `budget_users_sums`.`budget_user_id`)))
+  SQL
+  create_view "budgets_with_expenses", sql_definition: <<-SQL
+      select `budgets`.`id` AS `id`,`budgets`.`description` AS `description`,`budgets`.`is_approved` AS `is_approved`,`budgets`.`created_at` AS `created_at`,`budgets`.`updated_at` AS `updated_at`,`budgets`.`approver_id` AS `approver_id`,`budgets`.`requester_id` AS `requester_id`,`budgets`.`deprecated_group_id` AS `deprecated_group_id`,`budgets`.`comments` AS `comments`,`budgets`.`decline_reason` AS `decline_reason`,`budgets`.`budget_items_count` AS `budget_items_count`,`budgets`.`annual_budget_id` AS `annual_budget_id`,coalesce(`budgets_sums`.`spent`,0) AS `spent`,coalesce(`budgets_sums`.`reserved`,0) AS `reserved`,coalesce(`budgets_sums`.`requested_amount`,0) AS `requested_amount`,coalesce(`budgets_sums`.`available`,0) AS `available`,coalesce(`budgets_sums`.`unspent`,0) AS `unspent`,if((`budgets`.`is_approved` = true),`budgets_sums`.`requested_amount`,0) AS `approved_amount` from (`budgets` left join `budgets_sums` on((`budgets`.`id` = `budgets_sums`.`budget_id`)))
   SQL
   create_view "duplicate_page_names", sql_definition: <<-SQL
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
