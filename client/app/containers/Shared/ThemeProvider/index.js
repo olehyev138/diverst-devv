@@ -33,6 +33,13 @@ export function ThemeProvider(props) {
   const [defaultTheme] = useState(createMuiTheme());
 
   const buildTheme = (brandingColor, graphsColor) => createMuiTheme({
+    overrides: {
+      MuiCard: {
+        root: {
+          overflow: 'visible',
+        },
+      },
+    },
     palette: {
       type: 'light',
       background: {
