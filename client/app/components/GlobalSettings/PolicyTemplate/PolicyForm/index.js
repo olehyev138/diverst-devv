@@ -205,7 +205,7 @@ export function PolicyFormInner({
       Manage: 'group_leader_manage',
     },
     Settings: {
-      Manage_Grlup_Settings: 'group_settings_manage',
+      Manage_Group_Settings: 'group_settings_manage',
       Manage_Layouts: 'groups_layouts_manage',
       Manage_Insights: 'groups_insights_manage',
     },
