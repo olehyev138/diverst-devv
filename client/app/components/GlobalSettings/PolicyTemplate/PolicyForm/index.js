@@ -231,7 +231,7 @@ export function PolicyFormInner({
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography component='h2' variant='h5'>
-                    <DiverstFormattedMessage {...messages.type.general}/>
+                    <DiverstFormattedMessage {...messages.type.general} />
                   </Typography>
                 </Grid>
                 {policiesRender(generalPolicies)}
@@ -242,7 +242,7 @@ export function PolicyFormInner({
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography component='h2' variant='h5'>
-                    <DiverstFormattedMessage {...messages.type.group}/>
+                    <DiverstFormattedMessage {...messages.type.group} />
                   </Typography>
                 </Grid>
                 {policiesRender(groupPolicies)}
