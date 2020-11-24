@@ -15,7 +15,7 @@ export function DiverstHTMLEmbedder({ html, gridProps, interweaveProps }) {
       container
       {...gridProps}
     >
-      <Grid item>
+      <Grid item xs>
         <Interweave
           content={html}
           {...interweaveProps}
