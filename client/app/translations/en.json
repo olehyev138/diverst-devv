@@ -777,6 +777,7 @@
   "diverst.containers.MentorshipSession.title.hosting": "List of Sessions You Are Hosting",
   "diverst.containers.MentorshipSession.title.participating": "List of Sessions You Have Been Invited To",
   "diverst.containers.MetricsDashboard.fields.aggregations": "Aggregations",
+  "diverst.containers.MetricsDashboard.delete_confirm": "Delete metrics dashboard?",
   "diverst.containers.MetricsDashboard.fields.field": "Field",
   "diverst.containers.MetricsDashboard.fields.groups": "{erg_p}",
   "diverst.containers.MetricsDashboard.fields.name": "Name",

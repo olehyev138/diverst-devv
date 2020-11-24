@@ -68,6 +68,7 @@ export function MetricsDashboard(props) {
                   className={classNames(classes.buttons, classes.deleteButton)}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    // Add INTL to translate here
                     if (confirm('Delete metricsDashboard?'))
                       props.deleteMetricsDashboardBegin(metricsDashboard.id);
                   }}
