@@ -5,7 +5,7 @@ class CreateMaterializedSumTables < ActiveRecord::Migration[5.2]
       t.decimal :spent, precision: 20, scale: 4
     end
 
-    create_table :budget_item_sums do |t|
+    create_table :budget_items_sums do |t|
       t.belongs_to :budget_item
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4

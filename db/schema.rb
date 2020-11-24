@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_155648) do
+ActiveRecord::Schema.define(version: 2020_11_24_160707) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -159,14 +159,6 @@ ActiveRecord::Schema.define(version: 2020_11_24_155648) do
     t.index ["enterprise_id"], name: "index_badges_on_enterprise_id"
   end
 
-  create_table "budget_item_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "budget_item_id"
-    t.decimal "spent", precision: 20, scale: 4
-    t.decimal "reserved", precision: 20, scale: 4
-    t.decimal "finalized_expenditures", precision: 20, scale: 4
-    t.index ["budget_item_id"], name: "index_budget_item_sums_on_budget_item_id"
-  end
-
   create_table "budget_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "budget_id"
     t.string "title"
@@ -178,6 +170,14 @@ ActiveRecord::Schema.define(version: 2020_11_24_155648) do
     t.decimal "estimated_amount", precision: 20, scale: 4, default: "0.0", null: false
     t.decimal "deprecated_available_amount", precision: 20, scale: 4, default: "0.0"
     t.index ["budget_id"], name: "fk_rails_6135db3849"
+  end
+
+  create_table "budget_items_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_item_id"
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "finalized_expenditures", precision: 20, scale: 4
+    t.index ["budget_item_id"], name: "index_budget_items_sums_on_budget_item_id"
   end
 
   create_table "budget_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1986,8 +1986,11 @@ ActiveRecord::Schema.define(version: 2020_11_24_155648) do
   add_foreign_key "views", "resources"
   add_foreign_key "views", "users"
 
+  create_view "budget_items_with_expenses", sql_definition: <<-SQL
+      select `budget_items`.`id` AS `id`,`budget_items`.`budget_id` AS `budget_id`,`budget_items`.`title` AS `title`,`budget_items`.`estimated_date` AS `estimated_date`,`budget_items`.`is_private` AS `is_private`,`budget_items`.`is_done` AS `is_done`,`budget_items`.`created_at` AS `created_at`,`budget_items`.`updated_at` AS `updated_at`,`budget_items`.`estimated_amount` AS `estimated_amount`,`budget_items`.`deprecated_available_amount` AS `deprecated_available_amount`,coalesce(`budget_items_sums`.`spent`,0) AS `spent`,coalesce(`budget_items_sums`.`reserved`,0) AS `reserved`,coalesce(`budget_items_sums`.`finalized_expenditures`,0) AS `finalized_expenditures`,coalesce((`budget_items`.`estimated_amount` - `budget_items_sums`.`spent`),0) AS `unspent`,if((((`budget_items`.`budget_id` is null) or (0 <> `budget_items`.`is_done`) or (0 = `budgets`.`is_approved`)) = true),0,coalesce((`budget_items`.`estimated_amount` - `budget_items_sums`.`reserved`),0)) AS `available` from ((`budget_items` join `budgets` on((`budgets`.`id` = `budget_items`.`budget_id`))) left join `budget_items_sums` on((`budget_items`.`id` = `budget_items_sums`.`budget_item_id`)))
+  SQL
   create_view "budget_users_with_expenses", sql_definition: <<-SQL
-      select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,`budget_users`.`finished_expenses` AS `finished_expenses`,`budget_users`.`estimated` AS `estimated`,coalesce(`budget_users_sums`.`spent`,0) AS `spent`,(case `budget_users`.`finished_expenses` when true then coalesce(`budget_users_sums`.`spent`,0) else coalesce(`budget_users`.`estimated`,0) end) AS `reserved`,(case `budget_users`.`finished_expenses` when true then coalesce(`budget_users_sums`.`spent`,0) else 0 end) AS `final_expense` from (`budget_users` left join `budget_users_sums` on((`budget_users`.`id` = `budget_users_sums`.`budget_user_id`)))
+      select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,`budget_users`.`finished_expenses` AS `finished_expenses`,`budget_users`.`estimated` AS `estimated`,coalesce(`budget_users_sums`.`spent`,0) AS `spent`,if((`budget_users`.`finished_expenses` = true),coalesce(`budget_users_sums`.`spent`,0),coalesce(`budget_users`.`estimated`,0)) AS `reserved`,if((`budget_users`.`finished_expenses` = true),coalesce(`budget_users_sums`.`spent`,0),0) AS `final_expense` from (`budget_users` left join `budget_users_sums` on((`budget_users`.`id` = `budget_users_sums`.`budget_user_id`)))
   SQL
   create_view "duplicate_page_names", sql_definition: <<-SQL
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
