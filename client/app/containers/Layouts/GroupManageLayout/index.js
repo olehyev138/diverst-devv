@@ -59,7 +59,7 @@ const GroupManageLayout = (props) => {
       else if (permission(currentGroup, 'leaders_view?'))
         redirectAction(ROUTES.group.manage.leaders.index.path(groupId));
       else {
-        showSnackbar({ message: mesasges.permissions.budget, options: { variant: 'warning' } });
+        showSnackbar({ message: messages.permissions.budget, options: { variant: 'warning' } });
         redirectAction(ROUTES.group.home.path(groupId));
       }
 
