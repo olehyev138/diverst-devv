@@ -54,4 +54,4 @@ cookbooks/
 /.idea
 
 #ENV VARIABLES
-/.env.yml
+/.env
