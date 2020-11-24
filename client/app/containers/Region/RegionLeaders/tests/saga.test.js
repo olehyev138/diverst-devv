@@ -87,7 +87,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leaders, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leaders, options: { variant: 'warning' } });
     });
   });
 
@@ -127,7 +127,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leader, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leader, options: { variant: 'warning' } });
     });
   });
 
@@ -155,7 +155,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.create).toHaveBeenCalledWith({ region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -179,7 +179,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
 
     it('Should update a regionLeader', async () => {
@@ -204,7 +204,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -229,7 +229,7 @@ describe('Tests for regionLeaders saga', () => {
 
       expect(api.regionLeaders.update).toHaveBeenCalledWith(initialAction.payload.id, { region_leader: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -260,7 +260,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -284,7 +284,7 @@ describe('Tests for regionLeaders saga', () => {
       );
       expect(api.regionLeaders.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete, customTexts({}));
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

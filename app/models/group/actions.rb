@@ -30,12 +30,20 @@ module Group::Actions
   end
 
   module ClassMethods
-    def base_query
-      "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
+    def base_select
+      %w[`groups`.`id` `groups`.`name`]
     end
 
-    def base_left_joins
-      :children
+    def base_query(diverst_request)
+      if diverst_request.options[:with_children]
+        "LOWER(#{self.table_name}.name) LIKE :search OR LOWER(children_groups.name) LIKE :search"
+      else
+        "LOWER(#{self.table_name}.name) LIKE :search"
+      end
+    end
+
+    def base_left_joins(diverst_request)
+      :children if diverst_request.options[:with_children]
     end
 
     def valid_scopes
@@ -44,8 +52,13 @@ module Group::Actions
 
     # List of all attributes to preload.
     # Used when serializing a group itself
-    def base_preloads
-      base_preload_no_recursion | [ children: base_preload_no_recursion, parent: base_preload_no_recursion ]
+    def base_preloads(diverst_request)
+      preloads = base_preload_no_recursion(diverst_request)
+      associations = {}
+      associations[:children] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_children] || diverst_request.action == 'show'
+      associations[:parent] = base_attributes_preloads(diverst_request) if diverst_request.options[:with_parent] || diverst_request.action == 'show'
+      preloads.append(associations)
+      preloads
     end
 
     # List of all attributes to preload when dealing with annual budgets.
@@ -56,14 +69,20 @@ module Group::Actions
 
     # List of non-recursive attributes to preload.
     # Used as the preload fields for a groups children/parent as to prevent infinite recursion of base_preloads
-    def base_preload_no_recursion
-      base_attributes_preloads | [ :user_groups, :group_leaders, :children, :parent, :enterprise ]
+    def base_preload_no_recursion(diverst_request)
+      preloads = base_attributes_preloads(diverst_request)
+      preloads.append(:children) if diverst_request.options[:with_children]
+      preloads.append(:parent) if diverst_request.options[:with_parent]
+      preloads
     end
 
     # List of basic attributes to preload.
     # Used when preloading groups field for other serializers (Like UserGroupSerializer)
-    def base_attributes_preloads
-      [ :news_feed, :annual_budgets, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
+    def base_attributes_preloads(diverst_request)
+      preloads = [ :logo_attachment, :logo_blob, :user_groups, :group_leaders, :group_category, :group_category_type ]
+      preloads.append(:news_feed, :banner_attachment, :banner_blob) if diverst_request.action == 'show'
+      preloads.append(:annual_budgets) if diverst_request.options[:budget]
+      preloads
     end
 
     def update_child_categories(diverst_request, params)

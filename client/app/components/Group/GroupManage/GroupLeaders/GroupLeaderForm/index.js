@@ -87,7 +87,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -108,7 +108,7 @@ export function GroupLeaderForm(props) {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
-    position_name: { default: intl.formatMessage(messages.leader.position) },
+    position_name: { default: intl.formatMessage(messages.leader.position, props.customTexts) },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },
@@ -116,6 +116,7 @@ export function GroupLeaderForm(props) {
     pending_posts_notifications_enabled: { default: false },
     default_group_contact: { default: false },
   });
+
   return (
     <Formik
       initialValues={initialValues}
@@ -127,6 +128,7 @@ export function GroupLeaderForm(props) {
     />
   );
 }
+
 GroupLeaderForm.propTypes = {
   intl: intlShape.isRequired,
   edit: PropTypes.bool,
@@ -143,6 +145,7 @@ GroupLeaderForm.propTypes = {
   isLoadingMembers: PropTypes.bool,
   groupLeader: PropTypes.object,
   groupLeaderAction: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 GroupLeaderFormInner.propTypes = {
@@ -155,7 +158,7 @@ GroupLeaderFormInner.propTypes = {
   values: PropTypes.object,
   groupLeader: PropTypes.object,
   groupId: PropTypes.string,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectMembers: PropTypes.array,
   getMembersBegin: PropTypes.func,
   userRoles: PropTypes.array,

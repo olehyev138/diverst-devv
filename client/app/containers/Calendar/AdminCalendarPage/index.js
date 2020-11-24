@@ -21,7 +21,7 @@ const defaultParams = Object.freeze({
   count: -1, // TODO: Make this a constant and use it also in EventsList
   page: 0,
   order: 'asc',
-  orderBy: 'id',
+  orderBy: '`initiatives`.`id`',
   query_scopes: ['not_archived']
 });
 

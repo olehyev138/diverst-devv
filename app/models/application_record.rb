@@ -12,6 +12,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   scope :except_id, -> (id) { where.not(id: id.presence) }
 
+  if Rails.env.development? || Rails.env.test?
+    ActiveRecordQueryTrace.enabled = false
+  end
+
   def time_since_creation
     time_ago_in_words created_at
   end
@@ -184,8 +188,9 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def self.preload_all
-    preload(base_preloads || [])
+  def self.preload_all(action: 'show', user: nil)
+    request = Request.create_request(user, action: action)
+    preload(base_preloads(request)).includes(base_includes(request))
   end
 
   protected

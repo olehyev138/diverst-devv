@@ -48,7 +48,13 @@ class InviteTokenService < TokenService
   def self.get_payload_from_jwt(token)
     payload, _ = get_invite_payload(token)
 
-    [User.find_by(invitation_token: payload['invite_token']), payload]
+    [User.preload(
+        :field_data,
+        field_data: [
+            :field,
+            { field: Field.base_preloads(Request.create_request(nil, action: 'index')) }
+        ]
+      ).find_by(invitation_token: payload['invite_token']), payload]
   end
 
   private

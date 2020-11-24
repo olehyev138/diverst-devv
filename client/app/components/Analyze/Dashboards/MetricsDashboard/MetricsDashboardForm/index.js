@@ -29,6 +29,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
     });
   };
 
@@ -36,6 +37,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
     props.getSegmentsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
     });
   };
 
@@ -90,7 +92,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.metricsDashboardsIndex}
@@ -143,7 +145,7 @@ MetricsDashboardFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   getGroupsBegin: PropTypes.func,

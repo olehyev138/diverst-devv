@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import messages from './messages';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 import {
   GET_GROUPS_BEGIN,
@@ -51,7 +50,7 @@ export function* getGroups(action) {
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.groups), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.groups, options: { variant: 'warning' } }));
   }
 }
 
@@ -62,7 +61,7 @@ export function* getColors(action) {
     yield put(getColorsSuccess(response.data));
   } catch (err) {
     yield put(getColorsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.colors), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.colors, options: { variant: 'warning' } }));
   }
 }
 
@@ -73,7 +72,7 @@ export function* getAnnualBudgets(action) {
     yield put(getAnnualBudgetsSuccess(response.data.page));
   } catch (err) {
     yield put(getAnnualBudgetsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.annualBudgets, options: { variant: 'warning' } }));
   }
 }
 
@@ -83,7 +82,7 @@ export function* getGroup(action) {
     yield put(getGroupSuccess(response.data));
   } catch (err) {
     yield put(getGroupError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.group), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.group, options: { variant: 'warning' } }));
   }
 }
 
@@ -96,11 +95,11 @@ export function* createGroup(action) {
 
     yield put(createGroupSuccess());
     yield put(push(ROUTES.group.home.path(response.data.group.id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -110,10 +109,10 @@ export function* categorizeGroup(action) {
 
     yield put(groupCategorizeSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.group_categorize), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.group_categorize, options: { variant: 'success' } }));
   } catch (err) {
     yield put(groupCategorizeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.group_categorize), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.group_categorize, options: { variant: 'warning' } }));
   }
 }
 
@@ -124,10 +123,10 @@ export function* updateGroup(action) {
 
     yield put(updateGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -137,10 +136,10 @@ export function* updateGroupPosition(action) {
     yield call(api.groups.update.bind(api.groups), payload.group.id, payload.group);
 
     yield put(updateGroupPositionSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_group_position), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_group_position, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupPositionError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_group_position), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_group_position, options: { variant: 'warning' } }));
   }
 }
 
@@ -153,13 +152,13 @@ export function* updateGroupSettings(action) {
     yield put(updateGroupSettingsSuccess({ group: response.data.group }));
     yield put(push(ROUTES.group.home.path(response.data.group.id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_group_settings),
+      message: messages.snackbars.success.update_group_settings,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateGroupSettingsError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_group_settings),
+      message: messages.snackbars.errors.update_group_settings,
       options: { variant: 'warning' }
     }));
   }
@@ -170,10 +169,10 @@ export function* deleteGroup(action) {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
     yield put(deleteGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -182,10 +181,10 @@ export function* carryBudget(action) {
     yield call(api.groups.carryoverBudget.bind(api.groups), action.payload);
 
     yield put(carryBudgetSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.carry), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.carry, options: { variant: 'success' } }));
   } catch (err) {
     yield put(carryBudgetError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.carry), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.carry, options: { variant: 'warning' } }));
   }
 }
 
@@ -194,10 +193,10 @@ export function* resetBudget(action) {
     yield call(api.groups.resetBudget.bind(api.groups), action.payload);
 
     yield put(resetBudgetSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.reset), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.reset, options: { variant: 'success' } }));
   } catch (err) {
     yield put(resetBudgetError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.reset), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.reset, options: { variant: 'warning' } }));
   }
 }
 
@@ -208,7 +207,7 @@ export function* joinGroup(action) {
     yield put(joinGroupSuccess());
   } catch (err) {
     yield put(joinGroupError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.join), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.join, options: { variant: 'warning' } }));
   }
 }
 
@@ -220,7 +219,7 @@ export function* leaveGroup(action) {
     yield put(leaveGroupSuccess());
   } catch (err) {
     yield put(leaveGroupError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leave), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.leave, options: { variant: 'warning' } }));
   }
 }
 
@@ -230,7 +229,7 @@ export function* joinSubgroups(action) {
     yield put(joinSubgroupsSuccess());
   } catch (err) {
     yield put(joinSubgroupsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.join_subgroups), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.join_subgroups, options: { variant: 'warning' } }));
   }
 }
 

@@ -17,7 +17,7 @@ import {
 } from 'containers/Mentorship/Session/actions';
 
 import { selectFormSession, selectIsFetchingSession } from 'containers/Mentorship/Session/selectors';
-import { selectMentoringInterests } from 'containers/Shared/App/selectors';
+import { selectMentoringInterests, selectCustomText } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
@@ -48,8 +48,9 @@ export function SessionProfilePage(props) {
         user={props.formUser}
         isCommiting={props.isCommitting}
         buttonText={type === 'edit'
-          ? props.intl.formatMessage(messages.form.update)
-          : props.intl.formatMessage(messages.form.create)}
+          ? props.intl.formatMessage(messages.form.update, props.customTexts)
+          : props.intl.formatMessage(messages.form.create, props.customTexts)}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -69,12 +70,14 @@ SessionProfilePage.propTypes = {
   sessionsUnmount: PropTypes.func,
   interestOptions: PropTypes.array,
   typeOptions: PropTypes.array,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   formSession: selectFormSession(),
   isFormLoading: selectIsFetchingSession(),
   interestOptions: selectMentoringInterests(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

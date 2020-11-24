@@ -13,7 +13,7 @@ import saga from 'containers/Mentorship/Session/saga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectUser as selectUserSession } from 'containers/Shared/App/selectors';
+import { selectUser as selectUserSession, selectCustomText } from 'containers/Shared/App/selectors';
 import {
   selectSession,
   selectPaginatedUsers,
@@ -21,6 +21,7 @@ import {
   selectIsFetchingSessions,
   selectIsCommitting, selectHasChanged,
 } from 'containers/Mentorship/Session/selectors';
+
 
 import {
   getSessionBegin,
@@ -138,6 +139,7 @@ SessionPage.propTypes = {
   user: PropTypes.object,
   loggedUser: PropTypes.object,
   session: PropTypes.object,
+  customTexts: PropTypes.object,
 
   users: PropTypes.array,
 
@@ -151,7 +153,7 @@ const mapStateToProps = createStructuredSelector({
   session: selectSession(),
   users: selectPaginatedUsers(),
   loggedUser: selectUserSession(),
-
+  customTexts: selectCustomText(),
   isFetchingSession: selectIsFetchingSession(),
   isFetchingSessions: selectIsFetchingSessions(),
   isCommitting: selectIsCommitting(),

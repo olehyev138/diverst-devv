@@ -10,7 +10,6 @@ import React, {
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -26,7 +25,6 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel, Collapse,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
-import { intl } from '../../../containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -473,7 +471,7 @@ EnterpriseConfigurationInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func
 };

@@ -41,7 +41,7 @@ import saga from 'containers/GlobalSettings/Field/saga';
 import { injectIntl, intlShape } from 'react-intl';
 
 import AdminFieldList from 'components/Shared/Fields/AdminFieldList';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -116,6 +116,7 @@ export function AdminFieldsPage(props) {
         defaultParams={params}
         updateFieldPositionBegin={props.updateFieldPositionBegin}
         intl={intl}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -138,6 +139,7 @@ AdminFieldsPage.propTypes = {
     id: PropTypes.number
   }),
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -149,6 +151,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   hasChanged: selectHasChanged(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

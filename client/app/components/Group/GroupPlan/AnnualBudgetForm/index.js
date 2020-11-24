@@ -54,7 +54,7 @@ export function AnnualBudgetFormInner(
         <Form>
           <CardContent>
             <DiverstMoneyField
-              label={intl.formatMessage(formMessages.amount)}
+              label={intl.formatMessage(formMessages.amount, props.customTexts)}
               name='amount'
               id='amount'
               margin='dense'
@@ -166,11 +166,12 @@ AnnualBudgetFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

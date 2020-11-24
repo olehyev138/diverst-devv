@@ -10,7 +10,7 @@ RSpec.describe BudgetItem::Actions, type: :model do
   describe 'base_includes' do
     let(:base_includes) { [:budget] }
 
-    it { expect(BudgetItem.base_includes).to eq base_includes }
+    it { expect(BudgetItem.base_includes(Request.create_request(nil))).to eq base_includes }
   end
 
   describe 'close' do

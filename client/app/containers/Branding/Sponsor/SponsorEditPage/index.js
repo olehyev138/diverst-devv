@@ -52,7 +52,7 @@ export function SponsorEditPage(props) {
         sponsor={props.sponsor}
         sponsorAction={props.updateSponsorBegin}
         links={links}
-        buttonText={intl.formatMessage(messages.create)}
+        buttonText={messages.create}
       />
     </React.Fragment>
   );

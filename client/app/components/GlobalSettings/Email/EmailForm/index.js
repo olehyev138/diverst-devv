@@ -7,13 +7,11 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import Interweave from 'interweave';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
+  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box
 } from '@material-ui/core';
 
 import messages from 'containers/GlobalSettings/Email/Email/messages';
@@ -22,6 +20,8 @@ import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -55,15 +55,6 @@ export function EmailFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const regex = /%{(.*?)}/g;
-  const variables = props?.email?.variables || {};
-  const replace = (whole, grouped) => {
-    const example = variables?.[grouped]?.example;
-    return example || whole;
-  };
-
-  const { intl } = props;
-
 
   return (
     <React.Fragment>
@@ -84,16 +75,12 @@ export function EmailFormInner({
                 value={values.subject}
               />
               <Field
-                component={TextField}
-                onChange={handleChange}
-                disabled={props.isCommitting}
+                component={DiverstRichTextInput}
                 required
+                onChange={value => setFieldValue('content', value)}
                 fullWidth
                 id='content'
                 name='content'
-                multiline
-                rows={8}
-                variant='outlined'
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.content} />}
                 value={values.content}
@@ -106,9 +93,6 @@ export function EmailFormInner({
               </DiverstSubmit>
               <DiverstCancel
                 redirectFallback={props.links.emailsIndex}
-                variant='contained'
-                size='large'
-                className={classes.buttons}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
@@ -119,24 +103,8 @@ export function EmailFormInner({
         <Box mb={2} />
         <Card>
           <CardHeader
-            title={intl.formatMessage(messages.preview.title)}
-            subheader={intl.formatMessage(messages.preview.subTitle)}
-          />
-          <CardContent>
-            <Interweave
-              content={values.subject.replace(regex, replace)}
-            />
-            <Divider />
-            <Interweave
-              content={values.content.replace(regex, replace)}
-            />
-          </CardContent>
-        </Card>
-        <Box mb={2} />
-        <Card>
-          <CardHeader
-            title={intl.formatMessage(messages.variables.title)}
-            subheader={intl.formatMessage(messages.variables.subTitle)}
+            title=<DiverstFormattedMessage {...messages.variables.title} />
+            subheader=<DiverstFormattedMessage {...messages.variables.subTitle} />
           />
           {/* eslint-disable-next-line array-callback-return */}
           {props.email && Object.values(props.email.variables).map(variable => (
@@ -189,9 +157,7 @@ EmailForm.propTypes = {
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
-
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 EmailFormInner.propTypes = {
@@ -203,7 +169,7 @@ EmailFormInner.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,
@@ -215,11 +181,9 @@ EmailFormInner.propTypes = {
   }),
 
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles),
 )(EmailForm);

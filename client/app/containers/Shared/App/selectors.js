@@ -51,7 +51,15 @@ const selectFetchUserDataError = () => createSelector(
 
 const selectCustomText = () => createSelector(
   selectGlobal,
-  globalState => globalState?.data?.enterprise?.custom_text
+  (globalState) => {
+    const customTexts = globalState?.data?.enterprise?.custom_text;
+    if (customTexts) {
+      const flattenedCustomTexts = customTexts?.plural;
+      for (const [key, value] of Object.entries(flattenedCustomTexts))
+        customTexts[`${key}_p`] = value;
+    }
+    return customTexts;
+  }
 );
 
 const selectMentoringInterests = () => createSelector(

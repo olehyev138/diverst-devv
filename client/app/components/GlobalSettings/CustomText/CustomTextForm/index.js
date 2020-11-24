@@ -188,7 +188,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
+            <DiverstFormattedMessage {...buttonText} />
           </DiverstSubmit>
         </CardActions>
       </Form>
@@ -234,8 +234,7 @@ export function CustomTextForm(props) {
         onSubmit={(values, actions) => {
           props.customTextAction(values);
           handleClickOpen();
-        }
-        }
+        }}
       >
         {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
       </Formik>
@@ -260,7 +259,7 @@ CustomTextFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,

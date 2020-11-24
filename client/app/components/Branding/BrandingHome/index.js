@@ -33,7 +33,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   const { intl } = props;
   return (
     <Card>
@@ -45,11 +45,12 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 component={DiverstRichTextInput}
                 required
                 onChange={value => setFieldValue('home_message', value)}
-                fullWidth
+                fullWidthupdate
+                social
                 id='home_message'
                 name='home_message'
                 margin='normal'
-                label={intl.formatMessage(messages.Home.message)}
+                label={intl.formatMessage(messages.Home.message, props.customTexts)}
                 value={values.home_message}
               />
             </Grid>
@@ -67,7 +68,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 id='privacy_statement'
                 name='privacy_statement'
                 margin='normal'
-                label={intl.formatMessage(messages.Home.privacy)}
+                label={intl.formatMessage(messages.Home.privacy, props.customTexts)}
                 value={values.privacy_statement}
               />
             </Grid>
@@ -84,7 +85,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 margin='normal'
                 fileName={props.enterprise.banner_file_name}
                 fullWidth
-                label={intl.formatMessage(messages.Home.banner)}
+                label={intl.formatMessage(messages.Home.banner, props.customTexts)}
                 disabled={props.isCommitting}
                 value={values.banner}
                 fileType='image'
@@ -99,7 +100,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
               <FormControl>
                 <FormControlLabel
                   labelPlacement='end'
-                  label={intl.formatMessage(messages.Home.consent_message)}
+                  label={intl.formatMessage(messages.Home.consent_message, props.customTexts)}
                   control={(
                     <Field
                       component={Switch}
@@ -198,12 +199,12 @@ BrandingHomeInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   intl: intlShape.isRequired,
   isCommitting: PropTypes.bool,
   enterprise: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

@@ -1,6 +1,13 @@
 class NewsLinkSerializer < ApplicationRecordSerializer
   attributes :author, :photos, :picture_location, :news_feed_link_id
-  has_many :comments
+
+  attributes_with_permission :comments, if: :singular_action?
+
+  def comments
+    object.comments.map do |comment|
+      NewsLinkCommentSerializer.new(comment, **instance_options).as_json
+    end
+  end
 
   def picture_location
     object.picture_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
@@ -8,7 +15,7 @@ class NewsLinkSerializer < ApplicationRecordSerializer
 
   def photos
     object.photos.map do |photo|
-      NewsLinkPhotoSerializer.new(photo, scope: scope, root: false)
+      NewsLinkPhotoSerializer.new(photo, scope: scope, root: false).as_json
     end
   end
 
