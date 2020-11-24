@@ -1,18 +1,18 @@
 class CreateMaterializedSumTables < ActiveRecord::Migration[5.2]
   def change
-    create_table :budget_users_sums do |t|
+    create_table :budget_users_sums, id: false, force: true do |t|
       t.belongs_to :budget_user
       t.decimal :spent, precision: 20, scale: 4
     end
 
-    create_table :budget_items_sums do |t|
+    create_table :budget_items_sums, id: false, force: true do |t|
       t.belongs_to :budget_item
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4
       t.decimal :finalized_expenditures, precision: 20, scale: 4
     end
 
-    create_table :budgets_sums do |t|
+    create_table :budgets_sums, id: false, force: true do |t|
       t.belongs_to :budget
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4
@@ -21,7 +21,7 @@ class CreateMaterializedSumTables < ActiveRecord::Migration[5.2]
       t.decimal :unspent, precision: 20, scale: 4
     end
 
-    create_table :annual_budgets_sums do |t|
+    create_table :annual_budgets_sums, id: false, force: true do |t|
       t.belongs_to :annual_budget
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4

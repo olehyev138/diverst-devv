@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["group_id"], name: "index_annual_budgets_on_group_id"
   end
 
-  create_table "annual_budgets_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "annual_budgets_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "annual_budget_id"
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["budget_id"], name: "fk_rails_6135db3849"
   end
 
-  create_table "budget_items_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "budget_items_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "budget_item_id"
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
   end
 
-  create_table "budget_users_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "budget_users_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "budget_user_id"
     t.decimal "spent", precision: 20, scale: 4
     t.index ["budget_user_id"], name: "index_budget_users_sums_on_budget_user_id"
@@ -215,7 +215,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
   end
 
-  create_table "budgets_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "budgets_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "budget_id"
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
