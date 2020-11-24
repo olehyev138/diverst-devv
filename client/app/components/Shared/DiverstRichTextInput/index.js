@@ -70,6 +70,9 @@ export function DiverstRichTextInput(props) {
       </FormLabel>
       <Box mb={1} />
       <Editor
+        toolbar={{
+          options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'remove', 'history']
+        }}
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperStyle={wrapperStyle}
