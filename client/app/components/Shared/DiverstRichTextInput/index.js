@@ -9,7 +9,7 @@ import htmlToDraft from 'html-to-draftjs';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
 export function DiverstRichTextInput(props) {
-  const { label, value, fullWidth, ...rest } = props;
+  const { label, value, fullWidth, onChange, ...rest } = props;
 
   const wrapperStyle = {
     border: '1px solid lightgray',
