@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_162259) do
+ActiveRecord::Schema.define(version: 2020_11_24_193036) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -67,15 +67,13 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["group_id"], name: "index_annual_budgets_on_group_id"
   end
 
-  create_table "annual_budgets_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "annual_budget_id"
+  create_table "annual_budgets_sums", primary_key: "annual_budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
     t.decimal "requested_amount", precision: 20, scale: 4
     t.decimal "available", precision: 20, scale: 4
     t.decimal "approved", precision: 20, scale: 4
     t.decimal "unspent", precision: 20, scale: 4
-    t.index ["annual_budget_id"], name: "index_annual_budgets_sums_on_annual_budget_id"
   end
 
   create_table "answer_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -172,12 +170,10 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["budget_id"], name: "fk_rails_6135db3849"
   end
 
-  create_table "budget_items_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "budget_item_id"
+  create_table "budget_items_sums", primary_key: "budget_item_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
     t.decimal "finalized_expenditures", precision: 20, scale: 4
-    t.index ["budget_item_id"], name: "index_budget_items_sums_on_budget_item_id"
   end
 
   create_table "budget_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -192,10 +188,8 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
   end
 
-  create_table "budget_users_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "budget_user_id"
+  create_table "budget_users_sums", primary_key: "budget_user_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "spent", precision: 20, scale: 4
-    t.index ["budget_user_id"], name: "index_budget_users_sums_on_budget_user_id"
   end
 
   create_table "budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -215,14 +209,12 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
   end
 
-  create_table "budgets_sums", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "budget_id"
+  create_table "budgets_sums", primary_key: "budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
     t.decimal "requested_amount", precision: 20, scale: 4
     t.decimal "available", precision: 20, scale: 4
     t.decimal "unspent", precision: 20, scale: 4
-    t.index ["budget_id"], name: "index_budgets_sums_on_budget_id"
   end
 
   create_table "business_impacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -2016,4 +2008,23 @@ ActiveRecord::Schema.define(version: 2020_11_24_162259) do
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
+  create_trigger("initiative_expenses_after_insert_row_tr", :generated => true, :compatibility => 1).
+      on("initiative_expenses").
+      after(:insert) do
+    "SET @old_spent = 0; SELECT IFNULL(spent, 0) FROM budget_users_sums WHERE budget_user_id = NEW.budget_user_id INTO @old_spent; SET @new_spent = @old_spent + NEW.amount; REPLACE INTO budget_users_sums VALUES(NEW.budget_user_id, IFNULL(@new_spent, 0));"
+  end
+
+  create_trigger("initiative_expenses_after_delete_row_tr", :generated => true, :compatibility => 1).
+      on("initiative_expenses").
+      after(:delete) do
+    "SET @old_spent = 0; SELECT IFNULL(spent, 0) FROM budget_users_sums WHERE budget_user_id = OLD.budget_user_id INTO @old_spent; SET @new_spent = @old_spent - OLD.amount; REPLACE INTO budget_users_sums VALUES(OLD.budget_user_id, IFNULL(@new_spent, 0));"
+  end
+
+  create_trigger("initiative_expenses_after_update_of_amount_row_tr", :generated => true, :compatibility => 1).
+      on("initiative_expenses").
+      after(:update).
+      of(:amount) do
+    "SET @old_spent = 0; SELECT IFNULL(spent, 0) FROM budget_users_sums WHERE budget_user_id = NEW.budget_user_id INTO @old_spent; SET @new_spent = @old_spent + NEW.amount - OLD.amount; REPLACE INTO budget_users_sums VALUES(NEW.budget_user_id, IFNULL(@new_spent, 0));"
+  end
+
 end

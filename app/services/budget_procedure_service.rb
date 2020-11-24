@@ -13,7 +13,7 @@ class BudgetProcedureService
   end
 
   def self.refresh_budget_items_sums
-    connection.execute('TRUNCATE TABLE `budget_users_sums`;')
+    connection.execute('TRUNCATE TABLE `budget_items_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `budget_items_sums`
       SELECT
@@ -30,7 +30,7 @@ class BudgetProcedureService
   end
 
   def self.refresh_budgets_sums
-    connection.execute('TRUNCATE TABLE `budget_users_sums`;')
+    connection.execute('TRUNCATE TABLE `budgets_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `budgets_sums`
       SELECT
@@ -49,7 +49,7 @@ class BudgetProcedureService
   end
 
   def self.refresh_annual_budgets_sums
-    connection.execute('TRUNCATE TABLE `budget_users_sums`;')
+    connection.execute('TRUNCATE TABLE `annual_budgets_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `annual_budgets_sums`
       SELECT
