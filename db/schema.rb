@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_161820) do
+ActiveRecord::Schema.define(version: 2020_11_24_162259) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -68,14 +68,14 @@ ActiveRecord::Schema.define(version: 2020_11_24_161820) do
   end
 
   create_table "annual_budgets_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "budget_id"
+    t.bigint "annual_budget_id"
     t.decimal "spent", precision: 20, scale: 4
     t.decimal "reserved", precision: 20, scale: 4
     t.decimal "requested_amount", precision: 20, scale: 4
     t.decimal "available", precision: 20, scale: 4
     t.decimal "approved", precision: 20, scale: 4
     t.decimal "unspent", precision: 20, scale: 4
-    t.index ["budget_id"], name: "index_annual_budgets_sums_on_budget_id"
+    t.index ["annual_budget_id"], name: "index_annual_budgets_sums_on_annual_budget_id"
   end
 
   create_table "answer_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1986,6 +1986,9 @@ ActiveRecord::Schema.define(version: 2020_11_24_161820) do
   add_foreign_key "views", "resources"
   add_foreign_key "views", "users"
 
+  create_view "annual_budgets_with_expenses", sql_definition: <<-SQL
+      select `annual_budgets`.`id` AS `id`,`annual_budgets`.`group_id` AS `group_id`,`annual_budgets`.`deprecated_enterprise_id` AS `deprecated_enterprise_id`,`annual_budgets`.`amount` AS `amount`,`annual_budgets`.`closed` AS `closed`,`annual_budgets`.`deprecated_available_budget` AS `deprecated_available_budget`,`annual_budgets`.`deprecated_approved_budget` AS `deprecated_approved_budget`,`annual_budgets`.`deprecated_expenses` AS `deprecated_expenses`,`annual_budgets`.`deprecated_leftover_money` AS `deprecated_leftover_money`,`annual_budgets`.`created_at` AS `created_at`,`annual_budgets`.`updated_at` AS `updated_at`,`annual_budgets`.`start_date` AS `start_date`,`annual_budgets`.`end_date` AS `end_date`,`annual_budgets`.`event_name` AS `event_name`,coalesce(`annual_budgets_sums`.`spent`,0) AS `spent`,coalesce(`annual_budgets_sums`.`reserved`,0) AS `reserved`,coalesce(`annual_budgets_sums`.`requested_amount`,0) AS `requested_amount`,coalesce(`annual_budgets_sums`.`available`,0) AS `available`,coalesce(`annual_budgets_sums`.`unspent`,0) AS `unspent`,coalesce((coalesce(`annual_budgets`.`amount`,0) - `annual_budgets_sums`.`spent`),0) AS `leftover`,coalesce((coalesce(`annual_budgets`.`amount`,0) - `annual_budgets_sums`.`approved`),0) AS `free` from (`annual_budgets` left join `annual_budgets_sums` on((`annual_budgets`.`id` = `annual_budgets_sums`.`annual_budget_id`)))
+  SQL
   create_view "budget_items_with_expenses", sql_definition: <<-SQL
       select `budget_items`.`id` AS `id`,`budget_items`.`budget_id` AS `budget_id`,`budget_items`.`title` AS `title`,`budget_items`.`estimated_date` AS `estimated_date`,`budget_items`.`is_private` AS `is_private`,`budget_items`.`is_done` AS `is_done`,`budget_items`.`created_at` AS `created_at`,`budget_items`.`updated_at` AS `updated_at`,`budget_items`.`estimated_amount` AS `estimated_amount`,`budget_items`.`deprecated_available_amount` AS `deprecated_available_amount`,coalesce(`budget_items_sums`.`spent`,0) AS `spent`,coalesce(`budget_items_sums`.`reserved`,0) AS `reserved`,coalesce(`budget_items_sums`.`finalized_expenditures`,0) AS `finalized_expenditures`,coalesce((`budget_items`.`estimated_amount` - `budget_items_sums`.`spent`),0) AS `unspent`,if((((`budget_items`.`budget_id` is null) or (0 <> `budget_items`.`is_done`) or (0 = `budgets`.`is_approved`)) = true),0,coalesce((`budget_items`.`estimated_amount` - `budget_items_sums`.`reserved`),0)) AS `available` from ((`budget_items` join `budgets` on((`budgets`.`id` = `budget_items`.`budget_id`))) left join `budget_items_sums` on((`budget_items`.`id` = `budget_items_sums`.`budget_item_id`)))
   SQL
