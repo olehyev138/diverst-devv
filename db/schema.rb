@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_193450) do
+ActiveRecord::Schema.define(version: 2020_11_24_155648) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 2020_11_23_193450) do
     t.datetime "event_name"
     t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
     t.index ["group_id"], name: "index_annual_budgets_on_group_id"
+  end
+
+  create_table "annual_budgets_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_id"
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "requested_amount", precision: 20, scale: 4
+    t.decimal "available", precision: 20, scale: 4
+    t.decimal "approved", precision: 20, scale: 4
+    t.decimal "unspent", precision: 20, scale: 4
+    t.index ["budget_id"], name: "index_annual_budgets_sums_on_budget_id"
   end
 
   create_table "answer_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -148,6 +159,14 @@ ActiveRecord::Schema.define(version: 2020_11_23_193450) do
     t.index ["enterprise_id"], name: "index_badges_on_enterprise_id"
   end
 
+  create_table "budget_item_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_item_id"
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "finalized_expenditures", precision: 20, scale: 4
+    t.index ["budget_item_id"], name: "index_budget_item_sums_on_budget_item_id"
+  end
+
   create_table "budget_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "budget_id"
     t.string "title"
@@ -173,6 +192,12 @@ ActiveRecord::Schema.define(version: 2020_11_23_193450) do
     t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
   end
 
+  create_table "budget_users_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_user_id"
+    t.decimal "spent", precision: 20, scale: 4
+    t.index ["budget_user_id"], name: "index_budget_users_sums_on_budget_user_id"
+  end
+
   create_table "budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "description"
     t.boolean "is_approved"
@@ -188,6 +213,16 @@ ActiveRecord::Schema.define(version: 2020_11_23_193450) do
     t.index ["annual_budget_id"], name: "fk_rails_81cba7294a"
     t.index ["approver_id"], name: "fk_rails_a057b1443a"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
+  end
+
+  create_table "budgets_sums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_id"
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "requested_amount", precision: 20, scale: 4
+    t.decimal "available", precision: 20, scale: 4
+    t.decimal "unspent", precision: 20, scale: 4
+    t.index ["budget_id"], name: "index_budgets_sums_on_budget_id"
   end
 
   create_table "business_impacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1951,11 +1986,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_193450) do
   add_foreign_key "views", "resources"
   add_foreign_key "views", "users"
 
-  create_view "budget_users_expenses_sum", sql_definition: <<-SQL
-      select `initiative_expenses`.`budget_user_id` AS `budget_user_id`,coalesce(sum(`initiative_expenses`.`amount`),0) AS `spent` from `initiative_expenses` group by `initiative_expenses`.`budget_user_id`
-  SQL
   create_view "budget_users_with_expenses", sql_definition: <<-SQL
-      select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,coalesce(`budget_users_expenses_sum`.`spent`,0) AS `spent` from (`budget_users` left join `budget_users_expenses_sum` on((`budget_users`.`id` = `budget_users_expenses_sum`.`budget_user_id`)))
+      select `budget_users`.`id` AS `id`,`budget_users`.`budgetable_type` AS `budgetable_type`,`budget_users`.`budgetable_id` AS `budgetable_id`,`budget_users`.`budget_item_id` AS `budget_item_id`,`budget_users`.`created_at` AS `created_at`,`budget_users`.`updated_at` AS `updated_at`,`budget_users`.`finished_expenses` AS `finished_expenses`,`budget_users`.`estimated` AS `estimated`,coalesce(`budget_users_sums`.`spent`,0) AS `spent`,(case `budget_users`.`finished_expenses` when true then coalesce(`budget_users_sums`.`spent`,0) else coalesce(`budget_users`.`estimated`,0) end) AS `reserved`,(case `budget_users`.`finished_expenses` when true then coalesce(`budget_users_sums`.`spent`,0) else 0 end) AS `final_expense` from (`budget_users` left join `budget_users_sums` on((`budget_users`.`id` = `budget_users_sums`.`budget_user_id`)))
   SQL
   create_view "duplicate_page_names", sql_definition: <<-SQL
       select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
