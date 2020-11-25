@@ -1,6 +1,7 @@
 class BudgetSums < ApplicationRecord
-  self.primary_key = 'budget_id'
   self.table_name = 'budgets_sums'
+  include MaterializedTable
+
   belongs_to :budget
 
   def readonly?
