@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, FormLabel, Box } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -9,15 +10,45 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 
-export function DiverstRichTextInput(props) {
-  const { label, value, fullWidth, onChange, ...rest } = props;
+const wrapperStyle = {
+  border: '1px solid lightgray',
+  padding: 10,
+  borderRadius: 4,
+};
 
-  const wrapperStyle = {
-    border: '1px solid lightgray',
-    padding: '10px',
-    borderRadius: '4px',
-    width: '99%',
-  };
+const getEditorStyle = (height, borderSize) => ({
+  height,
+  border: `${borderSize}px solid #F1F1F1`,
+  borderRadius: 2,
+  padding: 8,
+  lineHeight: 1,
+});
+
+const useStyles = makeStyles({
+  editorContainer: {
+    '& .public-DraftEditor-content': {
+      cursor: 'auto', // Use proper text cursor for input
+    },
+    '& .public-DraftStyleDefault-block': {
+      margin: 0, // Remove top & bottom input margins
+    },
+    '& .DraftEditor-root': {
+      // Compensate height for border size and vertical padding to prevent unnecessary scrollbar in editor
+      height: props => props.height - 2 * (props.borderSize + 8),
+    },
+  },
+});
+
+export function DiverstRichTextInput(props) {
+  const { label, value, fullWidth, onChange, height, borderSize, field, form, ...rest } = props;
+
+  const classes = useStyles({ height, borderSize });
+
+  const [editorStyle, setEditorStyle] = useState(getEditorStyle(height, borderSize));
+
+  useEffect(() => {
+    setEditorStyle(getEditorStyle(height, borderSize));
+  }, [height, borderSize]);
 
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(
@@ -77,25 +108,27 @@ export function DiverstRichTextInput(props) {
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperStyle={wrapperStyle}
-        editorStyle={{
-          height: `${props.height}px`
-        }}
+        editorStyle={editorStyle}
+        editorClassName={classes.editorContainer}
       />
     </FormControl>
   );
 }
 
 DiverstRichTextInput.propTypes = {
-  classes: PropTypes.object,
   onChange: PropTypes.func,
   value: PropTypes.string,
-  height: PropTypes.number,
+  height: PropTypes.number.isRequired,
+  borderSize: PropTypes.number.isRequired,
   fullWidth: PropTypes.bool,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  field: PropTypes.object,
+  form: PropTypes.object,
 };
 
 DiverstRichTextInput.defaultProps = {
   height: 200,
+  borderSize: 1,
 };
 
 export default compose(
