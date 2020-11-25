@@ -7,7 +7,7 @@ import {
   createGroup, categorizeGroup, updateGroup,
   updateGroupSettings, deleteGroup, carryBudget,
   resetBudget, joinGroup, leaveGroup,
-  joinSubgroups
+  joinSubgroups, updateGroupPosition
 } from 'containers/Group/saga';
 
 import {
@@ -20,6 +20,7 @@ import {
   resetBudgetSuccess, resetBudgetError, joinGroupSuccess,
   joinGroupError, leaveGroupSuccess, leaveGroupError,
   joinSubgroupsSuccess, joinSubgroupsError,
+  updateGroupPositionSuccess, updateGroupPositionError
 } from 'containers/Group/actions';
 
 import { push } from 'connected-react-router';
@@ -134,7 +135,7 @@ describe('Get groups Saga', () => {
 
     expect(api.groups.all).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.groups);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.groups, options: { variant: 'warning' } });
   });
 });
 
@@ -174,7 +175,7 @@ describe('Get group Saga', () => {
 
     expect(api.groups.get).toHaveBeenCalledWith(initialAction.payload.id);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.group);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.group, options: { variant: 'warning' } });
   });
 });
 
@@ -216,7 +217,7 @@ describe('Get annual group budget', () => {
 
     expect(api.groups.annualBudgets).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.annualBudgets);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.annualBudgets, options: { variant: 'warning' } });
   });
 });
 
@@ -251,7 +252,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith({ group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -275,7 +276,7 @@ describe('Create group', () => {
     );
     expect(api.groups.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
   });
 });
 
@@ -306,7 +307,7 @@ describe('Categorize group', () => {
     );
     expect(api.groups.updateCategories).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.group_categorize);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.group_categorize, options: { variant: 'warning' } });
   });
 });
 
@@ -343,7 +344,7 @@ describe('Update group', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -368,7 +369,7 @@ describe('Update group', () => {
 
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
   });
 });
 
@@ -394,7 +395,7 @@ describe('Update group settings', () => {
     );
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_group_settings);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_settings, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -419,7 +420,59 @@ describe('Update group settings', () => {
 
     expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, { group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_group_settings);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update_group_settings, options: { variant: 'warning' } });
+  });
+});
+
+describe('Update group position', () => {
+  it('Should update some group positions', async () => {
+    api.groups.update.mockImplementation(() => Promise.resolve({ data: { } }));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'group updated',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupPositionSuccess(), notified];
+    const initialAction = { payload: {
+      id: 1,
+      position: 3,
+    } };
+    const dispatched = await recordSaga(
+      updateGroupPosition,
+      initialAction
+    );
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_group_position, options: { variant: 'success' } });
+  });
+
+  it('Should return error from the API', async () => {
+    const response = { response: { data: 'ERROR!' } };
+    api.groups.update.mockImplementation(() => Promise.reject(response));
+    const notified = {
+      notification: {
+        key: 1590092641484,
+        message: 'Failed to update group position',
+        options: { variant: 'warning' }
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [updateGroupPositionError(response), notified];
+    const initialAction = { payload: { id: 5, position: 5 } };
+    const dispatched = await recordSaga(
+      updateGroupPosition,
+      initialAction
+    );
+
+    expect(api.groups.update).toHaveBeenCalledWith(initialAction.payload.id, initialAction.payload);
+    expect(dispatched).toEqual(results);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update_group_position, options: { variant: 'warning' } });
   });
 });
 
@@ -449,7 +502,7 @@ describe('Delete group', () => {
     );
     expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
   });
 
   it('Should return error from the API', async () => {
@@ -473,7 +526,7 @@ describe('Delete group', () => {
     );
     expect(api.groups.destroy).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
   });
 });
 
@@ -504,7 +557,7 @@ describe('Carry budget', () => {
     );
     expect(api.groups.carryOverBudget).toHaveBeenCalledWith(initialAction);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.carry);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.carry, options: { variant: 'warning' } });
   });
 });
 // TODO
@@ -554,7 +607,7 @@ describe('reset budget', () => {
 
     expect(api.groups.resetBudget).toHaveBeenCalledWith(initialAction);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.reset);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.reset, options: { variant: 'warning' } });
   });
 });
 
@@ -592,7 +645,7 @@ describe('Join group', () => {
     );
     expect(api.userGroups.join).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.join);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.join, options: { variant: 'warning' } });
   });
 });
 
@@ -631,7 +684,7 @@ describe('Leave group', () => {
     );
     expect(api.userGroups.leave).toHaveBeenCalledWith({ user_group: initialAction.payload });
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.leave);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.leave, options: { variant: 'warning' } });
   });
 });
 
@@ -670,6 +723,6 @@ describe('Join subgroups', () => {
     );
     expect(api.userGroups.joinSubgroups).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
-    expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.join_subgroups);
+    expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.join_subgroups, options: { variant: 'warning' } });
   });
 });

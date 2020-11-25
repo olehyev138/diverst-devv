@@ -34,6 +34,9 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
   const drag = getListDrag(id, index, draggable);
   drag(drop(ref));
 
+  if (draggable && form)
+    setForm(false);
+
   return (
     <Grid item key={field.id} xs={12}>
       { draggable ? (
@@ -84,7 +87,7 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
               className={classes.errorButton}
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.delete_confirm)))
+                if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                   deleteFieldBegin(field.id);
               }}
             >
@@ -93,7 +96,7 @@ export default function DraggableFieldAdminCard({ id, index, moveCard, field, cl
           </CardActions>
         </Card>
       )}
-      { !draggable && (
+      { (!draggable) && (
         <Collapse in={form}>
           <FieldForm
             edit
@@ -131,4 +134,5 @@ DraggableFieldAdminCard.propTypes = {
     required: PropTypes.bool,
     memberList: PropTypes.bool,
   }),
+  customTexts: PropTypes.object,
 };

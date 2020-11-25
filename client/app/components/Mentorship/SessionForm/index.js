@@ -43,7 +43,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               id='notes'
               name='notes'
               value={values.notes}
-              label={props.intl.formatMessage(messages.form.notes)}
+              label={props.intl.formatMessage(messages.form.notes, props.customTexts)}
             />
             { /* Start and End Pickers */ }
             <Field
@@ -53,12 +53,12 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               keyboardMode
               /* eslint-disable-next-line dot-notation */
               maxDate={values['end'] || undefined}
-              maxDateMessage={props.intl.formatMessage(messages.form.start_message)}
+              maxDateMessage={props.intl.formatMessage(messages.form.start_message, props.customTexts)}
               fullWidth
               id='start'
               name='start'
               margin='normal'
-              label={props.intl.formatMessage(messages.form.start)}
+              label={props.intl.formatMessage(messages.form.start, props.customTexts)}
             />
             <Field
               component={DiverstDateTimePicker}
@@ -67,12 +67,12 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               keyboardMode
               /* eslint-disable-next-line dot-notation */
               minDate={values['start']}
-              minDateMessage={props.intl.formatMessage(messages.form.end_message)}
+              minDateMessage={props.intl.formatMessage(messages.form.end_message, props.customTexts)}
               fullWidth
               id='end'
               name='end'
               margin='normal'
-              label={props.intl.formatMessage(messages.form.end)}
+              label={props.intl.formatMessage(messages.form.end, props.customTexts)}
             />
             <Field
               component={TextField}
@@ -85,7 +85,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               id='link'
               name='link'
               value={values.link}
-              label={props.intl.formatMessage(messages.form.link)}
+              label={props.intl.formatMessage(messages.form.link, props.customTexts)}
             />
             {/* Interest */}
             <Select
@@ -95,7 +95,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               isMulti
               fullWidth
               margin='normal'
-              label={props.intl.formatMessage(messages.form.topics)}
+              label={props.intl.formatMessage(messages.form.topics, props.customTexts)}
               value={values.mentoring_interest_ids}
               options={props.interestOptions}
               onChange={value => setFieldValue('mentoring_interest_ids', value)}
@@ -107,7 +107,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               isMulti
               fullWidth
               margin='normal'
-              label={props.intl.formatMessage(messages.form.users)}
+              label={props.intl.formatMessage(messages.form.users, props.customTexts)}
               value={values.user_ids}
               options={props?.user?.mentees}
               onChange={value => setFieldValue('user_ids', value)}
@@ -161,7 +161,7 @@ SessionForm.propTypes = {
   currentSession: PropTypes.object,
   user: PropTypes.object,
   isCommitting: PropTypes.bool,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
 };
 
 SessionFormInner.propTypes = {
@@ -173,14 +173,15 @@ SessionFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   interestOptions: PropTypes.array.isRequired,
   isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     sessionsIndex: PropTypes.string
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

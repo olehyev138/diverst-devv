@@ -109,7 +109,7 @@ export function RegionLeaderForm(props) {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     region_id: { default: props.regionId },
-    position_name: { default: intl.formatMessage(messages.form.position.default, customTexts(props.customTexts)) },
+    position_name: { default: intl.formatMessage(messages.form.position.default, props.customTexts) },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },

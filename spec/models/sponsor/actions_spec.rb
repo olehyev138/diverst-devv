@@ -13,7 +13,7 @@ RSpec.describe Sponsor::Actions, type: :model do
   end
 
   describe 'base_attributes_preloads' do
-    let(:base_attributes_preloads) { [:sponsor_media_attachment] }
+    let(:base_attributes_preloads) { [:sponsor_media_attachment, :sponsor_media_blob] }
 
     it { expect(Sponsor.base_attributes_preloads).to eq base_attributes_preloads }
   end

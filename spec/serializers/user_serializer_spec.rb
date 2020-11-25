@@ -40,9 +40,10 @@ RSpec.describe UserSerializer, type: :serializer do
     expect(serializer.serializable_hash[:email]).to eq user.email
     expect(serializer.serializable_hash[:last_name]).to_not eq nil
     expect(serializer.serializable_hash[:user_role]).to_not eq nil
-    expect(serializer.serializable_hash[:user_groups].empty?).to_not be true
+    expect(serializer.serializable_hash[:user_groups]).to be nil
     expect(serializer.serializable_hash[:password_digest]).to be nil
     expect(serializer.serializable_hash[:field_data].size).to be 1
+    expect(serializer.serializable_hash[:status].size).to_not eq nil
   end
 
   it 'returns email and last name fields but not password_digest' do

@@ -58,35 +58,35 @@ export function BudgetList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.requested),
+      title: intl.formatMessage(messages.columns.requested, props.customTexts),
       field: 'requested_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.requested_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.available),
+      title: intl.formatMessage(messages.columns.available, props.customTexts),
       field: 'available_amount',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: intl.formatMessage(messages.columns.status, props.customTexts),
       field: 'status',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.columns.requestedAt),
+      title: intl.formatMessage(messages.columns.requestedAt, props.customTexts),
       field: 'requested_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.requested_at, DateTime.DATETIME_MED)
     },
     {
-      title: intl.formatMessage(messages.columns.number),
+      title: intl.formatMessage(messages.columns.number, props.customTexts),
       field: 'item_count',
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.columns.description),
+      title: intl.formatMessage(messages.columns.description, props.customTexts),
       field: 'description',
       query_field: 'description',
     },
@@ -96,7 +96,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DetailsIcon />,
-    tooltip: intl.formatMessage(messages.actions.details),
+    tooltip: intl.formatMessage(messages.actions.details, props.customTexts),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
@@ -105,11 +105,12 @@ export function BudgetList(props, context) {
 
   actions.push(rowData => ({
     icon: () => <DeleteIcon />,
-    tooltip: intl.formatMessage(messages.actions.delete),
+    tooltip: intl.formatMessage(messages.actions.delete, props.customTexts),
     disabled: !permission(rowData, 'destroy?'),
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      props.deleteBudgetBegin({ id: rowData.id });
+      // eslint-disable-next-line no-alert,no-restricted-globals
+      if (confirm(intl.formatMessage(messages.actions.deleteConfirmation)))
+        props.deleteBudgetBegin({ id: rowData.id });
     }
   }));
 
@@ -152,7 +153,7 @@ export function BudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.tableTitle)}
+            title={messages.tableTitle}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}
@@ -190,7 +191,8 @@ BudgetList.propTypes = {
     newRequest: PropTypes.string,
     annualBudgetOverview: PropTypes.string,
     requestDetails: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 export default compose(

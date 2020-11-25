@@ -15,7 +15,7 @@ class RegionPolicy < GroupBasePolicy
 
   def group_id_param; :parent_id end
 
-  delegate :show?, :update?, :destroy?, :manage?, to: :parent_policy
+  delegate :show?, :update?, :destroy?, :manage?, :members_view?, to: :parent_policy
 
   def index?
     group.present? ? parent_policy.show? : parent_policy.index?

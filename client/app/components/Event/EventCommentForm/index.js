@@ -15,8 +15,8 @@ import {
 import withStyles from '@material-ui/core/styles/withStyles';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
+import { DiverstFormattedMessage } from '../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   formTitle: {
@@ -26,7 +26,6 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function EventCommentFormInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
-  const { intl } = props;
   return (
     <Card>
       <Form>
@@ -34,7 +33,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
           <Typography
             paragraph
           >
-            {intl.formatMessage(messages.comment.label)}
+            <DiverstFormattedMessage {...messages.comment.label} />
           </Typography>
           <Field
             component={TextField}
@@ -45,7 +44,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
             name='content'
             variant='outlined'
             value={values.content}
-            label={intl.formatMessage(messages.comment.input)}
+            label=<DiverstFormattedMessage {...messages.comment.input} />
             multiline
             required
           />
@@ -53,7 +52,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            {intl.formatMessage(messages.comment.submit)}
+            <DiverstFormattedMessage {...messages.comment.submit} />
           </DiverstSubmit>
         </CardActions>
       </Form>
@@ -94,7 +93,6 @@ EventCommentForm.propTypes = {
 };
 
 EventCommentFormInner.propTypes = {
-  intl: intlShape.isRequired,
   classes: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
@@ -106,7 +104,6 @@ EventCommentFormInner.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   memo,
   withStyles(styles)
 )(EventCommentForm);

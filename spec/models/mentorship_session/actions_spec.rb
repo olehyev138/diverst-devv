@@ -65,7 +65,7 @@ RSpec.describe MentorshipSession::Actions, type: :model do
       ]
     }
 
-    it { expect(MentorshipSession.base_preloads).to eq base_preloads }
+    it { expect(MentorshipSession.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'accept' do

@@ -372,7 +372,7 @@ export function AdminLinks(props) {
                   <PlanGroupBudgetsIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Group Budgets
+                  <DiverstFormattedMessage {...{ id: 'diverst.containers.Routes.admin.plan.group_budgets' }} />
                 </ListItemText>
               </MenuPermission>
             </List>

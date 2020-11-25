@@ -2,10 +2,10 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   link: {
@@ -22,9 +22,10 @@ const styles = theme => ({
 
 export function PostsTable(props) {
   const { intl } = props;
+
   const columns = [
     {
-      title: 'Title',
+      title: intl.formatMessage(messages.title, props.customTexts),
       render: (rowData) => {
         if (rowData.group_message)
           return rowData.group_message.subject;
@@ -42,15 +43,15 @@ export function PostsTable(props) {
         + 'END)',
     },
     {
-      title: 'Type',
+      title: intl.formatMessage(messages.type, props.customTexts),
       render: (rowData) => {
         if (rowData.group_message)
-          return intl.formatMessage(messages.group_message);
+          return intl.formatMessage(messages.group_message, props.customTexts);
         if (rowData.news_link)
-          return intl.formatMessage(messages.news_link);
+          return intl.formatMessage(messages.news_link, props.customTexts);
         if (rowData.social_link)
-          return intl.formatMessage(messages.social_link);
-        return intl.formatMessage(messages.error);
+          return intl.formatMessage(messages.social_link, props.customTexts);
+        return intl.formatMessage(messages.error, props.customTexts);
       },
       query_field: '(CASE '
         + 'WHEN group_message_id IS NOT NULL THEN 1 '
@@ -69,7 +70,7 @@ export function PostsTable(props) {
 
   return (
     <DiverstTable
-      title='Archives'
+      title={props.title}
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
       onOrderChange={handleOrderChange}
@@ -79,7 +80,7 @@ export function PostsTable(props) {
       columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
-        tooltip: 'Restore',
+        tooltip: intl.formatMessage(messages.restore, props.customTexts),
         onClick: (_, rowData) => {
           props.handleRestore(rowData.id);
         }
@@ -89,21 +90,23 @@ export function PostsTable(props) {
 }
 
 PostsTable.propTypes = {
+  intl: intlShape.isRequired,
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
+  title: PropTypes.object
 };
 
 export default compose(
-  memo,
   injectIntl,
+  memo,
   withStyles(styles)
 )(PostsTable);

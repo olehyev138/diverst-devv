@@ -27,7 +27,7 @@ import { intlShape } from 'react-intl';
 import { getListDrop, getListDrag } from 'utils/DragAndDropHelpers';
 
 
-export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin }, props) {
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin, customTexts }, props) {
   const [expandedGroups, setExpandedGroups] = useState({});
   const ref = useRef(null);
   const ItemTypes = {
@@ -98,6 +98,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
             state: { id: group.id }
           }}
           component={WrappedNavLink}
+          disabled={draggable}
         >
           <DiverstFormattedMessage {...messages.edit} />
         </Button>
@@ -108,9 +109,10 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           className={classes.errorButton}
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.delete_confirm)))
+            if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
               deleteGroupBegin(group.id);
           }}
+          disabled={draggable}
         >
           <DiverstFormattedMessage {...messages.delete} />
         </Button>
@@ -122,6 +124,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
             onClick={() => {
               setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
             }}
+            disabled={draggable}
           >
             {expandedGroups[group.id] ? (
               <DiverstFormattedMessage {...messages.children_collapse} />
@@ -139,8 +142,9 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                 state: { id: group.id }
               }}
               component={WrappedNavLink}
+              disabled={draggable}
             >
-              Categorize Subgroups
+              <DiverstFormattedMessage {...messages.categorizeCollapsable} />
             </Button>
           </Permission>
 
@@ -150,6 +154,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
               color='primary'
               to={ROUTES.admin.manage.groups.regions.index.path(group.id)}
               component={WrappedNavLink}
+              disabled={draggable}
             >
               <DiverstFormattedMessage {...messages.manage_regions} />
             </Button>
@@ -199,6 +204,11 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
     </Dialog>
   );
 
+  // If a group has the sub-groups list open ensure the open state is wiped
+  if (draggable && (Object.entries(expandedGroups).length !== 0))
+    setExpandedGroups({});
+
+
   return (
     <Grid item key={group.id} xs={12}>
       { importDialog }
@@ -209,7 +219,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
         {cardContent}
         {cardActions}
       </Card>
-      <Collapse in={expandedGroups[`${group.id}`]}>
+      <Collapse in={!draggable && expandedGroups[`${group.id}`]}>
         <Box mt={1} />
         <Grid container spacing={2} justify='flex-end'>
           {children && children.map((childGroup, i) => (
@@ -283,7 +293,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
                       className={classes.errorButton}
                       onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete group?'))
+                        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
                           deleteGroupBegin(childGroup.id);
                       }}
                     >
@@ -311,4 +321,5 @@ DraggableGroupAdminCard.propTypes = {
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };

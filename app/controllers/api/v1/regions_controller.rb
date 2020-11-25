@@ -8,6 +8,14 @@ class Api::V1::RegionsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def members
+    item = klass.find(params[:id])
+    authorize item, :members_view?
+    params.delete(:id)
+
+    render status: 200, json: User.index(self.diverst_request, params.permit!, base: item.members)
+  end
+
   private
 
   def payload

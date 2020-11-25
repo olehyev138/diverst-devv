@@ -45,6 +45,7 @@ export function GroupMessage(props) {
                 comment={comment}
                 deleteCommentAction={props.deleteGroupMessageCommentBegin}
                 newsItem={props.newsItem}
+                customTexts={props.customTexts}
               />
             );
           })}
@@ -65,6 +66,7 @@ GroupMessage.propTypes = {
   }),
   deleteGroupMessageCommentBegin: PropTypes.func,
   groupMessage: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

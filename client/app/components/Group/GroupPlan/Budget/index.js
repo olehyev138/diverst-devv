@@ -36,7 +36,6 @@ import { useFormik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
@@ -66,46 +65,46 @@ export function Budget(props) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: intl.formatMessage(messages.columns.status, props.customTexts),
       field: 'is_done',
       query_field: 'budget_items.is_done',
       lookup: {
-        false: intl.formatMessage(messages.lookup.isDoneFalse),
-        true: intl.formatMessage(messages.lookup.isDoneTrue),
+        false: intl.formatMessage(messages.lookup.isDoneFalse, props.customTexts),
+        true: intl.formatMessage(messages.lookup.isDoneTrue, props.customTexts),
       }
     },
     {
-      title: intl.formatMessage(messages.columns.title),
+      title: intl.formatMessage(messages.columns.title, props.customTexts),
       field: 'title',
       query_field: 'budget_items.title',
     },
     {
-      title: intl.formatMessage(messages.columns.requested),
+      title: intl.formatMessage(messages.columns.requested, props.customTexts),
       field: 'estimated_amount',
       query_field: 'budget_items.estimated_amount',
       render: rowData => toCurrencyString(props.intl, rowData.estimated_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.available),
+      title: intl.formatMessage(messages.columns.available, props.customTexts),
       field: 'available_amount',
       query_field: 'budget_items.available_amount',
       render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
     },
     {
-      title: intl.formatMessage(messages.columns.endDate),
+      title: intl.formatMessage(messages.columns.endDate, props.customTexts),
       field: 'estimated_date',
       query_field: 'budget_items.estimated_date',
       render: rowData => rowData.estimated_date
         ? formatDateTimeString(rowData.estimated_date, DateTime.DATE_MED)
-        : intl.formatMessage(messages.lookup.notSet)
+        : intl.formatMessage(messages.lookup.notSet, props.customTexts)
     },
     {
-      title: intl.formatMessage(messages.columns.private),
+      title: intl.formatMessage(messages.columns.private, props.customTexts),
       field: 'is_private',
       query_field: 'budget_items.is_private',
       lookup: {
-        false: intl.formatMessage(messages.lookup.privateFalse),
-        true: intl.formatMessage(messages.lookup.privateTrue),
+        false: intl.formatMessage(messages.lookup.privateFalse, props.customTexts),
+        true: intl.formatMessage(messages.lookup.privateTrue, props.customTexts),
       }
     },
   ];
@@ -114,10 +113,10 @@ export function Budget(props) {
 
   actions.push(rowData => ({
     icon: () => <CloseIcon />,
-    tooltip: intl.formatMessage(messages.actions.close),
+    tooltip: intl.formatMessage(messages.actions.close, props.customTexts),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-restricted-globals,no-alert
-      if (confirm(intl.formatMessage(messages.actions.closeConfirm)))
+      if (confirm(intl.formatMessage(messages.actions.closeConfirm, props.customTexts)))
         props.closeBudgetAction({ id: rowData.id });
     },
     disabled: rowData.is_done,
@@ -272,7 +271,7 @@ export function Budget(props) {
         </Card>
         <Box mb={2} />
         <DiverstTable
-          title={intl.formatMessage(messages.tableTitle)}
+          title={messages.tableTitle}
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}
@@ -296,6 +295,7 @@ Budget.propTypes = {
   classes: PropTypes.object,
   budget: PropTypes.object,
   links: PropTypes.object,
+  customTexts: PropTypes.object,
 
   isCommitting: PropTypes.bool,
 

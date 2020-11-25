@@ -32,6 +32,8 @@ import {
 import {
   selectHasChanged
 } from 'containers/Group/GroupPlan/BudgetItem/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
+
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Budget from 'components/Group/GroupPlan/Budget';
@@ -80,6 +82,7 @@ export function BudgetPage(props) {
       closeBudgetAction={props.closeBudgetItemsBegin}
       isCommitting={props.isCommitting}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -94,6 +97,7 @@ BudgetPage.propTypes = {
 
   currentGroup: PropTypes.object,
   budget: PropTypes.object,
+  customTexts: PropTypes.object,
 
   isLoading: PropTypes.bool,
   isCommitting: PropTypes.bool,
@@ -106,6 +110,7 @@ const mapStateToProps = createStructuredSelector({
   budget: selectBudget(),
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

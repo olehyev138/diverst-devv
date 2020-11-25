@@ -9,6 +9,6 @@ RSpec.describe Email::Actions, type: :model do
       ]
     }
 
-    it { expect(Email.base_preloads).to eq base_preloads }
+    it { expect(Email.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

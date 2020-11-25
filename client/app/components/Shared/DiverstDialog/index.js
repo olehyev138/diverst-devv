@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import PropTypes from 'prop-types';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
+import { injectIntl, intlShape } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { selectCustomText } from 'containers/Shared/App/selectors';
+import { compose } from 'redux';
 
 const styles = {
   dialog: {
@@ -41,20 +45,20 @@ export function DiverstDialog(props) {
       }}
       className={classes.dialog}
     >
-      {title && <DialogTitle id='alert-dialog-title'>{ title }</DialogTitle>}
+      {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
       <DialogContent className={classes.content}>
-        {content}
+        {content.id ? props.intl.formatMessage(content, props.customText) : content}
       </DialogContent>
       {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
           {handleYes && textYes && (
             <Button onClick={handleYes} color='primary' autoFocus>
-              {textYes}
+              {textYes.id ? props.intl.formatMessage(textYes, props.customText) : textYes}
             </Button>
           )}
           {handleNo && textNo && (
             <Button onClick={handleNo} color='primary'>
-              {textNo}
+              {textNo.id ? props.intl.formatMessage(textNo, props.customText) : textNo}
             </Button>
           )}
           {extraActions.map(action => (
@@ -71,13 +75,14 @@ export function DiverstDialog(props) {
 }
 
 DiverstDialog.propTypes = {
-  title: PropTypes.node,
+  title: PropTypes.object,
   subTitle: PropTypes.node,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
   textYes: PropTypes.node,
   handleNo: PropTypes.func,
-  textNo: PropTypes.node,
+  textNo: PropTypes.object,
+  customText: PropTypes.object,
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
   paperProps: PropTypes.object,
@@ -86,10 +91,24 @@ DiverstDialog.propTypes = {
     func: PropTypes.func,
     label: PropTypes.node,
   })),
+  intl: intlShape.isRequired,
 };
 
 DiverstDialog.defaultProps = {
   extraActions: []
 };
 
-export default withStyles(styles)(DiverstDialog);
+const mapStateToProps = createStructuredSelector({
+  customText: selectCustomText(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
+export default compose(
+  injectIntl,
+  withStyles(styles),
+  memo,
+  withConnect
+)(DiverstDialog);

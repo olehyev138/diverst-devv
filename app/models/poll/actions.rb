@@ -13,12 +13,16 @@ module Poll::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       "LOWER(#{self.table_name}.title) LIKE :search"
     end
 
-    def base_preloads
-      [:fields, :groups, :segments, :enterprise]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then [:fields, :responses]
+      when 'show', 'create', 'update' then [:fields, :responses, :groups, :segments]
+      else []
+      end
     end
   end
 end

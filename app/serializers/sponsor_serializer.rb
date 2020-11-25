@@ -1,5 +1,5 @@
 class SponsorSerializer < ApplicationRecordSerializer
-  attributes :group, :enterprise, :sponsor_media_location, :sponsor_name, :sponsor_title, :sponsorable_id, :sponsorable_type, :permissions,
+  attributes :group, :sponsor_media_location, :sponsor_name, :sponsor_title, :sponsorable_id, :sponsorable_type, :permissions,
              :sponsor_media, :sponsor_media_file_name, :sponsor_media_data
 
   def serialize_all_fields

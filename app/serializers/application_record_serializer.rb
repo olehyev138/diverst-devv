@@ -23,18 +23,103 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
   def self.inherited(subclass)
     super
+
+    subclass.const_set('Tester', Class.new do
+      attr_reader :serializer, :user, :action, :klass, :object
+
+      def initialize(object, user: nil, action:, options: {}, path: ['object'], failures: [])
+        @klass = object.class
+        @path = path
+        @head = path.size == 1
+        @object = @head ? @klass.preload_all(action: action, user: user).find(object.id) : object
+        @user = user
+        @action = action
+        @options = options
+        @failures = failures
+        @serializer = self.class.parent.new(
+            @object,
+            options.merge({ scope: { current_user: user, action: action } })
+          )
+      end
+
+      def parent
+        @@parent = self.class.parent
+      end
+
+      def attributes
+        @attributes ||= parent._attributes.map do |attr|
+          [attr, (object.association(attr) rescue nil)]
+        end.filter(&:second).filter { |attr| serializer.validate(attr.first) }
+      end
+
+      def reflections
+        @reflections ||= parent._reflections.map do |attr, ref|
+          [attr, (object.association(attr) rescue nil)]
+        end.filter(&:second)
+      end
+
+      def associations
+        @associations ||= (attributes + reflections).to_h
+      end
+
+      def preloaded?
+        attributes.each do |attr, assoc|
+          loaded?(attr, assoc)
+          recursive?(attr, assoc) if parent.instance_methods(false).include? attr
+        end
+        reflections.each do |attr, assoc|
+          loaded?(attr, assoc)
+          recursive?(attr, assoc)
+        end
+        if @head && @failures.present?
+          raise StandardError, "#{@failures.join('; ')} #{@failures.size == 1 ? 'is' : 'are'} not preloaded"
+        end
+
+        true
+      end
+
+      def loaded?(attr, assoc)
+        @failures.append([*@path, attr].join('.')) unless assoc.loaded?
+      end
+
+      def recursive?(attr, assoc)
+        serializer = @options[:use_serializer]
+
+        sub_object = case assoc
+                     when ActiveRecord::Associations::CollectionAssociation
+                       object.send(attr).first
+                     when ActiveRecord::Associations::SingularAssociation
+                       object.send(attr)
+                     else nil
+        end
+
+        serializer ||= ActiveModel::Serializer.serializer_for(sub_object)
+
+        return true unless sub_object
+
+        serializer::Tester.new(
+            sub_object,
+            user: user,
+            action: action,
+            options: @options,
+            path: [*@path, "#{attr}[]"],
+            failures: @failures
+          ).preloaded?
+      end
+    end)
+
     class << subclass
       def permission_module
         @module ||= begin
                        temp = Module.new do
-                         def self.attr_conditions
-                           @attr_conditions ||= Hash.new do |hash, key|
-                             hash[key] = []
-                           end
-                         end
-
                          class << self
-                           delegate :[], to: :attr_conditions
+                           def attr_conditions
+                             @attr_conditions ||= Hash.new do |hash, key|
+                               hash[key] = []
+                             end
+                           end
+
+                           delegate :[], :key?, :inspect, to: :attr_conditions
                          end
                        end
                        prepend(temp)
@@ -51,9 +136,13 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
           unless permission_module.instance_methods(false).include? attr
             permission_module.define_method(attr) do
-              if self.class.permission_module.attr_conditions[__method__].any? { |pred| send(pred) }
+              if validate(__method__)
                 if defined?(super)
-                  super() rescue nil
+                  begin
+                    super()
+                  rescue NoMethodError
+                    nil
+                  end
                 else
                   object&.send(attr)
                 end
@@ -79,14 +168,27 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
     super(object, options)
     if @scope.nil?
       def self.scope
-        if Rails.env.test?
-          raise SerializerScopeNotDefinedException
-        else
-          Rollbar.error(SerializerScopeNotDefinedException.new)
-          nil
+        scope = Object.new
+        def scope.method_missing(*args)
+          if Rails.env.production?
+            Rollbar.error(SerializerScopeNotDefinedException.new)
+            nil
+          else
+            Clipboard.copy caller_locations
+            raise SerializerScopeNotDefinedException
+          end
         end
+
+        def scope.blank?
+          true
+        end
+        scope
       end
     end
+  end
+
+  def validate(field)
+    !self.class.permission_module.key?(field) || self.class.permission_module[field].any? { |pred| send(pred) }
   end
 
   # On serialization, excludes any keys that are returned by the `excluded_keys` method from the result
@@ -124,11 +226,33 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                 end
   end
 
+  def new_action_instance_options(new_action)
+    new = {}
+    instance_options.each do |k, v|
+      new[k] = v.dup
+    end
+    new[:scope][:action] = new_action
+    new
+  end
+
   def policies
     [:show?, :update?, :destroy?]
   end
 
   def permissions
     policies.reduce({}) { |sum, m| sum[m] = (policy.send(m)); sum }
+  end
+
+  def singular_action?
+    ['show', 'prototype', 'create', 'update'].include?(scope[:action])
+  end
+
+  private def method_missing(symbol, *args)
+    case symbol.to_s
+    when /([a-zA-Z_]+)_action\?/
+      scope[:action] == $1
+    else
+      super
+    end
   end
 end
