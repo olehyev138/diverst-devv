@@ -56,7 +56,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectGroup } from 'containers/Group/selectors';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -66,8 +65,6 @@ export function UpdateEditPage(props) {
   useInjectSaga({ key: 'updates', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
-
-  const { intl } = props;
 
   const location = useLocation();
   const { update_id: updateId } = useParams();
@@ -96,7 +93,7 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       updateAction={props.updateUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
 
@@ -106,7 +103,6 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getUpdateBegin: PropTypes.func.isRequired,
   getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
@@ -147,7 +143,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

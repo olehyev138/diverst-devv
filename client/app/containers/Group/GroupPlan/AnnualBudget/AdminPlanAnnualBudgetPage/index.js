@@ -13,6 +13,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
+import { selectCustomText, selectPermissions, selectEnterprise } from '../../../../Shared/App/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
@@ -23,7 +24,7 @@ import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
@@ -81,6 +82,7 @@ export function AdminAnnualBudgetPage(props) {
       carryBudget={props.carryBudgetBegin}
       resetBudget={props.resetBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -96,7 +98,8 @@ AdminAnnualBudgetPage.propTypes = {
   hasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func
+  deleteGroupBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -106,6 +109,7 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

@@ -32,7 +32,7 @@ export function* getPillar(action) {
     yield put(getPillarSuccess(response.data));
   } catch (err) {
     yield put(getPillarError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillar), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.pillar, options: { variant: 'warning' } }));
   }
 }
 
@@ -43,7 +43,7 @@ export function* getPillars(action) {
     yield put(getPillarsSuccess(response.data.page));
   } catch (err) {
     yield put(getPillarsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.pillars), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.pillars, options: { variant: 'warning' } }));
   }
 }
 
@@ -52,10 +52,10 @@ export function* createPillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(createPillarSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPillarError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -64,10 +64,10 @@ export function* updatePillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(updatePillarSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePillarError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -76,10 +76,10 @@ export function* deletePillar(action) {
     const response = { data: 'API CALL' };
 
     yield put(deletePillarSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePillarError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

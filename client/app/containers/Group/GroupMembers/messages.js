@@ -113,6 +113,12 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
+  logs: {
+    id: `${scope}.logs`
+  },
+  filterByGroup: {
+    id: `${scope}.filter.group`
+  },
   snackbars: {
     errors: {
       members: {

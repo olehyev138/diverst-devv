@@ -45,6 +45,7 @@ import saga from '../saga';
 import ExpenseList from 'components/Event/EventManage/ExpensesList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
 
@@ -121,6 +122,7 @@ export function ExpenseListPage(props) {
         deleteExpenseBegin={props.deleteExpenseBegin}
         finalizeExpensesBegin={props.finalizeExpensesBegin}
         links={links}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -134,7 +136,7 @@ ExpenseListPage.propTypes = {
   finalizeExpensesBegin: PropTypes.func.isRequired,
   expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
-  expenseSumTotal: PropTypes.number,
+  expenseSumTotal: PropTypes.string,
   isLoading: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
   expensesUnmount: PropTypes.func.isRequired,
@@ -146,7 +148,8 @@ ExpenseListPage.propTypes = {
   }),
   currentGroup: PropTypes.shape({
     id: PropTypes.number
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -158,6 +161,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectEvent(),
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

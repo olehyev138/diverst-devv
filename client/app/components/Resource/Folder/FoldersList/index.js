@@ -95,6 +95,7 @@ export function FoldersList(props, context) {
                   currentGroup={props.currentGroup}
                   deleteAction={props.deleteFolderBegin}
                   links={props.links}
+                  customTexts={props.customTexts}
                 />
               </Grid>
             );
@@ -146,6 +147,7 @@ FoldersList.propTypes = {
   currentGroup: PropTypes.object,
   permissions: PropTypes.object,
   type: PropTypes.string,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

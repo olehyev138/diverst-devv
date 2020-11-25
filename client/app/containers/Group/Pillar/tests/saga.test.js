@@ -84,7 +84,7 @@ describe('Tests for pillars saga', () => {
 
       expect(api.pillars.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.pillars);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.pillars, options: { variant: 'warning' } });
     });
   });
 
@@ -124,7 +124,7 @@ describe('Tests for pillars saga', () => {
 
       expect(api.pillars.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.pillar);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.pillar, options: { variant: 'warning' } });
     });
   });
 
@@ -152,7 +152,7 @@ describe('Tests for pillars saga', () => {
       );
       expect(api.pillars.create).toHaveBeenCalledWith({ pillar: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -176,7 +176,7 @@ describe('Tests for pillars saga', () => {
       );
       expect(api.pillars.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
 
     it('Should update a pillar', async () => {
@@ -201,7 +201,7 @@ describe('Tests for pillars saga', () => {
       );
       expect(api.pillars.update).toHaveBeenCalledWith(initialAction.payload.id, { pillar: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -226,7 +226,7 @@ describe('Tests for pillars saga', () => {
 
       expect(api.pillars.update).toHaveBeenCalledWith(initialAction.payload.id, { pillar: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -256,7 +256,7 @@ describe('Tests for pillars saga', () => {
       );
       expect(api.pillars.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'warning' } });
     });
 
     it('Should return error from the API', async () => {
@@ -280,7 +280,7 @@ describe('Tests for pillars saga', () => {
       );
       expect(api.pillars.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

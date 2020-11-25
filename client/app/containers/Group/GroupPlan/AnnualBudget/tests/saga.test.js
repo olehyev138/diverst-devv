@@ -73,7 +73,7 @@ describe('AnnualBudget Saga', () => {
 
       expect(api.groups.currentAnnualBudget).toHaveBeenCalledWith(initialAction.payload.groupId, {});
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.currentAnnualBudget);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.currentAnnualBudget, options: { variant: 'warning' } });
     });
   });
 
@@ -115,7 +115,7 @@ describe('AnnualBudget Saga', () => {
 
       expect(api.annualBudgets.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.annualBudget);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.annualBudget, options: { variant: 'warning' } });
     });
   });
 
@@ -157,7 +157,7 @@ describe('AnnualBudget Saga', () => {
 
       expect(api.annualBudgets.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.annualBudgets);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.annualBudgets, options: { variant: 'warning' } });
     });
   });
 
@@ -182,7 +182,7 @@ describe('AnnualBudget Saga', () => {
         initialAction
       );
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -206,7 +206,7 @@ describe('AnnualBudget Saga', () => {
       );
 
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 });

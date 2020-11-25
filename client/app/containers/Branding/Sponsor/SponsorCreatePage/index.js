@@ -39,7 +39,7 @@ export function SponsorCreatePage(props) {
       <SponsorForm
         sponsorAction={props.createSponsorBegin}
         links={links}
-        buttonText={intl.formatMessage(messages.create)}
+        buttonText={messages.create}
         sponsorableId={null}
         isCommitting={props.isCommitting}
       />

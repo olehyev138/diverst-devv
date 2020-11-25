@@ -45,7 +45,7 @@ export function PasswordResetPage(props) {
       });
     else {
       props.showSnackbar({
-        message: 'Invalid Token',
+        message: 'diverst.containers.App.texts.reset.token',
         options: { variant: 'warning' }
       });
       props.redirectAction(ROUTES.session.login.path());

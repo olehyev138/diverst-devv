@@ -32,7 +32,7 @@ export function* getExpense(action) {
   } catch (err) {
     yield put(getExpenseError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.expense), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.expense, options: { variant: 'warning' } }));
   }
 }
 
@@ -44,7 +44,7 @@ export function* getExpenses(action) {
   } catch (err) {
     yield put(getExpensesError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.expenses), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.expenses, options: { variant: 'warning' } }));
   }
 }
 
@@ -57,11 +57,11 @@ export function* createExpense(action) {
 
     yield put(createExpenseSuccess(response.data));
     yield put(push(path));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createExpenseError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -74,11 +74,11 @@ export function* updateExpense(action) {
 
     yield put(updateExpenseSuccess());
     yield put(push(path));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateExpenseError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -87,11 +87,11 @@ export function* deleteExpense(action) {
     const response = yield call(api.initiativeExpenses.destroy.bind(api.initiativeExpenses), action.payload.id);
 
     yield put(deleteExpenseSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteExpenseError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

@@ -40,7 +40,6 @@ export function EnterpriseConfigurationPage(props) {
       <EnterpriseConfiguration
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );

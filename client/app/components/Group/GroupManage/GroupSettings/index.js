@@ -25,7 +25,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import groupmessages from 'containers/Group/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import { intl } from '../../../../containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 
 const styles = theme => ({
@@ -37,62 +37,62 @@ const styles = theme => ({
 /* Define valid options for group settings - validated on backend */
 const SETTINGS_OPTIONS = Object.freeze({
   pendingUsers: [
-    { label: intl.formatMessage(messages.visibility.enabled), value: 'enabled' },
-    { label: intl.formatMessage(messages.visibility.disabled), value: 'disabled' }
+    { label: <DiverstFormattedMessage {...messages.visibility.enabled} />, value: 'enabled' },
+    { label: <DiverstFormattedMessage {...messages.visibility.disabled} />, value: 'disabled' }
   ],
   membersVisibility: [
-    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
-    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
-    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
+    { label: <DiverstFormattedMessage {...messages.visibility.public} />, value: 'public' },
+    { label: <DiverstFormattedMessage {...messages.visibility.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.visibility.leaders} />, value: 'leaders_only' },
   ],
   eventAttendanceVisibility: [
-    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
-    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
-    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
+    { label: <DiverstFormattedMessage {...messages.visibility.public} />, value: 'public' },
+    { label: <DiverstFormattedMessage {...messages.visibility.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.visibility.leaders} />, value: 'leaders_only' },
   ],
   messagesVisibility: [
-    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
-    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
-    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
+    { label: <DiverstFormattedMessage {...messages.visibility.public} />, value: 'public' },
+    { label: <DiverstFormattedMessage {...messages.visibility.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.visibility.leaders} />, value: 'leaders_only' },
   ],
   latestNewsVisibility: [
-    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
-    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
-    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
+    { label: <DiverstFormattedMessage {...messages.visibility.public} />, value: 'public' },
+    { label: <DiverstFormattedMessage {...messages.visibility.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.visibility.leaders} />, value: 'leaders_only' },
   ],
   upcomingEventsVisibility: [
-    { label: intl.formatMessage(messages.visibility.public), value: 'public' },
-    { label: intl.formatMessage(messages.visibility.group), value: 'group' },
-    { label: intl.formatMessage(messages.visibility.leaders), value: 'leaders_only' },
-    { label: intl.formatMessage(messages.visibility.non_member), value: 'non_member' }
+    { label: <DiverstFormattedMessage {...messages.visibility.public} />, value: 'public' },
+    { label: <DiverstFormattedMessage {...messages.visibility.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.visibility.leaders} />, value: 'leaders_only' },
+    { label: <DiverstFormattedMessage {...messages.visibility.non_member} />, value: 'non_member' }
   ],
   unitsOfExpiration: [
-    { label: intl.formatMessage(messages.units.years), value: 'years' },
-    { label: intl.formatMessage(messages.units.months), value: 'months' },
-    { label: intl.formatMessage(messages.units.weeks), value: 'weeks' },
+    { label: <DiverstFormattedMessage {...messages.units.years} />, value: 'years' },
+    { label: <DiverstFormattedMessage {...messages.units.months} />, value: 'months' },
+    { label: <DiverstFormattedMessage {...messages.units.weeks} />, value: 'weeks' },
   ],
 });
 
 function setHeader(value) {
   switch (value) {
     case 'leaders_only':
-      return intl.formatMessage(messages.visibility.leaders);
+      return <DiverstFormattedMessage {...messages.visibility.leaders} />;
     case 'public':
-      return intl.formatMessage(messages.visibility.public);
+      return <DiverstFormattedMessage {...messages.visibility.public} />;
     case 'group':
-      return intl.formatMessage(messages.visibility.group);
+      return <DiverstFormattedMessage {...messages.visibility.group} />;
     case 'non_member':
-      return intl.formatMessage(messages.visibility.non_member);
+      return <DiverstFormattedMessage {...messages.visibility.non_member} />;
     case 'disabled':
-      return intl.formatMessage(messages.visibility.disabled);
+      return <DiverstFormattedMessage {...messages.visibility.disabled} />;
     case 'enabled':
-      return intl.formatMessage(messages.visibility.enabled);
+      return <DiverstFormattedMessage {...messages.visibility.enabled} />;
     case 'years':
-      return intl.formatMessage(messages.units.years);
+      return <DiverstFormattedMessage {...messages.units.years} />;
     case 'months':
-      return intl.formatMessage(messages.units.months);
+      return <DiverstFormattedMessage {...messages.units.months} />;
     case 'weeks':
-      return intl.formatMessage(messages.units.weeks);
+      return <DiverstFormattedMessage {...messages.units.weeks} />;
     default:
       return '';
   }
@@ -241,7 +241,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 margin='normal'
                 fileName={props.group.logo_file_name}
                 fullWidth
-                label={intl.formatMessage(messages.settings.logo)}
+                label={<DiverstFormattedMessage {...messages.settings.logo} />}
                 disabled={props.isCommitting}
                 value={values.logo}
                 fileType='image'
@@ -252,7 +252,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 component={DiverstColorPicker}
                 id='calendar_color'
                 name='calendar_color'
-                label={intl.formatMessage(messages.settings.calendar_color)}
+                label={intl.formatMessage(messages.settings.calendar_color, props.customTexts)}
                 disabled={props.isCommitting}
                 value={values.calendar_color}
                 onChange={value => setFieldValue('calendar_color', value)}
@@ -265,7 +265,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
               <FormControl>
                 <FormControlLabel
                   labelPlacement='top'
-                  label={intl.formatMessage(messages.settings.auto_archive)}
+                  label={<DiverstFormattedMessage {...messages.settings.auto_archive} />}
                   control={(
                     <Field
                       component={Switch}
@@ -289,7 +289,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     id='unit_of_expiry_age'
                     name='unit_of_expiry_age'
                     margin='normal'
-                    label={intl.formatMessage(messages.settings.expiry_units)}
+                    label={<DiverstFormattedMessage {...messages.settings.expiry_units} />}
                     disabled={props.isCommitting}
                     options={SETTINGS_OPTIONS.unitsOfExpiration}
                     value={{ value: values.unit_of_expiry_age, label: setHeader(values.unit_of_expiry_age) }}
@@ -304,7 +304,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     type='number'
                     InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
-                    label={intl.formatMessage(messages.settings.expiry_news)}
+                    label={<DiverstFormattedMessage {...messages.settings.expiry_events} />}
                     value={values.expiry_age_for_news}
                     onChange={value => setFieldValue('expiry_age_for_news', value.target.value)}
                   />
@@ -317,7 +317,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     type='number'
                     InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
-                    label={intl.formatMessage(messages.settings.expiry_events)}
+                    label={<DiverstFormattedMessage {...messages.settings.expiry_events} />}
                     value={values.expiry_age_for_events}
                     onChange={value => setFieldValue('expiry_age_for_events', value.target.value)}
                   />
@@ -330,7 +330,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     type='number'
                     InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
-                    label={intl.formatMessage(messages.settings.expiry_resources)}
+                    label={<DiverstFormattedMessage {...messages.settings.expiry_resources} />}
                     value={values.expiry_age_for_resources}
                     onChange={value => setFieldValue('expiry_age_for_resources', value.target.value)}
                   />
@@ -398,11 +398,12 @@ GroupSettingsInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
   group: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

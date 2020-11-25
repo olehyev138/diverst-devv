@@ -92,7 +92,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.metricsDashboardsIndex}
@@ -145,7 +145,7 @@ MetricsDashboardFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   getGroupsBegin: PropTypes.func,

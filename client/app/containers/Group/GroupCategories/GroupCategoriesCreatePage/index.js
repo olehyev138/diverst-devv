@@ -13,7 +13,6 @@ import { createGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/
 import { selectPaginatedGroupCategories, selectIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupCategories/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -22,13 +21,12 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function GroupCategoriesCreatePage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
   useInjectSaga({ key: 'groupCategories', saga });
-  const { intl } = props;
   useEffect(() => () => props.categoriesUnmount(), []);
 
   return (
     <GroupCategoriesForm
       groupCategoriesAction={props.createGroupCategoriesBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       categories={props.categories}
       isCommitting={props.isCommitting}
     />
@@ -36,7 +34,6 @@ export function GroupCategoriesCreatePage(props) {
 }
 
 GroupCategoriesCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,
@@ -61,7 +58,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

@@ -86,7 +86,7 @@ export function UpdateCreatePage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText={intl.formatMessage(messages.createupdate)}
+      buttonText={messages.createupdate}
       updateAction={payload => props.createUpdateBegin({
         ...payload,
         updatableId: props?.currentEvent?.id

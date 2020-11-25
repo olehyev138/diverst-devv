@@ -46,7 +46,7 @@ export function* getFolders(action) {
   } catch (err) {
     yield put(getFoldersError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.folders),
+      message: messages.snackbars.errors.folders,
       options: { variant: 'warning' }
     }));
   }
@@ -59,7 +59,7 @@ export function* getFolder(action) {
   } catch (err) {
     yield put(getFolderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.folder),
+      message: messages.snackbars.errors.folder,
       options: { variant: 'warning' }
     }));
   }
@@ -73,13 +73,13 @@ export function* createFolder(action) {
     yield put(createFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.create_folder),
+      message: messages.snackbars.success.create_folder,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createFolderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.create_folder),
+      message: messages.snackbars.errors.create_folder,
       options: { variant: 'warning' }
     }));
   }
@@ -93,13 +93,13 @@ export function* updateFolder(action) {
     yield put(updateFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_folder),
+      message: messages.snackbars.success.update_folder,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateFolderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_folder),
+      message: messages.snackbars.errors.update_folder,
       options: { variant: 'warning' }
     }));
   }
@@ -112,13 +112,13 @@ export function* deleteFolder(action) {
     yield put(deleteFolderSuccess());
     yield put(push(getParentPage(action.payload.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.delete_folder),
+      message: messages.snackbars.success.delete_folder,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteFolderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.delete_folder),
+      message: messages.snackbars.errors.delete_folder,
       options: { variant: 'warning' }
     }));
   }
@@ -132,7 +132,7 @@ export function* getResources(action) {
   } catch (err) {
     yield put(getResourcesError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.resources),
+      message: messages.snackbars.errors.resources,
       options: { variant: 'warning' }
     }));
   }
@@ -145,7 +145,7 @@ export function* getResource(action) {
   } catch (err) {
     yield put(getResourceError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.resource),
+      message: messages.snackbars.errors.resource,
       options: { variant: 'warning' }
     }));
   }
@@ -159,13 +159,13 @@ export function* createResource(action) {
     yield put(createResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.create_resource),
+      message: messages.snackbars.success.create_resource,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(createResourceError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.create_resource),
+      message: messages.snackbars.errors.create_resource,
       options: { variant: 'warning' }
     }));
   }
@@ -179,13 +179,13 @@ export function* updateResource(action) {
     yield put(updateResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update_resource),
+      message: messages.snackbars.success.update_resource,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateResourceError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update_resource),
+      message: messages.snackbars.errors.update_resource,
       options: { variant: 'warning' }
     }));
   }
@@ -199,13 +199,13 @@ export function* deleteResource(action) {
     yield put(deleteResourceSuccess());
     yield put(push(getFolderShowPath(action.payload.folder)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.delete_resource),
+      message: messages.snackbars.success.delete_resource,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(deleteResourceError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.delete_resource),
+      message: messages.snackbars.errors.delete_resource,
       options: { variant: 'warning' }
     }));
   }
@@ -217,13 +217,13 @@ export function* archiveResource(action) {
     const response = yield call(api.resources.archive.bind(api.resources), payload.resource.id, payload);
     yield put(archiveResourceSuccess());
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.archive),
+      message: messages.snackbars.success.archive,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(archiveResourceError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.archive),
+      message: messages.snackbars.errors.archive,
       options: { variant: 'warning' }
     }));
   }
@@ -236,7 +236,7 @@ export function* validateFolderPassword(action) {
   } catch (err) {
     yield put(validateFolderPasswordError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.password),
+      message: messages.snackbars.errors.password,
       options: { variant: 'warning' }
     }));
   }
@@ -249,7 +249,7 @@ export function* getResourceFileData(action) {
     yield put(getFileDataSuccess({ data: response.data, contentType: response.headers['content-type'] }));
   } catch (err) {
     yield put(getFileDataError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.file_data), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.file_data, options: { variant: 'warning' } }));
   }
 }
 

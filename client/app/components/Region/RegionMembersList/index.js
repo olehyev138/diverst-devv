@@ -91,23 +91,23 @@ export function RegionMembersList(props) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.members.table.columns.givenName, customTexts(props.customTexts)),
+      title: intl.formatMessage(messages.members.table.columns.givenName, props.customTexts),
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: intl.formatMessage(messages.members.table.columns.familyName, customTexts(props.customTexts)),
+      title: intl.formatMessage(messages.members.table.columns.familyName, props.customTexts),
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: intl.formatMessage(messages.members.table.columns.status, customTexts(props.customTexts)),
+      title: intl.formatMessage(messages.members.table.columns.status, props.customTexts),
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
-        active: intl.formatMessage(messages.members.table.columns.status.active, customTexts(props.customTexts)),
-        inactive: intl.formatMessage(messages.members.table.columns.status.inactive, customTexts(props.customTexts)),
+        active: intl.formatMessage(messages.members.table.columns.status.active, props.customTexts),
+        inactive: intl.formatMessage(messages.members.table.columns.status.inactive, props.customTexts),
       }
     },
   ];
@@ -207,7 +207,7 @@ export function RegionMembersList(props) {
       </Grid>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={intl.formatMessage(messages.members.table.title, customTexts(props.customTexts))}
+        title={messages.members.table.title}
         handlePagination={props.handlePagination}
         handleSearching={props.handleSearching}
         isLoading={props.isLoading}
