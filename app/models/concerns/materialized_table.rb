@@ -55,32 +55,58 @@ module MaterializedTable
       sql + set_rest('spent')
     end
 
-    def reserver_adder
+    def estimate_adder
       sql = 'SET @new_reserved = @old_reserved + NEW.estimated; '
       sql + set_rest('reserved')
     end
 
-    def reserver_remover
+    def estimate_remover
       sql = 'SET @temp = (SELECT reserved FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
       sql += 'SET @new_reserved = @old_reserved - @temp; '
       sql + set_rest('reserved')
     end
 
-    def reserver_replacer
+    def estimate_replacer
       sql = 'SET @new_reserved = @old_reserved + NEW.estimated - OLD.estimated; '
       sql + set_rest('reserved')
     end
 
-    def reserver_finalized
+    def estimate_finalized
       sql =  'SET @spent = (SELECT spent FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
+      # UNCLOSED
       sql += 'IF COALESCE(OLD.`finished_expenses`, FALSE) AND NOT COALESCE(NEW.`finished_expenses`, FALSE) THEN '
       sql += 'SET @new_reserved = @old_reserved + OLD.`estimated` - @spent; '
       sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures - @spent; ' if relevant_columns.include?('finalized_expenditures')
+      # CLOSED
       sql += 'ELSEIF NOT COALESCE(OLD.`finished_expenses`, FALSE) AND COALESCE(NEW.`finished_expenses`, FALSE) THEN '
       sql += 'SET @new_reserved = @old_reserved - OLD.`estimated` + @spent; '
       sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures + @spent; ' if relevant_columns.include?('finalized_expenditures')
       sql += 'END IF; '
       sql + set_rest('reserved', 'finalized_expenditures')
+    end
+
+    def request_adder
+      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = NEW.`id`); '
+      sql += 'SET @new_requested = @old_requested + @requested; '
+      sql + set_rest('requested')
+    end
+
+    def request_remover
+      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = OLD.`id`); '
+      sql += 'SET @new_requested = @old_requested - @requested; '
+      sql + set_rest('requested')
+    end
+
+    def budget_approver
+      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = NEW.`id`); '
+      # UN APPROVED
+      sql += 'IF COALESCE(OLD.`is_approved`, FALSE) AND NOT COALESCE(NEW.`is_approved`, FALSE) THEN '
+      sql += 'SET @new_approved = @old_approved - @requested; '
+      # APPROVED
+      sql += 'ELSEIF NOT COALESCE(OLD.`is_approved`, FALSE) AND COALESCE(NEW.`is_approved`, FALSE) THEN '
+      sql += 'SET @new_approved = @old_approved + @requested; '
+      sql += 'END IF; '
+      sql + set_rest('approved', 'finalized_expenditures')
     end
 
     def expense_inserted
@@ -96,19 +122,31 @@ module MaterializedTable
     end
 
     def budget_user_inserted
-      trigger_wrapper(&method(:reserver_adder))
+      trigger_wrapper(&method(:estimate_adder))
     end
 
     def budget_user_deleted
-      trigger_wrapper(&method(:reserver_remover))
+      trigger_wrapper(&method(:estimate_remover))
     end
 
     def budget_user_estimate_updated
-      trigger_wrapper(&method(:reserver_replacer))
+      trigger_wrapper(&method(:estimate_replacer))
     end
 
     def budget_user_finalized
-      trigger_wrapper(&method(:reserver_finalized))
+      trigger_wrapper(&method(:estimate_finalized))
+    end
+
+    def budget_inserted
+      trigger_wrapper(&method(:request_adder))
+    end
+
+    def budget_deleted
+      trigger_wrapper(&method(:request_remover))
+    end
+
+    def budget_approved
+      trigger_wrapper(&method(:budget_approver))
     end
   end
 end

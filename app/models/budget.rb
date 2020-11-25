@@ -146,4 +146,42 @@ class Budget < ApplicationRecord
   def send_denial_notification
     BudgetMailer.budget_declined(self).deliver_later if self.requester
   end
+
+  BUDGET_KEYS = ['budget_id', 'annual_budget_id']
+
+  def self.get_foreign_keys(old_or_new = 'NEW')
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{BUDGET_KEYS.map {|col| "SET @#{col} = -1;" }.join(' ')}
+    #{Budget.select(
+        '`budgets`.`id`',
+        '`budgets`.`annual_budget_id`'
+    ).where(
+        "`budgets`.`id` = #{old_or_new}.`id`"
+    ).to_sql}
+    INTO #{BUDGET_KEYS.map {|col| "@#{col}" }.join(", ")};
+    SQL
+  end
+
+  trigger.after(:insert) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys}
+    #{BudgetSums.budget_inserted}
+    #{AnnualBudgetSums.budget_inserted}
+    SQL
+  end
+
+  trigger.before(:delete) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys('OLD')}
+    #{BudgetSums.budget_deleted}
+    #{AnnualBudgetSums.budget_deleted}
+    SQL
+  end
+
+  trigger.after(:update).of(:is_approved) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys}
+    #{AnnualBudgetSums.budget_approved}
+    SQL
+  end
 end
