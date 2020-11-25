@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { FormControl, FormLabel, Box } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
@@ -97,4 +98,6 @@ DiverstRichTextInput.defaultProps = {
   height: 200,
 };
 
-export default DiverstRichTextInput;
+export default compose(
+  memo,
+)(DiverstRichTextInput);
