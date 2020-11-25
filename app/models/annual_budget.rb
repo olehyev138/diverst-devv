@@ -25,47 +25,47 @@ class AnnualBudget < ApplicationRecord
   end
 
   # same as available
-  def approved
-    @approved ||= items_approved
-                      .sum('estimated_amount')
-  end
-
-  def reserved
-    @reserved ||=
-        expenses_finalized.sum('amount') + initiatives_active.sum('estimated_funding')
-  end
-
-  def expenses
-    @expenses ||= initiative_expenses.sum('amount')
-  end
-
-  def estimated
-    @estimated ||= initiatives.sum('estimated_funding')
-  end
-
-  def finalized_expenditure
-    @finalized_expenditure ||= expenses_finalized.sum('amount')
-  end
-
-  def available
-    @available ||= (approved - reserved)
-  end
-
-  def remaining
-    @remaining ||= (approved - expenses)
-  end
-
-  def unspent
-    @unspent ||= (estimated - expenses)
-  end
-
-  def leftover
-    @leftover ||= ((amount || 0) - expenses)
-  end
-
-  def free
-    @free ||= ((amount || 0) - approved)
-  end
+  # def approved
+  #   @approved ||= items_approved
+  #                     .sum('estimated_amount')
+  # end
+  #
+  # def reserved
+  #   @reserved ||=
+  #       expenses_finalized.sum('amount') + initiatives_active.sum('estimated_funding')
+  # end
+  #
+  # def expenses
+  #   @expenses ||= initiative_expenses.sum('amount')
+  # end
+  #
+  # def estimated
+  #   @estimated ||= initiatives.sum('estimated_funding')
+  # end
+  #
+  # def finalized_expenditure
+  #   @finalized_expenditure ||= expenses_finalized.sum('amount')
+  # end
+  #
+  # def available
+  #   @available ||= (approved - reserved)
+  # end
+  #
+  # def remaining
+  #   @remaining ||= (approved - expenses)
+  # end
+  #
+  # def unspent
+  #   @unspent ||= (estimated - expenses)
+  # end
+  #
+  # def leftover
+  #   @leftover ||= ((amount || 0) - expenses)
+  # end
+  #
+  # def free
+  #   @free ||= ((amount || 0) - approved)
+  # end
 
   def can_be_reset?
     unless no_active_initiatives?

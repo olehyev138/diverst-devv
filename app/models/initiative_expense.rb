@@ -25,44 +25,50 @@ class InitiativeExpense < ApplicationRecord
     end
   end
 
-  def self.get_old_sums(old_or_new = 'NEW')
-    <<~SQL.gsub(/\s+/, ' ').strip
-      SET @old_spent = 0;
-      SELECT IFNULL(spent, 0)
-      FROM budget_users_sums
-      WHERE budget_user_id = #{old_or_new}.budget_user_id
-      INTO @old_spent;
-    SQL
-  end
+  BUDGET_KEYS = ['budget_user_id', 'budget_item_id', 'budget_id', 'annual_budget_id']
 
-  def self.set_new_sums(old_or_new = 'NEW')
+  def self.get_foreign_keys(old_or_new = 'NEW')
     <<~SQL.gsub(/\s+/, ' ').strip
-      REPLACE INTO budget_users_sums
-      VALUES(#{old_or_new}.budget_user_id, IFNULL(@new_spent, 0));
+    #{BUDGET_KEYS.map {|col| "SET @#{col} = -1;" }.join(' ')}
+    #{BudgetUser.joins(:budget).select(
+        '`budget_users`.`id`',
+        '`budget_users`.`budget_item_id`',
+        '`budget_items`.`budget_id`',
+        '`budgets`.`annual_budget_id`'
+    ).where(
+        "`budget_users`.`id` = #{old_or_new}.`budget_user_id`"
+    ).to_sql}
+    INTO #{BUDGET_KEYS.map {|col| "@#{col}" }.join(", ")};
     SQL
   end
 
   trigger.after(:insert) do
     <<~SQL.gsub(/\s+/, ' ').strip
-      #{get_old_sums}
-      SET @new_spent = @old_spent + NEW.amount;
-      #{set_new_sums}
+    #{get_foreign_keys}
+    #{BudgetUserSums.expense_inserted}
+    #{BudgetItemSums.expense_inserted}
+    #{BudgetSums.expense_inserted}
+    #{AnnualBudgetSums.expense_inserted}
     SQL
   end
 
   trigger.after(:delete) do
     <<~SQL.gsub(/\s+/, ' ').strip
-      #{get_old_sums('OLD')}
-      SET @new_spent = @old_spent - OLD.amount;
-      #{set_new_sums('OLD')}
+    #{get_foreign_keys('OLD')}
+    #{BudgetUserSums.expense_deleted}
+    #{BudgetItemSums.expense_deleted}
+    #{BudgetSums.expense_deleted}
+    #{AnnualBudgetSums.expense_deleted}
     SQL
   end
 
   trigger.after(:update).of(:amount) do
     <<~SQL.gsub(/\s+/, ' ').strip
-      #{get_old_sums}
-      SET @new_spent = @old_spent + NEW.amount - OLD.amount;
-      #{set_new_sums}
+    #{get_foreign_keys}
+    #{BudgetUserSums.expense_updated}
+    #{BudgetItemSums.expense_updated}
+    #{BudgetSums.expense_updated}
+    #{AnnualBudgetSums.expense_updated}
     SQL
   end
 end
