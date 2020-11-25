@@ -4,7 +4,7 @@ SELECT
     COALESCE(`reserved`, 0) as reserved,
     COALESCE(`requested_amount`, 0) as requested_amount,
     COALESCE(`available`, 0) as available,
-    COALESCE(`unspent`, 0) as unspent,
+    COALESCE(`approved` - `spent`, 0) as unspent,
     COALESCE(COALESCE(`amount`, 0) - `spent`, 0) as leftover,
     COALESCE(COALESCE(`amount`, 0) - `approved`, 0) as free
 FROM `annual_budgets`

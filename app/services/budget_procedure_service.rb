@@ -16,7 +16,6 @@ class BudgetProcedureService
         'SUM(`reserved`) as reserved',
         'SUM(`estimated_amount`) as requested_amount',
         'SUM(`available`) as available',
-        'SUM(`unspent`) as unspent'
     ).group(:budget_id)
     ANNUAL_BUDGETS_SUMS = BudgetWithExpenses.select(
         :annual_budget_id,
@@ -25,7 +24,6 @@ class BudgetProcedureService
         'SUM(`requested_amount`) as requested_amount',
         'SUM(`available`) as available',
         'SUM(`approved_amount`) as approved',
-        'SUM(`unspent`) as unspent'
     ).group(:annual_budget_id)
   end
 
