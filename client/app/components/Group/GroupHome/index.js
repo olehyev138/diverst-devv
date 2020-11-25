@@ -194,17 +194,14 @@ export function GroupHome({ classes, ...props }) {
     />
   );
 
-  // textAlign: initial is necessary because the wrapping grid cell applies the textAlign: center style for some reason
   const description = (
-    <Box textAlign='initial'>
-      <DiverstHTMLEmbedder
-        html={
-          props.currentGroup
-            ? props.currentGroup.description
-            : ''
-        }
-      />
-    </Box>
+    <DiverstHTMLEmbedder
+      html={
+        props.currentGroup
+          ? props.currentGroup.description
+          : ''
+      }
+    />
   );
 
   return (

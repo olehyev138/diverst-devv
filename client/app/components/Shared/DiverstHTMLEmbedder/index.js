@@ -7,15 +7,19 @@ import { Grid } from '@material-ui/core';
 import Interweave from 'interweave';
 
 const styles = theme => ({
+  htmlContentWrapper: {
+    // Done to prevent mismatch between editor content & rendered content if a wrapping element defines this for a different reason
+    textAlign: 'initial',
+  },
 });
 
-export function DiverstHTMLEmbedder({ html, gridProps, interweaveProps }) {
+export function DiverstHTMLEmbedder({ classes, html, gridProps, interweaveProps }) {
   return (
     <Grid
       container
       {...gridProps}
     >
-      <Grid item xs>
+      <Grid item xs className={classes.htmlContentWrapper}>
         <Interweave
           content={html}
           {...interweaveProps}
@@ -26,6 +30,7 @@ export function DiverstHTMLEmbedder({ html, gridProps, interweaveProps }) {
 }
 
 DiverstHTMLEmbedder.propTypes = {
+  classes: PropTypes.object,
   gridProps: PropTypes.shape({
     spacing: PropTypes.number,
     direction: PropTypes.string,
