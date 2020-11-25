@@ -185,8 +185,10 @@
     
     if ((URL_REGEXP).test($(this).val())) {
       errorMessage.innerText = '';
+      $('input[type="submit"]').prop('disabled', false);
     } else {
       errorMessage.innerText = 'url should include http(s)://';
+      $('input[type="submit"]').prop('disabled', true);
     }
   });
 </script>
