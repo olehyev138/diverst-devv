@@ -151,14 +151,14 @@ class Budget < ApplicationRecord
 
   def self.get_foreign_keys(old_or_new = 'NEW')
     <<~SQL.gsub(/\s+/, ' ').strip
-    #{BUDGET_KEYS.map {|col| "SET @#{col} = -1;" }.join(' ')}
+    #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
     #{Budget.select(
         '`budgets`.`id`',
         '`budgets`.`annual_budget_id`'
-    ).where(
+      ).where(
         "`budgets`.`id` = #{old_or_new}.`id`"
-    ).to_sql}
-    INTO #{BUDGET_KEYS.map {|col| "@#{col}" }.join(", ")};
+      ).to_sql}
+    INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
     SQL
   end
 

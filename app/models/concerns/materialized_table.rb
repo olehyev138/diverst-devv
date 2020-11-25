@@ -4,25 +4,25 @@ module MaterializedTable
 
   class_methods do
     def relevant_columns
-      relevant_columns ||= column_names.reject{|a| a.include? 'id'}
+      relevant_columns ||= column_names.reject { |a| a.include? 'id' }
     end
 
     def get_old_sums
       <<~SQL.gsub(/\s+/, ' ').strip
-        #{relevant_columns.map {|col| "SET @old_#{col} = 0;" }.join("\n")}
+        #{relevant_columns.map { |col| "SET @old_#{col} = 0;" }.join("\n")}
         #{
-            select(*(relevant_columns.map {|col| "IFNULL(#{col}, 0)"}))
+            select(*(relevant_columns.map { |col| "IFNULL(#{col}, 0)" }))
                 .where("`#{primary_key}` = @#{primary_key}")
                 .to_sql
-        }
-        INTO #{relevant_columns.map {|col| "@old_#{col}" }.join(", ")};
+          }
+        INTO #{relevant_columns.map { |col| "@old_#{col}" }.join(", ")};
       SQL
     end
 
     def set_new_sums
       <<~SQL.gsub(/\s+/, ' ').strip
         REPLACE INTO #{table_name}
-        VALUES(@#{primary_key}, #{relevant_columns.map {|col| "IFNULL(@new_#{col}, 0)"}.join(', ')});
+        VALUES(@#{primary_key}, #{relevant_columns.map { |col| "IFNULL(@new_#{col}, 0)" }.join(', ')});
       SQL
     end
 

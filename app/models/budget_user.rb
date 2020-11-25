@@ -15,15 +15,15 @@ class BudgetUser < ApplicationRecord
 
   def self.get_foreign_keys(old_or_new = 'NEW')
     <<~SQL.gsub(/\s+/, ' ').strip
-    #{BUDGET_KEYS.map {|col| "SET @#{col} = -1;" }.join(' ')}
+    #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
     #{BudgetItem.joins(:budget).select(
         '`budget_items`.`id`',
         '`budget_items`.`budget_id`',
         '`budgets`.`annual_budget_id`'
-    ).where(
+      ).where(
         "`budget_users`.`id` = #{old_or_new}.`budget_item_id`"
-    ).to_sql}
-    INTO #{BUDGET_KEYS.map {|col| "@#{col}" }.join(", ")};
+      ).to_sql}
+    INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
     SQL
   end
 

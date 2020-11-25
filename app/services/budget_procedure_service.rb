@@ -3,26 +3,26 @@ class BudgetProcedureService
     BUDGET_USERS_SUMS = InitiativeExpense.select(
         :budget_user_id,
         'SUM(`amount`) as spent'
-    ).group(:budget_user_id)
+      ).group(:budget_user_id)
     BUDGET_ITEMS_SUMS = BudgetUserWithExpenses.select(
         :budget_item_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
         'SUM(`final_expense`) as finalized_expenditures'
-    ).group(:budget_item_id)
+      ).group(:budget_item_id)
     BUDGET_SUMS = BudgetItemWithExpenses.select(
         :budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
         'SUM(`estimated_amount`) as requested_amount',
-    ).group(:budget_id)
+      ).group(:budget_id)
     ANNUAL_BUDGETS_SUMS = BudgetWithExpenses.select(
         :annual_budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
         'SUM(`requested_amount`) as requested_amount',
         'SUM(`approved_amount`) as approved',
-    ).group(:annual_budget_id)
+      ).group(:annual_budget_id)
   end
 
   def self.refresh_budget_users_sums
