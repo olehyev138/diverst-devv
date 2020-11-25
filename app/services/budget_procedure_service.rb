@@ -1,11 +1,39 @@
 class BudgetProcedureService
+  class Queries
+    BUDGET_USERS_SUMS = InitiativeExpense.select(
+        :budget_user_id,
+        'SUM(`amount`) as spent'
+    ).group(:budget_user_id)
+    BUDGET_ITEMS_SUMS = BudgetUserWithExpenses.select(
+        :budget_item_id,
+        'SUM(`spent`) as spent',
+        'SUM(`reserved`) as reserved',
+        'SUM(`final_expense`) as finalized_expenditures'
+    ).group(:budget_item_id)
+    BUDGET_SUMS = BudgetItemWithExpenses.select(
+        :budget_id,
+        'SUM(`spent`) as spent',
+        'SUM(`reserved`) as reserved',
+        'SUM(`estimated_amount`) as requested_amount',
+        'SUM(`available`) as available',
+        'SUM(`unspent`) as unspent'
+    ).group(:budget_id)
+    ANNUAL_BUDGETS_SUMS = BudgetWithExpenses.select(
+        :annual_budget_id,
+        'SUM(`spent`) as spent',
+        'SUM(`reserved`) as reserved',
+        'SUM(`requested_amount`) as requested_amount',
+        'SUM(`available`) as available',
+        'SUM(`approved_amount`) as approved',
+        'SUM(`unspent`) as unspent'
+    ).group(:annual_budget_id)
+  end
+
   def self.refresh_budget_users_sums
     connection.execute('TRUNCATE TABLE `budget_users_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `budget_users_sums`
-      SELECT `budget_user_id`, SUM(`amount`) as spent
-      FROM `initiative_expenses`
-      GROUP BY `budget_user_id`;
+      #{Queries::BUDGET_USERS_SUMS.to_sql};
     SQL
                       )
   ensure
@@ -16,13 +44,7 @@ class BudgetProcedureService
     connection.execute('TRUNCATE TABLE `budget_items_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `budget_items_sums`
-      SELECT
-        `budget_item_id`,
-        SUM(`spent`) as spent,
-        SUM(`reserved`) as reserved,
-        SUM(`final_expense`) as finalized_expenditures
-      FROM `budget_users_with_expenses`
-      GROUP BY `budget_item_id`;
+      #{Queries::BUDGET_ITEMS_SUMS.to_sql};
     SQL
                       )
   ensure
@@ -33,15 +55,7 @@ class BudgetProcedureService
     connection.execute('TRUNCATE TABLE `budgets_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `budgets_sums`
-      SELECT
-        `budget_id`,
-        SUM(`spent`) as spent,
-        SUM(`reserved`) as reserved,
-        SUM(`estimated_amount`) as requested_amount,
-        SUM(`available`) as available,
-        SUM(`unspent`) as unspent
-      FROM `budget_items_with_expenses`
-      GROUP BY `budget_id`;
+      #{Queries::BUDGET_SUMS.to_sql};
     SQL
                       )
   ensure
@@ -52,16 +66,7 @@ class BudgetProcedureService
     connection.execute('TRUNCATE TABLE `annual_budgets_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
       INSERT INTO `annual_budgets_sums`
-      SELECT
-        `annual_budget_id`,
-        SUM(`spent`) as spent,
-        SUM(`reserved`) as reserved,
-        SUM(`requested_amount`) as requested_amount,
-        SUM(`available`) as available,
-        SUM(`approved_amount`) as approved,
-        SUM(`unspent`) as unspent
-      FROM `budgets_with_expenses`
-      GROUP BY `annual_budget_id`;
+      #{Queries::ANNUAL_BUDGETS_SUMS.to_sql};
     SQL
                       )
   ensure

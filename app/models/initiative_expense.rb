@@ -36,7 +36,7 @@ class InitiativeExpense < ApplicationRecord
   def self.set_new_sums(old_or_new = 'NEW')
     <<~SQL.gsub(/\s+/, ' ').strip
       REPLACE INTO budget_users_sums
-      VALUES(#{old_or_new}.budget_user_id, IFNULL(@new_spent, 0))
+      VALUES(#{old_or_new}.budget_user_id, IFNULL(@new_spent, 0));
     SQL
   end
 
