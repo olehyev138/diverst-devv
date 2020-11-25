@@ -17,7 +17,6 @@ class CreateMaterializedSumTables < ActiveRecord::Migration[5.2]
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4
       t.decimal :requested_amount, precision: 20, scale: 4
-      t.decimal :available, precision: 20, scale: 4
     end
 
     create_table :annual_budgets_sums, id: false, force: true do |t|
@@ -25,7 +24,6 @@ class CreateMaterializedSumTables < ActiveRecord::Migration[5.2]
       t.decimal :spent, precision: 20, scale: 4
       t.decimal :reserved, precision: 20, scale: 4
       t.decimal :requested_amount, precision: 20, scale: 4
-      t.decimal :available, precision: 20, scale: 4
       t.decimal :approved, precision: 20, scale: 4
     end
   end

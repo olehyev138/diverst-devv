@@ -42,17 +42,45 @@ module MaterializedTable
 
     def expense_adder
       sql = 'SET @new_spent = @old_spent + NEW.amount; '
-      sql + set_rest('spent', 'unspent', 'leftover')
+      sql + set_rest('spent')
     end
 
     def expense_remover
       sql = 'SET @new_spent = @old_spent - OLD.amount; '
-      sql + set_rest('spent', 'unspent', 'leftover')
+      sql + set_rest('spent')
     end
 
     def expense_replacer
       sql = 'SET @new_spent = @old_spent + NEW.amount - OLD.amount; '
-      sql + set_rest('spent', 'unspent', 'leftover')
+      sql + set_rest('spent')
+    end
+
+    def reserver_adder
+      sql = 'SET @new_reserved = @old_reserved + NEW.estimated; '
+      sql + set_rest('reserved')
+    end
+
+    def reserver_remover
+      sql = 'SET @temp = (SELECT reserved FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
+      sql += 'SET @new_reserved = @old_reserved - @temp; '
+      sql + set_rest('reserved')
+    end
+
+    def reserver_replacer
+      sql = 'SET @new_reserved = @old_reserved + NEW.estimated - OLD.estimated; '
+      sql + set_rest('reserved')
+    end
+
+    def reserver_finalized
+      sql =  'SET @spent = (SELECT spent FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
+      sql += 'IF COALESCE(OLD.`finished_expenses`, FALSE) AND NOT COALESCE(NEW.`finished_expenses`, FALSE) THEN '
+      sql += 'SET @new_reserved = @old_reserved + OLD.`estimated` - @spent; '
+      sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures - @spent; ' if relevant_columns.include?('finalized_expenditures')
+      sql += 'ELSEIF NOT COALESCE(OLD.`finished_expenses`, FALSE) AND COALESCE(NEW.`finished_expenses`, FALSE) THEN '
+      sql += 'SET @new_reserved = @old_reserved - OLD.`estimated` + @spent; '
+      sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures + @spent; ' if relevant_columns.include?('finalized_expenditures')
+      sql += 'END IF; '
+      sql + set_rest('reserved', 'finalized_expenditures')
     end
 
     def expense_inserted
@@ -68,19 +96,19 @@ module MaterializedTable
     end
 
     def budget_user_inserted
-      trigger_wrapper(&method(:expense_adder))
+      trigger_wrapper(&method(:reserver_adder))
     end
 
     def budget_user_deleted
-      trigger_wrapper(&method(:expense_remover))
+      trigger_wrapper(&method(:reserver_remover))
     end
 
     def budget_user_estimate_updated
-      trigger_wrapper(&method(:expense_replacer))
+      trigger_wrapper(&method(:reserver_replacer))
     end
 
     def budget_user_finalized
-      trigger_wrapper(&method(:expense_replacer))
+      trigger_wrapper(&method(:reserver_finalized))
     end
   end
 end
