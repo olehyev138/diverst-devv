@@ -108,6 +108,7 @@ export function GroupMessageListItem(props) {
                     totalLikes={newsItem.total_likes}
                     likeNewsItemBegin={props.likeNewsItemBegin}
                     unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                    customTexts={props.customTexts}
                   />
                 )}
                 {props.pinNewsItemBegin && (

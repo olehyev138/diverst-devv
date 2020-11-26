@@ -227,6 +227,7 @@ export function Folder(props) {
               isLoading={props.isLoading}
               count={props.foldersTotal}
               handlePagination={props.handleFolderPagination}
+              customTexts={props.customTexts}
             />
           )}
 
@@ -270,6 +271,7 @@ export function Folder(props) {
               isLoading={props.isLoading}
               count={props.resourcesTotal}
               handlePagination={props.handleResourcePagination}
+              customTexts={props.customTexts}
             />
           )}
         </React.Fragment>

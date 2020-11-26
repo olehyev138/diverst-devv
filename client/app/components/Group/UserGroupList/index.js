@@ -236,6 +236,7 @@ export function UserGroupList(props, context) {
         count={props.groupTotal}
         handlePagination={props.handlePagination}
         page={defaultParams.page}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -250,6 +251,7 @@ UserGroupList.propTypes = {
   deleteGroupBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   viewChildren: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

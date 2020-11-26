@@ -167,6 +167,7 @@ export function AdminGroupList(props, context) {
         handlePagination={props.handlePagination}
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

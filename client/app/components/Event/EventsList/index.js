@@ -44,6 +44,7 @@ import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 import { selectIsCommitting } from 'containers/Event/selectors';
+import { selectCustomText } from '../../../containers/Shared/App/selectors';
 import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
@@ -246,6 +247,7 @@ export function EventsList(props) {
               page={props.params.page}
               rowsPerPage={props.params.count}
               handlePagination={props.handlePagination}
+              customTexts={props.customTexts}
             />
           )}
         </React.Fragment>
@@ -282,10 +284,12 @@ EventsList.propTypes = {
     count: PropTypes.number
   }),
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  isCommitting: selectIsCommitting()
+  isCommitting: selectIsCommitting(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

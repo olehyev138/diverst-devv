@@ -113,6 +113,7 @@ export function GroupRegionsList(props) {
                 page={props.params.page}
                 rowsPerPage={props.params.count}
                 handlePagination={props.handlePagination}
+                customTexts={props.customTexts}
               />
             )}
           </React.Fragment>

@@ -134,6 +134,7 @@ export function DownloadsList(props, context) {
           isLoading={props.isLoading}
           count={props.downloadsTotal}
           handlePagination={props.handlePagination}
+          customTexts={props.customTexts}
         />
       )}
     </React.Fragment>
@@ -150,6 +151,7 @@ DownloadsList.propTypes = {
   isDownloadingData: PropTypes.bool,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

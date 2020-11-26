@@ -10,6 +10,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { findTitleForPath } from 'utils/routeHelpers';
 
 import { customTexts } from 'utils/customTextHelpers';
+import messages from './messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   paper: {
@@ -43,7 +45,7 @@ export function DiverstBreadcrumbs(props) {
       <Paper elevation={0} className={classes.paper}>
         <Breadcrumbs
           separator={<BreadcrumbSeparatorIcon fontSize='small' />}
-          aria-label='breadcrumb'
+          aria-label={props.intl.formatMessage(messages.breadcrumbs, props.customTexts)}
         >
           {pathNames.map((value, index) => {
             const last = index === pathNames.length - 1;
@@ -85,9 +87,11 @@ DiverstBreadcrumbs.propTypes = {
   isLoading: PropTypes.bool,
   title: PropTypes.string,
   customTexts: PropTypes.object.isRequired,
+  intl: intlShape.isRequired
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(DiverstBreadcrumbs);

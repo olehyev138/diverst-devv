@@ -126,6 +126,7 @@ export function EventsList(props) {
           isLoading={props.isLoading}
           count={props.eventsTotal}
           handlePagination={props.handlePagination}
+          customTexts={props.customTexts}
         />
       )}
     </React.Fragment>
@@ -140,6 +141,7 @@ EventsList.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   loaderProps: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

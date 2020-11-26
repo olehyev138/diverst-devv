@@ -165,6 +165,7 @@ export function EventsList(props) {
           rowsPerPageOptions={props.rowsPerPageOptions}
           count={props.outcomesTotal}
           handlePagination={props.handlePagination}
+          customTexts={props.customTexts}
         />
       )}
     </React.Fragment>
@@ -184,7 +185,8 @@ EventsList.propTypes = {
     outcomeIndex: PropTypes.string,
     eventNew: PropTypes.string,
     eventManage: PropTypes.func,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

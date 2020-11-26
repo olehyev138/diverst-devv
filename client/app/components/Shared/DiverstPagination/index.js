@@ -8,9 +8,9 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-
+import { injectIntl, intlShape } from 'react-intl';
 import animateScrollTo from 'animated-scroll-to';
-
+import messages from './messages';
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
 
 const paginationActionsStyles = theme => ({
@@ -37,28 +37,28 @@ function PaginationActions(props) {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label='first page'
+        aria-label={props.intl.formatMessage(messages.first, props.customTexts)}
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label='previous page'
+        aria-label={props.intl.formatMessage(messages.prev, props.customTexts)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label='next page'
+        aria-label={props.intl.formatMessage(messages.next, props.customTexts)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label='last page'
+        aria-label={props.intl.formatMessage(messages.last, props.customTexts)}
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
@@ -72,6 +72,8 @@ PaginationActions.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 const PaginationActionsComponent = withStyles(paginationActionsStyles)(PaginationActions);
@@ -165,10 +167,10 @@ export function DiverstPagination(props) {
         onChangePage={props.onChangePage || handleChangePage}
         onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
         backIconButtonProps={{
-          'aria-label': 'Previous Page',
+          'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
         }}
         nextIconButtonProps={{
-          'aria-label': 'Next Page',
+          'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
         }}
       />
     </div>
@@ -185,9 +187,12 @@ DiverstPagination.propTypes = {
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   withStyles(styles),
+  injectIntl,
   memo,
 )(DiverstPagination);

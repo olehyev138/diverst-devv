@@ -143,6 +143,7 @@ export function OutcomesList(props, context) {
         rowsPerPage={props.defaultParams.count}
         count={props.outcomesTotal}
         handlePagination={props.handlePagination}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

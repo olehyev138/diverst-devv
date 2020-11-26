@@ -66,6 +66,7 @@ export function AnnualBudgetList(props) {
         rowsPerPage={defaultParams.count}
         count={annualBudgetsTotal}
         handlePagination={handlePagination}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

@@ -125,6 +125,7 @@ export function UpdateList(props, context) {
         rowsPerPage={5}
         count={props.updateTotal}
         handlePagination={props.handlePagination}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -142,7 +143,7 @@ UpdateList.propTypes = {
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
-
+  customTexts: PropTypes.object,
   textUpdate: PropTypes.bool,
   selectUpdate: PropTypes.bool,
   checkboxUpdate: PropTypes.bool,
