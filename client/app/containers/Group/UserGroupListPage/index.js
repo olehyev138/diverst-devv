@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-import { Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { Button, Grid, Typography, Fade } from '@material-ui/core';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -27,6 +28,12 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
 
+const styles = theme => ({
+  headerText: {
+    fontWeight: 'bold',
+  },
+});
+
 const defaultAllGroupsParams = Object.freeze({
   count: 5,
   page: 0,
@@ -36,7 +43,7 @@ const defaultAllGroupsParams = Object.freeze({
   with_children: false
 });
 
-export function UserGroupListPage(props) {
+export function UserGroupListPage({ classes, ...props }) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
@@ -124,6 +131,7 @@ export function UserGroupListPage(props) {
 }
 
 UserGroupListPage.propTypes = {
+  classes: PropTypes.object,
   getGroupsBegin: PropTypes.func.isRequired,
   groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
@@ -156,6 +164,7 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  withStyles(styles),
   memo,
 )(Conditional(
   UserGroupListPage,
