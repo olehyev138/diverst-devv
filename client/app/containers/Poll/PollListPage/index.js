@@ -25,7 +25,7 @@ import {
   selectHasChanged
 } from 'containers/Poll/selectors';
 import { getPollsBegin, pollsUnmount, deletePollBegin } from 'containers/Poll/actions';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import PollList from 'components/Poll/PollList/Loadable';
 import Conditional from 'components/Compositions/Conditional';
@@ -98,6 +98,7 @@ export function PollListPage(props) {
         links={links}
         currentEnterprise={props.currentEnterprise}
         permissions={props.permissions}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -114,7 +115,7 @@ PollListPage.propTypes = {
   handlePollShow: PropTypes.func,
   hasChanged: PropTypes.bool,
   permissions: PropTypes.object,
-
+  customTexts: PropTypes.object,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   })
@@ -127,6 +128,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

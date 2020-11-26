@@ -22,7 +22,7 @@ export function* getLogs(action) {
     yield put(getLogsSuccess(response.data.page));
   } catch (err) {
     yield put(getLogsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.logs), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.logs, options: { variant: 'warning' } }));
   }
 }
 
@@ -31,10 +31,10 @@ export function* exportLogs(action) {
     const response = yield call(api.activities.csvExport.bind(api.activities), action.payload);
 
     yield put(exportLogsSuccess({}));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.export), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.export, options: { variant: 'success' } }));
   } catch (err) {
     yield put(exportLogsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.export), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.export, options: { variant: 'warning' } }));
   }
 }
 

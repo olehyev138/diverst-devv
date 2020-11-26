@@ -30,11 +30,11 @@ export function* updateCustomText(action) {
     const enterprise = yield select(selectEnterprise());
     yield put(setUserData({ enterprise: { ...enterprise, custom_text: response.data.custom_text } }, true));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 

@@ -22,7 +22,6 @@ import { eventsUnmount, getEventBegin, updateEventBegin } from 'containers/Event
 import EventForm from 'components/Event/EventForm';
 
 import messages from 'containers/Event/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -35,7 +34,7 @@ export function EventEditPage(props) {
     eventsIndex: ROUTES.group.events.index.path(groupId),
     eventShow: ROUTES.group.events.show.path(groupId, eventId),
   };
-  const { intl } = props;
+
   useEffect(() => {
     props.getEventBegin({ id: eventId });
 
@@ -50,7 +49,7 @@ export function EventEditPage(props) {
       eventAction={props.updateEventBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentGroup={currentGroup}
       event={currentEvent}
@@ -60,7 +59,6 @@ export function EventEditPage(props) {
 }
 
 EventEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getEventBegin: PropTypes.func,
   updateEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
@@ -91,7 +89,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

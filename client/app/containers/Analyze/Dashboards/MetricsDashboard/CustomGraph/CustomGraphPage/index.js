@@ -14,6 +14,7 @@ import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
 
 import { getCustomGraphDataBegin, deleteCustomGraphBegin, customGraphUnmount } from '../actions';
 import { selectCustomGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectCustomText } from '../../../../../Shared/App/selectors';
 
 import { getUpdateRange } from 'utils/metricsHelpers';
 import CustomGraph from 'components/Analyze/Graphs/Base/CustomGraph';
@@ -59,9 +60,11 @@ CustomGraphPage.propTypes = {
   selectData: PropTypes.func,
   getCustomGraphDataBegin: PropTypes.func,
   deleteCustomGraphBegin: PropTypes.func,
-  customGraphUnmount: PropTypes.func
+  customGraphUnmount: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
+// TODO : Add customText to pass it to customGraph
 const mapStateToProps = state => ({
   selectData: id => selectCustomGraphData(id)(state)
 });

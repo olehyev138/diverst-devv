@@ -189,7 +189,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
           'idp_sso_target_url' => 'https://v7.onelogin.com/trust/saml2/sso',
           'idp_slo_target_url' => 'https://v7.onelogin.com/trust/saml2/slo',
           'idp_cert' => "-----BEGIN CERTIFICATE-----\n  -----END CERTIFICATE-----\n",
-          'sp_entity_id' => 'ID'
+          'sp_entity_id' => 'ID',
+          'has_enabled_saml' => false,
       } }, headers: headers
       expect(response).to have_http_status(:ok)
     end

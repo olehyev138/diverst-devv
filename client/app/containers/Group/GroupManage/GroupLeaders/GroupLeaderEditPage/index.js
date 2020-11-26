@@ -28,15 +28,16 @@ import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
 import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
+import { selectCustomText } from '../../../../Shared/App/selectors';
+
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupManage/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function GroupLeaderEditPage(props) {
-  const { intl, members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
+  const { members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
 
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
@@ -74,14 +75,14 @@ export function GroupLeaderEditPage(props) {
       groupId={groupId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
 
 GroupLeaderEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getGroupLeaderBegin: PropTypes.func,
   getGroupMembersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
@@ -96,6 +97,7 @@ GroupLeaderEditPage.propTypes = {
   isFormLoading: PropTypes.bool,
   groupLeader: PropTypes.object,
   groupLeaderId: PropTypes.string,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -104,6 +106,7 @@ const mapStateToProps = createStructuredSelector({
   userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -122,7 +125,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

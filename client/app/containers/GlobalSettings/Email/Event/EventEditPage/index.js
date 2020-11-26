@@ -27,7 +27,7 @@ import messages from 'containers/GlobalSettings/Email/Event/messages';
 import globalMessages from 'containers/Shared/App/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function EventEditPage(props) {
@@ -44,9 +44,9 @@ export function EventEditPage(props) {
 
   const mapDay = (day) => {
     if (day.label >= 0)
-      day.label = intl.formatMessage(globalMessages.days_of_week[day.label]);
+      day.label = intl.formatMessage(globalMessages.days_of_week[day.label], props.customTexts);
     else
-      day.label = intl.formatMessage(messages.everyday);
+      day.label = intl.formatMessage(messages.everyday, props.customTexts);
 
     return day;
   };
@@ -82,6 +82,7 @@ EventEditPage.propTypes = {
   isFormLoading: PropTypes.bool,
 
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -89,6 +90,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingEvent(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

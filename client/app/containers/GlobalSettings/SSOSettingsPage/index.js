@@ -47,7 +47,6 @@ export function SSOSettingsPage(props) {
       <SSOSettings
         enterpriseAction={props.updateSsoSettingsBegin}
         enterprise={props.enterprise}
-        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );

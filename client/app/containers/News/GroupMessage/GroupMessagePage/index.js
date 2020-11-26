@@ -14,8 +14,9 @@ import saga from 'containers/News/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
+
 
 import {
   getNewsItemBegin,
@@ -55,6 +56,7 @@ export function GroupMessagePage(props) {
       links={links}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -70,6 +72,7 @@ GroupMessagePage.propTypes = {
   currentNewsItem: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -78,6 +81,7 @@ const mapStateToProps = createStructuredSelector({
   currentNewsItem: selectNewsItem(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

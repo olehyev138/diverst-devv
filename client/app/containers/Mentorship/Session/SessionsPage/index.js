@@ -14,6 +14,7 @@ import {
   selectIsFetchingSessions,
   selectHasChanged
 } from 'containers/Mentorship/Session/selectors';
+import { selectCustomText } from '../../../Shared/App/selectors';
 import {
   getHostingSessionsBegin, getParticipatingSessionsBegin,
   sessionsUnmount, deleteSessionBegin,
@@ -140,6 +141,7 @@ export function SessionsPage(props) {
       links={links}
       readonly={false}
       deleteAction={props.deleteSessionBegin}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -161,6 +163,7 @@ SessionsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -168,6 +171,7 @@ const mapStateToProps = createStructuredSelector({
   sessionsTotal: selectSessionsTotal(),
   isLoading: selectIsFetchingSessions(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
