@@ -47,8 +47,5 @@
     init_select2(".select2-field-new-members", "<%= users_path(:limit => 10, format: :json) %>", function(item) {
         return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
     });
-    init_select2(".select2-field-new-leaders", "<%= users_path(active: 1, user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>", function(item) {
-        return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
-    });
   });
 </script>
