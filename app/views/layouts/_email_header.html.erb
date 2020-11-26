@@ -1,6 +1,6 @@
  <header class="primary-header" style="height: 10%;">
    <div class="flex-row__cell" style="padding-bottom: 1%">
-     <h1 style="color: <%= @enterprise.theme.primary_color %> !important;
+     <h1 style="background-color: <%= @enterprise.theme&.primary_color %> !important;
                 height: 76px;">
        <img class="primary-header__logo logo hidden-xs" style="height: 124% !important; width: <%= @enterprise.theme&.logo.present? ? 'auto' : '70%' %> !important;" src="<%= enterprise_logo_url(@enterprise) %>" alt="<%= @enterprise.name %> logo">
      </h1>
