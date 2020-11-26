@@ -59,13 +59,13 @@ class BudgetItem < ApplicationRecord
     "#{title} ($%.2f)" % available_for_event(event)
   end
 
-  def expenses
-    initiatives_expenses.sum('amount')
-  end
-
-  def reserved
-    initiatives_active.sum('estimated_funding') + finalized_expenditure
-  end
+  # def expenses
+  #   initiatives_expenses.sum('amount')
+  # end
+  #
+  # def reserved
+  #   initiatives_active.sum('estimated_funding') + finalized_expenditure
+  # end
 
   def available_amount
     return 0 if budget.blank?
@@ -74,13 +74,13 @@ class BudgetItem < ApplicationRecord
     estimated_amount - reserved
   end
 
-  def unspent
-    estimated_amount - expenses
-  end
-
-  def finalized_expenditure
-    expenses_finalized.sum('amount')
-  end
+  # def unspent
+  #   estimated_amount - expenses
+  # end
+  #
+  # def finalized_expenditure
+  #   expenses_finalized.sum('amount')
+  # end
 
   def approve!
     self.update(deprecated_available_amount: estimated_amount)
