@@ -15,13 +15,13 @@ export default defineMessages({
   },
   permissions: {
     budget: {
-      id: `${scope}.budget`,
+      id: `${scope}.texts.permissions.budget`,
     },
     global: {
-      id: `${scope}.global`,
+      id: `${scope}.texts.permissions.global`,
     },
     system: {
-      id: `${scope}.system`,
+      id: `${scope}.texts.permissions.system`,
     },
   },
   texts: {

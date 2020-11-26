@@ -50,7 +50,7 @@ export function PollShowHeader(props, context) {
             variant='contained'
             color='primary'
           >
-            <DiverstFormattedMessage {...messages.back} />
+            <DiverstFormattedMessage {...messages.headers.back} />
           </Button>
         </Grid>
       </Grid>
@@ -64,7 +64,7 @@ export function PollShowHeader(props, context) {
           <Grid container>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                <DiverstFormattedMessage {...messages.invitations} />
+                <DiverstFormattedMessage {...messages.headers.invitations} />
               </Typography>
               <Typography variant='h6'>
                 {poll.targeted_users_count}
@@ -72,7 +72,7 @@ export function PollShowHeader(props, context) {
             </Grid>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                <DiverstFormattedMessage {...messages.response} />
+                <DiverstFormattedMessage {...messages.headers.response} />
               </Typography>
               <Typography variant='h6'>
                 {poll.responses_count}
@@ -80,13 +80,13 @@ export function PollShowHeader(props, context) {
             </Grid>
             <Grid item sm={6} md={3} lg={2}>
               <Typography variant='body2'>
-                <DiverstFormattedMessage {...messages.rate} />
+                <DiverstFormattedMessage {...messages.headers.rate} />
               </Typography>
               <Typography variant='h6'>
                 {
                   poll.targeted_users_count > 0
                     ? `${percent(poll.responses_count, poll.targeted_users_count)}%`
-                    : <DiverstFormattedMessage {...messages.na} />
+                    : <DiverstFormattedMessage {...messages.headers.na} />
                 }
               </Typography>
             </Grid>

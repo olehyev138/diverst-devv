@@ -100,7 +100,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
                     value={values.resource_type}
                   />
                 )}
-                label={<DiverstFormattedMessage {...messages.urlFile} />}
+                label={<DiverstFormattedMessage {...messages.form.urlFile} />}
               />
             </FormControl>
             {values.resource_type === 'file' && (
