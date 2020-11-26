@@ -22,6 +22,7 @@ const paginationActionsStyles = theme => ({
 
 function PaginationActions(props) {
   const theme = useTheme();
+
   const { classes, count, page, rowsPerPage, onChangePage } = props;
 
   const handleFirstPageButtonClick = event => onChangePage(event, 0);
@@ -76,7 +77,10 @@ PaginationActions.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const PaginationActionsComponent = withStyles(paginationActionsStyles)(PaginationActions);
+const PaginationActionsComponent = compose(
+  withStyles(paginationActionsStyles),
+  injectIntl,
+)(PaginationActions);
 
 const styles = theme => ({
   paginationContainer: {
@@ -163,6 +167,9 @@ export function DiverstPagination(props) {
         page={page}
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
         rowsPerPage={rowsPerPage || 0}
+        intl={props.intl}
+        customTexts={props.customTexts}
+
         count={props.count || 0}
         onChangePage={props.onChangePage || handleChangePage}
         onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}

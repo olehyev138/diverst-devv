@@ -95,7 +95,6 @@ export function UpdateListPage(props) {
       updateTotal={props.total}
       isFetching={props.isFetching}
       links={links}
-      customTexts={props.customTexts}
       deleteUpdateBegin={props.deleteUpdateBegin}
       handlePagination={handlePagination}
       customTexts={props.customTexts}
