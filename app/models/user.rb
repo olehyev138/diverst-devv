@@ -96,7 +96,7 @@ class User < ApplicationRecord
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :avatar_paperclip, s3_permissions: 'private'
 
-  validates :password, length: { maximum: 128, too_long: I18n.t('errors.numericality.too_long'), minimum: 8, too_short: I18n.t('errors.numericality.too_short') }
+  validates :password, length: { maximum: 128, too_long: I18n.t('errors.numericality.too_long'), minimum: 8, too_short: I18n.t('errors.numericality.too_short') }, allow_blank: true
   validates :mentorship_description, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
   validates :biography, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
   validates :tokens, length: { maximum: 65535, too_long: I18n.t('errors.numericality.too_long') }
@@ -135,7 +135,7 @@ class User < ApplicationRecord
   # add custom message?
   validates :avatar, content_type: AttachmentHelper.common_image_types
 
-  validates :password, confirmation: { message: I18n.t('errors.confirmation') }, allow_blank: { allow_blank: true, message: I18n.t('errors.blank') }
+  validates :password, confirmation: { message: I18n.t('errors.confirmation') }
 
   validates :email, uniqueness: { message: I18n.t('errors.unique_email') }, allow_blank: { allow_blank: false, message: I18n.t('errors.blank') }
 
