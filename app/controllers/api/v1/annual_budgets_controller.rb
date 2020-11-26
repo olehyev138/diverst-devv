@@ -5,6 +5,10 @@ class Api::V1::AnnualBudgetsController < DiverstController
     model.group
   end
 
+  def klass
+    AnnualBudgetWithExpenses
+  end
+
   def action_map(action)
     case action
     when :update then 'annual_budget_update'

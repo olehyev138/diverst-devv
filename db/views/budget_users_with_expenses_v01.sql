@@ -1,6 +1,7 @@
 SELECT
     `budget_users`.*,
     COALESCE(`spent`, 0)                                                           as spent,
+    `estimated`                                                                    as user_estimate,
     IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), COALESCE(`estimated`, 0)) as reserved,
     IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), 0)                        as final_expense
 FROM `budget_users`

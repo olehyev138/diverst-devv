@@ -8,18 +8,23 @@ class BudgetProcedureService
         :budget_item_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
+        'SUM(`user_estimate`) as user_estimates',
         'SUM(`final_expense`) as finalized_expenditures'
       ).group(:budget_item_id)
     BUDGET_SUMS = BudgetItemWithExpenses.select(
         :budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
+        'SUM(`user_estimates`) as user_estimates',
+        'SUM(`finalized_expenditures`) as finalized_expenditures',
         'SUM(`estimated_amount`) as requested_amount',
       ).group(:budget_id)
     ANNUAL_BUDGETS_SUMS = BudgetWithExpenses.select(
         :annual_budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
+        'SUM(`user_estimates`) as user_estimates',
+        'SUM(`finalized_expenditures`) as finalized_expenditures',
         'SUM(`requested_amount`) as requested_amount',
         'SUM(`approved_amount`) as approved',
       ).group(:annual_budget_id)

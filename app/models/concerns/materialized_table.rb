@@ -57,17 +57,20 @@ module MaterializedTable
 
     def estimate_adder
       sql = 'SET @new_reserved = @old_reserved + NEW.estimated; '
+      sql += 'SET @new_user_estimates = @old_user_estimates + NEW.estimated; ' if relevant_columns.include? 'user_estimates'
       sql + set_rest('reserved')
     end
 
     def estimate_remover
       sql = 'SET @temp = (SELECT reserved FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
       sql += 'SET @new_reserved = @old_reserved - @temp; '
+      sql += 'SET @new_user_estimates = @old_user_estimates - OLD.estimated; ' if relevant_columns.include? 'user_estimates'
       sql + set_rest('reserved')
     end
 
     def estimate_replacer
       sql = 'SET @new_reserved = @old_reserved + NEW.estimated - OLD.estimated; '
+      sql += 'SET @new_user_estimates = @old_user_estimates + NEW.estimated - OLD.estimated; ' if relevant_columns.include? 'user_estimates'
       sql + set_rest('reserved')
     end
 

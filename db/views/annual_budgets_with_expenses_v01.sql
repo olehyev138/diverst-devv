@@ -3,8 +3,12 @@ SELECT
     COALESCE(`spent`, 0) as spent,
     COALESCE(`reserved`, 0) as reserved,
     COALESCE(`requested_amount`, 0) as requested_amount,
+    COALESCE(`approved`, 0) as approved,
+    COALESCE(`user_estimates`, 0) as user_estimates,
+    COALESCE(`finalized_expenditures`, 0) as finalized_expenditures,
     COALESCE(`approved` - `reserved`, 0) as available,
-    COALESCE(`approved` - `spent`, 0) as unspent,
+    COALESCE(`user_estimates` - `spent`, 0) as unspent,
+    COALESCE(`approved` - `spent`, 0) as remaining,
     COALESCE(COALESCE(`amount`, 0) - `spent`, 0) as leftover,
     COALESCE(COALESCE(`amount`, 0) - `approved`, 0) as free
 FROM `annual_budgets`

@@ -2,6 +2,7 @@ SELECT
     `budget_items`.*,
     COALESCE(`spent`, 0) as spent,
     COALESCE(`reserved`, 0) as reserved,
+    COALESCE(`user_estimates`, 0) as user_estimates,
     COALESCE(`finalized_expenditures`, 0) as finalized_expenditures,
     COALESCE(`estimated_amount` - `spent`, 0) as unspent,
     IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0,
