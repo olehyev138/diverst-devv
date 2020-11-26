@@ -13,7 +13,7 @@
         <%= render "outcome_fields", f: o %>
       <% end %>
         <%= link_to_add_association "+Add #{ c_t(:outcome) }", f, :outcomes, class: "btn btn--secondary" %>
-        <%= f.button :submit, value: "Update plan", class: "btn btn--primary" %>
+        <%= f.button :submit, value: "Update plan", class: "btn btn--primary", style: 'margin-bottom: 15px;' %>
     </div>
   <% end %>
 </div>

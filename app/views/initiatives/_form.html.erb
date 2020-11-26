@@ -63,7 +63,7 @@
 
                     $('#initiative_estimated_funding').val(value);
                   });
-                })
+                });
               </script>
             <% end %>
           </div>
@@ -120,6 +120,7 @@
         <div class="col sm-3">
           <div class="card__section card__section--border">
             <%= f.input :location, label: "Specify the <strong>location</strong>".html_safe %>
+            <span class="event_url error"></span>
             <%= f.input :event_url, label: 'Event url' %>
           </div>
         </div>
@@ -176,5 +177,20 @@
     <%= f.button :submit, 'Submit' %>
   <% end %>
 </div>
+
+<script>
+  $('#initiative_event_url').on('change keyup', function(){
+    var URL_REGEXP = /^https?:\/\/([\w\d\-]+\.)+\w{2,}(\/.+)?$/;
+    var errorMessage = document.querySelector('.event_url');
+    
+    if ((URL_REGEXP).test($(this).val())) {
+      errorMessage.innerText = '';
+      $('input[type="submit"]').prop('disabled', false);
+    } else {
+      errorMessage.innerText = 'Please include https://';
+      $('input[type="submit"]').prop('disabled', true);
+    }
+  });
+</script>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>

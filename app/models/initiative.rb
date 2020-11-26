@@ -593,7 +593,7 @@ class Initiative < BaseClass
 
   def event_url_must_be_valid
     unless URL_REGEXP =~ event_url || event_url.blank?
-      errors.add(:event_url, 'not valid')
+      errors.add(:event_url, 'url should include http(s)://')
     end
   end
 
