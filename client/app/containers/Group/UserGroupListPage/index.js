@@ -33,7 +33,7 @@ const defaultAllGroupsParams = Object.freeze({
   orderBy: 'position',
   order: 'asc',
   query_scopes: ['all_parents'],
-  with_children: true
+  with_children: false
 });
 
 export function UserGroupListPage(props) {
@@ -49,6 +49,7 @@ export function UserGroupListPage(props) {
     orderBy: 'position',
     order: 'asc',
     query_scopes: [['joined_groups', props.user?.user_id]],
+    with_children: false,
   }), [props.user?.user_id]);
 
   useEffect(() => {
