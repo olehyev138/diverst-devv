@@ -50,7 +50,7 @@ export function PollShowHeader(props, context) {
             variant='contained'
             color='primary'
           >
-            <DiverstFormattedMessage {...messages.headers.back} />
+            <DiverstFormattedMessage {...messages.back} />
           </Button>
         </Grid>
       </Grid>

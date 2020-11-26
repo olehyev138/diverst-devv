@@ -147,7 +147,7 @@ export function PollShowPage(props) {
             textColor='primary'
           >
             <Tab
-              label={<DiverstFormattedMessage {...messages.responses} />}
+              label={<DiverstFormattedMessage {...messages.responses.title} />}
               value='responses'
             />
             <Tab
