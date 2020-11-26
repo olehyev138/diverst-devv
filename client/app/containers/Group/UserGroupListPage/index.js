@@ -47,7 +47,9 @@ export function UserGroupListPage({ classes, ...props }) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'], with_children: true });
+  const [parentData, setParentData] = useState(undefined);
+
+  const [params, setParams] = useState(defaultAllGroupsParams);
   const [displayMyGroups, setDisplayMyGroups] = useState(false);
 
   const defaultJoinedGroupsParams = useMemo(() => Object.freeze({
@@ -65,6 +67,17 @@ export function UserGroupListPage({ classes, ...props }) {
     return () => props.groupAllUnmount();
   }, []);
 
+  useEffect(() => {
+    if (parentData === undefined || !parentData?.id) return;
+
+    const newParams = { ...defaultAllGroupsParams, query_scopes: [['children_of', parentData?.id]] };
+
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
+  }, [parentData?.id]);
+
+  const handleParentExpand = (id, name) => setParentData({ id, name });
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -75,6 +88,7 @@ export function UserGroupListPage({ classes, ...props }) {
   const getJoinedGroups = () => {
     const newParams = { ...defaultJoinedGroupsParams, order: params.order, orderBy: params.orderBy };
 
+    setParentData({ name: parentData?.name });
     setParams(newParams);
     props.getGroupsBegin(newParams);
     setDisplayMyGroups(true);
@@ -83,6 +97,7 @@ export function UserGroupListPage({ classes, ...props }) {
   const getAllGroups = () => {
     const newParams = { ...defaultAllGroupsParams, order: params.order, orderBy: params.orderBy };
 
+    setParentData({ name: parentData?.name });
     setParams(newParams);
     props.getGroupsBegin(newParams);
     setDisplayMyGroups(false);
@@ -92,27 +107,62 @@ export function UserGroupListPage({ classes, ...props }) {
     <React.Fragment>
       <Grid container justify='space-between' spacing={3}>
         <Grid item>
+          <Fade
+            in={parentData?.id}
+            onExited={() => {
+              setParentData(null);
+              setDisplayMyGroups(false);
+            }}
+          >
+            <Button
+              size='small'
+              color='primary'
+              variant='contained'
+              onClick={() => {
+                setParentData({ name: parentData?.name });
+                getAllGroups();
+              }}
+            >
+              <DiverstFormattedMessage {...messages.back} />
+            </Button>
+          </Fade>
         </Grid>
+        <Fade in={parentData?.id}>
+          <Grid item>
+            <Typography component='span' color='primary' variant='h5' className={classes.headerText}>
+              {parentData?.name}
+            </Typography>
+            &nbsp;
+            &nbsp;
+            <Typography component='span' color='textSecondary' variant='h5' className={classes.headerText}>
+              <DiverstFormattedMessage {...messages.childList} />
+            </Typography>
+          </Grid>
+        </Fade>
         <Grid item>
-          {displayMyGroups ? (
-            <Button
-              size='small'
-              color='primary'
-              variant='contained'
-              onClick={getAllGroups}
-            >
-              <DiverstFormattedMessage {...messages.allGroups} />
-            </Button>
-          ) : (
-            <Button
-              size='small'
-              color='primary'
-              variant='contained'
-              onClick={getJoinedGroups}
-            >
-              <DiverstFormattedMessage {...messages.myGroups} />
-            </Button>
-          )}
+          <Fade in={!parentData?.name}>
+            <span>
+              {displayMyGroups ? (
+                <Button
+                  size='small'
+                  color='primary'
+                  variant='contained'
+                  onClick={getAllGroups}
+                >
+                  <DiverstFormattedMessage {...messages.allGroups} />
+                </Button>
+              ) : (
+                <Button
+                  size='small'
+                  color='primary'
+                  variant='contained'
+                  onClick={getJoinedGroups}
+                >
+                  <DiverstFormattedMessage {...messages.myGroups} />
+                </Button>
+              )}
+            </span>
+          </Fade>
         </Grid>
         <Grid item xs={12}>
           <GroupList
@@ -121,6 +171,7 @@ export function UserGroupListPage({ classes, ...props }) {
             groupTotal={props.groupTotal}
             defaultParams={params}
             deleteGroupBegin={props.deleteGroupBegin}
+            handleParentExpand={handleParentExpand}
             handlePagination={handlePagination}
             viewChildren={!displayMyGroups}
           />
