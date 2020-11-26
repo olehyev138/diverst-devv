@@ -13,22 +13,24 @@ class UserRole < ApplicationRecord
   has_many    :users, inverse_of: :user_role, dependent: :nullify
 
   # validations
-  validates_length_of :role_type, maximum: 191
-  validates_length_of :role_name, maximum: 191
-  validates :role_name,               presence: true, length: { minimum: 3 }
-  validates :role_type,               presence: true
-  validates :enterprise,              presence: true
-  validates :priority,                presence: true
-  validates :policy_group_template,   presence: true, on: :update
+  validates :role_name, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long'), minimum: 3, too_short: I18n.t('errors.numericality.too_short') }
+  validates :role_type, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
 
-  validates_uniqueness_of :role_name,             scope: [:enterprise_id]
-  validates_uniqueness_of :priority,              scope: [:enterprise_id]
-  validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
+  validates :role_name, presence: { message: I18n.t('errors.blank') }
+  validates :role_type, presence: { message: I18n.t('errors.blank') }
+  validates :enterprise, presence: { message: I18n.t('errors.blank') }
+  validates :priority, presence: { message: I18n.t('errors.blank') }
+  validates :enterprise, presence: { message: I18n.t('errors.blank') }
+  validates :policy_group_template, presence: { message: I18n.t('errors.blank'), on: :update }
+
+  validates :role_name, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id] }
+  validates :priority, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id] }
+  validates :default, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id], conditions: -> { where(default: true) } }
 
   before_destroy -> { throw :abort unless can_destroy? }, prepend: true
   before_update -> {
     if role_type_changed?
-      errors.add(:role_type, "can't be changed")
+      errors.add(:role_type, I18n.t('errors.user_role.no_change'))
       throw :abort
     end
   }
@@ -47,7 +49,7 @@ class UserRole < ApplicationRecord
   before_create :build_default_policy_group_template
 
   def build_default_policy_group_template
-    build_policy_group_template(name: "#{role_name} Policy Template")
+    build_policy_group_template(name: "#{role_name}" + I18n.t('messages.user_role.policy_template'))
     true
   end
 
@@ -63,11 +65,11 @@ class UserRole < ApplicationRecord
   # we don't want to delete any group roles or the default role
   def can_destroy?
     if default
-      errors.add(:base, 'Cannot destroy default user role')
+      errors.add(:base, I18n.t('errors.user_role.delete_default'))
       return false
     elsif role_type === 'group'
       if group_leaders.size > 0
-        errors.add(:base, 'Cannot delete because there are users with this group role.')
+        errors.add(:base, I18n.t('errors.user_role.delete_group'))
         return false
       end
     end

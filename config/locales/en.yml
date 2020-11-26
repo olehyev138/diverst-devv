@@ -56,6 +56,9 @@ en:
     parent: Parent
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
+  messages:
+    user_role:
+      policy_template: "Policy template",
   errors:
     invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
     invalid_linkedin_url: "Not a valid LinkedIn URL"
@@ -66,6 +69,7 @@ en:
     format_email: "The email entered is not valid"
     confirmation: "do not match"
     blank: "can't be blank"
+    uniqueness: "The %{attribute} entered has already been created, please enter a unique %{attribute}"
     numericality: {
       too_short: "is too short (minimum is %{count} characters)",
       too_long: "is too long (maximum is %{count} characters)",
@@ -79,4 +83,12 @@ en:
     invalid_route: "Invalid route"
     region: {
       parent_cant_be_child_group: "cannot be a child group"
+    }
+    segments: {
+      already_member: "is already a member of this segment"
+    }
+    user_role: {
+      no_change: "cannot be changed",
+      delete_default: "Cannot destroy default user role",
+      delete_group: "Cannot delete because there are users with this group role.",
     }
