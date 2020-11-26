@@ -135,6 +135,7 @@ export function BudgetList(props, context) {
               <DiverstFormattedMessage {...messages.buttons.back} />
             </Button>
           </Grid>
+          { console.log(props.annualBudget) }
           <Permission show={permission(props.currentGroup, 'budgets_create?') && !props.annualBudget?.closed}>
             <Grid item xs align='right'>
               <Button

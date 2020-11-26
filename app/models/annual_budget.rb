@@ -8,6 +8,7 @@ class AnnualBudget < ApplicationRecord
   has_many :budget_items, through: :budgets
   has_many :initiatives, through: :budget_items
   has_many :initiative_expenses, through: :initiatives, source: :expenses
+  has_one :annual_budget_sums, class_name: 'AnnualBudgetSums'
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiative_expenses, prefix: 'expenses'
@@ -15,6 +16,23 @@ class AnnualBudget < ApplicationRecord
   delegate :active, to: :initiative_expenses, prefix: 'expenses'
   delegate :approved, to: :budgets, prefix: true
   delegate :approved, to: :budget_items, prefix: 'items'
+
+  scope :with_expenses, -> do
+    select(
+        "`annual_budgets`.*",
+        "COALESCE(`spent`, 0) as spent",
+        "COALESCE(`reserved`, 0) as reserved",
+        "COALESCE(`requested_amount`, 0) as requested_amount",
+        "COALESCE(`approved`, 0) as approved",
+        "COALESCE(`user_estimates`, 0) as user_estimates",
+        "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
+        "COALESCE(`approved` - `reserved`, 0) as available",
+        "COALESCE(`user_estimates` - `spent`, 0) as unspent",
+        "COALESCE(`approved` - `spent`, 0) as remaining",
+        "COALESCE(COALESCE(`amount`, 0) - `spent`, 0) as leftover",
+        "COALESCE(COALESCE(`amount`, 0) - `approved`, 0) as free"
+    ).left_joins(:annual_budget_sums)
+  end
 
   def currency
     'USD'

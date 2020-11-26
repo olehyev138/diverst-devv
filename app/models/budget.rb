@@ -6,6 +6,7 @@ class Budget < ApplicationRecord
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
   has_one :group, through: :annual_budget
+  has_one :budget_sums, class_name: 'BudgetSums'
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy
@@ -14,6 +15,19 @@ class Budget < ApplicationRecord
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false) }
   scope :pending, -> { where(is_approved: nil) }
+  scope :with_expenses, -> do
+    select(
+        "`budgets`.*",
+        "COALESCE(`spent`, 0) as spent",
+        "COALESCE(`reserved`, 0) as reserved",
+        "COALESCE(`requested_amount`, 0) as requested_amount",
+        "COALESCE(`user_estimates`, 0) as user_estimates",
+        "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
+        "COALESCE(COALESCE(`requested_amount`, 0) - `reserved`, 0) as available",
+        "COALESCE(COALESCE(`requested_amount`, 0) - `spent`, 0) as unspent",
+        "IF(`is_approved` = TRUE, `requested_amount`, 0) as approved_amount"
+    ).left_joins(:budget_sums)
+  end
 
   # scope :with_available_funds, -> { where('available_amount > 0')}
 

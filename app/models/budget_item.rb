@@ -5,6 +5,7 @@ class BudgetItem < ApplicationRecord
   belongs_to :budget, counter_cache: true
   has_one :annual_budget, through: :budget
   has_one :group, through: :annual_budget
+  has_one :budget_item_sums, class_name: 'BudgetItemSums'
 
   has_many :initiatives
   has_many :initiatives_expenses, through: :initiatives, source: :expenses
@@ -20,16 +21,17 @@ class BudgetItem < ApplicationRecord
   scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
   scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
-  scope :with_expenses, -> {
-    new_query = select_values.present? ? self : select('`budget_items`.*')
-    partial_initiative_query = Initiative.select('budget_item_id').where.not(budget_item_id: nil).with_expenses
-    new_query
-        .joins("LEFT JOIN (#{partial_initiative_query.to_sql}) events_and_expenses ON `budget_item_id` = `budget_items`.`id`")
-        .group(*new_query.select_values.flat_map { |a| a.include?('*') ? column_names.map { |b| "`budget_items`.`#{b}`" } : a })
-        .select('COALESCE(SUM(`estimated`), 0) AS estimated')
-        .select('COALESCE(SUM(`spent`), 0) AS spent')
-        .select('COALESCE(SUM(`reserved`), 0) AS reserved')
-  }
+  scope :with_expenses, -> do
+    select(
+        "`budget_items`.*",
+        "COALESCE(`spent`, 0) as spent",
+        "COALESCE(`reserved`, 0) as reserved",
+        "COALESCE(`user_estimates`, 0) as user_estimates",
+        "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
+        "COALESCE(`estimated_amount` - `spent`, 0) as unspent",
+        "IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0, COALESCE(`estimated_amount` - `reserved`, 0)) as available"
+    ).joins(:budget).left_joins(:budget_item_sums)
+  end
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiatives_expenses, prefix: 'expenses'

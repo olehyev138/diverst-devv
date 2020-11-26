@@ -16,10 +16,6 @@ class Api::V1::BudgetsController < DiverstController
           )
   end
 
-  def klass
-    BudgetWithExpenses
-  end
-
   def create
     params[:budget][:budget_items_attributes] = params[:budget][:budget_items]
     params[:budget][:requester_id] = current_user.id

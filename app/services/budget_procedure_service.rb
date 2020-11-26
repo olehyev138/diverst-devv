@@ -4,22 +4,22 @@ class BudgetProcedureService
         :budget_user_id,
         'SUM(`amount`) as spent'
       ).group(:budget_user_id)
-    BUDGET_ITEMS_SUMS = BudgetUserWithExpenses.select(
+    BUDGET_ITEMS_SUMS = BudgetUser.select(
         :budget_item_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
         'SUM(`user_estimate`) as user_estimates',
         'SUM(`final_expense`) as finalized_expenditures'
-      ).group(:budget_item_id)
-    BUDGET_SUMS = BudgetItemWithExpenses.select(
+      ).from(BudgetUser.with_expenses).group(:budget_item_id)
+    BUDGET_SUMS = BudgetItem.select(
         :budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
         'SUM(`user_estimates`) as user_estimates',
         'SUM(`finalized_expenditures`) as finalized_expenditures',
         'SUM(`estimated_amount`) as requested_amount',
-      ).group(:budget_id)
-    ANNUAL_BUDGETS_SUMS = BudgetWithExpenses.select(
+      ).from(BudgetItem.with_expenses).group(:budget_id)
+    ANNUAL_BUDGETS_SUMS = Budget.select(
         :annual_budget_id,
         'SUM(`spent`) as spent',
         'SUM(`reserved`) as reserved',
@@ -27,7 +27,7 @@ class BudgetProcedureService
         'SUM(`finalized_expenditures`) as finalized_expenditures',
         'SUM(`requested_amount`) as requested_amount',
         'SUM(`approved_amount`) as approved',
-      ).group(:annual_budget_id)
+      ).from(Budget.with_expenses).group(:annual_budget_id)
   end
 
   def self.refresh_budget_users_sums
