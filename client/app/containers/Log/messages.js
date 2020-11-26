@@ -16,6 +16,9 @@ export default defineMessages({
   to: {
     id: `${scope}.to`
   },
+  filterByGroup: {
+    id: `${scope}.filter_by_group`
+  },
   filter: {
     id: `${scope}.filter`
   },

@@ -196,7 +196,7 @@ export function NewsLinkListItem(props) {
                     className={classes.errorButton}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete news link?'))
+                      if (confirm(intl.formatMessage(messages.deleteNewsLink, props.customTexts)))
                         props.deleteNewsLinkBegin(newsItem.news_link);
                     }}
                   >
@@ -241,6 +241,7 @@ NewsLinkListItem.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   enableLikes: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

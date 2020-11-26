@@ -28,6 +28,7 @@ export function NewsLink(props) {
         <React.Fragment>
           <NewsLinkListItem
             newsItem={newsItem}
+            customTexts={props.customTexts}
           />
           <Box mb={4} />
           <NewsLinkCommentForm

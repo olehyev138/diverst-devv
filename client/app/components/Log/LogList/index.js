@@ -103,7 +103,7 @@ export function LogList(props, context) {
             <CardContent>
               <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
                 <Grid item xs={4}>
-                  <Typography><DiverstFormattedMessage {...logMessages.filter} /></Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.filterByGroup} /></Typography>
                 </Grid>
                 <Grid item xs={3}>
                   <Typography><DiverstFormattedMessage {...logMessages.from} /></Typography>
@@ -163,7 +163,7 @@ export function LogList(props, context) {
                     variant='contained'
                     className={classes.submitButton}
                   >
-                    Filter
+                    <DiverstFormattedMessage {...logMessages.filter} />
                   </Button>
                 </Grid>
               </Grid>
