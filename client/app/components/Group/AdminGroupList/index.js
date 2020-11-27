@@ -170,6 +170,7 @@ export function AdminGroupList(props, context) {
       <DiverstPagination
         isLoading={props.isLoading}
         handlePagination={props.handlePagination}
+        page={defaultParams.page}
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
       />
