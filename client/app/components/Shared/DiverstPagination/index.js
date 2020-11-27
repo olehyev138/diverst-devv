@@ -38,28 +38,28 @@ function PaginationActions(props) {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label={props.intl.formatMessage(messages.first, props.customTexts)}
+        aria-label={props.intl.formatMessage(messages.first)}
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label={props.intl.formatMessage(messages.prev, props.customTexts)}
+        aria-label={props.intl.formatMessage(messages.prev)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label={props.intl.formatMessage(messages.next, props.customTexts)}
+        aria-label={props.intl.formatMessage(messages.next)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label={props.intl.formatMessage(messages.last, props.customTexts)}
+        aria-label={props.intl.formatMessage(messages.last)}
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
@@ -73,7 +73,6 @@ PaginationActions.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
@@ -168,8 +167,6 @@ export function DiverstPagination(props) {
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
         rowsPerPage={rowsPerPage || 0}
         intl={props.intl}
-        customTexts={props.customTexts}
-
         count={props.count || 0}
         onChangePage={props.onChangePage || handleChangePage}
         onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
