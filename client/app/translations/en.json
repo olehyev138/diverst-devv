@@ -5,7 +5,7 @@
   "diverst.components.DiverstPagination.last": "Last Page",
   "diverst.components.DiverstPagination.next": "Next Page",
   "diverst.components.DiverstPagination.prev": "Previous Page",
-  "diverst.components.DiverstBreadcrumbs": "Breadcrumbs",
+  "diverst.components.DiverstBreadcrumbs.label": "Breadcrumbs",
   "diverst.components.DiverstLike.color": "Choose Color",
   "diverst.components.DiverstFileInput.choose": "Choose File",
   "diverst.components.DiverstFileInput.delete": "Delete",

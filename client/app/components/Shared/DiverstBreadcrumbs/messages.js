@@ -1,9 +1,9 @@
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.components.diverstBreadcrumbs';
+export const scope = 'diverst.components.DiverstBreadcrumbs';
 
 export default defineMessages({
   breadcrumbs: {
-    id: `${scope}`
+    id: `${scope}.label`
   }
 });
