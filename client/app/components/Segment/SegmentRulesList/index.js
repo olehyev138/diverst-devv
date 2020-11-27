@@ -22,6 +22,10 @@ import SegmentRule from 'components/Segment/SegmentRules/SegmentRule';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
+import { compose } from 'redux';
+import { injectIntl, intlShape } from 'react-intl';
+import { withStyles } from '@material-ui/core/styles';
+
 
 const styles = theme => ({
   ruleInput: {
@@ -109,7 +113,7 @@ export function SegmentRules({ values, classes, ...props }) {
                             <IconButton
                               className={classes.deleteButton}
                               onClick={() => props.formik.setFieldValue(`${ruleData[tab].name}.${i}._destroy`, '1')}
-                              aria-label='delete'
+                              aria-label={props.intl.formatMessage(messages.close, props.customTexts)}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -146,8 +150,14 @@ SegmentRules.propTypes = {
   formik: PropTypes.object,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
-  })
+  }),
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 
-export default connect(SegmentRules);
+export default compose(
+  memo,
+  injectIntl,
+  withStyles(styles)
+)(SegmentRules);

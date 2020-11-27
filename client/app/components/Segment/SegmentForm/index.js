@@ -25,6 +25,7 @@ import { serializeSegment } from 'utils/customFieldHelpers';
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   ruleInput: {
@@ -64,6 +65,8 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
       <Box mb={3} />
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
         <SegmentRulesList
+          intl={props.intl}
+          customTexts={props.customTexts}
           values={values}
           classes={props.classes}
           {...props.ruleProps}
@@ -124,10 +127,13 @@ SegmentFormInner.propTypes = {
   isFormLoading: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number
-  }).isRequired
+  }).isRequired,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(SegmentForm);

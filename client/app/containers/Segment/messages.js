@@ -10,6 +10,9 @@ export const scope = 'diverst.containers.Segment';
 export const snackbar = 'diverst.snackbars.Segments';
 
 export default defineMessages({
+  close: {
+    id: `${scope}.close`,
+  },
   join: {
     id: `${scope}.label.join`,
   },
