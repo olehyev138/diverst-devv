@@ -1,5 +1,6 @@
 {
-  "diverst.components.SnackbarProviderWrapper": "Close",
+  "diverst.components.DiverstColorPicker.color": "Choose color",
+  "diverst.components.SnackbarProviderWrapper.close": "Close",
   "diverst.components.DiverstPagination.first": "First Page",
   "diverst.components.DiverstPagination.last": "Last Page",
   "diverst.components.DiverstPagination.next": "Next Page",
