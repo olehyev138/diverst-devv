@@ -45,7 +45,7 @@ class Importers::Users
       field = @enterprise.fields.find { |f| f.title.downcase == row.headers[i] }
       next if field.blank?
 
-      data = user[field]
+      data = user.get_field_data(field)
       field_data_attributes.append(
           data.present? ? {
               id: data.id,
@@ -82,7 +82,7 @@ class Importers::Users
   end
 
   def user_attributes(row, user)
-    id = user.present? ? user.user_role_id : @enterprise.default_user_role # default_user_role returns the ID of the default role
+    id = user.present? ? user.user_role_id : @enterprise.default_user_role_id # default_user_role returns the ID of the default role
 
     {
       first_name: row['first name'],

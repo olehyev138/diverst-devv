@@ -6,8 +6,12 @@ module Enterprise::Actions
   end
 
   module ClassMethods
-    def base_preloads
-      [ :theme ]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then [:theme]
+      when 'show', 'create', 'update' then [:theme, :custom_text, :sponsors, :mentoring_interests, :mentoring_types]
+      else []
+      end
     end
 
     def sso_login(diverst_request, params)
@@ -21,7 +25,7 @@ module Enterprise::Actions
 
         unless user = enterprise.users.find_by_email(nameid)
           user = enterprise.users.new(auth_source: 'saml', enterprise: enterprise)
-          user.user_role_id = enterprise.default_user_role
+          user.user_role_id = enterprise.default_user_role_id
           user.set_info_from_saml(nameid, attrs, enterprise)
 
           enterprise.users << user

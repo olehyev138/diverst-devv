@@ -14,7 +14,8 @@ import { intl } from 'tests/mocks/react-intl';
 loadTranslation('./app/translations/en.json');
 const props = {
   links: {},
-  params: {}
+  params: {},
+  customTexts: { erg: 'Group' }
 };
 describe('<GroupLeadersList />', () => {
   it('Expect to not log errors in console', () => {

@@ -15,6 +15,7 @@ describe('userReducer', () => {
       isLoadingDownloads: true,
       isFormLoading: true,
       isCommitting: false,
+      hasChanged: false,
       userList: {},
       userTotal: null,
       currentUser: null,

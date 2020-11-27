@@ -14,6 +14,6 @@ RSpec.describe PollResponse::Actions, type: :model do
       ]
     }
 
-    it { expect(PollResponse.base_preloads).to eq base_preloads }
+    it { expect(PollResponse.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

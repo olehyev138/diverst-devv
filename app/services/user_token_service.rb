@@ -27,7 +27,7 @@ class UserTokenService < TokenService
   def self.verify_jwt_token(token)
     session = get_session_from_jwt(token)
 
-    user_token_error if session.blank? || session.user.blank?
+    user_token_error if session.blank? || session.user.blank? || !session.user.active
 
     session.user
   end

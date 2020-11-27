@@ -40,7 +40,6 @@ const styles = theme => ({
 
 export function OutcomesList(props, context) {
   const { classes, intl } = props;
-
   return (
     <React.Fragment>
       <Grid container spacing={2} justify='space-between'>
@@ -116,7 +115,7 @@ export function OutcomesList(props, context) {
                     className={classes.errorButton}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm(intl.formatMessage(messages.pillars.delete_confirm)))
+                      if (confirm(intl.formatMessage(messages.pillars.delete_confirm, props.customTexts)))
                         props.deleteOutcomeBegin(outcome);
                     }}
                   >
@@ -159,6 +158,7 @@ OutcomesList.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   deleteOutcomeBegin: PropTypes.func.isRequired,
+  customTexts: PropTypes.object
 };
 
 export default compose(

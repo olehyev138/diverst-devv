@@ -46,9 +46,9 @@ export function UserRoleList(props, context) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.role_name), field: 'role_name' },
-    { title: intl.formatMessage(messages.role_type), field: 'role_type' },
-    { title: intl.formatMessage(messages.priority), field: 'priority' },
+    { title: intl.formatMessage(messages.role_name, props.customTexts), field: 'role_name' },
+    { title: intl.formatMessage(messages.role_type, props.customTexts), field: 'role_type' },
+    { title: intl.formatMessage(messages.priority, props.customTexts), field: 'priority' },
   ];
 
   return (
@@ -73,7 +73,7 @@ export function UserRoleList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.title)}
+            title={messages.title}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUserRoles}
@@ -84,7 +84,7 @@ export function UserRoleList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: intl.formatMessage(messages.edit),
+                tooltip: intl.formatMessage(messages.edit, props.customTexts),
                 onClick: (_, rowData) => {
                   props.handleVisitUserRoleEdit(rowData.id);
                 },
@@ -92,10 +92,16 @@ export function UserRoleList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.delete),
+                tooltip: (() => {
+                  if (rowData.default)
+                    return intl.formatMessage(messages.delete_default_role, props.customTexts);
+                  if (!permission(rowData, 'destroy?') && rowData.role_type === 'group')
+                    return intl.formatMessage(messages.delete_group_in_use, props.customTexts);
+                  return intl.formatMessage(messages.delete, props.customTexts);
+                })(),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                     props.deleteUserRoleBegin(rowData.id);
                 },
                 disabled: !permission(rowData, 'destroy?')
@@ -121,7 +127,8 @@ UserRoleList.propTypes = {
   links: PropTypes.shape({
     userRoleNew: PropTypes.string,
     userRoleEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

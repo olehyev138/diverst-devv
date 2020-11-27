@@ -52,7 +52,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               <Field
                 component={Select}
                 fullWidth
-                disabled={props.isCommitting}
+                disabled={props.edit || props.isCommitting}
                 id='role_type'
                 name='role_type'
                 margin='normal'
@@ -77,7 +77,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
             <Divider />
             <CardActions>
               <DiverstSubmit isCommitting={props.isCommitting}>
-                {buttonText}
+                <DiverstFormattedMessage {...buttonText} />
               </DiverstSubmit>
               <DiverstCancel
                 disabled={props.isCommitting}
@@ -136,7 +136,7 @@ UserRoleFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,

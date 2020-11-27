@@ -113,6 +113,11 @@ const selectIsLoadingEvents = () => createSelector(
   userState => userState.isLoadingEvents
 );
 
+const selectHasChanged = () => createSelector(
+  selectUsersDomain,
+  userState => userState.hasChanged
+);
+
 const selectIsLoadingDownloads = () => createSelector(
   selectUsersDomain,
   userState => userState.isLoadingDownloads
@@ -164,5 +169,5 @@ export {
   selectIsCommitting, selectIsFormLoading,
   selectPaginatedDownloads, selectDownloadsTotal,
   selectIsLoadingDownloads, selectIsDownloadingData,
-  selectDownloadData,
+  selectDownloadData, selectHasChanged
 };

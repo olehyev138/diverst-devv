@@ -11,7 +11,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedFolders, selectFoldersTotal, selectIsFolderLoading, selectHasChanged } from 'containers/Resource/selectors';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
@@ -94,6 +94,7 @@ export function FoldersPage(props) {
       type='admin'
       permissions={props.permissions}
       currentGroup={props.currentGroup}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -114,6 +115,7 @@ FoldersPage.propTypes = {
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -122,7 +124,8 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   isLoading: selectIsFolderLoading(),
   permissions: selectPermissions(),
-  hasChanged: selectHasChanged()
+  hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

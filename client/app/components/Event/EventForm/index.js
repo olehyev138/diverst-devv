@@ -64,6 +64,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       group_id: props.currentGroup.id,
+      minimal: true,
     });
   };
 
@@ -168,7 +169,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
               alignItems='center'
             >
               <Grid item xs={12} md={6}>
-                <FastField
+                <Field
                   component={DiverstSelect}
                   fullWidth
                   required
@@ -258,7 +259,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.event ? props.links.eventShow : props.links.eventsIndex}
@@ -321,7 +322,7 @@ EventForm.propTypes = {
 EventFormInner.propTypes = {
   edit: PropTypes.bool,
   event: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
 
   formikProps: PropTypes.shape({
     handleSubmit: PropTypes.func,

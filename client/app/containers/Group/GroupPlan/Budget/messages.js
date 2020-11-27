@@ -7,7 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.Budget';
-export const snackbar = 'diverst.snackbards.Group.Budget';
+export const snackbar = 'diverst.snackbars.Group.Budget';
 
 export default defineMessages({
   columns: {
@@ -36,6 +36,9 @@ export default defineMessages({
     },
     delete: {
       id: `${scope}.index.actions.delete`,
+    },
+    deleteConfirmation: {
+      id: `${scope}.index.actions.deleteConfirmation`,
     },
   },
   buttons: {

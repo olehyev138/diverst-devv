@@ -31,7 +31,10 @@ RSpec.describe User::Actions, type: :model do
   end
 
   describe 'base_query' do
-    it { expect(User.base_query).to eq 'users.id LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search' }
+    it { expect(User.base_query(Request.create_request(nil))).to(
+        eq 'users.id LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
+      )
+    }
   end
 
   describe 'valid_scopes' do
@@ -49,6 +52,7 @@ RSpec.describe User::Actions, type: :model do
           invitation_sent
           of_role
           not_member_of_group
+          for_segment_ids
       )
     }
 
@@ -65,37 +69,24 @@ RSpec.describe User::Actions, type: :model do
     let(:base_preloads) {
       [
           :field_data,
-          :enterprise,
-          :user_groups,
-          :user_role,
-          :news_links,
           :avatar_attachment,
           :avatar_blob,
+          :user_role,
           field_data: [
               :field,
-              field: Field.base_preloads
+              field: Field.base_preloads(Request.create_request(nil))
           ],
-          enterprise: [
-              :theme,
-              :mobile_fields
-          ]
       ]
     }
 
-    it { expect(User.base_preloads).to eq base_preloads }
+    it { expect(User.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'base_attribute_preloads' do
     let(:base_attribute_preloads) {
       [
           :user_role,
-          :enterprise,
-          :news_links,
-          :avatar_attachment,
-          enterprise: [
-              :theme,
-              :mobile_fields
-          ]
+          :avatar_attachment, :avatar_blob,
       ]
     }
 
@@ -146,6 +137,11 @@ RSpec.describe User::Actions, type: :model do
 
     it 'raises an exception if user does not exist' do
       expect { User.signin('test@gmail.com', 'testPassword') }.to raise_error(BadRequestException, 'User does not exist')
+    end
+
+    it 'raises an exception if user is inactive' do
+      user = create(:user, active: false, password: '123456789', password_confirmation: '123456789')
+      expect { User.signin(user.email, '123456789') }.to raise_error(BadRequestException, 'User does not exist')
     end
 
     it 'raises an exception if password is incorrect' do
@@ -316,14 +312,14 @@ RSpec.describe User::Actions, type: :model do
       NewsLink.first.news_feed_link.update(approved: false)
     }
 
-    it { expect(user.posts({}).total).to eq 4 }
+    it { expect(user.posts(Request.create_request(user), {}).total).to eq 4 }
   end
 
   describe 'downloads' do
     it 'gets download files' do
       user = create(:user)
       csv_files = create_list(:csv_file_download, 3, user: user)
-      downloads = Request.create_request(user).user.downloads({})
+      downloads = user.downloads(Request.create_request(user), {})
       expect(downloads.total).to eq csv_files.count
     end
   end

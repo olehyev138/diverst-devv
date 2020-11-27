@@ -97,7 +97,7 @@ export function UpdateList(props, context) {
           className={classNames(classes.folderLink, classes.deleteButton)}
           onClick={() => {
             // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm(props.intl.formatMessage(messages.deleteConfirmation)))
+            if (confirm(props.intl.formatMessage(messages.deleteConfirmation, props.customTexts)))
               props.deleteUpdateBegin(update.id);
           }}
         >
@@ -120,6 +120,7 @@ UpdateList.propTypes = {
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
   links: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 export default compose(

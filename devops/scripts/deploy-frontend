@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Build & deploy frontend
-# Must be run from app root
+# Deploy frontend
+#  - Must be run from app root
+#  - Assumes frontend-build script has been run & client/build is populated
 # Usage: ./create-app-version <frontend-bucket>
 
 FRONTEND_BUCKET=$1
@@ -16,9 +17,6 @@ fi
 
 cd client/
 
-# Build frontend (npm install is handled separately)
-npm run build
-
 # Sync app build files with S3
 #  - delete flag deletes files on bucket if deleted locally
 #  - exclude service worker & index, all chunk files get cached
@@ -27,6 +25,7 @@ aws s3 sync \
   --cache-control max-age=604800 \
   --exclude index.html \
   --exclude sw.js \
+  --quiet \
   build/ "s3://$FRONTEND_BUCKET"
 
 # Upload index & service worker to S3 separately with no caching for proper cache busting

@@ -20,9 +20,9 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -34,25 +34,25 @@ export function GroupLeadersList(props) {
   const { classes, links, intl } = props;
 
   const columns = [
-    { title: intl.formatMessage(messages.leader.column_name), field: 'user.name', query_field: 'users.last_name' },
-    { title: intl.formatMessage(messages.leader.column_position), field: 'position_name', query_field: 'position_name' }
+    { title: intl.formatMessage(messages.leader.column_name, props.customTexts), field: 'user.name', query_field: 'users.last_name' },
+    { title: intl.formatMessage(messages.leader.column_position, props.customTexts), field: 'position_name', query_field: 'position_name' }
   ];
 
   const actions = [];
   if (permission(props.group, 'leaders_manage?')) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(messages.leader.edit),
+      tooltip: intl.formatMessage(messages.leader.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
       }
     });
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: intl.formatMessage(messages.leader.delete),
+      tooltip: intl.formatMessage(messages.leader.delete, props.customTexts),
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to delete this group leader?'))
+        if (confirm(intl.formatMessage(messages.leader.confirm, props.customTexts)))
           props.deleteGroupLeaderBegin({ group_id: rowData.group_id, id: rowData.id });
       }
     });
@@ -87,7 +87,7 @@ export function GroupLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.leader.title)}
+            title={messages.leader.title}
             onOrderChange={handleOrderChange}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingGroupLeaders}
@@ -121,10 +121,11 @@ GroupLeadersList.propTypes = {
   edit: PropTypes.bool,
   groupLeader: PropTypes.object,
   handleVisitGroupLeaderEdit: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
-  injectIntl,
   memo,
+  injectIntl,
   withStyles(styles)
 )(GroupLeadersList);

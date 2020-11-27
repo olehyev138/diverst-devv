@@ -26,7 +26,7 @@ export function* getComments(action) {
     yield put(getCommentsSuccess(response.data.page));
   } catch (err) {
     yield put(getCommentsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.comments), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.comments, options: { variant: 'warning' } }));
   }
 }
 
@@ -37,10 +37,10 @@ export function* createComment(action) {
 
     yield put(createCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -52,13 +52,13 @@ export function* updateComment(action) {
     yield put(updateCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update),
+      message: messages.snackbars.success.update,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateCommentError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update),
+      message: messages.snackbars.errors.update,
       options: { variant: 'warning' }
     }));
   }
@@ -72,7 +72,7 @@ export function* getComment(action) {
   } catch (err) {
     yield put(getCommentError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.comment),
+      message: messages.snackbars.errors.comment,
       options: { variant: 'warning' }
     }));
   }
@@ -84,10 +84,10 @@ export function* deleteComment(action) {
 
     yield put(deleteCommentSuccess());
     yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaignId)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

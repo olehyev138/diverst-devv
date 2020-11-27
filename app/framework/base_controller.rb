@@ -5,7 +5,10 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params, policy: @policy)
+    response = klass.index(self.diverst_request, params, policy: @policy)
+    response = { page: response.as_json } if diverst_request.minimal
+
+    render status: 200, json: response, **diverst_request.options
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise
@@ -44,7 +47,7 @@ module BaseController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: klass.show(self.diverst_request, params)
+    render status: 200, json: klass.show(self.diverst_request, params), **diverst_request.options
   end
 
   def update
@@ -59,7 +62,7 @@ module BaseController
         .filter { |a| a.class_name.constantize == ActiveStorage::Attachment rescue false }
         .map { |a| a.name.to_s.chomp('_attachment').to_sym }
         .each do |attachment|
-          item.send(attachment).purge_later if params[attachment].blank? && item.send(attachment).attached?
+          item.send(attachment).purge_later if params[klass.symbol].key?(attachment) && params[attachment].blank? && item.send(attachment).attached?
         end
 
     updated_item = klass.update(self.diverst_request, params)

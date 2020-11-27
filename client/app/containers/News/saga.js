@@ -86,7 +86,7 @@ export function* getNewsItems(action) {
     yield (put(getNewsItemsSuccess(response.data.page)));
   } catch (err) {
     yield put(getNewsItemsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.news_items), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.news_items, options: { variant: 'warning' } }));
   }
 }
 
@@ -96,7 +96,7 @@ export function* getNewsItem(action) {
     yield put(getNewsItemSuccess(response.data));
   } catch (err) {
     yield put(getNewsItemError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.news_item), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.news_item, options: { variant: 'warning' } }));
   }
 }
 
@@ -107,10 +107,10 @@ export function* updateNewsItem(action) {
 
     yield put(updateNewsItemSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_news_item), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_news_item, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateNewsItemError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_news_item), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_news_item, options: { variant: 'warning' } }));
   }
 }
 
@@ -121,10 +121,10 @@ export function* createGroupMessage(action) {
 
     yield put(createGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_group_message), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_group_message, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupMessageError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_group_message), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_group_message, options: { variant: 'warning' } }));
   }
 }
 
@@ -135,10 +135,10 @@ export function* updateGroupMessage(action) {
 
     yield put(updateGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_group_message), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_group_message, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupMessageError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_group_message), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_group_message, options: { variant: 'warning' } }));
   }
 }
 
@@ -147,10 +147,10 @@ export function* deleteGroupMessage(action) {
     yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
     yield put(deleteGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_group_message), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_group_message, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupMessageError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_group_message), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_group_message, options: { variant: 'warning' } }));
   }
 }
 
@@ -159,10 +159,10 @@ export function* deleteGroupMessageComment(action) {
     yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
     yield put(deleteGroupMessageCommentSuccess());
     yield put(getNewsItemBegin({ id: action.payload.news_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_group_message_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_group_message_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupMessageCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_group_message_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_group_message_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -175,10 +175,10 @@ export function* createGroupMessageComment(action) {
 
     yield put(createGroupMessageCommentSuccess());
     yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_group_message_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_group_message_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupMessageCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_group_message_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_group_message_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -189,10 +189,10 @@ export function* createNewsLink(action) {
 
     yield put(createNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_news_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_news_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createNewsLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_news_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_news_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -203,10 +203,10 @@ export function* updateNewsLink(action) {
 
     yield put(updateNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_news_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_news_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateNewsLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_news_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_news_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -215,10 +215,10 @@ export function* deleteNewsLink(action) {
     yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload.id);
     yield put(deleteNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_news_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_news_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteNewsLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_news_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_news_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -231,10 +231,10 @@ export function* createNewsLinkComment(action) {
 
     yield put(createNewsLinkCommentSuccess());
     yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_news_link_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_news_link_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createNewsLinkCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_news_link_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_news_link_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -243,10 +243,10 @@ export function* deleteNewsLinkComment(action) {
     yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload.id);
     yield put(deleteNewsLinkCommentSuccess());
     yield put(getNewsItemBegin({ id: action.payload.news_id }));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_news_link_comment), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_news_link_comment, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteNewsLinkCommentError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_news_link_comment), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_news_link_comment, options: { variant: 'warning' } }));
   }
 }
 
@@ -257,10 +257,10 @@ export function* createSocialLink(action) {
 
     yield put(createSocialLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_social_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_social_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSocialLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_social_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_social_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -271,10 +271,10 @@ export function* updateSocialLink(action) {
 
     yield put(updateSocialLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_social_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_social_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSocialLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_social_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_social_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -283,10 +283,10 @@ export function* deleteSocialLink(action) {
     yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
     yield put(deleteSocialLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete_social_link), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete_social_link, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSocialLinkError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete_social_link), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete_social_link, options: { variant: 'warning' } }));
   }
 }
 
@@ -298,7 +298,7 @@ export function* archiveNewsItem(action) {
   } catch (err) {
     yield put(archiveNewsItemError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.archive),
+      message: messages.snackbars.errors.archive,
       options: { variant: 'warning' }
     }));
   }
@@ -312,7 +312,7 @@ export function* approveNewsItem(action) {
   } catch (err) {
     yield put(approveNewsItemError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.approve),
+      message: messages.snackbars.errors.approve,
       options: { variant: 'warning' }
     }));
   }
@@ -327,7 +327,7 @@ export function* pinNewsItem(action) {
   } catch (err) {
     yield put(pinNewsItemError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.pin),
+      message: messages.snackbars.errors.pin,
       options: { variant: 'warning' }
     }));
   }
@@ -342,7 +342,7 @@ export function* unpinNewsItem(action) {
   } catch (err) {
     yield put(unpinNewsItemError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.un_pin),
+      message: messages.snackbars.errors.un_pin,
       options: { variant: 'warning' }
     }));
   }

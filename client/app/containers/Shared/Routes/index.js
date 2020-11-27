@@ -9,6 +9,7 @@ import {
   PasswordResetPage,
   UserLayout,
   GroupLayout,
+  RegionLayout,
   AdminLayout,
   SessionLayout,
   AnonymousLayout,
@@ -26,6 +27,9 @@ import {
   GroupCategoriesCreatePage,
   GroupCategoriesEditPage,
   GroupCategorizePage,
+  GroupRegionsListPage,
+  GroupRegionsCreatePage,
+  GroupRegionsEditPage,
   SegmentListPage,
   SegmentPage,
   AdminFieldsPage,
@@ -45,6 +49,11 @@ import {
   GroupMessageCreatePage,
   GroupMessageEditPage,
   GroupPlanUpdateCreatePage,
+  RegionHomePage,
+  RegionMembersListPage,
+  RegionLeadersListPage,
+  RegionLeaderCreatePage,
+  RegionLeaderEditPage,
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
@@ -431,6 +440,26 @@ export default function Routes(props) {
                 </GroupLayout>
               </Route>
 
+              {/* Region */}
+              <Route path={ROUTES.region.pathPrefix()}>
+                <RegionLayout>
+                  <SwitchWithProps>
+                    {/* Home */}
+                    <RouteWithProps exact path={ROUTES.region.home.path()}><RegionHomePage /></RouteWithProps>
+
+                    {/* Members */}
+                    <RouteWithProps exact path={ROUTES.region.members.path()}><RegionMembersListPage /></RouteWithProps>
+
+                    {/* Leaders */}
+                    <RouteWithProps exact path={ROUTES.region.leaders.index.path()}><RegionLeadersListPage /></RouteWithProps>
+                    {/* Leaders - Edit */}
+                    <RouteWithProps path={ROUTES.region.leaders.edit.path()}><RegionLeaderEditPage /></RouteWithProps>
+                    {/* Leaders - Create */}
+                    <RouteWithProps path={ROUTES.region.leaders.new.path()}><RegionLeaderCreatePage /></RouteWithProps>
+                  </SwitchWithProps>
+                </RegionLayout>
+              </Route>
+
               {/* Admin */}
               <Route path={ROUTES.admin.pathPrefix}>
                 <AdminLayout>
@@ -470,6 +499,13 @@ export default function Routes(props) {
                     <RouteWithProps path={ROUTES.admin.manage.groups.categories.edit.path()}><GroupCategoriesEditPage /></RouteWithProps>
                     { /* Manage - Group Categorize */ }
                     <RouteWithProps path={ROUTES.admin.manage.groups.categorize.path()}><GroupCategorizePage /></RouteWithProps>
+
+                    { /* Manage - Group Regions */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.index.path()}><GroupRegionsListPage /></RouteWithProps>
+                    { /* Manage - Group Region Create */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.new.path()}><GroupRegionsCreatePage /></RouteWithProps>
+                    { /* Manage - Group Region Edit */ }
+                    <RouteWithProps exact path={ROUTES.admin.manage.groups.regions.edit.path()}><GroupRegionsEditPage /></RouteWithProps>
 
                     { /* Manage - Segments */ }
                     <RouteWithProps exact path={ROUTES.admin.manage.segments.index.path()}><SegmentListPage /></RouteWithProps>

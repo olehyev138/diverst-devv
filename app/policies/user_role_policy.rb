@@ -27,7 +27,7 @@ class UserRolePolicy < ApplicationPolicy
   end
 
   def destroy?
-    create?
+    create? && @record.can_destroy?
   end
 
   def show?

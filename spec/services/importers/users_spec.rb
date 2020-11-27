@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Importers::Users do
   let!(:enterprise) { create(:enterprise) }
-  let!(:manager) { create(:user, enterprise: enterprise, user_role_id: enterprise.default_user_role) }
+  let!(:manager) { create(:user, enterprise: enterprise, user_role_id: enterprise.default_user_role_id) }
   let(:importer) { Importers::Users.new(file, manager) }
   let(:admin_role) { enterprise.user_roles.where(role_type: 'admin').first }
+  let!(:field) { create(:numeric_field, title: 'Age', field_definer: enterprise, min: 0, max: 100) }
 
   context 'when spreadsheet does not have mandatory fields filled' do
     let(:file) do
@@ -39,6 +40,7 @@ RSpec.describe Importers::Users do
         'Email',
         'Notifications Email',
         'Active',
+        'Age',
       ]
       rows = [
         [
@@ -47,6 +49,7 @@ RSpec.describe Importers::Users do
           user.email,
           user.notifications_email,
           is_active_value,
+          20,
           'Developer',
           'Male',
           '1992-01-25',
@@ -92,9 +95,8 @@ RSpec.describe Importers::Users do
   context 'when spreadsheet have email that already exists in database' do
     let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
-      user = build(:user, :with_notifications_email, enterprise: enterprise, user_role_id: admin_role.id)
-      user.active = true
-      user.save!
+      user = create(:user, :with_notifications_email, enterprise: enterprise.reload, user_role_id: admin_role.id, active: true)
+      user.field_data.joins(:field).find_by(fields: { title: 'Age' })&.update(data: '10')
       user
     end
 
@@ -105,6 +107,7 @@ RSpec.describe Importers::Users do
         'Email',
         'Notifications email',
         'Active',
+        'Age'
       ]
       rows = [
         [
@@ -113,6 +116,7 @@ RSpec.describe Importers::Users do
           user.email,
           user.notifications_email,
           is_active_false,
+          20,
           'Designer',
           'Female',
           'Spanish',
@@ -137,6 +141,7 @@ RSpec.describe Importers::Users do
       expect(updated_user.notifications_email).to eq user.notifications_email
       expect(updated_user.active).to eq false
       expect(updated_user.user_role.role_type).to eq(admin_role.role_type)
+      expect(updated_user[:age]).to eq(20)
     end
 
     it 'does not send an invite to created user' do
@@ -158,9 +163,8 @@ RSpec.describe Importers::Users do
   context 'when spreadsheet have email that already exists in database' do
     let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
-      user = build(:user, :with_notifications_email, enterprise: enterprise, user_role_id: admin_role.id)
-      user.active = true
-      user.save!
+      user = create(:user, :with_notifications_email, enterprise: enterprise.reload, user_role_id: admin_role.id, active: true)
+      user.field_data.joins(:field).find_by(fields: { title: 'Age' })&.update(data: '10')
       user
     end
 
@@ -171,6 +175,7 @@ RSpec.describe Importers::Users do
         'Email',
         'Notifications email',
         'Active',
+        'Age'
       ]
       rows = [
         [
@@ -179,6 +184,7 @@ RSpec.describe Importers::Users do
           user.email,
           user.notifications_email,
           is_active_false,
+          20,
           'Designer',
           'Female',
           'Spanish',
@@ -203,6 +209,7 @@ RSpec.describe Importers::Users do
       expect(updated_user.notifications_email).to eq user.notifications_email
       expect(updated_user.active).to eq false
       expect(updated_user.user_role.role_type).to eq(admin_role.role_type)
+      expect(updated_user[:age]).to eq(20)
     end
 
     it 'does not send an invite to created user' do
@@ -224,9 +231,8 @@ RSpec.describe Importers::Users do
   context 'when user has notification email already but notifications email column is empty' do
     let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
-      user = build(:user, :with_notifications_email, enterprise: enterprise, user_role_id: admin_role.id)
-      user.active = true
-      user.save!
+      user = create(:user, :with_notifications_email, enterprise: enterprise.reload, user_role_id: admin_role.id, active: true)
+      user.field_data.joins(:field).find_by(fields: { title: 'Age' })&.update(data: '10')
       user
     end
 
@@ -237,6 +243,7 @@ RSpec.describe Importers::Users do
         'Email',
         'Notifications email',
         'Active',
+        'Age'
       ]
       rows = [
         [
@@ -245,6 +252,7 @@ RSpec.describe Importers::Users do
           user.email,
           '',
           is_active_false,
+          20,
           'Designer',
           'Female',
           'Spanish',
@@ -268,6 +276,7 @@ RSpec.describe Importers::Users do
       expect(updated_user.email).to eq user.email
       expect(updated_user.active).to eq false
       expect(updated_user.user_role.role_type).to eq(admin_role.role_type)
+      expect(updated_user[:age]).to eq(20)
     end
 
     it 'does not remove existing notifications email' do

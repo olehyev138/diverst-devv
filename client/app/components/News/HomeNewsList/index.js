@@ -128,6 +128,7 @@ NewsFeed.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   enableLikes: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

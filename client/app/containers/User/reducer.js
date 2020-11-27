@@ -68,6 +68,7 @@ export const initialState = {
     data: null,
     contentType: null,
   },
+  hasChanged: false,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -147,8 +148,10 @@ function usersReducer(state = initialState, action) {
       case CREATE_USER_BEGIN:
       case UPDATE_USER_BEGIN:
       case EXPORT_USERS_BEGIN:
+      case DELETE_USER_BEGIN:
       case UPDATE_FIELD_DATA_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
       case CREATE_USER_SUCCESS:
       case UPDATE_USER_SUCCESS:
@@ -157,7 +160,12 @@ function usersReducer(state = initialState, action) {
       case EXPORT_USERS_ERROR:
       case CREATE_USER_ERROR:
       case UPDATE_USER_ERROR:
+      case DELETE_USER_ERROR:
       case UPDATE_FIELD_DATA_ERROR:
+        draft.isCommitting = false;
+        break;
+      case DELETE_USER_SUCCESS:
+        draft.hasChanged = true;
         draft.isCommitting = false;
         break;
       case GET_USER_DOWNLOAD_DATA_BEGIN:

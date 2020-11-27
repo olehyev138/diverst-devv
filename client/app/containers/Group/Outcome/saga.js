@@ -30,7 +30,7 @@ export function* getOutcomes(action) {
   } catch (err) {
     yield put(getOutcomesError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.outcomes), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.outcomes, options: { variant: 'warning' } }));
   }
 }
 
@@ -40,7 +40,7 @@ export function* getOutcome(action) {
     yield put(getOutcomeSuccess(response.data));
   } catch (err) {
     yield put(getOutcomeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.outcome), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.outcome, options: { variant: 'warning' } }));
   }
 }
 
@@ -54,10 +54,10 @@ export function* createOutcome(action) {
 
     yield put(createOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createOutcomeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -68,10 +68,10 @@ export function* updateOutcome(action) {
 
     yield put(updateOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateOutcomeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -81,10 +81,10 @@ export function* deleteOutcome(action) {
 
     yield put(deleteOutcomeSuccess());
     yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteOutcomeError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

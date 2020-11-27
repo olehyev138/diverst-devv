@@ -19,7 +19,7 @@ import {
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers
 } from 'containers/Segment/selectors';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import SegmentMemberList from 'components/Segment/SegmentMemberList';
 
@@ -67,6 +67,7 @@ export function SegmentMemberListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         currentEnterprise={props.currentEnterprise}
+        customText={props.customTexts}
       />
     </React.Fragment>
   );
@@ -80,7 +81,8 @@ SegmentMemberListPage.propTypes = {
   isFetchingMembers: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -88,6 +90,7 @@ const mapStateToProps = createStructuredSelector({
   memberTotal: selectSegmentMemberTotal(),
   isFetchingMembers: selectIsFetchingSegmentMembers(),
   currentEnterprise: selectEnterprise(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
