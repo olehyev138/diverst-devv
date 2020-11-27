@@ -36,7 +36,7 @@ module MailHelper
 
   def inline_enterprise_logo
     if @enterprise && @enterprise.theme.present? && @enterprise.theme.logo.present?
-      attachments.inline[@enterprise.theme.logo_file_name] = File.read(File.join(Rails.root, @enterprise.theme.logo.url))
+      attachments.inline[@enterprise.theme.logo_file_name] = File.read(File.join(Rails.root, @enterprise.theme.logo.expiring_url(3601)))
       attachments[@enterprise.theme.logo_file_name].url
     else
       attachments.inline['diverst-logo.svg'] = File.read(File.join(Rails.root, 'app', 'assets', 'images', 'diverst-logo.svg'))
