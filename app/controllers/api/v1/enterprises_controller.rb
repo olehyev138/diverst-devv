@@ -16,10 +16,16 @@ class Api::V1::EnterprisesController < DiverstController
   end
 
   def get_auth_enterprise
+    preloaded_enterprise = Enterprise.preload(
+        :theme,
+        :sponsors,
+        theme: [:logo_attachment, :logo_blob],
+        sponsors: [:sponsor_media_attachment, :sponsor_media_blob]
+      )
     if params[:enterprise_id].blank?
-      enterprise = Enterprise.first
+      enterprise = preloaded_enterprise.first
     else
-      enterprise = Enterprise.find(params[:enterprise_id])
+      enterprise = preloaded_enterprise.find(params[:enterprise_id])
     end
 
     render json: enterprise
@@ -94,6 +100,7 @@ class Api::V1::EnterprisesController < DiverstController
             :idp_cert,
             :saml_first_name_mapping,
             :saml_last_name_mapping,
+            :has_enabled_saml,
           )
   end
 

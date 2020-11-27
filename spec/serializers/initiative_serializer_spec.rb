@@ -16,12 +16,12 @@ RSpec.describe InitiativeSerializer, type: :serializer do
   it 'returns associations' do
     expect(serializer.serializable_hash[:pillar]).to_not be nil
     expect(serializer.serializable_hash[:owner]).to_not be nil
-    expect(serializer.serializable_hash[:budget]).to_not be nil
+    expect(serializer.serializable_hash[:budget]).to be nil
     expect(serializer.serializable_hash[:outcome]).to_not be nil
-    expect(serializer.serializable_hash[:budget_status]).to_not be nil
-    expect(serializer.serializable_hash[:expenses_status]).to_not be nil
-    expect(serializer.serializable_hash[:current_expenses_sum]).to_not be nil
-    expect(serializer.serializable_hash[:leftover]).to_not be nil
+    expect(serializer.serializable_hash[:budget_status]).to be nil
+    expect(serializer.serializable_hash[:expenses_status]).to be nil
+    expect(serializer.serializable_hash[:current_expenses_sum]).to be nil
+    expect(serializer.serializable_hash[:leftover]).to be nil
     expect(serializer.serializable_hash[:picture_data]).to_not be nil
     expect(serializer.serializable_hash[:qr_code_data]).to_not be nil
     expect(serializer.serializable_hash[:full?]).to be false

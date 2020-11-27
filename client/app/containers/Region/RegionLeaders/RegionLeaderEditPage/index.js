@@ -82,7 +82,7 @@ export function RegionLeaderEditPage(props) {
       regionId={regionId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={intl.formatMessage(messages.update, props.customTexts)}
       links={links}
       customTexts={props.customTexts}
     />

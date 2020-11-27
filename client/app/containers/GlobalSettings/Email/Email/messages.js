@@ -54,6 +54,15 @@ export default defineMessages({
       id: `${scope}.index.empty`,
     },
   },
+  policies: {
+    id: `${scope}.policies`
+  },
+  name: {
+    id: `${scope}.policies.name`
+  },
+  action: {
+    id: `${scope}.policies.action`
+  },
   snackbars: {
     errors: {
       email: {

@@ -133,7 +133,7 @@ export function RegionMembersListPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <RegionMembersList
         memberList={props.memberList}
         memberTotal={props.memberTotal}

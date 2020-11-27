@@ -48,7 +48,7 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: 'Log',
+      title: intl.formatMessage(messages.logs, props.customTexts),
       render: (activity) => {
         try {
           // eslint-disable-next-line global-require
@@ -102,7 +102,7 @@ export function LogList(props, context) {
             <CardContent>
               <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
                 <Grid item xs={4}>
-                  <Typography>Filter by group</Typography>
+                  <DiverstFormattedMessage {...messages.filterByGroup} />
                 </Grid>
                 <Grid item xs={3}>
                   <Typography>From</Typography>
@@ -180,7 +180,7 @@ export function LogList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Logs'
+            title={messages.logs}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isLoading}
@@ -221,7 +221,7 @@ LogList.propTypes = {
   logFrom: PropTypes.instanceOf(DateTime),
   logTo: PropTypes.instanceOf(DateTime),
   groupLabels: PropTypes.array,
-
+  customTexts: PropTypes.object,
 };
 export default compose(
   injectIntl,

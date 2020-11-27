@@ -41,12 +41,12 @@ export function PollResponses(props, context) {
 
   const responsesColumns = [
     {
-      title: intl.formatMessage(messages.responses.respondent),
+      title: messages.responses.respondent,
       field: 'respondent',
       sorting: false
     },
     {
-      title: intl.formatMessage(messages.responses.date),
+      title: messages.responses.date,
       query_field: 'poll_responses.created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL)
     },
@@ -54,24 +54,24 @@ export function PollResponses(props, context) {
 
   const textColumns = [
     {
-      title: intl.formatMessage(messages.textual.answer),
+      title: messages.textual.answer,
       render: rowData => rowData?.field_data?.find(fd => fd.field_id === fieldId)?.data,
       sorting: false,
     },
     {
-      title: intl.formatMessage(messages.textual.respondent),
+      title: messages.textual.respondent,
       field: 'respondent',
       sorting: false
     },
     {
-      title: intl.formatMessage(messages.textual.date),
+      title: messages.textual.date,
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATETIME_FULL),
       query_field: 'poll_responses.created_at',
     },
   ];
 
   const detailPanel = [{
-    tooltip: props.intl.formatMessage(messages.responses.show),
+    tooltip: props.intl.formatMessage(messages.responses.show, props.customTexts),
     render: rowData => rowData.field_data && rowData.field_data.map((fieldDatum, i) => (
       <div key={fieldDatum.id}>
         <CardContent>
@@ -115,7 +115,7 @@ export function PollResponses(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={props.intl.formatMessage(messages.responses.title)}
+            title={messages.responses.title}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.responsesLoading}
@@ -154,7 +154,8 @@ PollResponses.propTypes = {
   links: PropTypes.shape({
     pollNew: PropTypes.string,
     pollEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 PollResponses.defaultProps = {

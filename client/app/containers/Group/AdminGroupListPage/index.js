@@ -28,7 +28,7 @@ import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
 import csvReducer from 'containers/Shared/CsvFile/reducer';
@@ -42,7 +42,7 @@ export function AdminGroupListPage(props) {
 
   const { intl } = props;
 
-  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'] });
+  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'], with_children: true });
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -82,6 +82,7 @@ export function AdminGroupListPage(props) {
         importAction={props.createCsvFileBegin}
         permissions={props.permissions}
         intl={intl}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -99,6 +100,7 @@ AdminGroupListPage.propTypes = {
   createCsvFileBegin: PropTypes.func,
   permissions: PropTypes.object,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -107,6 +109,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

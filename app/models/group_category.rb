@@ -1,4 +1,6 @@
 class GroupCategory < ApplicationRecord
+  include GroupCategory::Actions
+
   # NOTE: on user-interface, this entity is references as label
   has_many :groups
   belongs_to :group_category_type

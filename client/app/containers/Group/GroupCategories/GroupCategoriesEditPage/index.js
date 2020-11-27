@@ -41,7 +41,7 @@ export function GroupCategoriesEditPage(props) {
         groupCategoriesAction={props.updateGroupCategoriesBegin}
         groupCategories={props.groupCategories}
         groupCategory={props.groupCategory}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={messages.update}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />

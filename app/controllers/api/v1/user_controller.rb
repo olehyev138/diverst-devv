@@ -1,9 +1,16 @@
 class Api::V1::UserController < DiverstController
   def get_user_data
+    instance_options = {
+        scope: {
+            current_user: current_user,
+            action: 'show',
+        }
+    }
+
     render json: {
         user_id: current_user.id,
-        enterprise: AuthenticatedEnterpriseSerializer.new(current_user.enterprise).as_json,
-        policy_group: PolicyGroupSerializer.new(current_user.policy_group).as_json,
+        enterprise: AuthenticatedEnterpriseSerializer.new(current_user.enterprise, **instance_options).as_json,
+        policy_group: PolicyGroupSerializer.new(current_user.policy_group, **instance_options).as_json,
         email: current_user.email,
         avatar_data: AttachmentHelper.attachment_data_string(current_user.avatar),
         avatar_content_type: AttachmentHelper.attachment_content_type(current_user.avatar),
@@ -47,9 +54,9 @@ class Api::V1::UserController < DiverstController
             logs_create: LogPolicy.new(current_user, nil).create?,
             logs_manage: LogPolicy.new(current_user, nil).update?,
 
-            policy_templates_view: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).index?,
-            policy_templates_create: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).create?,
-            policy_templates_manage: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).update?,
+            policy_templates_view: UserRolePolicy.new(current_user, UserRole).index?,
+            policy_templates_create: UserRolePolicy.new(current_user, UserRole).create?,
+            policy_templates_manage: UserRolePolicy.new(current_user, UserRole).update?,
 
             metrics_overview: MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?,
             metrics_create: MetricsDashboardPolicy.new(current_user, MetricsDashboard).create?,
@@ -72,13 +79,13 @@ class Api::V1::UserController < DiverstController
   end
 
   def get_posts
-    render json: current_user.posts(params)
+    render json: current_user.posts(diverst_request, params)
   rescue => e
     raise BadRequestException.new(e.message)
   end
 
   def get_downloads
-    render json: diverst_request.user.downloads(params)
+    render json: diverst_request.user.downloads(diverst_request, params)
   rescue => e
     raise BadRequestException.new(e.message)
   end

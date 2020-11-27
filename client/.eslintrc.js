@@ -74,6 +74,7 @@ module.exports = {
     'react/sort-comp': 0,
     'react/jsx-tag-spacing': 1,
     'react/no-unused-prop-types': 0,
+    "react/default-props-match-prop-types": [1, { "allowRequiredDefaults": true }],
     'redux-saga/no-yield-in-race': 2,
     'redux-saga/yield-effects': 2,
     'require-yield': 0,

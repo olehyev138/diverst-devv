@@ -1,7 +1,9 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
-             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type, :permissions, :available_roles,
-             :name_with_status, :field_data, :status
+  attributes :last_name, :name,
+             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data, :avatar_content_type,
+             :permissions, :available_roles, :name_with_status, :status
+
+  attributes_with_permission :field_data, :user_role, if: :singular_action?
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
   def serialize_all_fields
@@ -10,8 +12,8 @@ class UserSerializer < ApplicationRecordSerializer
 
   def field_data
     field_objects = if object.field_data.loaded?
-      object.field_data.select { |fd| !fd.field.private || (scope && UserPolicy.new(scope.dig(:current_user), User).manage?) }
-    elsif scope && UserPolicy.new(scope.dig(:current_user), User).manage?
+      object.field_data.select { |fd| !fd.field.private || (scope.present? && UserPolicy.new(scope.dig(:current_user), User).manage?) }
+    elsif scope.present? && UserPolicy.new(scope.dig(:current_user), User).manage?
       object.field_data
     else
       object.field_data.includes(:field).where(fields: { private: false })

@@ -4,8 +4,12 @@ module Email::Actions
   end
 
   module ClassMethods
-    def base_preloads
-      [:email_variables, :variables]
+    def base_preloads(diverst_request)
+      case diverst_request.action
+      when 'index' then []
+      when 'show', 'create', 'update' then [:email_variables, :variables]
+      else []
+      end
     end
   end
 end

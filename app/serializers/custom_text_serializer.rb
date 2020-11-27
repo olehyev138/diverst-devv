@@ -3,12 +3,7 @@ class CustomTextSerializer < ApplicationRecordSerializer
              :dci_abbreviation, :member_preference, :parent, :sub_erg, :privacy_statement, :region, :plural
 
   def text_hash
-    @text_hash ||= begin
-                     temp = object.attributes.dup
-                     temp.delete('id')
-                     temp.delete('enterprise_id')
-                     temp
-                   end
+    @text_hash ||= object.attributes.except('id', 'enterprise_id')
   end
 
   def plural

@@ -1,5 +1,5 @@
 class UpdateSerializer < ApplicationRecordSerializer
-  attributes :field_data, :next_id
+  attributes_with_permission :field_data, :next_id, if: :singular_action?
 
   def serialize_all_fields
     true
@@ -10,8 +10,16 @@ class UpdateSerializer < ApplicationRecordSerializer
   end
 
   def field_data
-    object.field_data.map do |fd|
-      fd_hash = FieldDataSerializer.new(fd).as_json
+    data = if object.new_record?
+      object.field_data
+    elsif object.field_data.loaded
+      object.field_data.sort(&:field_id)
+    else
+      object.field_data.order(:field_id)
+    end
+
+    data.map do |fd|
+      fd_hash = FieldDataSerializer.new(fd, **instance_options).as_json
       variance = object.variance_from_previous(fd.field)
       fd_hash[:var_with_prev] = variance
       fd_hash[:percent_var_with_prev] = variance ? "#{(variance * 100).round(1)}%" : nil

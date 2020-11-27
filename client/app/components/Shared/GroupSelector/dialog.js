@@ -49,7 +49,7 @@ const GroupListSelector = (props) => {
     setExpandedGroups(initialExpandedGroups);
   }
 
-  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, params);
+  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, { ...params, with_children: true });
   const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {

@@ -35,7 +35,7 @@ import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selec
 
 // messages
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
-import { injectIntl, intlShape } from 'react-intl';
+
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CustomGraphCreatePage(props) {
@@ -48,7 +48,6 @@ export function CustomGraphCreatePage(props) {
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
-  const { intl } = props;
 
   useEffect(() => {
     // get metrics_dashboard specified in path
@@ -66,7 +65,7 @@ export function CustomGraphCreatePage(props) {
       fields={props.fields}
       metricsDashboardId={metricsDashboardId[0]}
       currentEnterprise={props.currentEnterprise}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       links={links}
       isCommitting={props.isCommitting}
     />
@@ -74,7 +73,6 @@ export function CustomGraphCreatePage(props) {
 }
 
 CustomGraphCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createCustomGraphBegin: PropTypes.func,
   getFieldsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,
@@ -113,7 +111,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

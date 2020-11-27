@@ -119,7 +119,7 @@ export function DiverstFileInput(props) {
   const [notAcceptedFile, setNotAcceptedFile] = useState(false);
   const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
   const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileMessages() : getAllSupportedFileMessages();
-
+  // TODO : Add customTExts to intl.formatMessage
   return (
     <React.Fragment>
       <DirectUploadProvider

@@ -6,16 +6,12 @@ module GroupLeader::Actions
   end
 
   module ClassMethods
-    def base_query
+    def base_query(diverst_request)
       'LOWER(users.first_name) LIKE :search OR LOWER(users.last_name) LIKE :search OR LOWER(users.email) LIKE :search'
     end
 
-    def base_includes
+    def base_includes(diverst_request)
       [ :user ]
-    end
-
-    def base_preloads
-      [:user, user: User.base_attribute_preloads ]
     end
   end
 end
