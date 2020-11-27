@@ -2,7 +2,7 @@
    <div class="flex-row__cell" style="padding-bottom: 1%">
      <h1 style="background-color: <%= @enterprise.theme&.primary_color %> !important;
                 height: 76px;">
-       <img class="primary-header__logo logo hidden-xs" style="height: 124% !important; width: <%= @enterprise.theme&.logo.present? ? 'auto' : '70%' %> !important;" src="<%= enterprise_logo_url(@enterprise) %>" alt="<%= @enterprise.name %> logo">
+       <%= image_tag(@embedded_enterprise_logo, height: '124%', width: '20%', alt: "#{@enterprise.name} logo" ) %> 
      </h1>
    </div>  
  </header>
