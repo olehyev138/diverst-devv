@@ -74,6 +74,7 @@
   "diverst.containers.AnnualBudget.item.viewRequests": "View Budget Requests",
   "diverst.containers.AnnualBudget.tabs.editAnnualBudget": "Edit Annual Budget",
   "diverst.containers.AnnualBudget.tabs.overview": "Overview",
+  "diverst.containers.App.drawer": "Open Drawer",
   "diverst.containers.App.confirmation.no": "No",
   "diverst.containers.App.confirmation.yes": "Yes",
   "diverst.containers.App.currency.defaultSymbol": "$",

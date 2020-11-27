@@ -13,6 +13,9 @@ export default defineMessages({
   budgetRoute: {
     id: `${routes}.admin.plan.group_budgets`
   },
+  openDrawer: {
+    id: `${scope}.drawer`
+  },
   permissions: {
     budget: {
       id: `${scope}.texts.permissions.budget`,
