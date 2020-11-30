@@ -88,6 +88,9 @@ en:
     segments: {
       already_member: "is already a member of this segment"
     }
+    groups: {
+      already_member: "is already a member of this group"
+    }
     user_role: {
       no_change: "cannot be changed",
       delete_default: "Cannot destroy default user role",
