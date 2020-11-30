@@ -1,7 +1,9 @@
 class Theme < BaseClass
   has_one :enterprise
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'),
+                     storage: :filesystem
+                    
   validates_length_of :logo_redirect_url, maximum: 191
   validates_length_of :secondary_color, maximum: 191
   validates_length_of :digest, maximum: 191
