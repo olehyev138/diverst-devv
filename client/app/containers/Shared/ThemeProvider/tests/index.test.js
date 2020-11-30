@@ -14,6 +14,7 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
+import { shallow } from 'enzyme';
 import { intl } from 'tests/mocks/react-intl';
 
 import { ThemeProvider } from 'containers/Shared/ThemeProvider/index';
@@ -36,8 +37,8 @@ describe('<ThemeProvider />', () => {
   });
 
   it('should render and match the snapshot', () => {
-    const wrapper = shallow(
-      <ThemeProvider />
+    const wrapper = shallowWithIntl(
+      <ThemeProvider intl={intl} {...props} />
     );
 
     expect(wrapper).toMatchSnapshot();
