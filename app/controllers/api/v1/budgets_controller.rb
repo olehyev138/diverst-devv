@@ -16,6 +16,10 @@ class Api::V1::BudgetsController < DiverstController
           )
   end
 
+  def base
+    super.with_expenses
+  end
+
   def create
     params[:budget][:budget_items_attributes] = params[:budget][:budget_items]
     params[:budget][:requester_id] = current_user.id
@@ -24,7 +28,7 @@ class Api::V1::BudgetsController < DiverstController
   end
 
   def approve
-    item = klass.find(params[:id])
+    item = show_base.find(params[:id])
     base_authorize(item)
 
     item.approve(current_user)

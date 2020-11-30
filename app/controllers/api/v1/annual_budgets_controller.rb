@@ -1,4 +1,8 @@
 class Api::V1::AnnualBudgetsController < DiverstController
+  def base
+    super.with_expenses
+  end
+
   private
 
   def model_map(model)
