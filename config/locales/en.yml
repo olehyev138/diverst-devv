@@ -57,8 +57,9 @@ en:
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
   messages:
-    user_role:
+    user_role: {
       policy_template: "Policy template",
+    }
   errors:
     invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
     invalid_linkedin_url: "Not a valid LinkedIn URL"
