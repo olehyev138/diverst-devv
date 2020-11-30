@@ -42,6 +42,9 @@ class AnnualBudget < ApplicationRecord
     update_column(:closed, true)
   end
 
+  def expenses; spent end
+  def estimated; user_estimates end
+
   # same as available
   # def approved
   #   @approved ||= items_approved

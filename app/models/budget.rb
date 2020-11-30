@@ -9,7 +9,7 @@ class Budget < ApplicationRecord
   has_one :budget_sums, class_name: 'BudgetSums'
 
   has_many :checklists, dependent: :destroy
-  has_many :budget_items, dependent: :destroy
+  has_many :budget_items, -> { with_expenses }, dependent: :destroy
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
   scope :approved, -> { where(is_approved: true) }
@@ -59,6 +59,8 @@ class Budget < ApplicationRecord
     @available_amount = nil
     super
   end
+
+  def available_amount; available end
 
   def status_title
     return 'Pending' if is_approved.nil?
