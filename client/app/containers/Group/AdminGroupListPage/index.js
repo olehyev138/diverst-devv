@@ -88,7 +88,10 @@ export function AdminGroupListPage({ classes, ...props }) {
 
   const handleFinishExitTransition = () => setDisplayParentUI(true);
 
-  useEffect(() => props.hasChanged && getGroups(), [props.hasChanged]);
+  useEffect(() => {
+    if (props.hasChanged === true)
+      getGroups();
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
