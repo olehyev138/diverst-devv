@@ -45,7 +45,7 @@ module BasePager
       if sum_column
         sum, total = partial_query.sum_and_count(sum_column) if sum_column
       else
-        total = partial_query.count
+        total = partial_query.unscope(:select).count
       end
 
       items = partial_query
@@ -68,7 +68,7 @@ module BasePager
       # set the parameters
       item_page, item_count, offset, order_by, order = get_params(params)
       # search
-      total = query.count
+      total = query.unscope(:select).count
       items = query
                 .order("#{order_by} #{order}")
                 .limit(item_count)
