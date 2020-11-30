@@ -13,19 +13,17 @@ class UserRole < ApplicationRecord
   has_many    :users, inverse_of: :user_role, dependent: :nullify
 
   # validations
-  validates :role_name, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long'), minimum: 3, too_short: I18n.t('errors.numericality.too_short') }
-  validates :role_type, length: { maximum: 191, too_long: I18n.t('errors.numericality.too_long') }
+  validates_length_of :role_type, maximum: 191
+  validates_length_of :role_name, maximum: 191
+  validates :role_name,               presence: true, length: { minimum: 3 }
+  validates :role_type,               presence: true
+  validates :enterprise,              presence: true
+  validates :priority,                presence: true
+  validates :policy_group_template,   presence: true, on: :update
 
-  validates :role_name, presence: { message: I18n.t('errors.blank') }
-  validates :role_type, presence: { message: I18n.t('errors.blank') }
-  validates :enterprise, presence: { message: I18n.t('errors.blank') }
-  validates :priority, presence: { message: I18n.t('errors.blank') }
-  validates :enterprise, presence: { message: I18n.t('errors.blank') }
-  validates :policy_group_template, presence: { message: I18n.t('errors.blank'), on: :update }
-
-  validates :role_name, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id] }
-  validates :priority, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id] }
-  validates :default, uniqueness: { message: I18n.t('errors.uniqueness'), scope: [:enterprise_id], conditions: -> { where(default: true) } }
+  validates_uniqueness_of :role_name,             scope: [:enterprise_id]
+  validates_uniqueness_of :priority,              scope: [:enterprise_id]
+  validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
   before_destroy -> { throw :abort unless can_destroy? }, prepend: true
   before_update -> {
