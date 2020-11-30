@@ -1,7 +1,7 @@
 class AnnualBudget < ApplicationRecord
   include AnnualBudget::Actions
 
-  belongs_to :group
+  belongs_to :budget_head, polymorphic: true
   has_one :enterprise, through: :group
 
   has_many :budgets, dependent: :destroy
@@ -16,6 +16,9 @@ class AnnualBudget < ApplicationRecord
   delegate :active, to: :initiative_expenses, prefix: 'expenses'
   delegate :approved, to: :budgets, prefix: true
   delegate :approved, to: :budget_items, prefix: 'items'
+
+  polymorphic_alias :budget_head, Group
+  polymorphic_alias :budget_head, Region
 
   scope :with_expenses, -> do
     select(

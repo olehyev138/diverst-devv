@@ -114,10 +114,7 @@ class Group < ApplicationRecord
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_many :annual_budgets, -> { with_expenses }, dependent: :destroy
-  has_many :budgets, dependent: :destroy, through: :annual_budgets
-  has_many :budget_items, dependent: :destroy, through: :budgets
-  has_many :initiative_expenses, through: :annual_budgets
+  has_many :annual_budgets, -> { with_expenses }, dependent: :destroy, as: :budget_head
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
@@ -235,20 +232,29 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  def immediate_parent
+    region || parent
+  end
+
   def create_annual_budget
     AnnualBudget.create(group: self, closed: false)
   end
 
-  def current_annual_budget
-    if annual_budgets.loaded?
-      @current_annual_budget ||= annual_budgets.find { |ab| ab.closed == false }
-    else
-      @current_annual_budget ||= annual_budgets.where(closed: false).last
-    end
-  end
+  # OLD BUDGET SYSTEM
+  # def current_annual_budget
+  #   if annual_budgets.loaded?
+  #     @current_annual_budget ||= annual_budgets.find { |ab| ab.closed == false }
+  #   else
+  #     @current_annual_budget ||= annual_budgets.where(closed: false).last
+  #   end
+  # end
+  #
+  # def current_annual_budget!
+  #   current_annual_budget || create_annual_budget
+  # end
 
-  def current_annual_budget!
-    current_annual_budget || create_annual_budget
+  def current_annual_budget
+    annual_budgets.where(closed: false).last || immediate_parent.current_annual_budget
   end
 
   def current_annual_budget=(annual_budget)

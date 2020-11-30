@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_224119) do
+ActiveRecord::Schema.define(version: 2020_11_30_194650) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -63,6 +63,9 @@ ActiveRecord::Schema.define(version: 2020_11_25_224119) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "event_name"
+    t.string "budget_head_type"
+    t.bigint "budget_head_id"
+    t.index ["budget_head_type", "budget_head_id"], name: "index_annual_budgets_on_budget_head_type_and_budget_head_id"
     t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
     t.index ["group_id"], name: "index_annual_budgets_on_group_id"
   end
