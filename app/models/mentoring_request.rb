@@ -19,7 +19,7 @@ class MentoringRequest < ApplicationRecord
   validates :receiver,    presence: true
 
   # only allow one unique request per sender
-  validates_uniqueness_of :sender_id, scope: [:receiver_id], message: "There's already a pending request"
+  validates_uniqueness_of :sender_id, scope: [:receiver_id], message: I18n.t('errors.mentoring.pending_request')
 
   validate :receiver_has_requests_enabled, on: :create
 
@@ -48,9 +48,9 @@ class MentoringRequest < ApplicationRecord
 
   def receiver_has_requests_enabled
     if self.mentoring_type == 'mentor' && !self.receiver.accepting_mentor_requests
-      errors.add(:receiver, 'is not currently accepting mentor requests')
+      errors.add(:receiver, I18n.t('errors.mentoring.mentor_request'))
     elsif self.mentoring_type == 'mentee' && !self.receiver.accepting_mentee_requests
-      errors.add(:receiver, 'is not currently accepting mentee requests')
+      errors.add(:receiver, I18n.t('errors.mentoring.mentee_request'))
     end
   end
 end

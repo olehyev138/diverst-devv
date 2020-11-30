@@ -67,6 +67,11 @@ en:
     user_role: {
       policy_template: "Policy template",
     }
+    mentorship: {
+      pending: "Pending",
+      accepted: "Accepted",
+      declined: "Declined"
+    }
   errors:
     invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
     invalid_linkedin_url: "Not a valid LinkedIn URL"
@@ -105,7 +110,7 @@ en:
       delete_group: "Cannot delete because there are users with this group role.",
     }
     twitter: {
-     doesnt_exist: "User doesn\'t exist"
+     doesnt_exist: "User doesn't exist"
     }
     theme: {
      valid_hex: "should be a valid hex color",
@@ -123,4 +128,36 @@ en:
       invalid: "is invalid",
       bad_configuration: "invalid configuration of polls",
       survey: "Survey is invalid without any field"
+    }
+    policy_group_template: {
+      name_taken: "Name already taken",
+    }
+    numeric: {
+      max: "can't be greater than max",
+      min: "can't be less than min",
+    }
+    metrics: {
+      name_required: "Metrics Dashboard name is required",
+      group: "Please select a group",
+    }
+    mentoring: {
+      start: "must be today or in the future",
+      end: "must be after start",
+      pending_request: "There's already a pending request",
+      mentor_request: "is not currently accepting mentor requests",
+      mentee_request: "is not currently accepting mentee requests"
+    }
+    initiative: {
+     already_joined: "has already joined this event",
+     expense: "Can't modify an expense for a closed initiative",
+     end: "must be after start",
+     finished: "Expenses are already finished",
+     progress: "Expenses in progress",
+     time: "Expenses over time",
+     budget: "You are providing wrong budget",
+     lack_of_funds: "Can not create event with funds but without budget",
+     segments: "has invalid segments",
+     budget_item_not_approved: "Budget Item is not approved",
+     lack_of_funds_2: "sorry, this budget doesn't have the sufficient funds",
+     temporary: "TEMPORARILY UNSUPPORTED"
     }
