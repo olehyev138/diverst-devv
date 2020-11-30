@@ -108,7 +108,7 @@ export function UserGroupListPage({ classes, ...props }) {
       <Grid container justify='space-between' spacing={3}>
         <Grid item>
           <Fade
-            in={parentData?.id}
+            in={!!parentData?.id}
             onExited={() => {
               setParentData(null);
               setDisplayMyGroups(false);
@@ -127,7 +127,7 @@ export function UserGroupListPage({ classes, ...props }) {
             </Button>
           </Fade>
         </Grid>
-        <Fade in={parentData?.id}>
+        <Fade in={!!parentData?.id}>
           <Grid item>
             <Typography component='span' color='primary' variant='h5' className={classes.headerText}>
               {parentData?.name}
