@@ -151,7 +151,7 @@ class Poll < ApplicationRecord
   end
 
   def at_least_one_field
-    errors[:base] << I18n.t('errors.poll.survey')  unless fields.any? rescue nil
+    errors[:base] << I18n.t('errors.poll.survey') unless fields.any? rescue nil
   end
 
   private
