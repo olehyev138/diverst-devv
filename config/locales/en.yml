@@ -56,6 +56,13 @@ en:
     parent: Parent
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
+  default_text_values:
+    segments_fields: {
+      segments: "Segments",
+    }
+    poll: {
+      deleted_user: "Deleted user"
+    }
   messages:
     user_role: {
       policy_template: "Policy template",
@@ -86,7 +93,8 @@ en:
       parent_cant_be_child_group: "cannot be a child group"
     }
     segments: {
-      already_member: "is already a member of this segment"
+      already_member: "is already a member of this segment",
+      group_scope: "there must be at least one group chosen",
     }
     groups: {
       already_member: "is already a member of this group"
@@ -95,4 +103,24 @@ en:
       no_change: "cannot be changed",
       delete_default: "Cannot destroy default user role",
       delete_group: "Cannot delete because there are users with this group role.",
+    }
+    twitter: {
+     doesnt_exist: "User doesn\'t exist"
+    }
+    theme: {
+     valid_hex: "should be a valid hex color",
+    }
+    session: {
+     value_required: "Value Required",
+    }
+    reward: {
+     responsible_user: "Invalid responsible",
+    }
+    resources: {
+     folder_no_parent: "Folder is without parent"
+    }
+    poll: {
+      invalid: "is invalid",
+      bad_configuration: "invalid configuration of polls",
+      survey: "Survey is invalid without any field"
     }

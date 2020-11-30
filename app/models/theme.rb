@@ -13,8 +13,8 @@ class Theme < ApplicationRecord
   validates_length_of :digest, maximum: 191
   validates_length_of :primary_color, maximum: 191
 
-  validates :primary_color, presence: true, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }
-  validates :secondary_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
+  validates :primary_color, presence: true, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, message: I18n.t('errors.theme.valid_hex') }
+  validates :secondary_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: I18n.t('errors.theme.valid_hex') }
 
   def branding_color
     primary_color

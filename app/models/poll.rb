@@ -95,7 +95,7 @@ class Poll < ApplicationRecord
         else
           user_id = ''
           user_email = ''
-          user_name = 'Deleted User'
+          user_name = I18n.t('default_text_values.poll.deleted_user')
         end
         response_column = [user_id, user_email, user_name]
 
@@ -124,25 +124,25 @@ class Poll < ApplicationRecord
 
   def validate_groups_enterprise
     if !groups.empty? && groups.map(&:enterprise_id).uniq != [enterprise_id]
-      errors.add(:groups, 'is invalid')
+      errors.add(:groups, I18n.t('errors.poll.invalid'))
     end
   end
 
   def validate_segments_enterprise
     if !segments.empty? && segments.map(&:enterprise_id).uniq != [enterprise_id]
-      errors.add(:segments, 'is invalid')
+      errors.add(:segments, I18n.t('errors.poll.invalid'))
     end
   end
 
   def validate_initiative_enterprise
     if !initiative.nil? && !enterprise.initiatives.where(id: initiative_id).exists?
-      errors.add(:initiative, 'is invalid')
+      errors.add(:initiative, I18n.t('errors.poll.invalid'))
     end
   end
 
   def validate_associated_objects
     if (!groups.empty?) && !initiative.nil?
-      errors.add(:associated_objects, 'invalid configuration of poll')
+      errors.add(:associated_objects, I18n.t('errors.poll.bad_configuration'))
     end
   end
 
@@ -151,7 +151,7 @@ class Poll < ApplicationRecord
   end
 
   def at_least_one_field
-    errors[:base] << 'Survey is invalid without any field' unless fields.any? rescue nil
+    errors[:base] << I18n.t('errors.poll.survey')  unless fields.any? rescue nil
   end
 
   private
