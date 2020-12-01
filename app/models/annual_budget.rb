@@ -153,6 +153,24 @@ class AnnualBudget < ApplicationRecord
     end
   end
 
+  def self.initialize_regions_budgets(amount: 0)
+    Region.find_each do |region|
+      AnnualBudget.create(budget_head: region, closed: false, amount: amount)
+    end
+  end
+
+  def self.initialize_parent_budgets(amount: 0)
+    Group.all_parents.find_each do |group|
+      AnnualBudget.create(budget_head: group, closed: false, amount: amount)
+    end
+  end
+
+  def self.initialize_group_budgets(amount: 0)
+    Group.find_each do |group|
+      AnnualBudget.create(budget_head: group, closed: false, amount: amount)
+    end
+  end
+
   def reload
     @approved = nil
     @reserved = nil
