@@ -62,7 +62,12 @@ module MaterializedTable
     end
 
     def estimate_remover
-      sql = 'SET @temp = (SELECT reserved FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
+      sql = "SET @temp = (#{
+        BudgetUser
+            .select("IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), COALESCE(`estimated`, 0)) as reserved")
+            .left_joins(:budget_user_sums).where('`id` = OLD.`id`')
+            .to_sql
+      }); "
       sql += 'SET @new_reserved = @old_reserved - @temp; '
       sql += 'SET @new_user_estimates = @old_user_estimates - OLD.estimated; ' if relevant_columns.include? 'user_estimates'
       sql + set_rest('reserved')
@@ -75,7 +80,7 @@ module MaterializedTable
     end
 
     def estimate_finalized
-      sql =  'SET @spent = (SELECT spent FROM `budget_users_with_expenses` WHERE `id` = OLD.`id`); '
+      sql = "SET @spent = (#{BudgetUser.select("COALESCE(`spent`, 0) as spent").left_joins(:budget_user_sums).where('`id` = OLD.`id`').to_sql}); "
       # UNCLOSED
       sql += 'IF COALESCE(OLD.`finished_expenses`, FALSE) AND NOT COALESCE(NEW.`finished_expenses`, FALSE) THEN '
       sql += 'SET @new_reserved = @old_reserved + OLD.`estimated` - @spent; '
@@ -89,19 +94,34 @@ module MaterializedTable
     end
 
     def request_adder
-      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = NEW.`id`); '
+      sql =  "SET @requested = (#{
+      Budget
+          .select("COALESCE(`requested_amount`, 0) as requested_amount")
+          .left_joins(:budget_sums)
+          .where('`id` = NEW.`id`').to_sql
+      }); "
       sql += 'SET @new_requested = @old_requested + @requested; '
       sql + set_rest('requested')
     end
 
     def request_remover
-      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = OLD.`id`); '
+      sql =  "SET @requested = (#{
+        Budget
+            .select("COALESCE(`requested_amount`, 0) as requested_amount")
+            .left_joins(:budget_sums)
+            .where('`id` = OLD.`id`').to_sql
+      }); "
       sql += 'SET @new_requested = @old_requested - @requested; '
       sql + set_rest('requested')
     end
 
     def budget_approver
-      sql =  'SET @requested = (SELECT requested FROM `budgets_with_expenses` WHERE `id` = NEW.`id`); '
+      sql =  "SET @requested = (#{
+      Budget
+          .select("COALESCE(`requested_amount`, 0) as requested_amount")
+          .left_joins(:budget_sums)
+          .where('`id` = NEW.`id`').to_sql
+      }); "
       # UN APPROVED
       sql += 'IF COALESCE(OLD.`is_approved`, FALSE) AND NOT COALESCE(NEW.`is_approved`, FALSE) THEN '
       sql += 'SET @new_approved = @old_approved - @requested; '
