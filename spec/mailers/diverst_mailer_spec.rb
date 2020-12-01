@@ -29,7 +29,7 @@ RSpec.describe DiverstMailer, type: :mailer do
         let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
 
         it 'renders the receiver email' do
-          expect(mail.to).to eq([record.email])
+          expect(mail.to).to eq(['abc@123.com'])
         end
       end
 
