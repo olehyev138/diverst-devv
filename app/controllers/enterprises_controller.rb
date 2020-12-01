@@ -224,6 +224,7 @@ class EnterprisesController < ApplicationController
         :login_text,
         :invite_member_enabled,
         :suggest_hire_enabled,
+        :twitter_feed_enabled,
         theme: [
           :id,
           :primary_color,
