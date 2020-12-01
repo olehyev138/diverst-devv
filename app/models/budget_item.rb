@@ -9,8 +9,8 @@ class BudgetItem < ApplicationRecord
   has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_one :budget_item_sums, class_name: 'BudgetItemSums'
 
-  has_many :initiatives
-  has_many :budget_users
+  has_many :initiatives, dependent: :nullify
+  has_many :budget_users, dependent: :destroy
   has_many :initiatives_expenses, through: :initiatives, source: :expenses
 
   validates_length_of :title, maximum: 191

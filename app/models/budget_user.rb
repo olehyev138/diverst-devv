@@ -35,7 +35,7 @@ class BudgetUser < ApplicationRecord
         '`budget_items`.`budget_id`',
         '`budgets`.`annual_budget_id`'
       ).where(
-        "`budget_users`.`id` = #{old_or_new}.`budget_item_id`"
+        "`budget_items`.`id` = #{old_or_new}.`budget_item_id`"
       ).to_sql}
     INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
     SQL
