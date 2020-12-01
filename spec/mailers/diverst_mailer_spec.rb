@@ -25,7 +25,7 @@ RSpec.describe DiverstMailer, type: :mailer do
     describe '#invitation_instructions' do
       describe 'has_enabled_onboarding_email is true' do
         let(:enterprise) { create(:enterprise, disable_emails: false, has_enabled_onboarding_email: true) }
-        let(:record) { create :user, enterprise: enterprise }
+        let(:record) { create :user, enterprise: enterprise, email: 'abc@123.com' }
         let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
 
         it 'renders the receiver email' do
