@@ -80,6 +80,8 @@
           <p><%= sanitize @event.description %></p>
           <h3 class="h4-styling">Location</h3>
           <p><%= @event.location %></p>
+          <h3 class="h4-styling">Event url</h3>
+          <p><%= link_to @event.event_url, @event.event_url %></p>
           <h3 class="h4-styling">Co-hosted/Participating Groups</h3>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
