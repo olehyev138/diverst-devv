@@ -115,6 +115,13 @@ class Group < ApplicationRecord
   has_many :leaders, through: :group_leaders, source: :user
 
   has_many :annual_budgets, -> { with_expenses }, dependent: :destroy, as: :budget_head
+  has_many :budgets, dependent: :destroy
+  has_many :budget_items, dependent: :destroy, through: :budgets
+  has_many :budget_users, dependent: :destroy, through: :budget_items
+  has_many :expenses, through: :budget_users
+
+  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'child', to: :annual_budgets
+  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'current_child', to: :current_annual_budget
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,

@@ -2,7 +2,10 @@ class BudgetUser < ApplicationRecord
   belongs_to :budgetable, polymorphic: true
   belongs_to :budget_item
   has_one :budget, through: :budget_item
+  has_one :group, through: :budget
   has_one :annual_budget, through: :budget
+  has_one :parent_group, through: :annual_budget, source: :budget_head, source_type: Group
+  has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_one :budget_user_sums, class_name: 'BudgetUserSums'
 

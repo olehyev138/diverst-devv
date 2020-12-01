@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_194650) do
+ActiveRecord::Schema.define(version: 2020_12_01_180724) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_194650) do
     t.datetime "updated_at", null: false
     t.bigint "approver_id"
     t.bigint "requester_id"
-    t.integer "deprecated_group_id"
+    t.integer "group_id"
     t.text "comments"
     t.string "decline_reason"
     t.integer "budget_items_count"

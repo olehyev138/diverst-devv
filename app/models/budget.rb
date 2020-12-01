@@ -3,9 +3,11 @@ class Budget < ApplicationRecord
   include Budget::Actions
 
   belongs_to :annual_budget
+  belongs_to :group
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
-  has_one :group, through: :annual_budget
+  has_one :parent_group, through: :annual_budget, source: :budget_head, source_type: Group
+  has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_one :budget_sums, class_name: 'BudgetSums'
 
   has_many :checklists, dependent: :destroy

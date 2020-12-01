@@ -4,10 +4,13 @@ class BudgetItem < ApplicationRecord
 
   belongs_to :budget, counter_cache: true
   has_one :annual_budget, through: :budget
-  has_one :group, through: :annual_budget
+  has_one :group, through: :budget
+  has_one :parent_group, through: :annual_budget, source: :budget_head, source_type: Group
+  has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_one :budget_item_sums, class_name: 'BudgetItemSums'
 
   has_many :initiatives
+  has_many :budget_users
   has_many :initiatives_expenses, through: :initiatives, source: :expenses
 
   validates_length_of :title, maximum: 191
