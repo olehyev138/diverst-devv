@@ -16,6 +16,10 @@ export const GET_ANNUAL_BUDGETS_BEGIN = 'app/Group/GroupPlan/AnnualBudget/GET_AN
 export const GET_ANNUAL_BUDGETS_SUCCESS = 'app/Group/GroupPlan/AnnualBudget/GET_ANNUAL_BUDGETS_SUCCESS';
 export const GET_ANNUAL_BUDGETS_ERROR = 'app/Group/GroupPlan/AnnualBudget/GET_ANNUAL_BUDGETS_ERROR';
 
+export const GET_CHILD_BUDGETS_BEGIN = 'app/Group/GroupPlan/ChildBudget/GET_CHILD_BUDGETS_BEGIN';
+export const GET_CHILD_BUDGETS_SUCCESS = 'app/Group/GroupPlan/ChildBudget/GET_CHILD_BUDGETS_SUCCESS';
+export const GET_CHILD_BUDGETS_ERROR = 'app/Group/GroupPlan/ChildBudget/GET_CHILD_BUDGETS_ERROR';
+
 export const CREATE_ANNUAL_BUDGET_BEGIN = 'app/Group/GroupPlan/AnnualBudget/CREATE_ANNUAL_BUDGET_BEGIN';
 export const CREATE_ANNUAL_BUDGET_SUCCESS = 'app/Group/GroupPlan/AnnualBudget/CREATE_ANNUAL_BUDGET_SUCCESS';
 export const CREATE_ANNUAL_BUDGET_ERROR = 'app/Group/GroupPlan/AnnualBudget/CREATE_ANNUAL_BUDGET_ERROR';

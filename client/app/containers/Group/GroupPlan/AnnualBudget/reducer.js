@@ -15,6 +15,9 @@ import {
   GET_ANNUAL_BUDGETS_BEGIN,
   GET_ANNUAL_BUDGETS_SUCCESS,
   GET_ANNUAL_BUDGETS_ERROR,
+  GET_CHILD_BUDGETS_BEGIN,
+  GET_CHILD_BUDGETS_SUCCESS,
+  GET_CHILD_BUDGETS_ERROR,
   CREATE_ANNUAL_BUDGET_BEGIN,
   CREATE_ANNUAL_BUDGET_SUCCESS,
   CREATE_ANNUAL_BUDGET_ERROR,
@@ -67,17 +70,20 @@ function annualBudgetReducer(state = initialState, action) {
         break;
 
       case GET_ANNUAL_BUDGETS_BEGIN:
+      case GET_CHILD_BUDGETS_BEGIN:
         draft.isFetchingAnnualBudgets = true;
         draft.hasChanged = false;
         break;
 
       case GET_ANNUAL_BUDGETS_SUCCESS:
+      case GET_CHILD_BUDGETS_SUCCESS:
         draft.annualBudgetList = action.payload.items;
         draft.annualBudgetListTotal = action.payload.total;
         draft.isFetchingAnnualBudgets = false;
         break;
 
       case GET_ANNUAL_BUDGETS_ERROR:
+      case GET_CHILD_BUDGETS_ERROR:
         draft.isFetchingAnnualBudgets = false;
         break;
 

@@ -14,6 +14,9 @@ import {
   GET_ANNUAL_BUDGETS_BEGIN,
   GET_ANNUAL_BUDGETS_SUCCESS,
   GET_ANNUAL_BUDGETS_ERROR,
+  GET_CHILD_BUDGETS_BEGIN,
+  GET_CHILD_BUDGETS_SUCCESS,
+  GET_CHILD_BUDGETS_ERROR,
   CREATE_ANNUAL_BUDGET_BEGIN,
   CREATE_ANNUAL_BUDGET_SUCCESS,
   CREATE_ANNUAL_BUDGET_ERROR,
@@ -82,6 +85,27 @@ export function getAnnualBudgetsSuccess(payload) {
 export function getAnnualBudgetsError(error) {
   return {
     type: GET_ANNUAL_BUDGETS_ERROR,
+    error,
+  };
+}
+
+export function getChildBudgetsBegin(payload) {
+  return {
+    type: GET_CHILD_BUDGETS_BEGIN,
+    payload,
+  };
+}
+
+export function getChildBudgetsSuccess(payload) {
+  return {
+    type: GET_CHILD_BUDGETS_SUCCESS,
+    payload,
+  };
+}
+
+export function getChildBudgetsError(error) {
+  return {
+    type: GET_CHILD_BUDGETS_ERROR,
     error,
   };
 }

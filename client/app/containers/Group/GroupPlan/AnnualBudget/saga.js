@@ -11,6 +11,7 @@ import {
   GET_CURRENT_ANNUAL_BUDGET_BEGIN,
   GET_ANNUAL_BUDGET_BEGIN,
   GET_ANNUAL_BUDGETS_BEGIN,
+  GET_CHILD_BUDGETS_BEGIN,
   CREATE_ANNUAL_BUDGET_BEGIN,
   UPDATE_ANNUAL_BUDGET_BEGIN,
 } from './constants';
@@ -57,6 +58,18 @@ export function* getAnnualBudgets(action) {
   }
 }
 
+export function* getChildBudgets(action) {
+  try {
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.currentChildBudgets.bind(api.groups), groupId, payload);
+
+    yield put(getAnnualBudgetsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getAnnualBudgetsError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
+  }
+}
+
 export function* updateAnnualBudget(action) {
   try {
     const payload = { annual_budget: action.payload };
@@ -75,5 +88,6 @@ export default function* annualBudgetSaga() {
   yield takeLatest(GET_CURRENT_ANNUAL_BUDGET_BEGIN, getCurrentAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGET_BEGIN, getAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
+  yield takeLatest(GET_CHILD_BUDGETS_BEGIN, getChildBudgets);
   yield takeLatest(UPDATE_ANNUAL_BUDGET_BEGIN, updateAnnualBudget);
 }
