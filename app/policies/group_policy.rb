@@ -205,6 +205,14 @@ class GroupPolicy < ApplicationPolicy
     UserGroupPolicy.new(self, UserGroup).leave?
   end
 
+  def budget_owner?
+    record.current_annual_budget&.budget_head == record
+  end
+
+  def budget_super?
+    current_child_budgets.any?
+  end
+
   # ========================================
   # MAYBE DEPRECATED
   # ========================================

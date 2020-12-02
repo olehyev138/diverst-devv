@@ -122,7 +122,7 @@ class Group < ApplicationRecord
   has_many :expenses, through: :budget_users
 
   delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'child', to: :annual_budgets
-  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'current_child', to: :current_annual_budget
+  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'current', to: :current_annual_budget
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
@@ -260,6 +260,12 @@ class Group < ApplicationRecord
   # def current_annual_budget!
   #   current_annual_budget || create_annual_budget
   # end
+
+  def current_child_budgets
+    AnnualBudget.where(closed: false, budget_head_id: regions.ids, budget_head_type: 'Region').or(
+      AnnualBudget.where(closed: false, budget_head_id: [*(children.ids), self.id], budget_head_type: 'Group')
+    )
+  end
 
   def current_annual_budget
     annual_budgets.where(closed: false).last || immediate_parent.current_annual_budget
