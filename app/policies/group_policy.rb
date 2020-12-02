@@ -28,12 +28,16 @@ class GroupPolicy < ApplicationPolicy
     update? || annual_budgets_view?
   end
 
+  def current_child_budget?
+    budget_super? && (update? || annual_budgets_view?)
+  end
+
   def carryover_annual_budget?
-    update?
+    budget_owner? && update?
   end
 
   def reset_annual_budget?
-    update?
+    budget_owner? && update?
   end
 
   def annual_budgets?

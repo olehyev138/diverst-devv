@@ -94,6 +94,7 @@ Diverst::Application.routes.draw do
 
 
           get '/annual_budget', to: 'groups#current_annual_budget'
+          get '/child_budgets', to: 'groups#current_child_budget'
           post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
           post '/reset_annual_budget', to: 'groups#reset_annual_budget'
           post '/update_categories', to: 'groups#update_categories'
