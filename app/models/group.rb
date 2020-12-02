@@ -264,11 +264,11 @@ class Group < ApplicationRecord
   def current_child_budgets
     AnnualBudget.where(closed: false, budget_head_id: regions.ids, budget_head_type: 'Region').or(
       AnnualBudget.where(closed: false, budget_head_id: [*(children.ids), self.id], budget_head_type: 'Group')
-    )
+    ).with_expenses
   end
 
   def current_annual_budget
-    annual_budgets.where(closed: false).last || immediate_parent.current_annual_budget
+    annual_budgets.where(closed: false).last || immediate_parent&.current_annual_budget
   end
 
   def all_annual_budgets

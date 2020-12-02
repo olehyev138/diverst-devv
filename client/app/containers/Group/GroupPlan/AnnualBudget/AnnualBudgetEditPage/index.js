@@ -17,8 +17,8 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 
-import { selectAnnualBudget, selectIsFetchingAnnualBudget } from '../selectors';
-import { updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount } from '../actions';
+import { selectAnnualBudget, selectIsFetchingAnnualBudgets, selectPaginatedAnnualBudgets } from '../selectors';
+import { updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount, getChildBudgetsBegin } from '../actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -32,7 +32,7 @@ export function AnnualBudgetEditPage(props) {
   const { group_id: groupId } = useParams();
 
   useEffect(() => {
-    props.getCurrentAnnualBudgetBegin({ groupId });
+    props.getChildBudgetsBegin({ groupId });
 
     return () => props.annualBudgetsUnmount();
   }, []);
@@ -41,33 +41,35 @@ export function AnnualBudgetEditPage(props) {
     <AnnualBudgetForm
       annualBudgetAction={props.updateAnnualBudgetBegin}
       group={props.currentGroup}
-      annualBudget={props.currentAnnualBudget}
+      annualBudgets={props.childBudgets}
       isCommitting={props.isCommitting}
-      isFormLoading={props.isFetchingAnnualBudget}
+      isFormLoading={props.isFetchingAnnualBudgets}
     />
   );
 }
 
 AnnualBudgetEditPage.propTypes = {
   currentGroup: PropTypes.object,
-  currentAnnualBudget: PropTypes.object,
+  childBudgets: PropTypes.array,
   updateAnnualBudgetBegin: PropTypes.func,
-  getCurrentAnnualBudgetBegin: PropTypes.func,
+  getChildBudgetsBegin: PropTypes.func,
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
-  isFetchingAnnualBudget: PropTypes.bool,
+  isFetchingAnnualBudgets: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentAnnualBudget: selectAnnualBudget(),
-  isFetchingAnnualBudget: selectIsFetchingAnnualBudget(),
+  childBudgets: selectPaginatedAnnualBudgets(),
+  isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
   isCommitting: selectGroupIsCommitting(),
 });
 
 const mapDispatchToProps = {
   updateAnnualBudgetBegin,
   getCurrentAnnualBudgetBegin,
+  getChildBudgetsBegin,
   annualBudgetsUnmount,
 };
 

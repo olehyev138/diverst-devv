@@ -55,7 +55,7 @@ const BudgetLayout = (props) => {
     if (matchPath(location.pathname, { path: ROUTES.group.plan.budget.index.path(), exact: true }))
       if (permission(currentGroup, 'annual_budgets_view?'))
         redirectAction(ROUTES.group.plan.budget.overview.path(groupId));
-      else if (permission(currentGroup, 'annual_budgets_manage?'))
+      else if (permission(currentGroup, 'annual_budgets_manage?') && permission(currentGroup, 'budget_super?'))
         redirectAction(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
       else {
         showSnackbar({ message: 'You do not have permission to manage this group\'s budget', options: { variant: 'warning' } });

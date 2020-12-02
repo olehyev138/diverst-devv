@@ -33,11 +33,7 @@ class Api::V1::GroupsController < DiverstController
     base_authorize(item)
 
     render status: 200,
-           json: AnnualBudget.index(
-             diverst_request,
-             params.permit!,
-             base: item.current_annual_budget
-           )
+           json: Page.of(item.current_child_budgets)
   rescue => e
     raise BadRequestException.new(e.message)
   end

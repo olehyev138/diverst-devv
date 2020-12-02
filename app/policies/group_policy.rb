@@ -214,7 +214,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def budget_super?
-    current_child_budgets.any?
+    record.current_child_budgets.any?
   end
 
   # ========================================

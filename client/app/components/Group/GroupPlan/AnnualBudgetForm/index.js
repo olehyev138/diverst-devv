@@ -46,8 +46,10 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function AnnualBudgetFormInner(
-  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudget, ...props }
+  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudgets, ...props }
 ) {
+  const annualBudget = annualBudgets[0];
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudget}>
       <Card>
@@ -128,7 +130,7 @@ export function AnnualBudgetFormInner(
 }
 
 export function AnnualBudgetForm(props) {
-  const initialValues = buildValues(props.annualBudget, {
+  const initialValues = buildValues(props.annualBudgets[0], {
     id: { default: '' },
     amount: { default: '' },
     currency: { default: 'USD' },
@@ -150,7 +152,7 @@ export function AnnualBudgetForm(props) {
 AnnualBudgetForm.propTypes = {
   annualBudgetAction: PropTypes.func,
   group: PropTypes.object,
-  annualBudget: PropTypes.object,
+  annualBudgets: PropTypes.array,
   enterpriseId: PropTypes.number,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
@@ -160,7 +162,7 @@ AnnualBudgetFormInner.propTypes = {
   intl: intlShape.isRequired,
   edit: PropTypes.bool,
   group: PropTypes.object,
-  annualBudget: PropTypes.object,
+  annualBudgets: PropTypes.array,
   classes: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,

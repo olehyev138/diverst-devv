@@ -37,7 +37,9 @@ export function BudgetLinks(props) {
               value='overview'
             />
           ) }
-          { permission(currentGroup, 'annual_budgets_manage?') && (
+          { permission(currentGroup, 'annual_budgets_manage?')
+          && permission(currentGroup, 'budget_super?')
+          && (
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.budget.editAnnualBudget.path(currentGroup.id)}
