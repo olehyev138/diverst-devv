@@ -150,7 +150,7 @@ export function AnnualBudgetForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.annualBudgetAction(values);
+        values.forEach(value => props.annualBudgetAction(value));
       }}
     >
       {formikProps => <AnnualBudgetFormInner {...props} {...formikProps} />}
