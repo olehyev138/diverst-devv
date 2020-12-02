@@ -262,13 +262,21 @@ class Group < ApplicationRecord
   # end
 
   def current_child_budgets
-    AnnualBudget.where(closed: false, budget_head_id: regions.ids, budget_head_type: 'Region').or(
-      AnnualBudget.where(closed: false, budget_head_id: [*(children.ids), self.id], budget_head_type: 'Group')
+    @current_child_budgets ||= child_budgets.where(closed: false)
+  end
+
+  def child_budgets
+    @child_budgets ||=
+      AnnualBudget.where(budget_head_id: regions.ids, budget_head_type: 'Region').or(
+      AnnualBudget.where(budget_head_id: [*(children.ids), self.id], budget_head_type: 'Group')
     ).with_expenses
   end
 
   def current_annual_budget
-    annual_budgets.where(closed: false).last || immediate_parent&.current_annual_budget
+    @current_annual_budget ||=
+      annual_budgets.where(closed: false).last ||
+      immediate_parent&.current_annual_budget ||
+      AnnualBudget.data_of(group: self, current: true).order(:year).order(:quarter).last
   end
 
   def all_annual_budgets

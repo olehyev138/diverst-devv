@@ -41,6 +41,35 @@ class AnnualBudget < ApplicationRecord
     'USD'
   end
 
+  def self.expenses_column_names
+    @expenses_column_names ||=
+      [:amount, *(with_expenses.select_values.map {|a| a.split(' as ').second}.filter(&:itself))]
+  end
+
+  def self.data_of(group:, year: nil, quarter: nil, current: false)
+    query = AnnualBudget.from(group.child_budgets.with_expenses).group(:year, :quarter)
+    query = query.where(year: year) if year.present?
+    query = query.where(quarter: quarter) if quarter.present?
+    query = query.select(
+      :year,
+      :quarter,
+      *(
+        expenses_column_names.flat_map do |column|
+          [
+            "MAX(`#{column}`) as max_#{column}",
+            "AVG(`#{column}`) as avg_#{column}",
+            "SUM(`#{column}`) as #{column}",
+          ]
+        end
+      ),
+      "MIN(`closed`) as closed",
+      "#{group.id} as budget_head_id",
+      '"Group" as budget_head_type',
+    )
+    query = query.having("NOT `closed`") if current
+    query
+  end
+
   def close!
     update_column(:closed, true)
   end
