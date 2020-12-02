@@ -23,7 +23,7 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.current_annual_budget!
+    render status: 200, json: item.current_annual_budget
   rescue => e
     raise BadRequestException.new(e.message)
   end

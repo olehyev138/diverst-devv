@@ -10,7 +10,8 @@ class Region < ApplicationRecord
 
   has_many :user_groups, through: :children
   has_many :members, -> { distinct }, through: :user_groups, class_name: 'User', source: :user
-  has_many :annual_budgets, -> { with_expenses }, dependent: :destroy, as: :budget_head
+  has_many :annual_budgets, -> { with_expenses }, as: :budget_head
+  has_many :annual_budgets_raw, dependent: :destroy, as: :budget_head, class_name: 'AnnualBudget'
 
   validates :name, presence: true
   validates :parent, presence: true
@@ -27,7 +28,12 @@ class Region < ApplicationRecord
   scope :non_private,       -> { where(private: false) }
 
   def current_annual_budget
-    annual_budgets.where(closed: false).last || immediate_parent.current_annual_budget
+    annual_budgets.where(closed: false).last || parent.current_annual_budget
+  end
+
+  def all_annual_budgets
+    other = parent&.all_annual_budgets
+    !other.nil? ? other.union(annual_budgets_raw) : annual_budgets_raw
   end
 
   def to_s

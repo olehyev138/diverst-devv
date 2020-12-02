@@ -114,7 +114,8 @@ class Group < ApplicationRecord
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_many :annual_budgets, -> { with_expenses }, dependent: :destroy, as: :budget_head
+  has_many :annual_budgets, -> { with_expenses }, as: :budget_head
+  has_many :annual_budgets_raw, dependent: :destroy, as: :budget_head, class_name: 'AnnualBudget'
   has_many :budgets, dependent: :destroy
   has_many :budget_items, dependent: :destroy, through: :budgets
   has_many :budget_users, dependent: :destroy, through: :budget_items
@@ -262,6 +263,11 @@ class Group < ApplicationRecord
 
   def current_annual_budget
     annual_budgets.where(closed: false).last || immediate_parent.current_annual_budget
+  end
+
+  def all_annual_budgets
+    other = immediate_parent&.all_annual_budgets
+    !other.nil? ? other.union(annual_budgets_raw) : annual_budgets_raw
   end
 
   def current_annual_budget=(annual_budget)

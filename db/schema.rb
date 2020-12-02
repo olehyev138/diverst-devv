@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_184322) do
+ActiveRecord::Schema.define(version: 2020_12_02_162246) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_184322) do
   end
 
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
+    t.bigint "deprecated_group_id"
     t.bigint "deprecated_enterprise_id"
     t.decimal "amount", precision: 20, scale: 4, default: "0.0", null: false
     t.boolean "closed", default: false
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_184322) do
     t.bigint "budget_head_id"
     t.index ["budget_head_type", "budget_head_id"], name: "index_annual_budgets_on_budget_head_type_and_budget_head_id"
     t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
-    t.index ["group_id"], name: "index_annual_budgets_on_group_id"
+    t.index ["deprecated_group_id"], name: "index_annual_budgets_on_deprecated_group_id"
   end
 
   create_table "annual_budgets_sums", primary_key: "annual_budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1912,7 +1912,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_184322) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "annual_budgets", "enterprises", column: "deprecated_enterprise_id"
-  add_foreign_key "annual_budgets", "groups"
+  add_foreign_key "annual_budgets", "groups", column: "deprecated_group_id"
   add_foreign_key "answers", "groups", column: "contributing_group_id"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budget_items", "budgets"
