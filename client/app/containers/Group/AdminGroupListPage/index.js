@@ -78,7 +78,7 @@ export function AdminGroupListPage({ classes, ...props }) {
   useEffect(() => {
     if (parentData === undefined || !parentData?.id) return;
 
-    const newParams = { ...defaultGroupsParams, query_scopes: [['children_of', parentData?.id]] };
+    const newParams = { ...defaultGroupsParams, count: params.count, query_scopes: [['children_of', parentData?.id]] };
 
     props.getGroupsBegin(newParams);
     setParams(newParams);
@@ -101,7 +101,7 @@ export function AdminGroupListPage({ classes, ...props }) {
   };
 
   const getGroups = () => {
-    const newParams = { ...defaultGroupsParams, order: params.order, orderBy: params.orderBy };
+    const newParams = { ...defaultGroupsParams, count: params.count, page: params.page, order: params.order, orderBy: params.orderBy };
 
     setParentData({ name: parentData?.name });
     setDisplayParentUI(false);
