@@ -52,14 +52,13 @@ export function AnnualBudgetFormInner(
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudgets}>
       <Form>
         { values.map((value, index) => (
-          <React.Fragment>
+          <React.Fragment key={`annual_budget:${annualBudgets[index].id}`}>
             <Card>
               <CardHeader
                 title={annualBudgets[index].name}
               />
               <CardContent>
-                <FastField
-                  component={DiverstMoneyField}
+                <DiverstMoneyField
                   label={intl.formatMessage(formMessages.amount)}
                   name={`[${index}].amount`}
                   id={`[${index}].amount`}
@@ -176,7 +175,7 @@ AnnualBudgetFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
-  values: PropTypes.object,
+  values: PropTypes.array,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
