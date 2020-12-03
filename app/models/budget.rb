@@ -25,7 +25,7 @@ class Budget < ApplicationRecord
         "COALESCE(`requested_amount`, 0) as requested_amount",
         "COALESCE(`user_estimates`, 0) as user_estimates",
         "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
-        "COALESCE(COALESCE(`requested_amount`, 0) - `reserved`, 0) as available",
+        "COALESCE(IF(`is_approved` = TRUE, `requested_amount`, 0) - `reserved`, 0) as available",
         "COALESCE(COALESCE(`requested_amount`, 0) - `spent`, 0) as unspent",
         "IF(`is_approved` = TRUE, `requested_amount`, 0) as approved_amount"
     ).left_joins(:budget_sums)
@@ -177,22 +177,6 @@ class Budget < ApplicationRecord
         "`budgets`.`id` = #{old_or_new}.`id`"
       ).to_sql}
     INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
-    SQL
-  end
-
-  trigger.after(:insert) do
-    <<~SQL.gsub(/\s+/, ' ').strip
-    #{get_foreign_keys}
-    #{BudgetSums.budget_inserted}
-    #{AnnualBudgetSums.budget_inserted}
-    SQL
-  end
-
-  trigger.before(:delete) do
-    <<~SQL.gsub(/\s+/, ' ').strip
-    #{get_foreign_keys('OLD')}
-    #{BudgetSums.budget_deleted}
-    #{AnnualBudgetSums.budget_deleted}
     SQL
   end
 

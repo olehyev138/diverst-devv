@@ -41,6 +41,37 @@ class BudgetItem < ApplicationRecord
   delegate :active, to: :initiatives, prefix: true
   delegate :active, to: :initiatives_expenses, prefix: 'expenses'
 
+  BUDGET_KEYS = ['budget_id', 'annual_budget_id']
+
+  def self.get_foreign_keys(old_or_new = 'NEW')
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
+    #{BudgetItem.joins(:annual_budget).select(
+      '`budgets`.`id`',
+      '`budgets`.`annual_budget_id`'
+    ).where(
+      "`budget_items`.`id` = #{old_or_new}.`id`"
+    ).to_sql}
+    INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
+    SQL
+  end
+
+  trigger.after(:insert) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys}
+    #{BudgetSums.budget_inserted}
+    #{AnnualBudgetSums.budget_inserted}
+    SQL
+  end
+
+  trigger.before(:delete) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys('OLD')}
+    #{BudgetSums.budget_deleted}
+    #{AnnualBudgetSums.budget_deleted}
+    SQL
+  end
+
   def close!
     if is_done?
       errors.add(:base, 'Budget Item is already closed')

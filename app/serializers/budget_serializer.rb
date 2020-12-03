@@ -29,6 +29,6 @@ class BudgetSerializer < ApplicationRecordSerializer
   end
 
   def serialize_all_fields
-    true
+    false # true
   end
 end

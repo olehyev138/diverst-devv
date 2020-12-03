@@ -4,7 +4,7 @@ module MaterializedTable
 
   class_methods do
     def relevant_columns
-      relevant_columns ||= column_names.reject { |a| a.include? 'id' }
+      @relevant_columns ||= column_names.reject { |a| a.include? 'id' }
     end
 
     def get_old_sums
@@ -94,25 +94,13 @@ module MaterializedTable
     end
 
     def request_adder
-      sql =  "SET @requested = (#{
-      Budget
-          .select("COALESCE(`requested_amount`, 0) as requested_amount")
-          .left_joins(:budget_sums)
-          .where('`id` = NEW.`id`').to_sql
-      }); "
-      sql += 'SET @new_requested = @old_requested + @requested; '
-      sql + set_rest('requested')
+      sql = 'SET @new_requested_amount = @old_requested_amount + NEW.`estimated_amount`; '
+      sql + set_rest('requested_amount')
     end
 
     def request_remover
-      sql =  "SET @requested = (#{
-        Budget
-            .select("COALESCE(`requested_amount`, 0) as requested_amount")
-            .left_joins(:budget_sums)
-            .where('`id` = OLD.`id`').to_sql
-      }); "
-      sql += 'SET @new_requested = @old_requested - @requested; '
-      sql + set_rest('requested')
+      sql = 'SET @new_requested_amount = @old_requested_amount - OLD.`estimated_amount`; '
+      sql + set_rest('requested_amount')
     end
 
     def budget_approver
