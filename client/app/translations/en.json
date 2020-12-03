@@ -292,6 +292,7 @@
   "diverst.containers.Event.index.tabs.participating": "Participating",
   "diverst.containers.Event.index.tabs.past": "Past",
   "diverst.containers.Event.index.tabs.upcoming": "Upcoming",
+  "diverst.containers.Event.label.create": "Create new free event ($0.00)",
   "diverst.containers.Event.show.date_and_time": "Date & Time",
   "diverst.containers.Event.show.hosted_by": "Hosted by",
   "diverst.containers.Event.show.hosted_by_group": "Hosted by: {group_name}",
