@@ -82,8 +82,7 @@ export function SegmentPage(props) {
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}
-        customTexts={props.customTexts}
-        intl={props.intl}
+        intl={intl}
       />
       <Box mb={4} />
       <Divider />
@@ -124,7 +123,6 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
-  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
