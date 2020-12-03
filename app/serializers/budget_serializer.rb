@@ -1,6 +1,7 @@
 class BudgetSerializer < ApplicationRecordSerializer
-  attributes :approver, :requested_amount, :available_amount, :group_id, :annual_budget_id,
-             :status, :requested_at, :item_count, :description, :requester, :permissions, :currency
+  attributes :id, :approver, :requested_amount, :available_amount, :group_id, :annual_budget_id,
+             :status, :requested_at, :item_count, :description, :requester, :permissions, :currency,
+             :is_approved, :decline_reason
 
   [:spent, :reserved, :requested_amount, :user_estimates, :finalized_expenditures, :available_amount, :unspent, :approved_amount].each do |method|
     define_method(method) do
