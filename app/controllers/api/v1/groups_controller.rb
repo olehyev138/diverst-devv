@@ -38,6 +38,20 @@ class Api::V1::GroupsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def aggregate_budgets
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    response = AnnualBudget.index(self.diverst_request, params, :return_base, policy: @policy, base: group.aggregate_budget_data)
+
+    render status: 200, json: response, **diverst_request.options
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
   def current_annual_budgets
     base_authorize(klass)
     params[:parent_id] = nil

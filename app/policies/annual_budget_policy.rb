@@ -17,7 +17,7 @@ class AnnualBudgetPolicy < GroupBasePolicy
 
   class Scope < Scope
     def group_base
-      group.all_annual_budgets.with_expenses
+      group.all_annual_budgets
     end
 
     def resolve

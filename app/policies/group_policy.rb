@@ -32,6 +32,8 @@ class GroupPolicy < ApplicationPolicy
     budget_super? && (update? || annual_budgets_view?)
   end
 
+  alias_method :aggregate_budgets?, :current_child_budget?
+
   def carryover_annual_budget?
     budget_owner? && update?
   end

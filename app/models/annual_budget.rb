@@ -37,6 +37,27 @@ class AnnualBudget < ApplicationRecord
     ).left_joins(:annual_budget_sums)
   end
 
+  define_relation_method :count do |*args|
+    query = self.all
+    if query.group_values.blank?
+      super(*args)
+    else
+      from_query = query.from_clause.value
+      from_query.unscope(:select).unscope(:left_joins).select(:year, :quarter).distinct.count
+    end
+  end
+
+  # def self.count(*args)
+  #   pp "Hello"
+  #   query = self.all
+  #   if query.group_values.blank?
+  #     super
+  #   else
+  #     from_query = query.from_caluse.value
+  #     from_query.unscope(:select).select(:year, :quarter).distinct.count
+  #   end
+  # end
+
   def currency
     'USD'
   end
@@ -47,7 +68,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def self.data_of(group:, year: nil, quarter: nil, current: false)
-    query = AnnualBudget.from(group.child_budgets.with_expenses).group(:year, :quarter)
+    query = AnnualBudget.from(group.child_budgets.with_expenses, :annual_budgets).group(:year, :quarter)
     query = query.where(year: year) if year.present?
     query = query.where(quarter: quarter) if quarter.present?
     query = query.select(
@@ -56,8 +77,6 @@ class AnnualBudget < ApplicationRecord
       *(
         expenses_column_names.flat_map do |column|
           [
-            "MAX(`#{column}`) as max_#{column}",
-            "AVG(`#{column}`) as avg_#{column}",
             "SUM(`#{column}`) as #{column}",
           ]
         end

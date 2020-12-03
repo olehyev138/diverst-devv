@@ -272,6 +272,10 @@ class Group < ApplicationRecord
     ).with_expenses
   end
 
+  def aggregate_budget_data
+    AnnualBudget.data_of(group: self)
+  end
+
   def current_annual_budget
     @current_annual_budget ||=
       annual_budgets.where(closed: false).last ||

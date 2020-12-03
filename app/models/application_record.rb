@@ -12,6 +12,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   scope :except_id, -> (id) { where.not(id: id.presence) }
 
+  def self.define_relation_method(name, &block)
+    self.all.class.define_method(name, &block)
+  end
+
   if Rails.env.development? || Rails.env.test?
     ActiveRecordQueryTrace.enabled = false
   end
