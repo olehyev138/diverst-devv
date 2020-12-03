@@ -117,7 +117,7 @@ export function PollResponseForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl ? intl.formatMessage(messages.form.submitConfirmation, props.customTexts) : 'confirm?')) {
+        if (confirm(intl.formatMessage(messages.form.submitConfirmation, props.customTexts))) {
           const payload = {
             anonymous: values.anonymous,
             field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)

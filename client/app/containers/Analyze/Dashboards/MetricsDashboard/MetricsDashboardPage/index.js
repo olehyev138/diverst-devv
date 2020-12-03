@@ -7,6 +7,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { useParams } from 'react-router-dom';
+import { injectIntl, intlShape } from 'react-intl';
 
 // reducers & sagas
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
@@ -19,6 +20,7 @@ import {
 
 // selectors
 import { selectMetricsDashboard, selectIsFormLoading } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
 import Conditional from 'components/Compositions/Conditional';
@@ -48,6 +50,8 @@ export function MetricsDashboardPage(props) {
       metricsDashboard={props.currentMetricsDashboard}
       links={links}
       isFormLoading={props.isFormLoading}
+      customTexts={props.customTexts}
+      intl={props.intl}
     />
   );
 }
@@ -58,11 +62,14 @@ MetricsDashboardPage.propTypes = {
   metricsDashboardsUnmount: PropTypes.func,
   currentMetricsDashboard: PropTypes.object,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentMetricsDashboard: selectMetricsDashboard(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -79,6 +86,7 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl,
 )(Conditional(
   MetricsDashboardPage,
   ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],

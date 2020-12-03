@@ -1607,6 +1607,8 @@
   "diverst.snackbars.News.success.update.news_item": "News feed link updated",
   "diverst.snackbars.News.success.update.news_link": "News link updated",
   "diverst.snackbars.News.success.update.social_link": "Social link updated",
+  "diverst.snackbars.PasswordReset.email_sent": "Password Reset Email Sent",
+  "diverst.snackbars.PasswordReset.password_change": "Successfully changed password",
   "diverst.snackbars.PasswordReset.invalid_token": "Invalid Token",
   "diverst.snackbars.Poll.errors.create.poll": "Failed to create poll",
   "diverst.snackbars.Poll.errors.create.publish.poll": "Failed to create and publish poll",

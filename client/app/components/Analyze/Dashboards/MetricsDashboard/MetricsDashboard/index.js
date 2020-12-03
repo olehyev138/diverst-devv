@@ -18,6 +18,7 @@ import CustomGraphPage from 'containers/Analyze/Dashboards/MetricsDashboard/Cust
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   padding: {
@@ -68,8 +69,7 @@ export function MetricsDashboard(props) {
                   className={classNames(classes.buttons, classes.deleteButton)}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    // Add INTL to translate here
-                    if (confirm('Delete metricsDashboard?'))
+                    if (confirm(props.intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       props.deleteMetricsDashboardBegin(metricsDashboard.id);
                   }}
                 >
@@ -126,10 +126,13 @@ MetricsDashboard.propTypes = {
   links: PropTypes.shape({
     metricsDashboardEdit: PropTypes.string,
     customGraphNew: PropTypes.string,
-  })
+  }),
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(MetricsDashboard);
