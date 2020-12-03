@@ -7,6 +7,7 @@ class Api::V1::BudgetsController < DiverstController
             :approver_id,
             :annual_budget_id,
             :requester_id,
+            :group_id,
             budget_items_attributes: [
                 :title,
                 :estimated_amount,

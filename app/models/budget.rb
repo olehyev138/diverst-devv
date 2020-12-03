@@ -43,7 +43,7 @@ class Budget < ApplicationRecord
   delegate :currency, to: :annual_budget
 
   def group_id
-    group.id
+    group&.id
   end
 
   # def requested_amount
@@ -62,7 +62,7 @@ class Budget < ApplicationRecord
     super
   end
 
-  def available_amount; available end
+  def available_amount; available if respond_to? :available end
 
   def status_title
     return 'Pending' if is_approved.nil?
