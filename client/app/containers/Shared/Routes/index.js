@@ -406,6 +406,8 @@ export default function Routes(props) {
                                 <RouteWithProps exact path={ROUTES.group.plan.budget.editAnnualBudget.path()}><AnnualBudgetEditPage /></RouteWithProps>
                                 {/* Overview */}
                                 <RouteWithProps exact path={ROUTES.group.plan.budget.overview.path()}><AnnualBudgetsPage /></RouteWithProps>
+                                {/* Aggregate */}
+                                <RouteWithProps exact path={ROUTES.group.plan.budget.aggregate.path()}><AnnualBudgetsPage /></RouteWithProps>
                               </SwitchWithProps>
                             </GroupBudgetLayout>
                           </RouteWithProps>

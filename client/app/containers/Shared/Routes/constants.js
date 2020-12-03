@@ -450,6 +450,12 @@ const ROUTES = {
             titleMessage: messages.groups.plan.budget.overview,
           }
         },
+        aggregate: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/aggregate`,
+          data: {
+            titleMessage: messages.groups.plan.budget.aggregate,
+          }
+        },
         budgets: {
           index: {
             path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets`,

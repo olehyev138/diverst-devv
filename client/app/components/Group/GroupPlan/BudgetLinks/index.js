@@ -29,7 +29,19 @@ export function BudgetLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          { permission(currentGroup, 'annual_budgets_view?') && (
+          { permission(currentGroup, 'annual_budgets_view?')
+          && permission(currentGroup, 'budget_super?')
+          && (
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.budget.aggregate.path(currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.aggregate} />}
+              value='aggregate'
+            />
+          ) }
+          { permission(currentGroup, 'annual_budgets_view?')
+          && permission(currentGroup, 'parent_budgets?')
+          && (
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.budget.overview.path(currentGroup.id)}

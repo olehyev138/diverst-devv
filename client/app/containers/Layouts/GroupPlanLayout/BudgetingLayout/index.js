@@ -25,6 +25,7 @@ const styles = theme => ({});
 
 const BudgetPages = Object.freeze([
   'overview',
+  'aggregate',
   'annual_budget',
 ]);
 
@@ -41,9 +42,10 @@ const BudgetLayout = (props) => {
 
   const defaultTab = (() => {
     if (permission(currentGroup, 'annual_budgets_view?'))
-      return BudgetPages[0];
-    if (permission(currentGroup, 'annual_budgets_manage?'))
-      return BudgetPages[1];
+      if (permission(currentGroup, 'parent_budgets?'))
+        return BudgetPages[1];
+      else
+        return BudgetPages[2];
     return null;
   });
 
@@ -53,8 +55,10 @@ const BudgetLayout = (props) => {
     if (!currentGroup) return;
 
     if (matchPath(location.pathname, { path: ROUTES.group.plan.budget.index.path(), exact: true }))
-      if (permission(currentGroup, 'annual_budgets_view?'))
+      if (permission(currentGroup, 'annual_budgets_view?') && permission(currentGroup, 'parent_budgets?'))
         redirectAction(ROUTES.group.plan.budget.overview.path(groupId));
+      else if (permission(currentGroup, 'annual_budgets_view?') && permission(currentGroup, 'budget_super?'))
+        redirectAction(ROUTES.group.plan.budget.aggregate.path(groupId));
       else if (permission(currentGroup, 'annual_budgets_manage?') && permission(currentGroup, 'budget_super?'))
         redirectAction(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
       else {

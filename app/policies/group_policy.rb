@@ -219,6 +219,10 @@ class GroupPolicy < ApplicationPolicy
     record.current_child_budgets.any?
   end
 
+  def parent_budgets?
+    record.all_annual_budgets.any?
+  end
+
   # ========================================
   # MAYBE DEPRECATED
   # ========================================

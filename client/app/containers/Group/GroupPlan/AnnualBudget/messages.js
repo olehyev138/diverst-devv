@@ -18,6 +18,9 @@ export default defineMessages({
     overview: {
       id: `${scope}.tabs.overview`,
     },
+    aggregate: {
+      id: `${scope}.tabs.aggregate`,
+    },
   },
   item: {
     pastTitle: {

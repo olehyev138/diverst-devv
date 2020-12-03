@@ -109,6 +109,7 @@ class GroupSerializer < ApplicationRecordSerializer
           :leave?,
           :budget_owner?,
           :budget_super?,
+          :parent_budgets?,
           :is_a_member?,
           :is_a_pending_member?,
           :is_an_accepted_member?,

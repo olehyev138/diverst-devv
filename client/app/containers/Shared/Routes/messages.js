@@ -198,6 +198,9 @@ const messages = defineMessages({
         overview: {
           id: `${scope}.group.plan.budget.overview`
         },
+        aggregate: {
+          id: `${scope}.group.plan.budget.aggregate`
+        },
         budgets: {
           index: {
             id: `${scope}.group.plan.budget.budget.index`
