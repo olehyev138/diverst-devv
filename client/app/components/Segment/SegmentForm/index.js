@@ -19,13 +19,13 @@ import {
   TextField, Hidden, FormControl, Divider, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { serializeSegment } from 'utils/customFieldHelpers';
 
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   ruleInput: {
@@ -65,12 +65,12 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
       <Box mb={3} />
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
         <SegmentRulesList
-          intl={props.intl}
-          customTexts={props.customTexts}
           values={values}
           classes={props.classes}
           {...props.ruleProps}
           currentEnterprise={props.currentEnterprise}
+          customTexts={props.customTexts}
+          intl={props.intl}
         />
       </DiverstFormLoader>
     </React.Fragment>
@@ -111,6 +111,7 @@ SegmentForm.propTypes = {
 };
 
 SegmentFormInner.propTypes = {
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   segment: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -129,7 +130,6 @@ SegmentFormInner.propTypes = {
     id: PropTypes.number
   }).isRequired,
   customTexts: PropTypes.object,
-  intl: intlShape.isRequired
 };
 
 export default compose(

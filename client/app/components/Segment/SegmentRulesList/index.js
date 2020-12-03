@@ -22,10 +22,7 @@ import SegmentRule from 'components/Segment/SegmentRules/SegmentRule';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
-import { compose } from 'redux';
-import { injectIntl, intlShape } from 'react-intl';
-import { withStyles } from '@material-ui/core/styles';
-
+import { intlShape } from 'react-intl';
 
 const styles = theme => ({
   ruleInput: {
@@ -143,6 +140,7 @@ export function SegmentRules({ values, classes, ...props }) {
 }
 
 SegmentRules.propTypes = {
+  intl: intlShape.isRequired,
   segmentId: PropTypes.string,
   updateSegmentBegin: PropTypes.func,
   values: PropTypes.object,
@@ -152,12 +150,7 @@ SegmentRules.propTypes = {
     id: PropTypes.number,
   }),
   customTexts: PropTypes.object,
-  intl: intlShape.isRequired
 };
 
 
-export default compose(
-  memo,
-  injectIntl,
-  withStyles(styles)
-)(SegmentRules);
+export default connect(SegmentRules);
