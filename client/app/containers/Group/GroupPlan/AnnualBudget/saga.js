@@ -23,6 +23,7 @@ import {
   getAnnualBudgetsSuccess, getAnnualBudgetsError,
   createAnnualBudgetSuccess, createAnnualBudgetError,
   updateAnnualBudgetSuccess, updateAnnualBudgetError,
+  getAggregateBudgetsSuccess, getAggregateBudgetsError,
 } from './actions';
 
 export function* getCurrentAnnualBudget(action) {
@@ -64,9 +65,9 @@ export function* getAggregateBudgets(action) {
     const { groupId, ...payload } = action.payload;
     const response = yield call(api.groups.aggregateBudgets.bind(api.groups), groupId, payload);
 
-    yield put(getAnnualBudgetsSuccess(response.data.page));
+    yield put(getAggregateBudgetsSuccess(response.data.page));
   } catch (err) {
-    yield put(getAnnualBudgetsError(err));
+    yield put(getAggregateBudgetsError(err));
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
   }
 }

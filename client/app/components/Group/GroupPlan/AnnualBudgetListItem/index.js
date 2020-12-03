@@ -23,6 +23,7 @@ import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import {AnnualBudgetList} from "components/Group/GroupPlan/AnnualBudgetList";
 
 const { events: eventMessages } = messages;
 const { item: itemMessages } = messages;
@@ -146,43 +147,47 @@ export function AnnualBudgetListItem(props) {
           <Grid item>
             <Divider orientation='vertical' />
           </Grid>
-          <Permission show={permission(props.currentGroup, 'budgets_view?')}>
-            <Grid item>
-              <Link
-                className={classes.eventLink}
-                component={WrappedNavLink}
-                to={{
-                  pathname: props.links.budgetsIndex(item.id),
-                  annualBudget: item
-                }}
-              >
-                <Typography color='primary' variant='body1' component='h2'>
-                  <DiverstFormattedMessage {...itemMessages.viewRequests} />
-                </Typography>
-              </Link>
-            </Grid>
-          </Permission>
-          {permission(props.currentGroup, 'budgets_view?') && permission(props.currentGroup, 'budgets_create?') && !item.closed && (
-            <Grid item>
-              <Divider orientation='vertical' />
-            </Grid>
+          {props.type === 'overview' && (
+            <>
+              <Permission show={permission(props.currentGroup, 'budgets_view?')}>
+                <Grid item>
+                  <Link
+                    className={classes.eventLink}
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: props.links.budgetsIndex(item.id),
+                      annualBudget: item
+                    }}
+                  >
+                    <Typography color='primary' variant='body1' component='h2'>
+                      <DiverstFormattedMessage {...itemMessages.viewRequests} />
+                    </Typography>
+                  </Link>
+                </Grid>
+              </Permission>
+              {permission(props.currentGroup, 'budgets_view?') && permission(props.currentGroup, 'budgets_create?') && !item.closed && (
+                <Grid item>
+                  <Divider orientation='vertical' />
+                </Grid>
+              )}
+              <Permission show={permission(props.currentGroup, 'budgets_create?') && !item.closed}>
+                <Grid item>
+                  <Link
+                    className={classes.eventLink}
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: props.links.newRequest(item.id),
+                      annualBudget: item
+                    }}
+                  >
+                    <Typography color='primary' variant='body1' component='h2'>
+                      <DiverstFormattedMessage {...itemMessages.createRequests} />
+                    </Typography>
+                  </Link>
+                </Grid>
+              </Permission>
+            </>
           )}
-          <Permission show={permission(props.currentGroup, 'budgets_create?') && !item.closed}>
-            <Grid item>
-              <Link
-                className={classes.eventLink}
-                component={WrappedNavLink}
-                to={{
-                  pathname: props.links.newRequest(item.id),
-                  annualBudget: item
-                }}
-              >
-                <Typography color='primary' variant='body1' component='h2'>
-                  <DiverstFormattedMessage {...itemMessages.createRequests} />
-                </Typography>
-              </Link>
-            </Grid>
-          </Permission>
         </Grid>
         <Grid
           alignItems='center'
@@ -277,31 +282,38 @@ export function AnnualBudgetListItem(props) {
             </Typography>
           </Grid>
         </Grid>
-        <Box mb={2} />
-        <Permission show={permission(props.currentGroup, 'events_view?')}>
-          <Button
-            color='primary'
-            variant='contained'
-            onClick={() => {
-              toggleList();
-            }}
-          >
-            <DiverstFormattedMessage {...eventMessages.title} />
-          </Button>
-        </Permission>
+        {props.type === 'overview' && (
+          <>
+            <Box mb={2} />
+            <Permission show={permission(props.currentGroup, 'events_view?')}>
+              <Button
+                color='primary'
+                variant='contained'
+                onClick={() => {
+                  toggleList();
+                }}
+              >
+                <DiverstFormattedMessage {...eventMessages.title} />
+              </Button>
+            </Permission>
+          </>
+        )}
       </CardContent>
-      <Collapse in={initList}>
-        <InitiativeList
-          initiatives={props.initiatives}
-          initiativeCount={props.initiativesTotal}
-          isLoading={props.initiativesLoading}
-          handlePagination={props.handlePagination}
-          handleOrdering={props.handleOrdering}
-          closeAction={() => setInitList(false)}
-          links={links}
-          intl={intl}
-        />
-      </Collapse>
+      {props.type === 'overview' && (
+        <Collapse in={initList}>
+          <InitiativeList
+            initiatives={props.initiatives}
+            initiativeCount={props.initiativesTotal}
+            isLoading={props.initiativesLoading}
+            handlePagination={props.handlePagination}
+            handleOrdering={props.handleOrdering}
+            closeAction={() => setInitList(false)}
+            links={links}
+            intl={intl}
+          />
+        </Collapse>
+      )}
+
     </Card>
   );
 }
@@ -317,6 +329,11 @@ AnnualBudgetListItem.propTypes = {
   initiativesLoading: PropTypes.bool,
   handlePagination: PropTypes.func.isRequired,
   handleOrdering: PropTypes.func.isRequired,
+  type: PropTypes.string,
+};
+
+AnnualBudgetListItem.defaultProps = {
+  type: 'overview'
 };
 
 InitiativeList.propTypes = {

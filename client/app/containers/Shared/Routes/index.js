@@ -93,6 +93,7 @@ import {
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
+  AnnualBudgetAggregatesPage,
   BudgetsPage,
   BudgetPage,
   BudgetRequestPage,
@@ -407,7 +408,7 @@ export default function Routes(props) {
                                 {/* Overview */}
                                 <RouteWithProps exact path={ROUTES.group.plan.budget.overview.path()}><AnnualBudgetsPage /></RouteWithProps>
                                 {/* Aggregate */}
-                                <RouteWithProps exact path={ROUTES.group.plan.budget.aggregate.path()}><AnnualBudgetsPage /></RouteWithProps>
+                                <RouteWithProps exact path={ROUTES.group.plan.budget.aggregate.path()}><AnnualBudgetAggregatesPage /></RouteWithProps>
                               </SwitchWithProps>
                             </GroupBudgetLayout>
                           </RouteWithProps>

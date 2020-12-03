@@ -52,9 +52,10 @@ export function AnnualBudgetList(props) {
               initiatives={initiatives[annualBudget.id]}
               initiativesTotal={initiativesTotals[annualBudget.id]}
               initiativesLoading={initiativesLoading[annualBudget.id]}
-              handlePagination={handleInitiativePagination(annualBudget.id)}
-              handleOrdering={handleInitiativeOrdering(annualBudget.id)}
+              handlePagination={handleInitiativePagination?.(annualBudget.id)}
+              handleOrdering={handleInitiativeOrdering?.(annualBudget.id)}
               currentGroup={props.currentGroup}
+              type={props.type}
             />
             <Box mb={2} />
           </React.Fragment>
@@ -84,6 +85,11 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.object,
   currentGroup: PropTypes.object,
   isLoading: PropTypes.bool,
+  type: PropTypes.string,
+};
+
+AnnualBudgetList.defaultProps = {
+  type: 'overview'
 };
 
 export default compose(
