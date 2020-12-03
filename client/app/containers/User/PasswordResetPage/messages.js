@@ -10,9 +10,6 @@ export const scope = 'diverst.containers.PasswordReset';
 export const snackbar = 'diverst.snackbars.PasswordReset';
 
 export default defineMessages({
-  invalidToken: {
-    id: `${snackbar}.invalid_token`
-  },
   changePassword: {
     id: `${scope}.changePassword`
   },
@@ -21,5 +18,14 @@ export default defineMessages({
   },
   passwordConfirmation: {
     id: `${scope}.passwordConfirmation`
+  },
+  emailSent: {
+    id: `${snackbar}.email_sent`
+  },
+  invalidToken: {
+    id: `${snackbar}.invalid_token`
+  },
+  passwordChange: {
+    id: `${snackbar}.password_change`
   },
 });
