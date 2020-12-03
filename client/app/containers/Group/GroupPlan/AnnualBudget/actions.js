@@ -17,6 +17,9 @@ import {
   GET_CHILD_BUDGETS_BEGIN,
   GET_CHILD_BUDGETS_SUCCESS,
   GET_CHILD_BUDGETS_ERROR,
+  GET_AGGREGATE_BUDGETS_BEGIN,
+  GET_AGGREGATE_BUDGETS_SUCCESS,
+  GET_AGGREGATE_BUDGETS_ERROR,
   CREATE_ANNUAL_BUDGET_BEGIN,
   CREATE_ANNUAL_BUDGET_SUCCESS,
   CREATE_ANNUAL_BUDGET_ERROR,
@@ -106,6 +109,27 @@ export function getChildBudgetsSuccess(payload) {
 export function getChildBudgetsError(error) {
   return {
     type: GET_CHILD_BUDGETS_ERROR,
+    error,
+  };
+}
+
+export function getAggregateBudgetsBegin(payload) {
+  return {
+    type: GET_AGGREGATE_BUDGETS_BEGIN,
+    payload,
+  };
+}
+
+export function getAggregateBudgetsSuccess(payload) {
+  return {
+    type: GET_AGGREGATE_BUDGETS_SUCCESS,
+    payload,
+  };
+}
+
+export function getAggregateBudgetsError(error) {
+  return {
+    type: GET_AGGREGATE_BUDGETS_ERROR,
     error,
   };
 }
