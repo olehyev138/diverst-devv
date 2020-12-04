@@ -28,7 +28,7 @@ class Budget < ApplicationRecord
         "COALESCE(IF(`is_approved` = TRUE, `requested_amount`, 0) - `reserved`, 0) as available",
         "COALESCE(COALESCE(`requested_amount`, 0) - `spent`, 0) as unspent",
         "IF(`is_approved` = TRUE, `requested_amount`, 0) as approved_amount"
-    ).left_joins(:budget_sums)
+    ).left_joins(:budget_sums, :annual_budget)
   end
 
   # scope :with_available_funds, -> { where('available_amount > 0')}

@@ -110,19 +110,6 @@ export function Budget(props) {
     },
   ];
 
-  const actions = [];
-
-  actions.push(rowData => ({
-    icon: () => <CloseIcon />,
-    tooltip: intl.formatMessage(messages.actions.close),
-    onClick: (_, rowData) => {
-      // eslint-disable-next-line no-restricted-globals,no-alert
-      if (confirm(intl.formatMessage(messages.actions.closeConfirm)))
-        props.closeBudgetAction({ id: rowData.id });
-    },
-    disabled: rowData.is_done,
-  }));
-
   const [formOpen, setFormOpen] = React.useState(false);
 
   const formik = useFormik({

@@ -19,7 +19,8 @@ class Api::V1::BudgetItemsController < DiverstController
     item = show_base.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.close(self.diverst_request)
+    render status: :not_found, json: { message: 'Temporarily Disabled' }
+    # render status: 200, json: item.close(self.diverst_request)
   rescue => e
     case e
     when InvalidInputException

@@ -47,17 +47,6 @@ class AnnualBudget < ApplicationRecord
     end
   end
 
-  # def self.count(*args)
-  #   pp "Hello"
-  #   query = self.all
-  #   if query.group_values.blank?
-  #     super
-  #   else
-  #     from_query = query.from_caluse.value
-  #     from_query.unscope(:select).select(:year, :quarter).distinct.count
-  #   end
-  # end
-
   def currency
     'USD'
   end
@@ -187,20 +176,6 @@ class AnnualBudget < ApplicationRecord
     new_annual_budget
   end
 
-  def self.load_sums
-    select(
-        '`annual_budgets`.`*`,'\
-        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
-        ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
-        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
-        .left_joins(:initiative_expenses)
-        .group(AnnualBudget.column_names).each do |ab|
-      ab.instance_variable_set(:@expenses, ab.expenses_sum)
-      ab.instance_variable_set(:@approved, ab.approved_sum)
-      ab.instance_variable_set(:@reserved, ab.reserved_sum)
-    end
-  end
-
   def self.initialize_regions_budgets(amount: 0)
     Region.find_each do |region|
       AnnualBudget.create(budget_head: region, closed: false, amount: amount)
@@ -220,15 +195,6 @@ class AnnualBudget < ApplicationRecord
   end
 
   def reload
-    @approved = nil
-    @reserved = nil
-    @expenses = nil
-    @estimated = nil
-    @finalized_expenditure = nil
-    @remaining = nil
-    @unspent = nil
-    @leftover = nil
-    @free = nil
     super
   end
 end

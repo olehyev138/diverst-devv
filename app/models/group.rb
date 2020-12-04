@@ -312,20 +312,6 @@ class Group < ApplicationRecord
     ab&.save
   end
 
-  def self.load_sums
-    select(
-        '`groups`.*,'\
-        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
-        ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
-        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
-        .left_joins(:initiative_expenses)
-        .group(Group.column_names).each do |g|
-      g.current_annual_budget.instance_variable_set(:@expenses, g.expenses_sum)
-      g.current_annual_budget.instance_variable_set(:@approved, g.approved_sum)
-      g.current_annual_budget.instance_variable_set(:@reserved, g.reserved_sum)
-    end
-  end
-
   def logo_location(expires_in: 3600, default_style: :medium)
     return nil unless logo.attached?
 

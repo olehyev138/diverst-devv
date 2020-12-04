@@ -1223,22 +1223,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe 'load_sums' do
-    it 'returns load sums' do
-      group = create(:group)
-      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
-      budget_item = budget.budget_items.first
-      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
-      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
-      create(:initiative_expense, initiative: initiative, amount: INITIATIVE_EXPENSE)
-      sum = Group.load_sums.first
-      expect(sum.expenses_sum).to eq INITIATIVE_EXPENSE
-      expect(sum.approved_sum).to eq BUDGET_ITEM_AMOUNT
-      expect(sum.reserved_sum).to eq INITIATIVE_ESTIMATE
-    end
-  end
-
   describe 'layout_values' do
     it 'returns layout values' do
       group = create(:group)

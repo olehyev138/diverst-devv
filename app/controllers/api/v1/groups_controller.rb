@@ -134,12 +134,6 @@ class Api::V1::GroupsController < DiverstController
   end
 
   private
-
-  def load_sums(result)
-    result.items = result.items.load_sums
-    result
-  end
-
   def leaders_payload
     params
         .require(klass.symbol)
