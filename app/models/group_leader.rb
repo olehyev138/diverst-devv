@@ -14,7 +14,7 @@ class GroupLeader < ApplicationRecord
   validates_presence_of :leader_of
   validates_presence_of :user
   validates_presence_of :user_role
-  validates :user_id, uniqueness: { message: -> (record, options) { "already exists as a #{record.leader_of_type.downcase} leader" }, scope: [:leader_of_id, :leader_of_type] }
+  validates :user_id, uniqueness: { message: -> (record, options) { I18n.t('errors.group.group_leader_uniqueness_1') + "#{record.leader_of_type.downcase}" + I18n.t('errors.group.group_leader_uniqueness_2') }, scope: [:leader_of_id, :leader_of_type] }
 
   scope :visible,   -> { where(visible: true) }
   scope :role_ids,  -> { distinct.pluck(:user_role_id) }
@@ -40,10 +40,10 @@ class GroupLeader < ApplicationRecord
   private
 
   def validate_group_membership_of_group_leader
-    errors.add(:user, 'Selected user is not a member of this group') unless UserGroup.find_by(user_id: user_id, group_id: group_id)&.is_accepted?
+    errors.add(:user, I18n.t('errors.group.user_not_member')) unless UserGroup.find_by(user_id: user_id, group_id: group_id)&.is_accepted?
   end
 
   def validate_group_membership_of_parent_of_region
-    errors.add(:user, 'Selected user is not a member of this region\'s parent group') unless UserGroup.find_by(user_id: user_id, group_id: region&.parent_id)&.is_accepted?
+    errors.add(:user, I18n.t('errors.group.user_not_member_region')) unless UserGroup.find_by(user_id: user_id, group_id: region&.parent_id)&.is_accepted?
   end
 end
