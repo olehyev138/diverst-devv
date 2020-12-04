@@ -374,6 +374,7 @@ Rails.application.routes.draw do
 
     member do
       get 'settings'
+      get 'emails'
       get 'layouts'
       get 'plan_overview'
       get 'export_csv'
