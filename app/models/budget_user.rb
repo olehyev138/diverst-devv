@@ -23,6 +23,10 @@ class BudgetUser < ApplicationRecord
     budgetable&.group
   end
 
+  def user_path
+    budgetable.path
+  end
+
   polymorphic_alias :budgetable, Initiative
 
   BUDGET_KEYS = ['budget_item_id', 'budget_id', 'annual_budget_id']

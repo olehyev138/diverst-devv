@@ -2,18 +2,18 @@ class AnnualBudget < ApplicationRecord
   include AnnualBudget::Actions
 
   belongs_to :budget_head, polymorphic: true
-  has_one :enterprise, through: :group
+  belongs_to :enterprise
 
   has_many :budgets, dependent: :destroy
   has_many :budget_items, through: :budgets
+  has_many :budget_users, through: :budget_items
   has_many :initiatives, through: :budget_items
   has_many :initiative_expenses, through: :initiatives, source: :expenses
   has_one :annual_budget_sums, class_name: 'AnnualBudgetSums'
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiative_expenses, prefix: 'expenses'
-  delegate :active, to: :initiatives, prefix: true
-  delegate :active, to: :initiative_expenses, prefix: 'expenses'
+  delegate :active, to: :budget_users, prefix: true
   delegate :approved, to: :budgets, prefix: true
   delegate :approved, to: :budget_items, prefix: 'items'
 
@@ -129,21 +129,20 @@ class AnnualBudget < ApplicationRecord
   # end
 
   def can_be_reset?
-    unless no_active_initiatives?
-      errors.add(:initiatives, 'expenses still have not all been closed')
-      return false
-    end
-
-    unless no_open_budgets?
-      errors.add(:budget_items, 'have not all been closed')
+    unless no_active_budget_users?
+      errors.add(:budget_users, 'expenses still have not all been closed')
       return false
     end
 
     true
   end
 
-  def no_active_initiatives?
-    initiatives_active.empty?
+  def self.open_users(enterprise)
+    BudgetUser.includes(:budgetable).joins(:annual_budget).where(finished_expenses: false, annual_budgets: { enterprise_id: enterprise.id }).map(&:path)
+  end
+
+  def no_active_budget_users?
+    budget_users_active.empty?
   end
 
   def no_open_budgets?

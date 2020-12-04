@@ -211,6 +211,10 @@ class Initiative < ApplicationRecord
 
   delegate :currency, to: :annual_budget, allow_nil: true
 
+  def path
+    "#{group.name}/#{name}"
+  end
+
   def ended?
     self.end < Time.now
   end

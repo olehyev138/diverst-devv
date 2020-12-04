@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_214025) do
+ActiveRecord::Schema.define(version: 2020_12_04_161226) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_214025) do
 
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "deprecated_group_id"
-    t.bigint "deprecated_enterprise_id"
+    t.bigint "enterprise_id"
     t.decimal "amount", precision: 20, scale: 4, default: "0.0", null: false
     t.boolean "closed", default: false
     t.decimal "deprecated_available_budget", precision: 20, scale: 4, default: "0.0"
@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(version: 2020_12_03_214025) do
     t.integer "year"
     t.integer "quarter"
     t.index ["budget_head_type", "budget_head_id"], name: "index_annual_budgets_on_budget_head_type_and_budget_head_id"
-    t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
     t.index ["deprecated_group_id"], name: "index_annual_budgets_on_deprecated_group_id"
+    t.index ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id"
   end
 
   create_table "annual_budgets_sums", primary_key: "annual_budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1913,7 +1913,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_214025) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "annual_budgets", "enterprises", column: "deprecated_enterprise_id"
+  add_foreign_key "annual_budgets", "enterprises"
   add_foreign_key "annual_budgets", "groups", column: "deprecated_group_id"
   add_foreign_key "answers", "groups", column: "contributing_group_id"
   add_foreign_key "badges", "enterprises"
