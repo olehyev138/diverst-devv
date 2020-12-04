@@ -18,6 +18,10 @@ class GroupPolicy < ApplicationPolicy
     settings?
   end
 
+  def new_email?
+    emails?
+  end
+
   def create?
     return true if manage_all?
     return true if @policy_group.groups_manage?

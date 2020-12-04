@@ -434,7 +434,25 @@ class GroupsController < ApplicationController
   def new_email
     authorize @group
 
+    @custom_email = @group.custom_emails.new
 
+    @submit_url = create_new_email_group_path(@group)
+    @submit_method = 'post'
+  end
+
+  def create_new_email
+    authorize @group, :new_email?
+
+    @custom_email = @group.custom_emails.new(custom_email_params)
+
+    if @custom_email.save
+      # TODO track activity
+      flash[:notice] = 'Your custom email was created'
+      redirect_to emails_group_path(@group)
+    else
+      flash.now[:alert] = 'Your custom email was not created, please fix errors'
+      render :new_email
+    end
   end
 
 
@@ -602,6 +620,19 @@ class GroupsController < ApplicationController
             :_destroy
           ]
         )
+  end
+
+  def custom_email_params
+    params
+      .require(:email)
+      .permit(
+        :name,
+        :description,
+        :content,
+        :subject,
+        :receivers,
+        receiver_groups_ids: []
+      )
   end
 
   def visit_page
