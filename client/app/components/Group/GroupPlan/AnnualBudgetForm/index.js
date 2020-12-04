@@ -10,7 +10,7 @@ import React, {
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
-import {Field, Formik, Form, getIn, FastField} from 'formik';
+import { Field, Formik, Form, getIn, FastField } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 

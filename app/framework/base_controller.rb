@@ -129,7 +129,9 @@ module BaseController
   def base
     klass
   end
+
   def index_base; base end
+
   def show_base; base end
 
   # Accepts a model instance or class

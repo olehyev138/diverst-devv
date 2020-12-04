@@ -63,18 +63,18 @@ class AdminGroupBudgetSerializer < ApplicationRecordSerializer
 
   def budget_type
     @budget_type ||= if head?
-                       child_proto = object.children.first
-                       budget_proto = child_proto.current_annual_budget
-                       if budget_proto.budget_head == object
-                         :parent
-                       elsif budget_proto.budget_head_type == 'Region'
-                         :region
-                       elsif budget_proto.budget_head == child_proto
-                         :all
-                       end
-                     else
-                       instance_options[:budget_type]
-                     end
+      child_proto = object.children.first
+      budget_proto = child_proto.current_annual_budget
+      if budget_proto.budget_head == object
+        :parent
+      elsif budget_proto.budget_head_type == 'Region'
+        :region
+      elsif budget_proto.budget_head == child_proto
+        :all
+      end
+    else
+      instance_options[:budget_type]
+    end
   end
 
   def budget_children

@@ -50,7 +50,7 @@ export function* getBudgets(action) {
 export function* createBudgetRequest(action) {
   try {
     const { path, groupId, ...rest } = action.payload;
-    const payload = { budget: { group_id: groupId, ...rest }};
+    const payload = { budget: { group_id: groupId, ...rest } };
     const response = yield call(api.budgets.create.bind(api.budgets), payload);
 
     yield put(createBudgetRequestSuccess());

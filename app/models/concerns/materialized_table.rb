@@ -104,12 +104,12 @@ module MaterializedTable
     end
 
     def budget_approver
-      sql =  "SET @requested = (#{
+      sql = "SET @requested = (#{
       Budget
           .select("COALESCE(`requested_amount`, 0) as requested_amount")
           .left_joins(:budget_sums)
           .where('`id` = NEW.`id`').to_sql
-      }); "
+    }); "
       # UN APPROVED
       sql += 'IF COALESCE(OLD.`is_approved`, FALSE) AND NOT COALESCE(NEW.`is_approved`, FALSE) THEN '
       sql += 'SET @new_approved = @old_approved - @requested; '

@@ -37,7 +37,7 @@ export function buildValues(object, valueSchemas) {
 }
 
 export function buildValuesOfArray(array, valueSchemas) {
-  return array.map(object => buildValues(object, valueSchemas))
+  return array.map(object => buildValues(object, valueSchemas));
 }
 
 /*

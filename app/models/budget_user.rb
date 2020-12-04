@@ -11,12 +11,12 @@ class BudgetUser < ApplicationRecord
 
   scope :with_expenses, -> do
     select(
-        "`budget_users`.*",
-        "COALESCE(`spent`, 0)                                                           as spent",
-        "`estimated`                                                                    as user_estimate",
-        "IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), COALESCE(`estimated`, 0)) as reserved",
-        "IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), 0)                        as final_expense"
-    ).left_joins(:budget_user_sums)
+        '`budget_users`.*',
+        'COALESCE(`spent`, 0)                                                           as spent',
+        '`estimated`                                                                    as user_estimate',
+        'IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), COALESCE(`estimated`, 0)) as reserved',
+        'IF(`finished_expenses` = TRUE, COALESCE(`spent`, 0), 0)                        as final_expense'
+      ).left_joins(:budget_user_sums)
   end
 
   def group

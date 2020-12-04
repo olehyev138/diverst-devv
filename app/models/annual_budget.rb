@@ -22,19 +22,19 @@ class AnnualBudget < ApplicationRecord
 
   scope :with_expenses, -> do
     select(
-        "`annual_budgets`.*",
-        "COALESCE(`spent`, 0) as spent",
-        "COALESCE(`reserved`, 0) as reserved",
-        "COALESCE(`requested_amount`, 0) as requested_amount",
-        "COALESCE(`approved`, 0) as approved",
-        "COALESCE(`user_estimates`, 0) as user_estimates",
-        "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
-        "COALESCE(`approved`, 0) - COALESCE(`reserved`, 0) as available",
-        "COALESCE(`user_estimates`, 0) - COALESCE(`spent`, 0) as unspent",
-        "COALESCE(`approved`, 0) - COALESCE(`spent`, 0) as remaining",
-        "COALESCE(`amount`, 0) - COALESCE(`spent`, 0) as leftover",
-        "COALESCE(`amount`, 0) - COALESCE(`approved`, 0) as free"
-    ).left_joins(:annual_budget_sums)
+        '`annual_budgets`.*',
+        'COALESCE(`spent`, 0) as spent',
+        'COALESCE(`reserved`, 0) as reserved',
+        'COALESCE(`requested_amount`, 0) as requested_amount',
+        'COALESCE(`approved`, 0) as approved',
+        'COALESCE(`user_estimates`, 0) as user_estimates',
+        'COALESCE(`finalized_expenditures`, 0) as finalized_expenditures',
+        'COALESCE(`approved`, 0) - COALESCE(`reserved`, 0) as available',
+        'COALESCE(`user_estimates`, 0) - COALESCE(`spent`, 0) as unspent',
+        'COALESCE(`approved`, 0) - COALESCE(`spent`, 0) as remaining',
+        'COALESCE(`amount`, 0) - COALESCE(`spent`, 0) as leftover',
+        'COALESCE(`amount`, 0) - COALESCE(`approved`, 0) as free'
+      ).left_joins(:annual_budget_sums)
   end
 
   define_relation_method :count do |*args|
@@ -53,7 +53,7 @@ class AnnualBudget < ApplicationRecord
 
   def self.expenses_column_names
     @expenses_column_names ||=
-      [:amount, *(with_expenses.select_values.map {|a| a.split(' as ').second}.filter(&:itself))]
+      [:amount, *(with_expenses.select_values.map { |a| a.split(' as ').second }.filter(&:itself))]
   end
 
   def self.data_of(group:, year: nil, quarter: nil, current: false)
@@ -70,11 +70,11 @@ class AnnualBudget < ApplicationRecord
           ]
         end
       ),
-      "MIN(`closed`) as closed",
+      'MIN(`closed`) as closed',
       "#{group.id} as budget_head_id",
       '"Group" as budget_head_type',
     )
-    query = query.having("NOT `closed`") if current
+    query = query.having('NOT `closed`') if current
     query
   end
 
@@ -83,6 +83,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def expenses; spent end
+
   def estimated; user_estimates end
 
   # same as available

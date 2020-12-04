@@ -19,18 +19,18 @@ class RefreshBudgetSumsJob < ApplicationJob
 
     unless old_data == new_data
       diff = {}
-      new_data.each do |k,v|
+      new_data.each do |k, v|
         changes = v - old_data[k]
         diff[k] = changes.map do |change|
           {
-              old: old_data[k].find {|new| new.id = change.id},
+              old: old_data[k].find { |new| new.id = change.id },
               new: change
           }
         end
       end
 
       if Rails.env.development? || Rails.env.test?
-        File.write("#{Rails.root}/log/budget_diff_#{Time.now.to_s}.json", diff.to_json)
+        File.write("#{Rails.root}/log/budget_diff_#{Time.now}.json", diff.to_json)
       else
         e = StandardError.new("Budgets Desynced:\n#{diff.to_json}")
         Rollbar.warn(e)

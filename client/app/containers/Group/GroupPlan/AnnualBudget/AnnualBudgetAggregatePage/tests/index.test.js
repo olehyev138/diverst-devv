@@ -9,12 +9,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import 'utils/mockReactRouterHooks';
-import { AnnualBudgetsPage } from '../index';
+import { AnnualBudgetsAggregatePage } from '../index';
 
-describe('<AnnualBudgetsPage />', () => {
+describe('<AnnualBudgetsAggregatePage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<AnnualBudgetsPage classes={{}} />);
+    const wrapper = shallow(<AnnualBudgetsAggregatePage classes={{}} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

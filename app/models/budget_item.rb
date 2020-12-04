@@ -26,14 +26,14 @@ class BudgetItem < ApplicationRecord
   scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
   scope :with_expenses, -> do
     select(
-        "`budget_items`.*",
-        "COALESCE(`spent`, 0) as spent",
-        "COALESCE(`reserved`, 0) as reserved",
-        "COALESCE(`user_estimates`, 0) as user_estimates",
-        "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
-        "COALESCE(`estimated_amount` - `spent`, 0) as unspent",
-        "IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0, COALESCE(`estimated_amount` - `reserved`, 0)) as available"
-    ).joins(:budget).left_joins(:budget_item_sums)
+        '`budget_items`.*',
+        'COALESCE(`spent`, 0) as spent',
+        'COALESCE(`reserved`, 0) as reserved',
+        'COALESCE(`user_estimates`, 0) as user_estimates',
+        'COALESCE(`finalized_expenditures`, 0) as finalized_expenditures',
+        'COALESCE(`estimated_amount` - `spent`, 0) as unspent',
+        'IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0, COALESCE(`estimated_amount` - `reserved`, 0)) as available'
+      ).joins(:budget).left_joins(:budget_item_sums)
   end
 
   delegate :finalized, to: :initiatives, prefix: true

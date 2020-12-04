@@ -263,7 +263,6 @@ export function Budget(props) {
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}
-          actions={actions}
           handlePagination={() => null}
           handleOrdering={() => null}
           rowsPerPage={Math.min((budgetItems || []).length, 5)}

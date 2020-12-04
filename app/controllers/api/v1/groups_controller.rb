@@ -146,6 +146,7 @@ class Api::V1::GroupsController < DiverstController
   end
 
   private
+
   def leaders_payload
     params
         .require(klass.symbol)

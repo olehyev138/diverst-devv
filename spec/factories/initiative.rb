@@ -21,7 +21,7 @@ FactoryBot.define do
                     group: initiative.group,
                     amount: 3000 + estimate_funding * 5
                   )
-          )
+        )
 
         initiative.budget_item = budget.budget_items.first
         budget.approve(initiative.owner)

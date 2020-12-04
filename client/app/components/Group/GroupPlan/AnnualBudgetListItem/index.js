@@ -23,7 +23,6 @@ import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
-import {AnnualBudgetList} from "components/Group/GroupPlan/AnnualBudgetList";
 
 const { events: eventMessages } = messages;
 const { item: itemMessages } = messages;
