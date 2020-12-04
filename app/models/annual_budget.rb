@@ -29,11 +29,11 @@ class AnnualBudget < ApplicationRecord
         "COALESCE(`approved`, 0) as approved",
         "COALESCE(`user_estimates`, 0) as user_estimates",
         "COALESCE(`finalized_expenditures`, 0) as finalized_expenditures",
-        "COALESCE(`approved` - `reserved`, 0) as available",
-        "COALESCE(`user_estimates` - `spent`, 0) as unspent",
-        "COALESCE(`approved` - `spent`, 0) as remaining",
-        "COALESCE(COALESCE(`amount`, 0) - `spent`, 0) as leftover",
-        "COALESCE(COALESCE(`amount`, 0) - `approved`, 0) as free"
+        "COALESCE(`approved`, 0) - COALESCE(`reserved`, 0) as available",
+        "COALESCE(`user_estimates`, 0) - COALESCE(`spent`, 0) as unspent",
+        "COALESCE(`approved`, 0) - COALESCE(`spent`, 0) as remaining",
+        "COALESCE(`amount`, 0) - COALESCE(`spent`, 0) as leftover",
+        "COALESCE(`amount`, 0) - COALESCE(`approved`, 0) as free"
     ).left_joins(:annual_budget_sums)
   end
 

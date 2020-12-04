@@ -155,15 +155,8 @@ class Group < ApplicationRecord
   delegate :news_feed_links,        to: :news_feed
   delegate :shared_news_feed_links, to: :news_feed
 
-  delegate :leftover, BUDGET_DELEGATE_OPTIONS
-  delegate :remaining, BUDGET_DELEGATE_OPTIONS
-  delegate :approved, BUDGET_DELEGATE_OPTIONS
-  delegate :expenses, BUDGET_DELEGATE_OPTIONS
-  delegate :available, BUDGET_DELEGATE_OPTIONS
-  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
-  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
-  delegate :reset!, BUDGET_DELEGATE_OPTIONS
-  delegate :currency, BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, :remaining, :approved, :expenses, :available, :finalized_expenditure, :currency, BUDGET_DELEGATE_OPTIONS
+  delegate :carryover!, :reset!, BUDGET_DELEGATE_OPTIONS
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -274,6 +267,10 @@ class Group < ApplicationRecord
 
   def aggregate_budget_data
     AnnualBudget.data_of(group: self)
+  end
+
+  def current_aggregate_budget_data
+    AnnualBudget.data_of(group: self, current: true).last
   end
 
   def current_annual_budget

@@ -42,7 +42,12 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    response = AnnualBudget.index(self.diverst_request, params, :return_base, policy: @policy, base: item.aggregate_budget_data)
+    response = AnnualBudget.index(
+      self.diverst_request,
+      params, :return_base,
+      policy: @policy,
+      base: item.aggregate_budget_data
+    )
 
     render status: 200, json: response, **diverst_request.options
   rescue => e
@@ -57,7 +62,14 @@ class Api::V1::GroupsController < DiverstController
     params[:parent_id] = nil
     diverst_request.options[:budgets] = true
     diverst_request.options[:with_children] = true
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), budgets: true, with_children: true
+    render status: 200,
+           json: klass.index(
+             self.diverst_request,
+             params.permit!,
+           ),
+           budgets: true,
+           with_children: true,
+           use_serializer: AdminGroupBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end

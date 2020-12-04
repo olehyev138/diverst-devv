@@ -83,37 +83,37 @@ export function AnnualBudgetList(props, context) {
       icon: () => <EditIcon />,
       tooltip: intl.formatMessage(listMessages.actions.edit),
       onClick: (_, rowData) => {
-        props.handleVisitEditPage(rowData.id);
+        props.handleVisitEditPage(rowData.budget_manager_id);
       },
       disabled: !permission(rowData, 'annual_budgets_manage?')
     })
   );
 
-  actions.push(
-    rowData => ({
-      icon: () => <RedoIcon />,
-      tooltip: intl.formatMessage(listMessages.actions.carryover),
-      onClick: (_, rowData) => {
-        /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
-          props.carryBudget(rowData.id);
-      },
-      // disabled: !permission(rowData, 'carryover_annual_budget?')
-    })
-  );
-
-  actions.push(
-    rowData => ({
-      icon: () => <LoopIcon />,
-      tooltip: intl.formatMessage(listMessages.actions.reset),
-      onClick: (_, rowData) => {
-        /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
-          props.resetBudget(rowData.id);
-      },
-      // disabled: !permission(rowData, 'reset_annual_budget?')
-    })
-  );
+  // actions.push(
+  //   rowData => ({
+  //     icon: () => <RedoIcon />,
+  //     tooltip: intl.formatMessage(listMessages.actions.carryover),
+  //     onClick: (_, rowData) => {
+  //       /* eslint-disable-next-line no-alert, no-restricted-globals */
+  //       if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
+  //         props.carryBudget(rowData.id);
+  //     },
+  //     // disabled: !permission(rowData, 'carryover_annual_budget?')
+  //   })
+  // );
+  //
+  // actions.push(
+  //   rowData => ({
+  //     icon: () => <LoopIcon />,
+  //     tooltip: intl.formatMessage(listMessages.actions.reset),
+  //     onClick: (_, rowData) => {
+  //       /* eslint-disable-next-line no-alert, no-restricted-globals */
+  //       if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
+  //         props.resetBudget(rowData.id);
+  //     },
+  //     // disabled: !permission(rowData, 'reset_annual_budget?')
+  //   })
+  // );
 
   return (
     <React.Fragment>
@@ -130,7 +130,7 @@ export function AnnualBudgetList(props, context) {
             dataTotal={props.annualBudgetTotal}
             columns={columns}
             actions={actions}
-            parentChildData={(row, rows) => rows.find(a => a.id === row.parent_id)}
+            parentChildData={(row, rows) => row.coded_id && rows.find(a => a.coded_id === row.parent_coded_id)}
           />
         </Grid>
       </Grid>

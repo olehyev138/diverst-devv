@@ -140,7 +140,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                 if defined?(super)
                   begin
                     super()
-                  rescue NoMethodError
+                  rescue NoMethodError => e
                     nil
                   end
                 else

@@ -13,9 +13,9 @@ FactoryBot.define do
       before(:create) do |initiative, evaluator|
         estimate_funding = initiative.estimated_funding
         budget = create(
-            :budget,
-            estimated_amount: estimate_funding,
-            annual_budget:
+          :budget,
+          estimated_amount: estimate_funding,
+          annual_budget:
                 create(
                     :annual_budget,
                     group: initiative.group,
