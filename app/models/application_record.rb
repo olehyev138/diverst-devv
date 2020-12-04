@@ -20,6 +20,10 @@ class ApplicationRecord < ActiveRecord::Base
     ActiveRecordQueryTrace.enabled = false
   end
 
+  def coded_id
+    "#{self.class.name}##{id}"
+  end
+
   def time_since_creation
     time_ago_in_words created_at
   end
