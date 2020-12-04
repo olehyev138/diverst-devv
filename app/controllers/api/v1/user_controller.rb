@@ -54,9 +54,9 @@ class Api::V1::UserController < DiverstController
             logs_create: LogPolicy.new(current_user, nil).create?,
             logs_manage: LogPolicy.new(current_user, nil).update?,
 
-            policy_templates_view: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).index?,
-            policy_templates_create: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).create?,
-            policy_templates_manage: PolicyGroupTemplatePolicy.new(current_user, PolicyGroupTemplate).update?,
+            policy_templates_view: UserRolePolicy.new(current_user, UserRole).index?,
+            policy_templates_create: UserRolePolicy.new(current_user, UserRole).create?,
+            policy_templates_manage: UserRolePolicy.new(current_user, UserRole).update?,
 
             metrics_overview: MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?,
             metrics_create: MetricsDashboardPolicy.new(current_user, MetricsDashboard).create?,
