@@ -425,16 +425,10 @@ class GroupsController < ApplicationController
     render nothing: true, status: :ok
   end
 
-  #TODO implement :visit_page for this action
-  #1 Route
-  #2 View template
-  #2.5 show something on a page
-  #3 reenable after login pundit check
   def emails
     authorize @group
 
-    @enterprise = current_user.enterprise
-    @custom_emails = @enterprise.custom_emails
+    @custom_emails = @group.custom_emails
   end
 
 
