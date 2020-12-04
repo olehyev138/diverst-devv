@@ -324,7 +324,7 @@ class Group < ApplicationRecord
     {
       'layout_0' => I18n.t('errors.group.layout_0'),
       'layout_1' => I18n.t('errors.group.layout_1'),
-      'layout_2' => I18n.t('errors.group.layout_2_1')+"#{c_t(:sub_erg).pluralize}"+I18n.t('errors.group.layout_2_2')
+      'layout_2' => I18n.t('errors.group.layout_2_1') + "#{c_t(:sub_erg).pluralize}" + I18n.t('errors.group.layout_2_2')
     }
   end
 
@@ -587,7 +587,7 @@ class Group < ApplicationRecord
       group_category_type = self.group_category.group_category_type if self.group_category
       if self.group_category && self.parent.group_category_type
         if group_category_type != self.parent.group_category_type
-          errors.add(:group_category, I18n.t('errors.group.bad_label')+" #{self.parent.group_category_type.name}")
+          errors.add(:group_category, I18n.t('errors.group.bad_label') + " #{self.parent.group_category_type.name}")
         end
       end
     end

@@ -38,7 +38,7 @@ class Folder < ApplicationRecord
     elsif enterprise_id
       EnterpriseFolderPolicy
     else
-      raise StandardError.new('Folder is without parent')
+      raise StandardError.new(I18n.t('errors.folder.no_parent'))
     end
   end
 

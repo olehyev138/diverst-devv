@@ -69,12 +69,12 @@ class AnnualBudget < ApplicationRecord
 
   def can_be_reset?
     unless no_active_initiatives?
-      errors.add(:initiatives, 'expenses still have not all been closed')
+      errors.add(:initiatives, I18n.t('errors.budget.closed_expenses'))
       return false
     end
 
     unless no_open_budgets?
-      errors.add(:budget_items, 'have not all been closed')
+      errors.add(:budget_items, I18n.t('errors.budget.open_annual_budgets'))
       return false
     end
 
@@ -96,7 +96,7 @@ class AnnualBudget < ApplicationRecord
     # has values set to 0
     return false unless update(closed: true)
 
-    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, 'Annual Budget is Closed') }
+    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, I18n.t('errors.budget.annual_budget_closed')) }
 
     group.create_annual_budget
   end
@@ -110,7 +110,7 @@ class AnnualBudget < ApplicationRecord
     new_annual_budget = group.create_annual_budget
     return false unless new_annual_budget.update(amount: leftover)
 
-    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, 'Annual Budget is Closed') }
+    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, I18n.t('errors.budget.annual_budget_closed')) }
 
     new_annual_budget
   end

@@ -21,16 +21,16 @@ class FieldData < ApplicationRecord
 
   def same_parent
     unless field.field_definer_id == field_user.field_definer_id
-      errors.add(:field, 'Field and field_user must have same parent')
+      errors.add(:field, I18n.t('errors.field.same_parent'))
     end
   end
 
   def validate_numeric_limit
     if data
       if field.max.present? && data.to_i > field.max
-        errors.add(:data, "can't be greater than the max value")
+        errors.add(:data, I18n.t('errors.field.max_value'))
       elsif field.min.present? && data.to_i < field.min
-        errors.add(:data, "can't be less than the min value")
+        errors.add(:data, I18n.t('errors.field.min_value'))
       end
     end
   end
@@ -39,8 +39,8 @@ class FieldData < ApplicationRecord
   def validate_presence_field_data
     if field&.required && (data.blank? || value.blank?) && !new_record?
       key = field.title.parameterize.underscore.to_sym
-      field_user.errors.add(key, "can't be blank")
-      errors.add(:data, "can't be blank")
+      field_user.errors.add(key, I18n.t('errors.field.blank'))
+      errors.add(:data, I18n.t('errors.field.blank'))
     end
   end
 end

@@ -180,3 +180,38 @@ en:
       bad_label: "wrong label for",
       inconsistent_label: "chosen label inconsistent with labels of sub groups"
     }
+    folder: {
+      no_parent: "Folder is without parent",
+    }
+    field: {
+      same_parent: "Field and field user must have same parent",
+      max_value: "can't be greater than the max value",
+      min_value: "can't be less than the min value",
+      blank: "can't be blank",
+    }
+    clockwork: {
+     exist: "does not exist",
+    }
+    campaign: {
+     select_minimum: "Please select at least 1 group",
+     next_day: "must be after today",
+     start: "must be after start",
+    }
+    budget: {
+     maximum: "number of digits must not exceed 6",
+     closed: "Budget Item is already closed",
+     used: "There are still events using this budget item",
+     budget_set: "Please set an annual budget for this group",
+     annual_budget_closed: "Annual Budget is Closed",
+     surplus: "This budget exceeds the annual budget",
+     closed_expenses: "expenses still have not all been closed",
+     open_annual_budgets: "have not all been closed",
+
+    }
+    application: {
+      only_or: "Can only `or` between two queries of the same Klass",
+      strings_joined: "Can't `or` when joins are defined by strings",
+    }
+    api: {
+     exists: "Already has an API key",
+    }
