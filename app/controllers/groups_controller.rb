@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
                                      :close_budgets_export_csv, :sort, :get_all_groups, :get_paginated_groups]
   before_action :set_groups, only: [:index, :get_all_groups]
   skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
-  after_action :verify_authorized, except: [:calendar_data, :emails]
+  after_action :verify_authorized, except: [:calendar_data]
   after_action :visit_page, only: [:index, :close_budgets, :calender, :new, :show, :edit, :layouts,
                                    :settings, :plan_overview, :metrics, :import_csv, :edit_fields]
 
@@ -431,7 +431,7 @@ class GroupsController < ApplicationController
   #2.5 show something on a page
   #3 reenable after login pundit check
   def emails
-
+    authorize @group
   end
 
 

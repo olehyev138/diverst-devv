@@ -14,6 +14,10 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
+  def emails?
+    settings?
+  end
+
   def create?
     return true if manage_all?
     return true if @policy_group.groups_manage?
