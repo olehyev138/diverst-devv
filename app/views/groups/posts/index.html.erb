@@ -56,9 +56,11 @@
         <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if GroupSocialLinkPolicy.new(current_user, [@group]).new? %>
       <% end %>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "Manage Twitter Feed", group_twitter_accounts_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
-    </div>
+    <% if current_user.enterprise.twitter_feed_enabled? %>
+      <div class="flex-row__cell">
+        <%= link_to "Manage Twitter Feed", group_twitter_accounts_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
+      </div>
+    <% end %>  
   </div>
 </div>
 
