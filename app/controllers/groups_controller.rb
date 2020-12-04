@@ -431,6 +431,12 @@ class GroupsController < ApplicationController
     @custom_emails = @group.custom_emails
   end
 
+  def new_email
+    authorize @group
+
+
+  end
+
 
   protected
 
@@ -485,7 +491,8 @@ class GroupsController < ApplicationController
 
   def resolve_layout
     case action_name
-    when 'show', 'layouts', 'settings', 'plan_overview', 'metrics', 'edit_fields', 'emails'
+    when 'show', 'layouts', 'settings', 'plan_overview',
+          'metrics', 'edit_fields', 'emails', 'new_email'
       'erg'
     when 'close_budgets'
       'plan'
