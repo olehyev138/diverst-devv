@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -12,13 +12,12 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Card, CardContent, CardActionArea,
-  Typography, Grid, Link, Collapse, Box, Hidden,
+  Typography, Grid, Link, Hidden,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -80,17 +79,6 @@ const styles = theme => ({
 
 export function UserGroupList(props, context) {
   const { classes, defaultParams } = props;
-  const [expandedGroups, setExpandedGroups] = useState({});
-
-  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
-  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
-    const initialExpandedGroups = {};
-
-    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
-    setExpandedGroups(initialExpandedGroups);
-  }
 
   return (
     <React.Fragment>
@@ -148,84 +136,18 @@ export function UserGroupList(props, context) {
                       </CardActionArea>
                     </Link>
                   </Grid>
-                  {props.viewChildren && group.children && group.children.length > 0 && (
+                  {props.viewChildren && group.is_parent_group === true && (
                     <Grid item className={classes.expandActionAreaContainer}>
                       <CardActionArea
                         className={classes.expandActionArea}
-                        onClick={() => {
-                          setExpandedGroups({
-                            ...expandedGroups,
-                            [group.id]: !expandedGroups[group.id]
-                          });
-                        }}
+                        onClick={() => props.handleParentExpand(group.id, group.name)}
                       >
-                        {expandedGroups[group.id] ? (
-                          <RemoveIcon color='primary' className={classes.expandIcon} />
-                        ) : (
-                          <AddIcon color='primary' className={classes.expandIcon} />
-                        )}
+                        <AddIcon color='primary' className={classes.expandIcon} />
                       </CardActionArea>
                     </Grid>
                   )}
                 </Grid>
               </Card>
-              <Collapse in={expandedGroups[`${group.id}`]}>
-                <Box mt={1} />
-                <Grid container spacing={2} justify='flex-end'>
-                  {group.children && group.children.map((childGroup, i) => (
-                    /* eslint-disable-next-line react/jsx-wrap-multilines */
-                    <Grid item key={childGroup.id} xs={12}>
-                      <Card className={classes.childGroupCard}>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <Link
-                          component={WrappedNavLink}
-                          to={{
-                            pathname: ROUTES.group.home.path(childGroup.id),
-                            state: { id: childGroup.id }
-                          }}
-                          className={classes.groupCardLink}
-                        >
-                          <CardActionArea>
-                            <CardContent className={classes.groupCardContent}>
-                              <Grid container spacing={2} alignItems='center'>
-                                {childGroup.logo_data && (
-                                  <React.Fragment>
-                                    <Hidden xsDown>
-                                      <Grid item xs='auto'>
-                                        <DiverstImg
-                                          data={childGroup.logo_data}
-                                          contentType={childGroup.logo_content_type}
-                                          maxWidth='60px'
-                                          maxHeight='60px'
-                                          minWidth='60px'
-                                          minHeight='60px'
-                                        />
-                                      </Grid>
-                                    </Hidden>
-                                  </React.Fragment>
-                                )}
-                                <Grid item xs>
-                                  {childGroup.current_user_is_member === true && (
-                                    <JoinedGroupIcon className={classes.groupCardIcon} />
-                                  )}
-                                  <Typography variant='h5' component='h2' display='inline'>
-                                    {childGroup.name}
-                                  </Typography>
-                                  {childGroup.short_description && (
-                                    <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                      {childGroup.short_description}
-                                    </Typography>
-                                  )}
-                                </Grid>
-                              </Grid>
-                            </CardContent>
-                          </CardActionArea>
-                        </Link>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Collapse>
             </Grid>
           ))}
         </Grid>
@@ -249,6 +171,7 @@ UserGroupList.propTypes = {
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
+  handleParentExpand: PropTypes.func,
   handlePagination: PropTypes.func,
   viewChildren: PropTypes.bool,
   customTexts: PropTypes.object,
