@@ -432,6 +432,9 @@ class GroupsController < ApplicationController
   #3 reenable after login pundit check
   def emails
     authorize @group
+
+    @enterprise = current_user.enterprise
+    @custom_emails = @enterprise.custom_emails
   end
 
 
