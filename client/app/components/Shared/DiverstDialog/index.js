@@ -13,6 +13,8 @@ import { createStructuredSelector } from 'reselect';
 import { selectCustomText } from 'containers/Shared/App/selectors';
 import { compose } from 'redux';
 
+import Scrollbar from 'components/Shared/Scrollbar';
+
 const styles = {
   dialog: {
     overflowY: 'scroll',
@@ -23,6 +25,7 @@ const styles = {
     margin: 'auto',
   },
   content: {
+    paddingTop: '10px !important',
     height: '100%',
     display: 'flex',
     flex: 1,
@@ -48,9 +51,11 @@ export function DiverstDialog(props) {
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
       {titleDivider && <Divider />}
-      <DialogContent className={classes.content}>
-        {content.id ? props.intl.formatMessage(content, props.customText) : content}
-      </DialogContent>
+      <Scrollbar>
+        <DialogContent className={classes.content}>
+          {content.id ? props.intl.formatMessage(content, props.customText) : content}
+        </DialogContent>
+      </Scrollbar>
       {actionsDivider && <Divider />}
       {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
