@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import GroupSelectorItem from './item';
-import { Typography, Fade, Grid, TextField, IconButton, withStyles } from '@material-ui/core';
+import { Typography, Fade, Grid, TextField, Box, IconButton, withStyles } from '@material-ui/core';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -22,10 +22,8 @@ const styles = {
   },
   container: {
     flex: 1,
-    alignItems: 'center'
   },
   list: {
-    flex: 1,
     overflow: 'auto',
   },
   clearSearchTextButton: {
@@ -128,12 +126,14 @@ const GroupListSelector = (props) => {
       <div className={classes.search}>
         {searchBar}
       </div>
-      <div className={classes.list}>
-        {list}
-      </div>
-      <div className={classes.bottom}>
-        {paginator}
-      </div>
+      <Box className={classes.container}>
+        <div className={classes.list}>
+          {list}
+        </div>
+        <div className={classes.bottom}>
+          {paginator}
+        </div>
+      </Box>
     </React.Fragment>
   );
 };
