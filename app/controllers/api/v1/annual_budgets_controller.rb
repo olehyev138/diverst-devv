@@ -3,6 +3,21 @@ class Api::V1::AnnualBudgetsController < DiverstController
     super.with_expenses
   end
 
+  def reset_budgets
+    base_authorize(klass)
+
+    AnnualBudget.transaction do
+      AnnualBudget.reset_budgets(
+        amount: params[:amount] || 0,
+        init_quarter: to_bool(param[:quarter]),
+        type_override: params[:type]&.downcase&.to_sym,
+        enterprise_id: current_user.enterprise_id
+      )
+    end
+
+    head :no_content
+  end
+
   private
 
   def model_map(model)

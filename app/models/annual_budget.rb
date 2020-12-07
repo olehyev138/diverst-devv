@@ -228,37 +228,50 @@ class AnnualBudget < ApplicationRecord
       end
     end
 
-    def reset_budgets(amount: 0, init_quarter: false, type_override: nil)
+    def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:)
       old_year, old_quarter = current_year_and_quarter
-      new_year, new_quarter = add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
+
+      new_year, new_quarter =  if old_year.present?
+                                 add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
+                               else
+                                 [default_year, init_quarter ? default_quarter : nil]
+                               end
+
       AnnualBudget.update_all(closed: true)
+
       case type_override.presence || current_aggregate_type
       when :region
-        initialize_regions_budgets(amount: amount, year: new_year, quarter: new_quarter)
+        initialize_regions_budgets(amount: amount, year: new_year, quarter: new_quarter, enterprise_id: enterprise_id)
       when :parent
-        initialize_parent_budgets(amount: amount, year: new_year, quarter: new_quarter)
+        initialize_parent_budgets(amount: amount, year: new_year, quarter: new_quarter, enterprise_id: enterprise_id)
       when :all
-        initialize_group_budgets(amount: amount, year: new_year, quarter: new_quarter)
+        initialize_group_budgets(amount: amount, year: new_year, quarter: new_quarter, enterprise_id: enterprise_id)
       else
         raise StandardError, "Current Aggregate Type Invalid"
       end
     end
 
-    def initialize_regions_budgets(amount: 0, year: default_year, quarter: default_quarter)
+    def initialize_regions_budgets(amount: 0, year: default_year, quarter: default_quarter, enterprise_id:)
       Region.find_each do |region|
-        AnnualBudget.create(budget_head: region, closed: false, amount: amount, year: year, quarter: quarter)
+        AnnualBudget.create(
+          budget_head: region, closed: false, amount: amount, year: year, quarter: quarter, enterprise_id: enterprise_id
+        )
       end
     end
 
-    def initialize_parent_budgets(amount: 0, year: default_year, quarter: default_quarter)
+    def initialize_parent_budgets(amount: 0, year: default_year, quarter: default_quarter, enterprise_id:)
       Group.all_parents.find_each do |group|
-        AnnualBudget.create(budget_head: group, closed: false, amount: amount, year: year, quarter: quarter)
+        AnnualBudget.create(
+          budget_head: group, closed: false, amount: amount, year: year, quarter: quarter, enterprise_id: enterprise_id
+        )
       end
     end
 
-    def initialize_group_budgets(amount: 0, year: default_year, quarter: default_quarter)
+    def initialize_group_budgets(amount: 0, year: default_year, quarter: default_quarter, enterprise_id:)
       Group.find_each do |group|
-        AnnualBudget.create(budget_head: group, closed: false, amount: amount, year: year, quarter: quarter)
+        AnnualBudget.create(
+          budget_head: group, closed: false, amount: amount, year: year, quarter: quarter, enterprise_id: enterprise_id
+        )
       end
     end
   end

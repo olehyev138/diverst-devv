@@ -19,7 +19,11 @@ Diverst::Application.routes.draw do
           get 'export_csv'
         end
       end
-      resources :annual_budgets
+      resources :annual_budgets do
+        collection do
+          post 'reset', to: 'annual_budgets#reset_budgets'
+        end
+      end
       resources :answers
       resources :answer_comments
       resources :answer_expenses
