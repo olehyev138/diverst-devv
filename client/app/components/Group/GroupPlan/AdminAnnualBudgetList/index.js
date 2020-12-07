@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Grid,
+  Grid, Button, Box
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
 
@@ -37,6 +38,9 @@ const styles = theme => ({
   },
   errorButton: {
     color: theme.palette.error.main,
+  },
+  buttons: {
+    float: 'right',
   },
 });
 
@@ -89,34 +93,22 @@ export function AnnualBudgetList(props, context) {
     })
   );
 
-  // actions.push(
-  //   rowData => ({
-  //     icon: () => <RedoIcon />,
-  //     tooltip: intl.formatMessage(listMessages.actions.carryover),
-  //     onClick: (_, rowData) => {
-  //       /* eslint-disable-next-line no-alert, no-restricted-globals */
-  //       if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
-  //         props.carryBudget(rowData.id);
-  //     },
-  //     // disabled: !permission(rowData, 'carryover_annual_budget?')
-  //   })
-  // );
-  //
-  // actions.push(
-  //   rowData => ({
-  //     icon: () => <LoopIcon />,
-  //     tooltip: intl.formatMessage(listMessages.actions.reset),
-  //     onClick: (_, rowData) => {
-  //       /* eslint-disable-next-line no-alert, no-restricted-globals */
-  //       if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
-  //         props.resetBudget(rowData.id);
-  //     },
-  //     // disabled: !permission(rowData, 'reset_annual_budget?')
-  //   })
-  // );
-
   return (
     <React.Fragment>
+      <Grid container alignContent='flex-end' alignItems='flex-end'>
+        <Grid item xs>
+          <Button
+            onClick={() => props.resetAll()}
+            color='primary'
+            variant='contained'
+            className={props.classes.buttons}
+          >
+            RESET BUDGET TEMP
+            {/* <DiverstFormattedMessage {...messages.declineForm.cancel} /> */}
+          </Button>
+        </Grid>
+      </Grid>
+      <Box mb={2} />
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
@@ -152,6 +144,7 @@ AnnualBudgetList.propTypes = {
   handleChangeScope: PropTypes.func,
   carryBudget: PropTypes.func,
   resetBudget: PropTypes.func,
+  resetAnnualBudgetBegin: PropTypes.func,
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
   links: PropTypes.shape({

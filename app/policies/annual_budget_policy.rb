@@ -15,6 +15,12 @@ class AnnualBudgetPolicy < GroupBasePolicy
     super || BudgetPolicy.new(user, [group, Budget]).index?
   end
 
+  def manage?
+    EnterprisePolicy.new(user, Enterprise).diversity_manage?
+  end
+
+  alias_method :reset_budgets?, :manage?
+
   class Scope < Scope
     def group_base
       group.all_annual_budgets
