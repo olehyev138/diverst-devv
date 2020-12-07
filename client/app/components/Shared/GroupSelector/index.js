@@ -140,7 +140,6 @@ const GroupSelector = (props) => {
         paperProps={{
           style: {
             maxHeight: '90%',
-            minHeight: '90%',
             minWidth: '40%',
           }
         }}
