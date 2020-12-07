@@ -36,20 +36,8 @@ const GroupListSelector = (props) => {
 
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
   const [searchKey, setSearchKey] = useState('');
-  const [expandedGroups, setExpandedGroups] = useState({});
-  const [selectedGroups, setSelectedGroup] = useState({});
 
-  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
-  if (props.groups && props.groups.length !== 0 && Object.keys(expandedGroups).length <= 0) {
-    const initialExpandedGroups = {};
-
-    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    props.groups.map((id, i) => initialExpandedGroups[id] = false);
-    setExpandedGroups(initialExpandedGroups);
-  }
-
-  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, { ...params, with_children: true });
+  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, { ...params, with_children: false });
   const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
@@ -99,8 +87,6 @@ const GroupListSelector = (props) => {
           key={group.value}
           {...rest}
           group={group}
-          expandedGroups={expandedGroups}
-          setExpandedGroups={setExpandedGroups}
           dialogNoChildren={props.dialogNoChildren}
         />
       ))}
@@ -148,6 +134,10 @@ GroupListSelector.propTypes = {
   queryScopes: PropTypes.arrayOf(PropTypes.string),
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
+
+  parentData: PropTypes.object,
+  displayParentUI: PropTypes.bool,
+  handleParentExpand: PropTypes.func,
 
   open: PropTypes.bool,
   addGroup: PropTypes.func.isRequired,
