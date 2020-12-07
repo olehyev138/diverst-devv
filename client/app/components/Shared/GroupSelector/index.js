@@ -37,7 +37,12 @@ const GroupSelector = (props) => {
   const [dialogSearch, setDialogSearch] = useState(false);
   const [dialogSelectedGroups, setDialogSelectedGroups] = useState([]);
 
+  const [displayParentUI, setDisplayParentUI] = useState(false);
+  const [parentData, setParentData] = useState(undefined);
+
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
+
+  const handleParentExpand = (id, name) => setParentData({ id, name });
 
   function groupCompare(g1, g2) {
     return g1.value === g2.value;
