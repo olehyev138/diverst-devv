@@ -82,12 +82,13 @@ const GroupListSelector = (props) => {
 
   const list = (
     <DiverstLoader isLoading={props.isLoading} transition={Fade}>
-      {(groups || []).map(group => (
+      {(groups || []).map((group, index) => (
         <GroupSelectorItem
           key={group.value}
           {...rest}
           group={group}
           dialogNoChildren={props.dialogNoChildren}
+          isLastGroup={index === groups.length - 1}
         />
       ))}
     </DiverstLoader>
