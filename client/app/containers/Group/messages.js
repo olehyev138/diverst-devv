@@ -166,6 +166,9 @@ export default defineMessages({
     close: {
       id: `${scope}.selectorDialog.close`,
     },
+    empty: {
+      id: `${scope}.selectorDialog.empty`,
+    },
   },
   categorizeCollapsable: {
     id: `${scope}.categorize.button.collapsable`,

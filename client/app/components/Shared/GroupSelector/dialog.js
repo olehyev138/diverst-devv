@@ -91,6 +91,11 @@ const GroupListSelector = (props) => {
           isLastGroup={index === groups.length - 1}
         />
       ))}
+      {(!groups || groups.length === 0) && (
+        <Typography variant='h6' color='secondary' align='center'>
+          <DiverstFormattedMessage {...messages.selectorDialog.empty} />
+        </Typography>
+      )}
     </DiverstLoader>
   );
 
