@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
@@ -31,7 +32,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, extraActions } = props;
+  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, extraActions } = props;
 
   return (
     <Dialog
@@ -46,6 +47,7 @@ export function DiverstDialog(props) {
       className={classes.dialog}
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
+      {titleDivider && <Divider />}
       <DialogContent className={classes.content}>
         {content.id ? props.intl.formatMessage(content, props.customText) : content}
       </DialogContent>
@@ -77,6 +79,7 @@ export function DiverstDialog(props) {
 DiverstDialog.propTypes = {
   title: PropTypes.object,
   subTitle: PropTypes.node,
+  titleDivider: PropTypes.bool,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
   textYes: PropTypes.node,
