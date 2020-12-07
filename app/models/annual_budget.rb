@@ -20,6 +20,13 @@ class AnnualBudget < ApplicationRecord
   polymorphic_alias :budget_head, Group
   polymorphic_alias :budget_head, Region
 
+  scope :current_year, -> { maximum(:year) }
+  scope :current_quarter, -> { where(year: current_year).maximum(:quarter) }
+  scope :current_year_and_quarter, -> do
+    year = current_year
+    [year, where(year: year).maximum(:quarter)]
+  end
+
   scope :with_expenses, -> do
     select(
         '`annual_budgets`.*',
@@ -176,21 +183,83 @@ class AnnualBudget < ApplicationRecord
     new_annual_budget
   end
 
-  def self.initialize_regions_budgets(amount: 0)
-    Region.find_each do |region|
-      AnnualBudget.create(budget_head: region, closed: false, amount: amount)
+  class << self
+    def default_year
+      Time.now.year
     end
-  end
 
-  def self.initialize_parent_budgets(amount: 0)
-    Group.all_parents.find_each do |group|
-      AnnualBudget.create(budget_head: group, closed: false, amount: amount)
+    def default_quarter
+      (Time.now.to_i % 1.year)/3.months
     end
-  end
 
-  def self.initialize_group_budgets(amount: 0)
-    Group.find_each do |group|
-      AnnualBudget.create(budget_head: group, closed: false, amount: amount)
+    def current_aggregate_type
+      type_row = AnnualBudget
+        .select(
+          :year,
+          :quarter,
+          "MIN(`annual_budgets`.`budget_head_type` = 'Region') as region_type",
+          "MAX(`groups`.`id`) IS NOT NULL AND MIN(`groups`.`parent_id` IS NULL) as parent_type"
+        ).joins(
+          "LEFT JOIN `groups` ON `groups`.`id` = `annual_budgets`.`budget_head_id` && `annual_budgets`.`budget_head_type` = 'Group'")
+        .group(:year, :quarter)
+        .order(year: :desc)
+        .order(quarter: :desc)
+        .limit(1)
+        .to_a.first
+
+      if type_row.region_type == 1
+        :region
+      elsif type_row.parent_type == 1
+        :parent
+      else
+        :all
+      end
+    end
+
+    def add_quarter(year:, quarter: nil, init_quarter: false)
+      if quarter.blank? && !init_quarter
+        [year+1, nil]
+      elsif quarter.blank? && init_quarter
+        [year, default_quarter]
+      elsif quarter >= 4
+        [year+1, 1]
+      else
+        [year, quarter + 1]
+      end
+    end
+
+    def reset_budgets(amount: 0, init_quarter: false, type_override: nil)
+      old_year, old_quarter = current_year_and_quarter
+      new_year, new_quarter = add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
+      AnnualBudget.update_all(closed: true)
+      case type_override.presence || current_aggregate_type
+      when :region
+        initialize_regions_budgets(amount: amount, year: new_year, quarter: new_quarter)
+      when :parent
+        initialize_parent_budgets(amount: amount, year: new_year, quarter: new_quarter)
+      when :all
+        initialize_group_budgets(amount: amount, year: new_year, quarter: new_quarter)
+      else
+        raise StandardError, "Current Aggregate Type Invalid"
+      end
+    end
+
+    def initialize_regions_budgets(amount: 0, year: default_year, quarter: default_quarter)
+      Region.find_each do |region|
+        AnnualBudget.create(budget_head: region, closed: false, amount: amount, year: year, quarter: quarter)
+      end
+    end
+
+    def initialize_parent_budgets(amount: 0, year: default_year, quarter: default_quarter)
+      Group.all_parents.find_each do |group|
+        AnnualBudget.create(budget_head: group, closed: false, amount: amount, year: year, quarter: quarter)
+      end
+    end
+
+    def initialize_group_budgets(amount: 0, year: default_year, quarter: default_quarter)
+      Group.find_each do |group|
+        AnnualBudget.create(budget_head: group, closed: false, amount: amount, year: year, quarter: quarter)
+      end
     end
   end
 
