@@ -147,6 +147,7 @@ const GroupSelector = (props) => {
         textYes={<DiverstFormattedMessage {...messages.selectorDialog.save} />}
         handleNo={() => setDialogSearch(false)}
         textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        actionsDivider
         extraActions={[
           {
             key: 'clear groups',
