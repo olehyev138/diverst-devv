@@ -102,6 +102,7 @@ const styles = theme => ({
   },
   buttonBase: {
     width: '100%',
+    textAlign: 'justify',
   },
   cardContentSelected: {
     paddingTop: 10,
