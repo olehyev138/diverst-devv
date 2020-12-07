@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <%= stylesheet_link_tag (@enterprise&.theme&.nil? ? "application" : @enterprise&.theme&.asset_url), media: 'all', 'data-turbolinks-track' => true %>
 </head>
+  <style>
+    img {
+      margin-top: 15px;
+    }
+  </style>
   <body>
     <%= render 'layouts/email_header' %>
 
