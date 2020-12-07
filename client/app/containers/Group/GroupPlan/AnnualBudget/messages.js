@@ -134,6 +134,12 @@ export default defineMessages({
     notSet: {
       id: `${scope}.adminList.notSet`,
     },
+    initializeYear: {
+      id: `${scope}.adminList.initializeYear`,
+    },
+    initializeQuarter: {
+      id: `${scope}.adminList.initializeQuarter`,
+    },
   },
   snackbars: {
     errors: {

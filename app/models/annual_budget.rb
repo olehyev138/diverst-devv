@@ -20,13 +20,6 @@ class AnnualBudget < ApplicationRecord
   polymorphic_alias :budget_head, Group
   polymorphic_alias :budget_head, Region
 
-  scope :current_year, -> { maximum(:year) }
-  scope :current_quarter, -> { where(year: current_year).maximum(:quarter) }
-  scope :current_year_and_quarter, -> do
-    year = current_year
-    [year, where(year: year).maximum(:quarter)]
-  end
-
   scope :with_expenses, -> do
     select(
         '`annual_budgets`.*',
@@ -192,6 +185,11 @@ class AnnualBudget < ApplicationRecord
       (Time.now.to_i % 1.year)/3.months
     end
 
+    def current_budget_period
+      year = maximum(:year)
+      [year, where(year: year).maximum(:quarter)]
+    end
+
     def current_aggregate_type
       type_row = AnnualBudget
         .select(
@@ -229,7 +227,7 @@ class AnnualBudget < ApplicationRecord
     end
 
     def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:)
-      old_year, old_quarter = current_year_and_quarter
+      old_year, old_quarter = current_budget_period
 
       new_year, new_quarter =  if old_year.present?
                                  add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)

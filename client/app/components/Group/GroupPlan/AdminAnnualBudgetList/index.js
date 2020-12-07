@@ -25,7 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
-import Permission from "components/Shared/DiverstPermission";
+import Permission from 'components/Shared/DiverstPermission';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
@@ -104,9 +104,11 @@ export function AnnualBudgetList(props, context) {
               color='primary'
               variant='contained'
               className={props.classes.buttons}
+              disabled={props.budgetPeriod[0] == null}
             >
-              RESET BUDGET TEMP
-              {/* <DiverstFormattedMessage {...messages.declineForm.cancel} /> */}
+              { props.budgetPeriod?.[1]
+                ? <DiverstFormattedMessage {...messages.adminList.initializeQuarter} />
+                : <DiverstFormattedMessage {...messages.adminList.initializeYear} /> }
             </Button>
           </Grid>
         </Grid>
@@ -150,6 +152,7 @@ AnnualBudgetList.propTypes = {
   resetAll: PropTypes.func,
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
+  budgetPeriod: PropTypes.array,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func

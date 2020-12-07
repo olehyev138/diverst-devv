@@ -24,6 +24,11 @@ const selectPermissions = () => createSelector(
   globalState => globalState.data?.permissions
 );
 
+const selectBudgetPeriod = () => createSelector(
+  selectGlobal,
+  globalState => globalState.data?.current_budget_period
+);
+
 const selectToken = () => createSelector(
   selectGlobal,
   globalState => globalState.token
@@ -90,5 +95,5 @@ export {
   selectUser, selectIsFetchingUserData, selectFetchUserDataError,
   selectCustomText, selectMentoringInterests, selectMentoringTypes,
   selectFindEnterpriseError, selectPermissions, selectEnterprisePrivacyMessage,
-  selectAdminDrawerOpen,
+  selectAdminDrawerOpen, selectBudgetPeriod,
 };

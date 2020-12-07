@@ -38,6 +38,8 @@
   "diverst.containers.AnnualBudget.adminList.columns.group": "Group",
   "diverst.containers.AnnualBudget.adminList.columns.leftover": "Unspent Budget",
   "diverst.containers.AnnualBudget.adminList.notSet": "Not Set",
+  "diverst.containers.AnnualBudget.adminList.initializeYear": "Initialize Next Year's Budget",
+  "diverst.containers.AnnualBudget.adminList.initializeQuarter": "Initialize Next Quarter's Budget",
   "diverst.containers.AnnualBudget.adminList.title": "Current Annual Budgets",
   "diverst.containers.AnnualBudget.events.columns.funding": "Estimated funding",
   "diverst.containers.AnnualBudget.events.columns.name": "Event",

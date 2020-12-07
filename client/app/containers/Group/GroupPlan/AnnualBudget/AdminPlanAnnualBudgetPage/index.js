@@ -25,7 +25,7 @@ import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectBudgetPeriod } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
@@ -89,6 +89,7 @@ export function AdminAnnualBudgetPage(props) {
       resetAll={props.resetAnnualBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
       permissions={props.permissions}
+      budgetPeriod={props.budgetPeriod}
     />
   );
 }
@@ -108,6 +109,7 @@ AdminAnnualBudgetPage.propTypes = {
   deleteGroupBegin: PropTypes.func,
   resetAnnualBudgetBegin: PropTypes.func,
   permissions: PropTypes.object,
+  budgetPeriod: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -118,6 +120,7 @@ const mapStateToProps = createStructuredSelector({
   hasChanged: selectHasChanged(),
   budgetHasChanged: budgetHasChanged(),
   permissions: selectPermissions(),
+  budgetPeriod: selectBudgetPeriod(),
 });
 
 const mapDispatchToProps = {
