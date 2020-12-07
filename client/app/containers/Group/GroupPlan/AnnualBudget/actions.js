@@ -26,6 +26,9 @@ import {
   UPDATE_ANNUAL_BUDGET_BEGIN,
   UPDATE_ANNUAL_BUDGET_SUCCESS,
   UPDATE_ANNUAL_BUDGET_ERROR,
+  RESET_ANNUAL_BUDGET_BEGIN,
+  RESET_ANNUAL_BUDGET_SUCCESS,
+  RESET_ANNUAL_BUDGET_ERROR,
   ANNUAL_BUDGETS_UNMOUNT,
 } from './constants';
 
@@ -172,6 +175,27 @@ export function updateAnnualBudgetSuccess(payload) {
 export function updateAnnualBudgetError(error) {
   return {
     type: UPDATE_ANNUAL_BUDGET_ERROR,
+    error,
+  };
+}
+
+export function resetAnnualBudgetBegin(payload) {
+  return {
+    type: RESET_ANNUAL_BUDGET_BEGIN,
+    payload,
+  };
+}
+
+export function resetAnnualBudgetSuccess(payload) {
+  return {
+    type: RESET_ANNUAL_BUDGET_SUCCESS,
+    payload,
+  };
+}
+
+export function resetAnnualBudgetError(error) {
+  return {
+    type: RESET_ANNUAL_BUDGET_ERROR,
     error,
   };
 }

@@ -32,4 +32,8 @@ export const UPDATE_ANNUAL_BUDGET_BEGIN = 'app/Group/GroupPlan/AnnualBudget/UPDA
 export const UPDATE_ANNUAL_BUDGET_SUCCESS = 'app/Group/GroupPlan/AnnualBudget/UPDATE_ANNUAL_BUDGET_SUCCESS';
 export const UPDATE_ANNUAL_BUDGET_ERROR = 'app/Group/GroupPlan/AnnualBudget/UPDATE_ANNUAL_BUDGET_ERROR';
 
+export const RESET_ANNUAL_BUDGET_BEGIN = 'app/Group/GroupPlan/AnnualBudget/RESET_ANNUAL_BUDGET_BEGIN';
+export const RESET_ANNUAL_BUDGET_SUCCESS = 'app/Group/GroupPlan/AnnualBudget/RESET_ANNUAL_BUDGET_SUCCESS';
+export const RESET_ANNUAL_BUDGET_ERROR = 'app/Group/GroupPlan/AnnualBudget/RESET_ANNUAL_BUDGET_ERROR';
+
 export const ANNUAL_BUDGETS_UNMOUNT = 'app/Group/GroupPlan/AnnualBudget/ANNUAL_BUDGETS_UNMOUNT';

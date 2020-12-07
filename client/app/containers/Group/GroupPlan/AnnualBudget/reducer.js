@@ -27,6 +27,9 @@ import {
   UPDATE_ANNUAL_BUDGET_BEGIN,
   UPDATE_ANNUAL_BUDGET_SUCCESS,
   UPDATE_ANNUAL_BUDGET_ERROR,
+  RESET_ANNUAL_BUDGET_BEGIN,
+  RESET_ANNUAL_BUDGET_SUCCESS,
+  RESET_ANNUAL_BUDGET_ERROR,
   ANNUAL_BUDGETS_UNMOUNT,
 } from './constants';
 
@@ -95,18 +98,21 @@ function annualBudgetReducer(state = initialState, action) {
 
       case CREATE_ANNUAL_BUDGET_BEGIN:
       case UPDATE_ANNUAL_BUDGET_BEGIN:
+      case RESET_ANNUAL_BUDGET_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
 
       case CREATE_ANNUAL_BUDGET_SUCCESS:
       case UPDATE_ANNUAL_BUDGET_SUCCESS:
+      case RESET_ANNUAL_BUDGET_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
 
       case CREATE_ANNUAL_BUDGET_ERROR:
       case UPDATE_ANNUAL_BUDGET_ERROR:
+      case RESET_ANNUAL_BUDGET_ERROR:
         draft.isCommitting = false;
         break;
 
