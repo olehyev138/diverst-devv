@@ -157,6 +157,9 @@ export default defineMessages({
     search: {
       id: `${scope}.selectorDialog.search`,
     },
+    searchPlaceholder: {
+      id: `${scope}.selectorDialog.searchPlaceholder`,
+    },
     save: {
       id: `${scope}.selectorDialog.save`,
     },
