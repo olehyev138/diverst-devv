@@ -515,7 +515,7 @@ class Initiative < ApplicationRecord
 
     # Here we know there is no budge, no leftover, but estimated_amount
     # is still greater than zero, which is not valid
-    errors.add(:budget, I18n.t('errors.initiative.budget.lack_of_funds'))
+    errors.add(:budget, I18n.t('errors.initiative.lack_of_funds'))
   end
 
   def segment_enterprise
