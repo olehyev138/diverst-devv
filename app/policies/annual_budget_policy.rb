@@ -16,7 +16,7 @@ class AnnualBudgetPolicy < GroupBasePolicy
   end
 
   def manage?
-    EnterprisePolicy.new(user, Enterprise).diversity_manage?
+    BudgetPolicy.new(user, Budget).manage_all_budgets?
   end
 
   alias_method :reset_budgets?, :manage?

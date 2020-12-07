@@ -25,6 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import Permission from "components/Shared/DiverstPermission";
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
@@ -95,20 +96,22 @@ export function AnnualBudgetList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container alignContent='flex-end' alignItems='flex-end'>
-        <Grid item xs>
-          <Button
-            onClick={() => props.resetAll()}
-            color='primary'
-            variant='contained'
-            className={props.classes.buttons}
-          >
-            RESET BUDGET TEMP
-            {/* <DiverstFormattedMessage {...messages.declineForm.cancel} /> */}
-          </Button>
+      <Permission show={permission(props, 'manage_all_budgets')}>
+        <Grid container alignContent='flex-end' alignItems='flex-end'>
+          <Grid item xs>
+            <Button
+              onClick={() => props.resetAll()}
+              color='primary'
+              variant='contained'
+              className={props.classes.buttons}
+            >
+              RESET BUDGET TEMP
+              {/* <DiverstFormattedMessage {...messages.declineForm.cancel} /> */}
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-      <Box mb={2} />
+        <Box mb={2} />
+      </Permission>
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
@@ -144,7 +147,7 @@ AnnualBudgetList.propTypes = {
   handleChangeScope: PropTypes.func,
   carryBudget: PropTypes.func,
   resetBudget: PropTypes.func,
-  resetAnnualBudgetBegin: PropTypes.func,
+  resetAll: PropTypes.func,
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
   links: PropTypes.shape({

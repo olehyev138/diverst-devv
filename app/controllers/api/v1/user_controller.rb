@@ -17,6 +17,7 @@ class Api::V1::UserController < DiverstController
         role: current_user.user_role.role_name,
         time_zone: ActiveSupport::TimeZone.find_tzinfo(current_user.time_zone).name,
         created_at: current_user.created_at.as_json,
+        current_budget_period: AnnualBudget.current_year_and_quarter,
         permissions: {
             users_view: UserPolicy.new(current_user, User).index?,
             users_create: UserPolicy.new(current_user, User).create?,

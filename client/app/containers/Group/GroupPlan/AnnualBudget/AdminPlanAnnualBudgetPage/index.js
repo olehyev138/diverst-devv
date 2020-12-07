@@ -88,6 +88,7 @@ export function AdminAnnualBudgetPage(props) {
       resetBudget={props.resetBudgetBegin}
       resetAll={props.resetAnnualBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
+      permissions={props.permissions}
     />
   );
 }
@@ -106,6 +107,7 @@ AdminAnnualBudgetPage.propTypes = {
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
   resetAnnualBudgetBegin: PropTypes.func,
+  permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
