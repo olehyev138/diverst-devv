@@ -139,6 +139,7 @@ const GroupSelector = (props) => {
       <DiverstDialog
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
+        titleDivider
         handleYes={() => {
           onChange(dialogSelectedGroups);
           setDialogSearch(false);
@@ -157,7 +158,8 @@ const GroupSelector = (props) => {
         paperProps={{
           style: {
             maxHeight: '90%',
-            minWidth: '40%',
+            minHeight: '85%',
+            minWidth: '50%',
           }
         }}
         content={(
