@@ -79,6 +79,7 @@ const PaginationActionsComponent = withStyles(paginationActionsStyles)(Paginatio
 const styles = theme => ({
   paginationContainer: {
     '& .MuiToolbar-gutters': {
+      minHeight: 42,
       paddingLeft: 0,
       paddingRight: 0,
     },
