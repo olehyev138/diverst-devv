@@ -32,7 +32,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, extraActions } = props;
+  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, actionsDivider, extraActions } = props;
 
   return (
     <Dialog
@@ -51,6 +51,7 @@ export function DiverstDialog(props) {
       <DialogContent className={classes.content}>
         {content.id ? props.intl.formatMessage(content, props.customText) : content}
       </DialogContent>
+      {actionsDivider && <Divider />}
       {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
           {handleYes && textYes && (
@@ -89,6 +90,7 @@ DiverstDialog.propTypes = {
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
   paperProps: PropTypes.object,
+  actionsDivider: PropTypes.bool,
   extraActions: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     func: PropTypes.func,
