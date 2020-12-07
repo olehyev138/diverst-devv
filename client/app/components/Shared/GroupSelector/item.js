@@ -35,6 +35,7 @@ import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineB
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles, lighten } from '@material-ui/core/styles';
 import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper';
+import classNames from 'classnames';
 
 const styles = theme => ({
   errorButton: {
@@ -56,6 +57,9 @@ const styles = theme => ({
   groupCardTitle: {
     verticalAlign: 'middle',
     width: '100%'
+  },
+  groupCardTitleNoChildren: {
+    paddingRight: 58, // Compensate for children expand button & icon
   },
   groupCardIcon: {
     verticalAlign: 'middle',
@@ -105,10 +109,10 @@ const styles = theme => ({
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.primary.main,
+    background: lighten(theme.palette.primary.main, 0.85),
     borderRightWidth: 1,
     borderRightStyle: 'solid',
     borderRightColor: theme.custom.colors.lightGrey,
-    background: lighten(theme.palette.primary.main, 0.85),
   },
   cardContentNotSelected: {
     paddingTop: 10,
@@ -119,7 +123,7 @@ const styles = theme => ({
     borderRightWidth: 1,
     borderRightStyle: 'solid',
     borderRightColor: theme.custom.colors.lightGrey,
-  }
+  },
 });
 
 const GroupSelectorItem = (props) => {
@@ -144,6 +148,14 @@ const GroupSelectorItem = (props) => {
 
   const imageDimensions = props.large ? '80px' : '30px';
 
+  const groupCardClasses = props.isSelected(group) ? classes.cardContentSelected : classes.cardContentNotSelected;
+  let groupCardTitleClasses = classes.groupCardTitle;
+  let groupCardShortDescriptionClasses = classes.groupCardTitle;
+
+  if (group.is_parent_group !== true)
+    if (props.large) groupCardShortDescriptionClasses = classNames(groupCardShortDescriptionClasses, classes.groupCardTitleNoChildren);
+    else groupCardTitleClasses = classNames(groupCardTitleClasses, classes.groupCardTitleNoChildren);
+
   return (
     <React.Fragment>
       <Divider />
@@ -154,7 +166,7 @@ const GroupSelectorItem = (props) => {
             onDoubleClick={handleDoubleClick}
             className={classes.buttonBase}
           >
-            <CardContent className={props.isSelected(props.group) ? classes.cardContentSelected : classes.cardContentNotSelected}>
+            <CardContent className={groupCardClasses}>
               <Grid container spacing={2} alignItems='center' alignContent='flex-start'>
                 <Hidden xsDown>
                   <Grid item xs='auto'>
@@ -175,11 +187,11 @@ const GroupSelectorItem = (props) => {
                   </Grid>
                 )}
                 <Grid item xs>
-                  <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
+                  <Typography variant='h5' component='h2' className={groupCardTitleClasses}>
                     {group.label || group.name}
                   </Typography>
                   {props.large && (
-                    <Typography variant='body1' component='h3' className={classes.groupCardTitle} color='secondary'>
+                    <Typography variant='body1' component='h3' className={groupCardShortDescriptionClasses} color='secondary'>
                       {group.short_description}
                     </Typography>
                   )}
