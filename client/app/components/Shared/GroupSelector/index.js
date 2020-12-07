@@ -159,6 +159,9 @@ const GroupSelector = (props) => {
             dialogNoChildren={props.dialogNoChildren}
             queryScopes={props.queryScopes}
             dialogQueryScopes={props.dialogQueryScopes}
+            parentData={parentData}
+            displayParentUI={displayParentUI}
+            handleParentExpand={handleParentExpand}
           />
         )}
       />
