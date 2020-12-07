@@ -22,7 +22,7 @@ import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
 import Permission from 'components/Shared/DiverstPermission';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import {Formik, Form, Field} from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 
 const { adminList: listMessages } = messages;
@@ -56,11 +56,13 @@ export function BudgetInitializationForm(props, context) {
     const currYear = date.getFullYear();
     const from0to10 = [...Array(10).keys()];
     const yearRange = from0to10.map(n => currYear + n - 2);
-    return [{ label: 'Current Year', value: null }] + yearRange.map(year => ({ label: year, value: year }));
+    return [{ label: 'Current Year', value: null }].concat(yearRange.map(year => ({ label: year, value: year })));
   }, []);
 
-  const quarterOptions = useMemo(() => [{ label: 'Current Quarter', value: null }]
-      + [...Array(4).keys()].map(a => ({ label: a + 1, value: a + 1 })), []);
+  const quarterOptions = useMemo(() => [{ label: 'Current Quarter', value: null }].concat(
+    [...Array(4).keys()].map(a => ({ label: a + 1, value: a + 1 }))
+  ),
+  []);
 
   return (
     <Formik
@@ -111,7 +113,6 @@ export function BudgetInitializationForm(props, context) {
               <Select
                 name='type'
                 id='type'
-                isMulti
                 fullWidth
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.interests} />}
@@ -120,12 +121,11 @@ export function BudgetInitializationForm(props, context) {
                 onChange={value => setFieldValue('type', value)}
               />
               <Box mb={2} />
-              <Grid container>
+              <Grid container alignContent='space-between' alignItems='center' spacing={2}>
                 <Grid item xs={10}>
                   <Select
                     name='year'
                     id='year'
-                    isMulti
                     fullWidth
                     margin='normal'
                     label={<DiverstFormattedMessage {...messages.form.interests} />}
@@ -134,7 +134,7 @@ export function BudgetInitializationForm(props, context) {
                     onChange={value => setFieldValue('year', value)}
                   />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs='auto'>
                   <FormControlLabel
                     control={(
                       <Field
@@ -158,7 +158,6 @@ export function BudgetInitializationForm(props, context) {
                   <Select
                     name='quarter'
                     id='quarter'
-                    isMulti
                     fullWidth
                     margin='normal'
                     label={<DiverstFormattedMessage {...messages.form.interests} />}

@@ -15,10 +15,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import { resetAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/actions';
 
-import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
+import BudgetInitializationForm from 'components/Group/GroupPlan/BudgetInitializationForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions, selectBudgetPeriod } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectBudgetPeriod, selectEnterprise } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
@@ -28,7 +28,7 @@ export function AdminInitializeBudgetPage(props) {
   useInjectSaga({ key: 'annualBudgets', saga: annualBudgetSaga });
 
   return (
-    <AnnualBudgetList
+    <BudgetInitializationForm
       resetAll={props.resetAnnualBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
       permissions={props.permissions}
@@ -45,6 +45,7 @@ AdminInitializeBudgetPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  enterprise: selectEnterprise(),
   permissions: selectPermissions(),
   budgetPeriod: selectBudgetPeriod(),
 });

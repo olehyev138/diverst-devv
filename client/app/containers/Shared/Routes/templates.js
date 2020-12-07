@@ -49,6 +49,7 @@ import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/L
 
 /* Admin - Plan */
 import AdminAnnualBudgetPage from 'containers/Group/GroupPlan/AnnualBudget/AdminPlanAnnualBudgetPage/Loadable';
+import AdminInitializeBudgetPage from 'containers/Group/GroupPlan/AnnualBudget/AdminInitializeBudgetPage/Loadable';
 
 /* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
@@ -288,6 +289,7 @@ export {
   RegionLeaderCreatePage,
   RegionLeaderEditPage,
   AdminAnnualBudgetPage,
+  AdminInitializeBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
   AnnualBudgetAggregatesPage,

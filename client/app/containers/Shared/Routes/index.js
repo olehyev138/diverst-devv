@@ -91,6 +91,7 @@ import {
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
   AdminAnnualBudgetPage,
+  AdminInitializeBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
   AnnualBudgetAggregatesPage,
@@ -534,6 +535,8 @@ export default function Routes(props) {
                     { /* Manage - Calendar */ }
                     <RouteWithProps path={ROUTES.admin.manage.calendar.index.path()}><AdminCalendarPage /></RouteWithProps>
 
+                    { /* Plan - Budget - Initialize */ }
+                    <RouteWithProps path={ROUTES.admin.plan.budgeting.initialize.path()}><AdminInitializeBudgetPage /></RouteWithProps>
                     { /* Plan - Budget */ }
                     <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>
 
