@@ -183,6 +183,7 @@ GroupSelector.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
   queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
+  disableAllParentsScope: PropTypes.bool,
   isLoading: PropTypes.bool,
 
   getGroupsBegin: PropTypes.func.isRequired,
@@ -196,11 +197,14 @@ GroupSelector.propTypes = {
 
 GroupSelector.defaultProps = {
   inputCallback: (props, searchKey = '', params = {}) => {
+    const passedQueryScopes = [...props.queryScopes] || [];
+    const initialQueryScopes = props.disableAllParentsScope ? [] : ['all_parents'];
+
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      minimal: true,
-      query_scopes: props.queryScopes || [],
+      with_children: false,
+      query_scopes: [...initialQueryScopes, ...passedQueryScopes],
       ...props.extraParams,
       ...params,
     });
