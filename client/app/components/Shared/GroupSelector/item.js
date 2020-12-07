@@ -124,7 +124,7 @@ const styles = theme => ({
 
 const GroupSelectorItem = (props) => {
   const { group, classes, doubleClickWait, ...rest } = props;
-  const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups } = rest;
+  const { getGroupsBegin, groupListUnmount, groupSelectAction } = rest;
 
   const [handleClick, handleDoubleClick] = useClickPreventionOnDoubleClick(
     () => {
@@ -135,9 +135,9 @@ const GroupSelectorItem = (props) => {
     },
     () => {
       if (props.isSelected(props.group))
-        props.removeGroup(...[props.group, ...props.group.children]);
+        props.removeGroup(...[props.group]);
       else
-        props.addGroup(...[props.group, ...props.group.children]);
+        props.addGroup(...[props.group]);
     },
     doubleClickWait,
   );
@@ -189,39 +189,20 @@ const GroupSelectorItem = (props) => {
             </CardContent>
           </ButtonBase>
         </Grid>
-        {!props.dialogNoChildren && group.children && group.children.length > 0 && (
+        {(!props.dialogNoChildren && group.is_parent_group === true) && (
           <Grid item className={props.isSelected(props.group) ? classes.expandActionAreaContainerSelected : classes.expandActionAreaContainer}>
             <CardActionArea
               className={classes.expandActionArea}
-              onClick={() => {
-                setExpandedGroups({
-                  ...expandedGroups,
-                  [group.value || group.id]: !expandedGroups[group.value || group.id]
-                });
-              }}
+              onClick={() => props.handleParentExpand(group.value || group.id, group.label || group.name)}
             >
-              {expandedGroups[group.value || group.id] ? (
-                <RemoveIcon color='primary' className={classes.expandIcon} />
-              ) : (
-                <AddIcon color='primary' className={classes.expandIcon} />
-              )}
+              <AddIcon color='primary' className={classes.expandIcon} />
             </CardActionArea>
           </Grid>
         )}
       </Grid>
-      <Divider />
-      <Collapse in={expandedGroups[`${group.value || group.id}`]}>
-        <Grid container>
-          <Grid item xs={1} />
-          <Grid item xs={11}>
-            {group.children && group.children.map((childGroup, i) => (
-              <React.Fragment key={childGroup.value || childGroup.id}>
-                <GroupSelectorItem {...props} group={childGroup} child />
-              </React.Fragment>
-            ))}
-          </Grid>
-        </Grid>
-      </Collapse>
+      {props.isLastGroup === true && (
+        <Divider />
+      )}
       {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
     </React.Fragment>
   );
@@ -232,8 +213,14 @@ GroupSelectorItem.propTypes = {
   group: PropTypes.shape({
     value: PropTypes.number,
     label: PropTypes.string,
-    children: PropTypes.arrayOf(PropTypes.object)
+    is_parent_group: PropTypes.bool,
   }).isRequired,
+
+  parentData: PropTypes.object,
+  displayParentUI: PropTypes.bool,
+  handleParentExpand: PropTypes.func,
+
+  isLastGroup: PropTypes.bool,
 
   dialogNoChildren: PropTypes.bool,
   inputCallback: PropTypes.func,
