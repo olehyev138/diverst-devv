@@ -11,6 +11,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import ClearIcon from '@material-ui/icons/Clear';
 import { union } from 'utils/arrayHelpers';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = {
   bottom: {
@@ -26,11 +27,14 @@ const styles = {
   list: {
     flex: 1,
     overflow: 'auto',
-  }
+  },
+  clearSearchTextButton: {
+    padding: 0,
+  },
 };
 
 const GroupListSelector = (props) => {
-  const { groups, classes, ...rest } = props;
+  const { groups, classes, intl, customTexts, ...rest } = props;
   const { getGroupsBegin, groupListUnmount } = rest;
 
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
@@ -52,31 +56,37 @@ const GroupListSelector = (props) => {
   );
 
   const searchBar = (
-    <Grid container justify='space-between' alignContent='center' alignItems='center'>
-      <Grid item style={{ flex: 1 }}>
-        <TextField
-          margin='dense'
-          id='search key'
-          fullWidth
-          type='text'
-          onChange={(e) => {
-            setSearchKey(e.target.value);
-            delayedSearchAction(e.target.value, params);
-          }}
-          value={searchKey}
-        />
+    <React.Fragment>
+      <Grid container justify='space-between' alignContent='center' alignItems='center'>
+        <Grid item style={{ flex: 1 }}>
+          <TextField
+            placeholder={intl.formatMessage(messages.selectorDialog.searchPlaceholder, customTexts)}
+            margin='dense'
+            id='search key'
+            fullWidth
+            type='text'
+            onChange={(e) => {
+              setSearchKey(e.target.value);
+              delayedSearchAction(e.target.value, params);
+            }}
+            value={searchKey}
+            InputProps={{
+              endAdornment: searchKey && (
+                <IconButton
+                  className={classes.clearSearchTextButton}
+                  onClick={() => {
+                    setSearchKey('');
+                    groupSearchAction('', params);
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              ),
+            }}
+          />
+        </Grid>
       </Grid>
-      <Grid item>
-        <IconButton
-          onClick={() => {
-            setSearchKey('');
-            groupSearchAction('', params);
-          }}
-        >
-          <ClearIcon />
-        </IconButton>
-      </Grid>
-    </Grid>
+    </React.Fragment>
   );
 
   const list = (
@@ -130,6 +140,7 @@ const GroupListSelector = (props) => {
 
 GroupListSelector.propTypes = {
   classes: PropTypes.object,
+  customTexts: PropTypes.object,
   isLoading: PropTypes.bool,
   isMulti: PropTypes.bool,
   dialogNoChildren: PropTypes.bool,
@@ -152,6 +163,8 @@ GroupListSelector.propTypes = {
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object
   ]),
+
+  intl: intlShape.isRequired,
 };
 
 GroupListSelector.defaultProps = {
@@ -160,6 +173,7 @@ GroupListSelector.defaultProps = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupListSelector);
