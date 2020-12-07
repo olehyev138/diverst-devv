@@ -41,8 +41,12 @@ class UserRole < ApplicationRecord
   scope :priorities,  ->  { pluck(:priority) }
   scope :default,     ->  { find_by(default: true) }
 
-  # before the user role is created we need to create a template that
-  # is tied to this role
+  before_create :build_default_policy_group_template
+
+  def build_default_policy_group_template
+    build_policy_group_template(name: role_name)
+    true
+  end
 
   def self.role_types
     ['admin', 'user', 'group']
