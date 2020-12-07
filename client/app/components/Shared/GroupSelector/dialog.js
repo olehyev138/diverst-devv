@@ -21,10 +21,20 @@ const styles = {
     marginBottom: 15,
   },
   container: {
+    display: 'flex',
+    flexDirection: 'column',
     flex: 1,
   },
   list: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
     overflow: 'auto',
+  },
+  listLoaderWrapper: {
+    display: 'flex',
+    flexDirection:'column',
+    flex: 1,
   },
   clearSearchTextButton: {
     padding: 0,
@@ -88,7 +98,13 @@ const GroupListSelector = (props) => {
   );
 
   const list = (
-    <DiverstLoader isLoading={props.isLoading} transition={Fade}>
+    <DiverstLoader
+      isLoading={props.isLoading}
+      transition={Fade}
+      wrapperProps={{
+        className: classes.listLoaderWrapper,
+      }}
+    >
       {(groups || []).map((group, index) => (
         <GroupSelectorItem
           key={group.value}

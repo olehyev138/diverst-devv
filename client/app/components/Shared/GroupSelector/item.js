@@ -38,6 +38,14 @@ import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper
 import classNames from 'classnames';
 
 const styles = theme => ({
+  itemContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+  },
+  itemGridContainer: {
+    flex: 1,
+  },
   errorButton: {
     color: theme.palette.error.main,
   },
@@ -101,12 +109,15 @@ const styles = theme => ({
     fontSize: 34,
   },
   buttonBase: {
+    height: '100%',
     width: '100%',
     textAlign: 'justify',
   },
   cardContentSelected: {
+    display: 'flex',
     paddingTop: 10,
     paddingBottom: 10,
+    height: '100%',
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.primary.main,
@@ -116,8 +127,10 @@ const styles = theme => ({
     borderRightColor: theme.custom.colors.lightGrey,
   },
   cardContentNotSelected: {
+    display: 'flex',
     paddingTop: 10,
     paddingBottom: 10,
+    height: '100%',
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.secondary.main,
@@ -158,9 +171,9 @@ const GroupSelectorItem = (props) => {
     else groupCardTitleClasses = classNames(groupCardTitleClasses, classes.groupCardTitleNoChildren);
 
   return (
-    <React.Fragment>
+    <Box className={classes.itemContainer}>
       <Divider />
-      <Grid container>
+      <Grid container alignItems='stretch' className={classes.itemGridContainer}>
         <Grid item xs>
           <ButtonBase
             onClick={handleClick}
@@ -168,7 +181,7 @@ const GroupSelectorItem = (props) => {
             className={classes.buttonBase}
           >
             <CardContent className={groupCardClasses}>
-              <Grid container spacing={2} alignItems='center' alignContent='flex-start'>
+              <Grid container spacing={2} alignItems='center' alignContent='center'>
                 <Hidden xsDown>
                   <Grid item xs='auto'>
                     <DiverstImg
@@ -217,7 +230,7 @@ const GroupSelectorItem = (props) => {
         <Divider />
       )}
       {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
-    </React.Fragment>
+    </Box>
   );
 };
 
