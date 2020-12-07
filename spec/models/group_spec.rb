@@ -548,6 +548,14 @@ RSpec.describe Group, type: :model do
         expect(Group.all_children).to eq([groups.second])
       end
     end
+
+    context 'Group::children_of' do
+      before { groups.second.update(parent_id: groups.first.id) }
+
+      it 'returns all child groups of given parent group id' do
+        expect(Group.children_of(groups.first.id)).to eq([groups.second])
+      end
+    end
   end
 
   describe '#is_parent_group?' do

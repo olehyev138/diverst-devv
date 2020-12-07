@@ -250,6 +250,7 @@ export function AdminFieldList(props, context) {
           currentEnterprise={props.currentEnterprise}
           toggles={props.toggles}
           intl={props.intl}
+          customTexts={props.customTexts}
         />
       </DiverstLoader>
       <DiverstPagination
@@ -285,6 +286,7 @@ AdminFieldList.propTypes = {
   importAction: PropTypes.func,
   updateFieldPositionBegin: PropTypes.func,
   positions: PropTypes.array,
+  customTexts: PropTypes.object,
 };
 
 AdminFieldList.defaultProps = {

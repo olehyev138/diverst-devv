@@ -6,6 +6,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { injectIntl, intlShape } from 'react-intl';
 import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
@@ -18,10 +19,13 @@ import {
 } from 'containers/Group/actions';
 
 import { selectGroup } from 'containers/Group/selectors';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+
+  const { intl } = props;
 
   return (
     <GroupHome
@@ -29,6 +33,8 @@ export function GroupHomePage(props) {
       joinGroup={props.joinGroupBegin}
       leaveGroup={props.leaveGroupBegin}
       joinSubgroups={props.joinSubgroupsBegin}
+      intl={intl}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -38,10 +44,13 @@ GroupHomePage.propTypes = {
   joinGroupBegin: PropTypes.func,
   leaveGroupBegin: PropTypes.func,
   joinSubgroupsBegin: PropTypes.func,
+  intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   group: selectGroup(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -56,6 +65,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   memo,
   withConnect,
 )(GroupHomePage);

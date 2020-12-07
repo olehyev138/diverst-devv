@@ -36,7 +36,7 @@ export function* getCurrentAnnualBudget(action) {
     yield put(getCurrentAnnualBudgetSuccess(response.data));
   } catch (err) {
     yield put(getCurrentAnnualBudgetError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.currentAnnualBudget), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.currentAnnualBudget, options: { variant: 'warning' } }));
   }
 }
 
@@ -47,7 +47,7 @@ export function* getAnnualBudget(action) {
     yield put(getAnnualBudgetSuccess(response.data));
   } catch (err) {
     yield put(getAnnualBudgetError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudget), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.annualBudget, options: { variant: 'warning' } }));
   }
 }
 
@@ -58,7 +58,19 @@ export function* getAnnualBudgets(action) {
     yield put(getAnnualBudgetsSuccess(response.data.page));
   } catch (err) {
     yield put(getAnnualBudgetsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.annualBudgets, options: { variant: 'warning' } }));
+  }
+}
+
+export function* createAnnualBudget(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(createAnnualBudgetSuccess({}));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createAnnualBudgetError(err));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -92,10 +104,10 @@ export function* updateAnnualBudget(action) {
     const response = yield call(api.annualBudgets.update.bind(api.annualBudgets), payload.annual_budget.id, payload);
 
     yield put(updateAnnualBudgetSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateAnnualBudgetError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 

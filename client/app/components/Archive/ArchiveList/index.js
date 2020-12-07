@@ -9,13 +9,11 @@ import {
   Tab } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import messages from 'containers/Archive/messages';
-import DiverstTable from 'components/Shared/DiverstTable';
-import { injectIntl, intlShape } from 'react-intl';
-import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import RestoreIcon from '@material-ui/icons/Restore';
 import EventsTable from 'components/Archive/EventsTable';
 import ResourcesTable from '../ResourcesTable';
 import PostsTable from '../PostsTable';
+import DiverstFormattedMessage from '../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   link: {
@@ -37,7 +35,6 @@ const ArchiveTypes = Object.freeze({
 });
 
 export function ArchiveList(props) {
-  const { intl } = props;
   return (
     <React.Fragment>
       <Paper>
@@ -47,9 +44,9 @@ export function ArchiveList(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label={intl.formatMessage(messages.posts)} />
-          <Tab label={intl.formatMessage(messages.resources)} />
-          <Tab label={intl.formatMessage(messages.events)} />
+          <Tab label={<DiverstFormattedMessage {...messages.posts} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.resources} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.events} />} />
         </ResponsiveTabs>
       </Paper>
       <br />
@@ -58,7 +55,7 @@ export function ArchiveList(props) {
           <Grid item xs>
             {props.currentTab === ArchiveTypes.events && (
               <EventsTable
-                title='Archives'
+                title={messages.events}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
@@ -66,56 +63,35 @@ export function ArchiveList(props) {
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
+                customTexts={props.customTexts}
               />
             )}
 
             {props.currentTab === ArchiveTypes.resources && (
               <ResourcesTable
-                title='Archives'
+                title={messages.resources}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
                 handlePagination={props.handlePagination}
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
+                customTexts={props.customTexts}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
               />
             )}
 
             {props.currentTab === ArchiveTypes.posts && (
               <PostsTable
-                title='Archives'
+                title={messages.posts}
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}
                 isLoading={props.isLoading}
                 handlePagination={props.handlePagination}
                 handleOrdering={props.handleOrdering}
                 handleRestore={props.handleRestore}
+                customTexts={props.customTexts}
                 rowsPerPage={10}
-                columns={props.columns}
-                actions={[{
-                  icon: () => <RestoreIcon />,
-                  tooltip: 'Restore',
-                  onClick: (_, rowData) => {
-                    props.handleRestore(rowData.id);
-                  }
-                }]}
               />
             )}
           </Grid>
@@ -129,18 +105,17 @@ ArchiveList.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   classes: PropTypes.object,
-  intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
   columns: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
   memo,
-  injectIntl,
   withStyles(styles)
 )(ArchiveList);

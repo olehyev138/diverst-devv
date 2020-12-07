@@ -14,7 +14,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupCategories/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -38,8 +37,6 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const { intl } = props;
-
   return (
     // eslint-disable-next-line react/prop-types
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupCategory}>
@@ -54,7 +51,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
               id='name'
               name='name'
               margin='normal'
-              label={intl.formatMessage(messages.name)}
+              label=<DiverstFormattedMessage {...messages.name} />
               value={values.name}
               required
             />
@@ -66,7 +63,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
               render={arrayHelpers => (
                 <React.Fragment>
                   <Typography variant='h6' className={classes.title}>
-                    {intl.formatMessage(messages.labels)}
+                    <DiverstFormattedMessage {...messages.labels} />
                   </Typography>
                   {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? values.group_categories_attributes.map((category, index) => (
                     // eslint-disable-next-line react/no-array-index-key
@@ -117,7 +114,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -164,13 +161,12 @@ GroupCategoriesForm.propTypes = {
 };
 
 GroupCategoriesFormInner.propTypes = {
-  intl: intlShape.isRequired,
   groupCategories: PropTypes.array,
   groupCategory: PropTypes.object,
   handleChange: PropTypes.func,
   classes: PropTypes.object,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   categories: PropTypes.array,
   formikProps: PropTypes.object,
   arrayHelpers: PropTypes.object,
@@ -181,7 +177,6 @@ GroupCategoriesFormInner.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   memo,
   withStyles(styles)
 )(GroupCategoriesForm);

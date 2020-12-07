@@ -16,6 +16,7 @@ import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 
+
 const styles = theme => ({
   cardHeader: {
     paddingBottom: 0,
@@ -47,8 +48,8 @@ export function EventComment(props) {
             )}
           </Avatar>
         )}
-        title={`${(comment.user_id === props.currentUserId) ? intl.formatMessage(messages.comment.you) : `${comment.user_name}`}`.concat(' ').concat(`${
-          intl.formatMessage(messages.comment.said)}`)}
+        title={`${(comment.user_id === props.currentUserId) ? intl.formatMessage(messages.comment.you, props.customTexts) : `${comment.user_name}`}`.concat(' ').concat(`${
+          intl.formatMessage(messages.comment.said, props.customTexts)}`)}
         titleTypographyProps={{ variant: 'overline', display: 'inline' }}
       />
       <CardContent>
@@ -65,7 +66,7 @@ export function EventComment(props) {
         <Typography variant='body1'>
           {comment.time_since_creation}
           &ensp;
-          {intl.formatMessage(messages.comment.ago)}
+          {intl.formatMessage(messages.comment.ago, props.customTexts)}
         </Typography>
       </CardContent>
       <Permission show={permission(comment, 'destroy?')}>
@@ -74,11 +75,11 @@ export function EventComment(props) {
             size='small'
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.comment.deleteconfirm)))
+              if (confirm(intl.formatMessage(messages.comment.deleteconfirm, props.customTexts)))
                 props.deleteEventCommentBegin({ initiative_id: comment.initiative_id, id: comment.id });
             }}
           >
-            {intl.formatMessage(messages.comment.delete)}
+            {intl.formatMessage(messages.comment.delete, props.customTexts)}
           </Button>
         </CardActions>
       </Permission>
@@ -93,6 +94,7 @@ EventComment.propTypes = {
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
   currentUserId: PropTypes.number,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

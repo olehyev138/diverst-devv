@@ -21,7 +21,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Region/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import RegionForm from 'components/Region/RegionForm';
@@ -53,7 +53,7 @@ export function GroupRegionEditPage(props) {
       parentGroup={props.parentGroup}
       region={props.region}
       regionAction={props.updateRegionBegin}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={intl.formatMessage(messages.update, props.customTexts)}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.selectGroups}
       isCommitting={props.isCommitting}
@@ -76,6 +76,7 @@ GroupRegionEditPage.propTypes = {
   parentGroupIsLoading: PropTypes.bool,
   selectGroups: PropTypes.array,
   isCommitting: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -86,6 +87,7 @@ const mapStateToProps = createStructuredSelector({
   selectGroups: selectPaginatedSelectGroups(),
   isCommitting: selectRegionIsCommitting(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

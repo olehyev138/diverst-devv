@@ -40,7 +40,7 @@ export function* getMentors(action) {
     yield put(getMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getMentorsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.mentors), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.mentors, options: { variant: 'warning' } }));
   }
 }
 
@@ -59,7 +59,7 @@ export function* getAvailableMentors(action) {
     yield put(getAvailableMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getAvailableMentorsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.available_mentors), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.available_mentors, options: { variant: 'warning' } }));
   }
 }
 
@@ -74,10 +74,10 @@ export function* deleteMentorship(action) {
 
     yield put(deleteMentorshipSuccess());
     yield put(push(path));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteMentorshipError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -87,10 +87,10 @@ export function* requestMentorship(action) {
     yield call(api.mentoringRequests.create.bind(api.mentoringRequests), payload);
 
     yield put(requestsMentorshipSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.request), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.request, options: { variant: 'success' } }));
   } catch (err) {
     yield put(requestsMentorshipError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.request), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.request, options: { variant: 'warning' } }));
   }
 }
 

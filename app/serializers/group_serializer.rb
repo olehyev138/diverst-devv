@@ -1,5 +1,5 @@
 class GroupSerializer < ApplicationRecordSerializer
-  attributes :id, :permissions, :current_user_is_member
+  attributes :id, :permissions, :current_user_is_member, :is_parent_group
 
   attributes_with_permission :name, :short_description, :private, :logo, :logo_file_name, :logo_data, :logo_content_type, if: :family?
 
@@ -62,6 +62,10 @@ class GroupSerializer < ApplicationRecordSerializer
     else
       []
     end
+  end
+
+  def is_parent_group
+    object.is_parent_group?
   end
 
   def parent
@@ -159,7 +163,8 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def logo_data
-    AttachmentHelper.attachment_data_string(object.logo)
+    # Thumbnail the logo to at most 125x125
+    AttachmentHelper.image_resize_variant_data_string(object.logo, 125, 125)
   end
 
   def logo_content_type

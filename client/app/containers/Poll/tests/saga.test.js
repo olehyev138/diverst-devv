@@ -95,7 +95,7 @@ describe('Tests for polls saga', () => {
 
       expect(api.polls.all).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.polls);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.polls, options: { variant: 'warning' } });
     });
   });
 
@@ -135,7 +135,7 @@ describe('Tests for polls saga', () => {
 
       expect(api.polls.get).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.poll);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.poll, options: { variant: 'warning' } });
     });
   });
 
@@ -163,7 +163,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.create).toHaveBeenCalledWith({ poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -187,7 +187,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.create).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create, options: { variant: 'warning' } });
     });
 
     it('Should update a poll', async () => {
@@ -212,7 +212,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.update).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -237,7 +237,7 @@ describe('Tests for polls saga', () => {
 
       expect(api.polls.update).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 
@@ -264,7 +264,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.createAndPublish).toHaveBeenCalledWith({ poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.create_publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.create_publish, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -288,7 +288,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.createAndPublish).toHaveBeenCalledWith(initialAction.payload);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.create_publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.create_publish, options: { variant: 'warning' } });
     });
 
     it('Should update a and publish poll', async () => {
@@ -313,7 +313,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.updateAndPublish).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update_publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update_publish, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -338,7 +338,7 @@ describe('Tests for polls saga', () => {
 
       expect(api.polls.updateAndPublish).toHaveBeenCalledWith(initialAction.payload.id, { poll: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update_publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update_publish, options: { variant: 'warning' } });
     });
 
     it('Should publish a poll', async () => {
@@ -363,7 +363,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.publish).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.publish, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -388,7 +388,7 @@ describe('Tests for polls saga', () => {
 
       expect(api.polls.publish).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.publish);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.publish, options: { variant: 'warning' } });
     });
   });
 
@@ -418,7 +418,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.delete, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -442,7 +442,7 @@ describe('Tests for polls saga', () => {
       );
       expect(api.polls.destroy).toHaveBeenCalledWith(initialAction.payload.id);
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.delete);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } });
     });
   });
 });

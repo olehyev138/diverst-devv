@@ -23,7 +23,6 @@ import {
 } from 'containers/News/actions';
 
 import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -31,7 +30,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function SocialLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-  const { intl } = props;
 
   const { group_id: groupId, item_id: itemId } = useParams();
   const links = {
@@ -49,7 +47,7 @@ export function SocialLinkEditPage(props) {
     <SocialLinkForm
       edit
       socialLinkAction={props.updateSocialLinkBegin}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}
@@ -61,7 +59,6 @@ export function SocialLinkEditPage(props) {
 }
 
 SocialLinkEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getNewsItemBegin: PropTypes.func,
   updateSocialLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
@@ -92,7 +89,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

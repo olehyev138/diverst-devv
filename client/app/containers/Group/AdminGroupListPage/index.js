@@ -9,6 +9,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+import { withStyles } from '@material-ui/core/styles';
+import { Button, Grid, Typography, Fade, Box } from '@material-ui/core';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -23,18 +26,37 @@ import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
 import { getGroupsBegin, groupAllUnmount, deleteGroupBegin, updateGroupPositionBegin } from 'containers/Group/actions';
+
+import messages from 'containers/Group/messages';
+
 import GroupList from 'components/Group/AdminGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { injectIntl, intlShape } from 'react-intl';
 
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import { createCsvFileBegin } from 'containers/Shared/CsvFile/actions';
 import csvReducer from 'containers/Shared/CsvFile/reducer';
 import csvSaga from 'containers/Shared/CsvFile/saga';
 
-export function AdminGroupListPage(props) {
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
+const styles = theme => ({
+  headerText: {
+    fontWeight: 'bold',
+  },
+});
+
+const defaultGroupsParams = Object.freeze({
+  count: 5,
+  page: 0,
+  orderBy: 'position',
+  order: 'asc',
+  query_scopes: ['all_parents'],
+  with_children: false
+});
+
+export function AdminGroupListPage({ classes, ...props }) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   useInjectReducer({ key: 'csv_files', reducer: csvReducer });
@@ -42,7 +64,10 @@ export function AdminGroupListPage(props) {
 
   const { intl } = props;
 
-  const [params, setParams] = useState({ count: 5, page: 0, orderBy: 'position', order: 'asc', query_scopes: ['all_parents'], with_children: true });
+  const [displayParentUI, setDisplayParentUI] = useState(false);
+  const [parentData, setParentData] = useState(undefined);
+
+  const [params, setParams] = useState(defaultGroupsParams);
 
   useEffect(() => {
     props.getGroupsBegin(params);
@@ -51,15 +76,35 @@ export function AdminGroupListPage(props) {
   }, []);
 
   useEffect(() => {
-    if (props.hasChanged)
-      props.getGroupsBegin(params);
+    if (parentData === undefined || !parentData?.id) return;
 
-    return () => props.groupAllUnmount();
+    const newParams = { ...defaultGroupsParams, count: params.count, query_scopes: [['children_of', parentData?.id]] };
+
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
+  }, [parentData?.id]);
+
+  const handleParentExpand = (id, name) => setParentData({ id, name });
+
+  const handleFinishExitTransition = () => setDisplayParentUI(true);
+
+  useEffect(() => {
+    if (props.hasChanged === true)
+      getGroups();
   }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
+    props.getGroupsBegin(newParams);
+    setParams(newParams);
+  };
+
+  const getGroups = () => {
+    const newParams = { ...defaultGroupsParams, count: params.count, page: params.page, order: params.order, orderBy: params.orderBy };
+
+    setParentData({ name: parentData?.name });
+    setDisplayParentUI(false);
     props.getGroupsBegin(newParams);
     setParams(newParams);
   };
@@ -70,6 +115,41 @@ export function AdminGroupListPage(props) {
 
   return (
     <React.Fragment>
+      <Fade
+        in={displayParentUI}
+        appear
+        mountOnEnter
+        unmountOnExit
+        onExited={() => setParentData(null)}
+      >
+        <Box pt={1} pb={3}>
+          <Grid container spacing={3}>
+            <Grid item>
+              <Button
+                size='small'
+                color='primary'
+                variant='contained'
+                onClick={() => {
+                  setParentData({ name: parentData?.name });
+                  getGroups();
+                }}
+              >
+                <DiverstFormattedMessage {...messages.back} />
+              </Button>
+            </Grid>
+            <Grid item xs align='center'>
+              <Typography component='span' color='primary' variant='h5' className={classes.headerText}>
+                {parentData?.name}
+              </Typography>
+              &nbsp;
+              &nbsp;
+              <Typography component='span' color='textSecondary' variant='h5' className={classes.headerText}>
+                <DiverstFormattedMessage {...messages.childList} />
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Fade>
       <GroupList
         isLoading={props.isLoading}
         groups={props.groups}
@@ -78,16 +158,21 @@ export function AdminGroupListPage(props) {
         defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
         updateGroupPositionBegin={props.updateGroupPositionBegin}
+        handleParentExpand={handleParentExpand}
+        handleFinishExitTransition={handleFinishExitTransition}
+        isDisplayingChildren={!!parentData?.name}
         handlePagination={handlePagination}
         importAction={props.createCsvFileBegin}
         permissions={props.permissions}
         intl={intl}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
 }
 
 AdminGroupListPage.propTypes = {
+  classes: PropTypes.object,
   getGroupsBegin: PropTypes.func.isRequired,
   groupAllUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
@@ -99,6 +184,7 @@ AdminGroupListPage.propTypes = {
   createCsvFileBegin: PropTypes.func,
   permissions: PropTypes.object,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -107,6 +193,7 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -125,6 +212,7 @@ const withConnect = connect(
 export default compose(
   injectIntl,
   withConnect,
+  withStyles(styles),
   memo,
 )(Conditional(
   AdminGroupListPage,

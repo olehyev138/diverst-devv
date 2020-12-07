@@ -25,7 +25,7 @@ import {
 
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 const defaultParams = Object.freeze({
@@ -72,6 +72,7 @@ export function MetricsDashboardListPage(props) {
       deleteMetricsDashboardBegin={props.deleteMetricsDashboardBegin}
       handlePagination={handlePagination}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -85,12 +86,14 @@ MetricsDashboardListPage.propTypes = {
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   metricsDashboards: selectPaginatedMetricsDashboards(),
   metricsDashboardsTotal: selectMetricsDashboardsTotal(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

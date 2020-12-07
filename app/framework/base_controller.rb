@@ -62,7 +62,7 @@ module BaseController
         .filter { |a| a.class_name.constantize == ActiveStorage::Attachment rescue false }
         .map { |a| a.name.to_s.chomp('_attachment').to_sym }
         .each do |attachment|
-          item.send(attachment).purge_later if params[attachment].blank? && item.send(attachment).attached?
+          item.send(attachment).purge_later if params[klass.symbol].key?(attachment) && params[attachment].blank? && item.send(attachment).attached?
         end
 
     updated_item = klass.update(self.diverst_request, params, base: show_base)

@@ -1,4 +1,3 @@
-import dig from 'object-dig';
 
 export function mapFields(values, keys) {
   const mappedValues = Object.assign({}, values);

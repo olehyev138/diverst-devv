@@ -17,6 +17,7 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import { selectAnnualBudget, selectIsFetchingAnnualBudgets, selectPaginatedAnnualBudgets } from '../selectors';
 import { updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount, getChildBudgetsBegin } from '../actions';
 
@@ -44,6 +45,7 @@ export function AnnualBudgetEditPage(props) {
       annualBudgets={props.childBudgets}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFetchingAnnualBudgets}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -56,6 +58,7 @@ AnnualBudgetEditPage.propTypes = {
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFetchingAnnualBudgets: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -64,6 +67,7 @@ const mapStateToProps = createStructuredSelector({
   childBudgets: selectPaginatedAnnualBudgets(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
   isCommitting: selectGroupIsCommitting(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

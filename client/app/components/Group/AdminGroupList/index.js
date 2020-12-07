@@ -15,11 +15,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
-  Dialog, DialogContent
-} from '@material-ui/core';
+import { Button, Box, Grid, Fade } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -84,67 +80,75 @@ export function AdminGroupList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Permission show={permission(props, 'groups_create')}>
-            <Button
-              variant='contained'
-              to={ROUTES.admin.manage.groups.new.path()}
-              color='primary'
-              size='large'
-              component={WrappedNavLink}
-              startIcon={<AddIcon />}
-              className={classes.optionButton}
-            >
-              <DiverstFormattedMessage {...messages.new} />
-            </Button>
-          </Permission>
-          <Permission show={permission(props, 'groups_manage')}>
-            <Button
-              variant='contained'
-              to={ROUTES.admin.manage.groups.categories.index.path()}
-              color='primary'
-              size='large'
-              component={WrappedNavLink}
-              className={classes.optionButton}
-            >
-              <DiverstFormattedMessage {...messages.allcategories} />
-            </Button>
-          </Permission>
-          <Permission show={permission(props, 'groups_manage')}>
-            { order ? (
+      <Fade
+        in={!props.isDisplayingChildren}
+        appear
+        mountOnEnter
+        unmountOnExit
+        onExited={props.handleFinishExitTransition}
+      >
+        <Grid container spacing={3} justify='flex-end'>
+          <Grid item>
+            <Permission show={permission(props, 'groups_create')}>
               <Button
                 variant='contained'
+                to={ROUTES.admin.manage.groups.new.path()}
                 color='primary'
                 size='large'
-                startIcon={<ReorderIcon />}
+                component={WrappedNavLink}
+                startIcon={<AddIcon />}
                 className={classes.optionButton}
-                onClick={() => {
-                  setSave(true);
-                  setOrder(false);
-                }
-                }
               >
-                <DiverstFormattedMessage {...messages.set_order} />
+                <DiverstFormattedMessage {...messages.new} />
               </Button>
-            ) : (
+            </Permission>
+            <Permission show={permission(props, 'groups_manage')}>
               <Button
                 variant='contained'
+                to={ROUTES.admin.manage.groups.categories.index.path()}
                 color='primary'
                 size='large'
-                startIcon={<ReorderIcon />}
+                component={WrappedNavLink}
                 className={classes.optionButton}
-                onClick={() => {
-                  setSave(false);
-                  setOrder(true);
-                }}
               >
-                <DiverstFormattedMessage {...messages.change_order} />
+                <DiverstFormattedMessage {...messages.allcategories} />
               </Button>
-            )}
-          </Permission>
+            </Permission>
+            <Permission show={permission(props, 'groups_manage')}>
+              { order ? (
+                <Button
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  startIcon={<ReorderIcon />}
+                  className={classes.optionButton}
+                  onClick={() => {
+                    setSave(true);
+                    setOrder(false);
+                  }
+                  }
+                >
+                  <DiverstFormattedMessage {...messages.set_order} />
+                </Button>
+              ) : (
+                <Button
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  startIcon={<ReorderIcon />}
+                  className={classes.optionButton}
+                  onClick={() => {
+                    setSave(false);
+                    setOrder(true);
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.change_order} />
+                </Button>
+              )}
+            </Permission>
+          </Grid>
         </Grid>
-      </Grid>
+      </Fade>
       <Box mb={1} />
       <DiverstLoader isLoading={props.isLoading}>
         <DroppableGroupList
@@ -153,17 +157,20 @@ export function AdminGroupList(props, context) {
           classes={classes}
           draggable={order}
           save={save}
+          handleParentExpand={props.handleParentExpand}
           updateGroupPositionBegin={props.updateGroupPositionBegin}
           deleteGroupBegin={props.deleteGroupBegin}
           currentPage={defaultParams.page}
           importAction={props.importAction}
           intl={props.intl}
           rowsPerPage={defaultParams.count}
+          customTexts={props.customTexts}
         />
       </DiverstLoader>
       <DiverstPagination
         isLoading={props.isLoading}
         handlePagination={props.handlePagination}
+        page={defaultParams.page}
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
       />
@@ -180,9 +187,13 @@ AdminGroupList.propTypes = {
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
   updateGroupPositionBegin: PropTypes.func,
+  handleParentExpand: PropTypes.func,
+  handleFinishExitTransition: PropTypes.func,
+  isDisplayingChildren: PropTypes.bool,
   handlePagination: PropTypes.func,
   positions: PropTypes.array,
   importAction: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 export default compose(

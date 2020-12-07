@@ -86,7 +86,7 @@ export function Event(props) {
                   startIcon={<DeleteIcon />}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       props.deleteEventBegin({
                         id: event.id,
                         group_id: event.owner_group_id
@@ -266,6 +266,7 @@ export function Event(props) {
             currentUserId={props.currentUserId}
             event={props.event}
             commentAction={props.createEventCommentBegin}
+            customTexts={props.customTexts}
           />
           { /* eslint-disable-next-line arrow-body-style */}
           {event?.comments && (
@@ -282,6 +283,7 @@ export function Event(props) {
                   comment={comment}
                   deleteEventCommentBegin={props.deleteEventCommentBegin}
                   currentUserId={props.currentUserId}
+                  customTexts={props.customTexts}
                 />
               ))}
             </React.Fragment>
@@ -310,6 +312,7 @@ Event.propTypes = {
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
   export: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

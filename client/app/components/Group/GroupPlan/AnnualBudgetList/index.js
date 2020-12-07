@@ -56,6 +56,7 @@ export function AnnualBudgetList(props) {
               handleOrdering={handleInitiativeOrdering?.(annualBudget.id)}
               currentGroup={props.currentGroup}
               type={props.type}
+              customTexts={props.customTexts}
             />
             <Box mb={2} />
           </React.Fragment>
@@ -85,6 +86,7 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.object,
   currentGroup: PropTypes.object,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
   type: PropTypes.string,
 };
 
