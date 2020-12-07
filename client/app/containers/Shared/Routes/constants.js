@@ -821,6 +821,12 @@ const ROUTES = {
             titleMessage: messages.admin.manage.groups,
           }
         },
+        initialize: {
+          path: () => '/admin/plan/budgeting/initialize',
+          data: {
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
       },
     },
     include: {

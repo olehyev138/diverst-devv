@@ -11,6 +11,7 @@ class Api::V1::AnnualBudgetsController < DiverstController
         amount: params[:amount] || 0,
         init_quarter: to_bool(params[:quarter]),
         type_override: params[:type]&.downcase&.to_sym,
+        period_override: params[:period_override],
         enterprise_id: current_user.enterprise_id
       )
     end

@@ -226,14 +226,16 @@ class AnnualBudget < ApplicationRecord
       end
     end
 
-    def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:)
-      old_year, old_quarter = current_budget_period
+    def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:, period_override: nil)
+      old_year, old_quarter = period_override&.any? ? [nil, nil] : current_budget_period
 
-      new_year, new_quarter =  if old_year.present?
+      new_year, new_quarter = if period_override&.any?
+                                period_override
+                              elsif old_year.present?
                                  add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
-                               else
-                                 [default_year, init_quarter ? default_quarter : nil]
-                               end
+                              else
+                                [default_year, init_quarter ? default_quarter : nil]
+                              end
 
       AnnualBudget.update_all(closed: true)
 
