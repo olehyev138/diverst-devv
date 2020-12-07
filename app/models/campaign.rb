@@ -43,7 +43,7 @@ class Campaign < ApplicationRecord
   validates :groups,      presence: { message: I18n.t('errors.campaign.select_minimum') }
 
   validates :start,
-            date: { after: Proc.new { Date.today }, message: I18n.t('errors.campaign.next_day')},
+            date: { after: Proc.new { Date.today }, message: I18n.t('errors.campaign.next_day') },
             on: [:create, :update]
 
   validates :end, date: { after: :start, message: I18n.t('errors.campaign.start') }, on: [:create, :update]
