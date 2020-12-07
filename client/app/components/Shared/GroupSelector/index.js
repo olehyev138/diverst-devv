@@ -14,23 +14,36 @@ import {
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import ListIcon from '@material-ui/icons/ListAlt';
+
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups, selectGroupIsLoading, selectGroupTotal } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
-import { union, difference, intersection } from 'utils/arrayHelpers';
+import { union, difference } from 'utils/arrayHelpers';
 import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
-import { Grid, Button } from '@material-ui/core';
+
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectCustomText, selectPermissions } from 'containers/Shared/App/selectors';
+
+const styles = theme => ({
+  selectButton: {
+    marginTop: 28,
+  },
+  selectButtonIcon: {
+    fontSize: '24px !important',
+  },
+});
 
 const GroupSelector = (props) => {
-  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
+  const { classes, customTexts, handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
 
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -110,6 +123,10 @@ const GroupSelector = (props) => {
       {dialogSelector && (
         <Grid item>
           <Button
+            className={classes.selectButton}
+            color='primary'
+            variant='contained'
+            startIcon={<ListIcon className={classes.selectButtonIcon} />}
             onClick={() => {
               setDialogSelectedGroups(values[groupField]);
               setDialogSearch(true);
@@ -161,6 +178,7 @@ const GroupSelector = (props) => {
             parentData={parentData}
             displayParentUI={displayParentUI}
             handleParentExpand={handleParentExpand}
+            customTexts={customTexts}
           />
         )}
       />
@@ -170,7 +188,9 @@ const GroupSelector = (props) => {
 };
 
 GroupSelector.propTypes = {
+  classes: PropTypes.object,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
   dialogSelector: PropTypes.bool,
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogNoChildren: PropTypes.bool,
@@ -216,6 +236,7 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -230,6 +251,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  withStyles(styles),
   withConnect,
   memo,
 )(GroupSelector);
