@@ -18,12 +18,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
-import { permission } from 'utils/permissionsHelpers';
-import { toCurrencyString } from 'utils/currencyHelpers';
-import Permission from 'components/Shared/DiverstPermission';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Formik, Form, Field } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
+import {Typography} from "@material-ui/core/index";
 
 const { adminList: listMessages } = messages;
 
@@ -98,24 +96,43 @@ export function BudgetInitializationForm(props, context) {
       }) => (
         <Card>
           <CardContent>
+            <Typography variant='h6'>
+              <DiverstFormattedMessage {...messages.initializationForm.types} />
+            </Typography>
+            <ul>
+              <li>
+                <Typography variant='body1'>
+                  <DiverstFormattedMessage {...messages.initializationForm.parentType} />
+                </Typography>
+                <Typography variant='body2'>
+                  <DiverstFormattedMessage {...messages.initializationForm.parentTypeExplanation} />
+                </Typography>
+              </li>
+              <li>
+                <Typography variant='body1'>
+                  <DiverstFormattedMessage {...messages.initializationForm.regionType} />
+                </Typography>
+                <Typography variant='body2'>
+                  <DiverstFormattedMessage {...messages.initializationForm.regionTypeExplanation} />
+                </Typography>
+              </li>
+              <li>
+                <Typography variant='body1'>
+                  <DiverstFormattedMessage {...messages.initializationForm.allType} />
+                </Typography>
+                <Typography variant='body2'>
+                  <DiverstFormattedMessage {...messages.initializationForm.allTypeExplanation} />
+                </Typography>
+              </li>
+            </ul>
+            <Box mb={1} />
             <Form>
-              <TextField
-                id='amount'
-                name='amount'
-                type='number'
-                fullWidth
-                margin='normal'
-                label={<DiverstFormattedMessage {...messages.min} />}
-                value={values.amount}
-                onChange={handleChange}
-              />
-              <Box mb={2} />
               <Select
                 name='type'
                 id='type'
                 fullWidth
                 margin='normal'
-                label={<DiverstFormattedMessage {...messages.form.interests} />}
+                label={<DiverstFormattedMessage {...messages.initializationForm.type} />}
                 value={values.type}
                 options={budgetTypesOption}
                 onChange={value => setFieldValue('type', value)}
@@ -128,7 +145,7 @@ export function BudgetInitializationForm(props, context) {
                     id='year'
                     fullWidth
                     margin='normal'
-                    label={<DiverstFormattedMessage {...messages.form.interests} />}
+                    label={<DiverstFormattedMessage {...messages.initializationForm.year} />}
                     value={values.year}
                     options={yearOptions}
                     onChange={value => setFieldValue('year', value)}
@@ -143,12 +160,12 @@ export function BudgetInitializationForm(props, context) {
                         id='with_quarter'
                         name='with_quarter'
                         margin='normal'
-                        label='with_quarter'
+                        label={<DiverstFormattedMessage {...messages.initializationForm.withQuarter} />}
                         value={values.with_quarter}
                         checked={values.with_quarter}
                       />
                     )}
-                    label='with_quarter'
+                    label={<DiverstFormattedMessage {...messages.initializationForm.withQuarter} />}
                   />
                 </Grid>
               </Grid>
@@ -160,7 +177,7 @@ export function BudgetInitializationForm(props, context) {
                     id='quarter'
                     fullWidth
                     margin='normal'
-                    label={<DiverstFormattedMessage {...messages.form.interests} />}
+                    label={<DiverstFormattedMessage {...messages.initializationForm.quarter} />}
                     value={values.quarter}
                     options={quarterOptions}
                     onChange={value => setFieldValue('quarter', value)}

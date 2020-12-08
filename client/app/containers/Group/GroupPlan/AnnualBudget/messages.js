@@ -96,6 +96,53 @@ export default defineMessages({
       id: `${scope}.form.button.cancel`,
     },
   },
+  initializationForm: {
+    amount: {
+      id: `${scope}.initialization.form.amount`,
+    },
+    type: {
+      id: `${scope}.initialization.form.type`,
+    },
+    types: {
+      id: `${scope}.initialization.form.types`,
+    },
+    year: {
+      id: `${scope}.initialization.form.year`,
+    },
+    withQuarter: {
+      id: `${scope}.initialization.form.withQuarter`,
+    },
+    quarter: {
+      id: `${scope}.initialization.form.quarter`,
+    },
+    parentType: {
+      id: `${scope}.initialization.form.parentType`,
+    },
+    regionType: {
+      id: `${scope}.initialization.form.regionType`,
+    },
+    allType: {
+      id: `${scope}.initialization.form.allType`,
+    },
+    parentTypeExplanation: {
+      id: `${scope}.initialization.form.parentTypeExplanation`,
+    },
+    regionTypeExplanation: {
+      id: `${scope}.initialization.form.regionTypeExplanation`,
+    },
+    allTypeExplanation: {
+      id: `${scope}.initialization.form.allTypeExplanation`,
+    },
+    currentYear: {
+      id: `${scope}.initialization.form.currentYear`,
+    },
+    currentQuarter: {
+      id: `${scope}.initialization.form.currentQuarter`,
+    },
+    initialize: {
+      id: `${scope}.initialization.form.initialize`,
+    },
+  },
   adminList: {
     columns: {
       group: {
