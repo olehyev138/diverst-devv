@@ -163,8 +163,8 @@ GroupListSelector.propTypes = {
 
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
-  queryScopes: PropTypes.arrayOf(PropTypes.string),
-  dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
+  queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
+  dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   inputCallback: PropTypes.func,
 
   parentData: PropTypes.object,
