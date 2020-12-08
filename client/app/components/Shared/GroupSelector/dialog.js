@@ -30,6 +30,7 @@ const styles = {
     flexDirection: 'column',
     flex: 1,
     overflow: 'auto',
+    paddingBottom: 1,
   },
   listLoaderWrapper: {
     display: 'flex',
