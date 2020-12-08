@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
@@ -31,6 +32,12 @@ const styles = {
     flex: 1,
     flexFlow: 'column',
   },
+  scrollbarContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    height: '100%',
+  },
 };
 
 
@@ -52,9 +59,11 @@ export function DiverstDialog(props) {
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
       {titleDivider && <Divider />}
       <Scrollbar>
-        <DialogContent className={classes.content}>
-          {content.id ? props.intl.formatMessage(content, props.customText) : content}
-        </DialogContent>
+        <Box className={classes.scrollbarContent}>
+          <DialogContent className={classes.content}>
+            {content.id ? props.intl.formatMessage(content, props.customText) : content}
+          </DialogContent>
+        </Box>
       </Scrollbar>
       {actionsDivider && <Divider />}
       {(handleYes || handleNo || extraActions.length > 0) && (

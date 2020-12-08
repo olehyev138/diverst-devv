@@ -14,6 +14,9 @@ const CONTENT_SCROLL_CLASS_NAME = 'primary-content-scroll-container';
 
 const styles = theme => ({
   scrollContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
     flexGrow: 1,
     marginTop: 0,
     marginBottom: -1,
