@@ -175,9 +175,14 @@ export default defineMessages({
         id: `${scope}.adminList.actions.resetConfirm`,
       },
     },
-    title: {
-      id: `${scope}.adminList.title`,
+    title(year = null, quarter = null) {
+      if (year && quarter) return { id: `${scope}.adminList.titleQuarter` };
+      if (year) return { id: `${scope}.adminList.titleYear` };
+      return { id: `${scope}.adminList.title` };
     },
+    // title: {
+    //   id: `${scope}.adminList.title`,
+    // },
     notSet: {
       id: `${scope}.adminList.notSet`,
     },

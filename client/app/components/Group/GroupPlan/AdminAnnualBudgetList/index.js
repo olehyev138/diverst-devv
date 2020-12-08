@@ -6,7 +6,7 @@
  */
 
 import React, {
-  memo
+  memo, useMemo
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -47,6 +47,11 @@ const styles = theme => ({
 
 export function AnnualBudgetList(props, context) {
   const { classes, intl } = props;
+
+  const budgetPeriodObject = useMemo(
+    () => ({ year: props.budgetPeriod?.[0], quarter: props.budgetPeriod?.[1] }),
+    [props.budgetPeriod]
+  );
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -117,7 +122,8 @@ export function AnnualBudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={listMessages.title}
+            title={listMessages.title(...props.budgetPeriod)}
+            extraTitleProps={budgetPeriodObject}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             handleSearching={props.handleSearching}
