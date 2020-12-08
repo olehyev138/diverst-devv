@@ -42,6 +42,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    maxHeight: 140,
   },
   itemGridContainer: {
     flex: 1,
