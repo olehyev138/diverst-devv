@@ -182,7 +182,7 @@ class AnnualBudget < ApplicationRecord
     end
 
     def default_quarter
-      (Time.now.to_i % 1.year)/3.months + 1
+      (Time.now.to_i % 1.year) / 3.months + 1
     end
 
     def current_budget_period
@@ -196,7 +196,7 @@ class AnnualBudget < ApplicationRecord
           :year,
           :quarter,
           "MIN(`annual_budgets`.`budget_head_type` = 'Region') as region_type",
-          "MAX(`groups`.`id`) IS NOT NULL AND MIN(`groups`.`parent_id` IS NULL) as parent_type"
+          'MAX(`groups`.`id`) IS NOT NULL AND MIN(`groups`.`parent_id` IS NULL) as parent_type'
         ).joins(
           "LEFT JOIN `groups` ON `groups`.`id` = `annual_budgets`.`budget_head_id` && `annual_budgets`.`budget_head_type` = 'Group'")
         .group(:year, :quarter)
@@ -216,11 +216,11 @@ class AnnualBudget < ApplicationRecord
 
     def add_quarter(year:, quarter: nil, init_quarter: false)
       if quarter.blank? && !init_quarter
-        [year+1, nil]
+        [year + 1, nil]
       elsif quarter.blank? && init_quarter
         [year, default_quarter]
       elsif quarter >= 4
-        [year+1, 1]
+        [year + 1, 1]
       else
         [year, quarter + 1]
       end
@@ -230,12 +230,12 @@ class AnnualBudget < ApplicationRecord
       old_year, old_quarter = period_override&.any? ? [nil, nil] : current_budget_period
 
       new_year, new_quarter = if period_override&.any?
-                                period_override
-                              elsif old_year.present?
-                                 add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
-                              else
-                                [default_year, init_quarter ? default_quarter : nil]
-                              end
+        period_override
+      elsif old_year.present?
+        add_quarter(year: old_year, quarter: old_quarter, init_quarter: init_quarter)
+      else
+        [default_year, init_quarter ? default_quarter : nil]
+      end
 
       AnnualBudget.update_all(closed: true)
 
@@ -247,7 +247,7 @@ class AnnualBudget < ApplicationRecord
       when :all
         initialize_group_budgets(amount: amount, year: new_year, quarter: new_quarter, enterprise_id: enterprise_id)
       else
-        raise StandardError, "Current Aggregate Type Invalid"
+        raise StandardError, 'Current Aggregate Type Invalid'
       end
 
       [new_year, new_quarter]
