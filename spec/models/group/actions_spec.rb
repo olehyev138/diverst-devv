@@ -18,6 +18,7 @@ RSpec.describe Group::Actions, type: :model do
           possible_children
           all_parents
           no_children
+          children_of
           is_private
           replace_with_children
           except_id

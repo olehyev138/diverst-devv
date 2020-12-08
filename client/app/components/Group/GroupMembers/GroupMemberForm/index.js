@@ -31,7 +31,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       minimal: true,
-      query_scopes: [['not_member_of_group', props.currentGroup.id]]
+      query_scopes: [['not_member_of_group', props.currentGroup.id], 'active']
     });
   };
 
