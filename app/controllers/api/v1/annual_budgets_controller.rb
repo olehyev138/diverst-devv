@@ -9,7 +9,7 @@ class Api::V1::AnnualBudgetsController < DiverstController
     AnnualBudget.transaction do
       AnnualBudget.reset_budgets(
         amount: params[:amount] || 0,
-        init_quarter: to_bool(params[:quarter]),
+        init_quarter: to_bool(params[:init_quarter]),
         type_override: params[:type]&.downcase&.to_sym,
         period_override: params[:period_override],
         enterprise_id: current_user.enterprise_id

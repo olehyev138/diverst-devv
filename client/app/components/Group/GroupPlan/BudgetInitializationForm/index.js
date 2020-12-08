@@ -12,8 +12,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Grid, Button, Box, Card, CardContent, TextField, Checkbox, FormControlLabel
-} from '@material-ui/core';
+  Grid, Button, Box, Card, CardContent, TextField, Checkbox, FormControlLabel, CardActions,
+  Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -21,7 +21,8 @@ import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Formik, Form, Field } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
-import {Typography} from "@material-ui/core/index";
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const { adminList: listMessages } = messages;
 
@@ -67,9 +68,9 @@ export function BudgetInitializationForm(props, context) {
       initialValues={{
         amount: 0,
         type: { label: 'Parent Groups Only', value: 'parent' },
-        year: { label: 'Current Year', value: null },
+        year: { label: 'Current Year', value: '' },
         with_quarter: false,
-        quarter: { label: 'Current Quarter', value: null },
+        quarter: { label: 'Current Quarter', value: '' },
       }}
       enableReinitialize
       onSubmit={(values, actions) => {
@@ -78,8 +79,8 @@ export function BudgetInitializationForm(props, context) {
           init_quarter: values.with_quarter,
           type: values.type.value,
           period_override: [
-            values.year.value,
-            values.with_quarter ? values.quarter.value : null
+            values.year.value || null,
+            values.with_quarter ? values.quarter.value || null : null
           ]
         };
         props.resetAll(payload);
@@ -95,38 +96,38 @@ export function BudgetInitializationForm(props, context) {
         ...otherFormikProps
       }) => (
         <Card>
-          <CardContent>
-            <Typography variant='h6'>
-              <DiverstFormattedMessage {...messages.initializationForm.types} />
-            </Typography>
-            <ul>
-              <li>
-                <Typography variant='body1'>
-                  <DiverstFormattedMessage {...messages.initializationForm.parentType} />
-                </Typography>
-                <Typography variant='body2'>
-                  <DiverstFormattedMessage {...messages.initializationForm.parentTypeExplanation} />
-                </Typography>
-              </li>
-              <li>
-                <Typography variant='body1'>
-                  <DiverstFormattedMessage {...messages.initializationForm.regionType} />
-                </Typography>
-                <Typography variant='body2'>
-                  <DiverstFormattedMessage {...messages.initializationForm.regionTypeExplanation} />
-                </Typography>
-              </li>
-              <li>
-                <Typography variant='body1'>
-                  <DiverstFormattedMessage {...messages.initializationForm.allType} />
-                </Typography>
-                <Typography variant='body2'>
-                  <DiverstFormattedMessage {...messages.initializationForm.allTypeExplanation} />
-                </Typography>
-              </li>
-            </ul>
-            <Box mb={1} />
-            <Form>
+          <Form>
+            <CardContent>
+              <Typography variant='h6'>
+                <DiverstFormattedMessage {...messages.initializationForm.types} />
+              </Typography>
+              <ul>
+                <li>
+                  <Typography variant='body1'>
+                    <DiverstFormattedMessage {...messages.initializationForm.parentType} />
+                  </Typography>
+                  <Typography variant='body2'>
+                    <DiverstFormattedMessage {...messages.initializationForm.parentTypeExplanation} />
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant='body1'>
+                    <DiverstFormattedMessage {...messages.initializationForm.regionType} />
+                  </Typography>
+                  <Typography variant='body2'>
+                    <DiverstFormattedMessage {...messages.initializationForm.regionTypeExplanation} />
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant='body1'>
+                    <DiverstFormattedMessage {...messages.initializationForm.allType} />
+                  </Typography>
+                  <Typography variant='body2'>
+                    <DiverstFormattedMessage {...messages.initializationForm.allTypeExplanation} />
+                  </Typography>
+                </li>
+              </ul>
+              <Box mb={1} />
               <Select
                 name='type'
                 id='type'
@@ -184,8 +185,13 @@ export function BudgetInitializationForm(props, context) {
                   />
                 </React.Fragment>
               )}
-            </Form>
-          </CardContent>
+            </CardContent>
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                <DiverstFormattedMessage {...messages.initializationForm.initialize} />
+              </DiverstSubmit>
+            </CardActions>
+          </Form>
         </Card>
       )}
     </Formik>
@@ -198,6 +204,7 @@ BudgetInitializationForm.propTypes = {
   resetAll: PropTypes.func,
   annualBudgetType: PropTypes.string,
   budgetPeriod: PropTypes.array,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func

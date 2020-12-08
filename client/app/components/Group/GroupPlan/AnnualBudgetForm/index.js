@@ -49,76 +49,80 @@ export function AnnualBudgetFormInner(
   { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudgets, ...props }
 ) {
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudgets}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudgets.length}>
       <Form>
-        { values.map((value, index) => (
-          <React.Fragment key={`annual_budget:${annualBudgets[index].id}`}>
-            <Card>
-              <CardHeader
-                title={annualBudgets[index].name}
-              />
-              <CardContent>
-                <DiverstMoneyField
-                  label={intl.formatMessage(formMessages.amount, props.customTexts)}
-                  name={`[${index}].amount`}
-                  id={`[${index}].amount`}
-                  margin='dense'
-                  fullWidth
-                  disabled={props.isCommitting}
-                  value={value.amount}
-                  onChange={value => setFieldValue(`[${index}].amount`, value)}
-
-                  currencyForm
-                  currency={getCurrency(value.currency)}
-                  currency_name={`[${index}].currency`}
-                  currency_id={`[${index}].currency`}
-                  onCurrencyChange={value => setFieldValue(`[${index}].currency`, value.value)}
+        { values.map((value, index) => {
+          if (!annualBudgets[index])
+            return <React.Fragment />;
+          return (
+            <React.Fragment key={`annual_budget:${annualBudgets[index].id}`}>
+              <Card>
+                <CardHeader
+                  title={annualBudgets[index].name}
                 />
-              </CardContent>
-              { annualBudgets[index] && (
                 <CardContent>
-                  <Grid
-                    container
-                    justify='space-between'
-                    spacing={3}
-                    alignContent='stretch'
-                    alignItems='center'
-                  >
-                    <Grid item sm={6}>
-                      <Typography color='primary' variant='h6' component='h2'>
-                        <DiverstFormattedMessage {...formMessages.leftover} />
-                      </Typography>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Typography color='primary' variant='h6' component='h2'>
-                        <DiverstFormattedMessage {...formMessages.approved} />
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    justify='space-between'
-                    spacing={3}
-                    alignContent='stretch'
-                    alignItems='center'
-                  >
-                    <Grid item sm={6}>
-                      <Typography color='secondary' variant='body1' component='h3'>
-                        {toCurrencyString(intl, annualBudgets[index].leftover || 0, annualBudgets[index].currency)}
-                      </Typography>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Typography color='secondary' variant='body1' component='h3'>
-                        {toCurrencyString(intl, annualBudgets[index].approved || 0, annualBudgets[index].currency)}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                  <DiverstMoneyField
+                    label={intl.formatMessage(formMessages.amount, props.customTexts)}
+                    name={`[${index}].amount`}
+                    id={`[${index}].amount`}
+                    margin='dense'
+                    fullWidth
+                    disabled={props.isCommitting}
+                    value={value.amount}
+                    onChange={value => setFieldValue(`[${index}].amount`, value)}
+
+                    currencyForm
+                    currency={getCurrency(value.currency)}
+                    currency_name={`[${index}].currency`}
+                    currency_id={`[${index}].currency`}
+                    onCurrencyChange={value => setFieldValue(`[${index}].currency`, value.value)}
+                  />
                 </CardContent>
-              )}
-            </Card>
-            <Box mb={2} />
-          </React.Fragment>
-        ))}
+                { annualBudgets[index] && (
+                  <CardContent>
+                    <Grid
+                      container
+                      justify='space-between'
+                      spacing={3}
+                      alignContent='stretch'
+                      alignItems='center'
+                    >
+                      <Grid item sm={6}>
+                        <Typography color='primary' variant='h6' component='h2'>
+                          <DiverstFormattedMessage {...formMessages.leftover} />
+                        </Typography>
+                      </Grid>
+                      <Grid item sm={6}>
+                        <Typography color='primary' variant='h6' component='h2'>
+                          <DiverstFormattedMessage {...formMessages.approved} />
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      justify='space-between'
+                      spacing={3}
+                      alignContent='stretch'
+                      alignItems='center'
+                    >
+                      <Grid item sm={6}>
+                        <Typography color='secondary' variant='body1' component='h3'>
+                          {toCurrencyString(intl, annualBudgets[index].leftover || 0, annualBudgets[index].currency)}
+                        </Typography>
+                      </Grid>
+                      <Grid item sm={6}>
+                        <Typography color='secondary' variant='body1' component='h3'>
+                          {toCurrencyString(intl, annualBudgets[index].approved || 0, annualBudgets[index].currency)}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                )}
+              </Card>
+              <Box mb={2} />
+            </React.Fragment>
+          );
+        })}
         <Card>
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>

@@ -80,10 +80,12 @@ class AdminGroupBudgetSerializer < ApplicationRecordSerializer
   def budget_children
     if head?
       case budget_type
-      when :parent, :all
+      when :all
         object.children
       when :region
         object.regions
+      when :parent
+        object.children.none
       else nil
       end
     end

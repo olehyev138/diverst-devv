@@ -22,6 +22,7 @@ import { selectPermissions, selectBudgetPeriod, selectEnterprise } from 'contain
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
+import { selectIsCommitting } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
 
 export function AdminInitializeBudgetPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer: annualBudgetReducer });
@@ -30,24 +31,25 @@ export function AdminInitializeBudgetPage(props) {
   return (
     <BudgetInitializationForm
       resetAll={props.resetAnnualBudgetBegin}
-      handleVisitEditPage={props.handleVisitEditPage}
       permissions={props.permissions}
       budgetPeriod={props.budgetPeriod}
+      isCommitting={props.isCommitting}
     />
   );
 }
 
 AdminInitializeBudgetPage.propTypes = {
-  handleVisitEditPage: PropTypes.func.isRequired,
   resetAnnualBudgetBegin: PropTypes.func.isRequired,
   permissions: PropTypes.object,
   budgetPeriod: PropTypes.array,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
   permissions: selectPermissions(),
   budgetPeriod: selectBudgetPeriod(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

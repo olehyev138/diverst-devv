@@ -182,7 +182,7 @@ class AnnualBudget < ApplicationRecord
     end
 
     def default_quarter
-      (Time.now.to_i % 1.year)/3.months
+      (Time.now.to_i % 1.year)/3.months + 1
     end
 
     def current_budget_period
