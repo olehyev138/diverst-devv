@@ -4,6 +4,8 @@ class DiverstMailer < Devise::Mailer
   def invitation_instructions(record, token, opts = {})
     @record = record
     @token = token
+    @enterprise = record.enterprise
+    
     return if @record.enterprise.disable_emails?
 
     set_defaults(record.enterprise, method_name)
