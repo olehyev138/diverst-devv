@@ -33,7 +33,7 @@ const styles = {
   },
   listLoaderWrapper: {
     display: 'flex',
-    flexDirection:'column',
+    flexDirection: 'column',
     flex: 1,
   },
   clearSearchTextButton: {
