@@ -141,6 +141,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                   begin
                     super()
                   rescue NoMethodError => e
+                    warn(e)
                     nil
                   end
                 else

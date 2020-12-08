@@ -1,6 +1,6 @@
 class BudgetUser < ApplicationRecord
   belongs_to :budgetable, polymorphic: true
-  belongs_to :budget_item
+  belongs_to :budget_item, -> { with_expenses }
   has_one :budget, through: :budget_item
   has_one :group, through: :budget
   has_one :annual_budget, through: :budget
@@ -8,6 +8,10 @@ class BudgetUser < ApplicationRecord
   has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_one :budget_user_sums, class_name: 'BudgetUserSums'
+
+  validates :budget_item_id,
+            presence: true,
+            uniqueness: { scope: [:budgetable_type, :budgetable_id] }
 
   scope :with_expenses, -> do
     select(

@@ -61,6 +61,7 @@ import Permission from 'components/Shared/DiverstPermission';
 import { BudgetItemFormInner } from 'components/Group/GroupPlan/BudgetRequestForm';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import useArgumentRemembering from 'utils/customHooks/rememberArguments';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
 
@@ -71,6 +72,8 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
   const removeIndex = id => (() => setFieldValue(`budget_users_attributes[${id}]._destroy`, true));
   const insertAtIndex = (id, obj) => (() => insert(id, obj));
   const pushObject = obj => (() => push(obj));
+
+  const budgetSelectAction = useArgumentRemembering(props.budgetSelectAction);
 
   return (
     <React.Fragment>
@@ -125,25 +128,25 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
                       margin='normal'
                       disabled={props.isCommitting || budgetUser.finished_expenses}
                       value={budgetUser.budget_item_id}
-                      options={[freeEvent, ...props.budgetItems]}
+                      options={props.budgetItems}
                       onChange={(value) => {
                         setFieldValue(`budget_users_attributes[${index}].budget_item_id`, value);
-                        setFieldValue(`budget_users_attributes[${index}].estimated_funding`, value.available);
+                        setFieldValue(`budget_users_attributes[${index}].estimated`, value.available);
                       }}
-                      onInputChange={value => props.budgetSelectAction(value)}
+                      onInputChange={value => budgetSelectAction(value)}
                       onBlur={() => setFieldTouched(`budget_users_attributes[${index}].budget_item_id`, true)}
                     />
                   </Grid>
                   <Grid item xs={11} md={6}>
                     <DiverstMoneyField
                       label={<DiverstFormattedMessage {...messages.inputs.budgetAmount} />}
-                      name='estimated_funding'
-                      id='estimated_funding'
+                      name='estimated'
+                      id='estimated'
                       margin='dense'
                       fullWidth
                       disabled={props.isCommitting || budgetUser.finished_expenses}
-                      value={budgetUser.estimated_funding}
-                      onChange={value => setFieldValue(`budget_users_attributes[${index}].estimated_funding`, value)}
+                      value={budgetUser.estimated}
+                      onChange={value => setFieldValue(`budget_users_attributes[${index}].estimated`, value)}
                       currency={getCurrency(budgetUser.currency)}
                       max={budgetUser.budget_item_id.available}
                     />
@@ -371,8 +374,8 @@ export function EventForm(props) {
     max_attendees: { default: '' },
     location: { default: '' },
     // budget_item: { default: freeEvent, customKey: 'budget_item_id' },
-    budget_users_attributes: { default: [] },
-    estimated_funding: { default: '' },
+    budget_users: { default: [], customKey: 'budget_users_attributes' },
+    // estimated_funding: { default: '' },
     currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
     pillar: { default: props.pillar, customKey: 'pillar_id' },
@@ -386,6 +389,7 @@ export function EventForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['pillar_id', 'participating_group_ids']);
+        payload.budget_users_attributes = payload.budget_users_attributes.map(a => mapFields(a, ['budget_item_id']));
         props.eventAction(payload);
       }}
     >

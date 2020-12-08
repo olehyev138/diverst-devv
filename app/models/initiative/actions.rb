@@ -45,8 +45,10 @@ module Initiative::Actions
             :participating_groups,
             :qr_code_attachment, :qr_code_blob,
             :initiative_users,
+            :budget_users,
+            budget_users: [:budget_item]
         ]
-        preloads.append(:budget_item, :budget, :expenses) if diverst_request.options[:with_budget]
+        preloads.append(:budget, :expenses) if diverst_request.options[:with_budget]
         preloads.append(:comments) if diverst_request.options[:with_comments]
         # preloads.append(:initiative_users) if diverst_request.policy.attendees?
         preloads

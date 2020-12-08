@@ -29,7 +29,7 @@ class Initiative < ApplicationRecord
   # update admin fields to save new fields as well
   # change name in admin to initiatives
 
-  has_many :budget_users, as: :budgetable
+  has_many :budget_users, -> { with_expenses }, as: :budgetable
   has_many :budget_items, through: :budget_users
   has_many :budgets, through: :budget_items
   has_one :annual_budget, through: :budgets
