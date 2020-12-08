@@ -144,8 +144,8 @@ export default defineMessages({
     participatingGroups: {
       id: `${scope}.form.input.participatingGroups`
     },
-    budgetName: {
-      id: `${scope}.form.input.budgetName`
+    addBudgets: {
+      id: `${scope}.form.input.addBudgets`
     },
     budgetAmount: {
       id: `${scope}.form.input.budgetAmount`

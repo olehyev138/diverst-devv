@@ -268,7 +268,7 @@
   "diverst.containers.Event.form.button.update": "Update Event",
   "diverst.containers.Event.form.input.attendee": "Attendees",
   "diverst.containers.Event.form.input.budgetAmount": "Specify amount to deduct from budget",
-  "diverst.containers.Event.form.input.budgetName": "Attach a budget to the event",
+  "diverst.containers.Event.form.input.addBudgets": "Attach budgets to the event",
   "diverst.containers.Event.form.input.description": "Description",
   "diverst.containers.Event.form.input.end": "End Date",
   "diverst.containers.Event.form.input.enderror": "End date cannot be before start date",

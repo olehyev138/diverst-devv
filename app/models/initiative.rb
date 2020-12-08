@@ -29,10 +29,13 @@ class Initiative < ApplicationRecord
   # update admin fields to save new fields as well
   # change name in admin to initiatives
 
-  belongs_to :budget_item
-  belongs_to :budget
-  has_one :annual_budget, through: :budget
+  has_many :budget_users, as: :budgetable
+  has_many :budget_items, through: :budget_users
+  has_many :budgets, through: :budget_items
+  has_one :annual_budget, through: :budgets
   has_one :annual_budget_item, through: :budget_item, source: :annual_budget
+
+  accepts_nested_attributes_for :budget_users, allow_destroy: true
 
   has_many :checklists, dependent: :destroy
   has_many :resources, dependent: :destroy

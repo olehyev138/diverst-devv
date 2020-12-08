@@ -12,9 +12,20 @@ import { DateTime } from 'luxon';
 import { useLastLocation } from 'react-router-last-location';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form, FastField } from 'formik';
+import { Field, Formik, Form, FastField, FieldArray } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Grid, Divider,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  TextField,
+  Grid,
+  Divider,
+  Paper,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  Switch, IconButton,
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -47,8 +58,112 @@ import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
 import { selectPermissions } from 'containers/Shared/App/selectors';
 import { permission } from 'utils/permissionsHelpers';
 import Permission from 'components/Shared/DiverstPermission';
+import { BudgetItemFormInner } from 'components/Group/GroupPlan/BudgetRequestForm';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
+
+export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+  const { remove, insert, push } = arrayHelpers;
+
+  const removeIndex = id => (() => setFieldValue(`budget_users_attributes[${id}]._destroy`, true));
+  const insertAtIndex = (id, obj) => (() => insert(id, obj));
+  const pushObject = obj => (() => push(obj));
+
+  return (
+    <React.Fragment>
+      <CardContent>
+        <Grid
+          container
+          spacing={2}
+          alignContent='space-between'
+        >
+          <Grid item align='left' xs={6}>
+            <Typography color='secondary' variant='body1' component='h2' align='left'>
+              <DiverstFormattedMessage {...messages.inputs.addBudgets} />
+            </Typography>
+          </Grid>
+          <Grid item align='right' xs={6}>
+            <Button
+              color='primary'
+              startIcon={<AddIcon />}
+              onClick={pushObject({
+                id: '',
+                budget_item_id: { label: '', value: null, available: 0 },
+                estimated: 0,
+              })}
+            >
+              <DiverstFormattedMessage {...messages.addEvent} />
+            </Button>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <Divider />
+      {values.budget_users_attributes.map((budgetUser, index) => (
+        // eslint-disable-next-line no-underscore-dangle
+        budgetUser._destroy ? <React.Fragment />
+          : (
+        // eslint-disable-next-line react/no-array-index-key
+            <React.Fragment key={index}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                  alignContent='center'
+                  alignItems='center'
+                >
+                  <Grid item xs={12} md={5}>
+                    <Field
+                      component={DiverstSelect}
+                      fullWidth
+                      required
+                      id='budget_item_id'
+                      name='budget_item_id'
+                      label={<DiverstFormattedMessage {...messages.inputs.addBudgets} />}
+                      margin='normal'
+                      disabled={props.isCommitting || budgetUser.finished_expenses}
+                      value={budgetUser.budget_item_id}
+                      options={[freeEvent, ...props.budgetItems]}
+                      onChange={(value) => {
+                        setFieldValue(`budget_users_attributes[${index}].budget_item_id`, value);
+                        setFieldValue(`budget_users_attributes[${index}].estimated_funding`, value.available);
+                      }}
+                      onInputChange={value => props.budgetSelectAction(value)}
+                      onBlur={() => setFieldTouched(`budget_users_attributes[${index}].budget_item_id`, true)}
+                    />
+                  </Grid>
+                  <Grid item xs={11} md={6}>
+                    <DiverstMoneyField
+                      label={<DiverstFormattedMessage {...messages.inputs.budgetAmount} />}
+                      name='estimated_funding'
+                      id='estimated_funding'
+                      margin='dense'
+                      fullWidth
+                      disabled={props.isCommitting || budgetUser.finished_expenses}
+                      value={budgetUser.estimated_funding}
+                      onChange={value => setFieldValue(`budget_users_attributes[${index}].estimated_funding`, value)}
+                      currency={getCurrency(budgetUser.currency)}
+                      max={budgetUser.budget_item_id.available}
+                    />
+                  </Grid>
+                  <Grid item xs={1} md={1}>
+                    <IconButton
+                      size='small'
+                      onClick={removeIndex(index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </React.Fragment>
+          )
+      ))}
+    </React.Fragment>
+  );
+}
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({ buttonText, formikProps, ...props }) {
@@ -161,49 +276,18 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
             </CardContent>
           </Permission>
           <Divider />
-          <CardContent>
-            <Grid
-              container
-              spacing={3}
-              alignContent='center'
-              alignItems='center'
-            >
-              <Grid item xs={12} md={6}>
-                <Field
-                  component={DiverstSelect}
-                  fullWidth
-                  required
-                  id='budget_item_id'
-                  name='budget_item_id'
-                  label={<DiverstFormattedMessage {...messages.inputs.budgetName} />}
-                  margin='normal'
-                  disabled={props.isCommitting || values.finished_expenses}
-                  value={values.budget_item_id}
-                  options={[freeEvent, ...props.budgetItems]}
-                  onChange={(value) => {
-                    setFieldValue('budget_item_id', value);
-                    setFieldValue('estimated_funding', value.available);
-                  }}
-                  onInputChange={value => budgetSelectAction(value)}
-                  onBlur={() => setFieldTouched('budget_item_id', true)}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <DiverstMoneyField
-                  label={<DiverstFormattedMessage {...messages.inputs.budgetAmount} />}
-                  name='estimated_funding'
-                  id='estimated_funding'
-                  margin='dense'
-                  fullWidth
-                  disabled={props.isCommitting || values.finished_expenses}
-                  value={values.estimated_funding}
-                  onChange={value => setFieldValue('estimated_funding', value)}
-                  currency={getCurrency(values.currency)}
-                  max={values.budget_item_id.available}
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
+          <FieldArray
+            name='budget_users_attributes'
+            render={arrayHelpers => (
+              <BudgetUserFormInner
+                formikProps={formikProps}
+                arrayHelpers={arrayHelpers}
+                budgetSelectAction={budgetSelectAction}
+                {...props}
+              />
+            )}
+          />
+
           <Divider />
           <CardContent>
             <Grid container spacing={6} justify='space-between'>
@@ -286,7 +370,8 @@ export function EventForm(props) {
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
-    budget_item: { default: freeEvent, customKey: 'budget_item_id' },
+    // budget_item: { default: freeEvent, customKey: 'budget_item_id' },
+    budget_users_attributes: { default: [] },
     estimated_funding: { default: '' },
     currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
@@ -300,7 +385,7 @@ export function EventForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['budget_item_id', 'pillar_id', 'participating_group_ids']);
+        const payload = mapFields(values, ['pillar_id', 'participating_group_ids']);
         props.eventAction(payload);
       }}
     >
@@ -348,6 +433,14 @@ EventFormInner.propTypes = {
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
   })
+};
+
+BudgetUserFormInner.propTypes = {
+  formikProps: PropTypes.object,
+  arrayHelpers: PropTypes.object,
+  isCommitting: PropTypes.bool,
+  annualBudget: PropTypes.object,
+  ...EventFormInner.propTypes
 };
 
 const mapStateToProps = createStructuredSelector({
