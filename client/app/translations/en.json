@@ -1098,6 +1098,7 @@
   "diverst.containers.Routes.admin.mentorship.index": "Mentorship",
   "diverst.containers.Routes.admin.plan.index": "Plan",
   "diverst.containers.Routes.admin.plan.group_budgets": "{erg} Budgets",
+  "diverst.containers.Routes.admin.plan.budget_initialize": "Budget Initialization",
   "diverst.containers.Routes.admin.system.branding": "Branding",
   "diverst.containers.Routes.admin.system.diversity": "Diversity",
   "diverst.containers.Routes.admin.system.globalSettings": "Global Settings",

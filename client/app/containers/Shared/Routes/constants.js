@@ -816,7 +816,7 @@ const ROUTES = {
       budgeting: {
         pathPrefix: '/admin/plan/budgeting',
         index: {
-          path: () => '/admin/plan/budgeting',
+          path: () => '/admin/plan/budgeting/list',
           data: {
             titleMessage: messages.admin.manage.groups,
           }
