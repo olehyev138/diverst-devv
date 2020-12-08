@@ -6,8 +6,10 @@ class Api::V1::AnnualBudgetsController < DiverstController
   def reset_budgets
     base_authorize(klass)
 
+    new_period = [nil, nil]
+
     AnnualBudget.transaction do
-      AnnualBudget.reset_budgets(
+      new_period = AnnualBudget.reset_budgets(
         amount: params[:amount] || 0,
         init_quarter: to_bool(params[:init_quarter]),
         type_override: params[:type]&.downcase&.to_sym,
@@ -16,7 +18,7 @@ class Api::V1::AnnualBudgetsController < DiverstController
       )
     end
 
-    head :no_content
+    render status: 200, json: new_period
   end
 
   private

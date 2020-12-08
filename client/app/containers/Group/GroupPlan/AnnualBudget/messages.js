@@ -29,6 +29,11 @@ export default defineMessages({
     currentTitle: {
       id: `${scope}.item.currentTitle`,
     },
+    title(year = null, quarter = null, closed = true) {
+      if (year && quarter) return { id: `${scope}.item.titleQuarter` };
+      if (year) return { id: `${scope}.item.titleYear` };
+      return { id: `${scope}.item.${closed ? 'pastTitle' : 'currentTitle'}` };
+    },
     budget: {
       id: `${scope}.item.budget`,
     },
@@ -180,9 +185,6 @@ export default defineMessages({
       if (year) return { id: `${scope}.adminList.titleYear` };
       return { id: `${scope}.adminList.title` };
     },
-    // title: {
-    //   id: `${scope}.adminList.title`,
-    // },
     notSet: {
       id: `${scope}.adminList.notSet`,
     },

@@ -113,7 +113,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 
 export function AnnualBudgetListItem(props) {
   const { classes, links, item, intl } = props;
-  const { expenses, amount, available, approved, remaining, estimated, unspent, currency } = item;
+  const { expenses, amount, available, approved, remaining, estimated, unspent, currency, closed, year, quarter } = item;
 
   const [initList, setInitList] = useState(false);
 
@@ -127,9 +127,7 @@ export function AnnualBudgetListItem(props) {
     <Card>
       <CardContent>
         <Typography variant='h5' align='left' color='primary'>
-          {item.closed
-            ? <DiverstFormattedMessage {...itemMessages.pastTitle} />
-            : <DiverstFormattedMessage {...itemMessages.currentTitle} />}
+          {<DiverstFormattedMessage {...itemMessages.title(year, quarter, closed)} values={{ year, quarter }} />}
         </Typography>
         <Box mb={2} />
         <Grid

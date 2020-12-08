@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -27,6 +27,7 @@ import {
   getAggregateBudgetsSuccess, getAggregateBudgetsError,
   resetAnnualBudgetSuccess, resetAnnualBudgetError,
 } from './actions';
+import { setUserData } from 'containers/Shared/App/actions';
 
 export function* getCurrentAnnualBudget(action) {
   try {
@@ -117,6 +118,9 @@ export function* resetAnnualBudget(action) {
     const response = yield call(api.annualBudgets.currentChildBudgets.bind(api.annualBudgets), payload);
 
     yield put(resetAnnualBudgetSuccess());
+
+    yield put(setUserData({ current_budget_period: response.data }, true));
+
     yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
   } catch (err) {
     yield put(resetAnnualBudgetError(err));

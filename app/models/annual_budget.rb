@@ -249,6 +249,8 @@ class AnnualBudget < ApplicationRecord
       else
         raise StandardError, "Current Aggregate Type Invalid"
       end
+
+      [new_year, new_quarter]
     end
 
     def initialize_regions_budgets(amount: 0, year: default_year, quarter: default_quarter, enterprise_id:)
