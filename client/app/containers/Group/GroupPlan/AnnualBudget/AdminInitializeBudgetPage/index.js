@@ -18,7 +18,12 @@ import { resetAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/
 import BudgetInitializationForm from 'components/Group/GroupPlan/BudgetInitializationForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectPermissions, selectBudgetPeriod, selectEnterprise } from 'containers/Shared/App/selectors';
+import {
+  selectPermissions,
+  selectBudgetPeriod,
+  selectEnterprise,
+  selectCustomText
+} from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
@@ -34,6 +39,7 @@ export function AdminInitializeBudgetPage(props) {
       permissions={props.permissions}
       budgetPeriod={props.budgetPeriod}
       isCommitting={props.isCommitting}
+      customText={props.customText}
     />
   );
 }
@@ -43,6 +49,7 @@ AdminInitializeBudgetPage.propTypes = {
   permissions: PropTypes.object,
   budgetPeriod: PropTypes.array,
   isCommitting: PropTypes.bool,
+  customText: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -50,6 +57,7 @@ const mapStateToProps = createStructuredSelector({
   permissions: selectPermissions(),
   budgetPeriod: selectBudgetPeriod(),
   isCommitting: selectIsCommitting(),
+  customText: selectCustomText(),
 });
 
 const mapDispatchToProps = {
