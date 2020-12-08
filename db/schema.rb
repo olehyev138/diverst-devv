@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_161226) do
+ActiveRecord::Schema.define(version: 2020_12_08_194730) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -874,7 +874,7 @@ ActiveRecord::Schema.define(version: 2020_12_04_161226) do
     t.string "name"
     t.datetime "start"
     t.datetime "end"
-    t.decimal "estimated_funding", precision: 20, scale: 4, default: "0.0", null: false
+    t.integer "estimated_funding", default: 0
     t.decimal "deprecated_actual_funding", precision: 20, scale: 4
     t.integer "owner_id"
     t.integer "pillar_id"
