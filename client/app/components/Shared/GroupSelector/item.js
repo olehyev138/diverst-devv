@@ -259,7 +259,8 @@ GroupSelectorItem.propTypes = {
   doubleClickWait: PropTypes.number,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
-    PropTypes.object
+    PropTypes.object,
+    PropTypes.string,
   ]),
 };
 

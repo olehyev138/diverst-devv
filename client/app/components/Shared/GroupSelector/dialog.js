@@ -239,7 +239,8 @@ GroupListSelector.propTypes = {
   isSelected: PropTypes.func.isRequired,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
-    PropTypes.object
+    PropTypes.object,
+    PropTypes.string, // When it's a single item select and there's no value
   ]),
 
   intl: intlShape.isRequired,
