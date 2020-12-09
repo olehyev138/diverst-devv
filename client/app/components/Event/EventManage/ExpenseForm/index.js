@@ -61,7 +61,7 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
               name='budget_item_id'
               fullWidth
               id='budget_item_id'
-              label={<DiverstFormattedMessage {...messages.groupselect} />}
+              label={<DiverstFormattedMessage {...formMessages.budgetItem} />}
               options={budgetItemOptions}
               value={values.budget_item_id}
               onChange={v => setFieldValue('budget_item_id', v)}
