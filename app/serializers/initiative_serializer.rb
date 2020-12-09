@@ -6,12 +6,16 @@ class InitiativeSerializer < ApplicationRecordSerializer
   attributes_with_permission :pillar, :outcome, :initiative_users,
                              :qr_code, :qr_code_file_name, :qr_code_data, :budget_users, if: :singular_action?
 
-  attributes_with_permission :budget, :budget_status, :expenses_status, :current_expenses_sum,
+  attributes_with_permission :budget, :budgets, :budget_status, :expenses_status, :current_expenses_sum,
                              :leftover, if: :with_budget?
 
   attributes_with_permission :total_comments, :comments, if: :with_comments?
 
   attributes_with_permission :total_attendees, if: :view_attendees?
+
+  def budget
+    budgets.first
+  end
 
   def with_budget?
     instance_options[:with_budget] && singular_action?

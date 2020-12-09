@@ -301,7 +301,7 @@ class Initiative < ApplicationRecord
   end
 
   def budget_status
-    budget.try(:status_title) || 'Not attached'
+    budgets.first.try(:status_title) || 'Not attached'
   end
 
   def expenses_status
