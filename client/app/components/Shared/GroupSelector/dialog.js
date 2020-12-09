@@ -44,7 +44,6 @@ const styles = {
 
 const GroupListSelector = (props) => {
   const { groups, classes, intl, customTexts, ...rest } = props;
-  const { getGroupsBegin, groupListUnmount } = rest;
 
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
   const [searchKey, setSearchKey] = useState('');

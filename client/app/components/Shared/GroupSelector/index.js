@@ -172,7 +172,6 @@ const GroupSelector = (props) => {
             groupTotal={rest.groupTotal}
             isLoading={rest.isLoading}
             inputCallback={props.inputCallback}
-            getGroupsBegin={props.getGroupsBegin}
             open={dialogSearch}
             addGroup={addGroup}
             removeGroup={removeGroup}
