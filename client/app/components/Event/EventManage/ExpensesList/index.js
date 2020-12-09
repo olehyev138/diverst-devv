@@ -115,7 +115,8 @@ export function ExpenseList(props, context) {
                   <Button
                     color='primary'
                     variant='contained'
-                    to={props.links.newExpense}
+                    to={{ pathname: props.links.newExpense,
+                      state: { budgetItem: { value: budgetUser.budget_item.id, label: budgetUser.budget_item.title } } }}
                     component={WrappedNavLink}
                     startIcon={<AddIcon />}
                   >
