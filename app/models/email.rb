@@ -19,7 +19,7 @@ class Email < BaseClass
   validates_length_of :template, maximum: 191
   validates_length_of :mailer_method, maximum: 191
   validates_length_of :mailer_name, maximum: 191
-  validates_length_of :content, maximum: 65535
+  validates_length_of :content, maximum: 1029
   validates_length_of :subject, maximum: 191
   validates_length_of :name, maximum: 191
   validates :name, :subject, :content, :description, :mailer_name, :mailer_method, presence: true
