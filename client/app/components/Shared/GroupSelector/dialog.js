@@ -54,7 +54,6 @@ const GroupListSelector = (props) => {
   useEffect(() => {
     if (props.open)
       groupSearchAction(searchKey, params);
-    return () => null;
   }, [props.open]);
 
   const header = (
