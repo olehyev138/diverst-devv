@@ -98,7 +98,7 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
                 estimated: 0,
               })}
             >
-              <DiverstFormattedMessage {...messages.addEvent} />
+              <DiverstFormattedMessage {...messages.addBudget} />
             </Button>
           </Grid>
         </Grid>
@@ -124,7 +124,7 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
                       required
                       id='budget_item_id'
                       name='budget_item_id'
-                      label={<DiverstFormattedMessage {...messages.inputs.addBudgets} />}
+                      label={<DiverstFormattedMessage {...messages.inputs.selectBudget} />}
                       margin='normal'
                       disabled={props.isCommitting || budgetUser.finished_expenses}
                       value={budgetUser.budget_item_id}
@@ -373,9 +373,7 @@ export function EventForm(props) {
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
-    // budget_item: { default: freeEvent, customKey: 'budget_item_id' },
     budget_users: { default: [], customKey: 'budget_users_attributes' },
-    // estimated_funding: { default: '' },
     currency: { default: props.currentGroup.annual_budget_currency },
     finished_expenses: { default: false },
     pillar: { default: props.pillar, customKey: 'pillar_id' },

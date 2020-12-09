@@ -147,6 +147,12 @@ export default defineMessages({
     addBudgets: {
       id: `${scope}.form.input.addBudgets`
     },
+    addBudget: {
+      id: `${scope}.form.input.addBudget`
+    },
+    selectBudget: {
+      id: `${scope}.form.input.selectBudget`
+    },
     budgetAmount: {
       id: `${scope}.form.input.budgetAmount`
     },
