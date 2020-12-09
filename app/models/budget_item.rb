@@ -87,7 +87,8 @@ class BudgetItem < ApplicationRecord
   end
 
   def available_for_event(event)
-    event_offset = event.present? && event.budget_item_id == id ? event.estimated_funding : 0
+    budget_users = BudgetUser.find_by(budgetable: event, budget_item_id: id)
+    event_offset = budget_users.present? ? budget_users.estimated : 0
     available_amount + event_offset
   end
 
