@@ -49,7 +49,7 @@ import BudgetList from 'components/Event/EventManage/BudgetList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectCustomText } from 'containers/Shared/App/selectors';
-import {selectIsFetchingBudgetUsers, selectPaginatedBudgetUsers} from 'containers/Group/GroupPlan/BudgetUser/selectors';
+import { selectIsFetchingBudgetUsers, selectPaginatedBudgetUsers } from 'containers/Group/GroupPlan/BudgetUser/selectors';
 
 const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
 

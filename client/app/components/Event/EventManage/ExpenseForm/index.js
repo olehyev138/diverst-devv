@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Form, Formik } from 'formik';
 import { Box, Button, CardContent, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
-import {buildValues, mapFields} from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 

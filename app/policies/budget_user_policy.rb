@@ -18,7 +18,7 @@ class BudgetUserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if policy.index?
-        scope.joins(:group).where(groups: {enterprise_id: user.enterprise_id})
+        scope.joins(:group).where(groups: { enterprise_id: user.enterprise_id })
       else
         scope.none
       end

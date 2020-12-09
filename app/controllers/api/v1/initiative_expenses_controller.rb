@@ -24,5 +24,4 @@ class Api::V1::InitiativeExpensesController < DiverstController
         :budget_user_id,
       )
   end
-
 end
