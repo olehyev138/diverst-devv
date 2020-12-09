@@ -100,7 +100,7 @@ DiverstTable.propTypes = {
   dataTotal: PropTypes.number,
   columns: PropTypes.array.isRequired,
   actions: PropTypes.array,
-  handlePagination: PropTypes.func.isRequired,
+  handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleSearching: PropTypes.func,
   handleRowClick: PropTypes.func,

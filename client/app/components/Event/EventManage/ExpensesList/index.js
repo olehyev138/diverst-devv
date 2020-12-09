@@ -152,8 +152,6 @@ export function ExpenseList(props, context) {
           <Grid item xs>
             <DiverstTable
               title={messages.title}
-              handlePagination={props.handlePagination}
-              onOrderChange={handleOrderChange}
               isLoading={props.isFetchingExpenses}
               rowsPerPage={5}
               dataArray={Object.values(props.expenses)}
@@ -231,8 +229,6 @@ ExpenseList.propTypes = {
   expenseSumTotal: PropTypes.string,
   isFetchingExpenses: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
-  handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func,
   handleVisitExpenseEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
   expenseType: PropTypes.string,

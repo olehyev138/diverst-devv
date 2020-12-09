@@ -48,7 +48,7 @@ module Initiative::Actions
             :budget_users,
             budget_users: [:budget_item]
         ]
-        preloads.append(:budgets, :expenses) if diverst_request.options[:with_budget]
+        preloads.last[:budget_users].append(:budget, :expenses) if diverst_request.options[:with_budget]
         preloads.append(:comments) if diverst_request.options[:with_comments]
         # preloads.append(:initiative_users) if diverst_request.policy.attendees?
         preloads

@@ -76,7 +76,6 @@ export function ExpenseListPage(props) {
 }
 
 ExpenseListPage.propTypes = {
-  getExpensesBegin: PropTypes.func.isRequired,
   createExpenseBegin: PropTypes.func.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
