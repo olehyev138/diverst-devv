@@ -20,8 +20,8 @@ class InitiativeExpense < ApplicationRecord
   scope :active, -> { joins(:initiative).where(initiatives: { finished_expenses: false }) }
 
   def initiative_is_not_finalized
-    if budget_user&.budgetable.blank? || budget_user.budgetable.finished_expenses?
-      errors.add(:initiative, "Can't #{new_record? ? 'add' : 'edit'} an expense for a closed initiative")
+    if budget_user.blank? || budget_user.finished_expenses?
+      errors.add(:budget_user, "Can't #{new_record? ? 'add' : 'edit'} an expense for a closed initiative")
     end
   end
 
