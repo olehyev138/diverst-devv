@@ -48,7 +48,7 @@ const GroupListSelector = (props) => {
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
   const [searchKey, setSearchKey] = useState('');
 
-  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, { ...params, with_children: false });
+  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, params);
   const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
