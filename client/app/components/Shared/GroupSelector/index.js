@@ -59,6 +59,8 @@ const GroupSelector = (props) => {
 
   const handleParentExpand = (id, name) => setParentData({ id, name });
 
+  const handleFinishExitTransition = () => setDisplayParentUI(true);
+
   function groupCompare(g1, g2) {
     return g1.value === g2.value;
   }
@@ -182,8 +184,12 @@ const GroupSelector = (props) => {
             queryScopes={props.queryScopes}
             dialogQueryScopes={props.dialogQueryScopes}
             parentData={parentData}
+            setParentData={setParentData}
             displayParentUI={displayParentUI}
+            setDisplayParentUI={setDisplayParentUI}
+            isDisplayingChildren={!!parentData?.name}
             handleParentExpand={handleParentExpand}
+            handleFinishExitTransition={handleFinishExitTransition}
             customTexts={customTexts}
           />
         )}
