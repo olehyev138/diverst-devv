@@ -58,7 +58,7 @@ export function DiverstDialog(props) {
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
       {titleDivider && <Divider />}
-      <Scrollbar>
+      <Scrollbar useFlexContainer>
         <Box className={classes.scrollbarContent}>
           <DialogContent className={classes.content}>
             {content.id ? props.intl.formatMessage(content, props.customText) : content}
