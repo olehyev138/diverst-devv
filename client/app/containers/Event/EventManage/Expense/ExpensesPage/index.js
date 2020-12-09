@@ -42,10 +42,10 @@ import {
 import reducer from '../reducer';
 import saga from '../saga';
 
-import ExpenseList from 'components/Event/EventManage/ExpensesList';
+import BudgetList from 'components/Event/EventManage/BudgetList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
 
@@ -53,76 +53,23 @@ export function ExpenseListPage(props) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
 
-  const [params, setParams] = useState(
-    {
-      count: 5,
-      page: 0,
-      order: 'asc',
-      orderBy: 'initiative_expenses.id',
-    }
-  );
-
   const links = {
     newExpense: ROUTES.group.plan.events.manage.expenses.new.path(props.currentGroup.id, props.currentEvent.id),
     editExpense: id => props.handleVisitEditPage(props.currentGroup.id, props.currentEvent.id, id),
     initiativeManage: ROUTES.group.plan.events.index.path(props.currentGroup.id, props.currentEvent.id),
   };
 
-  function getExpenses(params) {
-    props.getExpensesBegin({
-      ...params,
-      initiative_id: props.currentEvent.id,
-      sum: 'amount'
-    });
-  }
-
-  useEffect(() => {
-    getExpenses(params);
-
-    return () => {
-      props.expensesUnmount();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (props.hasChanged)
-      getExpenses(params);
-
-    return () => {
-      props.expensesUnmount();
-    };
-  }, [props.hasChanged]);
-
-  const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
-
-    getExpenses(newParams);
-    setParams(newParams);
-  };
-
-  const handleOrdering = (payload) => {
-    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
-
-    getExpenses(newParams);
-    setParams(newParams);
-  };
-
   return (
     <React.Fragment>
-      <ExpenseList
+      <BudgetList
         initiative={props.currentEvent}
         currentGroup={props.currentGroup}
-        expenses={props.expenses}
-        expenseTotal={props.expenseTotal}
-        expenseSumTotal={props.expenseSumTotal}
-        isFetchingExpenses={props.isLoading}
-        handlePagination={handlePagination}
-        handleOrdering={handleOrdering}
         handleVisitEditPage={props.handleVisitEditPage}
         deleteExpenseBegin={props.deleteExpenseBegin}
         finalizeExpensesBegin={props.finalizeExpensesBegin}
         links={links}
         customTexts={props.customTexts}
+        isCommitting={props.isCommitting}
       />
     </React.Fragment>
   );
@@ -134,10 +81,6 @@ ExpenseListPage.propTypes = {
   updateExpenseBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
   finalizeExpensesBegin: PropTypes.func.isRequired,
-  expenses: PropTypes.array,
-  expenseTotal: PropTypes.number,
-  expenseSumTotal: PropTypes.string,
-  isLoading: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
   expensesUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
@@ -165,7 +108,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getExpensesBegin,
   createExpenseBegin,
   updateExpenseBegin,
   deleteExpenseBegin,
