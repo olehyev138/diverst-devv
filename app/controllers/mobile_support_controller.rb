@@ -9,6 +9,6 @@ class MobileSupportController < DiverstController
 
   # TODO (DI-844): - temporary mobile appeasement for apple store
   def render_aasa
-    render json: File.read(Rails.root.join('public', 'aasa'))
+    render json: File.read(Rails.root.join('app', 'assets', 'json', 'aasa'))
   end
 end
