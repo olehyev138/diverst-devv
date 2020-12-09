@@ -165,6 +165,9 @@ export default defineMessages({
     },
     clear: {
       id: `${scope}.selectorDialog.clear`,
+      confirm: {
+        id: `${scope}.selectorDialog.clear.confirm`,
+      },
     },
     close: {
       id: `${scope}.selectorDialog.close`,

@@ -567,6 +567,7 @@
   "diverst.containers.Group.selector.text.from": "From",
   "diverst.containers.Group.selector.text.to": "To",
   "diverst.containers.Group.selectorDialog.clear": "Clear All",
+  "diverst.containers.Group.selectorDialog.clear.confirm": "Are you sure you want to clear all selections?",
   "diverst.containers.Group.selectorDialog.close": "Cancel",
   "diverst.containers.Group.selectorDialog.save": "Save",
   "diverst.containers.Group.selectorDialog.search": "Search",

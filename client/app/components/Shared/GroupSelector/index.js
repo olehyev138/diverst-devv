@@ -33,6 +33,8 @@ import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { selectCustomText, selectPermissions } from 'containers/Shared/App/selectors';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 const styles = theme => ({
   selectButton: {
     marginTop: 28,
@@ -43,7 +45,7 @@ const styles = theme => ({
 });
 
 const GroupSelector = (props) => {
-  const { classes, customTexts, handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
+  const { classes, intl, customTexts, handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
 
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -151,7 +153,8 @@ const GroupSelector = (props) => {
         extraActions={[
           {
             key: 'clear groups',
-            func: () => setDialogSelectedGroups([]),
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            func: () => confirm(intl.formatMessage(messages.selectorDialog.clear.confirm)) && setDialogSelectedGroups([]),
             label: <DiverstFormattedMessage {...messages.selectorDialog.clear} />,
             color: 'secondary'
           }
@@ -215,6 +218,8 @@ GroupSelector.propTypes = {
   extraParams: PropTypes.object,
 
   inputCallback: PropTypes.func,
+
+  intl: intlShape.isRequired,
 };
 
 GroupSelector.defaultProps = {
@@ -254,6 +259,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withStyles(styles),
   withConnect,
   memo,
