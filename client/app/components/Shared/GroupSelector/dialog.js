@@ -165,6 +165,7 @@ GroupListSelector.propTypes = {
   queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   inputCallback: PropTypes.func,
+  getGroupsBegin: PropTypes.func,
 
   parentData: PropTypes.object,
   displayParentUI: PropTypes.bool,
