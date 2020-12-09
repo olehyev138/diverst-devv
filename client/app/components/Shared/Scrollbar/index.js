@@ -14,24 +14,30 @@ const CONTENT_SCROLL_CLASS_NAME = 'primary-content-scroll-container';
 
 const styles = theme => ({
   scrollContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
     flexGrow: 1,
     marginTop: 0,
     marginBottom: -1,
   },
+  scrollContentDisplayFlex: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
 });
 
 export function Scrollbar(props) {
-  const { classes, ...rest } = props;
+  const { classes, useFlexContainer, ...rest } = props;
+
+  let scrollContentClasses = classes.scrollContent;
+  if (useFlexContainer)
+    scrollContentClasses = classNames(scrollContentClasses, classes.scrollContentDisplayFlex);
 
   return (
     <PerfectScrollbar
       options={{
         suppressScrollX: true,
       }}
-      className={classNames(classes.scrollContent, CONTENT_SCROLL_CLASS_NAME)}
+      className={classNames(scrollContentClasses, CONTENT_SCROLL_CLASS_NAME)}
     >
       {props.children}
     </PerfectScrollbar>
@@ -41,6 +47,7 @@ export function Scrollbar(props) {
 Scrollbar.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
+  useFlexContainer: PropTypes.bool,
 };
 
 export { CONTENT_SCROLL_CLASS_NAME };
