@@ -43,6 +43,7 @@ Diverst::Application.routes.draw do
           post 'close', to: 'budget_items#close_budget'
         end
       end
+      resources :budget_users, only: [:index]
       resources :campaigns
       resources :campaigns_groups
       resources :campaign_invitations
