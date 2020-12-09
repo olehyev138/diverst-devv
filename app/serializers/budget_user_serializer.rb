@@ -4,7 +4,7 @@ class BudgetUserSerializer < ApplicationRecordSerializer
   attributes_with_permission :expenses, if: :with_budget?
 
   def with_budget?
-    instance_options[:with_budget] && singular_action?
+    instance_options[:with_budget]
   end
 
   def expenses

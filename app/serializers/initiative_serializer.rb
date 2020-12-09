@@ -57,7 +57,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
 
   def budget_users
     object.budget_users.map do |budget_user|
-      BudgetUserSerializer.new(budget_user, event: object, **instance_options).as_json
+      BudgetUserSerializer.new(budget_user, event: object, **instance_options.except(:with_budget?)).as_json
     end
   end
 
