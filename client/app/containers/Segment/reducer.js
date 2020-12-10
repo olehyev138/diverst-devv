@@ -12,6 +12,7 @@ import {
   SEGMENT_UNMOUNT, GET_SEGMENTS_ERROR, GET_SEGMENT_ERROR,
   CREATE_SEGMENT_BEGIN, CREATE_SEGMENT_SUCCESS, CREATE_SEGMENT_ERROR,
   UPDATE_SEGMENT_BEGIN, UPDATE_SEGMENT_SUCCESS, UPDATE_SEGMENT_ERROR, GET_SEGMENT_BEGIN,
+  DELETE_SEGMENT_BEGIN, DELETE_SEGMENT_SUCCESS, DELETE_SEGMENT_ERROR,
 } from 'containers/Segment/constants';
 
 export const initialState = {
@@ -24,7 +25,8 @@ export const initialState = {
   segmentMemberList: [],
   segmentMemberTotal: null,
   isFetchingSegmentMembers: true,
-  isSegmentBuilding: false
+  isSegmentBuilding: false,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -67,13 +69,19 @@ function segmentsReducer(state = initialState, action) {
         break;
       case CREATE_SEGMENT_BEGIN:
       case UPDATE_SEGMENT_BEGIN:
+      case DELETE_SEGMENT_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
       case CREATE_SEGMENT_SUCCESS:
       case CREATE_SEGMENT_ERROR:
       case UPDATE_SEGMENT_SUCCESS:
       case UPDATE_SEGMENT_ERROR:
+      case DELETE_SEGMENT_ERROR:
         draft.isCommitting = false;
+        break;
+      case DELETE_SEGMENT_SUCCESS:
+        draft.hasChanged = true;
         break;
       case SEGMENT_UNMOUNT:
         return initialState;
