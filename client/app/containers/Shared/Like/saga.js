@@ -25,7 +25,7 @@ export function* likeNewsItem(action) {
     callback();
   } catch (err) {
     yield put(likeNewsItemError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.like), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.like, options: { variant: 'warning' } }));
   }
 }
 
@@ -39,7 +39,7 @@ export function* unlikeNewsItem(action) {
     callback();
   } catch (err) {
     yield put(unlikeNewsItemError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.unlike), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.unlike, options: { variant: 'warning' } }));
   }
 }
 

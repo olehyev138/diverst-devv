@@ -57,7 +57,7 @@ const EventManageLayout = (props) => {
   }, [currentPage]);
 
   useEffect(() => {
-    rest.getEventBegin({ id: eventId });
+    rest.getEventBegin({ id: eventId, with_budget: true });
 
     return () => {
       rest.eventsUnmount();

@@ -1,6 +1,7 @@
 # The base class for all Active Storage controllers.
 class ActiveStorage::BaseController < ActionController::Base
   include BaseAuthentication
+  include ApiHelper
 
   before_action :init_response
   before_action :verify_api_key

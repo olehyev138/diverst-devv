@@ -63,32 +63,32 @@ export function MentorRequestList(props, context) {
   };
 
   const columns = [
-    { title: intl.formatMessage(appMessages.person.givenName),
+    { title: intl.formatMessage(appMessages.person.givenName, props.customTexts),
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name`,
       query_field: 'users.first_name'
     },
-    { title: intl.formatMessage(appMessages.person.familyName),
+    { title: intl.formatMessage(appMessages.person.familyName, props.customTexts),
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name`,
       query_field: 'users.last_name'
     },
-    { title: intl.formatMessage(messages.columns.notes), field: 'notes', query_field: 'notes' },
+    { title: intl.formatMessage(messages.columns.notes, props.customTexts), field: 'notes', query_field: 'notes' },
     {
-      title: intl.formatMessage(messages.columns.type),
+      title: intl.formatMessage(messages.columns.type, props.customTexts),
       field: 'mentoring_type',
       query_field: 'mentoring_type',
       lookup: {
-        mentor: intl.formatMessage(mentorMessages.mentor.neutral),
-        mentee: intl.formatMessage(mentorMessages.mentee.neutral),
+        mentor: intl.formatMessage(messages.columns.type, props.customTexts),
+        mentee: intl.formatMessage(mentorMessages.mentee.neutral, props.customTexts),
       }
     },
     {
-      title: intl.formatMessage(messages.columns.status),
+      title: intl.formatMessage(messages.columns.status, props.customTexts),
       field: 'status',
       query_field: 'status',
       lookup: {
-        pending: intl.formatMessage(messages.status.pending),
-        accepted: intl.formatMessage(messages.status.accept),
-        rejected: intl.formatMessage(messages.status.reject),
+        pending: intl.formatMessage(messages.columns.status, props.customTexts),
+        accepted: intl.formatMessage(messages.status.accept, props.customTexts),
+        rejected: intl.formatMessage(messages.status.reject, props.customTexts),
       }
     },
   ];
@@ -97,10 +97,10 @@ export function MentorRequestList(props, context) {
   if (type === 'incoming' && props?.user?.id === props.userSession.user_id) {
     actions.push({
       icon: () => (<CheckIcon />),
-      tooltip: intl.formatMessage(messages.actions.approve),
+      tooltip: intl.formatMessage(messages.actions.approve, props.customTexts),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm(intl.formatMessage(messages.actions.approveWarning))) {
+        if (confirm(intl.formatMessage(messages.actions.approveWarning, props.customTexts))) {
           const payload = { id: rowData.id };
           props.acceptRequest(payload);
         }
@@ -109,10 +109,10 @@ export function MentorRequestList(props, context) {
 
     actions.push({
       icon: () => (<ClearIcon />),
-      tooltip: intl.formatMessage(messages.actions.reject),
+      tooltip: intl.formatMessage(messages.actions.reject, props.customTexts),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm(intl.formatMessage(messages.actions.rejectWarning))) {
+        if (confirm(intl.formatMessage(messages.actions.rejectWarning, props.customTexts))) {
           const payload = { id: rowData.id };
           props.rejectRequest(payload);
         }
@@ -121,10 +121,10 @@ export function MentorRequestList(props, context) {
   } else if (props?.user?.id === props.userSession.user_id)
     actions.push({
       icon: () => (<DeleteIcon />),
-      tooltip: intl.formatMessage(messages.actions.remove),
+      tooltip: intl.formatMessage(messages.actions.remove, props.customTexts),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm(intl.formatMessage(messages.actions.removeWarning))) {
+        if (confirm(intl.formatMessage(messages.actions.removeWarning, props.customTexts))) {
           const payload = { id: rowData.id };
           props.deleteRequest(payload);
         }
@@ -133,7 +133,7 @@ export function MentorRequestList(props, context) {
 
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: intl.formatMessage(messages.actions.viewProfile),
+    tooltip: intl.formatMessage(messages.actions.viewProfile, props.customTexts),
     onClick: (_, rowData) => {
       handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
     }
@@ -151,8 +151,8 @@ export function MentorRequestList(props, context) {
       <Box mb={1} />
       <DiverstTable
         title={type === 'incoming'
-          ? intl.formatMessage(messages.title.incoming)
-          : intl.formatMessage(messages.title.outgoing)}
+          ? messages.title.incoming
+          : messages.title.outgoing}
         handlePagination={props.handleRequestPagination}
         onOrderChange={handleOrderChange}
         isLoading={props.isFetchingRequests}
@@ -223,6 +223,7 @@ MentorRequestList.propTypes = {
   acceptRequest: PropTypes.func,
   deleteRequest: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object
 };
 
 export default compose(

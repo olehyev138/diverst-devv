@@ -35,7 +35,6 @@ import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard
 
 // messages
 import messages from 'containers/Analyze/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
@@ -51,7 +50,6 @@ export function MetricsDashboardEditPage(props) {
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
   };
-  const { intl } = props;
 
   useEffect(() => {
     props.getMetricsDashboardBegin({ id: metricsDashboardId });
@@ -67,7 +65,7 @@ export function MetricsDashboardEditPage(props) {
       getSegmentsBegin={props.getSegmentsBegin}
       groups={props.groups}
       segments={props.segments}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       metricsDashboard={props.currentMetricsDashboard}
       links={links}
       isCommitting={props.isCommitting}
@@ -77,7 +75,6 @@ export function MetricsDashboardEditPage(props) {
 }
 
 MetricsDashboardEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getMetricsDashboardBegin: PropTypes.func,
   updateMetricsDashboardBegin: PropTypes.func,
   metricsDashboardsUnmount: PropTypes.func,
@@ -112,7 +109,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

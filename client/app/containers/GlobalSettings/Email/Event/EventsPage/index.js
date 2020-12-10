@@ -17,7 +17,7 @@ import {
   selectIsFetchingEvents,
   selectEventsTotal
 } from 'containers/GlobalSettings/Email/Event/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   eventsUnmount, getEventsBegin,
@@ -50,9 +50,9 @@ export function EventsPage(props) {
 
   const mapDay = (event) => {
     if (event.day.label >= 0)
-      event.day.label = intl.formatMessage(globalMessages.days_of_week[event.day.label]);
+      event.day.label = intl.formatMessage(globalMessages.days_of_week[event.day.label], props.customTexts);
     else
-      event.day.label = intl.formatMessage(messages.everyday);
+      event.day.label = intl.formatMessage(messages.everyday, props.customTexts);
 
     return event;
   };
@@ -103,6 +103,7 @@ EventsPage.propTypes = {
   isFetching: PropTypes.bool,
 
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -111,6 +112,7 @@ const mapStateToProps = createStructuredSelector({
   eventsTotal: selectEventsTotal(),
   isFetching: selectIsFetchingEvents(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

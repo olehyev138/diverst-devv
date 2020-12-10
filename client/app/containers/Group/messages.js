@@ -34,8 +34,17 @@ export default defineMessages({
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },
+  sub_erg: {
+    id: `${scope}.home.sub_erg`,
+  },
+  groupParent: {
+    id: `${scope}.home.parent`,
+  },
   children_expand: {
     id: `${scope}.index.button.children_expand`,
+  },
+  manage_regions: {
+    id: `${scope}.index.button.manage_regions`
   },
   rows: {
     id: `${scope}.index.button.rows`,
@@ -75,6 +84,9 @@ export default defineMessages({
   },
   welcome: {
     id: `${scope}.home.span.welcome`,
+  },
+  categorize_subgroups: {
+    id: `${scope}.categorize`,
   },
   allcategories: {
     id: `${scope}.categorize.button.allcategories`,
@@ -126,6 +138,12 @@ export default defineMessages({
   allGroups: {
     id: `${scope}.index.button.all_groups`
   },
+  back: {
+    id: `${scope}.index.button.back`
+  },
+  childList: {
+    id: `${scope}.index.child_list`
+  },
   selectorDialog: {
     title: {
       id: `${scope}.selectorDialog.title`,
@@ -148,6 +166,9 @@ export default defineMessages({
     close: {
       id: `${scope}.selectorDialog.close`,
     },
+  },
+  categorizeCollapsable: {
+    id: `${scope}.categorize.button.collapsable`,
   },
   snackbars: {
     errors: {

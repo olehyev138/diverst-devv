@@ -9,12 +9,14 @@ RSpec.describe GroupMessage::Actions, type: :model do
           :comments,
           {
               comments: [
-                  :author
+                  :author,
+                  :group,
+                  author: [:avatar_attachment, :avatar_blob]
               ]
           }
       ]
     end
 
-    it { expect(GroupMessage.base_preloads).to eq base_preloads }
+    it { expect(GroupMessage.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

@@ -548,6 +548,14 @@ RSpec.describe Group, type: :model do
         expect(Group.all_children).to eq([groups.second])
       end
     end
+
+    context 'Group::children_of' do
+      before { groups.second.update(parent_id: groups.first.id) }
+
+      it 'returns all child groups of given parent group id' do
+        expect(Group.children_of(groups.first.id)).to eq([groups.second])
+      end
+    end
   end
 
   describe '#is_parent_group?' do
@@ -615,7 +623,7 @@ RSpec.describe Group, type: :model do
       user = create(:user)
       group = create(:group, enterprise: user.enterprise, owner: user)
       create(:user_group, user: user, group: group, accepted_member: true)
-      create(:group_leader, group: group, user: user)
+      create(:group_leader, leader_of: group, user: user)
 
       expect(group.managers.length).to eq(2)
     end
@@ -1025,7 +1033,7 @@ RSpec.describe Group, type: :model do
       survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
-      group_leader = create(:group_leader, group: group, user: user)
+      group_leader = create(:group_leader, leader_of: group, user: user)
       child = create(:group, parent: group)
 
       group.fields.reload
@@ -1132,8 +1140,23 @@ RSpec.describe Group, type: :model do
     end
 
     it 'calls resolve_auto_archive_state as after_update callback' do
-      expect(group).to receive(:resolve_auto_archive_state)
-      group.run_callbacks(:update)
+      expect((group)._update_callbacks.select { |callback| callback.filter == :resolve_auto_archive_state }).to_not be nil
+    end
+  end
+
+  describe '#set_position' do
+    context 'position has been set' do
+      it 'callback has been called' do
+        enterprise = create(:enterprise)
+        group = create(:group, enterprise: enterprise)
+        expect((group)._create_callbacks.select { |callback| callback.filter == :set_position }).to_not be nil
+      end
+
+      it 'position set to id ' do
+        enterprise = create(:enterprise)
+        group = create(:group, enterprise: enterprise)
+        expect(group.position).to be(group.id)
+      end
     end
   end
 

@@ -37,7 +37,7 @@ export function* getPoll(action) {
     yield put(getPollSuccess(response.data));
   } catch (err) {
     yield put(getPollError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.poll), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.poll, options: { variant: 'warning' } }));
   }
 }
 
@@ -48,7 +48,7 @@ export function* getPolls(action) {
     yield put(getPollsSuccess(response.data.page));
   } catch (err) {
     yield put(getPollsError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.polls), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.polls, options: { variant: 'warning' } }));
   }
 }
 
@@ -60,10 +60,10 @@ export function* createPoll(action) {
 
     yield put(createPollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -75,10 +75,10 @@ export function* updatePoll(action) {
 
     yield put(updatePollSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
@@ -90,10 +90,10 @@ export function* createPollAndPublish(action) {
 
     yield put(createPollAndPublishSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create_publish), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create_publish, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createPollAndPublishError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create_publish), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create_publish, options: { variant: 'warning' } }));
   }
 }
 
@@ -105,10 +105,10 @@ export function* updatePollAndPublish(action) {
 
     yield put(updatePollAndPublishSuccess());
     yield put(push(ROUTES.admin.include.polls.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update_publish), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update_publish, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updatePollAndPublishError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update_publish), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update_publish, options: { variant: 'warning' } }));
   }
 }
 
@@ -117,10 +117,10 @@ export function* publishPoll(action) {
     const response = yield call(api.polls.publish.bind(api.polls), action.payload.id);
 
     yield put(publishPollSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.publish), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.publish, options: { variant: 'success' } }));
   } catch (err) {
     yield put(publishPollError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.publish), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.publish, options: { variant: 'warning' } }));
   }
 }
 
@@ -128,10 +128,10 @@ export function* deletePoll(action) {
   try {
     yield call(api.polls.destroy.bind(api.polls), action.payload.id);
     yield put(deletePollSuccess());
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deletePollError(err));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 

@@ -18,6 +18,7 @@ import {
   selectPaginatedGroupLeaders, selectGroupLeaderTotal,
   selectIsFetchingGroupLeaders, selectHasChanged
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -75,6 +76,7 @@ export function GroupLeadersListPage(props) {
       params={params}
       handlePagination={handlePagination}
       handleOrdering={handleOrdering}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -88,6 +90,7 @@ GroupLeadersListPage.propTypes = {
   isFetchingGroupLeaders: PropTypes.bool,
   handleVisitGroupLeaderEdit: PropTypes.func,
   currentGroup: PropTypes.object,
+  customTexts: PropTypes.object,
   hasChanged: PropTypes.bool,
 };
 
@@ -95,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   groupLeaderList: selectPaginatedGroupLeaders(),
   groupLeaderTotal: selectGroupLeaderTotal(),
   isFetchingGroupLeaders: selectIsFetchingGroupLeaders(),
+  customTexts: selectCustomText(),
   hasChanged: selectHasChanged(),
 });
 

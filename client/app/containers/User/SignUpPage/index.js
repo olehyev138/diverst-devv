@@ -45,7 +45,7 @@ export function SignUpPage(props) {
       });
     else {
       props.showSnackbar({
-        message: 'You need nave an invitation to sign up',
+        message: 'diverst.containers.App.texts.signup',
         options: { variant: 'warning' }
       });
       props.redirectAction(ROUTES.session.login.path());

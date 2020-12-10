@@ -27,8 +27,10 @@ export function DroppableGroupList(props) {
         classes={props.classes}
         draggable={props.draggable}
         importAction={props.importAction}
+        handleParentExpand={props.handleParentExpand}
         deleteGroupBegin={props.deleteGroupBegin}
         intl={props.intl}
+        customTexts={props.customTexts}
       />
     </Grid>
   );
@@ -57,9 +59,11 @@ DroppableGroupList.propTypes = {
   updateGroupPositionBegin: PropTypes.func,
   currentPage: PropTypes.number,
   importAction: PropTypes.func,
+  handleParentExpand: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   draggable: PropTypes.bool,
   rowsPerPage: PropTypes.number,
   positions: PropTypes.array,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };

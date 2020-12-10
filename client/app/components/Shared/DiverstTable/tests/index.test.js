@@ -7,18 +7,25 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { DiverstTable } from '../index';
+
+import { intl } from 'tests/mocks/react-intl';
+
+loadTranslation('./app/translations/en.json');
 
 const props = {
   dataArray: [],
   columns: [],
-  handlePagination: jest.fn()
+  handlePagination: jest.fn(),
+  intl,
+  classes: {},
+  title: { id: 'diverst.containers.App.texts.erg' }
 };
 describe('<DiverstTable />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<DiverstTable classes={{}} {...props} />);
+    const wrapper = shallowWithIntl(<DiverstTable intl={intl} {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });

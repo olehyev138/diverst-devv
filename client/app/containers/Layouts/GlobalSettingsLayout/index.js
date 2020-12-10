@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useCallback } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { useLocation, useRouteMatch } from 'react-router-dom';
@@ -38,7 +38,7 @@ const GlobalSettingsLayout = (props) => {
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
   const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
 
-  const defaultTab = (() => {
+  const defaultTab = useCallback(() => {
     if (permission(props, 'enterprise_manage'))
       return GlobalSettingsPages[0];
     if (permission(props, 'fields_manage'))
@@ -50,9 +50,9 @@ const GlobalSettingsLayout = (props) => {
     if (permission(props, 'emails_manage'))
       return GlobalSettingsPages[4];
     return null;
-  });
+  }, [props?.permissions]);
 
-  const [tab, setTab] = useState(currentPage || defaultTab);
+  const [tab, setTab] = useState(currentPage || defaultTab());
 
   useEffect(() => {
     if (isRoot)
@@ -61,13 +61,13 @@ const GlobalSettingsLayout = (props) => {
       else if (permission(props, 'fields_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.fields.index.path());
       else if (permission(props, 'custom_text_manage'))
-        redirectAction(ROUTES.admin.system.globalSettings.customText.index.path());
+        redirectAction(ROUTES.admin.system.globalSettings.customText.edit.path());
       else if (permission(props, 'sso_authentication'))
         redirectAction(ROUTES.admin.system.globalSettings.ssoSettings.index.path());
       else if (permission(props, 'emails_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.emails.layouts.index.path());
       else if (permissions) {
-        showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
+        showSnackbar({ message: 'diverst.containers.App.texts.permissions.global', options: { variant: 'warning' } });
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
       }
 

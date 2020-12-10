@@ -23,11 +23,12 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
 import { omit } from 'lodash';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -52,7 +53,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstColorPicker}
                   id='primary_color'
                   name='primary_color'
-                  label={intl.formatMessage(messages.Theme.primarycolor)}
+                  label={intl.formatMessage(messages.Theme.primarycolor, props.customTexts)}
                   disabled={props.isCommitting}
                   value={values.primary_color}
                   onChange={value => setFieldValue('primary_color', value)}
@@ -67,7 +68,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstSwitch}
                   id='use_secondary_color'
                   name='use_secondary_color'
-                  label={intl.formatMessage(messages.Theme.colorswitch)}
+                  label={intl.formatMessage(messages.Theme.colorswitch, props.customTexts)}
                   margin='normal'
                   disabled={props.isCommitting}
                   value={values.use_secondary_color}
@@ -82,7 +83,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                     fullWidth
                     id='secondary_color'
                     name='secondary_color'
-                    label={intl.formatMessage(messages.Theme.graphcolor)}
+                    label={intl.formatMessage(messages.Theme.graphcolor, props.customTexts)}
                     disabled={props.isCommitting}
                     value={values.secondary_color}
                     onChange={value => setFieldValue('secondary_color', value)}
@@ -132,7 +133,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
           </CardActions>
         </Form>
@@ -200,11 +201,12 @@ BrandingThemeInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

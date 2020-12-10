@@ -18,6 +18,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/User/PasswordResetPage/saga';
 import reducer from 'containers/User/PasswordResetPage/reducer';
 import { requestPasswordResetBegin } from 'containers/User/PasswordResetPage/actions';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 export function ForgotPasswordPage(props) {
   useInjectReducer({ key: 'forgotPassword', reducer });
@@ -30,6 +31,7 @@ export function ForgotPasswordPage(props) {
       email={email}
       enterprise={props.enterprise}
       forgotPasswordBegin={props.requestPasswordResetBegin}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -38,9 +40,11 @@ ForgotPasswordPage.propTypes = {
   location: PropTypes.object,
   enterprise: PropTypes.object,
   requestPasswordResetBegin: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

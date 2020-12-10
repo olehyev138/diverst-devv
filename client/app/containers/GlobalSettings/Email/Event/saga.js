@@ -29,7 +29,7 @@ export function* getEvent(action) {
   } catch (err) {
     yield put(getEventError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.email), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.email, options: { variant: 'warning' } }));
   }
 }
 
@@ -41,7 +41,7 @@ export function* getEvents(action) {
   } catch (err) {
     yield put(getEventsError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.emails), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.emails, options: { variant: 'warning' } }));
   }
 }
 
@@ -52,11 +52,11 @@ export function* updateEvent(action) {
 
     yield put(updateEventSuccess());
     yield put(push(ROUTES.admin.system.globalSettings.emails.events.index.path()));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEventError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 

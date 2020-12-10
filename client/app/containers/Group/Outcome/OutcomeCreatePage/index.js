@@ -20,7 +20,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import Conditional from 'components/Compositions/Conditional';
 import permissionMessages from 'containers/Shared/Permissions/messages';
@@ -28,7 +27,6 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function OutcomeCreatePage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
-  const { intl } = props;
   const { currentUser, currentGroup } = props;
 
   const { group_id: groupId } = useParams();
@@ -41,7 +39,7 @@ export function OutcomeCreatePage(props) {
   return (
     <OutcomeForm
       outcomeAction={props.createOutcomeBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -51,7 +49,6 @@ export function OutcomeCreatePage(props) {
 }
 
 OutcomeCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createOutcomeBegin: PropTypes.func,
   outcomesUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -76,7 +73,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

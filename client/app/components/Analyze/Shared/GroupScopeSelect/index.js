@@ -31,6 +31,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
     props.getGroupsBegin({
       count: 30, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
       query_scopes: ['all_parents']
     });
   };
@@ -91,7 +92,7 @@ GroupScopeSelectInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   classes: PropTypes.object,

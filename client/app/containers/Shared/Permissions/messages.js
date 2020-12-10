@@ -18,7 +18,10 @@ export default defineMessages({
     },
     group: {
       id: `${scope}.layouts.groupLayout`
-    }
+    },
+    region: {
+      id: `${scope}.layouts.regionLayout`
+    },
   },
   globalSettings: {
     email: {
@@ -61,6 +64,15 @@ export default defineMessages({
   group: {
     categorizePage: {
       id: `${scope}.group.groupCategorizePage`
+    },
+    manageRegionsPage: {
+      id: `${scope}.group.manageRegionsPage`
+    },
+    createRegionsPage: {
+      id: `${scope}.group.createRegionsPage`
+    },
+    editRegionsPage: {
+      id: `${scope}.group.editRegionsPage`
     },
     outcome: {
       editPage: {
@@ -167,6 +179,22 @@ export default defineMessages({
     adminListPage: {
       id: `${scope}.group.adminGroupListPage`
     }
+  },
+  region: {
+    membersListPage: {
+      id: `${scope}.region.membersListPage`
+    },
+    leaders: {
+      listPage: {
+        id: `${scope}.region.leaders.listPage`
+      },
+      editPage: {
+        id: `${scope}.region.leaders.editPage`
+      },
+      createPage: {
+        id: `${scope}.region.leaders.createPage`
+      },
+    },
   },
   analyze: {
     dashboards: {

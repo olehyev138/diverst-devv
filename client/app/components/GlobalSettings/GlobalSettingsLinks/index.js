@@ -45,7 +45,7 @@ export function GlobalSettingsLinks(props) {
               value='fields'
             />
           )}
-          { permission(props, '\'custom_text_manage\'') && (
+          { permission(props, 'custom_text_manage') && (
             <Tab
               component={WrappedNavLink}
               to={ROUTES.admin.system.globalSettings.customText.edit.path()}

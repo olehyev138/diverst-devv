@@ -78,7 +78,7 @@ describe('EnterpriseConfiguration saga', () => {
 
       expect(api.enterprises.getEnterprise).toHaveBeenCalledWith();
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.load);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.load, options: { variant: 'warning' } });
     });
   });
 
@@ -107,7 +107,7 @@ describe('EnterpriseConfiguration saga', () => {
       );
       expect(api.enterprises.updateEnterprise).toHaveBeenCalledWith({ enterprise: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.success.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.success.update, options: { variant: 'success' } });
     });
 
     it('Should return error from the API', async () => {
@@ -136,7 +136,7 @@ describe('EnterpriseConfiguration saga', () => {
 
       expect(api.enterprises.updateEnterprise).toHaveBeenCalledWith({ enterprise: initialAction.payload });
       expect(dispatched).toEqual(results);
-      expect(intl.formatMessage).toHaveBeenCalledWith(messages.snackbars.errors.update);
+      expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.update, options: { variant: 'warning' } });
     });
   });
 });

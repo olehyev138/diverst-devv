@@ -7,7 +7,7 @@ RSpec.describe GroupLeaderCommentNotificationsJob, type: :job do
   let!(:user) { create(:user, enterprise: enterprise) }
   let!(:group) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
   let!(:user_group) { create(:user_group, group: group, user: user, accepted_member: true) }
-  let!(:group_leader) { create(:group_leader, group: group, user: user) }
+  let!(:group_leader) { create(:group_leader, leader_of: group, user: user) }
 
   context 'with daily frequency' do
     context 'when there are no pending comments' do

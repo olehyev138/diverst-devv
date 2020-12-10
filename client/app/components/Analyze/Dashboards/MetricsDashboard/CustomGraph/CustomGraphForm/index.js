@@ -29,6 +29,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
       fieldDefinerId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
       orderBy: 'fields.id',
+      minimal: true,
       search: searchKey,
     });
   };
@@ -72,7 +73,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               redirectFallback={props.links.metricsDashboardShow}
@@ -126,7 +127,7 @@ CustomGraphFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   getFieldsBegin: PropTypes.func,

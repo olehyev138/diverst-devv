@@ -112,33 +112,6 @@ RSpec.describe UserPolicy, type: :policy do
       end
     end
 
-    describe '#join_or_leave_groups?' do
-      context 'when current user IS record' do
-        let(:other_user) { user }
-
-        it 'returns true' do
-          expect(subject.join_or_leave_groups?).to eq true
-        end
-      end
-
-      context 'when current user IS NOT record' do
-        let(:other_user) { create(:user) }
-
-        it 'returns false' do
-          expect(subject.join_or_leave_groups?).to eq true
-        end
-      end
-
-      context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do
-        let(:other_user) { create(:user) }
-        before { user.policy_group.update groups_members_manage: false }
-
-        it 'returns false' do
-          expect(subject.join_or_leave_groups?).to eq false
-        end
-      end
-    end
-
     describe '#user_not_current_user?' do
       context 'when current user IS NOT record' do
         let(:other_user) { create(:user) }

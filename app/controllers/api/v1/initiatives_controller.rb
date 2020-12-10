@@ -28,6 +28,12 @@ class Api::V1::InitiativesController < DiverstController
     end
   end
 
+  def show
+    diverst_request.options[:with_budget] = to_bool(params[:with_budget])
+    diverst_request.options[:with_comments] = to_bool(params[:with_comments])
+    super
+  end
+
   def payload
     params
       .require(:initiative)

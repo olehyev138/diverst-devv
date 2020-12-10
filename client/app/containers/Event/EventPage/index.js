@@ -14,7 +14,7 @@ import saga from 'containers/Event/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectEvent, selectHasChanged, selectIsFormLoading } from 'containers/Event/selectors';
 import { redirectAction } from 'utils/reduxPushHelper';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
@@ -54,7 +54,7 @@ export function EventPage(props) {
     if (props.currentEvent && props.currentEvent.group_id != groupId && !props.currentEvent.participating_groups.find(g => g.id == groupId)) {
       props.redirectAction(links.eventsIndex);
       props.showSnackbar({
-        message: props.intl.formatMessage(messages.errors.invalidURL),
+        message: messages.errors.invalidURL,
         options: { variant: 'warning' }
       });
     }
@@ -62,7 +62,7 @@ export function EventPage(props) {
 
   useEffect(() => {
     // get event specified in path
-    props.getEventBegin({ id: eventId });
+    props.getEventBegin({ id: eventId, with_comments: true });
 
     return () => props.eventsUnmount();
   }, [props.hasChanged]);
@@ -70,7 +70,7 @@ export function EventPage(props) {
   const { currentUser, currentEvent } = props;
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <Event
         currentUserId={currentUser.user_id}
         createEventCommentBegin={props.createEventCommentBegin}
@@ -85,6 +85,7 @@ export function EventPage(props) {
         hasChanged={props.hasChanged}
         currentGroup={props.currentGroup}
         export={props.exportAttendeesBegin}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -107,6 +108,7 @@ EventPage.propTypes = {
   hasChanged: PropTypes.bool,
   redirectAction: PropTypes.func,
   showSnackbar: PropTypes.func,
+  customTexts: PropTypes.object,
   intl: intlShape,
 };
 
@@ -116,6 +118,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectEvent(),
   isFormLoading: selectIsFormLoading(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

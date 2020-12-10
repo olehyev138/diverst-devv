@@ -17,7 +17,7 @@ import {
   selectIsFolderLoading,
   selectHasChanged
 } from 'containers/Resource/selectors';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
@@ -107,7 +107,7 @@ export function FoldersPage(props) {
 
   return (
     <React.Fragment>
-      <DiverstBreadcrumbs />
+      <DiverstBreadcrumbs customTexts={props.customTexts} />
       <FoldersList
         folders={props.folders}
         foldersTotal={props.foldersTotal}
@@ -117,6 +117,7 @@ export function FoldersPage(props) {
         links={links}
         type='group'
         currentGroup={props.currentGroup}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -137,6 +138,7 @@ FoldersPage.propTypes = {
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -145,6 +147,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   isLoading: selectIsFolderLoading(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
