@@ -35,10 +35,7 @@ import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
   expensesUnmount, deleteExpenseBegin
 } from '../actions';
-import { getBudgetUsersBegin } from 'containers/Group/GroupPlan/BudgetUser/actions';
-import {
-  finalizeExpensesBegin
-} from 'containers/Event/actions';
+import { getBudgetUsersBegin, finalizeExpensesBegin } from 'containers/Group/GroupPlan/BudgetUser/actions';
 
 import reducer from '../reducer';
 import saga from '../saga';

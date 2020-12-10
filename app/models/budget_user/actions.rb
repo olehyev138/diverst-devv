@@ -15,4 +15,8 @@ module BudgetUser::Actions
 
     self
   end
+
+  module ClassMethods
+
+  end
 end

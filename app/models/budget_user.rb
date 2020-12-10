@@ -1,4 +1,6 @@
 class BudgetUser < ApplicationRecord
+  include BudgetUser::Actions
+
   belongs_to :budgetable, polymorphic: true
   belongs_to :budget_item, -> { with_expenses }
   has_one :budget, through: :budget_item
