@@ -23,7 +23,7 @@ class RefreshBudgetSumsJob < ApplicationJob
         changes = v - old_data[k]
         diff[k] = changes.map do |change|
           {
-              old: old_data[k].find { |new| new.id = change.id },
+              old: old_data[k].find { |new| new[:id] = change[:id] },
               new: change
           }
         end
