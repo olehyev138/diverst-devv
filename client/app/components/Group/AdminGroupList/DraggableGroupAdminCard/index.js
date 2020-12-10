@@ -39,7 +39,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
   const [importGroup, setImportGroup] = useState(0);
   const handleDialogClose = () => setImportGroup(0);
   const handleDialogOpen = id => setImportGroup(id);
-
+  console.log(group);
   const cardContent = (
     <CardContent>
       <Grid container spacing={2} alignItems='center'>
@@ -151,11 +151,12 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           </Permission>
         </React.Fragment>
       )}
-      <Permission show={permission(group, 'add_members?')}>
+      <Permission show={permission(group, 'update?')}>
         <Button
           size='small'
           color='primary'
           onClick={() => handleDialogOpen(group.id)}
+          disabled={draggable}
         >
           Import Users
         </Button>
