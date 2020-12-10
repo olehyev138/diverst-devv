@@ -7,7 +7,9 @@ class CustomEmailMailer < ApplicationMailer
 
     set_defaults(@custom_email.enterprise, 'custom')
 
-    emails = members_from_groups(custom_email_id, group_ids)
+    if !group_ids.empty?
+      emails = members_from_groups(custom_email_id, group_ids)
+    end
 
     current_user = User.find_by_id current_user_id
 
