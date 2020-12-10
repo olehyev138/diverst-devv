@@ -182,6 +182,7 @@ en:
     }
     folder: {
       no_parent: "Folder is without parent",
+      parent_self: "can't be itself",
     }
     field: {
       same_parent: "Field and field user must have same parent",

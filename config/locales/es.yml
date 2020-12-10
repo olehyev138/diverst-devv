@@ -138,6 +138,7 @@ es:
     }
     folder: {
       no_parent: "Folder is without parent(NEEDS TRANSLATION)",
+      parent_self: "can't be itself(NEEDS TRANSLATION)"
     }
     field: {
       same_parent: "Field and field user must have same parent(NEEDS TRANSLATION)",
