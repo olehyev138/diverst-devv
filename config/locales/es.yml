@@ -120,8 +120,8 @@ es:
     group: {
       deleted: "Deleted group(NEEDS TRANSLATION)",
       unknown: "Unknown(NEEDS TRANSLATION)",
-      group_leader_uniqueness_1: "already exists as a (NEEDS TRANSLATION)",
-      group_leader_uniqueness_2: " leader(NEEDS TRANSLATION)",
+      leader_uniqueness_1: "already exists as a (NEEDS TRANSLATION)",
+      leader_uniqueness_2: " leader(NEEDS TRANSLATION)",
       user_not_member: "Selected user is not a member of this group(NEEDS TRANSLATION)",
       user_not_member_region: "Selected user is not a member of this region's parent group(NEEDS TRANSLATION)",
       category_in_use: "Can't delete category in use(NEEDS TRANSLATION)",
