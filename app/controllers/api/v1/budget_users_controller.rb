@@ -1,5 +1,5 @@
 class Api::V1::BudgetUsersController < DiverstController
-  private def index_base
+  private def base
     super.with_expenses
   end
 
@@ -18,7 +18,7 @@ class Api::V1::BudgetUsersController < DiverstController
   end
 
   def finish_expenses
-    item = klass.find(params[:id])
+    item = show_base.find(params[:id])
     base_authorize(item)
 
     render status: 200, json: item.finalize_expenses(self.diverst_request)

@@ -29,7 +29,7 @@ import {
   selectExpensesTotal,
   selectIsFetchingExpenses,
   selectIsCommitting,
-  selectHasChanged, selectExpenseListSum,
+  selectExpenseListSum,
 } from '../selectors';
 import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
@@ -46,7 +46,11 @@ import BudgetList from 'components/Event/EventManage/BudgetList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectCustomText } from 'containers/Shared/App/selectors';
-import { selectIsFetchingBudgetUsers, selectPaginatedBudgetUsers } from 'containers/Group/GroupPlan/BudgetUser/selectors';
+import {
+  selectIsFetchingBudgetUsers,
+  selectHasChanged,
+  selectPaginatedBudgetUsers
+} from 'containers/Group/GroupPlan/BudgetUser/selectors';
 
 const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
 
@@ -62,12 +66,21 @@ export function ExpenseListPage(props) {
     initiativeManage: ROUTES.group.plan.events.index.path(props.currentGroup.id, props.currentEvent.id),
   };
 
-  useEffect(() => {
+  function getBudgetUsers() {
     props.getBudgetUsersBegin({
       count: -1,
       order: 'asc',
       initiative_id: props.currentEvent.id
     });
+  }
+
+  useEffect(() => {
+    getBudgetUsers();
+  }, [props.currentEvent]);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      getBudgetUsers();
   }, [props.currentEvent]);
 
   return (
