@@ -32,6 +32,15 @@ class BudgetUser < ApplicationRecord
     budgetable.path
   end
 
+  def finish_expenses!
+    if finished_expenses?
+      errors.add(:initiative, 'Expenses are already finished')
+      return false
+    end
+
+    self.update(finished_expenses: true)
+  end
+
   polymorphic_alias :budgetable, Initiative
 
   BUDGET_KEYS = ['budget_item_id', 'budget_id', 'annual_budget_id']

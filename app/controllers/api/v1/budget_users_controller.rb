@@ -16,4 +16,18 @@ class Api::V1::BudgetUsersController < DiverstController
     diverst_request.options[:with_budget] = true
     super
   end
+
+  def finish_expenses
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.finalize_expenses(self.diverst_request)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
 end
