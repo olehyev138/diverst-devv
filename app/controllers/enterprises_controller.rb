@@ -225,6 +225,7 @@ class EnterprisesController < ApplicationController
         :invite_member_enabled,
         :suggest_hire_enabled,
         :twitter_feed_enabled,
+        :enable_outlook,
         theme: [
           :id,
           :primary_color,
