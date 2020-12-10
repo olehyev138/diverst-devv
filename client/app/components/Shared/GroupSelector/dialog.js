@@ -14,9 +14,6 @@ import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallb
 import { injectIntl, intlShape } from 'react-intl';
 
 const styles = {
-  bottom: {
-    minHeight: '100%',
-  },
   search: {
     marginBottom: 15,
   },
@@ -29,7 +26,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    overflow: 'auto',
     paddingBottom: 1,
   },
   listLoaderWrapper: {
@@ -203,7 +199,7 @@ const GroupListSelector = (props) => {
         <div className={classes.list}>
           {list}
         </div>
-        <div className={classes.bottom}>
+        <div>
           {paginator}
         </div>
       </Box>
