@@ -39,7 +39,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
   const [importGroup, setImportGroup] = useState(0);
   const handleDialogClose = () => setImportGroup(0);
   const handleDialogOpen = id => setImportGroup(id);
-  console.log(group);
+
   const cardContent = (
     <CardContent>
       <Grid container spacing={2} alignItems='center'>
