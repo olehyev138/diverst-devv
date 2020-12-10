@@ -4,12 +4,12 @@ class BudgetUserSerializer < ApplicationRecordSerializer
   attributes_with_permission :expenses, if: :with_budget?
 
   def with_budget?
-    instance_options[:with_budget]
+    instance_options[:with_budget] && !instance_options[:ignore_expenses]
   end
 
   def expenses
     object.expenses.map do |expense|
-      InitiativeExpenseSerializer.new(expense, **instance_options).as_json
+      InitiativeExpenseSerializer.new(expense, **instance_options, ignore_budget_user: true).as_json
     end
   end
 

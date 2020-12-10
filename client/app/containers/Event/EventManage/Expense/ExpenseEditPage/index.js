@@ -25,7 +25,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectIsCommitting, selectIsFetchingExpense, selectExpense
+  selectIsCommitting, selectIsFetchingExpense, selectFormExpense
 } from '../selectors';
 import {
   getExpenseBegin, updateExpenseBegin, expensesUnmount
@@ -53,7 +53,7 @@ export function ExpenseEditPage(props) {
     }
   );
 
-  const { expenses_id: expensesId } = useParams;
+  const { expenses_id: expensesId } = useParams();
   const links = {
     index: ROUTES.group.plan.events.manage.expenses.index.path(props.currentGroup.id, props.currentEvent.id),
   };
@@ -103,7 +103,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectEvent(),
   currentGroup: selectGroup(),
   isLoading: selectIsFetchingExpense(),
-  expense: selectExpense(),
+  expense: selectFormExpense(),
 });
 
 const mapDispatchToProps = {
