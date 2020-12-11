@@ -14,7 +14,8 @@ import { intl } from 'tests/mocks/react-intl';
 loadTranslation('./app/translations/en.json');
 const props = {
   annualBudgets: [],
-  links: {}
+  links: {},
+  customTexts: { erg: 'Group', region: 'Region', parent: 'Parent' },
 };
 describe('<AnnualBudgetList />', () => {
   it('Expect to not log errors in console', () => {

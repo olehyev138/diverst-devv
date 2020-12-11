@@ -108,7 +108,7 @@ export function AnnualBudgetList(props, context) {
               onClick={() => props.resetAll()}
               color='primary'
               variant='contained'
-              className={props.classes.buttons}
+              className={classes.buttons}
               disabled={props.budgetPeriod[0] == null}
             >
               { props.budgetPeriod?.[1]
@@ -158,7 +158,7 @@ AnnualBudgetList.propTypes = {
   resetAll: PropTypes.func,
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
-  budgetPeriod: PropTypes.array,
+  budgetPeriod: PropTypes.array.isRequired,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func

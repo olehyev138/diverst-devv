@@ -16,6 +16,7 @@ const props = {
   groupAllUnmount: jest.fn(),
   carryBudgetBegin: jest.fn(),
   resetBudgetBegin: jest.fn(),
+  resetAnnualBudgetBegin: jest.fn(),
   handleVisitEditPage: jest.fn(),
 };
 describe('<AdminAnnualBudgetPage />', () => {

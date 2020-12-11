@@ -142,7 +142,7 @@ export function AnnualBudgetFormInner(
 }
 
 export function AnnualBudgetForm(props) {
-  const initialValues = buildValuesOfArray(props.annualBudgets, {
+  const initialValues = buildValuesOfArray(props.annualBudgets || [], {
     id: { default: '' },
     amount: { default: '' },
     currency: { default: 'USD' },

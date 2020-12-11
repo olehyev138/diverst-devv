@@ -39,7 +39,7 @@ export function AdminInitializeBudgetPage(props) {
       permissions={props.permissions}
       budgetPeriod={props.budgetPeriod}
       isCommitting={props.isCommitting}
-      customText={props.customText}
+      customTexts={props.customText}
     />
   );
 }

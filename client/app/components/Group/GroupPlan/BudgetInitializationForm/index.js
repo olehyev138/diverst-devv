@@ -45,9 +45,9 @@ export function BudgetInitializationForm(props, context) {
   const { classes, intl } = props;
 
   const budgetTypesOption = useMemo(() => [
-    { label: props.intl.formatMessage(messages.initializationForm.parentType, props.customText), value: 'parent' },
-    { label: props.intl.formatMessage(messages.initializationForm.regionType, props.customText), value: 'region' },
-    { label: props.intl.formatMessage(messages.initializationForm.allType, props.customText), value: 'all' },
+    { label: props.intl.formatMessage(messages.initializationForm.parentType, props.customTexts), value: 'parent' },
+    { label: props.intl.formatMessage(messages.initializationForm.regionType, props.customTexts), value: 'region' },
+    { label: props.intl.formatMessage(messages.initializationForm.allType, props.customTexts), value: 'all' },
   ], []);
 
   const yearOptions = useMemo(() => {
@@ -56,14 +56,14 @@ export function BudgetInitializationForm(props, context) {
     const from0to10 = [...Array(10).keys()];
     const yearRange = from0to10.map(n => currYear + n - 2);
     return [
-      { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customText), value: null }
+      { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customTexts), value: null }
     ].concat(
       yearRange.map(year => ({ label: year, value: year }))
     );
   }, []);
 
   const quarterOptions = useMemo(() => [
-    { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customText), value: null }
+    { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customTexts), value: null }
   ].concat(
     [...Array(4).keys()].map(a => ({ label: a + 1, value: a + 1 }))
   ),
@@ -73,10 +73,10 @@ export function BudgetInitializationForm(props, context) {
     <Formik
       initialValues={{
         amount: 0,
-        type: { label: props.intl.formatMessage(messages.initializationForm.parentType, props.customText), value: 'parent' },
-        year: { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customText), value: '' },
+        type: { label: props.intl.formatMessage(messages.initializationForm.parentType, props.customTexts), value: 'parent' },
+        year: { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customTexts), value: '' },
         with_quarter: false,
-        quarter: { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customText), value: '' },
+        quarter: { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customTexts), value: '' },
       }}
       enableReinitialize
       onSubmit={(values, actions) => {
@@ -211,7 +211,7 @@ BudgetInitializationForm.propTypes = {
   annualBudgetType: PropTypes.string,
   budgetPeriod: PropTypes.array,
   isCommitting: PropTypes.bool,
-  customText: PropTypes.object,
+  customTexts: PropTypes.object,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func
