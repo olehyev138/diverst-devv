@@ -22,16 +22,28 @@ RSpec.describe DiverstMailer, type: :mailer do
       end
     end
 
-#    describe '#invitation_instructions' do
-#      let(:enterprise) { create(:enterprise, disable_emails: false) }
-#      let(:record) { create :user, enterprise: enterprise }
-#      let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
-#
-#      it 'renders the receiver email' do
-#        expect(mail.to).to eq([record.email])
-#      end
-#    end
-#
+    describe '#invitation_instructions' do
+      describe 'has_enabled_onboarding_email is true' do
+        let(:enterprise) { create(:enterprise, disable_emails: false, has_enabled_onboarding_email: true) }
+        let(:record) { create :user, enterprise: enterprise, email: 'abc@123.com' }
+        let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
+
+        it 'renders the receiver email' do
+          expect(mail.to).to eq(['abc@123.com'])
+        end
+      end
+
+      describe 'has_enabled_onboarding_email is false' do
+        let(:enterprise) { create(:enterprise, disable_emails: false, has_enabled_onboarding_email: false) }
+        let(:record) { create :user, enterprise: enterprise }
+        let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
+
+        it 'renders null mail object' do
+          expect(mail).to be(nil)
+        end
+      end
+    end
+
 #    describe '#reset_password_instructions' do
 #      let(:enterprise) { create(:enterprise, disable_emails: false) }
 #      let(:record) { create :user, enterprise: enterprise }
@@ -64,16 +76,16 @@ RSpec.describe DiverstMailer, type: :mailer do
       end
     end
 
-#    describe '#invitation_instructions' do
-#      let(:enterprise) { create(:enterprise, disable_emails: true) }
-#      let(:record) { create :user, enterprise: enterprise }
-#      let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
-#
-#      it 'renders null mail object' do
-#        expect(mail).to be(nil)
-#      end
-#    end
-#
+   describe '#invitation_instructions' do
+     let(:enterprise) { create(:enterprise, disable_emails: true) }
+     let(:record) { create :user, enterprise: enterprise }
+     let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
+
+     it 'renders null mail object' do
+       expect(mail).to be(nil)
+     end
+   end
+
 #    describe '#reset_password_instructions' do
 #      let(:enterprise) { create(:enterprise, disable_emails: true) }
 #      let(:record) { create :user, enterprise: enterprise }

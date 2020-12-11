@@ -138,6 +138,12 @@ export default defineMessages({
   allGroups: {
     id: `${scope}.index.button.all_groups`
   },
+  back: {
+    id: `${scope}.index.button.back`
+  },
+  childList: {
+    id: `${scope}.index.child_list`
+  },
   selectorDialog: {
     title: {
       id: `${scope}.selectorDialog.title`,
