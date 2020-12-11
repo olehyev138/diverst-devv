@@ -41,8 +41,9 @@ module Diverst
 
     ActionMailer::Base.delivery_method = :smtp
 
+    # TODO (DI-844): - 'apple-app-site-association' is a temporary mobile appeasement
     config.middleware.insert_before ActionDispatch::Static, Rack::Rewrite do
-      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails|\/health).*}, '/', not: %r{(.*\..*)}
+      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails|\/health|\/apple-app-site-association).*}, '/', not: %r{(.*\..*)}
     end
 
     # rails api
@@ -56,9 +57,6 @@ module Diverst
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-
-    # Enable the asset pipeline
-    # config.assets.enabled = true
 
     config.middleware.use ActiveRecord::Migration::CheckPending
     config.middleware.use Rack::Deflater
