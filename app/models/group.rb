@@ -307,6 +307,7 @@ class Group < ApplicationRecord
   def annual_budget=(new_budget)
     ab = current_annual_budget
     raise StandardError, 'No Annual Budget' unless ab&.budget_head == self
+
     ab&.amount = new_budget
     ab&.save
   end
