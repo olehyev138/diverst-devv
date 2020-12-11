@@ -30,6 +30,7 @@ export function DroppableFieldList(props) {
         currentEnterprise={props.currentEnterprise}
         toggles={props.toggles}
         intl={props.intl}
+        customTexts={props.customTexts}
       />
     </Grid>
   );
@@ -71,4 +72,5 @@ DroppableFieldList.propTypes = {
     required: PropTypes.bool,
     memberList: PropTypes.bool,
   }),
+  customTexts: PropTypes.object,
 };

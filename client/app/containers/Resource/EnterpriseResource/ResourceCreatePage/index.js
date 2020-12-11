@@ -14,7 +14,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   getFolderBegin, createResourceBegin,
@@ -51,7 +51,7 @@ export function ResourceCreatePage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.searchFolders}
       resourceAction={props.createResourceBegin}
-      buttonText={props.intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       currentUser={currentUser}
       currentEnterprise={currentEnterprise}
       currentFolder={currentFolder}
@@ -79,7 +79,8 @@ ResourceCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -89,6 +90,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   isCommitting: selectIsCommitting(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

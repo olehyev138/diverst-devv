@@ -1,14 +1,21 @@
 import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 
 import MaterialTable from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
+import { createStructuredSelector } from 'reselect';
+import { selectCustomText } from 'containers/Shared/App/selectors';
+
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'components/Shared/DiverstTable/messages';
+
+import { injectIntl, intlShape } from 'react-intl';
+
 
 const styles = theme => ({
   materialTableContainer: {
@@ -59,7 +66,7 @@ export function DiverstTable(props) {
         totalCount={dataTotal || 0}
         page={currentPage()}
         icons={tableIcons}
-        title={title || <DiverstFormattedMessage {...messages.title} />}
+        title={(props.intl.formatMessage(title, props.customText)) || <DiverstFormattedMessage {...messages.title} />}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
@@ -91,15 +98,27 @@ DiverstTable.propTypes = {
   handleOrdering: PropTypes.func,
   handleSearching: PropTypes.func,
   handleRowClick: PropTypes.func,
-  title: PropTypes.string,
+  title: PropTypes.object,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   params: PropTypes.object,
   isStatic: PropTypes.bool,
   tableOptions: PropTypes.object,
+  customText: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
+const mapStateToProps = createStructuredSelector({
+  customText: selectCustomText(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
 export default compose(
+  injectIntl,
   withStyles(styles),
   memo,
+  withConnect
 )(DiverstTable);

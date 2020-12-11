@@ -25,6 +25,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
+import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
 
@@ -52,24 +53,24 @@ export function AnnualBudgetList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(listMessages.columns.group),
+      title: intl.formatMessage(listMessages.columns.group, props.customTexts),
       field: 'name',
       query_field: 'name'
     },
     {
-      title: intl.formatMessage(listMessages.columns.budget),
+      title: intl.formatMessage(listMessages.columns.budget, props.customTexts),
       field: 'annual_budget',
       sorting: false,
-      render: rowData => rowData.leftover ? toCurrencyString(props.intl, rowData.leftover) : intl.formatMessage(listMessages.notSet),
+      render: rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet, props.customTexts),
     },
     {
-      title: intl.formatMessage(listMessages.columns.leftover),
+      title: intl.formatMessage(listMessages.columns.leftover, props.customTexts),
       field: 'annual_budget_leftover',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency)
     },
     {
-      title: intl.formatMessage(listMessages.columns.approved),
+      title: intl.formatMessage(listMessages.columns.approved, props.customTexts),
       field: 'annual_budget_approved',
       sorting: false,
       render: rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency)
@@ -81,7 +82,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <EditIcon />,
-      tooltip: intl.formatMessage(listMessages.actions.edit),
+      tooltip: intl.formatMessage(listMessages.actions.edit, props.customTexts),
       onClick: (_, rowData) => {
         props.handleVisitEditPage(rowData.id);
       },
@@ -92,7 +93,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <RedoIcon />,
-      tooltip: intl.formatMessage(listMessages.actions.carryover),
+      tooltip: <DiverstFormattedMessage {...listMessages.actions.carryover} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
@@ -105,7 +106,7 @@ export function AnnualBudgetList(props, context) {
   actions.push(
     rowData => ({
       icon: () => <LoopIcon />,
-      tooltip: intl.formatMessage(listMessages.actions.reset),
+      tooltip: <DiverstFormattedMessage {...listMessages.actions.reset} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
         if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
@@ -120,7 +121,7 @@ export function AnnualBudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(listMessages.title)}
+            title={listMessages.title}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             handleSearching={props.handleSearching}
@@ -157,7 +158,8 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

@@ -15,11 +15,12 @@ RSpec.describe Resource::Actions, type: :model do
   describe 'base_preloads' do
     let(:base_preloads) {
       [
+          :owner,
           :folder,
-          :file_attachment
+          :file_attachment, :file_blob
       ]
     }
 
-    it { expect(Resource.base_preloads).to eq base_preloads }
+    it { expect(Resource.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

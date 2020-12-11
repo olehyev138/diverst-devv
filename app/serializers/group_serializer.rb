@@ -1,24 +1,37 @@
 class GroupSerializer < ApplicationRecordSerializer
-  attributes :id, :permissions, :current_user_is_member
+  attributes :id, :permissions, :current_user_is_member, :is_parent_group
 
-  attributes_with_permission :name, :short_description, :private, :logo, :logo_file_name, :logo_data, :logo_content_type,
-                             :group_category, if: :family?
+  attributes_with_permission :name, :short_description, :private, :logo, :logo_file_name, :logo_data, :logo_content_type, if: :family?
 
   attributes_with_permission :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
-                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
-                             :annual_budget, :annual_budget_leftover, :active,
-                             :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
+                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility, :active,
+                             :private, :home_message, :default_mentor_group, :position,
                              :enterprise_id, :event_attendance_visibility, :get_calendar_color, :auto_archive,
-                             :banner, :banner_file_name, :banner_data, :banner_content_type,
                              :unit_of_expiry_age, :expiry_age_for_resources, :expiry_age_for_news, :expiry_age_for_events,
-                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :parent,
-                             :annual_budget_currency, :region, :regions, if: :show?
+                             :logo, :logo_file_name, :logo_data, :logo_content_type, :children, :region, :regions, if: :show?
 
   attributes_with_permission :name, :short_description, :description, :parent_id, :enterprise_id, :currency, :children,
                              :annual_budget, :annual_budget_leftover, :annual_budget_approved, :annual_budget_available, if: :budgets?
 
+  attributes_with_permission :group_category, :group_category_type, :news_feed,
+                             :banner, :banner_file_name, :banner_data, :banner_content_type, if: :not_budgets?
+
+  attributes_with_permission :parent, if: :with_parent?
+
+  def with_children?
+    (instance_options[:with_children] || singular_action?) && (show? || budgets?) && !family?
+  end
+
+  def with_parent?
+    (instance_options[:with_parent] || singular_action?) && show? && !family?
+  end
+
   def budgets?
     instance_options[:budgets]
+  end
+
+  def not_budgets?
+    !budgets? && singular_action?
   end
 
   def family?
@@ -41,12 +54,18 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def children
     if budgets?
-      if instance_options[:with_children]
-        object.children.map { |child| GroupSerializer.new(child, **instance_options).as_json }
+      if with_children?
+        object.children.map { |child| GroupSerializer.new(child, **instance_options, with_children: false, with_parent: false).as_json }
       end
-    else
+    elsif with_children?
       object.children.map { |child| GroupSerializer.new(child, **instance_options, family: true).as_json }
+    else
+      []
     end
+  end
+
+  def is_parent_group
+    object.is_parent_group?
   end
 
   def parent
@@ -54,46 +73,62 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def policies
-    budgets? ? [
-        :annual_budgets_manage?,
-        :carryover_annual_budget?,
-        :reset_annual_budget?,
-    ] : [
-        :show?,
-        :destroy?,
-        :update?,
-        :events_view?,
-        :members_view?,
-        :news_view?,
-        :resources_view?,
-        :annual_budgets_view?,
-        :budgets_view?,
-        :leaders_view?,
-        :events_create?,
-        :members_create?,
-        :message_create?,
-        :news_link_create?,
-        :social_link_create?,
-        :news_create?,
-        :resources_create?,
-        :budgets_create?,
-        :leaders_create?,
-        :events_manage?,
-        :resources_manage?,
-        :kpi_manage?,
-        :leaders_manage?,
-        :news_manage?,
-        :annual_budgets_manage?,
-        :carryover_annual_budget?,
-        :reset_annual_budget?,
-        :members_destroy?,
-        :join?,
-        :leave?,
-        :is_a_member?,
-        :is_a_pending_member?,
-        :is_an_accepted_member?,
-        :is_a_leader?,
-    ]
+    if budgets?
+      [
+          :annual_budgets_manage?,
+          :carryover_annual_budget?,
+          :reset_annual_budget?,
+      ]
+    elsif singular_action?
+      [
+          :show?,
+          :destroy?,
+          :update?,
+          :events_view?,
+          :members_view?,
+          :news_view?,
+          :resources_view?,
+          :annual_budgets_view?,
+          :budgets_view?,
+          :leaders_view?,
+          :events_create?,
+          :members_create?,
+          :message_create?,
+          :news_link_create?,
+          :social_link_create?,
+          :news_create?,
+          :resources_create?,
+          :budgets_create?,
+          :leaders_create?,
+          :events_manage?,
+          :resources_manage?,
+          :kpi_manage?,
+          :leaders_manage?,
+          :news_manage?,
+          :annual_budgets_manage?,
+          :carryover_annual_budget?,
+          :reset_annual_budget?,
+          :members_destroy?,
+          :join?,
+          :leave?,
+          :is_a_member?,
+          :is_a_pending_member?,
+          :is_an_accepted_member?,
+          :is_a_leader?,
+      ]
+    else
+      [
+          :show?,
+          :destroy?,
+          :update?,
+          :join?,
+          :leave?,
+          :is_a_member?,
+          :is_a_pending_member?,
+          :is_an_accepted_member?,
+          :is_a_leader?,
+      ]
+    end
   end
 
   def logo_location
@@ -125,7 +160,8 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def logo_data
-    AttachmentHelper.attachment_data_string(object.logo)
+    # Thumbnail the logo to at most 125x125
+    AttachmentHelper.image_resize_variant_data_string(object.logo, 125, 125)
   end
 
   def logo_content_type

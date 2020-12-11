@@ -10,7 +10,7 @@ class Api::V1::PollResponsesController < DiverstController
 
     render status: 200, json: {
         token: second_token,
-        response: PollResponseSerializer.new(prototype).as_json,
+        response: PollResponseSerializer.new(prototype, scope: { action_name: action_name }).as_json,
     }
   rescue => e
     raise BadRequestException.new(e.message)

@@ -27,7 +27,7 @@ export function* getGroupLeaders(action) {
   } catch (err) {
     yield put(getGroupLeadersError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.leaders), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.leaders, options: { variant: 'warning' } }));
   }
 }
 
@@ -38,7 +38,7 @@ export function* getGroupLeader(action) {
   } catch (err) {
     yield put(getGroupLeaderError(err));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.leader),
+      message: messages.snackbars.errors.leader,
       options: { variant: 'warning' }
     }));
   }
@@ -50,11 +50,11 @@ export function* createGroupLeader(action) {
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
     yield put(createGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.create), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.create, options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.create), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.create, options: { variant: 'warning' } }));
   }
 }
 
@@ -63,11 +63,11 @@ export function* deleteGroupLeader(action) {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.delete), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.delete, options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.delete), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.delete, options: { variant: 'warning' } }));
   }
 }
 
@@ -78,14 +78,14 @@ export function* updateGroupLeader(action) {
     yield put(updateGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.success.update),
+      message: messages.snackbars.success.update,
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateGroupLeaderError(err));
 
     yield put(showSnackbar({
-      message: intl.formatMessage(messages.snackbars.errors.update),
+      message: messages.snackbars.errors.update,
       options: { variant: 'warning' }
     }));
   }

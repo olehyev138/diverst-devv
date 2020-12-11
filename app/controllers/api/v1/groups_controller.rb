@@ -7,6 +7,18 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
+  def index
+    diverst_request.options[:with_children] = to_bool(params[:with_children])
+    diverst_request.options[:with_parent] = to_bool(params[:with_parent])
+    super
+  end
+
+  def show
+    diverst_request.options[:with_children] = to_bool(params[:with_children])
+    diverst_request.options[:with_parent] = to_bool(params[:with_parent])
+    super
+  end
+
   def current_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
@@ -19,6 +31,8 @@ class Api::V1::GroupsController < DiverstController
   def current_annual_budgets
     base_authorize(klass)
     params[:parent_id] = nil
+    diverst_request.options[:budgets] = true
+    diverst_request.options[:with_children] = true
     render status: 200, json: klass.index(self.diverst_request, params.permit!), budgets: true, with_children: true
   rescue => e
     raise BadRequestException.new(e.message)
@@ -27,6 +41,7 @@ class Api::V1::GroupsController < DiverstController
   def carryover_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
+    diverst_request.options[:budgets] = true
     updated_item = item.carryover_annual_budget(self.diverst_request)
     track_activity(updated_item)
     render status: 200, json: updated_item, budgets: true
@@ -37,7 +52,7 @@ class Api::V1::GroupsController < DiverstController
   def reset_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
-
+    diverst_request.options[:budgets] = true
     updated_item = item.reset_annual_budget(self.diverst_request)
     track_activity(updated_item)
     render status: 200, json: updated_item, budgets: true

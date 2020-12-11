@@ -12,6 +12,10 @@ import injectReducer from 'utils/injectReducer';
 
 import { selectNotifications } from './selectors';
 
+import { selectCustomText } from '../App/selectors';
+import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
+
 class Notifier extends Component {
   displayed = [];
 
@@ -48,17 +52,31 @@ class Notifier extends Component {
       // Do nothing if snackbar is already displayed
       if (this.displayed.includes(key)) return;
       // Display snackbar using notistack
-      this.props.enqueueSnackbar(message, {
-        ...options,
-        /* eslint-disable-next-line no-shadow */
-        onClose: (event, reason, key) => {
-          if (options.onClose)
-            options.onClose(event, reason, key);
+      if (!message?.id)
+        this.props.enqueueSnackbar(message, {
+          ...options,
+          /* eslint-disable-next-line no-shadow */
+          onClose: (event, reason, key) => {
+            if (options.onClose)
+              options.onClose(event, reason, key);
 
-          // Dispatch action to remove snackbar from redux store
-          this.props.removeSnackbar(key);
-        }
-      });
+            // Dispatch action to remove snackbar from redux store
+            this.props.removeSnackbar(key);
+          }
+        });
+      else
+        this.props.enqueueSnackbar(intl.formatMessage(message, this.props.customTexts), {
+          ...options,
+          /* eslint-disable-next-line no-shadow */
+          onClose: (event, reason, key) => {
+            if (options.onClose)
+              options.onClose(event, reason, key);
+
+            // Dispatch action to remove snackbar from redux store
+            this.props.removeSnackbar(key);
+          }
+        });
+
       // Keep track of snackbars that we've displayed
       this.storeDisplayed(key);
     });
@@ -71,6 +89,7 @@ class Notifier extends Component {
 
 const mapStateToProps = createStructuredSelector({
   notifications: selectNotifications(),
+  customTexts: selectCustomText(),
 });
 
 function mapDispatchToProps(dispatch) {

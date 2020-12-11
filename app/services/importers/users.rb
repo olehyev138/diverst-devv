@@ -45,7 +45,7 @@ class Importers::Users
       field = @enterprise.fields.find { |f| f.title.downcase == row.headers[i] }
       next if field.blank?
 
-      data = user[field]
+      data = user.get_field_data(field)
       field_data_attributes.append(
           data.present? ? {
               id: data.id,

@@ -6,6 +6,6 @@ RSpec.describe SocialLink::Actions, type: :model do
       [:author]
     }
 
-    it { expect(SocialLink.base_preloads).to eq base_preloads }
+    it { expect(SocialLink.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 end

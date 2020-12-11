@@ -11,4 +11,6 @@ RSpec.describe FolderSerializer, type: :serializer do
     expect(serializer.serializable_hash[:password_digest]).to be nil
     expect(serializer.serializable_hash[:permissions]&.keys).to eq [:show?, :update?, :destroy?, :archive?]
   end
+
+  include_examples 'preloads serialized data', :folder
 end

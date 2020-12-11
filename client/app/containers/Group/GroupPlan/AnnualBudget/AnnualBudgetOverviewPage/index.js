@@ -21,6 +21,7 @@ import {
   selectInitiativesTotal,
   selectIsFetchingInitiatives
 } from '../selectors';
+import { selectCustomText } from '../../../../Shared/App/selectors';
 
 import { getAnnualBudgetsBegin, annualBudgetsUnmount } from '../actions';
 import { getEventsBegin } from 'containers/Event/actions';
@@ -37,6 +38,13 @@ const defaultParams = Object.freeze({
   page: 0,
   order: 'desc',
   orderBy: 'id',
+});
+
+const defaultInitiativeParams = Object.freeze({
+  count: 5,
+  page: 0,
+  order: 'desc',
+  orderBy: '`initiatives`.`id`',
 });
 
 export function AnnualBudgetsPage(props) {
@@ -74,26 +82,26 @@ export function AnnualBudgetsPage(props) {
 
   const handleInitiativePagination = id => (payload) => {
     const newParams = {
-      ...(initParams[id] || defaultParams),
+      ...(initParams[id] || defaultInitiativeParams),
       count: payload.count,
       page: payload.page
     };
 
     props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]], annualBudgetId: id });
-    setParams(produce(initParams, (draft) => {
+    setInitParams(produce(initParams, (draft) => {
       draft[id] = newParams;
     }));
   };
 
   const handleInitiativeOrdering = id => (payload) => {
     const newParams = {
-      ...(initParams[id] || defaultParams),
+      ...(initParams[id] || defaultInitiativeParams),
       orderBy: payload.orderBy,
       order: payload.orderDir
     };
 
     props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]], annualBudgetId: id });
-    setParams(produce(initParams, (draft) => {
+    setInitParams(produce(initParams, (draft) => {
       draft[id] = newParams;
     }));
   };
@@ -114,6 +122,7 @@ export function AnnualBudgetsPage(props) {
         handleInitiativeOrdering={handleInitiativeOrdering}
         defaultParams={defaultParams}
         currentGroup={props.currentGroup}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -131,6 +140,7 @@ AnnualBudgetsPage.propTypes = {
   isCommitting: PropTypes.bool,
   isFetchingAnnualBudgets: PropTypes.bool,
   isFetchingInitiatives: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -141,6 +151,7 @@ const mapStateToProps = createStructuredSelector({
   initiativesTotals: selectInitiativesTotal(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
   isFetchingInitiatives: selectIsFetchingInitiatives(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

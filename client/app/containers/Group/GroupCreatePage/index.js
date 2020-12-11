@@ -13,7 +13,6 @@ import { createGroupBegin, getGroupsBegin, groupFormUnmount, getGroupsSuccess } 
 import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -23,13 +22,12 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-  const { intl } = props;
   useEffect(() => () => props.groupFormUnmount(), []);
 
   return (
     <GroupForm
       groupAction={props.createGroupBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}
@@ -39,7 +37,6 @@ export function GroupCreatePage(props) {
 }
 
 GroupCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
@@ -67,7 +64,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

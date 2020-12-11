@@ -6,18 +6,16 @@ RSpec.describe Initiative::Actions, type: :model do
       [
           :pillar,
           :owner,
-          :budget,
           :outcome,
           :group,
-          :expenses,
-          :picture_attachment,
+          :participating_groups,
           :qr_code_attachment,
-          :initiative_users,
-          :comments
+          :qr_code_blob,
+          :initiative_users
       ]
     }
 
-    it { expect(Initiative.base_preloads).to eq base_preloads }
+    it { expect(Initiative.base_preloads(Request.create_request(nil))).to eq base_preloads }
   end
 
   describe 'valid_scopes' do

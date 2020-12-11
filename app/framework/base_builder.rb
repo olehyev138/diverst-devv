@@ -11,8 +11,8 @@ module BaseBuilder
 
   module ClassMethods
     # @param base [ActiveRecord], partial query
-    def index(diverst_request, params, search_method = :lookup, base: self, policy: nil, action: :index)
-      pager(diverst_request, params, search_method, base: base, policy: policy, action: action)
+    def index(diverst_request, params, search_method = :lookup, base: self, policy: nil)
+      pager(diverst_request, params, search_method, base: base, policy: policy)
     end
 
     # @param base [ActiveRecord::Association], association to create a new object from
@@ -45,7 +45,7 @@ module BaseBuilder
 
       # get the item
       item = self
-      item = item.preload(base_preloads) if respond_to? 'base_preloads'
+      item = item.preload(base_preloads(diverst_request)) if respond_to? 'base_preloads'
       item = item.find(params[:id])
 
       # check if the user can read it

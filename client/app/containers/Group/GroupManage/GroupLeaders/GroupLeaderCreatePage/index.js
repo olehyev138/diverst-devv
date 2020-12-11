@@ -28,6 +28,8 @@ import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMemb
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
 import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
+import { selectCustomText } from '../../../../Shared/App/selectors';
+
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -42,7 +44,7 @@ export function GroupLeaderCreatePage(props) {
   useInjectSaga({ key: 'members', saga: memberSaga });
   useInjectReducer({ key: 'roles', reducer: userRoleReducer });
   useInjectSaga({ key: 'roles', saga: userRoleSaga });
-  const { intl } = props;
+
   const { isCommitting, members, ...rest } = props;
 
   const { group_id: groupId } = useParams();
@@ -69,7 +71,7 @@ export function GroupLeaderCreatePage(props) {
   return (
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       groupId={groupId}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
@@ -77,12 +79,12 @@ export function GroupLeaderCreatePage(props) {
       isCommitting={isCommitting}
       links={links}
       isLoadingMembers={props.isLoadingMembers}
+      customTexts={props.customTexts}
     />
   );
 }
 
 GroupLeaderCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
@@ -94,13 +96,15 @@ GroupLeaderCreatePage.propTypes = {
   groupLeaders: PropTypes.array,
   isCommitting: PropTypes.bool,
   isLoadingMembers: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   members: selectPaginatedSelectMembers(),
   userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
-  isLoadingMembers: selectIsFetchingMembers()
+  isLoadingMembers: selectIsFetchingMembers(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {
@@ -118,7 +122,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

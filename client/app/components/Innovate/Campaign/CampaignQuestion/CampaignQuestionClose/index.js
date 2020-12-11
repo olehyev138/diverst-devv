@@ -35,8 +35,8 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
       <Card>
         <Form>
           <CardContent>
-            <h2>{props.intl.formatMessage(messages.question.mark_close)}</h2>
-            <h4>{props.intl.formatMessage(messages.question.mark_close_description)}</h4>
+            <h2>{props.intl.formatMessage(messages.question.mark_close, props.customTexts)}</h2>
+            <h4>{props.intl.formatMessage(messages.question.mark_close_description, props.customTexts)}</h4>
             <Card>
               <CardContent>
                 <Field
@@ -47,7 +47,7 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
                   name='conclusion'
                   margin='normal'
                   disabled={props.isCommitting}
-                  placeholder={props.intl.formatMessage(messages.question.placeholder)}
+                  placeholder={props.intl.formatMessage(messages.question.placeholder, props.customTexts)}
                   value={values.conclusion}
                 />
               </CardContent>
@@ -120,7 +120,7 @@ CampaignQuestionCloseInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectUsers: PropTypes.array,
   getQuestionBegin: PropTypes.func,
   // getMembersBegin: PropTypes.func,
@@ -132,6 +132,7 @@ CampaignQuestionCloseInner.propTypes = {
   links: PropTypes.shape({
     questionsIndex: PropTypes.string
   }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

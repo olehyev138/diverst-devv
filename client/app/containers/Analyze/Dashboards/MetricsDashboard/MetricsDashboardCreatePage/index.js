@@ -47,7 +47,6 @@ export function MetricsDashboardCreatePage(props) {
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
   };
-  const { intl } = props;
 
   useEffect(() => () => props.metricsDashboardsUnmount(), []);
 
@@ -58,7 +57,7 @@ export function MetricsDashboardCreatePage(props) {
       getSegmentsBegin={props.getSegmentsBegin}
       groups={props.groups}
       segments={props.segments}
-      buttonText={intl.formatMessage(messages.create)}
+      buttonText={messages.create}
       links={links}
       isCommitting={props.isCommitting}
     />
@@ -66,7 +65,6 @@ export function MetricsDashboardCreatePage(props) {
 }
 
 MetricsDashboardCreatePage.propTypes = {
-  intl: intlShape.isRequired,
   createMetricsDashboardBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,
@@ -97,7 +95,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(Conditional(

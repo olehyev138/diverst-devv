@@ -67,7 +67,7 @@ const GlobalSettingsLayout = (props) => {
       else if (permission(props, 'emails_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.emails.layouts.index.path());
       else if (permissions) {
-        showSnackbar({ message: 'You do not have permission to manage global settings', options: { variant: 'warning' } });
+        showSnackbar({ message: 'diverst.containers.App.texts.permissions.global', options: { variant: 'warning' } });
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
       }
 

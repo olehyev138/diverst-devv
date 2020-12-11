@@ -46,7 +46,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
               disabled={props.isCommitting}
               value={values.title}
               label={<DiverstFormattedMessage {...messages.question.title} />}
-              placeholder={props.intl.formatMessage(messages.question.title_placeholder)}
+              placeholder={props.intl.formatMessage(messages.question.title_placeholder, props.customTexts)}
             />
             <Field
               component={TextField}
@@ -61,7 +61,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
               disabled={props.isCommitting}
               value={values.description}
               label={<DiverstFormattedMessage {...messages.question.description} />}
-              placeholder={props.intl.formatMessage(messages.question.description_placeholder)}
+              placeholder={props.intl.formatMessage(messages.question.description_placeholder, props.customTexts)}
             />
           </CardContent>
           <Divider />
@@ -69,7 +69,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -126,7 +126,7 @@ CampaignQuestionFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectUsers: PropTypes.array,
   getQuestionBegin: PropTypes.func,
   // getMembersBegin: PropTypes.func,
@@ -138,6 +138,7 @@ CampaignQuestionFormInner.propTypes = {
   links: PropTypes.shape({
     questionsIndex: PropTypes.string
   }),
+  customTexts: PropTypes.object
 };
 
 export default compose(
