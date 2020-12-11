@@ -9,6 +9,11 @@
     img {
       margin: 1.1rem;
     }
+
+    a {
+      color: <%= @enterprise.theme.primary_color + " !important" || "#00AEEF !important" %>;
+      text-decoration: underline;
+    }
   </style>
   <body>
     <%= render 'layouts/email_header' %>
