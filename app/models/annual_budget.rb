@@ -7,8 +7,8 @@ class AnnualBudget < ApplicationRecord
   has_many :budgets, dependent: :destroy
   has_many :budget_items, through: :budgets
   has_many :budget_users, through: :budget_items
-  has_many :initiatives, through: :budget_items
-  has_many :initiative_expenses, through: :initiatives, source: :expenses
+  has_many :initiatives, through: :budget_users, source_type: 'Initiative', source: :budgetable
+  has_many :initiative_expenses, through: :budget_users, source: :expenses
   has_one :annual_budget_sums, class_name: 'AnnualBudgetSums'
 
   delegate :finalized, to: :initiatives, prefix: true

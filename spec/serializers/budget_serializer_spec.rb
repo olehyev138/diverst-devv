@@ -5,7 +5,7 @@ RSpec.describe BudgetSerializer, type: :serializer do
   let(:requester) { create(:user) }
   let(:group) { create(:group) }
   let(:annual_budget) { create(:annual_budget, group: group) }
-  let(:budget) { create(:budget, requester: requester, approver: approver, annual_budget: annual_budget) }
+  let(:budget) { create(:budget, requester: requester, approver: approver, annual_budget: annual_budget, group: group) }
 
   let(:serializer) { BudgetSerializer.new(budget, scope: serializer_scopes(create(:user))) }
 

@@ -11,11 +11,15 @@ FactoryBot.define do
     f.owner { FactoryBot.create(:user) }
     trait :with_budget_item do
       before(:create) do |initiative, evaluator|
-        initiative.budget_items << create(
-          :budget_item,
-          budget: create(
-            :budget,
-            group: initiative.group
+        initiative.budget_users << create(
+          :budget_user,
+          finished_expenses: false,
+          budget_item: create(
+            :budget_item,
+            budget: create(
+              :budget,
+              group: initiative.group
+            )
           )
         )
       end

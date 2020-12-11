@@ -5,9 +5,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let!(:group) { create(:group, name: 'gerlinmasd', annual_budget: 10000, enterprise: enterprise) }
+  let!(:group) { create(:group, name: 'gerlinmasd', annual_budgets: create_list(:annual_budget, 1, amount: 10000), enterprise: enterprise) }
   let(:initiative) { create(:initiative, :with_budget_item, owner_group: group) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym, initiative: initiative) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym, budget_user: initiative.budget_users.first) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
@@ -15,6 +15,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#index' do
     it 'gets all items' do
       get "/api/v1/#{route}", headers: headers
+      Clipboard.copy response.body
       expect(response).to have_http_status(:ok)
     end
 
@@ -49,26 +50,26 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
-    let(:new_item) { build(route.singularize.to_sym, initiative: initiative, description: 'create test') }
+    let(:attributes) { { description: Faker::Lorem.paragraph, name: Faker::Lorem.sentence(2), amount: 50, initiative_id: initiative.id, budget_item_id: initiative.budget_items.first.id } }
 
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
 
     it 'contains expected attributes' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => new_item.attributes }, headers: headers
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
       id = JSON.parse(response.body)['initiative_expense']['id']
-      expect(model.constantize.find(id).description).to eq new_item.description
+      expect(model.constantize.find(id).description).to eq attributes[:description]
     end
 
     it 'captures the error when BadRequestException' do
       allow(model.constantize).to receive(:build).and_raise(BadRequestException)
-      post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
+      post "/api/v1/#{route}", params: { "#{route.singularize}": attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
 
-    include_examples 'InvalidInputException when creating', model
+    include_examples 'InvalidInputException when creating', model, attributes_name: :attributes
   end
 
   describe '#update' do
