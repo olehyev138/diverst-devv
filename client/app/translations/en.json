@@ -285,7 +285,7 @@
   "diverst.containers.Event.show.participating_groups": "Participating {erg_p}",
   "diverst.containers.Event.show.until": "until",
   "diverst.containers.EventExpenses.actions.delete": "Delete",
-  "diverst.containers.EventExpenses.actions.edit": "Details",
+  "diverst.containers.EventExpenses.actions.edit": "Edit",
   "diverst.containers.EventExpenses.buttons.close": "Finalize Expenses",
   "diverst.containers.EventExpenses.buttons.closeConfirm": "Are you sure you want to close the expenses?\nThis can NOT be undone",
   "diverst.containers.EventExpenses.buttons.new": "New Expense",
