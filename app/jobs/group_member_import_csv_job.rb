@@ -8,6 +8,7 @@ class GroupMemberImportCSVJob < ActiveJob::Base
     group = file.group
     return if group.nil?
 
+    enterprise_id = group.enterprise_id
     table = CSV.table file.path_for_csv
 
     failed_rows = []
@@ -30,6 +31,6 @@ class GroupMemberImportCSVJob < ActiveJob::Base
 
     group.save
 
-    CsvUploadMailer.result(successful_rows, failed_rows, table.count).deliver_now
+    CsvUploadMailer.result(successful_rows, failed_rows, table.count, enterprise_id).deliver_now
   end
 end
