@@ -11,7 +11,7 @@ class Budget < ApplicationRecord
   has_one :budget_sums, class_name: 'BudgetSums'
 
   has_many :checklists, dependent: :destroy
-  has_many :budget_items, -> { with_expenses }, dependent: :destroy
+  has_many :budget_items, -> { with_expenses }, dependent: :destroy, inverse_of: :budget
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
   scope :approved, -> { where(is_approved: true) }

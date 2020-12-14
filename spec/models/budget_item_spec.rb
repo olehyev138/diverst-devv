@@ -6,7 +6,7 @@ RSpec.describe BudgetItem, type: :model do
 
     it { expect(budget_item).to belong_to(:budget).counter_cache(:true) }
     it { expect(budget_item).to have_one(:annual_budget).through(:budget) }
-    it { expect(budget_item).to have_one(:group).through(:annual_budget) }
+    it { expect(budget_item).to have_one(:group).through(:budget) }
 
     it { expect(budget_item).to have_many(:initiatives) }
     it { expect(budget_item).to have_many(:initiatives_expenses).through(:initiatives).source(:expenses) }
@@ -82,8 +82,8 @@ RSpec.describe BudgetItem, type: :model do
       let!(:group) { create(:group) }
       let!(:budget) { create(:budget, is_approved: true, group: group) }
       let!(:budget_item) { create(:budget_item, budget: budget, estimated_amount: 200) }
-      let!(:initiative) { create(:initiative, budget_item: budget_item, estimated_funding: 100, pillar: group.outcomes.first.pillars.first) }
-      it 'prevents budget closing' do
+      let!(:initiative) { create(:initiative, budget_users: build_list(:budget_user, 1, estimated: 100), pillar: group.outcomes.first.pillars.first) }
+      it 'prevents budget closing', skip: 'Temporarily disabled budget closing' do
         budget_item.close!
         expect(budget_item.errors.size).to_not be 0
         expect(budget_item.errors.full_messages).to include 'There are still events using this budget item'
