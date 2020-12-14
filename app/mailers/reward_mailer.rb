@@ -8,6 +8,7 @@ class RewardMailer < ApplicationMailer
     @email = @reward.responsible.email_for_notification
     return if @user.enterprise.disable_emails?
 
+    @enterprise = @user.enterprise
     set_defaults(@user.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: 'A request for reward redemption')
@@ -22,6 +23,7 @@ class RewardMailer < ApplicationMailer
     @email = @user.email_for_notification
     return if @user.enterprise.disable_emails?
 
+    @enterprise = @user.enterprise  
     set_defaults(@user.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: 'Reward Approval')
@@ -37,6 +39,7 @@ class RewardMailer < ApplicationMailer
     @comment = user_reward.comment
     return if @user.enterprise.disable_emails?
 
+    @enterprise = @user.enterprise
     set_defaults(@user.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: 'Reward Request Denied')

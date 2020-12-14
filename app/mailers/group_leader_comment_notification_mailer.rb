@@ -7,6 +7,8 @@ class GroupLeaderCommentNotificationMailer < ApplicationMailer
 
     @email = @leader.email_for_notification
 
+    @enterprise = @leader.enterprise
+
     set_defaults(@leader.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: "#{count} Pending Comment(s) for #{group.name.titleize}")

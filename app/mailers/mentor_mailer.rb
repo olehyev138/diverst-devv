@@ -12,6 +12,8 @@ class MentorMailer < ApplicationMailer
     @email = @receiver.email_for_notification
     return if @sender.enterprise.disable_emails?
 
+    @enterprise = @sender.enterprise
+
     set_defaults(@sender.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: 'New Mentoring Request')
@@ -27,6 +29,7 @@ class MentorMailer < ApplicationMailer
 
     @mentorship_session = @mentoring_session.mentorship_sessions.find_by(user_id: @user.id)
     @email = @user.email_for_notification
+    @enterprise = @user.enterprise
 
     set_defaults(@user.enterprise, method_name)
 
@@ -42,6 +45,7 @@ class MentorMailer < ApplicationMailer
     return if @user.enterprise.disable_emails?
 
     @email = @user.email_for_notification
+    @enterprise = @user.enterprise
 
     set_defaults(@user.enterprise, method_name)
 
@@ -57,6 +61,7 @@ class MentorMailer < ApplicationMailer
     return if @user.enterprise.disable_emails?
 
     @email = @user.email_for_notification
+    @enterprise = @user.enterprise
     set_defaults(@user.enterprise, method_name)
 
     mail(to: @email, subject: "Mentoring Session Scheduled for #{@start} has been canceled")
@@ -74,6 +79,7 @@ class MentorMailer < ApplicationMailer
     return if @declined_user.nil?
 
     @email = @user.email_for_notification
+    @enterprise = @user.enterprise
     set_defaults(@user.enterprise, method_name)
 
     mail(to: @email, subject: "#{@declined_user.name} has declined your Mentoring Session")
@@ -88,6 +94,7 @@ class MentorMailer < ApplicationMailer
     return if @sender.enterprise.disable_emails?
 
     @email = @sender.email_for_notification
+    @enterprise = @sender.enterprise
     set_defaults(@sender.enterprise, method_name)
 
     mail(to: @email, subject: 'Mentor Request Declined')
@@ -102,6 +109,7 @@ class MentorMailer < ApplicationMailer
     return if @sender.enterprise.disable_emails?
 
     @email = @sender.email_for_notification
+    @enterprise = @sender.enterprise
     set_defaults(@sender.enterprise, method_name)
 
     mail(to: @email, subject: 'Mentor Request Accepted')
@@ -118,6 +126,7 @@ class MentorMailer < ApplicationMailer
     return if @user.enterprise.disable_emails?
 
     @email = @user.email_for_notification
+    @enterprise = @user.enterprise
     set_defaults(@user.enterprise, method_name)
 
     mail(to: @email, subject: "Reminder: Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p")}")
