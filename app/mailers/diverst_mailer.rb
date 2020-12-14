@@ -6,6 +6,7 @@ class DiverstMailer < ApplicationMailer
     @token = InviteTokenService.request_token(user)
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
+    return unless @enterprise.has_enabled_onboarding_email?
 
     set_defaults(@enterprise, method_name)
 

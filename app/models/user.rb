@@ -29,7 +29,7 @@ class User < ApplicationRecord
   has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
   has_many :menteeships, class_name: 'Mentoring', foreign_key: 'mentee_id'
   has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
-  has_many :availabilities,   class_name: 'MentorshipAvailability'
+  has_many :availabilities,   class_name: 'MentorshipAvailability', dependent: :destroy
   has_many :mentorship_ratings
 
   # many to many
@@ -60,11 +60,11 @@ class User < ApplicationRecord
   has_many :campaigns, through: :invitations
 
   has_many :news_links, through: :groups
-  has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
+  has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :nullify
   has_many :messages, through: :groups
-  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id
+  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id, dependent: :nullify
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
-  has_many :social_links, foreign_key: :author_id, dependent: :destroy
+  has_many :social_links, foreign_key: :author_id, dependent: :nullify
 
   has_many :initiative_users, dependent: :destroy
   has_many :initiatives, through: :initiative_users, source: :initiative
@@ -89,6 +89,7 @@ class User < ApplicationRecord
   has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :views, dependent: :nullify
 
   # ActiveStorage
   has_one_attached :avatar

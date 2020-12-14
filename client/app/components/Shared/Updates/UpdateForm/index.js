@@ -8,32 +8,25 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { DateTime } from 'luxon';
-import { useParams } from 'react-router-dom';
-
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { useLocation } from 'react-router-dom';
 import { Field, Formik, Form } from 'formik';
-import {
-  Button, Card, CardActions, CardContent, TextField,
-  Divider, Box
-} from '@material-ui/core';
-
-
+import { Card, CardActions, CardContent, TextField, Divider, Box } from '@material-ui/core';
 import { buildValues } from 'utils/formHelpers';
-import messages from 'containers/Shared/Update/messages';
 
+import messages from 'containers/Shared/Update/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from '../../DiverstCancel';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
 
-  const { group_id: groupId } = useParams();
+  const location = useLocation();
 
   return (
     <React.Fragment>
@@ -73,7 +66,7 @@ export function UpdateFormInner({ formikProps, buttonText, ...props }) {
 
               messages={messages}
               formikProps={formikProps}
-              link={ROUTES.group.plan.kpi.fields.path(groupId)}
+              link={location.pathname.replace('updates/new', 'fields')}
 
               join
               noCard
