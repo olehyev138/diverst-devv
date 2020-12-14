@@ -47,6 +47,7 @@ export function SelectFormFormInner(props) {
             onChange={value => setFieldValue('options_text', value.target.value)}
             fullWidth
             multiline
+            required
             disabled={props.isCommitting}
             id={`options_text:${values.id}`}
             name={`options_text:${values.id}`}
@@ -57,7 +58,7 @@ export function SelectFormFormInner(props) {
         </CardContent>
         <Divider />
         <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
+          <DiverstSubmit isCommitting={props.isCommitting} disabled={!values.options_text.trim()}>
             {
               props.edit
                 ? (<DiverstFormattedMessage {...messages.update} />)
