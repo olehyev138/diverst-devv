@@ -12,7 +12,7 @@ import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import messages from 'containers/News/messages';
-import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 
 const styles = theme => ({});

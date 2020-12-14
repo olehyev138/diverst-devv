@@ -20,7 +20,7 @@ import {
 
 // selectors
 import { selectMetricsDashboard, selectIsFormLoading } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
 import Conditional from 'components/Compositions/Conditional';
