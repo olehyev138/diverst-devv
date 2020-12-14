@@ -58,8 +58,6 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
   useInjectReducer({ key: 'budgetItems', reducer: budgetItemReducer });
   useInjectSaga({ key: 'budgetItems', saga: budgetItemSaga });
 
-  const freeEvent = { label: <DiverstFormattedMessage {...messages.createLabel} />, value: null, available: '0' };
-
   const pillarSelectAction = (searchKey = '') => {
     props.getPillarsBegin({
       count: 10, page: 0, order: 'asc',
@@ -180,7 +178,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
                   margin='normal'
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
-                  options={[freeEvent, ...props.budgetItems]}
+                  options={[props.freeEvent, ...props.budgetItems]}
                   onChange={(value) => {
                     setFieldValue('budget_item_id', value);
                     setFieldValue('estimated_funding', value.available);
@@ -307,7 +305,7 @@ export function EventForm(props) {
         props.eventAction(payload);
       }}
     >
-      {formikProps => <EventFormInner {...props} formikProps={formikProps} />}
+      {formikProps => <EventFormInner {...props} freeEvent={freeEvent} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -353,6 +351,7 @@ EventFormInner.propTypes = {
   }),
   intl: intlShape.isRequired,
   customTexts: PropTypes.object,
+  freeEvent: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
