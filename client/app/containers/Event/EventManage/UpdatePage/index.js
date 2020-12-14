@@ -85,7 +85,7 @@ export function UpdateEditPage(props) {
     return () => {
       props.updatesUnmount();
     };
-  }, []);
+  }, [location]);
 
   return (
     <Update
