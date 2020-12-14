@@ -11,7 +11,7 @@
     }
 
     a {
-      color: <%= @enterprise.theme.primary_color + " !important" || "#00AEEF !important" %>;
+      color: <%= @enterprise.theme.present? ? @enterprise&.theme&.primary_color + " !important" : "#00AEEF !important" %>;
       text-decoration: underline;
     }
   </style>
