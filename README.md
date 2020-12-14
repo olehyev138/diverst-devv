@@ -75,6 +75,7 @@ that the seed data generated on initialization is defined in db/seeds/developmen
 `sudo npm install -g yarn`
 7. Get the Yarn packages:  
 `yarn`
+8. Enjoy your setup.
 
 **That's it! Start the server using: `bin/rails server`**  
 
