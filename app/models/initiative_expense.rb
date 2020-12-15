@@ -16,8 +16,8 @@ class InitiativeExpense < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate -> { initiative_is_not_finalized }
 
-  scope :finalized, -> { joins(:initiative).where(initiatives: { finished_expenses: true }) }
-  scope :active, -> { joins(:initiative).where(initiatives: { finished_expenses: false }) }
+  scope :finalized, -> { joins(:budget_user).where(budget_users: { finished_expenses: true }) }
+  scope :active, -> { joins(:budget_user).where(budget_users: { finished_expenses: false }) }
 
   def initiative_is_not_finalized
     if budget_user.blank? || budget_user.finished_expenses?

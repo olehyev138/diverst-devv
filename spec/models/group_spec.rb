@@ -65,10 +65,12 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:group_leaders).dependent(:destroy) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
 
-    it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
-    it { expect(group).to have_many(:budgets).dependent(:destroy).through(:annual_budgets) }
-    it { expect(group).to have_many(:budget_items).dependent(:destroy).through(:budgets) }
-    it { expect(group).to have_many(:initiative_expenses).through(:annual_budgets) }
+    it { expect(group).to have_many(:annual_budgets) }
+    it { expect(group).to have_many(:annual_budgets_raw).dependent(:destroy).class_name('AnnualBudget') }
+    it { expect(group).to have_many(:budgets).dependent(:nullify) }
+    it { expect(group).to have_many(:budget_items).through(:budgets) }
+    it { expect(group).to have_many(:budget_users).through(:budget_items) }
+    it { expect(group).to have_many(:expenses).through(:budget_users) }
 
     it { expect(group).to have_many(:fields).dependent(:destroy) }
     it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
@@ -700,10 +702,18 @@ RSpec.describe Group, type: :model do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
       budget = create(:approved_budget, annual_budget_id: annual_budget.id)
-      initiative = create(:initiative, owner_group: group,
-                                       estimated_funding: budget.budget_items.first.available,
-                                       budget_item_id: budget.budget_items.first.id)
-      create(:initiative_expense, initiative_id: initiative.id, amount: 10)
+      initiative = create(
+        :initiative,
+        owner_group: group,
+        budget_users: build_list(
+          :budget_user,
+          1,
+          estimated: budget.budget_items.first.available,
+          budget_item_id: budget.budget_items.first.id
+        )
+      )
+
+      create(:initiative_expense, budget_user: initiative.budget_users.first, amount: 10)
       initiative.finish_expenses!
 
       expect(group.annual_budget_expenses).to eq 10
@@ -843,11 +853,17 @@ RSpec.describe Group, type: :model do
     it 'returns title_with_leftover_amount' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
-      budget_item = budget.budget_items.first
-      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
-      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
-      build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT)
+      budget = create(:approved_budget, annual_budget: annual_budget, estimated_amount: BUDGET_ITEM_AMOUNT, number_of_items: 1)
+      initiative = create(
+        :initiative,
+        owner_group: group,
+        budget_users: build_list(
+          :budget_user,
+          1,
+          estimated: INITIATIVE_ESTIMATE,
+          budget_item: budget.budget_items.first
+        ))
+      create(:initiative_expense, budget_user: initiative.budget_users.first, amount: EXPENSE_AMOUNT)
 
       expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
     end
@@ -1012,7 +1028,7 @@ RSpec.describe Group, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      group = create(:group, annual_budget: 10000)
+      group = create(:group, :with_annual_budget, amount: 10000)
       news_feed = create(:news_feed, group: group)
       user_group = create(:user_group, group: group)
       groups_poll = create(:groups_poll, group: group)

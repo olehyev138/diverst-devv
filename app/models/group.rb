@@ -116,9 +116,9 @@ class Group < ApplicationRecord
 
   has_many :annual_budgets, -> { with_expenses }, as: :budget_head
   has_many :annual_budgets_raw, dependent: :destroy, as: :budget_head, class_name: 'AnnualBudget'
-  has_many :budgets, dependent: :destroy
-  has_many :budget_items, dependent: :destroy, through: :budgets
-  has_many :budget_users, dependent: :destroy, through: :budget_items
+  has_many :budgets, dependent: :nullify
+  has_many :budget_items, through: :budgets
+  has_many :budget_users, through: :budget_items
   has_many :expenses, through: :budget_users
 
   delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'child', to: :annual_budgets
@@ -551,9 +551,9 @@ class Group < ApplicationRecord
 
   def title_with_leftover_amount
     if annual_budget_expenses > 0
-      "Create event from #{name} ($#{annual_budget_available})"
-    else
       "Create event from #{name} leftover ($%.2f)" % (annual_budget_remaining == 0 ? 0 : annual_budget_available).round(2)
+    else
+      "Create event from #{name} ($#{annual_budget_available})"
     end
   end
 
