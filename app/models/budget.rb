@@ -48,7 +48,7 @@ class Budget < ApplicationRecord
 
   def requested_amount
     @requested_amount ||=
-      if attributes.include? "requested_amount"
+      if attributes.include? 'requested_amount'
         super
       else
         budget_items.sum(:estimated_amount)
@@ -57,7 +57,7 @@ class Budget < ApplicationRecord
 
   def available
     @available ||=
-      if attributes.include? "available"
+      if attributes.include? 'available'
         super
       elsif is_approved
         budget_items.available.to_a.sum(&:available)

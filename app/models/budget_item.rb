@@ -98,7 +98,7 @@ class BudgetItem < ApplicationRecord
 
   def expenses
     @expenses ||=
-      if attributes.include? "spent"
+      if attributes.include? 'spent'
         spent
       else
         initiatives_expenses.sum('amount')
@@ -107,7 +107,7 @@ class BudgetItem < ApplicationRecord
 
   def available
     @available ||=
-      if attributes.include? "available"
+      if attributes.include? 'available'
         super
       elsif budget.blank? || is_done || !(budget.is_approved?)
         0
@@ -118,7 +118,7 @@ class BudgetItem < ApplicationRecord
 
   def unspent
     @unspent ||=
-      if attributes.include? "unspent"
+      if attributes.include? 'unspent'
         super
       else
         estimated_amount - expenses
@@ -127,7 +127,7 @@ class BudgetItem < ApplicationRecord
 
   def finalized_expenditure
     @finalized_expenditure ||=
-      if attributes.include? "finalized_expenditure"
+      if attributes.include? 'finalized_expenditure'
         super
       else
         expenses_finalized.sum('amount')
