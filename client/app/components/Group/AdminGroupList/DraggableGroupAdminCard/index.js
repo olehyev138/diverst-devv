@@ -27,8 +27,7 @@ import { intlShape } from 'react-intl';
 import { getListDrop, getListDrag } from 'utils/DragAndDropHelpers';
 
 
-export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin, customTexts }, props) {
-  const [expandedGroups, setExpandedGroups] = useState({});
+export default function DraggableGroupAdminCard({ id, text, index, moveCard, group, classes, draggable, intl, deleteGroupBegin, customTexts, ...props }) {
   const ref = useRef(null);
   const ItemTypes = {
     CARD: 'card',
@@ -40,8 +39,6 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
   const [importGroup, setImportGroup] = useState(0);
   const handleDialogClose = () => setImportGroup(0);
   const handleDialogOpen = id => setImportGroup(id);
-
-  const children = (group.children ? group.children : []);
 
   const cardContent = (
     <CardContent>
@@ -117,21 +114,14 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           <DiverstFormattedMessage {...messages.delete} />
         </Button>
       </Permission>
-      {children.length > 0 && (
+      {group.is_parent_group === true && (
         <React.Fragment>
           <Button
             size='small'
-            onClick={() => {
-              setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-            }}
+            onClick={() => props.handleParentExpand(group.id, group.name)}
             disabled={draggable}
           >
-            {expandedGroups[group.id] ? (
-              <DiverstFormattedMessage {...messages.children_collapse} />
-            ) : (
-              <DiverstFormattedMessage {...messages.children_expand} />
-            )}
-
+            <DiverstFormattedMessage {...messages.children_expand} />
           </Button>
           <Permission show={permission(group, 'update?')}>
             <Button
@@ -161,11 +151,12 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           </Permission>
         </React.Fragment>
       )}
-      <Permission show={permission(group, 'add_members?')}>
+      <Permission show={permission(group, 'update?')}>
         <Button
           size='small'
           color='primary'
           onClick={() => handleDialogOpen(group.id)}
+          disabled={draggable}
         >
           Import Users
         </Button>
@@ -204,10 +195,6 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
     </Dialog>
   );
 
-  // If a group has the sub-groups list open ensure the open state is wiped
-  if (draggable && (Object.entries(expandedGroups).length !== 0))
-    setExpandedGroups({});
-
 
   return (
     <Grid item key={group.id} xs={12}>
@@ -219,93 +206,6 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
         {cardContent}
         {cardActions}
       </Card>
-      <Collapse in={!draggable && expandedGroups[`${group.id}`]}>
-        <Box mt={1} />
-        <Grid container spacing={2} justify='flex-end'>
-          {children && children.map((childGroup, i) => (
-            /* eslint-disable-next-line react/jsx-wrap-multilines */
-            <Grid item key={childGroup.id} xs={12}>
-              <Card className={classes.childGroupCard}>
-                <CardContent>
-                  <Grid container spacing={2} alignItems='center'>
-                    {childGroup.logo_data && (
-                      <React.Fragment>
-                        <Hidden xsDown>
-                          <Grid item xs='auto'>
-                            <DiverstImg
-                              data={childGroup.logo_data}
-                              contentType={childGroup.logo_content_type}
-                              maxWidth='60px'
-                              maxHeight='60px'
-                              minWidth='60px'
-                              minHeight='60px'
-                            />
-                          </Grid>
-                        </Hidden>
-                      </React.Fragment>
-                    )}
-                    <Grid item xs>
-                      <Link
-                        component={WrappedNavLink}
-                        to={{
-                          pathname: ROUTES.group.home.path(childGroup.id),
-                          state: { id: childGroup.id }
-                        }}
-                      >
-                        <Typography variant='h5' component='h2' display='inline'>
-                          {childGroup.name}
-                        </Typography>
-                      </Link>
-                      {childGroup.short_description && (
-                        <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                          {childGroup.short_description}
-                        </Typography>
-                      )}
-                    </Grid>
-                  </Grid>
-                </CardContent>
-                <CardActions>
-                  <Permission show={permission(childGroup, 'update?')}>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
-                        state: { id: childGroup.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      <DiverstFormattedMessage {...messages.edit} />
-                    </Button>
-                  </Permission>
-                  <Permission show={permission(childGroup, 'add_members?')}>
-                    <Button
-                      size='small'
-                      color='primary'
-                      onClick={() => handleDialogOpen(childGroup.id)}
-                    >
-                    Import Users
-                    </Button>
-                  </Permission>
-                  <Permission show={permission(childGroup, 'destroy?')}>
-                    <Button
-                      size='small'
-                      className={classes.errorButton}
-                      onClick={() => {
-                      /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm(intl.formatMessage(messages.delete_confirm, customTexts)))
-                          deleteGroupBegin(childGroup.id);
-                      }}
-                    >
-                      <DiverstFormattedMessage {...messages.delete} />
-                    </Button>
-                  </Permission>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Collapse>
     </Grid>
   );
 }
@@ -318,6 +218,7 @@ DraggableGroupAdminCard.propTypes = {
   group: PropTypes.object,
   draggable: PropTypes.bool,
   classes: PropTypes.object,
+  handleParentExpand: PropTypes.func,
   importAction: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   intl: intlShape.isRequired,

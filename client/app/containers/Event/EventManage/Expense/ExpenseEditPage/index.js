@@ -53,7 +53,7 @@ export function ExpenseEditPage(props) {
     }
   );
 
-  const { expenses_id: expensesId } = useParams;
+  const { expenses_id: expensesId } = useParams();
   const links = {
     index: ROUTES.group.plan.events.manage.expenses.index.path(props.currentGroup.id, props.currentEvent.id),
   };

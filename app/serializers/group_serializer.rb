@@ -1,5 +1,5 @@
 class GroupSerializer < ApplicationRecordSerializer
-  attributes :id, :permissions, :current_user_is_member
+  attributes :id, :permissions, :current_user_is_member, :is_parent_group
 
   attributes_with_permission :name, :short_description, :private, :logo, :logo_file_name, :logo_data, :logo_content_type, if: :family?
 
@@ -62,6 +62,10 @@ class GroupSerializer < ApplicationRecordSerializer
     else
       []
     end
+  end
+
+  def is_parent_group
+    object.is_parent_group?
   end
 
   def parent
