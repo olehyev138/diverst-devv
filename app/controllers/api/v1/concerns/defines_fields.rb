@@ -14,6 +14,10 @@ module Api::V1::Concerns::DefinesFields
   end
 
   def create_field
+    if (['SelectField', 'CheckboxField'].include? field_payload[:type]) && field_payload[:options_text].strip.empty?
+      raise InvalidInputException
+    end
+
     params[:field] = field_payload
     item = klass.find(params[:id])
     base_authorize(item)

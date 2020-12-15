@@ -30,7 +30,7 @@ RSpec.describe Update, type: :model do
 
     context 'uniqueness' do
       let!(:uniqueness_update) { create(:update) }
-      it { expect(uniqueness_update).to validate_uniqueness_of(:report_date).scoped_to(:updatable_id) }
+      it { expect(uniqueness_update).to validate_uniqueness_of(:report_date).scoped_to(:updatable_id, :updatable_type) }
     end
   end
 
