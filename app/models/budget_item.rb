@@ -99,7 +99,7 @@ class BudgetItem < ApplicationRecord
   [:spent, :reserved, :user_estimates, :finalized_expenditures].each do |method|
     define_method method do
       if attributes.include? method.to_s
-        super
+        self[method.to_s]
       else
         budget_item_sums&.send(method) || 0
       end

@@ -8,8 +8,8 @@ RSpec.describe BudgetItem, type: :model do
     it { expect(budget_item).to have_one(:annual_budget).through(:budget) }
     it { expect(budget_item).to have_one(:group).through(:budget) }
 
-    it { expect(budget_item).to have_many(:initiatives) }
-    it { expect(budget_item).to have_many(:initiatives_expenses).through(:initiatives).source(:expenses) }
+    it { expect(budget_item).to have_many(:budget_users) }
+    it { expect(budget_item).to have_many(:initiatives_expenses).through(:budget_users).source(:expenses) }
 
     it { expect(budget_item).to validate_presence_of(:title) }
     it { expect(budget_item).to validate_length_of(:title).is_at_least(2) }

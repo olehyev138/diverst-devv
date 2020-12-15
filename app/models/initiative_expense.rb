@@ -10,7 +10,7 @@ class InitiativeExpense < ApplicationRecord
   has_one :enterprise, through: :annual_budget
 
   validates_length_of :description, maximum: 191
-  # validates :initiative, presence: true
+  validates :budget_user, presence: true
   # validates :annual_budget, presence: true
   validates :owner, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }

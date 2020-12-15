@@ -32,8 +32,7 @@ class Initiative < ApplicationRecord
   has_many :budget_users, -> { with_expenses }, as: :budgetable
   has_many :budget_items, through: :budget_users
   has_many :budgets, through: :budget_items
-  has_one :annual_budget, through: :budgets
-  has_one :annual_budget_item, through: :budget_item, source: :annual_budget
+  has_one :annual_budget, through: :budget_item, source: :annual_budget
 
   accepts_nested_attributes_for :budget_users, allow_destroy: true
 
@@ -310,18 +309,6 @@ class Initiative < ApplicationRecord
     else
       'Expenses in progress'
     end
-  end
-
-  def approved?
-    # If there is no budget for event then it is considered approved
-    return true if budget.nil?
-
-    # Check if budget is approved
-    budget.is_approved
-  end
-
-  def pending?
-    !approved?
   end
 
   def finish_expenses!

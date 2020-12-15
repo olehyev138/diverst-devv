@@ -85,7 +85,7 @@ class AnnualBudget < ApplicationRecord
   [:spent, :reserved, :requested_amount, :approved, :user_estimates, :finalized_expenditures].each do |method|
     define_method method do
       if attributes.include? method.to_s
-        super
+        self[method.to_s]
       else
         annual_budget_sums&.send(method) || 0
       end

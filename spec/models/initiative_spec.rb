@@ -19,9 +19,9 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to validate_length_of(:description).is_at_most(65535) }
     it { expect(initiative).to validate_length_of(:name).is_at_most(191) }
 
-    it { expect(initiative).to belong_to(:budget_item) }
-    it { expect(initiative).to have_one(:budget).through(:budget_item) }
-    it { expect(initiative).to have_one(:annual_budget).through(:budget) }
+    it { expect(initiative).to have_many(:budget_items) }
+    it { expect(initiative).to have_many(:budgets).through(:budget_items) }
+    it { expect(initiative).to have_one(:annual_budget) }
 
     it { expect(initiative).to have_many(:checklists).dependent(:destroy) }
     it { expect(initiative).to have_many(:resources).dependent(:destroy) }
@@ -143,7 +143,14 @@ RSpec.describe Initiative, type: :model do
     context 'initiative::of_annual_budget' do
       let!(:annual_budget) { create :annual_budget, id: 100 }
       let!(:budget) { create(:approved_budget, annual_budget: annual_budget) }
-      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first }
+      let!(:annual_budget_initiative) { create(
+        :initiative,
+        budget_users: build_list(
+          :budget_user,
+          1,
+          budget_item: budget.budget_items.first
+        ))
+      }
 
       it 'returns initiative of_annual_budget' do
         expect(Initiative.of_annual_budget(100)).to eq([annual_budget_initiative])
@@ -425,7 +432,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#approved?' do
+  describe '#approved?', skip: 'Deprecated' do
     it 'returns true if no budget exists' do
       initiative = create(:initiative)
 
@@ -449,7 +456,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#pending?' do
+  describe '#pending?', skip: 'Deprecated' do
     it 'returns false' do
       initiative = create(:initiative)
       expect(initiative.pending?).to eq(false)
@@ -481,7 +488,7 @@ RSpec.describe Initiative, type: :model do
 
     it 'returns true' do
       enterprise = create(:enterprise)
-      group = create(:group, enterprise: enterprise, annual_budget: 10000)
+      group = create(:group, :with_annual_budget, enterprise: enterprise, amount: 10000)
       annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
       budget = create(:approved_budget, annual_budget: annual_budget)
       initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
@@ -559,39 +566,22 @@ RSpec.describe Initiative, type: :model do
     end
 
     context 'with funds' do
-      let(:initiative) { build(:initiative, owner_group: group, estimated_funding: 100) }
-
-      context 'without budget' do
-        it 'is not valid' do
-          expect(initiative).to_not be_valid
-        end
-      end
-
-      context 'with incorrect budget' do
-        let(:new_budget) { build(:budget) }
-
-        before { initiative.budget = new_budget }
-
-        it 'is not valid' do
-          expect(initiative).to_not be_valid
-        end
-      end
-
       context 'with correct budget item' do
         let!(:initiative) { create(:initiative, :with_budget_item, estimated_funding: 1000) }
+        let!(:budget_user) { initiative.budget_users.first }
 
         context 'with enough budget money' do
-          let!(:estimated_funding) { initiative.estimated_funding }
-          let!(:available) { initiative.budget_item.available }
+          let!(:estimated_funding) { budget_user.estimated }
+          let!(:available) { budget_user.budget_item.available }
 
           it 'saves initiative with correct funding' do
-            expect(initiative).to_not be_new_record
+            expect(budget_user).to_not be_new_record
 
-            expect(initiative.estimated_funding).to eq estimated_funding
+            expect(budget_user.estimated).to eq estimated_funding
           end
 
           it 'substracts estimated funding from budget item' do
-            expect(initiative.budget_item.available).to eq 0
+            expect(budget_user.reload.budget_item.available).to eq 0
           end
 
           it 'marks budget item as done', skip: 'redefine IsDone later' do
