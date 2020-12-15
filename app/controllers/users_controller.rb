@@ -34,6 +34,10 @@ class UsersController < ApplicationController
       @users = @users.where(id: user_ids_with_perms)
     end
 
+    if params[:active] == 'false'
+      @users = current_user.enterprise.users.where(active: false)
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
