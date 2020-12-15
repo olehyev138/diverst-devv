@@ -46,24 +46,28 @@ class Budget < ApplicationRecord
     group&.id
   end
 
-  def requested_amount
-    @requested_amount ||=
-      if attributes.include? 'requested_amount'
+  [:spent, :reserved, :requested_amount, :user_estimates, :finalized_expenditures].each do |method|
+    define_method method do
+      if attributes.include? method.to_s
         super
       else
-        budget_items.sum(:estimated_amount)
+        budget_sums&.send(method) || 0
       end
+    end
   end
 
   def available
-    @available ||=
-      if attributes.include? 'available'
-        super
-      elsif is_approved
-        budget_items.available.to_a.sum(&:available)
-      else
-        0
-      end
+    return 0 unless is_approved
+    requested_amount - reserved
+  end
+
+  def unspent
+    requested_amount - spent
+  end
+
+  def approved_amount
+    return 0 unless is_approved
+    requested_amount
   end
 
   def reload

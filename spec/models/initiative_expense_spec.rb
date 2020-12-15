@@ -55,11 +55,11 @@ RSpec.describe InitiativeExpense, type: :model do
     it 'sets expenses on annual_budget to 0 when expense is destroyed' do
       expense.reload
       annual_budget1.reload
-      expect(annual_budget1.expenses).to eq expense.amount
+      expect(annual_budget1.spent).to eq expense.amount
 
       expense.destroy
 
-      expect(annual_budget1.reload.expenses).to eq 0
+      expect(annual_budget1.reload.spent).to eq 0
     end
   end
 
@@ -79,11 +79,11 @@ RSpec.describe InitiativeExpense, type: :model do
     it 'sets expenses on annual_budget to 0 when expense is destroyed' do
       expense.reload
       annual_budget1.reload
-      expect(annual_budget1.expenses).to eq expense.amount
+      expect(annual_budget1.spent).to eq expense.amount
 
       expense.destroy
 
-      expect(annual_budget1.reload.expenses).to eq 0
+      expect(annual_budget1.reload.spent).to eq 0
     end
   end
 

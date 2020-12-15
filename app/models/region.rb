@@ -28,7 +28,7 @@ class Region < ApplicationRecord
   scope :is_private,        -> { where(private: true) }
   scope :non_private,       -> { where(private: false) }
 
-  delegate :leftover, :remaining, :approved, :expenses, :available, :finalized_expenditure, :currency, Group::BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, :remaining, :approved, :spent, :available, :finalized_expenditure, :currency, Group::BUDGET_DELEGATE_OPTIONS
 
   def current_annual_budget
     @current_annual_budget ||= annual_budgets.where(closed: false).last || parent.current_annual_budget

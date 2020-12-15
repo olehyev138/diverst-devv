@@ -82,52 +82,35 @@ class AnnualBudget < ApplicationRecord
     update_column(:closed, true)
   end
 
-  def expenses; spent end
+  [:spent, :reserved, :requested_amount, :approved, :user_estimates, :finalized_expenditures].each do |method|
+    define_method method do
+      if attributes.include? method.to_s
+        super
+      else
+        annual_budget_sums&.send(method) || 0
+      end
+    end
+  end
 
-  def estimated; user_estimates end
+  def available
+    @available ||= (approved - reserved)
+  end
 
-  # same as available
-  # def approved
-  #   @approved ||= items_approved
-  #                     .sum('estimated_amount')
-  # end
-  #
-  # def reserved
-  #   @reserved ||=
-  #       expenses_finalized.sum('amount') + initiatives_active.sum('estimated_funding')
-  # end
-  #
-  # def expenses
-  #   @expenses ||= initiative_expenses.sum('amount')
-  # end
-  #
-  # def estimated
-  #   @estimated ||= initiatives.sum('estimated_funding')
-  # end
-  #
-  # def finalized_expenditure
-  #   @finalized_expenditure ||= expenses_finalized.sum('amount')
-  # end
-  #
-  # def available
-  #   @available ||= (approved - reserved)
-  # end
-  #
-  # def remaining
-  #   @remaining ||= (approved - expenses)
-  # end
-  #
-  # def unspent
-  #   @unspent ||= (estimated - expenses)
-  # end
-  #
-  # def leftover
-  #   @leftover ||= ((amount || 0) - expenses)
-  # end
-  #
-  # def free
-  #   @free ||= ((amount || 0) - approved)
-  # end
+  def remaining
+    @remaining ||= (approved - spent)
+  end
+
+  def unspent
+    @unspent ||= (user_estimates - spent)
+  end
+
+  def leftover
+    @leftover ||= ((amount || 0) - spent)
+  end
+
+  def free
+    @free ||= ((amount || 0) - approved)
+  end
 
   def can_be_reset?
     unless no_active_budget_users?

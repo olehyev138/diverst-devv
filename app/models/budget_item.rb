@@ -96,42 +96,23 @@ class BudgetItem < ApplicationRecord
     "#{title} ($%.2f)" % available_for_event(event)
   end
 
-  def expenses
-    @expenses ||=
-      if attributes.include? 'spent'
-        spent
-      else
-        initiatives_expenses.sum('amount')
-      end
-  end
-
-  def available
-    @available ||=
-      if attributes.include? 'available'
+  [:spent, :reserved, :user_estimates, :finalized_expenditures].each do |method|
+    define_method method do
+      if attributes.include? method.to_s
         super
-      elsif budget.blank? || is_done || !(budget.is_approved?)
-        0
       else
-        initiatives_active.sum('estimated_funding') + finalized_expenditure
+        budget_item_sums&.send(method) || 0
       end
+    end
   end
 
   def unspent
-    @unspent ||=
-      if attributes.include? 'unspent'
-        super
-      else
-        estimated_amount - expenses
-      end
+    requested_amount - spent
   end
 
-  def finalized_expenditure
-    @finalized_expenditure ||=
-      if attributes.include? 'finalized_expenditure'
-        super
-      else
-        expenses_finalized.sum('amount')
-      end
+  def available
+    return 0 if budget.blank? || is_done || !(budget.is_approved?)
+    estimated_amount - reserved
   end
 
   def reload!

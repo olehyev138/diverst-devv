@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BudgetManager, type: :service do
+RSpec.describe BudgetManager, type: :service, skip: 'Deprecated' do
   let(:user) { create(:user) }
   let(:group) { create(:group) }
   let(:annual_budget) { create(:annual_budget, group: group, amount: 10000) }

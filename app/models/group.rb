@@ -121,8 +121,8 @@ class Group < ApplicationRecord
   has_many :budget_users, through: :budget_items
   has_many :expenses, through: :budget_users
 
-  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'child', to: :annual_budgets
-  delegate :budgets, :budget_items, :budget_users, :expenses, prefix: 'current', to: :current_annual_budget
+  delegate :budgets, :budget_items, :budget_users, :spent, prefix: 'child', to: :annual_budgets
+  delegate :budgets, :budget_items, :budget_users, :spent, prefix: 'current', to: :current_annual_budget
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
@@ -155,7 +155,7 @@ class Group < ApplicationRecord
   delegate :news_feed_links,        to: :news_feed
   delegate :shared_news_feed_links, to: :news_feed
 
-  delegate :leftover, :remaining, :approved, :expenses, :available, :finalized_expenditure, :currency, BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, :remaining, :approved, :spent, :available, :finalized_expenditure, :currency, BUDGET_DELEGATE_OPTIONS
   delegate :carryover!, :reset!, BUDGET_DELEGATE_OPTIONS
 
   validates_length_of :event_attendance_visibility, maximum: 191

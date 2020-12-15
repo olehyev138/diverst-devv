@@ -113,7 +113,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 
 export function AnnualBudgetListItem(props) {
   const { classes, links, item, intl } = props;
-  const { expenses, amount, available, approved, remaining, estimated, unspent, currency, closed, year, quarter } = item;
+  const { spent, amount, available, approved, remaining, user_estimates, unspent, currency, closed, year, quarter } = item;
 
   const [initList, setInitList] = useState(false);
 
@@ -197,12 +197,12 @@ export function AnnualBudgetListItem(props) {
               <DiverstFormattedMessage {...itemMessages.expenses} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2'>
-              {toCurrencyString(props.intl, expenses || 0, currency)}
+              {toCurrencyString(props.intl, spent || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={8} md={10}>
             <DiverstProgress
-              number={expenses}
+              number={spent}
               buffer={approved}
               total={amount}
               overflow
@@ -270,7 +270,7 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={6}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {toCurrencyString(props.intl, estimated || 0, currency)}
+              {toCurrencyString(props.intl, user_estimates || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={6}>
