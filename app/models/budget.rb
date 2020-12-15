@@ -58,6 +58,7 @@ class Budget < ApplicationRecord
 
   def available
     return 0 unless is_approved
+
     requested_amount - reserved
   end
 
@@ -67,6 +68,7 @@ class Budget < ApplicationRecord
 
   def approved_amount
     return 0 unless is_approved
+
     requested_amount
   end
 

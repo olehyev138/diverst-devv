@@ -26,7 +26,8 @@ RSpec.describe InitiativeExpense, type: :model do
           1,
           budget_item: budget.budget_items.first
         )
-      )}
+      )
+      }
       let!(:finalized_initiative_expense) { create(:initiative_expense, budget_user: annual_budget_initiative.budget_users.first) }
       before do
         annual_budget_initiative.update(finished_expenses: true)
@@ -45,7 +46,8 @@ RSpec.describe InitiativeExpense, type: :model do
           1,
           budget_item: budget.budget_items.first
         )
-      )}
+      )
+      }
       let!(:active_initiative_expense) { create(:initiative_expense, budget_user: annual_budget_initiative.budget_users.first) }
 
       it 'returns initiative expense active' do
