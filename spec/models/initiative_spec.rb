@@ -582,7 +582,7 @@ RSpec.describe Initiative, type: :model do
 
         context 'with enough budget money' do
           let!(:estimated_funding) { initiative.estimated_funding }
-          let!(:available_amount) { initiative.budget_item.available_amount }
+          let!(:available) { initiative.budget_item.available }
 
           it 'saves initiative with correct funding' do
             expect(initiative).to_not be_new_record
@@ -591,7 +591,7 @@ RSpec.describe Initiative, type: :model do
           end
 
           it 'substracts estimated funding from budget item' do
-            expect(initiative.budget_item.available_amount).to eq 0
+            expect(initiative.budget_item.available).to eq 0
           end
 
           it 'marks budget item as done', skip: 'redefine IsDone later' do
@@ -840,7 +840,7 @@ RSpec.describe Initiative, type: :model do
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,
                                             owner_group: group,
-                                            estimated_funding: budget.budget_items.first.available_amount,
+                                            estimated_funding: budget.budget_items.first.available,
                                             budget_item_id: budget.budget_items.first.id)
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }

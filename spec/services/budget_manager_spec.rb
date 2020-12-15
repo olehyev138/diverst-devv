@@ -12,7 +12,7 @@ RSpec.describe BudgetManager, type: :service do
 
     it 'updates all budget_items as approved' do
       budget_item.reload
-      expect(budget_item.available_amount).to eq 100
+      expect(budget_item.available).to eq 100
     end
 
     it 'updates budget as approved' do

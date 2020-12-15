@@ -11,7 +11,7 @@ class BudgetItem < ApplicationRecord
 
   has_many :initiatives, dependent: :nullify
   has_many :budget_users, dependent: :destroy
-  has_many :initiatives_expenses, through: :initiatives, source: :expenses
+  has_many :initiatives_expenses, through: :budget_users, source: :expenses
 
   validates_length_of :title, maximum: 191
   validates_presence_of :budget
@@ -89,35 +89,58 @@ class BudgetItem < ApplicationRecord
   def available_for_event(event)
     budget_users = BudgetUser.find_by(budgetable: event, budget_item_id: id)
     event_offset = budget_users.present? ? budget_users.estimated : 0
-    available_amount + event_offset
+    available + event_offset
   end
 
   def title_with_amount(event = nil)
     "#{title} ($%.2f)" % available_for_event(event)
   end
 
-  # def expenses
-  #   initiatives_expenses.sum('amount')
-  # end
-  #
-  # def reserved
-  #   initiatives_active.sum('estimated_funding') + finalized_expenditure
-  # end
-
-  def available_amount
-    return 0 if budget.blank?
-    return 0 if is_done || !(budget.is_approved?)
-
-    estimated_amount - reserved
+  def expenses
+    @expenses ||=
+      if attributes.include? "spent"
+        spent
+      else
+        initiatives_expenses.sum('amount')
+      end
   end
 
-  # def unspent
-  #   estimated_amount - expenses
-  # end
-  #
-  # def finalized_expenditure
-  #   expenses_finalized.sum('amount')
-  # end
+  def available
+    @available ||=
+      if attributes.include? "available"
+        super
+      elsif budget.blank? || is_done || !(budget.is_approved?)
+        0
+      else
+        initiatives_active.sum('estimated_funding') + finalized_expenditure
+      end
+  end
+
+  def unspent
+    @unspent ||=
+      if attributes.include? "unspent"
+        super
+      else
+        estimated_amount - expenses
+      end
+  end
+
+  def finalized_expenditure
+    @finalized_expenditure ||=
+      if attributes.include? "finalized_expenditure"
+        super
+      else
+        expenses_finalized.sum('amount')
+      end
+  end
+
+  def reload!
+    @expenses = 0
+    @available = 0
+    @unspent = 0
+    @finalized_expenditure = 0
+    super
+  end
 
   def approve!
     self.update(deprecated_available_amount: estimated_amount)

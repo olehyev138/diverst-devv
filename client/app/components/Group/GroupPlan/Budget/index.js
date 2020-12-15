@@ -86,9 +86,9 @@ export function Budget(props) {
     },
     {
       title: intl.formatMessage(messages.columns.available, props.customTexts),
-      field: 'available_amount',
-      query_field: 'budget_items.available_amount',
-      render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
+      field: 'available',
+      query_field: 'budget_items.available',
+      render: rowData => toCurrencyString(props.intl, rowData.available || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.endDate, props.customTexts),

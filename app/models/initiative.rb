@@ -552,7 +552,7 @@ class Initiative < ApplicationRecord
     update_column(:estimated_funding, 0) unless new_record?
     self.estimated_funding = temp
 
-    if budget_item.present? && estimated_funding > budget_item.available_amount
+    if budget_item.present? && estimated_funding > budget_item.available
       errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
       false
     elsif funded_by_leftover?

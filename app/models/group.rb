@@ -301,7 +301,7 @@ class Group < ApplicationRecord
   end
 
   def annual_budget
-    current_annual_budget!.amount
+    current_annual_budget&.amount || 0
   end
 
   def annual_budget=(new_budget)
@@ -527,7 +527,7 @@ class Group < ApplicationRecord
     CSV.generate do |csv|
       csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
       self.budgets.order(created_at: :desc).each do |budget|
-        csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+        csv << [budget.requested_amount, budget.available, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
       end
     end
   end

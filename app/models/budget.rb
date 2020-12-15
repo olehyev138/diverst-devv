@@ -46,23 +46,31 @@ class Budget < ApplicationRecord
     group&.id
   end
 
-  # def requested_amount
-  #   @requested_amount ||= budget_items.sum(:estimated_amount)
-  # end
-  #
-  # def available_amount
-  #   return 0 unless is_approved
-  #
-  #   @available_amount ||= budget_items.available.to_a.sum(&:available_amount)
-  # end
+  def requested_amount
+    @requested_amount ||=
+      if attributes.include? "requested_amount"
+        super
+      else
+        budget_items.sum(:estimated_amount)
+      end
+  end
+
+  def available
+    @available ||=
+      if attributes.include? "available"
+        super
+      elsif is_approved
+        budget_items.available.to_a.sum(&:available)
+      else
+        0
+      end
+  end
 
   def reload
     @requested_amount = nil
-    @available_amount = nil
+    @available = nil
     super
   end
-
-  def available_amount; available if respond_to? :available end
 
   def status_title
     return 'Pending' if is_approved.nil?

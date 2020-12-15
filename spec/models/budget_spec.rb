@@ -65,7 +65,7 @@ RSpec.describe Budget, type: :model do
         it 'sums only active budget items' do
           active_available = budget.budget_items.sum(&:estimated_amount)
 
-          expect(budget.available_amount).to eq active_available
+          expect(budget.available).to eq active_available
         end
       end
 
@@ -74,7 +74,7 @@ RSpec.describe Budget, type: :model do
         let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
 
         it 'always return 0' do
-          expect(budget.available_amount).to eq 0
+          expect(budget.available).to eq 0
         end
       end
     end
