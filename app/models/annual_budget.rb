@@ -11,7 +11,7 @@ class AnnualBudget < ApplicationRecord
   has_many :initiative_expenses, through: :budget_users, source: :expenses
   has_one :annual_budget_sums, class_name: 'AnnualBudgetSums'
 
-  delegate :finalized, to: :initiatives, prefix: true
+  delegate :finalized, to: :budget_users, prefix: true
   delegate :finalized, to: :initiative_expenses, prefix: 'expenses'
   delegate :active, to: :budget_users, prefix: true
   delegate :approved, to: :budgets, prefix: true

@@ -20,6 +20,9 @@ class BudgetUser < ApplicationRecord
             presence: true,
             uniqueness: { scope: [:budgetable_type, :budgetable_id] }
 
+  scope :finalized, -> { where(finished_expenses: true) }
+  scope :active, -> { where(finished_expenses: false) }
+
   scope :with_expenses, -> do
     select(
         '`budget_users`.*',
