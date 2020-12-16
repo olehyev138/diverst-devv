@@ -1,6 +1,8 @@
 class BudgetUser < ApplicationRecord
   include BudgetUser::Actions
 
+  attr_accessor :skip_allocate_budget_funds
+
   belongs_to :budgetable, polymorphic: true
   belongs_to :budget_item, -> { with_expenses }
   has_one :budget, through: :budget_item
@@ -11,6 +13,8 @@ class BudgetUser < ApplicationRecord
   has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_one :budget_user_sums, class_name: 'BudgetUserSums'
+
+  validate -> { allocate_budget_funds unless check_if_available }
 
   validates :budget_item_id,
             presence: true,
@@ -41,6 +45,18 @@ class BudgetUser < ApplicationRecord
     end
 
     self.update(finished_expenses: true)
+  end
+
+  def check_if_available
+    if budget_item.present? && estimated > budget_item.available
+      errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
+      return false
+    end
+    true
+  end
+
+  def budget_item_is_approved
+    errors.add(:budget_item, 'Budget Item is not approved') unless budget_item.blank? || budget.is_approved?
   end
 
   polymorphic_alias :budgetable, Initiative

@@ -14,7 +14,6 @@ class Initiative < ApplicationRecord
            as: :field_definer,
            dependent: :destroy,
            after_add: :add_missing_field_background_job
-  has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_many :user_reward_actions
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
@@ -29,10 +28,10 @@ class Initiative < ApplicationRecord
   # update admin fields to save new fields as well
   # change name in admin to initiatives
 
-  has_many :budget_users, -> { with_expenses }, as: :budgetable
+  has_many :budget_users, -> { with_expenses }, as: :budgetable, dependent: :destroy
   has_many :budget_items, through: :budget_users
   has_many :budgets, through: :budget_items
-  has_one :annual_budget, through: :budget_item, source: :annual_budget
+  has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense', through: :budget_users
 
   accepts_nested_attributes_for :budget_users, allow_destroy: true
 
@@ -80,7 +79,7 @@ class Initiative < ApplicationRecord
     .where(initiative_conditions.join(' OR '))
   }
   scope :of_annual_budget, ->(budget_id) {
-    joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
+    joins(:budgets).where('`budgets`.`id` = ?', Budget.where(annual_budget_id: budget_id).pluck(:id))
   }
   scope :with_expenses, -> {
     new_query = select_values.present? ? self : select('`initiatives`.*')
@@ -212,6 +211,10 @@ class Initiative < ApplicationRecord
   end
 
   delegate :currency, to: :annual_budget, allow_nil: true
+
+  def annual_budget
+    budgets.first&.annual_budget
+  end
 
   def path
     "#{group.name}/#{name}"
@@ -428,9 +431,9 @@ class Initiative < ApplicationRecord
 
   def expenses_highcharts_history(from: 1.year.ago, to: Time.current)
     highcharts_expenses = self.expenses
-    .where('created_at >= ?', from)
-    .where('created_at <= ?', to)
-    .order(created_at: :asc)
+    .where('`initiative_expenses`.created_at >= ?', from)
+    .where('`initiative_expenses`.created_at <= ?', to)
+    .order('`initiative_expenses`.created_at ASC')
     .map do |expense|
       [
         expense.created_at.to_time.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
@@ -526,10 +529,6 @@ class Initiative < ApplicationRecord
         return
       end
     end
-  end
-
-  def budget_item_is_approved
-    errors.add(:budget_item, 'Budget Item is not approved') unless budget_item.blank? || budget.is_approved?
   end
 
   def allocate_budget_funds
