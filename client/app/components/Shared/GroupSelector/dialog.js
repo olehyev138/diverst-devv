@@ -47,6 +47,7 @@ const GroupListSelector = (props) => {
   const groupSearchAction = (searchKey = searchKey, params = params, clearParentUI = true) => {
     if (clearParentUI) setDisplayParentUI(false);
 
+    setParams(params);
     props.inputCallback(props, searchKey, params);
   };
 
@@ -180,6 +181,7 @@ const GroupListSelector = (props) => {
       rowsPerPage={params.count}
       rowsPerPageOptions={[10]}
       count={props.groupTotal}
+      page={params.page}
       handlePagination={(payload) => {
         const newParams = { ...params, count: payload.count, page: payload.page };
 
