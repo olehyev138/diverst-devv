@@ -67,7 +67,7 @@ RSpec.describe Group, type: :model do
 
     it { expect(group).to have_many(:annual_budgets) }
     it { expect(group).to have_many(:annual_budgets_raw).dependent(:destroy).class_name('AnnualBudget') }
-    it { expect(group).to have_many(:budgets).dependent(:nullify) }
+    it { expect(group).to have_many(:budgets).dependent(:destroy) }
     it { expect(group).to have_many(:budget_items).through(:budgets) }
     it { expect(group).to have_many(:budget_users).through(:budget_items) }
     it { expect(group).to have_many(:expenses).through(:budget_users) }
