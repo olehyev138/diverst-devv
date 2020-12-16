@@ -27,7 +27,11 @@ class AnnualBudgetPolicy < GroupBasePolicy
     end
 
     def resolve
-      super(policy.base_index_permission)
+      if group.present?
+        super(policy.base_index_permission)
+      else
+        scope.none
+      end
     end
   end
 end
