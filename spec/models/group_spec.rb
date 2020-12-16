@@ -114,7 +114,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to delegate_method(:leftover).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:remaining).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:approved).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
-    it { expect(group).to delegate_method(:expenses).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:spent).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:available).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:finalized_expenditure).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:carryover!).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
@@ -682,7 +682,7 @@ RSpec.describe Group, type: :model do
       budget = create(:budget, group: group, is_approved: true, annual_budget: group.current_annual_budget)
       create(:budget_item, budget: budget, estimated_amount: 5000)
 
-      expect(group.annual_budget_available).to eq(group.annual_budget_approved - group.annual_budget_expenses)
+      expect(group.annual_budget_available).to eq(group.annual_budget_approved - group.annual_budget_spent)
     end
   end
 
@@ -690,12 +690,12 @@ RSpec.describe Group, type: :model do
     it 'returns 0 with annual expenses' do
       group = build(:group)
       group.create_annual_budget
-      expect(group.annual_budget_expenses).to eq(0)
+      expect(group.annual_budget_spent).to eq(0)
     end
 
     it 'returns nil without annual budget' do
       group = build(:group)
-      expect(group.annual_budget_expenses).to eq(nil)
+      expect(group.annual_budget_spent).to eq(nil)
     end
 
     it 'returns expenses budget' do
@@ -716,7 +716,7 @@ RSpec.describe Group, type: :model do
       create(:initiative_expense, budget_user: initiative.budget_users.first, amount: 10)
       initiative.finish_expenses!
 
-      expect(group.annual_budget_expenses).to eq 10
+      expect(group.annual_budget_spent).to eq 10
     end
   end
 
