@@ -15,7 +15,6 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#index' do
     it 'gets all items' do
       get "/api/v1/#{route}", headers: headers
-      Clipboard.copy response.body
       expect(response).to have_http_status(:ok)
     end
 

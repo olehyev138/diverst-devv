@@ -107,7 +107,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def unspent
-    requested_amount - spent
+    estimated_amount - spent
   end
 
   def available
