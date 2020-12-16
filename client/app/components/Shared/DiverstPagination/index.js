@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -102,12 +102,16 @@ const styles = theme => ({
 export function DiverstPagination(props) {
   const { classes, ...rest } = props;
 
+  const paginationComponentRef = useRef();
   const [paginationKey] = useState(Math.random().toString(36).substring(10));
   const [page, setPage] = useState(props.page || 0);
   const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
   const [doScrollToBottom, setDoScrollToBottom] = useState(false);
 
   const paginationClassName = `pagination-${paginationKey}`;
+
+  // Get the closest scrollbar container for the pagination to scroll
+  const closestScrollbarContainer = paginationComponentRef?.current?.closest(`.${CONTENT_SCROLL_CLASS_NAME}`);
 
   const handleChangePage = (event, newPage) => {
     let scroll = true;
@@ -121,7 +125,7 @@ export function DiverstPagination(props) {
 
     if (scroll)
       animateScrollTo(0, {
-        elementToScroll: document.querySelector(`.${CONTENT_SCROLL_CLASS_NAME}`)
+        elementToScroll: closestScrollbarContainer
       });
   };
 
@@ -135,7 +139,7 @@ export function DiverstPagination(props) {
     if (props.isLoading === false && doScrollToBottom === true) {
       setDoScrollToBottom(false);
       animateScrollTo(document.querySelector(`.${paginationClassName}`), {
-        elementToScroll: document.querySelector(`.${CONTENT_SCROLL_CLASS_NAME}`)
+        elementToScroll: closestScrollbarContainer
       });
     }
   }, [props.isLoading]);
@@ -156,6 +160,7 @@ export function DiverstPagination(props) {
   return (
     <div className={classes.paginationContainer}>
       <TablePagination
+        ref={paginationComponentRef}
         className={paginationClassName}
         ActionsComponent={PaginationActionsComponent}
         component='div'
