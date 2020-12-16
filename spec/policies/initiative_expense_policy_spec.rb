@@ -17,7 +17,7 @@ RSpec.describe InitiativeExpensePolicy, type: :policy do
                             budget_users: build_list(:budget_user,
                                                      1,
                                                      budget_item: budget.budget_items.first
-                            )
+                                                    )
   }
   let(:initiative_expense) { create(:initiative_expense, budget_user: initiative.budget_users.first, owner: user) }
   let(:policy_scope) { InitiativeExpensePolicy::Scope.new(user, InitiativeExpense).resolve }
