@@ -34,7 +34,6 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles, lighten } from '@material-ui/core/styles';
-import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper';
 import classNames from 'classnames';
 
 const styles = theme => ({
@@ -142,24 +141,15 @@ const styles = theme => ({
 });
 
 const GroupSelectorItem = (props) => {
-  const { group, classes, doubleClickWait, ...rest } = props;
+  const { group, classes, ...rest } = props;
   const { getGroupsBegin, groupListUnmount, groupSelectAction } = rest;
 
-  const [handleClick, handleDoubleClick] = useClickPreventionOnDoubleClick(
-    () => {
-      if (props.isSelected(props.group))
-        props.removeGroup(props.group);
-      else
-        props.addGroup(props.group);
-    },
-    () => {
-      if (props.isSelected(props.group))
-        props.removeGroup(...[props.group]);
-      else
-        props.addGroup(...[props.group]);
-    },
-    doubleClickWait,
-  );
+  const handleClick = () => {
+    if (props.isSelected(props.group))
+      props.removeGroup(props.group);
+    else
+      props.addGroup(props.group);
+  };
 
   const imageDimensions = props.large ? '80px' : '30px';
 
@@ -178,7 +168,6 @@ const GroupSelectorItem = (props) => {
         <Grid item xs>
           <ButtonBase
             onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
             className={classes.buttonBase}
           >
             <CardContent className={groupCardClasses}>
@@ -256,16 +245,11 @@ GroupSelectorItem.propTypes = {
   isSelected: PropTypes.func,
   large: PropTypes.bool,
   child: PropTypes.bool,
-  doubleClickWait: PropTypes.number,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
     PropTypes.object,
     PropTypes.string,
   ]),
-};
-
-GroupSelectorItem.defaultProps = {
-  doubleClickWait: 200,
 };
 
 const mapStateToProps = createStructuredSelector({
