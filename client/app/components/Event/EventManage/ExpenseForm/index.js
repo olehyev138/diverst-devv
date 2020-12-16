@@ -7,16 +7,11 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
 import { Form, Formik } from 'formik';
-import { Box, Button, CardContent, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Box, CardContent, Divider, Grid, Paper, TextField } from '@material-ui/core';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
-
-import { selectPaginatedSelectUsers } from 'containers/User/selectors';
-import { getUsersBegin } from 'containers/User/actions';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
@@ -38,9 +33,6 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
       <Form>
         <Paper>
           <CardContent>
-            <Typography color='secondary' variant='body1' component='h2'>
-              <DiverstFormattedMessage {...formMessages.title} />
-            </Typography>
             <TextField
               autoFocus
               fullWidth
@@ -142,7 +134,6 @@ ExpenseForm.propTypes = {
 
 ExpenseFormInner.propTypes = {
   expense: PropTypes.object,
-  approvers: PropTypes.array,
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
   budgetItem: PropTypes.object,
@@ -154,27 +145,11 @@ ExpenseFormInner.propTypes = {
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
 
-  getUsersBegin: PropTypes.func,
-
   links: PropTypes.shape({
     index: PropTypes.string,
   })
 };
 
-const mapStateToProps = createStructuredSelector({
-  approvers: selectPaginatedSelectUsers(),
-});
-
-const mapDispatchToProps = {
-  getUsersBegin,
-};
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
 export default compose(
-  withConnect,
   memo,
 )(ExpenseForm);
