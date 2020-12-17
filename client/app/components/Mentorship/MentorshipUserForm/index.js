@@ -26,7 +26,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
 
 /* eslint-disable object-curly-newline */
-export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day], props.customTexts), value: day }));
   return (
     <React.Fragment>
@@ -198,7 +198,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 color='primary'
                 type='submit'
               >
-                Submit
+                <DiverstFormattedMessage {...messages.form.button.submit} />
               </Button>
             </CardActions>
           </Form>

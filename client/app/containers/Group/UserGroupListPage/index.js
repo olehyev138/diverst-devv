@@ -23,7 +23,7 @@ import saga from 'containers/Group/saga';
 import GroupList from 'components/Group/UserGroupList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from '../messages';
@@ -174,6 +174,7 @@ export function UserGroupListPage({ classes, ...props }) {
             handleParentExpand={handleParentExpand}
             handlePagination={handlePagination}
             viewChildren={!displayMyGroups}
+            customTexts={props.customTexts}
           />
         </Grid>
       </Grid>
@@ -190,6 +191,7 @@ UserGroupListPage.propTypes = {
   user: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -198,6 +200,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
   permissions: selectPermissions(),
   user: selectUser(),
+  customTexts: selectCustomText(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
-import { selectCustomText, selectPermissions, selectEnterprise } from '../../../../Shared/App/selectors';
+import { selectCustomText, selectPermissions, selectEnterprise } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';

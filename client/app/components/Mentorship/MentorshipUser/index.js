@@ -260,7 +260,7 @@ export function Profile(props) {
                       </List>
                     )}
                     {user.availabilities && user.availabilities.length <= 0 && (
-                      'None'
+                      <DiverstFormattedMessage {...appMessages.none} />
                     )}
                   </Typography>
                 </Grid>

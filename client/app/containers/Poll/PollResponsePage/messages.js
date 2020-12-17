@@ -7,6 +7,7 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.PollResponse';
+export const snackbar = 'diverst.snackbars.PollResponse';
 
 export default defineMessages({
   form: {
@@ -33,5 +34,18 @@ export default defineMessages({
     fields_save: {
       id: `${scope}.fields.fields_save`
     },
+  },
+  responses: {
+    id: `${scope}.responses`
+  },
+  graphs: {
+    id: `${scope}.graphs`
+  },
+  snackbars: {
+    errors: {
+      invitation: {
+        id: `${snackbar}.errors.invitation`
+      },
+    }
   }
 });

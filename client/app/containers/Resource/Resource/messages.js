@@ -46,6 +46,9 @@ export default defineMessages({
     url: {
       id: `${scope}.form.input.url`,
     },
+    urlFile: {
+      id: `${scope}.form.input.url_file`,
+    },
     file: {
       id: `${scope}.form.input.file`,
     },

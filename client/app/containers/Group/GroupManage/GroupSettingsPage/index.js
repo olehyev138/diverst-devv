@@ -14,7 +14,7 @@ import {
 } from 'containers/Group/actions';
 
 import { selectGroupIsCommitting, selectGroupIsFormLoading, selectGroup } from 'containers/Group/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';

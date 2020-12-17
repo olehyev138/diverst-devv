@@ -158,7 +158,7 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           onClick={() => handleDialogOpen(group.id)}
           disabled={draggable}
         >
-          Import Users
+          <DiverstFormattedMessage {...messages.importUsers} />
         </Button>
       </Permission>
     </CardActions>
@@ -173,10 +173,10 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
     >
       <DialogContent>
         <Typography component='h2' variant='h6' className={classes.dataHeaders}>
-          Import instructions
+          <DiverstFormattedMessage {...messages.importInstructions} />
         </Typography>
         <Typography component='h2' variant='body1' color='secondary' className={classes.data}>
-          {'To batch import users to this group, upload a CSV file using the form below. The file should only contain a single column comprised of the users\' email adresses. The first row will be ignored, as it is reserved for the header.'}
+          <DiverstFormattedMessage {...messages.importDescription} />
         </Typography>
       </DialogContent>
       <Formik

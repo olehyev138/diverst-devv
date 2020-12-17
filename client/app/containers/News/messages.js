@@ -13,6 +13,9 @@ export default defineMessages({
   new: {
     id: `${scope}.index.button.group_message.new`,
   },
+  deleteNewsLink: {
+    id: `${scope}.delete_news_link_confirm`,
+  },
   comments: {
     id: `${scope}.index.button.comments`,
   },
@@ -63,6 +66,9 @@ export default defineMessages({
   },
   approved: {
     id: `${scope}.tab.approved`,
+  },
+  leave_comment: {
+    id: `${scope}.leave.comment`
   },
   pending: {
     id: `${scope}.tab.pending`,

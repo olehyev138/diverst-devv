@@ -20,7 +20,7 @@ import {
   selectPaginatedMembers, selectMemberTotal,
   selectIsFetchingMembers, selectHasChanged,
 } from 'containers/Group/GroupMembers/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 

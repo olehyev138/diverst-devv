@@ -17,7 +17,7 @@ import campaignSaga from 'containers/Innovate/Campaign/saga';
 import {
   selectIsCommitting, selectQuestion, selectIsFormLoading
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';

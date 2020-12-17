@@ -28,7 +28,7 @@ import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from
 import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
 import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 

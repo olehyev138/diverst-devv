@@ -48,7 +48,7 @@ export function* updateEmail(action) {
     const response = yield call(api.emails.update.bind(api.emails), payload.email.id, payload);
 
     yield put(updateEmailSuccess());
-    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEmailError(err));
 

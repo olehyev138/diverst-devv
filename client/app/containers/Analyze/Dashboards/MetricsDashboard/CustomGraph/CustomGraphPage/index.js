@@ -14,7 +14,6 @@ import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
 
 import { getCustomGraphDataBegin, deleteCustomGraphBegin, customGraphUnmount } from '../actions';
 import { selectCustomGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
-import { selectCustomText } from '../../../../../Shared/App/selectors';
 
 import { getUpdateRange } from 'utils/metricsHelpers';
 import CustomGraph from 'components/Analyze/Graphs/Base/CustomGraph';

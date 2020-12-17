@@ -18,7 +18,7 @@ import {
   selectPaginatedGroupLeaders, selectGroupLeaderTotal,
   selectIsFetchingGroupLeaders,
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

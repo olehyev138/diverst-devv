@@ -19,6 +19,7 @@ import {
   TextField, Hidden, FormControl, Divider, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { serializeSegment } from 'utils/customFieldHelpers';
 
@@ -68,6 +69,8 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
           classes={props.classes}
           {...props.ruleProps}
           currentEnterprise={props.currentEnterprise}
+          customTexts={props.customTexts}
+          intl={props.intl}
         />
       </DiverstFormLoader>
     </React.Fragment>
@@ -108,6 +111,7 @@ SegmentForm.propTypes = {
 };
 
 SegmentFormInner.propTypes = {
+  intl: intlShape.isRequired,
   edit: PropTypes.bool,
   segment: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -124,10 +128,12 @@ SegmentFormInner.propTypes = {
   isFormLoading: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number
-  }).isRequired
+  }).isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(SegmentForm);

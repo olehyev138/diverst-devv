@@ -96,7 +96,7 @@ export function AnnualBudgetList(props, context) {
       tooltip: <DiverstFormattedMessage {...listMessages.actions.carryover} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
+        if (confirm(intl.formatMessage(messages.carryoverConfirm, props.customTexts)))
           props.carryBudget(rowData.id);
       },
       // disabled: !permission(rowData, 'carryover_annual_budget?')
@@ -109,7 +109,7 @@ export function AnnualBudgetList(props, context) {
       tooltip: <DiverstFormattedMessage {...listMessages.actions.reset} />,
       onClick: (_, rowData) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
+        if (confirm(intl.formatMessage(messages.resetConfirm, props.customTexts)))
           props.resetBudget(rowData.id);
       },
       // disabled: !permission(rowData, 'reset_annual_budget?')

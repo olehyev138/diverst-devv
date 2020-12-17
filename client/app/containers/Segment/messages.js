@@ -10,6 +10,27 @@ export const scope = 'diverst.containers.Segment';
 export const snackbar = 'diverst.snackbars.Segments';
 
 export default defineMessages({
+  close: {
+    id: `${scope}.close`,
+  },
+  join: {
+    id: `${scope}.label.join`,
+  },
+  intersect: {
+    id: `${scope}.label.intersect`,
+  },
+  signIn: {
+    id: `${scope}.label.signIn`,
+  },
+  rewards: {
+    id: `${scope}.label.rewards`,
+  },
+  ascending: {
+    id: `${scope}.label.ascending`,
+  },
+  descending: {
+    id: `${scope}.label.descending`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
