@@ -20,7 +20,7 @@ import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategorie
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 export function GroupCategoriesPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });

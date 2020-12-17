@@ -14,7 +14,7 @@ import saga from 'containers/Group/Outcome/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
