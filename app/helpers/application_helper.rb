@@ -43,21 +43,11 @@ module ApplicationHelper
   end
 
   def event_color(event)
-    calendar_color = event.try(:group).try(:calendar_color).blank? ? nil : '#' + event.try(:group).try(:calendar_color)
+    calendar_color = event&.group&.calendar_color.blank? ? nil : '#' + event&.group&.calendar_color
 
     result_color = calendar_color || enterprise_primary_color || '#7b77c9'
 
-    to_color result_color
-  end
-
-  def to_color(color)
-    trimmed_color = color.tr('#', '')
-
-    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase # if string is a valid hex number
-      '#' + trimmed_color
-    else
-      trimmed_color
-    end
+    result_color
   end
 
   def enterprise_primary_color(enterprise = nil)
