@@ -4,13 +4,6 @@
       <%= simple_form_for @user, wrapper: :inline_form, html: { class: 'form-inline' }, url: user_mentorship_path(@user) do |f| %>
         <div class="card__section">
           <div class="row row--spacing-bottom">
-            <% if @user.linkedin_profile_url.blank? %>
-              <%= link_to '/omniauth/linkedin' do %>
-                <img class="img-responsive center-block" src="<%= image_path "Connect with LinkedIn.png" %>" alt="Home">
-              <% end %>
-            <% end %>
-          </div>
-          <div class="row row--spacing-bottom">
             <div class="col md-6">
               <p class="field__hint">Are you interested in being a mentor?</p>
               <%= f.hidden_field :mentor, value: 0 %>
