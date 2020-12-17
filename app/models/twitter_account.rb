@@ -12,7 +12,7 @@ class TwitterAccount < ApplicationRecord
 
   def user_exists
     unless TwitterClient.user_exists?(account)
-      errors.add(:account, 'User doesn\'t exist')
+      errors.add(:account, I18n.t('errors.twitter.doesnt_exist'))
     end
   end
 end

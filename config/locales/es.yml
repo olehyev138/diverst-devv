@@ -12,8 +12,161 @@ es:
     parent: Parent
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
+  default_text_values:
+    segments_fields: {
+      segments: "Segments(NEEDS TRANSLATION)",
+    }
+    poll: {
+      deleted_user: "Deleted user(NEEDS TRANSLATION)"
+    }
+  messages:
+    user_role: {
+      policy_template: "Policy template(NEEDS TRANSLATION)",
+    }
+    mentorship: {
+      pending: "Pending(NEEDS TRANSLATION)",
+      accepted: "Accepted(NEEDS TRANSLATION)",
+      declined: "Declined(NEEDS TRANSLATION)"
+    }
   errors:
+    invalid_linkedin_profile: "Not a valid LinkedIn profile URL(NEEDS TRANSLATION)"
+    invalid_linkedin_url: "Not a valid LinkedIn URL(NEEDS TRANSLATION)"
+    invalid_url: "Not a valid URL(NEEDS TRANSLATION)"
+    destroy_user: "Users older then 14 days cannot be destroyed(NEEDS TRANSLATION)"
+    role_validity: "Cannot set user role to a group role(NEEDS TRANSLATION)"
+    unique_email: "The email entered is already used(NEEDS TRANSLATION)"
+    format_email: "The email entered is not valid(NEEDS TRANSLATION)"
+    confirmation: "do not match(NEEDS TRANSLATION)"
+    blank: "can't be blank(NEEDS TRANSLATION)"
+    uniqueness: "The %{attribute} entered has already been created, please enter a unique %{attribute}(NEEDS TRANSLATION)"
+    numericality: {
+      too_short: "is too short (minimum is %{count} characters)(NEEDS TRANSLATION)",
+      too_long: "is too long (maximum is %{count} characters)(NEEDS TRANSLATION)",
+      integer: "is not a valid number(NEEDS TRANSLATION)",
+    }
     not_found: {
-      one: "Lo sentimos, el recurso que busca no existe.",
-      other: "Lo sentimos, el recurso que busca no existe."
+      one: "Sorry, the resource you are looking for does not exist.(NEEDS TRANSLATION)",
+      other: "Sorry, the resources you are looking for don't exist.(NEEDS TRANSLATION)"
+    }
+    timed_out: "Your request timed out. Please try again later.(NEEDS TRANSLATION)"
+    invalid_route: "Invalid route(NEEDS TRANSLATION)"
+    region: {
+      parent_cant_be_child_group: "cannot be a child group(NEEDS TRANSLATION)"
+    }
+    segments: {
+      already_member: "is already a member of this segment(NEEDS TRANSLATION)",
+      group_scope: "there must be at least one group chosen(NEEDS TRANSLATION)",
+    }
+    groups: {
+      already_member: "is already a member of this group(NEEDS TRANSLATION)"
+    }
+    user_role: {
+      no_change: "cannot be changed(NEEDS TRANSLATION)",
+      delete_default: "Cannot destroy default user role(NEEDS TRANSLATION)",
+      delete_group: "Cannot delete because there are users with this group role.(NEEDS TRANSLATION)",
+    }
+    twitter: {
+      doesnt_exist: "User doesn't exist(NEEDS TRANSLATION)"
+    }
+    theme: {
+      valid_hex: "should be a valid hex color(NEEDS TRANSLATION)",
+    }
+    session: {
+      value_required: "Value Required(NEEDS TRANSLATION)",
+    }
+    reward: {
+      responsible_user: "Invalid responsible(NEEDS TRANSLATION)",
+    }
+    resources: {
+      folder_no_parent: "Folder is without parent(NEEDS TRANSLATION)"
+    }
+    poll: {
+      invalid: "is invalid(NEEDS TRANSLATION)",
+      bad_configuration: "invalid configuration of polls(NEEDS TRANSLATION)",
+      survey: "Survey is invalid without any field(NEEDS TRANSLATION)"
+    }
+    policy_group_template: {
+      name_taken: "Name already taken(NEEDS TRANSLATION)",
+    }
+    numeric: {
+      max: "can't be greater than max(NEEDS TRANSLATION)",
+      min: "can't be less than min(NEEDS TRANSLATION)",
+    }
+    metrics: {
+      name_required: "Metrics Dashboard name is required(NEEDS TRANSLATION)",
+      group: "Please select a group(NEEDS TRANSLATION)",
+    }
+    mentoring: {
+      start: "must be today or in the future(NEEDS TRANSLATION)",
+      end: "must be after start(NEEDS TRANSLATION)",
+      pending_request: "There's already a pending request(NEEDS TRANSLATION)",
+      mentor_request: "is not currently accepting mentor requests(NEEDS TRANSLATION)",
+      mentee_request: "is not currently accepting mentee requests(NEEDS TRANSLATION)"
+    }
+    initiative: {
+      already_joined: "has already joined this event(NEEDS TRANSLATION)",
+      expense: "Can't modify an expense for a closed initiative(NEEDS TRANSLATION)",
+      end: "must be after start(NEEDS TRANSLATION)",
+      finished: "Expenses are already finished(NEEDS TRANSLATION)",
+      progress: "Expenses in progress(NEEDS TRANSLATION)",
+      time: "Expenses over time(NEEDS TRANSLATION)",
+      budget: "You are providing wrong budget(NEEDS TRANSLATION)",
+      lack_of_funds: "Can not create event with funds but without budget(NEEDS TRANSLATION)",
+      segments: "has invalid segments(NEEDS TRANSLATION)",
+      budget_item_not_approved: "Budget Item is not approved(NEEDS TRANSLATION)",
+      lack_of_funds_2: "sorry, this budget doesn't have the sufficient funds(NEEDS TRANSLATION)",
+      temporary: "TEMPORARILY UNSUPPORTED(NEEDS TRANSLATION)"
+    }
+    group: {
+      deleted: "Deleted group(NEEDS TRANSLATION)",
+      unknown: "Unknown(NEEDS TRANSLATION)",
+      leader_uniqueness: "already exists as a %{leader_type} leader (NEEDS TRANSLATION)",
+      user_not_member: "Selected user is not a member of this group(NEEDS TRANSLATION)",
+      user_not_member_region: "Selected user is not a member of this region's parent group(NEEDS TRANSLATION)",
+      category_in_use: "Can't delete category in use(NEEDS TRANSLATION)",
+      layout_0: "Default layout(NEEDS TRANSLATION)",
+      layout_1: "Layout without leader boards for Most Active Members(NEEDS TRANSLATION)",
+      layout_2: "Layout with(NEEDS TRANSLATION)",
+      yammer: "this is not a yammer group link(NEEDS TRANSLATION)",
+      no_parent_and_child: "Group can't have both parent and children(NEEDS TRANSLATION)",
+      no_parent: "Group cant be its own parent(NEEDS TRANSLATION)",
+      no_child: "Group cant be its own child(NEEDS TRANSLATION)",
+      bad_label: "wrong label for(NEEDS TRANSLATION)",
+      inconsistent_label: "chosen label inconsistent with labels of sub groups(NEEDS TRANSLATION)"
+    }
+    folder: {
+      no_parent: "Folder is without parent(NEEDS TRANSLATION)",
+      parent_self: "can't be itself(NEEDS TRANSLATION)"
+    }
+    field: {
+      same_parent: "Field and field user must have same parent(NEEDS TRANSLATION)",
+      max_value: "can't be greater than the max value(NEEDS TRANSLATION)",
+      min_value: "can't be less than the min value(NEEDS TRANSLATION)",
+      blank: "can't be blank(NEEDS TRANSLATION)",
+    }
+    clockwork: {
+      exist: "does not exist(NEEDS TRANSLATION)",
+    }
+    campaign: {
+      select_minimum: "Please select at least 1 group(NEEDS TRANSLATION)",
+      next_day: "must be after today(NEEDS TRANSLATION)",
+      start: "must be after start(NEEDS TRANSLATION)",
+    }
+    budget: {
+      maximum: "number of digits must not exceed 6(NEEDS TRANSLATION)",
+      closed: "Budget Item is already closed(NEEDS TRANSLATION)",
+      used: "There are still events using this budget item(NEEDS TRANSLATION)",
+      budget_set: "Please set an annual budget for this group(NEEDS TRANSLATION)",
+      annual_budget_closed: "Annual Budget is Closed(NEEDS TRANSLATION)",
+      surplus: "This budget exceeds the annual budget(NEEDS TRANSLATION)",
+      closed_expenses: "expenses still have not all been closed(NEEDS TRANSLATION)",
+      open_annual_budgets: "have not all been closed(NEEDS TRANSLATION)",
+
+    }
+    application: {
+      only_or: "Can only `or` between two queries of the same Klass(NEEDS TRANSLATION)",
+      strings_joined: "Can't `or` when joins are defined by strings(NEEDS TRANSLATION)",
+    }
+    api: {
+      exists: "Already has an API key(NEEDS TRANSLATION)",
     }

@@ -39,6 +39,7 @@ gem 'rack-cors', '~> 1.1.0'
 gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-timeout', '~> 0.4.2'
 gem 'rails', '~> 5.2.3'
+gem 'rails-i18n', '~> 5.1'
 gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false

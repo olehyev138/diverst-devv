@@ -14,7 +14,7 @@ class SegmentsField < Field
   private
 
   def init
-    self.title = 'Segments'
+    self.title = I18n.t('default_text_values.segments_fields.segments')
     self.elasticsearch_only = true
   end
 end
