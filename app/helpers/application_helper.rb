@@ -43,7 +43,7 @@ module ApplicationHelper
   end
 
   def event_color(event)
-    calendar_color = event&.group&.calendar_color.blank? ? nil : '#' + event&.group&.calendar_color
+    calendar_color = event&.group&.valid_calendar_color? ? '#' + event&.group&.calendar_color : nil
 
     result_color = calendar_color || enterprise_primary_color || '#7b77c9'
 

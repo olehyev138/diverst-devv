@@ -1,4 +1,5 @@
 class Group < BaseClass
+  REGEX_HEX_CODE = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i
   include PublicActivity::Common
   include CustomTextHelpers
 
@@ -187,6 +188,10 @@ class Group < BaseClass
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   attr_accessor :start_date, :end_date
+
+  def valid_calendar_color?
+    '#' << calendar_color =~ REGEX_HEX_CODE
+  end
 
   def logo_description
     value = "#{name} logo"
