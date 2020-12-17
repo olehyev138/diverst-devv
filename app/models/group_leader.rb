@@ -14,7 +14,7 @@ class GroupLeader < ApplicationRecord
   validates_presence_of :leader_of
   validates_presence_of :user
   validates_presence_of :user_role
-  validates :user_id, uniqueness: { message: -> (record, o) { I18n.t('errors.group.leader_uniqueness', leader_type: "#{record.leader_of_type.downcase}") },
+  validates :user_id, uniqueness: { message: -> (record, o) { I18n.t('errors.group.leader_uniqueness', leader_type: record.leader_of_type.downcase) },
                                     scope: [:leader_of_id, :leader_of_type] }
 
   scope :visible,   -> { where(visible: true) }
