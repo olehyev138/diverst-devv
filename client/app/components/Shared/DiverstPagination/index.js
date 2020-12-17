@@ -12,6 +12,9 @@ import { injectIntl, intlShape } from 'react-intl';
 import animateScrollTo from 'animated-scroll-to';
 import messages from './messages';
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 const paginationActionsStyles = theme => ({
   root: {
@@ -180,6 +183,13 @@ export function DiverstPagination(props) {
     </div>
   );
 }
+const mapStateToProps = createStructuredSelector({
+  customText: selectCustomText(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
 
 DiverstPagination.propTypes = {
   classes: PropTypes.object,
@@ -199,4 +209,5 @@ export default compose(
   withStyles(styles),
   injectIntl,
   memo,
+  withConnect,
 )(DiverstPagination);
