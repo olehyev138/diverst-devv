@@ -112,7 +112,6 @@ const GroupListSelector = (props) => {
       rowsPerPage={params.count}
       rowsPerPageOptions={[10]}
       count={props.groupTotal}
-      customTexts={props.customTexts}
       handlePagination={(payload) => {
         const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -149,7 +148,6 @@ GroupListSelector.propTypes = {
   queryScopes: PropTypes.arrayOf(PropTypes.string),
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
-  customTexts: PropTypes.object,
   open: PropTypes.bool,
   addGroup: PropTypes.func.isRequired,
   removeGroup: PropTypes.func.isRequired,

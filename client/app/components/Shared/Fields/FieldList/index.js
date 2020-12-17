@@ -224,7 +224,6 @@ export function FieldList(props, context) {
         rowsPerPage={5}
         count={props.fieldTotal}
         handlePagination={props.handlePagination}
-        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -248,7 +247,6 @@ FieldList.propTypes = {
   checkboxField: PropTypes.bool,
   dateField: PropTypes.bool,
   numberField: PropTypes.bool,
-  customTexts: PropTypes.object,
 
   toggles: PropTypes.shape({
     visible: PropTypes.bool,

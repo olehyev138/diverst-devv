@@ -127,7 +127,6 @@ export function FoldersList(props, context) {
           isLoading={props.isLoading}
           count={props.foldersTotal}
           handlePagination={props.handlePagination}
-          customTexts={props.customTexts}
         />
       )}
     </React.Fragment>

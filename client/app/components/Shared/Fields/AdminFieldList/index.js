@@ -258,7 +258,6 @@ export function AdminFieldList(props, context) {
         rowsPerPage={5}
         count={props.fieldTotal}
         handlePagination={props.handlePagination}
-        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

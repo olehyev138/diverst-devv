@@ -194,7 +194,6 @@ export function NewsFeed(props) {
         rowsPerPage={props.defaultParams.count}
         count={props.newsItemsTotal}
         handlePagination={props.handlePagination}
-        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -225,7 +224,6 @@ NewsFeed.propTypes = {
   approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
   enableLikes: PropTypes.bool,
-  customTexts: PropTypes.object,
 };
 
 export default compose(

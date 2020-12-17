@@ -246,7 +246,6 @@ export function EventsList(props) {
               page={props.params.page}
               rowsPerPage={props.params.count}
               handlePagination={props.handlePagination}
-              customTexts={props.customTexts}
             />
           )}
         </React.Fragment>
@@ -283,12 +282,10 @@ EventsList.propTypes = {
     count: PropTypes.number
   }),
   intl: intlShape.isRequired,
-  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
-  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

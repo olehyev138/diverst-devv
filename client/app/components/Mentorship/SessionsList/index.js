@@ -169,7 +169,6 @@ export function SessionsList(props, context) {
           isLoading={props.isLoading}
           count={props.sessionsTotal}
           handlePagination={props.handlePagination}
-          customTexts={props.customTexts}
         />
       )}
     </React.Fragment>

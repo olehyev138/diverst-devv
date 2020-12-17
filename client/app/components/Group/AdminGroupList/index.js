@@ -173,7 +173,6 @@ export function AdminGroupList(props, context) {
         page={defaultParams.page}
         rowsPerPage={defaultParams.count}
         count={props.groupTotal}
-        customTexts={props.customTexts}
       />
     </React.Fragment>
   );

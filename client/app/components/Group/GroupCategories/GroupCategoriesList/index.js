@@ -164,7 +164,6 @@ export function GroupCategoriesList(props, context) {
         handlePagination={props.handlePagination}
         rowsPerPage={defaultParams.count}
         count={props.groupCategoriesTotal}
-        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
