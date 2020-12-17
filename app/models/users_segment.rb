@@ -5,7 +5,7 @@ class UsersSegment < ApplicationRecord
   belongs_to :segment
 
   # validations
-  validates_uniqueness_of :user, scope: [:segment], message: 'is already a member of this segment'
+  validates_uniqueness_of :user, scope: [:segment], message: I18n.t('errors.segments.already_member')
 
   settings do
     # dynamic template for combined_info fields, maps them to keyword

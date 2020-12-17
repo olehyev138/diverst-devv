@@ -151,11 +151,12 @@ export default function DraggableGroupAdminCard({ id, text, index, moveCard, gro
           </Permission>
         </React.Fragment>
       )}
-      <Permission show={permission(group, 'add_members?')}>
+      <Permission show={permission(group, 'update?')}>
         <Button
           size='small'
           color='primary'
           onClick={() => handleDialogOpen(group.id)}
+          disabled={draggable}
         >
           <DiverstFormattedMessage {...messages.importUsers} />
         </Button>

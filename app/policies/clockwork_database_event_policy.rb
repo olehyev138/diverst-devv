@@ -1,12 +1,4 @@
-class ClockworkDatabaseEventPolicy < EnterprisePolicy
-  def index?
-    update?
-  end
-
-  def show?
-    update?
-  end
-
+class ClockworkDatabaseEventPolicy < EmailPolicy
   class Scope < Scope
     def index?
       ClockworkDatabaseEventPolicy.new(user, nil).index?

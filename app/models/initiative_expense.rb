@@ -17,7 +17,7 @@ class InitiativeExpense < ApplicationRecord
 
   def initiative_is_not_finalized
     if initiative.blank? || initiative.finished_expenses?
-      errors.add(:initiative, "Can't #{new_record? ? 'add' : 'edit'} an expense for a closed initiative")
+      errors.add(:initiative, I18n.t('errors.initiative.expense'))
     end
   end
 end

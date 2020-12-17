@@ -8,6 +8,9 @@ Diverst::Application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
+  # TODO (DI-844): - 'apple-app-site-association' is a temporary mobile appeasement -
+  get 'apple-app-site-association', to: 'mobile_support#render_aasa'
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       # manual match for enterprise update - without id
