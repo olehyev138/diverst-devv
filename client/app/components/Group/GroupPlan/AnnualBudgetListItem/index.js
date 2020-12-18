@@ -325,7 +325,7 @@ AnnualBudgetListItem.propTypes = {
   initiativesTotal: PropTypes.number,
   initiativesLoading: PropTypes.bool,
   handlePagination: PropTypes.func.isRequired,
-  handleOrdering: PropTypes.func.isRequired,
+  handleOrdering: PropTypes.func,
   customTexts: PropTypes.object,
   type: PropTypes.string,
 };

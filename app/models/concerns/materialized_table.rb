@@ -81,12 +81,22 @@ module MaterializedTable
 
     def estimate_finalized
       sql = "SET @spent = (#{BudgetUser.select("COALESCE(`spent`, 0) as spent").left_joins(:budget_user_sums).where('`id` = OLD.`id`').to_sql}); "
+      sql += "SET @count = (#{BudgetUser.select("count(id)").left_joins(:budget_user_sums).to_sql}); "
+      sql += "SET @sum = (#{BudgetUser.select("sum(id)").left_joins(:budget_user_sums).to_sql}); "
       # UNCLOSED
       sql += 'IF COALESCE(OLD.`finished_expenses`, FALSE) AND NOT COALESCE(NEW.`finished_expenses`, FALSE) THEN '
       sql += 'SET @new_reserved = @old_reserved + OLD.`estimated` - @spent; '
       sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures - @spent; ' if relevant_columns.include?('finalized_expenditures')
       # CLOSED
       sql += 'ELSEIF NOT COALESCE(OLD.`finished_expenses`, FALSE) AND COALESCE(NEW.`finished_expenses`, FALSE) THEN '
+      sql += 'INSERT INTO `prints` VALUES(OLD.`id`); '
+      sql += 'INSERT INTO `prints` VALUES(@old_reserved); '
+      sql += 'INSERT INTO `prints` VALUES(OLD.`estimated`); '
+      sql += 'INSERT INTO `prints` VALUES(@count); '
+      sql += 'INSERT INTO `prints` VALUES(@sum); '
+      sql += 'INSERT INTO `prints` VALUES(@spent); '
+      sql += 'INSERT INTO `prints` VALUES(@old_finalized_expenditures); '
+      sql += 'INSERT INTO `prints` VALUES("================================"); '
       sql += 'SET @new_reserved = @old_reserved - OLD.`estimated` + @spent; '
       sql += 'SET @new_finalized_expenditures = @old_finalized_expenditures + @spent; ' if relevant_columns.include?('finalized_expenditures')
       sql += 'END IF; '

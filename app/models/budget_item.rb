@@ -32,7 +32,7 @@ class BudgetItem < ApplicationRecord
         'COALESCE(`user_estimates`, 0) as user_estimates',
         'COALESCE(`finalized_expenditures`, 0) as finalized_expenditures',
         'COALESCE(`estimated_amount` - `spent`, 0) as unspent',
-        'IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0, COALESCE(`estimated_amount` - `reserved`, 0)) as available'
+        'IF((`budget_id` IS NULL OR `is_done` OR NOT `budgets`.`is_approved`) = TRUE, 0, COALESCE(`estimated_amount`, 0) - COALESCE(`reserved`, 0)) as available'
       ).joins(:budget).left_joins(:budget_item_sums)
   end
 
