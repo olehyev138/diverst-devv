@@ -13,7 +13,8 @@ import { compose } from 'redux';
 
 import {
   Grid, Button, Box, Card, CardContent, TextField, Checkbox, FormControlLabel, CardActions,
-  Typography } from '@material-ui/core';
+  Typography, Switch
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -145,37 +146,31 @@ export function BudgetInitializationForm(props, context) {
                 onChange={value => setFieldValue('type', value)}
               />
               <Box mb={2} />
-              <Grid container alignContent='space-between' alignItems='center' spacing={2}>
-                <Grid item xs={10}>
-                  <Select
-                    name='year'
-                    id='year'
-                    fullWidth
+              <Select
+                name='year'
+                id='year'
+                fullWidth
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.initializationForm.year} />}
+                value={values.year}
+                options={yearOptions}
+                onChange={value => setFieldValue('year', value)}
+              />
+              <FormControlLabel
+                control={(
+                  <Field
+                    component={Switch}
+                    onChange={handleChange}
+                    id='with_quarter'
+                    name='with_quarter'
                     margin='normal'
-                    label={<DiverstFormattedMessage {...messages.initializationForm.year} />}
-                    value={values.year}
-                    options={yearOptions}
-                    onChange={value => setFieldValue('year', value)}
-                  />
-                </Grid>
-                <Grid item xs='auto'>
-                  <FormControlLabel
-                    control={(
-                      <Field
-                        component={Checkbox}
-                        onChange={handleChange}
-                        id='with_quarter'
-                        name='with_quarter'
-                        margin='normal'
-                        label={<DiverstFormattedMessage {...messages.initializationForm.withQuarter} />}
-                        value={values.with_quarter}
-                        checked={values.with_quarter}
-                      />
-                    )}
                     label={<DiverstFormattedMessage {...messages.initializationForm.withQuarter} />}
+                    value={values.with_quarter}
+                    checked={values.with_quarter}
                   />
-                </Grid>
-              </Grid>
+                )}
+                label={<DiverstFormattedMessage {...messages.initializationForm.withQuarter} />}
+              />
               {values.with_quarter && (
                 <React.Fragment>
                   <Box mb={2} />
