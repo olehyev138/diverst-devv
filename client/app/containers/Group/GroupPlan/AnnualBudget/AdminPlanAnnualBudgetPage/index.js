@@ -25,7 +25,7 @@ import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-import { selectEnterprise, selectPermissions, selectBudgetPeriod, selectCustomText } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions, selectBudgetPeriod, selectCustomText, selectBudgetType } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
@@ -90,6 +90,7 @@ export function AdminAnnualBudgetPage(props) {
       handleVisitEditPage={props.handleVisitEditPage}
       permissions={props.permissions}
       budgetPeriod={props.budgetPeriod}
+      budgetType={props.budgetType}
       customTexts={props.customTexts}
     />
   );
@@ -111,6 +112,7 @@ AdminAnnualBudgetPage.propTypes = {
   resetAnnualBudgetBegin: PropTypes.func,
   permissions: PropTypes.object,
   budgetPeriod: PropTypes.array,
+  budgetType: PropTypes.string,
   customTexts: PropTypes.object,
 };
 
@@ -123,6 +125,7 @@ const mapStateToProps = createStructuredSelector({
   budgetHasChanged: budgetHasChanged(),
   permissions: selectPermissions(),
   budgetPeriod: selectBudgetPeriod(),
+  budgetType: selectBudgetType(),
   customTexts: selectCustomText()
 });
 

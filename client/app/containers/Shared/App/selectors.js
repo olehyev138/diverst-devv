@@ -29,6 +29,11 @@ const selectBudgetPeriod = () => createSelector(
   globalState => globalState.data?.current_budget_period
 );
 
+const selectBudgetType = () => createSelector(
+  selectGlobal,
+  globalState => globalState.data?.current_aggregate_type
+);
+
 const selectToken = () => createSelector(
   selectGlobal,
   globalState => globalState.token
@@ -103,5 +108,5 @@ export {
   selectUser, selectIsFetchingUserData, selectFetchUserDataError,
   selectCustomText, selectMentoringInterests, selectMentoringTypes,
   selectFindEnterpriseError, selectPermissions, selectEnterprisePrivacyMessage,
-  selectAdminDrawerOpen, selectBudgetPeriod,
+  selectAdminDrawerOpen, selectBudgetPeriod, selectBudgetType
 };

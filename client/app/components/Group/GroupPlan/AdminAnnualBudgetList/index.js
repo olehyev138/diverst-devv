@@ -6,7 +6,7 @@
  */
 
 import React, {
-  memo, useMemo
+  memo, useMemo, useCallback
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -60,6 +60,26 @@ export function AnnualBudgetList(props, context) {
     });
   };
 
+  const annualRowRender = useCallback(
+    rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet, props.customTexts),
+    [props.intl]
+  );
+
+  const leftoverRowRender = useCallback(
+    rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency),
+    [props.intl]
+  );
+
+  const approvedRowRender = useCallback(
+    rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency),
+    [props.intl]
+  );
+
+  const rowStyle = useCallback(
+    (value, rowData) => (props.budgetType !== 'region' || rowData.parent_coded_id) ? {} : { fontWeight: 'bold' },
+    [props.budgetType]
+  );
+
   const columns = [
     {
       title: intl.formatMessage(listMessages.columns.group, props.customTexts),
@@ -70,19 +90,22 @@ export function AnnualBudgetList(props, context) {
       title: intl.formatMessage(listMessages.columns.budget, props.customTexts),
       field: 'annual_budget',
       sorting: false,
-      render: rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet, props.customTexts),
+      cellStyle: rowStyle,
+      render: annualRowRender,
     },
     {
       title: intl.formatMessage(listMessages.columns.leftover, props.customTexts),
       field: 'annual_budget_leftover',
       sorting: false,
-      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency)
+      cellStyle: rowStyle,
+      render: leftoverRowRender
     },
     {
       title: intl.formatMessage(listMessages.columns.approved, props.customTexts),
       field: 'annual_budget_approved',
       sorting: false,
-      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency)
+      cellStyle: rowStyle,
+      render: approvedRowRender
     },
   ];
 
@@ -159,6 +182,7 @@ AnnualBudgetList.propTypes = {
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
   budgetPeriod: PropTypes.array.isRequired,
+  budgetType: PropTypes.string,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func

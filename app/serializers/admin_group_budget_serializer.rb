@@ -1,7 +1,7 @@
 class AdminGroupBudgetSerializer < ApplicationRecordSerializer
   attributes :id, :coded_id, :permissions
 
-  attributes_with_permission :name, :short_description, :description, :parent_id, :parent_coded_id,
+  attributes_with_permission :name, :short_description, :description, :parent_id, :parent_coded_id, :budget_type,
                              :private, :enterprise_id, :children, :annual_budget_leftover, :budget_manager_id,
                              :annual_budget, :annual_budget_approved, :annual_budget_available, :aggregate, if: :show?
 
