@@ -28,7 +28,7 @@ import {
   selectIsFetchingUpdates,
   selectHasChanged,
 } from 'containers/Shared/Update/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getUpdatesBegin,
   deleteUpdateBegin,

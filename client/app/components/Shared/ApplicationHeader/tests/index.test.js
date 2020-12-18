@@ -1,9 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 import 'utils/mockReactRouterHooks';
+import { intl } from 'tests/mocks/react-intl';
 
 import { StyledApplicationHeader } from 'components/Shared/ApplicationHeader/index';
+
+loadTranslation('./app/translations/en.json');
 const ApplicationHeaderNaked = unwrap(StyledApplicationHeader);
 
 /**
@@ -27,13 +30,13 @@ const props = {
 describe('<ApplicationHeader />', () => {
   it('should not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<ApplicationHeaderNaked {...props} />);
+    const wrapper = shallowWithIntl(<ApplicationHeaderNaked intl={intl} {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('should render and match the snapshot', () => {
-    const wrapper = shallow(<ApplicationHeaderNaked {...props} />);
+    const wrapper = shallowWithIntl(<ApplicationHeaderNaked intl={intl} {...props} />);
 
     expect(wrapper).toMatchSnapshot();
   });

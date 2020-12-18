@@ -46,6 +46,26 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
+  graphs: {
+    id: `${scope}.graph.title`,
+  },
+  back: {
+    id: `${scope}.back`,
+  },
+  headers: {
+    invitations: {
+      id: `${scope}.header.invitation`,
+    },
+    response: {
+      id: `${scope}.header.response`,
+    },
+    rate: {
+      id: `${scope}.header.rate`,
+    },
+    na: {
+      id: `${scope}.header.na`
+    }
+  },
   form: {
     header: {
       create: {

@@ -8,10 +8,13 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-
+import { injectIntl, intlShape } from 'react-intl';
 import animateScrollTo from 'animated-scroll-to';
-
+import messages from './messages';
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 const paginationActionsStyles = theme => ({
   root: {
@@ -22,6 +25,7 @@ const paginationActionsStyles = theme => ({
 
 function PaginationActions(props) {
   const theme = useTheme();
+
   const { classes, count, page, rowsPerPage, onChangePage } = props;
 
   const handleFirstPageButtonClick = event => onChangePage(event, 0);
@@ -37,28 +41,28 @@ function PaginationActions(props) {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label='first page'
+        aria-label={props.intl.formatMessage(messages.first)}
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label='previous page'
+        aria-label={props.intl.formatMessage(messages.prev)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label='next page'
+        aria-label={props.intl.formatMessage(messages.next)}
       >
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label='last page'
+        aria-label={props.intl.formatMessage(messages.last)}
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
@@ -72,9 +76,13 @@ PaginationActions.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
+  intl: intlShape.isRequired,
 };
 
-const PaginationActionsComponent = withStyles(paginationActionsStyles)(PaginationActions);
+const PaginationActionsComponent = compose(
+  withStyles(paginationActionsStyles),
+  injectIntl,
+)(PaginationActions);
 
 const styles = theme => ({
   paginationContainer: {
@@ -161,19 +169,27 @@ export function DiverstPagination(props) {
         page={page}
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
         rowsPerPage={rowsPerPage || 0}
+        intl={props.intl}
         count={props.count || 0}
         onChangePage={props.onChangePage || handleChangePage}
         onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
         backIconButtonProps={{
-          'aria-label': 'Previous Page',
+          'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
         }}
         nextIconButtonProps={{
-          'aria-label': 'Next Page',
+          'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
         }}
       />
     </div>
   );
 }
+const mapStateToProps = createStructuredSelector({
+  customText: selectCustomText(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
 
 DiverstPagination.propTypes = {
   classes: PropTypes.object,
@@ -185,9 +201,13 @@ DiverstPagination.propTypes = {
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
   isLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   withStyles(styles),
+  injectIntl,
   memo,
+  withConnect,
 )(DiverstPagination);

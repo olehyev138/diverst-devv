@@ -10,6 +10,11 @@ export const scope = 'diverst.containers.RequestList';
 export const snackbar = 'diverst.snackbars.Mentorship.Requests';
 
 export default defineMessages({
+  form: {
+    close: {
+      id: `${scope}.form.close`
+    }
+  },
   columns: {
     notes: {
       id: `${scope}.column.notes`

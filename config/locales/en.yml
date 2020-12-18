@@ -164,15 +164,13 @@ en:
     group: {
       deleted: "Deleted group",
       unknown: "Unknown",
-      group_leader_uniqueness_1: "already exists as a ",
-      group_leader_uniqueness_2: " leader",
+      leader_uniqueness: "already exists as a %{leader_type} leader",
       user_not_member: "Selected user is not a member of this group",
       user_not_member_region: "Selected user is not a member of this region's parent group",
       category_in_use: "Can't delete category in use",
       layout_0: "Default layout",
       layout_1: "Layout without leader boards for Most Active Members",
-      layout_2_1: "Layout with ",
-      layout_2_2: " on top of group leaders",
+      layout_2: "Layout with %{sub_ergs} on top of group leaders",
       yammer: "this is not a yammer group link",
       no_parent_and_child: "Group can't have both parent and children",
       no_parent: "Group cant be its own parent",
@@ -182,6 +180,7 @@ en:
     }
     folder: {
       no_parent: "Folder is without parent",
+      parent_self: "can't be itself",
     }
     field: {
       same_parent: "Field and field user must have same parent",

@@ -142,7 +142,6 @@ UpdateList.propTypes = {
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
-
   textUpdate: PropTypes.bool,
   selectUpdate: PropTypes.bool,
   checkboxUpdate: PropTypes.bool,

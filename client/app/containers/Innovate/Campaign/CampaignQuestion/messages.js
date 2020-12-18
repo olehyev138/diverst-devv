@@ -13,6 +13,9 @@ export default defineMessages({
   new: {
     id: `${scope}.form.button.new`,
   },
+  deleteQuestionConfirm: {
+    id: `${scope}.delete_question_confirm`,
+  },
   edit: {
     id: `${scope}.form.button.edit`,
   },

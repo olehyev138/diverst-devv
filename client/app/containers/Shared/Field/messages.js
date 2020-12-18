@@ -10,6 +10,20 @@ export const scope = 'diverst.containers.Field';
 export const snackbar = 'diverst.snackbars.Shared.Field';
 
 export default defineMessages({
+  form: {
+    hide: {
+      id: `${scope}.form.hide`,
+    },
+    show: {
+      id: `${scope}.form.show`,
+    },
+    required: {
+      id: `${scope}.form.required`,
+    },
+    edit: {
+      id: `${scope}.form.edit`,
+    },
+  },
   newTextField: {
     id: `${scope}.index.button.textField.new`,
   },

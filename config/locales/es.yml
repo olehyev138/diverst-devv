@@ -120,15 +120,13 @@ es:
     group: {
       deleted: "Deleted group(NEEDS TRANSLATION)",
       unknown: "Unknown(NEEDS TRANSLATION)",
-      group_leader_uniqueness_1: "already exists as a (NEEDS TRANSLATION)",
-      group_leader_uniqueness_2: " leader(NEEDS TRANSLATION)",
+      leader_uniqueness: "already exists as a %{leader_type} leader (NEEDS TRANSLATION)",
       user_not_member: "Selected user is not a member of this group(NEEDS TRANSLATION)",
       user_not_member_region: "Selected user is not a member of this region's parent group(NEEDS TRANSLATION)",
       category_in_use: "Can't delete category in use(NEEDS TRANSLATION)",
       layout_0: "Default layout(NEEDS TRANSLATION)",
       layout_1: "Layout without leader boards for Most Active Members(NEEDS TRANSLATION)",
-      layout_2_1: "Layout with(NEEDS TRANSLATION)",
-      layout_2_2: "on top of group leaders(NEEDS TRANSLATION)",
+      layout_2: "Layout with(NEEDS TRANSLATION)",
       yammer: "this is not a yammer group link(NEEDS TRANSLATION)",
       no_parent_and_child: "Group can't have both parent and children(NEEDS TRANSLATION)",
       no_parent: "Group cant be its own parent(NEEDS TRANSLATION)",
@@ -138,6 +136,7 @@ es:
     }
     folder: {
       no_parent: "Folder is without parent(NEEDS TRANSLATION)",
+      parent_self: "can't be itself(NEEDS TRANSLATION)"
     }
     field: {
       same_parent: "Field and field user must have same parent(NEEDS TRANSLATION)",

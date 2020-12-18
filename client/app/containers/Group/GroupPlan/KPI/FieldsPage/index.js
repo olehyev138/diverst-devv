@@ -30,7 +30,7 @@ import {
   selectCommitSuccess,
   selectHasChanged,
 } from 'containers/Shared/Field/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin

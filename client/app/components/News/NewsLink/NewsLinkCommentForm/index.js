@@ -28,7 +28,7 @@ export function NewsLinkCommentFormInner({ classes, handleSubmit, handleChange, 
           <Typography
             paragraph
           >
-            Leave a Comment
+            <DiverstFormattedMessage {...messages.leave_comment} />
           </Typography>
           <Field
             component={TextField}

@@ -139,10 +139,10 @@ RSpec.describe User do
         it { expect(user).to have_many(:invitations).class_name('CampaignInvitation').dependent(:destroy) }
         it { expect(user).to have_many(:campaigns).through(:invitations) }
         it { expect(user).to have_many(:news_links).through(:groups) }
-        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id).dependent(:nullify) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:nullify) }
         it { expect(user).to have_many(:initiative_users).dependent(:destroy) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
         it { expect(user).to have_many(:initiative_invitees).dependent(:destroy) }
@@ -170,7 +170,7 @@ RSpec.describe User do
         it { expect(user).to have_many(:mentoring_types).through('mentorship_types') }
         it { expect(user).to have_many(:mentorship_proposals).with_foreign_key('sender_id').class_name('MentoringRequest') }
         it { expect(user).to have_many(:mentorship_requests).with_foreign_key('receiver_id').class_name('MentoringRequest') }
-        it { expect(user).to have_many(:own_messages).with_foreign_key(:owner_id).class_name('GroupMessage') }
+        it { expect(user).to have_many(:own_messages).with_foreign_key(:owner_id).class_name('GroupMessage').dependent(:nullify) }
         it { expect(user).to have_many(:likes).dependent(:destroy) }
         it { expect(user).to have_many(:csv_files) }
         it { expect(user).to have_many(:urls_visited).dependent(:destroy).class_name('PageVisitationData') }
@@ -1298,9 +1298,7 @@ RSpec.describe User do
       expect { AnswerUpvote.find(answer_upvote.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { AnswerComment.find(answer_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignInvitation.find(campaign_invitation.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { NewsLink.find(news_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { GroupMessageComment.find(group_message_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { SocialLink.find(social_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeUser.find(initiative_user.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeInvitee.find(initiative_invitee.id) }.to raise_error(ActiveRecord::RecordNotFound)
       # expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)

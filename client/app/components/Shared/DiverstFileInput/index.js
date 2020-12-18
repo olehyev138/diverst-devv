@@ -281,7 +281,7 @@ export function DiverstFileInput(props) {
                                 <Typography display='inline' variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
                                   <IconButton
                                     className={classes.deleteButton}
-                                    aria-label='delete'
+                                    aria-label={intl.formatMessage(messages.delete)}
                                     size='small'
                                     onClick={() => {
                                       setNotAcceptedFile(false);

@@ -217,6 +217,7 @@ class Group < ApplicationRecord
   scope :possible_children, -> (id) { except_id(id).where(parent_id: [nil, id.presence]).no_children }
   scope :all_children,      -> { where.not(parent_id: nil) }
   scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
+  scope :children_of,       -> (id) { where(parent_id: id) }
 
   # Regions
   # Pass a group ID to get all the children of the group that are not in regions,
@@ -324,7 +325,7 @@ class Group < ApplicationRecord
     {
       'layout_0' => I18n.t('errors.group.layout_0'),
       'layout_1' => I18n.t('errors.group.layout_1'),
-      'layout_2' => I18n.t('errors.group.layout_2_1') + "#{c_t(:sub_erg).pluralize}" + I18n.t('errors.group.layout_2_2')
+      'layout_2' => I18n.t('errors.group.layout_2', sub_ergs: "#{c_t(:sub_erg).pluralize}")
     }
   end
 

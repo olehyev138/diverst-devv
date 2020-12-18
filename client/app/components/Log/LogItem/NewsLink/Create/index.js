@@ -6,8 +6,7 @@ import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import { DateTime } from 'luxon';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { Link, Avatar, Box } from '@material-ui/core';
-import DiverstImg from 'components/Shared/DiverstImg';
+import { Link, Box } from '@material-ui/core';
 
 // This component for displaying log owner
 export function NewsLinkCreate(props) {

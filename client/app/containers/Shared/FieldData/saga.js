@@ -14,18 +14,19 @@ import {
   updateFieldDataSuccess, updateFieldDataError,
 } from './actions';
 
+import messages from 'containers/Shared/FieldData/messages';
+
 export function* updateFieldData(action) {
   try {
     const payload = { field_data: { field_data: action.payload.field_data } };
     const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
 
     yield put(updateFieldDataSuccess());
-    yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldDataError(err));
 
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update fields', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 

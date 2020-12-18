@@ -26,7 +26,6 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/messages';
-import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
@@ -44,6 +43,7 @@ import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 import { selectIsCommitting } from 'containers/Event/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
@@ -285,7 +285,7 @@ EventsList.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  isCommitting: selectIsCommitting()
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

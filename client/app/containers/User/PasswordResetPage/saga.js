@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import messages from './messages';
 
 import {
   REQUEST_PASSWORD_RESET_BEGIN,
@@ -23,11 +24,10 @@ export function* requestPasswordReset(action) {
     const response = yield call(api.users.requestPasswordReset.bind(api.users), action.payload);
 
     yield put(requestPasswordResetSuccess({}));
-    yield put(showSnackbar({ message: 'Password Reset Email Sent', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.emailSent, options: { variant: 'success' } }));
   } catch (err) {
     yield put(requestPasswordResetError(err));
 
-    // TODO: intl message
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
   }
 }
@@ -40,7 +40,7 @@ export function* getUserByToken(action) {
   } catch (err) {
     yield put(getUserByTokenError(err));
 
-    // TODO: intl message
+
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
     yield put(push(ROUTES.session.login.path()));
   }
@@ -54,11 +54,11 @@ export function* submitPassword(action) {
     const response = yield call(api.users.passwordReset.bind(api.users), payload);
 
     yield put(submitPasswordSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully changed password', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.passwordChange, options: { variant: 'success' } }));
     yield put(push(ROUTES.session.login.path()));
   } catch (err) {
     yield put(submitPasswordError(err));
-    // TODO: intl message
+
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
     if (err.response.status === 400)
       yield put(push(ROUTES.session.login.path()));

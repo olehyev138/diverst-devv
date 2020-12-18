@@ -23,7 +23,7 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import { getAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/actions';
 import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import annualReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
 

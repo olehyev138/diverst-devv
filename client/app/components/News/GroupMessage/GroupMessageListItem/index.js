@@ -67,12 +67,11 @@ export function GroupMessageListItem(props) {
     setPinned(false);
   }
 
-  // TODO : Add customText to intl.formatMessage
   return (
     <React.Fragment>
       <CardHeader
         className={classes.cardHeader}
-        avatar={(
+        avatar={groupMessage.owner && (
           <Avatar>
             { groupMessage.owner.avatar ? (
               <DiverstImg
@@ -94,11 +93,13 @@ export function GroupMessageListItem(props) {
           {groupMessage.content}
         </Typography>
         <Grid container justify='space-between'>
-          <Grid item>
-            <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
-              {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
-            </Typography>
-          </Grid>
+          {groupMessage.owner && (
+            <Grid item>
+              <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+                {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
+              </Typography>
+            </Grid>
+          )}
           <Grid item>
             <Grid container>
               <Grid item>
@@ -109,6 +110,7 @@ export function GroupMessageListItem(props) {
                     totalLikes={newsItem.total_likes}
                     likeNewsItemBegin={props.likeNewsItemBegin}
                     unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                    customTexts={props.customTexts}
                   />
                 )}
                 {props.pinNewsItemBegin && (

@@ -103,7 +103,7 @@ export function CampaignQuestionsList(props) {
             tooltip: intl.formatMessage(messages.question.delete, props.customTexts),
             onClick: (_, rowData) => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete question?'))
+              if (confirm(intl.formatMessage(messages.deleteQuestionConfirm, props.customTexts)))
                 props.deleteQuestionBegin({ campaignId: props.campaignId, questionId: rowData.id });
             },
             disabled: !permission(rowData, 'destroy?')

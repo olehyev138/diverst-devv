@@ -10,6 +10,9 @@ export const scope = 'diverst.containers.MetricsDashboard';
 export const snackbar = 'diverst.snackbars.Analyze.Dashboards';
 
 export default defineMessages({
+  delete_confirm: {
+    id: `${scope}.delete_confirm`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },

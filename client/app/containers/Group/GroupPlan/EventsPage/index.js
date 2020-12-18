@@ -14,6 +14,7 @@ import saga from 'containers/Group/Outcome/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
@@ -68,6 +69,7 @@ export function EventsPage(props) {
       handlePagination={handlePagination}
       params={params}
       rowsPerPageOptions={[1, 2, 3, 5]}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -79,12 +81,14 @@ EventsPage.propTypes = {
   outcomesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.object,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   outcomes: selectPaginatedOutcomes(),
   outcomesTotal: selectOutcomesTotal(),
   isLoading: selectIsLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

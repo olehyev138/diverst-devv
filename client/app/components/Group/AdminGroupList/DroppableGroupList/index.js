@@ -27,6 +27,7 @@ export function DroppableGroupList(props) {
         classes={props.classes}
         draggable={props.draggable}
         importAction={props.importAction}
+        handleParentExpand={props.handleParentExpand}
         deleteGroupBegin={props.deleteGroupBegin}
         intl={props.intl}
         customTexts={props.customTexts}
@@ -58,6 +59,7 @@ DroppableGroupList.propTypes = {
   updateGroupPositionBegin: PropTypes.func,
   currentPage: PropTypes.number,
   importAction: PropTypes.func,
+  handleParentExpand: PropTypes.func,
   deleteGroupBegin: PropTypes.func,
   draggable: PropTypes.bool,
   rowsPerPage: PropTypes.number,

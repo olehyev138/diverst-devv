@@ -12,13 +12,15 @@ import { compose } from 'redux';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 
 import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 
 import { formatColor } from 'utils/selectorHelpers';
+
+import { injectIntl, intlShape } from 'react-intl';
 
 // Date/time pickers
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -115,7 +117,7 @@ export function ThemeProvider(props) {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <SnackbarProviderWrapper>
+      <SnackbarProviderWrapper customTexts={props.customTexts} intl={props.intl}>
         <MuiPickersUtilsProvider utils={LuxonUtils}>
           <App />
         </MuiPickersUtilsProvider>
@@ -126,10 +128,13 @@ export function ThemeProvider(props) {
 
 ThemeProvider.propTypes = {
   enterprise: PropTypes.object,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
+  customTexts: selectCustomText(),
 });
 
 const withConnect = connect(
@@ -138,5 +143,6 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(ThemeProvider);

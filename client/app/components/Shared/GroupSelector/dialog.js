@@ -148,7 +148,6 @@ GroupListSelector.propTypes = {
   queryScopes: PropTypes.arrayOf(PropTypes.string),
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
-
   open: PropTypes.bool,
   addGroup: PropTypes.func.isRequired,
   removeGroup: PropTypes.func.isRequired,
