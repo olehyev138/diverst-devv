@@ -8,7 +8,7 @@ class BudgetUserSerializer < ApplicationRecordSerializer
   end
 
   def expenses
-    object.spent.map do |expense|
+    object.expenses.map do |expense|
       InitiativeExpenseSerializer.new(expense, **instance_options, ignore_budget_user: true).as_json
     end
   end

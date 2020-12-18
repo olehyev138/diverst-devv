@@ -14,7 +14,7 @@ class BudgetUser < ApplicationRecord
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_one :budget_user_sums, class_name: 'BudgetUserSums'
 
-  validate -> { allocate_budget_funds unless check_if_available }
+  # validate -> { allocate_budget_funds unless check_if_available }
 
   validates :budget_item_id,
             presence: true,
