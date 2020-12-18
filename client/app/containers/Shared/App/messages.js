@@ -185,6 +185,17 @@ export default defineMessages({
       id: `${scope}.person.email`
     }
   },
+  budgets: {
+    quarterAbbreviation: {
+      id: `${scope}.budgets.quarterAbbreviation`
+    },
+    yearAbbreviation: {
+      id: `${scope}.budgets.yearAbbreviation`
+    },
+    yearAndQuarter: {
+      id: `${scope}.budgets.yearAndQuarter`
+    }
+  },
   header: {
     dashboard: {
       id: `${scope}.header.dashboard`

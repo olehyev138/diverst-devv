@@ -24,6 +24,7 @@ import { Formik, Form, Field } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import { useBudgetFormatter } from 'utils/customHooks/budgetTitleFormatter';
 
 const { adminList: listMessages } = messages;
 
@@ -45,6 +46,8 @@ const styles = theme => ({
 export function BudgetInitializationForm(props, context) {
   const { classes, intl } = props;
 
+  const { formatQuarter, formatYear, formatYearAndQuarter } = useBudgetFormatter(intl);
+
   const budgetTypesOption = useMemo(() => [
     { label: props.intl.formatMessage(messages.initializationForm.parentType, props.customTexts), value: 'parent' },
     { label: props.intl.formatMessage(messages.initializationForm.regionType, props.customTexts), value: 'region' },
@@ -59,16 +62,15 @@ export function BudgetInitializationForm(props, context) {
     return [
       { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customTexts), value: null }
     ].concat(
-      yearRange.map(year => ({ label: year, value: year }))
+      yearRange.map(year => ({ label: formatYear(year), value: year }))
     );
-  }, []);
+  }, [intl]);
 
   const quarterOptions = useMemo(() => [
     { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customTexts), value: null }
   ].concat(
-    [...Array(4).keys()].map(a => ({ label: a + 1, value: a + 1 }))
-  ),
-  []);
+    [...Array(4).keys()].map(a => ({ label: formatQuarter(a + 1), value: a + 1 }))
+  ), [intl]);
 
   return (
     <Formik
