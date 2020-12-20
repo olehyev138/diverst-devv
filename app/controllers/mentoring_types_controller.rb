@@ -35,10 +35,10 @@ class MentoringTypesController < ApplicationController
     authorize MentoringType
 
     if @type.update(type_params)
-      flash[:notice] = 'The type was updated'
+      flash[:notice] = 'The mentoring type was updated'
       redirect_to action: :index
     else
-      flash[:alert] = 'The type was not updated. Please fix the errors'
+      flash[:alert] = 'The mentoring type was not updated. Please fix the errors'
       render :edit
     end
   end
