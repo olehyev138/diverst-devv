@@ -65,6 +65,10 @@ const GroupListSelector = (props) => {
     groupSearchAction('', { ...params, page: 0, query_scopes: union(props.queryScopes, [['children_of', parentData?.id]]) }, false);
   }, [parentData?.id]);
 
+  useEffect(() => {
+    setParams({ ...params, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
+  }, [props.queryScopes, props.dialogQueryScopes]);
+
   const header = (
     <Typography color='secondary' variant='body1'>
       <DiverstFormattedMessage {...messages.selectorDialog.subTitle} />
