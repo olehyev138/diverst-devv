@@ -32,6 +32,7 @@ import Profile from 'components/Mentorship/MentorshipUser';
 import messages from 'containers/Mentorship/Requests/messages';
 import appMessages from 'containers/Shared/App/messages';
 import mentorMessages from 'containers/Mentorship/messages';
+import DiverstFormattedMessage from '../../Shared/DiverstFormattedMessage';
 
 
 const styles = theme => ({
@@ -197,7 +198,7 @@ export function MentorRequestList(props, context) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleProfileClose} color='primary'>
-            Close
+            <DiverstFormattedMessage {...messages.form.close} />
           </Button>
         </DialogActions>
       </Dialog>

@@ -26,6 +26,7 @@ import {
   selectEnterprise,
   selectUser,
   selectPermissions,
+  selectCustomText
 } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -37,6 +38,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   grow: {
@@ -184,7 +186,7 @@ export function ApplicationHeader(props) {
           { isAdmin
             ? (
               <IconButton
-                aria-label='Open drawer'
+                aria-label={props.intl.formatMessage(messages.openDrawer, props.customTexts)}
                 edge='start'
                 onClick={handleDrawerToggle}
                 className={classNames(classes.drawerToggle, classes.whiteButton)}
@@ -284,6 +286,8 @@ ApplicationHeader.propTypes = {
   handleVisitAdmin: PropTypes.func,
   handleVisitHome: PropTypes.func,
   toggleAdminDrawer: PropTypes.func,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 const mapDispatchToProps = {
@@ -297,6 +301,7 @@ const mapStateToProps = createStructuredSelector({
   group: selectGroup(),
   region: selectRegion(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const withConnect = connect(
@@ -308,6 +313,7 @@ export const StyledApplicationHeader = withStyles(styles)(ApplicationHeader);
 
 export default compose(
   withConnect,
+  injectIntl,
   withStyles(styles),
   memo,
 )(ApplicationHeader);

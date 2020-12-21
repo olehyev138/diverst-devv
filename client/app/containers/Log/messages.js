@@ -5,12 +5,23 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { scope } from '../Innovate/Campaign/messages';
 
 export const snackbar = 'diverst.snackbars.Log';
-
+export const scope = 'diverst.containers.Log';
 
 export default defineMessages({
+  from: {
+    id: `${scope}.from`
+  },
+  to: {
+    id: `${scope}.to`
+  },
+  filterByGroup: {
+    id: `${scope}.filter_by_group`
+  },
+  filter: {
+    id: `${scope}.filter`
+  },
   snackbars: {
     errors: {
       logs: {

@@ -11,6 +11,8 @@ import reducer from './reducer';
 import saga from './saga';
 import { redirectAction } from 'utils/reduxPushHelper';
 
+import messages from '../messages';
+
 import {
   selectToken,
   selectResponse,
@@ -43,7 +45,7 @@ export function PollResponsePage(props) {
       });
     else {
       props.showSnackbar({
-        message: 'You need nave an invitation answer this poll',
+        message: messages.errors.invitation,
         options: { variant: 'warning' }
       });
       props.redirectAction(ROUTES.user.home.path());

@@ -31,7 +31,7 @@ import {
   selectMentorshipsTotal,
   selectIsFetchingMentorships,
 } from 'containers/Mentorship/Mentoring/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getMentorsBegin,
   getAvailableMentorsBegin,

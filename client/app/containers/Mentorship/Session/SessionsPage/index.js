@@ -14,7 +14,7 @@ import {
   selectIsFetchingSessions,
   selectHasChanged
 } from 'containers/Mentorship/Session/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getHostingSessionsBegin, getParticipatingSessionsBegin,
   sessionsUnmount, deleteSessionBegin,

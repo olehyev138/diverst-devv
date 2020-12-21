@@ -16,6 +16,7 @@ import {
   selectDownloadData,
 } from 'containers/User/selectors';
 import { getUserDownloadsBegin, getUserDownloadDataBegin, userUnmount } from 'containers/User/actions';
+import { selectCustomText } from '../../Shared/App/selectors';
 
 import DownloadsList from 'components/User/DownloadsList';
 
@@ -58,6 +59,7 @@ export function UserDownloadsPage(props) {
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -74,6 +76,7 @@ UserDownloadsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -82,6 +85,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoadingDownloads(),
   isDownloadingData: selectIsDownloadingData(),
   downloadData: selectDownloadData(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

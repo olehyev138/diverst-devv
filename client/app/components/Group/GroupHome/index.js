@@ -63,6 +63,7 @@ export function GroupHome({ classes, ...props }) {
         <EventsPage
           currentGroup={props.currentGroup}
           listComponent={EventsList}
+          customTexts={props.customTexts}
           readonly
           loaderProps={{
             transitionProps: {

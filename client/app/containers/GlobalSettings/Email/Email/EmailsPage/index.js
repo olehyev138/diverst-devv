@@ -17,7 +17,7 @@ import {
   selectIsFetchingEmails,
   selectEmailsTotal
 } from 'containers/GlobalSettings/Email/Email/selectors';
-import { selectPermissions, selectUser } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 
 import {
   emailsUnmount, getEmailsBegin,
@@ -77,6 +77,7 @@ export function EmailsPage(props) {
       emailsTotal={props.emailsTotal}
       links={links}
       isLoading={isFetching}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -88,6 +89,7 @@ EmailsPage.propTypes = {
   emails: PropTypes.array,
   emailsTotal: PropTypes.number,
   isFetching: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -96,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   emailsTotal: selectEmailsTotal(),
   isFetching: selectIsFetchingEmails(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

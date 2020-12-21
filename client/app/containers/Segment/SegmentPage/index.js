@@ -82,6 +82,8 @@ export function SegmentPage(props) {
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}
+        intl={intl}
+        customTexts={props.customTexts}
       />
       <Box mb={4} />
       <Divider />

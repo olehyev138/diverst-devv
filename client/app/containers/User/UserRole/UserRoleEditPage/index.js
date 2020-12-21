@@ -20,7 +20,7 @@ import {
 import {
   selectFormUserRole, selectIsCommitting, selectIsFormLoading
 } from '../selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';

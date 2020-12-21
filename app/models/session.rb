@@ -5,9 +5,9 @@ class Session < ApplicationRecord
   belongs_to :user
 
   # validations
-  validates_presence_of   :token,             message: 'Value Required'
-  validates_presence_of   :expires_at,        message: 'Value Required'
-  validates_presence_of   :user,              message: 'Value Required'
+  validates_presence_of   :token,             message: I18n.t('errors.session.value_required')
+  validates_presence_of   :expires_at,        message: I18n.t('errors.session.value_required')
+  validates_presence_of   :user,              message: I18n.t('errors.session.value_required')
 
   enum status: {
     active: 0,

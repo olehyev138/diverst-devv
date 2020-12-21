@@ -17,7 +17,7 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import { selectAnnualBudget, selectIsFetchingAnnualBudget } from '../selectors';
 import { updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount } from '../actions';
 

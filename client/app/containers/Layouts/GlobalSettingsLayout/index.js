@@ -16,6 +16,7 @@ import { push } from 'connected-react-router';
 import { permission } from 'utils/permissionsHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { renderChildrenWithProps } from 'utils/componentHelpers';
+import messages from 'containers/Shared/App/messages';
 
 const styles = theme => ({});
 
@@ -67,7 +68,7 @@ const GlobalSettingsLayout = (props) => {
       else if (permission(props, 'emails_manage'))
         redirectAction(ROUTES.admin.system.globalSettings.emails.layouts.index.path());
       else if (permissions) {
-        showSnackbar({ message: 'diverst.containers.App.texts.permissions.global', options: { variant: 'warning' } });
+        showSnackbar({ message: messages.permissions.global, options: { variant: 'warning' } });
         redirectAction(permission(props, 'adminPath') || ROUTES.user.home.path());
       }
 

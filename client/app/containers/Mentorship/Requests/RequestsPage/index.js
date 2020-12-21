@@ -28,7 +28,7 @@ import {
   selectIsFetchingRequests,
   selectSuccessfulChange
 } from 'containers/Mentorship/Requests/selectors';
-import { selectCustomText } from '../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getProposalsBegin,
   getRequestsBegin,

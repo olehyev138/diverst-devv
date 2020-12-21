@@ -44,11 +44,10 @@ import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
 import GroupSelector from 'components/Shared/GroupSelector';
 import DiverstRichTextInput from 'components/Shared/DiverstRichTextInput';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 import { permission } from 'utils/permissionsHelpers';
 import Permission from 'components/Shared/DiverstPermission';
-
-const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: '0' };
+import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({ buttonText, formikProps, ...props }) {
@@ -178,7 +177,7 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
                   margin='normal'
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
-                  options={[freeEvent, ...props.budgetItems]}
+                  options={[props.freeEvent, ...props.budgetItems]}
                   onChange={(value) => {
                     setFieldValue('budget_item_id', value);
                     setFieldValue('estimated_funding', value.available);
@@ -276,6 +275,8 @@ export function EventFormInner({ buttonText, formikProps, ...props }) {
 export function EventForm(props) {
   const event = props?.event;
 
+  const freeEvent = { label: <DiverstFormattedMessage {...messages.createLabel} />, value: null, available: '0' };
+
   const initialValues = buildValues(event, {
     id: { default: '' },
     name: { default: '' },
@@ -303,7 +304,7 @@ export function EventForm(props) {
         props.eventAction(payload);
       }}
     >
-      {formikProps => <EventFormInner {...props} formikProps={formikProps} />}
+      {formikProps => <EventFormInner {...props} freeEvent={freeEvent} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -346,13 +347,17 @@ EventFormInner.propTypes = {
   links: PropTypes.shape({
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
-  })
+  }),
+  intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
+  freeEvent: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   pillars: selectPaginatedSelectPillars(),
   budgetItems: selectPaginatedSelectBudgetItems(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -367,5 +372,6 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(EventForm);

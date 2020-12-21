@@ -22,7 +22,7 @@ import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { getCampaignBegin } from 'containers/Innovate/Campaign/actions';
 import { selectCampaign, selectIsFormLoading } from 'containers/Innovate/Campaign/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
 
 export function CampaignQuestionCreatePage(props) {
