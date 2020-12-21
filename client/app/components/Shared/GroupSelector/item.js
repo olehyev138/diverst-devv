@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -8,28 +8,18 @@ import {
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups, selectGroupIsLoading } from 'containers/Group/selectors';
-import DiverstPagination from 'components/Shared/DiverstPagination';
 import {
   Box,
-  Card,
   CardActionArea,
   CardContent,
-  Collapse,
   Divider,
   Grid,
   Hidden,
-  Link,
   Typography,
-  ButtonBase
 } from '@material-ui/core';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstImg from 'components/Shared/DiverstImg';
-import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
-import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
