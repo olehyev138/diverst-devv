@@ -188,7 +188,9 @@ class AnnualBudget < ApplicationRecord
         .limit(1)
         .to_a.first
 
-      if type_row.region_type == 1
+      if type_row.nil?
+        :none
+      elsif type_row.region_type == 1
         :region
       elsif type_row.parent_type == 1
         :parent
