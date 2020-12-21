@@ -42,7 +42,7 @@ const styles = {
 
 
 export function DiverstDialog(props) {
-  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, actionsDivider, extraActions } = props;
+  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, actionsDivider, extraActions, ...rest } = props;
 
   return (
     <Dialog
@@ -55,6 +55,7 @@ export function DiverstDialog(props) {
         ...paperProps,
       }}
       className={classes.dialog}
+      {...rest}
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
       {titleDivider && <Divider />}
