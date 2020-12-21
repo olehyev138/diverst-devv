@@ -42,6 +42,7 @@ const GroupListSelector = (props) => {
   const { groups, classes, intl, customTexts, displayParentUI, parentData, setDisplayParentUI, setParentData, ...rest } = props;
 
   const [params, setParams] = useState({ count: 10, page: 0, query_scopes: union(props.queryScopes, props.dialogQueryScopes) });
+
   const [searchKey, setSearchKey] = useState('');
 
   const groupSearchAction = (searchKey = searchKey, params = params, clearParentUI = true) => {
@@ -186,7 +187,6 @@ const GroupListSelector = (props) => {
         const newParams = { ...params, count: payload.count, page: payload.page };
 
         groupSearchAction(searchKey, newParams);
-        setParams(newParams);
       }}
     />
   );

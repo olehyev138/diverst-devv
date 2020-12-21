@@ -14,7 +14,6 @@ import {
   Box,
   CardActionArea,
   CardContent,
-  Divider,
   Grid,
   Hidden,
   Typography,
