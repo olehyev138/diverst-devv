@@ -89,7 +89,7 @@ const GroupListSelector = (props) => {
               type='text'
               onChange={(e) => {
                 setSearchKey(e.target.value);
-                delayedSearchAction(e.target.value, params);
+                delayedSearchAction(e.target.value, { ...params, page: 0 });
               }}
               value={searchKey}
               InputProps={{
