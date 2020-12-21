@@ -1,5 +1,9 @@
 <div class="content__header">
   <h1>Mentoring Types</h1>
+  <div class='flex-row__cell'>
+    <%= link_to 'Create Mentoring Type', new_mentoring_type_path, class: 'btn btn--primary pull-right hidden-xs' if MentoringInterestPolicy.new(current_user, MentoringInterest).new?  %>
+    <%= link_to 'Create Mentoring Type', new_mentoring_type_path, class: "btn btn-primary visible-xs" if MentoringInterestPolicy.new(current_user, MentoringInterest).new? %>
+  </div>
 </div>
 
 <div class="content__main">
