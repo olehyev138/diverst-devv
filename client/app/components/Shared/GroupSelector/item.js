@@ -42,6 +42,10 @@ const styles = theme => ({
     flexDirection: 'column',
     flex: 1,
     maxHeight: 140,
+    borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+  },
+  itemContainerLast: {
+    borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
   },
   itemGridContainer: {
     flex: 1,
@@ -162,11 +166,10 @@ const GroupSelectorItem = (props) => {
     else groupCardTitleClasses = classNames(groupCardTitleClasses, classes.groupCardTitleNoChildren);
 
   return (
-    <Box className={classes.itemContainer}>
-      <Divider />
+    <Box className={classNames(classes.itemContainer, props.isLastGroup === true && classes.itemContainerLast)}>
       <Grid container alignItems='stretch' className={classes.itemGridContainer}>
         <Grid item xs>
-          <ButtonBase
+          <CardActionArea
             onClick={handleClick}
             className={classes.buttonBase}
           >
@@ -203,7 +206,7 @@ const GroupSelectorItem = (props) => {
               </Grid>
 
             </CardContent>
-          </ButtonBase>
+          </CardActionArea>
         </Grid>
         {(!props.dialogNoChildren && group.is_parent_group === true) && (
           <Grid item className={props.isSelected(props.group) ? classes.expandActionAreaContainerSelected : classes.expandActionAreaContainer}>
@@ -216,9 +219,6 @@ const GroupSelectorItem = (props) => {
           </Grid>
         )}
       </Grid>
-      {props.isLastGroup === true && (
-        <Divider />
-      )}
       {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
     </Box>
   );
