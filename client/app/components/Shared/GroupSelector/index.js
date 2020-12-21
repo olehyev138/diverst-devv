@@ -221,7 +221,6 @@ GroupSelector.propTypes = {
   getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
   extraParams: PropTypes.object,
-  customTexts: PropTypes.object,
   inputCallback: PropTypes.func,
 
   intl: intlShape.isRequired,
