@@ -19,14 +19,9 @@ import { formatColor } from 'utils/selectorHelpers';
 const styles = theme => ({
   wrapper: {
     margin: theme.spacing(1),
-    position: 'relative',
   },
   buttonProgress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+    marginBottom: 20,
   },
 });
 
@@ -56,7 +51,7 @@ export function DiverstGroupLegend({ groups, isLoading, classes, ...rest }) {
         {isLoading && (
           <Grid container justify='center' alignContent='center'>
             <Grid item>
-              <CircularProgress size={80} thickness={1.5} className={classes.buttonProgress} />
+              <CircularProgress size={40} thickness={1.3} className={classes.buttonProgress} />
             </Grid>
           </Grid>
         )}
