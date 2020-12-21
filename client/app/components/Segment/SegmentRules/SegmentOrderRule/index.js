@@ -18,8 +18,8 @@ import messages from 'containers/Segment/messages';
  *  - Could define UI strings in backend as well
  */
 const fields = [
-  { value: 0, label: 'Sign-in Count' },
-  { value: 1, label: 'Reward Points' }
+  { value: 0, label: <DiverstFormattedMessage {...messages.signIn} /> },
+  { value: 1, label: <DiverstFormattedMessage {...messages.rewards} /> }
 ];
 
 /*
@@ -27,8 +27,8 @@ const fields = [
  *  - Could define UI strings in backend as well
  */
 const operators = [
-  { value: 0, label: 'Ascending' },
-  { value: 1, label: 'Descending' },
+  { value: 0, label: <DiverstFormattedMessage {...messages.ascending} /> },
+  { value: 1, label: <DiverstFormattedMessage {...messages.descending} /> },
 ];
 
 const SegmentOrderRule = ({ rule, ...props }) => {

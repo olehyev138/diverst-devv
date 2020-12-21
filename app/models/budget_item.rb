@@ -16,7 +16,7 @@ class BudgetItem < ApplicationRecord
   validates_length_of :title, maximum: 191
   validates_presence_of :budget
   validates :title, presence: true, length: { minimum: 2 }
-  validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: 'number of digits must not exceed 6' }
+  validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: I18n.t('errors.budget.maximum') }
 
   scope :available, -> { joins(:budget).where(is_done: false).where('budgets.is_approved = TRUE') }
   scope :allocated, -> { where(is_done: true) }
@@ -74,12 +74,12 @@ class BudgetItem < ApplicationRecord
 
   def close!
     if is_done?
-      errors.add(:base, 'Budget Item is already closed')
+      errors.add(:base, I18n.t('errors.budget.closed'))
       return false
     end
 
     if initiatives.active.any?
-      errors.add(:base, 'There are still events using this budget item')
+      errors.add(:base, I18n.t('errors.budget.used'))
       return false
     end
 

@@ -33,6 +33,9 @@ export default defineMessages({
   deleteFileConfirm: {
     id: `${scope}.deleteFileConfirm`
   },
+  delete: {
+    id: `${scope}.delete`
+  },
   fileTypes: {
     id: `${scope}.fileTypes`,
     png: {

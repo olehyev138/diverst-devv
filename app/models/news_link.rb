@@ -91,7 +91,7 @@ class NewsLink < ApplicationRecord
     open(self.url)
     true
   rescue => e
-    errors.add(:url, 'Invalid URL')
+    errors.add(:url, I18n.t('errors.invalid_url'))
   end
 
   def build_default_link

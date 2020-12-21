@@ -15,6 +15,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupPlanLinks from 'components/Group/GroupPlan/GroupPlanLinks';
 
 import { renderChildrenWithProps } from 'utils/componentHelpers';
+import messages from 'containers/Shared/App/messages';
+
 
 const styles = theme => ({
   content: {
@@ -66,7 +68,7 @@ const GroupPlanLayout = (props) => {
       else if (permission(rest.currentGroup, 'events_manage?'))
         redirectAction(ROUTES.group.plan.events.index.path(groupId));
       else {
-        showSnackbar({ message: 'You do not have permission to see this page', options: { variant: 'warning' } });
+        showSnackbar({ message: messages.permissions.system, options: { variant: 'warning' } });
         redirectAction(ROUTES.group.home.path(groupId));
       }
 

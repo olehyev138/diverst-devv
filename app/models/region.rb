@@ -55,7 +55,7 @@ class Region < ApplicationRecord
 
   def ensure_parent_isnt_a_child_group
     if parent.is_sub_group?
-      errors.add(:parent, t('errors.region.parent_cant_be_child_group'))
+      errors.add(:parent, I18n.t('errors.region.parent_cant_be_child_group'))
     end
   end
 end

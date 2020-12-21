@@ -177,6 +177,9 @@ export default defineMessages({
       id: `${scope}.show.hosted_by_group`
     },
   },
+  createLabel: {
+    id: `${scope}.label.create`,
+  },
   snackbars: {
     errors: {
       create_event: {

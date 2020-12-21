@@ -21,7 +21,7 @@ import {
   selectInitiativesTotal,
   selectIsFetchingInitiatives
 } from '../selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { getAnnualBudgetsBegin, annualBudgetsUnmount } from '../actions';
 import { getEventsBegin } from 'containers/Event/actions';

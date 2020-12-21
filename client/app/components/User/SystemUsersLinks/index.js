@@ -58,7 +58,7 @@ export function SystemUsersLinks(props) {
             <Tab
               component={WrappedNavLink}
               to={ROUTES.admin.system.users.import.path()}
-              label='Import Users'
+              label={<DiverstFormattedMessage {...messages.tab.import} />}
               value='import'
             />
           ) }

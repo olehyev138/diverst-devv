@@ -224,7 +224,6 @@ NewsFeed.propTypes = {
   approveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.object,
   enableLikes: PropTypes.bool,
-  customTexts: PropTypes.object,
 };
 
 export default compose(

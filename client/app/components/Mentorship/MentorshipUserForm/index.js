@@ -198,7 +198,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 color='primary'
                 type='submit'
               >
-                Submit
+                <DiverstFormattedMessage {...messages.form.button.submit} />
               </Button>
             </CardActions>
           </Form>

@@ -21,7 +21,7 @@ class Initiative < ApplicationRecord
   validates_length_of :location, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
-  validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
+  validates :end, date: { after: :start, message: I18n.t('errors.initiative.end') }, on: [:create, :update]
 
   # Ported from Event
   # todo: check events controller views and forms to work
@@ -308,15 +308,15 @@ class Initiative < ApplicationRecord
 
   def expenses_status
     if finished_expenses?
-      'Expenses finished'
+      I18n.t('errors.initiative.finished')
     else
-      'Expenses in progress'
+      I18n.t('errors.initiative.progress')
     end
   end
 
   def finish_expenses!
     if finished_expenses?
-      errors.add(:initiative, 'Expenses are already finished')
+      errors.add(:initiative, I18n.t('errors.initiative.finished'))
       return false
     end
 
@@ -468,7 +468,7 @@ class Initiative < ApplicationRecord
       to: time_to ? Time.at(time_to.to_i / 1000) : Time.current
     )
 
-    strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+    strategy = Reports::GraphTimeseriesGeneric.new(title: I18n.t('errors.initiative.time'), data: data)
     report = Reports::Generator.new(strategy)
 
     report.to_csv
@@ -506,7 +506,7 @@ class Initiative < ApplicationRecord
 
       if budget.group != group
         # make sure noone is trying to put incorrect budget value
-        errors.add(:budget, 'You are providing wrong budget')
+        errors.add(:budget, I18n.t('errors.initiative.budget'))
         return false
       end
 
@@ -519,13 +519,13 @@ class Initiative < ApplicationRecord
 
     # Here we know there is no budge, no leftover, but estimated_amount
     # is still greater than zero, which is not valid
-    errors.add(:budget, 'Can not create event with funds but without budget')
+    errors.add(:budget, I18n.t('errors.initiative.lack_of_funds'))
   end
 
   def segment_enterprise
     segments.each do |segment|
       if segment.try(:enterprise) != owner.try(:enterprise)
-        errors.add(:segments, 'has invalid segments')
+        errors.add(:segments, I18n.t('errors.initiative.segments'))
         return
       end
     end
@@ -539,10 +539,10 @@ class Initiative < ApplicationRecord
     self.estimated_funding = temp
 
     if budget_item.present? && estimated_funding > budget_item.available
-      errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
+      errors.add(:budget_item_id, I18n.t('errors.initiative.lack_of_funds_2'))
       false
     elsif funded_by_leftover?
-      errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
+      errors.add(:budget_item_id, I18n.t('errors.initiative.temporary'))
       false
     end
   end

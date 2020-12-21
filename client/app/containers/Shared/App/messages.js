@@ -7,8 +7,26 @@
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.App';
+export const routes = 'diverst.containers.Routes';
 
 export default defineMessages({
+  budgetRoute: {
+    id: `${routes}.admin.plan.group_budgets`
+  },
+  openDrawer: {
+    id: `${scope}.drawer`
+  },
+  permissions: {
+    budget: {
+      id: `${scope}.texts.permissions.budget`,
+    },
+    global: {
+      id: `${scope}.texts.permissions.global`,
+    },
+    system: {
+      id: `${scope}.texts.permissions.system`,
+    },
+  },
   texts: {
     erg: {
       id: `${scope}.texts.erg`,
@@ -155,6 +173,9 @@ export default defineMessages({
       id: `${scope}.dayOfWeek.saturday`,
     },
   ],
+  none: {
+    id: `${scope}.none`
+  },
   confirmation: {
     yes: {
       id: `${scope}.confirmation.yes`

@@ -28,7 +28,7 @@ import {
 
 import { injectIntl, intlShape } from 'react-intl';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-import { push } from 'connected-react-router';
+import messages from '../messages';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PasswordResetForm from 'components/User/PasswordResetForm';
 
@@ -45,7 +45,7 @@ export function PasswordResetPage(props) {
       });
     else {
       props.showSnackbar({
-        message: 'diverst.containers.App.texts.reset.token',
+        message: messages.invalidToken,
         options: { variant: 'warning' }
       });
       props.redirectAction(ROUTES.session.login.path());

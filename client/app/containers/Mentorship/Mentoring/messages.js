@@ -23,6 +23,19 @@ export default defineMessages({
       id: `${scope}.tab.available`
     },
   },
+  form: {
+    button: {
+      cancel: {
+        id: `${scope}.form.button.cancel`,
+      },
+      submit: {
+        id: `${scope}.form.button.submit`,
+      },
+      close: {
+        id: `${scope}.form.button.close`,
+      }
+    },
+  },
   title: {
     current: {
       mentor: {
@@ -30,6 +43,9 @@ export default defineMessages({
       },
       mentee: {
         id: `${scope}.title.current.mentee`
+      },
+      mentorship_request: {
+        id: `${scope}.title.mentorship_request`
       },
     },
     available: {

@@ -13,8 +13,8 @@ class MetricsDashboard < ApplicationRecord
 
   validates_length_of :shareable_token, maximum: 191
   validates_length_of :name, maximum: 191
-  validates_presence_of :name, message: 'Metrics Dashboard name is required'
-  validates_presence_of :groups, message: 'Please select a group'
+  validates_presence_of :name, message: I18n.t('errors.metrics.name_required')
+  validates_presence_of :groups, message: I18n.t('errors.metrics.group')
 
   scope :with_shared_dashboards, -> (user_id) {
     joins('LEFT JOIN shared_metrics_dashboards ON metrics_dashboards.id = shared_metrics_dashboards.metrics_dashboard_id')

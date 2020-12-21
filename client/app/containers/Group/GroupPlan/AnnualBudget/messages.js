@@ -11,6 +11,12 @@ export const scope = 'diverst.containers.AnnualBudget';
 export const snackbar = 'diverst.snackbars.Group.AnnualBudget';
 
 export default defineMessages({
+  carryoverConfirm: {
+    id: `${scope}.carryover_confirm`,
+  },
+  resetConfirm: {
+    id: `${scope}.reset_confirm`,
+  },
   links: {
     editAnnualBudget: {
       id: `${scope}.tabs.editAnnualBudget`,

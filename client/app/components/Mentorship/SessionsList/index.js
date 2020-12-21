@@ -100,14 +100,15 @@ export function SessionsList(props, context) {
                       }}
                     >
                       <Typography color='primary' variant='h6' component='h2'>
-                        {item.interests || 'Mentorship'}
+                        {item.interests || <DiverstFormattedMessage {...messages.mentorship} />}
                       </Typography>
                     </Link>
                     <hr className={classes.divider} />
                     {item.interests && (
                       <React.Fragment>
                         <Typography color='textSecondary'>
-                          {`Hosted by ${item.creator.name}`}
+                          <DiverstFormattedMessage {...messages.host} />
+                          {`${item.creator.name}`}
                         </Typography>
                         <Box pb={1} />
                       </React.Fragment>
