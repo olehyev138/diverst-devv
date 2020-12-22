@@ -108,7 +108,6 @@ Diverst::Application.routes.draw do
       resources :group_messages
       resources :group_message_comments
       resources :group_messages_segments
-      resources :group_updates
       resources :groups_metrics_dashboards
       resources :groups_polls
       resources :group_members, path: 'members' do
@@ -144,7 +143,6 @@ Diverst::Application.routes.draw do
       resources :initiative_invitees
       resources :initiative_participating_groups
       resources :initiative_segments
-      resources :initiative_updates
       resources :initiative_users do
         collection do
           post 'join'
