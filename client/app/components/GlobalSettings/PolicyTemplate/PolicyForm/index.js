@@ -145,9 +145,10 @@ export function PolicyFormInner({
       Create: 'segments_create',
       Manage: 'segments_manage',
     },
-    Mentorship: {
-      Manage: 'mentorship_manage',
-    },
+    // TODO : Disabled module
+    // Mentorship: {
+    //   Manage: 'mentorship_manage',
+    // },
     Settings: {
       Manage_Auto_Archive_Settings: 'auto_archive_manage',
       Manage_Enterprise: 'enterprise_manage',
@@ -155,11 +156,12 @@ export function PolicyFormInner({
   });
 
   const generalPolicies = Object.freeze({
-    Campaigns: {
-      View: 'campaigns_index',
-      Create: 'campaigns_create',
-      Manage: 'campaigns_manage',
-    },
+    // TODO : Disabled module
+    // Campaigns: {
+    //   View: 'campaigns_index',
+    //   Create: 'campaigns_create',
+    //   Manage: 'campaigns_manage',
+    // },
     Surveys: {
       View: 'polls_index',
       Create: 'polls_create',
