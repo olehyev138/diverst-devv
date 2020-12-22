@@ -8,6 +8,7 @@ RSpec.describe Field do
       it { expect(field).to belong_to(:field_definer) }
       it { expect(field).to have_many(:field_data).class_name('FieldData').dependent(:destroy) }
       it { expect(field).to have_many(:yammer_field_mappings).with_foreign_key('diverst_field_id').dependent(:delete_all) }
+      it { expect(field).to have_many(:segment_field_rules).with_foreign_key('field_id').dependent(:restrict_with_error) }
 
       it { expect(field).to validate_presence_of(:title) }
       it { expect(field).to validate_presence_of(:type) }
