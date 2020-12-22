@@ -137,7 +137,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                   <Card variant='outlined'>
                     <CardContent>
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.module_setting} /></Typography>
-                      <FormControl>
+                      {/*                      <FormControl>
                         <FormControlLabel
                           labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.mentorship_module} />}
@@ -172,7 +172,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                             />
                           )}
                         />
-                      </FormControl>
+                      </FormControl> */}
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'
