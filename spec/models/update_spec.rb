@@ -11,7 +11,7 @@ RSpec.describe Update, type: :model do
     it { expect(update).to belong_to(:previous).class_name('Update').inverse_of(:next) }
 
     context 'initiative' do
-      let!(:initiative_update) { build(:initiative_update2, updatable_type: 'Initiative') }
+      let!(:initiative_update) { build(:initiative_update, updatable_type: 'Initiative') }
       it { expect(initiative_update).to belong_to(:initiative).with_foreign_key(:updatable_id) }
     end
 

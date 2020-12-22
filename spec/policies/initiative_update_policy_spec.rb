@@ -38,7 +38,7 @@ RSpec.describe InitiativeUpdatePolicy, type: :policy do
     let!(:initiative1) { create :initiative, pillar: pillar, owner_group: group, owner: user }
     let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, owner: user }
     let!(:initiative_update1) { create(:initiative_update, updatable: initiative1, owner: user) }
-    let!(:initiative_update2) { create(:initiative_update, updatable: initiative2, owner: user) }
+    let!(:initiative_update) { create(:initiative_update, updatable: initiative2, owner: user) }
     let(:policy_scope) { UpdatePolicy::Scope.new(user, InitiativeUpdate, params: { initiative_id: initiative1.id }).resolve }
 
     before do
