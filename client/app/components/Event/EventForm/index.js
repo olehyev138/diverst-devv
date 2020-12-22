@@ -99,7 +99,7 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
                 estimated: 0,
               })}
             >
-              <DiverstFormattedMessage {...messages.addBudget} />
+              <DiverstFormattedMessage {...messages.inputs.addBudget} />
             </Button>
           </Grid>
         </Grid>
@@ -156,6 +156,7 @@ export function BudgetUserFormInner({ formikProps, arrayHelpers, ...props }) {
                     <IconButton
                       size='small'
                       onClick={removeIndex(index)}
+                      disabled={props.isCommitting || budgetUser.finished_expenses}
                     >
                       <DeleteIcon />
                     </IconButton>
