@@ -16,6 +16,7 @@ loadTranslation('./app/translations/en.json');
 const props = {
   intl,
   customTexts: { erg: 'Group' },
+  templates: [],
 };
 
 describe('<EmailLinks />', () => {
