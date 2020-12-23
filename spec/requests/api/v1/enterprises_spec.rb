@@ -208,7 +208,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
           'id' => item.id,
           'home_message' => 'home_message',
           'onboarding_consent_enabled' => true,
-          'onboarding_consent_message' => "onboarding_consent_message",
+          'onboarding_consent_message' => 'onboarding_consent_message',
           'privacy_statement' => 'privacy_statement',
           'theme_attributes' => {
             'primary_color' => 'FFFFFF',
