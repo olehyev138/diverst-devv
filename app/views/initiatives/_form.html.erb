@@ -84,7 +84,7 @@
 
       <div class="card__section card__section--border">
         <%= f.input :description,
-            label: "Give it a short (or long) <strong>description</strong>".html_safe,
+            label: "Add event details and meeting link".html_safe,
             as: :ckeditor
         %>
       </div>
@@ -121,7 +121,7 @@
           <div class="card__section card__section--border">
             <%= f.input :location, label: "Specify the <strong>location</strong>".html_safe %>
             <span class="event_url error"></span>
-            <%= f.input :event_url, label: 'Event url' %>
+            <%= f.input :event_url, label: 'External registration link if applicable' %>
           </div>
         </div>
         <div class="col sm-3">
