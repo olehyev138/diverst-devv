@@ -18,6 +18,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { findTitleForPath } from 'utils/routeHelpers';
 
 import { customTexts } from 'utils/customTextHelpers';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'components/Shared/DiverstBreadcrumbs/messages';
 
 const styles = theme => ({
   paper: {
@@ -82,7 +84,7 @@ export function DiverstNestedBreadcrumbs(props) {
       <Paper elevation={0} className={classes.paper}>
         <Breadcrumbs
           separator={<BreadcrumbSeparatorIcon fontSize='small' />}
-          aria-label='breadcrumb'
+          aria-label={props.intl.formatMessage(messages.breadcrumbs, props.customTexts)}
         >
           {breadCrumbs.map((value, index) => {
             const last = index === breadCrumbs.length - 1;
@@ -114,9 +116,12 @@ DiverstNestedBreadcrumbs.propTypes = {
   isLoading: PropTypes.bool,
   title: PropTypes.string,
   nestedNavigation: PropTypes.array,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(DiverstNestedBreadcrumbs);

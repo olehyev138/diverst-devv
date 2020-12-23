@@ -86,7 +86,7 @@ export function Event(props) {
                   startIcon={<DeleteIcon />}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                    if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                       props.deleteEventBegin({
                         id: event.id,
                         group_id: event.owner_group_id
@@ -237,24 +237,28 @@ export function Event(props) {
                   </React.Fragment>
                 )}
               </Grid>
-              <Grid item xs={3}>
-                {event.location && (
-                  <React.Fragment>
+              {(event.location || permission(props.event, 'attendees?')) && (
+                <Grid item xs={3}>
+                  {event.location && (
+                    <React.Fragment>
+                      <Typography className={classes.dataHeaders}>
+                        <DiverstFormattedMessage {...messages.inputs.location} />
+                      </Typography>
+                      <Typography color='textSecondary' className={classes.data}>
+                        {event.location}
+                      </Typography>
+                    </React.Fragment>
+                  )}
+                  <Permission show={permission(props.event, 'attendees?')}>
                     <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.location} />
+                      <DiverstFormattedMessage {...messages.inputs.attendee} />
                     </Typography>
                     <Typography color='textSecondary' className={classes.data}>
-                      {event.location}
+                      {event.total_attendees}
                     </Typography>
-                  </React.Fragment>
-                )}
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.inputs.attendee} />
-                </Typography>
-                <Typography color='textSecondary' className={classes.data}>
-                  {event.total_attendees}
-                </Typography>
-              </Grid>
+                  </Permission>
+                </Grid>
+              )}
             </Grid>
           </Paper>
           <Box mb={4} />
@@ -262,24 +266,28 @@ export function Event(props) {
             currentUserId={props.currentUserId}
             event={props.event}
             commentAction={props.createEventCommentBegin}
+            customTexts={props.customTexts}
           />
-          <Box mb={4} />
-          <Typography variant='h6'>
-            {event.total_comments}
-            &ensp;
-            <DiverstFormattedMessage {...messages.comment.total_comments} />
-          </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {event?.comments.sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
-            return (
-              <EventComment
-                key={comment.id}
-                comment={comment}
-                deleteEventCommentBegin={props.deleteEventCommentBegin}
-                currentUserId={props.currentUserId}
-              />
-            );
-          })}
+          {event?.comments && (
+            <React.Fragment>
+              <Box mb={4} />
+              <Typography variant='h6'>
+                {event.total_comments}
+                &ensp;
+                <DiverstFormattedMessage {...messages.comment.total_comments} />
+              </Typography>
+              {event?.comments.sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => (
+                <EventComment
+                  key={comment.id}
+                  comment={comment}
+                  deleteEventCommentBegin={props.deleteEventCommentBegin}
+                  currentUserId={props.currentUserId}
+                  customTexts={props.customTexts}
+                />
+              ))}
+            </React.Fragment>
+          )}
         </React.Fragment>
       )}
     </DiverstShowLoader>
@@ -304,6 +312,7 @@ Event.propTypes = {
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
   export: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

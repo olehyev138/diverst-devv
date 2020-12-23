@@ -37,13 +37,36 @@ module AttachmentHelper
     attachment.filename.to_s if attachment.attached?
   end
 
-  # Attachment data encoded in base64, useful for rendering the attachment as an image on deserialization
+  # Attachment data encoded into a string for serialization
   def self.attachment_data_string(attachment)
-    Base64.encode64(attachment.download) if attachment.attached?
+    self.encode_data(attachment.download) if attachment.attached?
   end
 
   # Attachment content type
   def self.attachment_content_type(attachment)
     attachment.content_type if attachment.attached?
+  end
+
+  # Creates a resized image variant of the passed attachment with the upper limits of the passed width & height
+  # and encodes it into a string for serialization.
+  #
+  # Note: When the variant is processed, ActiveStorage should upload it to the service so that the processing
+  # doesn't happen every single time.
+  def self.image_resize_variant_data_string(image_attachment, width, height)
+    return nil unless image_attachment.attached?
+
+    processed = image_attachment.variant(combine_options: {
+        auto_orient: true,
+        gravity: 'center',
+        resize: "#{width}x#{height}^",
+        crop: "#{width}x#{height}+0+0"
+    }).processed
+
+    self.encode_data(processed.service.download(processed.key))
+  end
+
+  # Encodes the passed in data in base64 for serialization
+  def self.encode_data(data_to_encode)
+    Base64.encode64(data_to_encode) if data_to_encode.present?
   end
 end

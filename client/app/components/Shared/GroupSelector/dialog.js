@@ -49,7 +49,7 @@ const GroupListSelector = (props) => {
     setExpandedGroups(initialExpandedGroups);
   }
 
-  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, params);
+  const groupSearchAction = (searchKey = searchKey, params = params) => props.inputCallback(props, searchKey, { ...params, with_children: true });
   const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
@@ -148,7 +148,6 @@ GroupListSelector.propTypes = {
   queryScopes: PropTypes.arrayOf(PropTypes.string),
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.string),
   inputCallback: PropTypes.func,
-
   open: PropTypes.bool,
   addGroup: PropTypes.func.isRequired,
   removeGroup: PropTypes.func.isRequired,

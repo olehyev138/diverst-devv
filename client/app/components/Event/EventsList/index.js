@@ -17,8 +17,6 @@ import AddIcon from '@material-ui/icons/Add';
 import TodayIcon from '@material-ui/icons/Today';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 
-import { injectIntl } from 'react-intl';
-
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -28,7 +26,6 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/messages';
-import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
@@ -46,6 +43,8 @@ import reducer from 'containers/Event/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Event/saga';
 import { selectIsCommitting } from 'containers/Event/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   eventListItem: {
@@ -142,8 +141,8 @@ export function EventsList(props) {
                   indicatorColor='primary'
                   textColor='primary'
                 >
-                  <Tab label={intl.formatMessage(messages.index.participating)} />
-                  <Tab label={intl.formatMessage(messages.index.all)} />
+                  <Tab label={<DiverstFormattedMessage {...messages.index.participating} />} />
+                  <Tab label={<DiverstFormattedMessage {...messages.index.all} />} />
                 </ResponsiveTabs>
               </Grid>
             )}
@@ -168,9 +167,9 @@ export function EventsList(props) {
               indicatorColor='primary'
               textColor='primary'
             >
-              <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-              <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-              <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+              <Tab label={<DiverstFormattedMessage {...messages.index.upcoming} />} />
+              <Tab label={<DiverstFormattedMessage {...messages.index.ongoing} />} />
+              <Tab label={<DiverstFormattedMessage {...messages.index.past} />} />
             </ResponsiveTabs>
           )}
         </React.Fragment>
@@ -256,7 +255,6 @@ export function EventsList(props) {
 }
 
 EventsList.propTypes = {
-  intl: PropTypes.object,
   classes: PropTypes.object,
   events: PropTypes.array,
   calendarEvents: PropTypes.array,
@@ -282,11 +280,12 @@ EventsList.propTypes = {
   params: PropTypes.shape({
     page: PropTypes.number,
     count: PropTypes.number
-  })
+  }),
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  isCommitting: selectIsCommitting()
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
@@ -300,8 +299,8 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
+  injectIntl,
   withStyles(styles),
   memo,
 )(EventsList);

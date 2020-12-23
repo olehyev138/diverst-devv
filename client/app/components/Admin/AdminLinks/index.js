@@ -61,6 +61,7 @@ import { permission } from 'utils/permissionsHelpers';
 import Scrollbar from 'components/Shared/Scrollbar';
 
 import { toggleAdminDrawer } from 'containers/Shared/App/actions';
+import messages from 'containers/Shared/App/messages';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -372,7 +373,7 @@ export function AdminLinks(props) {
                   <PlanGroupBudgetsIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Group Budgets
+                  <DiverstFormattedMessage {...messages.budgetRoute} />
                 </ListItemText>
               </MenuPermission>
             </List>

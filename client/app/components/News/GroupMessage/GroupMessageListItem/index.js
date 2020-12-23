@@ -71,7 +71,7 @@ export function GroupMessageListItem(props) {
     <React.Fragment>
       <CardHeader
         className={classes.cardHeader}
-        avatar={(
+        avatar={groupMessage.owner && (
           <Avatar>
             { groupMessage.owner.avatar ? (
               <DiverstImg
@@ -93,11 +93,13 @@ export function GroupMessageListItem(props) {
           {groupMessage.content}
         </Typography>
         <Grid container justify='space-between'>
-          <Grid item>
-            <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
-              {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
-            </Typography>
-          </Grid>
+          {groupMessage.owner && (
+            <Grid item>
+              <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+                {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
+              </Typography>
+            </Grid>
+          )}
           <Grid item>
             <Grid container>
               <Grid item>
@@ -108,6 +110,7 @@ export function GroupMessageListItem(props) {
                     totalLikes={newsItem.total_likes}
                     likeNewsItemBegin={props.likeNewsItemBegin}
                     unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                    customTexts={props.customTexts}
                   />
                 )}
                 {props.pinNewsItemBegin && (
@@ -178,7 +181,7 @@ export function GroupMessageListItem(props) {
                 className={classes.errorButton}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.group_delete_confirm, props.customTexts)))
                     props.deleteGroupMessageBegin(newsItem.group_message);
                 }}
               >
@@ -224,6 +227,7 @@ GroupMessageListItem.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   enableLikes: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

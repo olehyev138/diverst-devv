@@ -26,9 +26,10 @@ import GroupHomeFamily from 'components/Group/GroupHome/GroupHomeFamily';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import SubgroupJoinForm from 'components/Group/GroupHome/SubgroupJoinForm';
 import messages from 'containers/Group/messages';
-import { injectIntl, intlShape } from 'react-intl';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { permission } from 'utils/permissionsHelpers';
+import DiverstFormattedMessage from '../../Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   title: {
@@ -62,6 +63,7 @@ export function GroupHome({ classes, ...props }) {
         <EventsPage
           currentGroup={props.currentGroup}
           listComponent={EventsList}
+          customTexts={props.customTexts}
           readonly
           loaderProps={{
             transitionProps: {
@@ -127,7 +129,7 @@ export function GroupHome({ classes, ...props }) {
           }}
           startIcon={<RemoveIcon />}
         >
-          {intl.formatMessage(messages.leave)}
+          <DiverstFormattedMessage {...messages.leave} />
         </Button>
       );
     if (!isJoined && permission(props.currentGroup, 'join?'))
@@ -141,7 +143,7 @@ export function GroupHome({ classes, ...props }) {
             onClick={(handleOpenSubgroup)}
             startIcon={<AddIcon />}
           >
-            {intl.formatMessage(messages.join)}
+            <DiverstFormattedMessage {...messages.join} />
           </Button>
           {/* eslint-disable-next-line no-nested-ternary */}
           {props.currentGroup.parent_id === null
@@ -149,7 +151,7 @@ export function GroupHome({ classes, ...props }) {
               props.currentGroup.children.length > 0 ? (
                 <DiverstDialog
                   open={openSubgroup}
-                  title={intl.formatMessage(messages.thanks)}
+                  title={messages.thanks}
                   content={(
                     <SubgroupJoinForm
                       subgroupJoinAction={props.joinSubgroups}
@@ -166,12 +168,12 @@ export function GroupHome({ classes, ...props }) {
             : (
               <DiverstDialog
                 open={openSubgroup}
-                title={intl.formatMessage(messages.thanks)}
-                content={intl.formatMessage(messages.joinParent)}
+                title={messages.thanks}
+                content={messages.joinParent}
                 handleYes={handleJoinParentGroup}
-                textYes={intl.formatMessage(messages.yes)}
+                textYes={messages.yes}
                 handleNo={handleJoinGroup}
-                textNo={intl.formatMessage(messages.no)}
+                textNo={messages.no}
               />
             )
           }
@@ -236,6 +238,7 @@ GroupHome.propTypes = {
   leaveGroup: PropTypes.func,
   joinSubgroups: PropTypes.func,
   intl: intlShape.isRequired,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

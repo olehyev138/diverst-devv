@@ -23,13 +23,12 @@ class UserRole < ApplicationRecord
 
   validates_uniqueness_of :role_name,             scope: [:enterprise_id]
   validates_uniqueness_of :priority,              scope: [:enterprise_id]
-  # validates_uniqueness_of :policy_group_template, scope: [:enterprise], :on => :update
   validates_uniqueness_of :default,               scope: [:enterprise_id], conditions: -> { where(default: true) }
 
   before_destroy -> { throw :abort unless can_destroy? }, prepend: true
   before_update -> {
     if role_type_changed?
-      errors.add(:role_type, "can't be changed")
+      errors.add(:role_type, I18n.t('errors.user_role.no_change'))
       throw :abort
     end
   }
@@ -48,7 +47,7 @@ class UserRole < ApplicationRecord
   before_create :build_default_policy_group_template
 
   def build_default_policy_group_template
-    build_policy_group_template(name: "#{role_name} Policy Template", enterprise: enterprise, default: default)
+    build_policy_group_template(name: "#{role_name}" + I18n.t('messages.user_role.policy_template'))
     true
   end
 
@@ -64,11 +63,11 @@ class UserRole < ApplicationRecord
   # we don't want to delete any group roles or the default role
   def can_destroy?
     if default
-      errors.add(:base, 'Cannot destroy default user role')
+      errors.add(:base, I18n.t('errors.user_role.delete_default'))
       return false
     elsif role_type === 'group'
       if group_leaders.size > 0
-        errors.add(:base, 'Cannot delete because there are users with this group role.')
+        errors.add(:base, I18n.t('errors.user_role.delete_group'))
         return false
       end
     end

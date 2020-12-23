@@ -56,10 +56,161 @@ en:
     parent: Parent
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
+  default_text_values:
+    segments_fields: {
+      segments: "Segments",
+    }
+    poll: {
+      deleted_user: "Deleted User"
+    }
+  messages:
+    user_role: {
+      policy_template: "Policy template",
+    }
+    mentorship: {
+      pending: "Pending",
+      accepted: "Accepted",
+      declined: "Declined"
+    }
   errors:
+    invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
+    invalid_linkedin_url: "Not a valid LinkedIn URL"
+    invalid_url: "Not a valid URL"
+    destroy_user: "Users older then 14 days cannot be destroyed"
+    role_validity: "Cannot set user role to a group role"
+    unique_email: "The email entered is already used"
+    format_email: "The email entered is not valid"
+    confirmation: "do not match"
+    blank: "can't be blank"
+    uniqueness: "The %{attribute} entered has already been created, please enter a unique %{attribute}"
+    numericality: {
+      too_short: "is too short (minimum is %{count} characters)",
+      too_long: "is too long (maximum is %{count} characters)",
+      integer: "is not a valid number",
+    }
     not_found: {
       one: "Sorry, the resource you are looking for does not exist.",
       other: "Sorry, the resources you are looking for don't exist."
     }
     timed_out: "Your request timed out. Please try again later."
     invalid_route: "Invalid route"
+    region: {
+      parent_cant_be_child_group: "cannot be a child group"
+    }
+    segments: {
+      already_member: "is already a member of this segment",
+      group_scope: "there must be at least one group chosen",
+    }
+    groups: {
+      already_member: "is already a member of this group"
+    }
+    user_role: {
+      no_change: "cannot be changed",
+      delete_default: "Cannot destroy default user role",
+      delete_group: "Cannot delete because there are users with this group role.",
+    }
+    twitter: {
+     doesnt_exist: "User doesn't exist"
+    }
+    theme: {
+     valid_hex: "should be a valid hex color",
+    }
+    session: {
+     value_required: "Value Required",
+    }
+    reward: {
+     responsible_user: "Invalid responsible",
+    }
+    resources: {
+     folder_no_parent: "Folder is without parent"
+    }
+    poll: {
+      invalid: "is invalid",
+      bad_configuration: "invalid configuration of polls",
+      survey: "Survey is invalid without any field"
+    }
+    policy_group_template: {
+      name_taken: "Name already taken",
+    }
+    numeric: {
+      max: "can't be greater than max",
+      min: "can't be less than min",
+    }
+    metrics: {
+      name_required: "Metrics Dashboard name is required",
+      group: "Please select a group",
+    }
+    mentoring: {
+      start: "must be today or in the future",
+      end: "must be after start",
+      pending_request: "There's already a pending request",
+      mentor_request: "is not currently accepting mentor requests",
+      mentee_request: "is not currently accepting mentee requests"
+    }
+    initiative: {
+     already_joined: "has already joined this event",
+     expense: "Can't modify an expense for a closed initiative",
+     end: "must be after start",
+     finished: "Expenses are already finished",
+     progress: "Expenses in progress",
+     time: "Expenses over time",
+     budget: "You are providing wrong budget",
+     lack_of_funds: "Can not create event with funds but without budget",
+     segments: "has invalid segments",
+     budget_item_not_approved: "Budget Item is not approved",
+     lack_of_funds_2: "sorry, this budget doesn't have the sufficient funds",
+     temporary: "TEMPORARILY UNSUPPORTED"
+    }
+    group: {
+      deleted: "Deleted group",
+      unknown: "Unknown",
+      leader_uniqueness: "already exists as a %{leader_type} leader",
+      user_not_member: "Selected user is not a member of this group",
+      user_not_member_region: "Selected user is not a member of this region's parent group",
+      category_in_use: "Can't delete category in use",
+      layout_0: "Default layout",
+      layout_1: "Layout without leader boards for Most Active Members",
+      layout_2: "Layout with %{sub_ergs} on top of group leaders",
+      yammer: "this is not a yammer group link",
+      no_parent_and_child: "Group can't have both parent and children",
+      no_parent: "Group cant be its own parent",
+      no_child: "Group cant be its own child",
+      bad_label: "wrong label for",
+      inconsistent_label: "chosen label inconsistent with labels of sub groups"
+    }
+    folder: {
+      no_parent: "Folder is without parent",
+      parent_self: "can't be itself",
+    }
+    field: {
+      same_parent: "Field and field user must have same parent",
+      max_value: "can't be greater than the max value",
+      min_value: "can't be less than the min value",
+      blank: "can't be blank",
+    }
+    clockwork: {
+     exist: "does not exist",
+    }
+    campaign: {
+     select_minimum: "Please select at least 1 group",
+     next_day: "must be after today",
+     start: "must be after start",
+    }
+    budget: {
+     maximum: "number of digits must not exceed 6",
+     closed: "Budget Item is already closed",
+     used: "There are still events using this budget item",
+     budget_set: "Please set an annual budget for this group",
+     annual_budget_closed: "Annual Budget is Closed",
+     surplus: "This budget exceeds the annual budget",
+     closed_expenses: "expenses still have not all been closed",
+     open_annual_budgets: "have not all been closed",
+
+    }
+    application: {
+      only_or: "Can only `or` between two queries of the same Klass",
+      strings_joined: "Can't `or` when joins are defined by strings",
+    }
+    api: {
+     exists: "Already has an API key",
+    }

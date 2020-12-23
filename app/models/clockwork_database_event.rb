@@ -37,7 +37,7 @@ class ClockworkDatabaseEvent < ApplicationRecord
     if job_name.present? && method_name.present?
       begin
         unless job_name.constantize.respond_to? method_name.to_sym
-          errors.add(:method_name, 'does not exist')
+          errors.add(:method_name, I18n.t('errors.clockwork.exist'))
           return false
         end
       rescue => e

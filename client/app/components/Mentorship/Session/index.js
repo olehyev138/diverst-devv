@@ -103,26 +103,26 @@ export function Session(props) {
   };
 
   const columns = [
-    { title: intl.formatMessage(appMessages.person.givenName),
+    { title: intl.formatMessage(appMessages.person.givenName, props.customTexts),
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
-    { title: intl.formatMessage(appMessages.person.familyName),
+    { title: intl.formatMessage(appMessages.person.familyName, props.customTexts),
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
-    { title: intl.formatMessage(messages.show.role),
+    { title: intl.formatMessage(messages.show.role, props.customTexts),
       field: 'role',
       query_field: 'role' },
     {
-      title: intl.formatMessage(messages.show.status),
+      title: intl.formatMessage(messages.show.status, props.customTexts),
       field: 'status',
       query_field: 'status',
       lookup: {
-        leading: intl.formatMessage(messages.show.leading),
-        pending: intl.formatMessage(messages.show.pending),
-        accepted: intl.formatMessage(messages.show.accepted),
-        declined: intl.formatMessage(messages.show.rejected),
+        leading: intl.formatMessage(messages.show.leading, props.customTexts),
+        pending: intl.formatMessage(messages.show.pending, props.customTexts),
+        accepted: intl.formatMessage(messages.show.accepted, props.customTexts),
+        declined: intl.formatMessage(messages.show.rejected, props.customTexts),
       }
     },
   ];
@@ -130,7 +130,7 @@ export function Session(props) {
   const actions = [];
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: intl.formatMessage(messages.show.viewProfile),
+    tooltip: intl.formatMessage(messages.show.viewProfile, props.customTexts),
     onClick: (_, rowData) => {
       handleProfileClickOpen(rowData.user);
     }
@@ -160,7 +160,7 @@ export function Session(props) {
                     startIcon={<DeleteIcon />}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm(intl.formatMessage(messages.show.confirm.delete)))
+                      if (confirm(intl.formatMessage(messages.show.confirm.delete, props.customTexts)))
                         props.deleteSession({
                           id: session.id,
                         });
@@ -199,7 +199,7 @@ export function Session(props) {
                   className={classNames(classes.buttons, classes.deleteButton)}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.show.confirm.decline)))
+                    if (confirm(intl.formatMessage(messages.show.confirm.decline, props.customTexts)))
                       props.declineInvite({
                         user_id: session.current_user_session.user_id,
                         session_id: session.id
@@ -215,7 +215,7 @@ export function Session(props) {
                   className={classNames(classes.buttons)}
                   onClick={() => {
                     /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm(intl.formatMessage(messages.show.confirm.accept)))
+                    if (confirm(intl.formatMessage(messages.show.confirm.accept, props.customTexts)))
                       props.acceptInvite({
                         user_id: session.current_user_session.user_id,
                         session_id: session.id
@@ -306,7 +306,7 @@ export function Session(props) {
             {session.users && (
               <React.Fragment>
                 <DiverstTable
-                  title={intl.formatMessage(messages.show.title)}
+                  title={messages.show.title}
                   handlePagination={props.handleParticipantPagination}
                   onOrderChange={handleOrderChange}
                   isLoading={props.isFetchingSessions}
@@ -354,7 +354,7 @@ export function Session(props) {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleProfileClose} color='primary'>
-                      Close
+                      <DiverstFormattedMessage {...messages.form.close} />
                     </Button>
                   </DialogActions>
                 </Dialog>
@@ -373,6 +373,7 @@ Session.propTypes = {
   loggedUser: PropTypes.object,
   classes: PropTypes.object,
   links: PropTypes.object,
+  customTexts: PropTypes.object,
 
   users: PropTypes.array,
   usersTotal: PropTypes.array,

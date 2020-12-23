@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
+import logMessages from 'containers/Log/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Form, Formik } from 'formik';
@@ -48,7 +49,7 @@ export function LogList(props, context) {
 
   const columns = [
     {
-      title: 'Log',
+      title: intl.formatMessage(messages.logs, props.customTexts),
       render: (activity) => {
         try {
           // eslint-disable-next-line global-require
@@ -102,13 +103,13 @@ export function LogList(props, context) {
             <CardContent>
               <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
                 <Grid item xs={4}>
-                  <Typography>Filter by group</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.filterByGroup} /></Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>From</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.from} /></Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography>To</Typography>
+                  <Typography><DiverstFormattedMessage {...logMessages.to} /></Typography>
                 </Grid>
                 <Grid item xs={2}>
                 </Grid>
@@ -162,7 +163,7 @@ export function LogList(props, context) {
                     variant='contained'
                     className={classes.submitButton}
                   >
-                    Filter
+                    <DiverstFormattedMessage {...logMessages.filter} />
                   </Button>
                 </Grid>
               </Grid>
@@ -180,7 +181,7 @@ export function LogList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Logs'
+            title={messages.logs}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isLoading}
@@ -221,7 +222,7 @@ LogList.propTypes = {
   logFrom: PropTypes.instanceOf(DateTime),
   logTo: PropTypes.instanceOf(DateTime),
   groupLabels: PropTypes.array,
-
+  customTexts: PropTypes.object,
 };
 export default compose(
   injectIntl,

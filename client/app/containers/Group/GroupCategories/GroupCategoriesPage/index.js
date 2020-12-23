@@ -20,6 +20,7 @@ import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategorie
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 export function GroupCategoriesPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
@@ -49,6 +50,7 @@ export function GroupCategoriesPage(props) {
         handlePagination={handlePagination}
         deleteGroupCategoriesBegin={props.deleteGroupCategoriesBegin}
         groupCategoriesTotal={props.groupCategoriesTotal}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -61,12 +63,14 @@ GroupCategoriesPage.propTypes = {
   isLoading: PropTypes.bool,
   groupCategories: PropTypes.object,
   groupCategoriesTotal: PropTypes.number,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   groupCategories: selectPaginatedGroupCategories(),
   groupCategoriesTotal: selectGroupCategoriesTotal(),
+  customTexts: selectCustomText(),
 });
 const mapDispatchToProps = {
   getGroupCategoriesBegin,

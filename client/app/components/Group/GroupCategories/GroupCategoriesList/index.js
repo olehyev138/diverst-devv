@@ -102,7 +102,7 @@ export function GroupCategoriesList(props, context) {
                     className={classes.errorButton}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm(intl.formatMessage(messages.delete_confirm)))
+                      if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                         props.deleteGroupCategoriesBegin(categoryType.id);
                     }}
                   >
@@ -178,7 +178,8 @@ GroupCategoriesList.propTypes = {
   groupCategoriesTotal: PropTypes.number,
   deleteGroupCategoriesBegin: PropTypes.func,
   deleteGroupCategoryBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 export default compose(

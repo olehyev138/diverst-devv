@@ -30,8 +30,8 @@ class MentoringSession < ApplicationRecord
   validates :status,  presence: true
   validates :medium,  presence: true
 
-  validates :start,   date: { after: Date.yesterday, message: 'must be today or in the future' }, on: [:create, :update]
-  validates :end,     date: { after: :start, message: 'must be after start' }, on: [:create, :update]
+  validates :start,   date: { after: Date.yesterday, message: I18n.t('errors.mentoring.start') }, on: [:create, :update]
+  validates :end,     date: { after: :start, message: I18n.t('errors.mentoring.end') }, on: [:create, :update]
 
   # scopes
   scope :past,            -> { where('end < ?', Time.now.utc) }

@@ -18,8 +18,8 @@ import messages from 'containers/Segment/messages';
  *  - Could define UI strings in backend as well
  */
 const operators = [
-  { value: 0, label: 'Join' },
-  { value: 1, label: 'Intersect' },
+  { value: 0, label: <DiverstFormattedMessage {...messages.join} /> },
+  { value: 1, label: <DiverstFormattedMessage {...messages.intersect} /> },
 ];
 
 const SegmentGroupRule = ({ rule, ...props }) => {
@@ -34,6 +34,7 @@ const SegmentGroupRule = ({ rule, ...props }) => {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
     });
   };
 

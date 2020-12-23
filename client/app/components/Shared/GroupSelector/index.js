@@ -27,7 +27,7 @@ import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
 const GroupSelector = (props) => {
   const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
@@ -154,6 +154,7 @@ const GroupSelector = (props) => {
             dialogNoChildren={props.dialogNoChildren}
             queryScopes={props.queryScopes}
             dialogQueryScopes={props.dialogQueryScopes}
+            customTexts={props.customTexts}
           />
         )}
       />
@@ -182,7 +183,7 @@ GroupSelector.propTypes = {
   getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
   extraParams: PropTypes.object,
-
+  customTexts: PropTypes.object,
   inputCallback: PropTypes.func,
 };
 
@@ -191,6 +192,7 @@ GroupSelector.defaultProps = {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
       query_scopes: props.queryScopes || [],
       ...props.extraParams,
       ...params,
@@ -204,6 +206,7 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

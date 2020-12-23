@@ -10,6 +10,9 @@ export const scope = 'diverst.containers.Members';
 export const snackbar = 'diverst.snackbars.Group.Members';
 
 export default defineMessages({
+  close: {
+    id: `${scope}.button.close`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
@@ -112,6 +115,12 @@ export default defineMessages({
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
+  },
+  logs: {
+    id: `${scope}.logs`
+  },
+  filterByGroup: {
+    id: `${scope}.filter.group`
   },
   snackbars: {
     errors: {

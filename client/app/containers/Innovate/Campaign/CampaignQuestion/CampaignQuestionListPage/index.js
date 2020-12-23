@@ -18,6 +18,7 @@ import {
   selectPaginatedQuestions, selectQuestionTotal,
   selectIsFetchingQuestions
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -78,6 +79,7 @@ export function CampaignQuestionListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        customTexts={props.customTexts}
       />
     </React.Fragment>
   );
@@ -93,12 +95,14 @@ CampaignQuestionListPage.propTypes = {
   isFetchingQuestions: PropTypes.bool,
   handleVisitQuestionEdit: PropTypes.func,
   handleVisitQuestionShow: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   questionList: selectPaginatedQuestions(),
   questionTotal: selectQuestionTotal(),
-  isFetchingQuestions: selectIsFetchingQuestions()
+  isFetchingQuestions: selectIsFetchingQuestions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = dispatch => ({

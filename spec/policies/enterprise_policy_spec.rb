@@ -31,12 +31,12 @@ RSpec.describe EnterprisePolicy, type: :policy do
 
       context 'when sso_manage is true' do
         before { user.policy_group.update sso_manage: true }
-        it { is_expected.to permit_actions([:edit_auth, :edit_fields, :edit_mobile_fields, :update_sso]) }
+        it { is_expected.to permit_actions([:edit_auth, :edit_fields, :edit_mobile_fields, :update_sso, :get_enterprise]) }
       end
 
       context 'when branding_manage is true' do
         before { user.policy_group.update branding_manage: true }
-        it { is_expected.to permit_actions([:edit_branding, :update_branding, :restore_default_branding]) }
+        it { is_expected.to permit_actions([:edit_branding, :update_branding, :restore_default_branding, :get_enterprise]) }
       end
     end
 

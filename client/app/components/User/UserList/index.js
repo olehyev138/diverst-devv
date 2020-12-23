@@ -67,17 +67,17 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: intl.formatMessage(messages.first_name),
+      title: intl.formatMessage(messages.first_name, props.customTexts),
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: intl.formatMessage(messages.last_name),
+      title: intl.formatMessage(messages.last_name, props.customTexts),
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: intl.formatMessage(messages.email),
+      title: intl.formatMessage(messages.email, props.customTexts),
       field: 'email',
       query_field: 'email'
     },
@@ -118,7 +118,7 @@ export function UserList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.members)}
+            title={messages.members}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             handleSearching={props.handleSearching}
@@ -130,7 +130,7 @@ export function UserList(props, context) {
             actions={[
               rowData => ({
                 icon: () => <EditIcon />,
-                tooltip: intl.formatMessage(messages.tooltip.edit),
+                tooltip: intl.formatMessage(messages.tooltip.edit, props.customTexts),
                 onClick: (_, rowData) => {
                   props.handleVisitUserEdit(rowData.id);
                 },
@@ -138,10 +138,10 @@ export function UserList(props, context) {
               }),
               rowData => ({
                 icon: () => <DeleteIcon />,
-                tooltip: intl.formatMessage(messages.tooltip.delete),
+                tooltip: intl.formatMessage(messages.tooltip.delete, props.customTexts),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.delete_confirm)))
+                  if (confirm(intl.formatMessage(messages.delete_confirm, props.customTexts)))
                     props.deleteUserBegin(rowData.id);
                 },
                 disabled: !permission(rowData, 'destroy?')
@@ -208,7 +208,8 @@ UserList.propTypes = {
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

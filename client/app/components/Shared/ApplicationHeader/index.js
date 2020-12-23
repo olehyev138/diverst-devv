@@ -26,9 +26,11 @@ import {
   selectEnterprise,
   selectUser,
   selectPermissions,
+  selectCustomText
 } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
+import { selectRegion } from 'containers/Region/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -36,6 +38,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
 import Permission from 'components/Shared/DiverstPermission';
 import DiverstImg from 'components/Shared/DiverstImg';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   grow: {
@@ -99,7 +102,7 @@ const styles = theme => ({
 });
 
 export function ApplicationHeader(props) {
-  const { classes, group, user, permissions } = props;
+  const { classes, group, region, user, permissions } = props;
 
   const isAdmin = !!useRouteMatch(ROUTES.admin.pathPrefix);
 
@@ -183,7 +186,7 @@ export function ApplicationHeader(props) {
           { isAdmin
             ? (
               <IconButton
-                aria-label='Open drawer'
+                aria-label={props.intl.formatMessage(messages.openDrawer, props.customTexts)}
                 edge='start'
                 onClick={handleDrawerToggle}
                 className={classNames(classes.drawerToggle, classes.whiteButton)}
@@ -196,13 +199,16 @@ export function ApplicationHeader(props) {
           <Logo height='55px' withLink />
           <div className={classNames(classes.grow, classes.centerText)}>
             <Hidden xsDown>
-              {!isAdmin && group ? (
+              {!isAdmin && group && (
                 <Typography variant='h5'>
                   {group.name}
                 </Typography>
-              )
-                : (<React.Fragment />)
-              }
+              )}
+              {!isAdmin && !group && region && (
+                <Typography variant='h5'>
+                  {region.name}
+                </Typography>
+              )}
             </Hidden>
           </div>
           <div className={classes.sectionDesktop}>
@@ -272,6 +278,7 @@ ApplicationHeader.propTypes = {
   classes: PropTypes.object,
   user: PropTypes.object,
   group: PropTypes.object,
+  region: PropTypes.object,
   permissions: PropTypes.object,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
@@ -279,6 +286,8 @@ ApplicationHeader.propTypes = {
   handleVisitAdmin: PropTypes.func,
   handleVisitHome: PropTypes.func,
   toggleAdminDrawer: PropTypes.func,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 const mapDispatchToProps = {
@@ -290,7 +299,9 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),
+  region: selectRegion(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const withConnect = connect(
@@ -302,6 +313,7 @@ export const StyledApplicationHeader = withStyles(styles)(ApplicationHeader);
 
 export default compose(
   withConnect,
+  injectIntl,
   withStyles(styles),
   memo,
 )(ApplicationHeader);

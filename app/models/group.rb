@@ -69,6 +69,10 @@ class Group < ApplicationRecord
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
 
+  # Regions
+  belongs_to :region
+  has_many :regions, foreign_key: :parent_id, dependent: :destroy
+
   has_one :news_feed, dependent: :destroy
 
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
@@ -107,7 +111,7 @@ class Group < ApplicationRecord
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
 
-  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
+  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
   has_many :leaders, through: :group_leaders, source: :user
 
   has_many :annual_budgets, dependent: :destroy
@@ -177,7 +181,7 @@ class Group < ApplicationRecord
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
-  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
+  validates :calendar_color, format: { with: %r{\A(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: I18n.t('errors.theme.valid_hex') }
   validates :expiry_age_for_news, numericality: { greater_than_or_equal_to: 0 }
   validates :expiry_age_for_events, numericality: { greater_than_or_equal_to: 0 }
   validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
@@ -213,6 +217,14 @@ class Group < ApplicationRecord
   scope :possible_children, -> (id) { except_id(id).where(parent_id: [nil, id.presence]).no_children }
   scope :all_children,      -> { where.not(parent_id: nil) }
   scope :no_children,       -> { includes(:children).where(children_groups: { id: nil }) }
+  scope :children_of,       -> (id) { where(parent_id: id) }
+
+  # Regions
+  # Pass a group ID to get all the children of the group that are not in regions,
+  # intended for retrieving the options when assigning children into a region.
+  # Optionally pass a region ID to include children from that region,
+  # intended for including children of the region when editing it
+  scope :non_regioned_children, -> (id, region_id = nil) { where(parent_id: id, region_id: [nil, region_id]) }
 
   # This scope acts as an alternative to `all_parents` which ignore a given list of groups, while getting the
   # children of said groups and adding them to the result of the query
@@ -266,7 +278,7 @@ class Group < ApplicationRecord
 
   def self.load_sums
     select(
-        'groups.*,'\
+        '`groups`.*,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
         ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
@@ -311,9 +323,9 @@ class Group < ApplicationRecord
 
   def layout_values
     {
-      'layout_0' => 'Default layout',
-      'layout_1' => 'Layout without leader boards for Most Active Members',
-      'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+      'layout_0' => I18n.t('errors.group.layout_0'),
+      'layout_1' => I18n.t('errors.group.layout_1'),
+      'layout_2' => I18n.t('errors.group.layout_2', sub_ergs: "#{c_t(:sub_erg).pluralize}")
     }
   end
 
@@ -343,7 +355,7 @@ class Group < ApplicationRecord
 
   def valid_yammer_group_link?
     if yammer_group_link.present? && !yammer_group_id
-      errors.add(:yammer_group_link, 'this is not a yammer group link')
+      errors.add(:yammer_group_link, I18n.t('errors.group.yammer'))
       return false
     end
 
@@ -555,19 +567,19 @@ class Group < ApplicationRecord
 
   def ensure_one_level_nesting
     if parent.present? && children.present?
-      errors.add(:parent_id, "Group can't have both parent and children")
+      errors.add(:parent_id, I18n.t('errors.group.no_parent_and_child'))
     end
   end
 
   def ensure_not_own_parent
     if parent.present? && parent.id == self.id
-      errors.add(:parent_id, 'Group cant be its own parent')
+      errors.add(:parent_id, I18n.t('errors.group.no_parent'))
     end
   end
 
   def ensure_not_own_child
     if children.exists?(self.id)
-      errors.add(:child_ids, 'Group cant be its own child')
+      errors.add(:child_ids, I18n.t('errors.group.no_child'))
     end
   end
 
@@ -576,7 +588,7 @@ class Group < ApplicationRecord
       group_category_type = self.group_category.group_category_type if self.group_category
       if self.group_category && self.parent.group_category_type
         if group_category_type != self.parent.group_category_type
-          errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
+          errors.add(:group_category, I18n.t('errors.group.bad_label') + " #{self.parent.group_category_type.name}")
         end
       end
     end
@@ -585,7 +597,7 @@ class Group < ApplicationRecord
   def ensure_label_consistency_between_parent_and_sub_groups
     unless group_category.nil?
       if if_any_sub_group_category_type_not_equal_to_parent_category_type?
-        errors.add(:group_category_id, 'chosen label inconsistent with labels of sub groups')
+        errors.add(:group_category_id, I18n.t('errors.group.inconsistent_label'))
       end
     end
   end
@@ -637,5 +649,6 @@ class Group < ApplicationRecord
 
   def set_position
     self.position = self.id
+    save!
   end
 end

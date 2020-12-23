@@ -1,13 +1,14 @@
 class ApplicationPolicy
-  attr_reader :user, :policy_group, :params, :record, :group_leader_role_id
+  attr_reader :user, :policy_group, :params, :record, :group_leader_role_id, :diverst_request
 
-  def initialize(user, record, params = {})
+  def initialize(user, record, params = {}, diverst_request = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
     @record = record
     @params = params
     @policy_group = @user.policy_group
+    @diverst_request = diverst_request
   end
 
   def index?
@@ -21,7 +22,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(id: record&.id).exists?
+    index?
   end
 
   def create?
@@ -43,7 +44,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    scope.where(id: record&.id).exists?
+    update?
   end
 
   def manage_all?

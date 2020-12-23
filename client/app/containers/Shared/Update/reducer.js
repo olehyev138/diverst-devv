@@ -65,7 +65,7 @@ function updateReducer(state = initialState, action) {
         break;
 
       case GET_UPDATES_SUCCESS:
-        draft.updateList = action.payload.items.map(formatUpdate);
+        draft.updateList = action.payload.items;
         draft.updateListTotal = action.payload.total;
         draft.isFetchingUpdates = false;
         break;

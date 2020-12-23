@@ -31,6 +31,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import SignUpForm from 'components/User/SignUpForm';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
+import messages from '../messages';
+
 
 export function SignUpPage(props) {
   useInjectReducer({ key: 'signUp', reducer });
@@ -45,7 +47,7 @@ export function SignUpPage(props) {
       });
     else {
       props.showSnackbar({
-        message: 'You need nave an invitation to sign up',
+        message: messages.token,
         options: { variant: 'warning' }
       });
       props.redirectAction(ROUTES.session.login.path());

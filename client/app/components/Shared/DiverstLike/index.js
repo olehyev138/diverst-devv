@@ -7,6 +7,8 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import { IconButton } from '@material-ui/core';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import messages from './messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   liked: {
@@ -44,7 +46,7 @@ export function DiverstLike(props) {
   return (
     <React.Fragment>
       <IconButton
-        aria-label='Choose color'
+        aria-label={props.intl.formatMessage(messages.color, props.customTexts)}
         size='small'
         onClick={() => {
           if (liked)
@@ -70,8 +72,11 @@ DiverstLike.propTypes = {
   answerId: PropTypes.number,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 export default compose(
+  injectIntl,
   withStyles(styles),
 )(DiverstLike);

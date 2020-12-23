@@ -272,7 +272,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   <AttachMoneyIcon />
                 </WithStyles(ForwardRef(ListItemIcon))>
                 <WithStyles(ForwardRef(ListItemText))>
-                  Group Budgets
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.plan.group_budgets"
+                  />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
             </WithStyles(ForwardRef(List))>
@@ -745,7 +747,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   <AttachMoneyIcon />
                 </WithStyles(ForwardRef(ListItemIcon))>
                 <WithStyles(ForwardRef(ListItemText))>
-                  Group Budgets
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.plan.group_budgets"
+                  />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
             </WithStyles(ForwardRef(List))>

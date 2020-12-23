@@ -34,6 +34,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
     rest.getSegmentsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true,
     });
   };
 

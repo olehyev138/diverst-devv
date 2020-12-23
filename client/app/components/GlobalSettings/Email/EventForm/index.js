@@ -64,8 +64,6 @@ export function EventFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError, classes,
   ...props
 }) {
-  const { intl } = props;
-
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={!props.event}>
@@ -158,9 +156,6 @@ export function EventFormInner({
               </DiverstSubmit>
               <DiverstCancel
                 redirectFallback={props.links.eventsIndex}
-                variant='contained'
-                size='large'
-                className={classes.buttons}
                 disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
@@ -219,7 +214,7 @@ EventFormInner.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,

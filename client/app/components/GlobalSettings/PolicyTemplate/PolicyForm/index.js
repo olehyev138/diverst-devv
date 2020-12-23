@@ -220,7 +220,7 @@ export function PolicyFormInner({
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   <Typography component='h2' variant='h5'>
-                    Enterprise
+                    <DiverstFormattedMessage {...messages.type.enterprise} />
                   </Typography>
                 </Grid>
                 {policiesRender(enterprisePolicies)}
@@ -231,7 +231,7 @@ export function PolicyFormInner({
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography component='h2' variant='h5'>
-                    General
+                    <DiverstFormattedMessage {...messages.type.general} />
                   </Typography>
                 </Grid>
                 {policiesRender(generalPolicies)}
@@ -242,7 +242,7 @@ export function PolicyFormInner({
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography component='h2' variant='h5'>
-                    Group
+                    <DiverstFormattedMessage {...messages.type.group} />
                   </Typography>
                 </Grid>
                 {policiesRender(groupPolicies)}
@@ -380,7 +380,7 @@ PolicyFormInner.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,

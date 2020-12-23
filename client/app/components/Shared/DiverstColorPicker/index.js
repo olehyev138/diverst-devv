@@ -9,6 +9,9 @@ import { formatColor } from 'utils/selectorHelpers';
 
 import { TwitterPicker } from 'react-color';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from './messages';
+
 const styles = theme => ({
   paper: {
     overflow: 'visible',
@@ -76,7 +79,7 @@ export function DiverstColorPicker(props) {
           endAdornment={(
             <InputAdornment position='end'>
               <IconButton
-                aria-label='Choose color'
+                aria-label={props.intl.formatMessage(messages.color)}
                 onClick={handleClick}
               >
                 <PaletteIcon />
@@ -136,6 +139,7 @@ DiverstColorPicker.propTypes = {
   InputProps: PropTypes.object,
   PickerProps: PropTypes.object,
   FormControlProps: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 DiverstColorPicker.defaultProps = {
@@ -144,6 +148,7 @@ DiverstColorPicker.defaultProps = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
   withTheme,
 )(DiverstColorPicker);

@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
 import { getOutcomesBegin, deleteOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
@@ -68,6 +69,7 @@ export function OutcomesPage(props) {
       defaultParams={defaultParams}
       handlePagination={handlePagination}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -82,12 +84,14 @@ OutcomesPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   outcomes: selectPaginatedOutcomes(),
   outcomesTotal: selectOutcomesTotal(),
   isLoading: selectIsLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

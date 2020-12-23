@@ -11,6 +11,9 @@ import NewsLinkCommentForm from 'components/News/NewsLink/NewsLinkCommentForm';
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import messages from 'containers/News/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
 
 const styles = theme => ({});
 
@@ -25,6 +28,7 @@ export function NewsLink(props) {
         <React.Fragment>
           <NewsLinkListItem
             newsItem={newsItem}
+            customTexts={props.customTexts}
           />
           <Box mb={4} />
           <NewsLinkCommentForm
@@ -35,7 +39,7 @@ export function NewsLink(props) {
           />
           <Box mb={4} />
           <Typography variant='h6'>
-            Comments
+            <DiverstFormattedMessage {...messages.comments} />
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
           {newsLink?.comments && newsLink.comments.map((comment, i) => {
@@ -45,6 +49,7 @@ export function NewsLink(props) {
                 comment={comment}
                 deleteCommentAction={props.deleteNewsLinkCommentBegin}
                 newsItem={props.newsItem}
+                customTexts={props.customTexts}
               />
             );
           })}
@@ -64,6 +69,7 @@ NewsLink.propTypes = {
     newsLinkEdit: PropTypes.func
   }),
   deleteNewsLinkCommentBegin: PropTypes.func,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

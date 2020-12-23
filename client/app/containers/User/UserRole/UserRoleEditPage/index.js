@@ -20,6 +20,7 @@ import {
 import {
   selectFormUserRole, selectIsCommitting, selectIsFormLoading
 } from '../selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
 import { injectIntl, intlShape } from 'react-intl';
@@ -51,7 +52,7 @@ export function UserRoleEditPage(props) {
         userRoleAction={props.updateUserRoleBegin}
         links={links}
         userRole={props.userRole}
-        buttonText={intl.formatMessage(messages.update)}
+        buttonText={messages.update}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
@@ -68,12 +69,14 @@ UserRoleEditPage.propTypes = {
   userRoleUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   userRole: selectFormUserRole(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

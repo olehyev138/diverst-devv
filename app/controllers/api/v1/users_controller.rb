@@ -15,7 +15,11 @@ class Api::V1::UsersController < DiverstController
   def index
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: serializer(params)
+    response = klass.index(self.diverst_request, params, policy: @policy)
+    response = { page: response.as_json } if diverst_request.minimal
+    options = diverst_request.minimal ? {} : { use_serializer: serializer(params) }
+
+    render status: 200, json: response, **options
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -29,16 +33,13 @@ class Api::V1::UsersController < DiverstController
 
     base_authorize(klass)
 
-    base = User.left_joins(:policy_group, :group_leaders, :user_groups)
-                .where(
-                    [
-                        '(`group_leaders`.`budget_approval` = TRUE AND `group_leaders`.`group_id` = ?)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `policy_groups`.`groups_manage` = TRUE)',
-                        '(`policy_groups`.`budget_approval` = TRUE AND `user_groups`.`group_id` = ?)',
-                        '(`policy_groups`.`manage_all` = TRUE)',
-                    ].join(' OR '), params[:group_id], params[:group_id])
+    group = Group.find(params[:group_id])
+    base = User.budget_approvers(group)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!, base: base)
+    response = klass.index(self.diverst_request, params.permit!, base: base)
+    response = { page: response.as_json } if diverst_request.minimal
+
+    render status: 200, json: response
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -129,13 +130,23 @@ class Api::V1::UsersController < DiverstController
   # TOKEN CODE
   # ===============================================
 
-  private def token(token_service)
+  private def token(token_service, with_associations: false, groups: false)
     token, user = token_service.form_token(params[:token])
+
+    groups_scope = if groups
+      Group
+          .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
+          .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id)
+    else
+      Group.none
+    end
 
     render status: 200, json: {
         token: token,
-        user: InvitedUserSerializer.new(user).as_json,
-        groups: Group.where(parent_id: nil, private: false, enterprise_id: user.enterprise_id).map { |group| GroupOnboardingSerializer.new(group).as_json }
+        user: InvitedUserSerializer.new(user, with_associations: with_associations).as_json,
+        groups: groups_scope.map do |group|
+          GroupOnboardingSerializer.new(group, scope: { current_user: user }).as_json
+        end
     }
   rescue => e
     raise BadRequestException.new(e.message)
@@ -146,7 +157,7 @@ class Api::V1::UsersController < DiverstController
   # ================================================
 
   def sign_up_token
-    token(InviteTokenService)
+    token(InviteTokenService, groups: true, with_associations: true)
   end
 
   def sign_up

@@ -30,6 +30,7 @@ import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function PollResponseFormInner({ formikProps, buttonText, errors, ...props }) {
+  // Translation issue :  Message generated is dependant on a description?
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <Scrollbar>
@@ -116,7 +117,7 @@ export function PollResponseForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl ? intl.formatMessage(messages.form.submitConfirmation) : 'confirm?')) {
+        if (confirm(intl.formatMessage(messages.form.submitConfirmation, props.customTexts))) {
           const payload = {
             anonymous: values.anonymous,
             field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
@@ -138,19 +139,21 @@ PollResponseForm.propTypes = {
   isLoading: PropTypes.bool,
   token: PropTypes.string,
   errors: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 PollResponseFormInner.propTypes = {
   formikProps: PropTypes.object,
   errors: PropTypes.object,
   response: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 export default compose(

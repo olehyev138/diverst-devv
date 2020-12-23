@@ -11,7 +11,7 @@ class UserGroup < ApplicationRecord
 
   # validations
   validates_length_of :data, maximum: 65535
-  validates_uniqueness_of :user, scope: [:group], message: 'is already a member of this group'
+  validates_uniqueness_of :user, scope: [:group], message: I18n.t('errors.groups.already_member')
 
   scope :top_participants, ->(n) { order(total_weekly_points: :desc).limit(n) }
 
@@ -129,6 +129,6 @@ class UserGroup < ApplicationRecord
   private
 
   def remove_leader_role
-    GroupLeader.where(group_id: group_id, user_id: user_id).destroy_all
+    GroupLeader.where(leader_of: group, user_id: user_id).destroy_all
   end
 end

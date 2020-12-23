@@ -17,6 +17,7 @@ import { renderChildrenWithProps } from 'utils/componentHelpers';
 import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { permission } from 'utils/permissionsHelpers';
+import messages from 'containers/Shared/App/messages';
 
 const styles = theme => ({
   content: {
@@ -73,7 +74,7 @@ const SystemUsersLayout = (props) => {
       else if (permission(props, 'policy_templates_manage'))
         redirectAction(ROUTES.admin.system.users.roles.index.path());
       else {
-        showSnackbar({ message: 'You do not have permission to see this page', options: { variant: 'warning' } });
+        showSnackbar({ message: messages.permissions.system, options: { variant: 'warning' } });
         redirectAction(ROUTES.user.home.path());
       }
 

@@ -22,6 +22,7 @@ class Budget < ApplicationRecord
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
+  validates :budget_items, presence: true
 
   delegate :currency, to: :annual_budget
 
@@ -102,20 +103,19 @@ class Budget < ApplicationRecord
 
   def annual_budget_set?
     unless (annual_budget&.amount || 0) > 0
-      'Please set an annual budget for this group'
+      I18n.t('errors.budget.budget_set')
     end
   end
 
   def annual_budget_open?
     unless annual_budget.present? && !annual_budget.closed
-      'Annual Budget is Closed'
+      I18n.t('errors.budget.annual_budget_closed')
     end
   end
 
   def request_surplus?
-    unless requested_amount.present? && requested_amount < annual_budget&.amount
-
-      'This budget exceeds the annual budget'
+    unless requested_amount.present? && requested_amount <= annual_budget&.free
+      I18n.t('errors.budget.surplus')
     end
   end
 

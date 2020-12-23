@@ -30,6 +30,7 @@ import {
   selectCommitSuccess,
   selectHasChanged,
 } from 'containers/Shared/Field/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin
@@ -96,7 +97,7 @@ export function FieldListPage(props) {
         isCommitting={props.isCommitting}
         commitSuccess={props.commitSuccess}
         currentEvent={props.currentEvent}
-
+        customTexts={props.customTexts}
         numberField
       />
     </React.Fragment>
@@ -107,7 +108,7 @@ FieldListPage.propTypes = {
   getFieldsBegin: PropTypes.func.isRequired,
   createFieldBegin: PropTypes.func.isRequired,
   updateFieldBegin: PropTypes.func.isRequired,
-  fields: PropTypes.object,
+  fields: PropTypes.array,
   fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,
@@ -120,7 +121,8 @@ FieldListPage.propTypes = {
   }),
   currentGroup: PropTypes.shape({
     id: PropTypes.number
-  })
+  }),
+  customTexts: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -132,6 +134,7 @@ const mapStateToProps = createStructuredSelector({
   currentEvent: selectEvent(),
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText()
 });
 
 const mapDispatchToProps = {

@@ -23,6 +23,7 @@ import permissionMessages from 'containers/Shared/Permissions/messages';
 
 import { getAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/actions';
 import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import annualReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 import annualSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
 
@@ -48,7 +49,7 @@ export function BudgetCreatePage(props) {
     <RequestForm
       budgetAction={props.createBudgetRequestBegin}
       isCommitting={props.isCommitting}
-      buttonText={props.intl.formatMessage(formMessage.create)}
+      buttonText={props.intl.formatMessage(formMessage.create, props.customTexts)}
       annualBudget={props.annualBudget}
       currentGroup={props.currentGroup}
       links={links}
@@ -65,12 +66,14 @@ BudgetCreatePage.propTypes = {
   isCommitting: PropTypes.bool,
   getAnnualBudgetBegin: PropTypes.func,
   annualBudget: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   currentGroup: selectGroup(),
   annualBudget: selectAnnualBudget(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

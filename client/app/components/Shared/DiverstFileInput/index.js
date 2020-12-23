@@ -119,7 +119,7 @@ export function DiverstFileInput(props) {
   const [notAcceptedFile, setNotAcceptedFile] = useState(false);
   const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
   const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileMessages() : getAllSupportedFileMessages();
-
+  // TODO : Add customTExts to intl.formatMessage
   return (
     <React.Fragment>
       <DirectUploadProvider
@@ -281,7 +281,7 @@ export function DiverstFileInput(props) {
                                 <Typography display='inline' variant='h6' className={classNames(classes.fileInfo, classes.fileInfoBoxTypography)}>
                                   <IconButton
                                     className={classes.deleteButton}
-                                    aria-label='delete'
+                                    aria-label={intl.formatMessage(messages.delete)}
                                     size='small'
                                     onClick={() => {
                                       setNotAcceptedFile(false);

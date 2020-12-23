@@ -10,6 +10,17 @@ export const scope = 'diverst.containers.Policies';
 export const snackbar = 'diverst.snackbars.User.Policy';
 
 export default defineMessages({
+  type: {
+    enterprise: {
+      id: `${scope}.type.enterprise`,
+    },
+    general: {
+      id: `${scope}.type.general`,
+    },
+    group: {
+      id: `${scope}.type.group`,
+    },
+  },
   form: {
     update: {
       id: `${scope}.form.update`,

@@ -100,14 +100,15 @@ export function SessionsList(props, context) {
                       }}
                     >
                       <Typography color='primary' variant='h6' component='h2'>
-                        {item.interests || 'Mentorship'}
+                        {item.interests || <DiverstFormattedMessage {...messages.mentorship} />}
                       </Typography>
                     </Link>
                     <hr className={classes.divider} />
                     {item.interests && (
                       <React.Fragment>
                         <Typography color='textSecondary'>
-                          {`Hosted by ${item.creator.name}`}
+                          <DiverstFormattedMessage {...messages.host} />
+                          {`${item.creator.name}`}
                         </Typography>
                         <Box pb={1} />
                       </React.Fragment>
@@ -134,7 +135,7 @@ export function SessionsList(props, context) {
                               className={classNames(classes.folderLink, classes.deleteButton)}
                               onClick={() => {
                                 // eslint-disable-next-line no-restricted-globals,no-alert
-                                if (confirm(props.intl.formatMessage(messages.index.deleteConfirmation)))
+                                if (confirm(props.intl.formatMessage(messages.index.deleteConfirmation, props.customTexts)))
                                   props.deleteAction({
                                     id: item.id
                                   });
@@ -194,6 +195,7 @@ SessionsList.propTypes = {
   readonly: PropTypes.bool,
   loaderProps: PropTypes.object,
   deleteAction: PropTypes.func.isRequired,
+  customTexts: PropTypes.object
 };
 
 export default compose(

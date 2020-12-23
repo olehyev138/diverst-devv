@@ -59,9 +59,11 @@ CustomGraphPage.propTypes = {
   selectData: PropTypes.func,
   getCustomGraphDataBegin: PropTypes.func,
   deleteCustomGraphBegin: PropTypes.func,
-  customGraphUnmount: PropTypes.func
+  customGraphUnmount: PropTypes.func,
+  customTexts: PropTypes.object
 };
 
+// TODO : Add customText to pass it to customGraph
 const mapStateToProps = state => ({
   selectData: id => selectCustomGraphData(id)(state)
 });

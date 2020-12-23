@@ -15,6 +15,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import PropTypes from 'prop-types';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from './messages';
+
 const styles = theme => ({
   root: {
     marginBottom: 20,
@@ -58,7 +61,7 @@ function SnackbarProviderWrapper(props) {
       action={key => (
         <IconButton
           key='close'
-          aria-label='close'
+          aria-label={props.intl.formatMessage(messages.close, props.customTexts)}
           color='inherit'
           onClick={() => notistackRef.current.closeSnackbar(key)}
         >
@@ -75,9 +78,12 @@ SnackbarProviderWrapper.propTypes = {
   children: PropTypes.node.isRequired,
   classes: PropTypes.object,
   closeSnackbar: PropTypes.func,
+  customTexts: PropTypes.object,
+  intl: intlShape.isRequired
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(SnackbarProviderWrapper);

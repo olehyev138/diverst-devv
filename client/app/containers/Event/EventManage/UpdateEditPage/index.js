@@ -57,7 +57,6 @@ import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
 
 export function UpdateEditPage(props) {
@@ -68,8 +67,6 @@ export function UpdateEditPage(props) {
 
   const location = useLocation();
   const { update_id: updateId } = useParams();
-
-  const { intl } = props;
 
   const partialLink = ROUTES.group.plan.events.manage.updates;
 
@@ -97,7 +94,7 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText={intl.formatMessage(messages.update)}
+      buttonText={messages.update}
       updateAction={props.updateUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
 
@@ -107,7 +104,6 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
-  intl: intlShape.isRequired,
   getUpdateBegin: PropTypes.func.isRequired,
   getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
@@ -152,7 +148,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(UpdateEditPage);

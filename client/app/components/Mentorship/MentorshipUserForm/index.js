@@ -26,8 +26,8 @@ import { withStyles } from '@material-ui/core/styles';
 import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
 
 /* eslint-disable object-curly-newline */
-export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
+export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
+  const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day], props.customTexts), value: day }));
   return (
     <React.Fragment>
       { props.user && props.userSession.user_id === props.user.id && (
@@ -198,7 +198,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 color='primary'
                 type='submit'
               >
-                Submit
+                <DiverstFormattedMessage {...messages.form.button.submit} />
               </Button>
             </CardActions>
           </Form>
@@ -257,14 +257,14 @@ MentorshipUserFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   interestOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   links: PropTypes.shape({
     usersIndex: PropTypes.string
-  })
+  }),
+  customTexts: PropTypes.object,
 };
 
 export default compose(

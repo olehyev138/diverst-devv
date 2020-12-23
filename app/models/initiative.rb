@@ -22,7 +22,7 @@ class Initiative < ApplicationRecord
   validates_length_of :location, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
-  validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
+  validates :end, date: { after: :start, message: I18n.t('errors.initiative.end') }, on: [:create, :update]
 
   # Ported from Event
   # todo: check events controller views and forms to work
@@ -52,10 +52,18 @@ class Initiative < ApplicationRecord
   has_many :attendees, through: :initiative_users, source: :user
 
   belongs_to :owner_group, class_name: 'Group'
-  belongs_to :pillar
+  belongs_to :pillar, inverse_of: :initiatives
   has_one :outcome, through: :pillar
   has_one :group, through: :outcome
   has_one :enterprise, through: :group
+
+  def group
+    if association(:group).loaded? || !association(:pillar).loaded?
+      super
+    else
+      pillar.group
+    end
+  end
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
@@ -111,7 +119,11 @@ class Initiative < ApplicationRecord
       )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    unscope(:left_joins).joins(
+    new_query = self
+    new_query = new_query.unscope(:left_joins)
+    new_query = new_query.unscope(:joins)
+    new_query.eager_load_values = []
+    new_query.joins(
         'LEFT OUTER JOIN `initiative_participating_groups` '\
           'ON `initiative_participating_groups`.`initiative_id` = `initiatives`.`id` '\
         'LEFT OUTER JOIN `pillars` ' \
@@ -121,6 +133,8 @@ class Initiative < ApplicationRecord
         'LEFT OUTER JOIN `groups` '\
           'ON 	`groups`.`id` = `outcomes`.`group_id` ' \
             'OR `groups`.`id` = `initiative_participating_groups`.`group_id`'\
+        'LEFT OUTER JOIN `regions` '\
+          'ON 	`regions`.`parent_id` = `groups`.`id` ' \
         'LEFT OUTER JOIN `initiative_segments` '\
           'ON `initiative_segments`.`initiative_id` = `initiatives`.`id` '\
         'LEFT OUTER JOIN `initiative_invitees` '\
@@ -128,9 +142,11 @@ class Initiative < ApplicationRecord
         'LEFT OUTER JOIN `enterprises` '\
           'ON `enterprises`.`id` = `groups`.`enterprise_id` '\
 		    'LEFT OUTER JOIN `group_leaders` '\
-          'ON `group_leaders`.`group_id` = `groups`.`id` '\
+          'ON (`group_leaders`.`leader_of_id` = `groups`.`id` AND `group_leaders`.`leader_of_type` = "Group") '\
+            'OR (`group_leaders`.`leader_of_id` = `regions`.`id` AND `group_leaders`.`leader_of_type` = "Region") '\
 		    'LEFT OUTER JOIN `user_groups` '\
-          'ON `user_groups`.`group_id` = `groups`.`id` '
+          'ON `user_groups`.`group_id` = `groups`.`id` '\
+		    "JOIN policy_groups ON policy_groups.user_id = #{user.id.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")}"
       ).where(valid_ors.join(' OR '))
   }
 
@@ -276,9 +292,9 @@ class Initiative < ApplicationRecord
 
   def expenses_status
     if finished_expenses?
-      'Expenses finished'
+      I18n.t('errors.initiative.finished')
     else
-      'Expenses in progress'
+      I18n.t('errors.initiative.progress')
     end
   end
 
@@ -296,7 +312,7 @@ class Initiative < ApplicationRecord
 
   def finish_expenses!
     if finished_expenses?
-      errors.add(:initiative, 'Expenses are already finished')
+      errors.add(:initiative, I18n.t('errors.initiative.finished'))
       return false
     end
 
@@ -448,7 +464,7 @@ class Initiative < ApplicationRecord
       to: time_to ? Time.at(time_to.to_i / 1000) : Time.current
     )
 
-    strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+    strategy = Reports::GraphTimeseriesGeneric.new(title: I18n.t('errors.initiative.time'), data: data)
     report = Reports::Generator.new(strategy)
 
     report.to_csv
@@ -486,7 +502,7 @@ class Initiative < ApplicationRecord
 
       if budget.group != group
         # make sure noone is trying to put incorrect budget value
-        errors.add(:budget, 'You are providing wrong budget')
+        errors.add(:budget, I18n.t('errors.initiative.budget'))
         return false
       end
 
@@ -499,20 +515,20 @@ class Initiative < ApplicationRecord
 
     # Here we know there is no budge, no leftover, but estimated_amount
     # is still greater than zero, which is not valid
-    errors.add(:budget, 'Can not create event with funds but without budget')
+    errors.add(:budget, I18n.t('errors.initiative.lack_of_funds'))
   end
 
   def segment_enterprise
     segments.each do |segment|
       if segment.try(:enterprise) != owner.try(:enterprise)
-        errors.add(:segments, 'has invalid segments')
+        errors.add(:segments, I18n.t('errors.initiative.segments'))
         return
       end
     end
   end
 
   def budget_item_is_approved
-    errors.add(:budget_item, 'Budget Item is not approved') unless budget_item.blank? || budget.is_approved?
+    errors.add(:budget_item, I18n.t('errors.initiative.budget_item_not_approved')) unless budget_item.blank? || budget.is_approved?
   end
 
   def allocate_budget_funds
@@ -523,10 +539,10 @@ class Initiative < ApplicationRecord
     self.estimated_funding = temp
 
     if budget_item.present? && estimated_funding > budget_item.available_amount
-      errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
+      errors.add(:budget_item_id, I18n.t('errors.initiative.lack_of_funds_2'))
       false
     elsif funded_by_leftover?
-      errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
+      errors.add(:budget_item_id, I18n.t('errors.initiative.temporary'))
       false
     end
   end

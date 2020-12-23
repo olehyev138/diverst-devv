@@ -12,6 +12,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   scope :except_id, -> (id) { where.not(id: id.presence) }
 
+  if Rails.env.development? || Rails.env.test?
+    ActiveRecordQueryTrace.enabled = false
+  end
+
   def time_since_creation
     time_ago_in_words created_at
   end
@@ -33,6 +37,43 @@ class ApplicationRecord < ActiveRecord::Base
   def self.column_reload!
     self.connection.schema_cache.clear!
     self.reset_column_information
+  end
+
+  # Defines alias to access polymorphic data as if it weren't
+  #
+  # For example
+  # class GroupLeader
+  #   belongs_to :leader_of, polymorphic: true
+  #   polymorphic_alias :leader_of, Group
+  #   polymorphic_alias :leader_of, Region
+  # end
+  #
+  # gl = GroupLeader.first
+  #
+  # gl.group // if leader_of is a group, return it
+  # gl.group = Group.first // sets leader_ofK
+  # gl.group = Region.first // ArgumentError "Must pass a Group"
+  #
+  # gl.group_id // if leader_of is a group, return leader_of_id
+  # gl.group_id = 1 // sets leader_of_id to 1 and leader_of_type to 'Group'
+  def self.polymorphic_alias(field, model)
+    define_method model.model_name.singular do
+      if model.model_name.name == send("#{field}_type")
+        send(field)
+      end
+    end
+    define_method "#{model.model_name.singular}=" do |arg|
+      raise ArgumentError, "Must pass a #{model.model_name.name}" unless arg.is_a? model
+
+      send("#{field}=", arg)
+    end
+    define_method "#{model.model_name.singular}_id=" do |id|
+      send("#{field}_id=", id)
+      send("#{field}_type=", model.model_name.name)
+    end
+    define_method "#{model.model_name.singular}_id" do
+      send("#{field}_id") if model.model_name.name == send("#{field}_type")
+    end
   end
 
   ActiveRecord::Associations::Association.class_eval do
@@ -65,7 +106,7 @@ class ApplicationRecord < ActiveRecord::Base
     left = all
     right = right_raw.all
 
-    raise ::ArgumentError.new('Can only `or` between two queries of the same Klass') unless left.klass == right.klass
+    raise ::ArgumentError.new(I18n.t('errors.application.only_or')) unless left.klass == right.klass
 
     merged = left.merge(right)
 
@@ -85,7 +126,7 @@ class ApplicationRecord < ActiveRecord::Base
           case j
           when Arel::Nodes::Join
             inner_joins.append Arel::Nodes::OuterJoin.new(j.left, j.right)
-          when String then raise ::ArgumentError.new("Can't `or` when joins are defined by strings")
+          when String then raise ::ArgumentError.new(I18n.t('errors.application.strings_joined'))
           else left_joins.append j
           end
         end
@@ -147,8 +188,9 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def self.preload_all
-    preload(base_preloads || [])
+  def self.preload_all(action: 'show', user: nil)
+    request = Request.create_request(user, action: action)
+    preload(base_preloads(request)).includes(base_includes(request))
   end
 
   protected

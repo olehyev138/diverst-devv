@@ -139,17 +139,17 @@ RSpec.describe User do
         it { expect(user).to have_many(:invitations).class_name('CampaignInvitation').dependent(:destroy) }
         it { expect(user).to have_many(:campaigns).through(:invitations) }
         it { expect(user).to have_many(:news_links).through(:groups) }
-        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id).dependent(:nullify) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:nullify) }
         it { expect(user).to have_many(:initiative_users).dependent(:destroy) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
         it { expect(user).to have_many(:initiative_invitees).dependent(:destroy) }
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
         it { expect(user).to have_many(:group_leaders).dependent(:destroy) }
-        it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
+        it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:leader_of) }
         it { expect(user).to have_many(:user_reward_actions).dependent(:destroy) }
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
         it { expect(user).to have_many(:user_rewards) }
@@ -170,7 +170,7 @@ RSpec.describe User do
         it { expect(user).to have_many(:mentoring_types).through('mentorship_types') }
         it { expect(user).to have_many(:mentorship_proposals).with_foreign_key('sender_id').class_name('MentoringRequest') }
         it { expect(user).to have_many(:mentorship_requests).with_foreign_key('receiver_id').class_name('MentoringRequest') }
-        it { expect(user).to have_many(:own_messages).with_foreign_key(:owner_id).class_name('GroupMessage') }
+        it { expect(user).to have_many(:own_messages).with_foreign_key(:owner_id).class_name('GroupMessage').dependent(:nullify) }
         it { expect(user).to have_many(:likes).dependent(:destroy) }
         it { expect(user).to have_many(:csv_files) }
         it { expect(user).to have_many(:urls_visited).dependent(:destroy).class_name('PageVisitationData') }
@@ -382,20 +382,18 @@ RSpec.describe User do
 
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
-    let!(:active_user) { create :user, enterprise: enterprise }
-    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
 
-    describe '#active' do
-      it 'only returns active users' do
+    describe '#active and #inactive' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+      let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+      it '#active only returns active users' do
         active_users = enterprise.users.active
 
         expect(active_users).to include active_user
         expect(active_users).to_not include inactive_user
       end
-    end
 
-    describe '#inactive' do
-      it 'only returns inactive user' do
+      it '#inactive only returns inactive user' do
         inactive_users = enterprise.users.inactive
 
         expect(inactive_users).to include inactive_user
@@ -404,6 +402,7 @@ RSpec.describe User do
     end
 
     describe '#for_segments' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:segment) { create(:segment, enterprise_id: enterprise.id) }
       let!(:user_segment) { create(:users_segment, user_id: active_user.id, segment_id: segment.id) }
 
@@ -413,7 +412,19 @@ RSpec.describe User do
       end
     end
 
+    describe '#for_segment_ids' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+      let!(:segment) { create(:segment, enterprise_id: enterprise.id) }
+      let!(:user_segment) { create(:users_segment, user_id: active_user.id, segment_id: segment.id) }
+
+      it 'returns users with segments' do
+        segments = active_user.segments
+        expect(enterprise.users.for_segment_ids(segments.ids)).to eq [active_user]
+      end
+    end
+
     describe '#for_groups' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
       let!(:user_group) { create(:user_group, user_id: active_user.id, group_id: group.id) }
 
@@ -424,6 +435,7 @@ RSpec.describe User do
     end
 
     describe '#answered_poll' do
+      let!(:active_user) { create :user, enterprise: enterprise }
       let!(:poll) { create(:poll, enterprise_id: enterprise.id) }
       let!(:response) { create(:poll_response, user_id: active_user.id, poll_id: poll.id) }
 
@@ -433,6 +445,8 @@ RSpec.describe User do
     end
 
     describe '#invitation_sent' do
+      let!(:active_user) { create :user, enterprise: enterprise }
+
       it 'returns invitation_sent' do
         expect(User.active.invitation_sent).to eq [active_user]
       end
@@ -520,17 +534,19 @@ RSpec.describe User do
 
     describe 'accepting_mentor_requests' do
       let!(:accepting_mentor_requests) { create_list(:user, 3, accepting_mentor_requests: true) }
+      let!(:not_accepting_mentor_requests) { create_list(:user, 3, accepting_mentor_requests: false) }
 
       it 'returns accepting_mentor_requests' do
-        expect(User.accepting_mentor_requests.count).to eq 5
+        expect(User.accepting_mentor_requests.count).to eq 3
       end
     end
 
     describe 'accepting_mentee_requests' do
       let!(:accepting_mentee_requests) { create_list(:user, 3, accepting_mentee_requests: true) }
+      let!(:not_accepting_mentee_requests) { create_list(:user, 3, accepting_mentee_requests: false) }
 
       it 'returns accepting_mentor_requests' do
-        expect(User.accepting_mentee_requests.count).to eq 5
+        expect(User.accepting_mentee_requests.count).to eq 3
       end
     end
 
@@ -562,6 +578,51 @@ RSpec.describe User do
       end
       it 'returns enterprise_mentees' do
         expect(User.enterprise_mentees(user_ids = [1]).count).to eq 2
+      end
+    end
+
+    describe 'budget_approvers' do
+      let(:user_role1) { create(:user_role, enterprise: enterprise, role_type: 'group') }
+      let(:user_role2) { create(:user_role, enterprise: enterprise, role_type: 'group') }
+      let(:parent) { create(:group, enterprise: enterprise) }
+      let(:group) { create(:group, parent: parent, enterprise: enterprise) }
+      let(:region) { create(:region, parent: parent, children: [group]) }
+      let(:users) { create_list(:user, 11, :no_permissions, custom_policy_group: true) }
+      before do
+        user_role1.policy_group_template.update(budget_approval: true)
+
+        group_leader1, group_leader2, region_leader1, region_leader2,
+            groups_manager1, groups_manager2, group_member1, group_member2,
+            super_user, other1, other2, = users
+
+        create(:user_group, group: group, user: group_leader1)
+        create(:user_group, group: group, user: group_leader2)
+        create(:user_group, group: group, user: region_leader1)
+        create(:user_group, group: group, user: region_leader2)
+        create(:user_group, group: group, user: group_member1)
+        create(:user_group, group: group, user: group_member2)
+
+        create(:group_leader, group: group, user: group_leader1, user_role: user_role1)
+        create(:group_leader, group: group, user: group_leader2, user_role: user_role2)
+
+        create(:region_leader, region: region, user: region_leader1, user_role: user_role1)
+        create(:region_leader, region: region, user: region_leader2, user_role: user_role2)
+
+        groups_manager1.policy_group.update(groups_manage: true, budget_approval: true)
+        groups_manager2.policy_group.update(groups_manage: true)
+
+        group_member1.policy_group.update(budget_approval: true)
+
+        super_user.policy_group.update(manage_all: true)
+      end
+      it 'returns only approvers' do
+        expect(Set.new(User.budget_approvers(group).pluck(:id))).to eq Set.new([
+                                                                                   users[0].id, # group leader with approval
+                                                                                   users[2].id, # region leader with approval
+                                                                                   users[4].id, # group manager with approval
+                                                                                   users[6].id, # group member with approval
+                                                                                   users[8].id, # super user
+                                                                               ])
       end
     end
   end
@@ -662,7 +723,7 @@ RSpec.describe User do
     it 'when there is a matching policy for the provided group' do
       user = create(:user)
       group = create(:group)
-      group_leader = create(:group_leader, user: user, group: group)
+      group_leader = create(:group_leader, user: user, leader_of: group)
       expect(user.policy_group_leader(group.id)).to eq group_leader
     end
   end
@@ -742,7 +803,7 @@ RSpec.describe User do
     it 'when user is a leader of the provided group' do
       user = create(:user)
       group = create(:group)
-      group_leader = create(:group_leader, group: group, user: user)
+      group_leader = create(:group_leader, leader_of: group, user: user)
       expect(user.is_group_leader_of?(group)).to eq true
     end
   end
@@ -1218,7 +1279,7 @@ RSpec.describe User do
       initiative_user = create(:initiative_user, user: user)
       initiative_invitee = create(:initiative_invitee, user: user)
       # sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, user: user, group: user_group.group)
+      group_leader = create(:group_leader, user: user, leader_of: user_group.group)
       user_reward_action = create(:user_reward_action, user: user)
       # reward = create(:reward, :responsible_id => user.id)
 
@@ -1237,9 +1298,7 @@ RSpec.describe User do
       expect { AnswerUpvote.find(answer_upvote.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { AnswerComment.find(answer_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignInvitation.find(campaign_invitation.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { NewsLink.find(news_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { GroupMessageComment.find(group_message_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { SocialLink.find(social_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeUser.find(initiative_user.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeInvitee.find(initiative_invitee.id) }.to raise_error(ActiveRecord::RecordNotFound)
       # expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)

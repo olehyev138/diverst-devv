@@ -22,6 +22,7 @@ import {
   selectIsCommitting,
   selectIsFormLoading,
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import QuestionSummary from 'components/Innovate/Campaign/CampaignQuestion/QuestionSummary';
 import AnswerListPage from 'containers/Innovate/Campaign/CampaignQuestion/Answer/AnswerListPage';
@@ -64,6 +65,7 @@ export function CampaignQuestionShowPage(props) {
           questionAction={props.updateQuestionBegin}
           question={props.question}
           links={links}
+          customTexts={props.customTexts}
         />
         {props.question.solved_at !== null ? (<h2>{<DiverstFormattedMessage {...messages.question.closed} />}</h2>) : null}
       </React.Fragment>
@@ -81,13 +83,14 @@ CampaignQuestionShowPage.propTypes = {
   isCommitting: PropTypes.bool,
   campaignId: PropTypes.array,
   questionId: PropTypes.array,
-
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   question: selectQuestion(),
-  isFormLoading: selectIsFormLoading()
+  isFormLoading: selectIsFormLoading(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

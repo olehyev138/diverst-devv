@@ -47,7 +47,6 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
     parentSelectAction();
   }, []);
 
-
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
       <Card>
@@ -101,7 +100,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
                     value={values.resource_type}
                   />
                 )}
-                label='URL / File'
+                label={<DiverstFormattedMessage {...messages.form.urlFile} />}
               />
             </FormControl>
             {values.resource_type === 'file' && (
@@ -135,7 +134,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -226,7 +225,7 @@ ResourceFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,

@@ -28,6 +28,7 @@ import {
   selectIsFetchingRequests,
   selectSuccessfulChange
 } from 'containers/Mentorship/Requests/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getProposalsBegin,
   getRequestsBegin,
@@ -117,6 +118,7 @@ export function MentorsPage(props) {
         user={props.user}
         userSession={props.userSession}
         userParams={params}
+        customTexts={props.customTexts}
 
         requests={requests}
         requestsTotal={requestsTotal}
@@ -142,6 +144,7 @@ MentorsPage.propTypes = {
   userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
+  customTexts: PropTypes.object,
 
   getProposalsBegin: PropTypes.func.isRequired,
   getRequestsBegin: PropTypes.func.isRequired,
@@ -157,6 +160,7 @@ MentorsPage.propTypes = {
   deleteRequestBegin: PropTypes.func.isRequired,
 
   successfulChange: PropTypes.bool,
+
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -164,6 +168,7 @@ const mapStateToProps = createStructuredSelector({
   requestsTotal: selectRequestsTotal(),
   isFetchingRequests: selectIsFetchingRequests(),
   successfulChange: selectSuccessfulChange(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

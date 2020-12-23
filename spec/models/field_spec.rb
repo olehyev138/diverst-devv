@@ -79,6 +79,22 @@ RSpec.describe Field do
     end
   end
 
+  describe '#create_callbacks' do
+    describe '#set_position' do
+      context 'position has been set' do
+        it 'callback has been called' do
+          field = create(:field)
+          expect((field)._create_callbacks.select { |callback| callback.filter == :set_position }).to_not be nil
+        end
+
+        it 'position set to id ' do
+          field = create(:field)
+          expect(field.position).to be(field.id)
+        end
+      end
+    end
+  end
+
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       field = create(:field)

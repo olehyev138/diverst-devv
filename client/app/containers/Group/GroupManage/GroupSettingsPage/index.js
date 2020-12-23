@@ -14,7 +14,7 @@ import {
 } from 'containers/Group/actions';
 
 import { selectGroupIsCommitting, selectGroupIsFormLoading, selectGroup } from 'containers/Group/selectors';
-
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -29,6 +29,7 @@ export function GroupSettingsPage(props) {
       groupAction={props.updateGroupSettingsBegin}
       group={props.currentGroup}
       isCommitting={props.isCommitting}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -38,12 +39,14 @@ GroupSettingsPage.propTypes = {
   updateGroupSettingsBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectGroupIsCommitting(),
   isFormLoading: selectGroupIsFormLoading(),
   currentGroup: selectGroup(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

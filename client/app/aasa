@@ -1,0 +1,16 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appIDs": [ "PGWMHLR553.com.diverst.mobile", "PGWMHLR553.com.diverst.mobile.dell" ],
+             "components": [
+               {
+                  "/": "/login*",
+                  "comment": "Matches any URL whose path starts with /login"
+               }
+             ]
+           }
+       ]
+   }
+}
+

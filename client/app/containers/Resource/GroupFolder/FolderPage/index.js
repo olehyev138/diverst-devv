@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal, selectIsFolderLoading,
@@ -221,7 +221,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstNestedBreadcrumbs nestedNavigation={parents} isLoading={props.isLoading} />
+          <DiverstNestedBreadcrumbs nestedNavigation={parents} isLoading={props.isLoading} customTexts={props.customTexts} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}
@@ -242,6 +242,7 @@ export function FolderPage(props) {
             isLoading={props.isLoading}
             isFormLoading={props.isFormLoading}
             links={links}
+            customTexts={props.customTexts}
           />
         </React.Fragment>
       )}
@@ -274,6 +275,7 @@ FolderPage.propTypes = {
   isFormLoading: PropTypes.bool,
   valid: PropTypes.bool,
   hasChanged: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -290,6 +292,7 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFolderFormLoading(),
   valid: selectValid(),
   hasChanged: selectHasChanged(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {

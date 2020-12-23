@@ -5,12 +5,19 @@ module Api::V1::Concerns::DefinesFields
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
+    response = Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
+    response = { page: response.as_json } if diverst_request.minimal
+
+    render status: 200, json: response, **diverst_request.options
   rescue => e
     raise BadRequestException.new(e.message)
   end
 
   def create_field
+    if (['SelectField', 'CheckboxField'].include? field_payload[:type]) && field_payload[:options_text].strip.empty?
+      raise InvalidInputException
+    end
+
     params[:field] = field_payload
     item = klass.find(params[:id])
     base_authorize(item)

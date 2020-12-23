@@ -28,6 +28,7 @@ import {
   selectIsFetchingUpdates,
   selectHasChanged,
 } from 'containers/Shared/Update/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   getUpdatesBegin,
   deleteUpdateBegin,
@@ -95,6 +96,7 @@ export function UpdateListPage(props) {
       updateTotal={props.total}
       isFetching={props.isFetching}
       links={links}
+      customTexts={props.customTexts}
 
       deleteUpdateBegin={props.deleteUpdateBegin}
       handlePagination={handlePagination}
@@ -106,7 +108,7 @@ UpdateListPage.propTypes = {
   getUpdatesBegin: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func,
   updatesUnmount: PropTypes.func.isRequired,
-
+  customTexts: PropTypes.object,
   updates: PropTypes.array,
   total: PropTypes.number,
   isFetching: PropTypes.bool,
@@ -123,6 +125,7 @@ const mapStateToProps = createStructuredSelector({
   isFetching: selectIsFetchingUpdates(),
   hasChanged: selectHasChanged(),
   currentGroup: selectGroup(),
+  customTexts: selectGroup(),
 });
 
 const mapDispatchToProps = {

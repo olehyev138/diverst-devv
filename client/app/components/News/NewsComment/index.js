@@ -35,6 +35,7 @@ const styles = theme => ({
 
 export function NewsComment(props) {
   const { classes, comment, newsItem, intl } = props;
+
   return (
     <Card className={classes.margin}>
       <CardHeader
@@ -45,6 +46,8 @@ export function NewsComment(props) {
               <DiverstImg
                 data={comment.author.avatar_data}
                 contentType={comment.author.avatar_content_type}
+                maxWidth='100%'
+                maxHeight='240px'
               />
             ) : (
               comment.author.first_name[0]
@@ -71,7 +74,7 @@ export function NewsComment(props) {
             className={classes.errorButton}
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.group_comment_delete_confirm)))
+              if (confirm(intl.formatMessage(messages.group_comment_delete_confirm, props.customTexts)))
                 props.deleteCommentAction({ news_id: newsItem.id, id: comment.id });
             }}
           >
@@ -89,6 +92,7 @@ NewsComment.propTypes = {
   comment: PropTypes.object,
   deleteCommentAction: PropTypes.func,
   newsItem: PropTypes.object,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

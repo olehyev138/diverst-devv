@@ -34,6 +34,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      minimal: true
     });
   };
 
@@ -135,7 +136,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              <DiverstFormattedMessage {...buttonText} />
             </DiverstSubmit>
             <DiverstCancel
               disabled={props.isCommitting}
@@ -195,7 +196,7 @@ CampaignFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.object,
   selectUsers: PropTypes.array,
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
