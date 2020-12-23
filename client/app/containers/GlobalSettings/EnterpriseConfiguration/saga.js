@@ -52,11 +52,11 @@ export function* updateBranding(action) {
 
     yield put(updateBrandingSuccess());
     yield put(setUserData({ enterprise: response.data.enterprise }, true));
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: messages.snackbars.success.update, options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateBrandingError(err));
 
-    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: messages.snackbars.errors.update, options: { variant: 'warning' } }));
   }
 }
 
