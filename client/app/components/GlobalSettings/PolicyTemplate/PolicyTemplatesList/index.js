@@ -18,8 +18,9 @@ import messages from 'containers/GlobalSettings/Email/Email/messages';
 import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
-import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
+
 import { injectIntl, intlShape } from 'react-intl';
+import { DiverstFormattedMessage } from '../../../Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   emailListItem: {
@@ -96,7 +97,7 @@ export function TemplatesList(props) {
           isLoading={props.isLoading}
           rowsPerPage={5}
           params={props.params}
-          dataArray={props.templates}
+          dataArray={props.templates.map(policy => ({ id: policy.id, permissions: policy.permissions, name: intl.formatMessage(messages.policy_template, { name: policy.name }) }))}
           dataTotal={props.templatesTotal}
           columns={columns}
           actions={actions}
