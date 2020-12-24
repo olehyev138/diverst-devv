@@ -95,105 +95,105 @@ export function PolicyFormInner({
   }
 
   const enterprisePolicies = Object.freeze({
-    [intl.formatMessage(messages.enterprise_policies.logs)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'logs_view',
+    [intl.formatMessage(messages.enterprise_policies.logs, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'logs_view',
     },
-    [intl.formatMessage(messages.enterprise_policies.permissions)]: {
-      [intl.formatMessage(messages.permissions.manage)]: 'permissions_manage',
+    [intl.formatMessage(messages.enterprise_policies.permissions, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'permissions_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.sso)]: {
-      [intl.formatMessage(messages.permissions.manage)]: 'sso_manage',
+    [intl.formatMessage(messages.enterprise_policies.sso, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'sso_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.calendar)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'global_calendar',
+    [intl.formatMessage(messages.enterprise_policies.calendar, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'global_calendar',
     },
-    [intl.formatMessage(messages.enterprise_policies.resources)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'enterprise_resources_index',
-      [intl.formatMessage(messages.permissions.create)]: 'enterprise_resources_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'enterprise_resources_manage',
+    [intl.formatMessage(messages.enterprise_policies.resources, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'enterprise_resources_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'enterprise_resources_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'enterprise_resources_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.diversity)]: {
-      [intl.formatMessage(messages.permissions.manage)]: 'diversity_manage',
+    [intl.formatMessage(messages.enterprise_policies.diversity, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'diversity_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.branding)]: {
-      [intl.formatMessage(messages.permissions.manage)]: 'branding_manage',
+    [intl.formatMessage(messages.enterprise_policies.branding, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'branding_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.metrics)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'metrics_dashboards_index',
-      [intl.formatMessage(messages.permissions.create)]: 'metrics_dashboards_create',
+    [intl.formatMessage(messages.enterprise_policies.metrics, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'metrics_dashboards_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'metrics_dashboards_create',
     },
-    [intl.formatMessage(messages.enterprise_policies.users)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'users_index',
-      [intl.formatMessage(messages.permissions.manage)]: 'users_manage',
+    [intl.formatMessage(messages.enterprise_policies.users, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'users_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'users_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.segments)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'segments_index',
-      [intl.formatMessage(messages.permissions.create)]: 'segments_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'segments_manage',
+    [intl.formatMessage(messages.enterprise_policies.segments, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'segments_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'segments_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'segments_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.mentorship)]: {
-      [intl.formatMessage(messages.permissions.manage)]: 'mentorship_manage',
+    [intl.formatMessage(messages.enterprise_policies.mentorship, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'mentorship_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.settings)]: {
-      [intl.formatMessage(messages.permissions.auto_archive)]: 'auto_archive_manage',
-      [intl.formatMessage(messages.permissions.enterprise)]: 'enterprise_manage',
+    [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.auto_archive, props.customTexts)]: 'auto_archive_manage',
+      [intl.formatMessage(messages.permissions.enterprise, props.customTexts)]: 'enterprise_manage',
     },
   });
 
   const generalPolicies = Object.freeze({
-    [intl.formatMessage(messages.general_policies.campaigns)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'campaigns_index',
-      [intl.formatMessage(messages.permissions.create)]: 'campaigns_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'campaigns_manage',
+    [intl.formatMessage(messages.general_policies.campaigns, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'campaigns_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'campaigns_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'campaigns_manage',
     },
-    [intl.formatMessage(messages.general_policies.surveys)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'polls_index',
-      [intl.formatMessage(messages.permissions.create)]: 'polls_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'polls_manage',
+    [intl.formatMessage(messages.general_policies.surveys, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'polls_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'polls_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'polls_manage',
     },
-    [intl.formatMessage(messages.general_policies.groups)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'groups_index',
-      [intl.formatMessage(messages.permissions.create)]: 'groups_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'groups_manage',
+    [intl.formatMessage(messages.general_policies.groups, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'groups_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_manage',
     },
   });
 
   const groupPolicies = Object.freeze({
-    [intl.formatMessage(messages.group_policies.events)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'initiatives_index',
-      [intl.formatMessage(messages.permissions.create)]: 'initiatives_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'initiatives_manage',
+    [intl.formatMessage(messages.group_policies.events, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'initiatives_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'initiatives_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'initiatives_manage',
     },
-    [intl.formatMessage(messages.group_policies.resource)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'group_resources_index',
-      [intl.formatMessage(messages.permissions.create)]: 'group_resources_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'group_resources_manage',
+    [intl.formatMessage(messages.group_policies.resource, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_resources_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'group_resources_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'group_resources_manage',
     },
-    [intl.formatMessage(messages.group_policies.news)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'group_posts_index',
-      [intl.formatMessage(messages.permissions.message)]: 'group_messages_create',
-      [intl.formatMessage(messages.permissions.news_link)]: 'news_links_create',
-      [intl.formatMessage(messages.permissions.social_link)]: 'social_links_create',
-      [intl.formatMessage(messages.permissions.manage)]: 'manage_posts',
+    [intl.formatMessage(messages.group_policies.news, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_posts_index',
+      [intl.formatMessage(messages.permissions.message, props.customTexts)]: 'group_messages_create',
+      [intl.formatMessage(messages.permissions.news_link, props.customTexts)]: 'news_links_create',
+      [intl.formatMessage(messages.permissions.social_link, props.customTexts)]: 'social_links_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'manage_posts',
     },
-    [intl.formatMessage(messages.group_policies.budgets)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'groups_budgets_index',
-      [intl.formatMessage(messages.permissions.request)]: 'groups_budgets_request',
-      [intl.formatMessage(messages.permissions.approval)]: 'budget_approval',
-      [intl.formatMessage(messages.permissions.manage)]: 'groups_budgets_manage',
+    [intl.formatMessage(messages.group_policies.budgets, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_budgets_index',
+      [intl.formatMessage(messages.permissions.request, props.customTexts)]: 'groups_budgets_request',
+      [intl.formatMessage(messages.permissions.approval, props.customTexts)]: 'budget_approval',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_budgets_manage',
     },
-    [intl.formatMessage(messages.group_policies.members)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'groups_members_index',
-      [intl.formatMessage(messages.permissions.manage)]: 'groups_members_manage',
+    [intl.formatMessage(messages.group_policies.members, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_members_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_members_manage',
     },
-    [intl.formatMessage(messages.group_policies.leaders)]: {
-      [intl.formatMessage(messages.permissions.view)]: 'group_leader_index',
-      [intl.formatMessage(messages.permissions.manage)]: 'group_leader_manage',
+    [intl.formatMessage(messages.group_policies.leaders, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_leader_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'group_leader_manage',
     },
-    [intl.formatMessage(messages.group_policies.settings)]: {
-      [intl.formatMessage(messages.permissions.settings)]: 'group_settings_manage',
-      [intl.formatMessage(messages.permissions.layouts)]: 'groups_layouts_manage',
-      [intl.formatMessage(messages.permissions.insights)]: 'groups_insights_manage',
+    [intl.formatMessage(messages.group_policies.settings, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.settings, props.customTexts)]: 'group_settings_manage',
+      [intl.formatMessage(messages.permissions.layouts, props.customTexts)]: 'groups_layouts_manage',
+      [intl.formatMessage(messages.permissions.insights, props.customTexts)]: 'groups_insights_manage',
     },
   });
 
