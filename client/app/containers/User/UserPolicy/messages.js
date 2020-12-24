@@ -84,6 +84,17 @@ export default defineMessages({
       id: `${scope}.enterprise.settings`,
     },
   },
+  general_policies: {
+    campaigns: {
+      id: `${scope}.general.campaigns`,
+    },
+    surveys: {
+      id: `${scope}.general.surveys`,
+    },
+    groups: {
+      id: `${scope}.general.groups`,
+    },
+  },
   snackbars: {
     errors: {
       policy: {

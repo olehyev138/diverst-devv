@@ -141,20 +141,20 @@ export function PolicyFormInner({
   });
 
   const generalPolicies = Object.freeze({
-    Campaigns: {
-      View: 'campaigns_index',
-      Create: 'campaigns_create',
-      Manage: 'campaigns_manage',
+    [intl.formatMessage(messages.general_policies.campaigns)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'campaigns_index',
+      [intl.formatMessage(messages.permissions.create)]: 'campaigns_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'campaigns_manage',
     },
-    Surveys: {
-      View: 'polls_index',
-      Create: 'polls_create',
-      Manage: 'polls_manage',
+    [intl.formatMessage(messages.general_policies.surveys)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'polls_index',
+      [intl.formatMessage(messages.permissions.create)]: 'polls_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'polls_manage',
     },
-    Groups: {
-      View: 'groups_index',
-      Create: 'groups_create',
-      Manage: 'groups_manage',
+    [intl.formatMessage(messages.general_policies.groups)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'groups_index',
+      [intl.formatMessage(messages.permissions.create)]: 'groups_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'groups_manage',
     },
   });
 
@@ -214,9 +214,25 @@ export function PolicyFormInner({
               <Box mb={2} />
               <Divider />
               <Box mb={2} />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography component='h2' variant='h5'>
+                    <DiverstFormattedMessage {...messages.type.general} />
+                  </Typography>
+                </Grid>
+                {policiesRender(generalPolicies)}
+              </Grid>
               <Box mb={2} />
               <Divider />
               <Box mb={2} />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography component='h2' variant='h5'>
+                    <DiverstFormattedMessage {...messages.type.group} />
+                  </Typography>
+                </Grid>
+                {policiesRender(groupPolicies)}
+              </Grid>
             </CardContent>
             <Divider />
             <CardActions>
