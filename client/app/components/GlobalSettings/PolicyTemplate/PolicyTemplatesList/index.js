@@ -20,7 +20,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
 
 import { injectIntl, intlShape } from 'react-intl';
-import { DiverstFormattedMessage } from '../../../Shared/DiverstFormattedMessage';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   emailListItem: {
