@@ -18,7 +18,6 @@ import messages from 'containers/GlobalSettings/Email/Email/messages';
 import EditIcon from '@material-ui/icons/Edit';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { permission } from 'utils/permissionsHelpers';
-import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
 import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({

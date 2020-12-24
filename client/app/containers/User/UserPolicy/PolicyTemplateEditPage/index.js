@@ -14,7 +14,7 @@ import saga from 'containers/User/UserPolicy/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectCustomText } from 'containers/Shared/App/selectors';
 import { selectPolicy, selectIsCommitting, selectIsFetchingPolicy } from 'containers/User/UserPolicy/selectors';
 
 import {
@@ -52,6 +52,7 @@ export function PolicyEditPage(props) {
       isFormLoading={props.isFormLoading}
       policy={currentPolicy}
       links={links}
+      customTexts={props.customTexts}
     />
   );
 }
@@ -65,6 +66,7 @@ PolicyEditPage.propTypes = {
   currentPolicy: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -73,6 +75,7 @@ const mapStateToProps = createStructuredSelector({
   currentPolicy: selectPolicy(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFetchingPolicy(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
