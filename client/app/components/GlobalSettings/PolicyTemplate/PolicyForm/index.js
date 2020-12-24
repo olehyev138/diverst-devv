@@ -7,30 +7,16 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography,
-  Card,
-  CardHeader,
-  CardActions,
-  CardContent,
-  TextField,
-  Grid,
-  Divider,
-  Box,
-  Button,
-  Checkbox,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
+  Typography, Card, CardActions, CardContent, Grid, Divider, Box,
+  Checkbox, FormLabel, FormGroup, FormControlLabel,
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/UserPolicy/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -86,12 +72,12 @@ export function PolicyFormInner({
             name={policy[key]}
             margin='normal'
             disabled={props.isCommitting}
-            label={underToSpace(key)}
+            label={key}
             value={values[policy[key]]}
             checked={values[policy[key]]}
           />
         )}
-        label={underToSpace(key)}
+        label={key}
         key={key}
       />
     ));
@@ -100,7 +86,7 @@ export function PolicyFormInner({
   function policiesRender(policies) {
     return Object.keys(policies).map(key => (
       <Grid item xs={12} sm={6} md={3} key={key}>
-        <FormLabel component='legend'>{underToSpace(key)}</FormLabel>
+        <FormLabel component='legend'>{key}</FormLabel>
         <FormGroup>
           {policyRender(policies[key])}
         </FormGroup>
@@ -109,48 +95,48 @@ export function PolicyFormInner({
   }
 
   const enterprisePolicies = Object.freeze({
-    Logs: {
-      View: 'logs_view',
+    [intl.formatMessage(messages.enterprise_policies.logs)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'logs_view',
     },
-    Permissions: {
-      Manage: 'permissions_manage',
+    [intl.formatMessage(messages.enterprise_policies.permissions)]: {
+      [intl.formatMessage(messages.permissions.manage)]: 'permissions_manage',
     },
-    SSO: {
-      Manage: 'sso_manage',
+    [intl.formatMessage(messages.enterprise_policies.sso)]: {
+      [intl.formatMessage(messages.permissions.manage)]: 'sso_manage',
     },
-    Global_Calendar: {
-      View: 'global_calendar',
+    [intl.formatMessage(messages.enterprise_policies.calendar)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'global_calendar',
     },
-    Enterprise_Resources: {
-      View: 'enterprise_resources_index',
-      Create: 'enterprise_resources_create',
-      Manage: 'enterprise_resources_manage',
+    [intl.formatMessage(messages.enterprise_policies.resources)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'enterprise_resources_index',
+      [intl.formatMessage(messages.permissions.create)]: 'enterprise_resources_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'enterprise_resources_manage',
     },
-    Diversity_and_Culture_Index: {
-      Manage: 'diversity_manage',
+    [intl.formatMessage(messages.enterprise_policies.diversity)]: {
+      [intl.formatMessage(messages.permissions.manage)]: 'diversity_manage',
     },
-    Branding: {
-      Manage: 'branding_manage',
+    [intl.formatMessage(messages.enterprise_policies.branding)]: {
+      [intl.formatMessage(messages.permissions.manage)]: 'branding_manage',
     },
-    Metrics_Dashboards: {
-      View: 'metrics_dashboards_index',
-      Create: 'metrics_dashboards_create',
+    [intl.formatMessage(messages.enterprise_policies.metrics)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'metrics_dashboards_index',
+      [intl.formatMessage(messages.permissions.create)]: 'metrics_dashboards_create',
     },
-    Users: {
-      View: 'users_index',
-      Manage: 'users_manage',
+    [intl.formatMessage(messages.enterprise_policies.users)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'users_index',
+      [intl.formatMessage(messages.permissions.manage)]: 'users_manage',
     },
-    Segments: {
-      View: 'segments_index',
-      Create: 'segments_create',
-      Manage: 'segments_manage',
+    [intl.formatMessage(messages.enterprise_policies.segments)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'segments_index',
+      [intl.formatMessage(messages.permissions.create)]: 'segments_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'segments_manage',
     },
-    Mentorship: {
-      Manage: 'mentorship_manage',
+    [intl.formatMessage(messages.enterprise_policies.mentorship)]: {
+      [intl.formatMessage(messages.permissions.manage)]: 'mentorship_manage',
     },
-    Settings: {
-      Manage_Auto_Archive_Settings: 'auto_archive_manage',
-      Manage_Enterprise: 'enterprise_manage',
+    [intl.formatMessage(messages.enterprise_policies.settings)]: {
+      [intl.formatMessage(messages.permissions.auto_archive)]: 'auto_archive_manage',
+      [intl.formatMessage(messages.permissions.enterprise)]: 'enterprise_manage',
     },
   });
 
@@ -228,25 +214,9 @@ export function PolicyFormInner({
               <Box mb={2} />
               <Divider />
               <Box mb={2} />
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography component='h2' variant='h5'>
-                    <DiverstFormattedMessage {...messages.type.general} />
-                  </Typography>
-                </Grid>
-                {policiesRender(generalPolicies)}
-              </Grid>
               <Box mb={2} />
               <Divider />
               <Box mb={2} />
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography component='h2' variant='h5'>
-                    <DiverstFormattedMessage {...messages.type.group} />
-                  </Typography>
-                </Grid>
-                {policiesRender(groupPolicies)}
-              </Grid>
             </CardContent>
             <Divider />
             <CardActions>
@@ -392,6 +362,7 @@ PolicyFormInner.propTypes = {
   }),
 
   classes: PropTypes.object,
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
