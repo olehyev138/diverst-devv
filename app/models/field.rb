@@ -7,7 +7,7 @@ class Field < ApplicationRecord
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  has_many :segment_field_rules, foreign_key: :field_id, dependent: :restrict_with_error
+  has_many :segment_field_rules, foreign_key: :field_id, dependent: :destroy
 
   after_create :set_position
 
