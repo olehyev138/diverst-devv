@@ -45,6 +45,30 @@ export default defineMessages({
     enterprise: {
       id: `${scope}.permissions.enterprise`,
     },
+    insights: {
+      id: `${scope}.permissions.insights`,
+    },
+    layouts: {
+      id: `${scope}.permissions.layouts`,
+    },
+    settings: {
+      id: `${scope}.permissions.settings`,
+    },
+    request: {
+      id: `${scope}.permissions.request`,
+    },
+    approval: {
+      id: `${scope}.permissions.approval`,
+    },
+    social_link: {
+      id: `${scope}.permissions.social_link`,
+    },
+    news_link: {
+      id: `${scope}.permissions.news_link`,
+    },
+    message: {
+      id: `${scope}.permissions.message`,
+    },
   },
   enterprise_policies: {
     logs: {
@@ -93,6 +117,29 @@ export default defineMessages({
     },
     groups: {
       id: `${scope}.general.groups`,
+    },
+  },
+  group_policies: {
+    events: {
+      id: `${scope}.group.events`,
+    },
+    resource: {
+      id: `${scope}.group.resource`,
+    },
+    news: {
+      id: `${scope}.group.news`,
+    },
+    budgets: {
+      id: `${scope}.group.budgets`,
+    },
+    members: {
+      id: `${scope}.group.members`,
+    },
+    leaders: {
+      id: `${scope}.group.leaders`,
+    },
+    settings: {
+      id: `${scope}.group.settings`,
     },
   },
   snackbars: {

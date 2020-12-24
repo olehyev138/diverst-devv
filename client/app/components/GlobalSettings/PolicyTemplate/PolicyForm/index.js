@@ -159,41 +159,41 @@ export function PolicyFormInner({
   });
 
   const groupPolicies = Object.freeze({
-    Events: {
-      View: 'initiatives_index',
-      Create: 'initiatives_create',
-      Manage: 'initiatives_manage',
+    [intl.formatMessage(messages.group_policies.events)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'initiatives_index',
+      [intl.formatMessage(messages.permissions.create)]: 'initiatives_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'initiatives_manage',
     },
-    Resource: {
-      View: 'group_resources_index',
-      Create: 'group_resources_create',
-      Manage: 'group_resources_manage',
+    [intl.formatMessage(messages.group_policies.resource)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'group_resources_index',
+      [intl.formatMessage(messages.permissions.create)]: 'group_resources_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'group_resources_manage',
     },
-    News: {
-      View: 'group_posts_index',
-      Create_Message: 'group_messages_create',
-      Create_News_Link: 'news_links_create',
-      Create_Social_Link: 'social_links_create',
-      Manage: 'manage_posts',
+    [intl.formatMessage(messages.group_policies.news)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'group_posts_index',
+      [intl.formatMessage(messages.permissions.message)]: 'group_messages_create',
+      [intl.formatMessage(messages.permissions.news_link)]: 'news_links_create',
+      [intl.formatMessage(messages.permissions.social_link)]: 'social_links_create',
+      [intl.formatMessage(messages.permissions.manage)]: 'manage_posts',
     },
-    Budgets: {
-      View: 'groups_budgets_index',
-      Request: 'groups_budgets_request',
-      Approval: 'budget_approval',
-      Manage: 'groups_budgets_manage',
+    [intl.formatMessage(messages.group_policies.budgets)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'groups_budgets_index',
+      [intl.formatMessage(messages.permissions.request)]: 'groups_budgets_request',
+      [intl.formatMessage(messages.permissions.approval)]: 'budget_approval',
+      [intl.formatMessage(messages.permissions.manage)]: 'groups_budgets_manage',
     },
-    Members: {
-      View: 'groups_members_index',
-      Manage: 'groups_members_manage',
+    [intl.formatMessage(messages.group_policies.members)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'groups_members_index',
+      [intl.formatMessage(messages.permissions.manage)]: 'groups_members_manage',
     },
-    Leaders: {
-      View: 'group_leader_index',
-      Manage: 'group_leader_manage',
+    [intl.formatMessage(messages.group_policies.leaders)]: {
+      [intl.formatMessage(messages.permissions.view)]: 'group_leader_index',
+      [intl.formatMessage(messages.permissions.manage)]: 'group_leader_manage',
     },
-    Settings: {
-      Manage_Group_Settings: 'group_settings_manage',
-      Manage_Layouts: 'groups_layouts_manage',
-      Manage_Insights: 'groups_insights_manage',
+    [intl.formatMessage(messages.group_policies.settings)]: {
+      [intl.formatMessage(messages.permissions.settings)]: 'group_settings_manage',
+      [intl.formatMessage(messages.permissions.layouts)]: 'groups_layouts_manage',
+      [intl.formatMessage(messages.permissions.insights)]: 'groups_insights_manage',
     },
   });
 
