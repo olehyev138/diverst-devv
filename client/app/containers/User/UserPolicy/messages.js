@@ -29,6 +29,61 @@ export default defineMessages({
       id: `${scope}.form.cancel`,
     },
   },
+  permissions: {
+    view: {
+      id: `${scope}.permissions.view`,
+    },
+    manage: {
+      id: `${scope}.permissions.manage`,
+    },
+    create: {
+      id: `${scope}.permissions.create`,
+    },
+    auto_archive: {
+      id: `${scope}.permissions.auto_archive`,
+    },
+    enterprise: {
+      id: `${scope}.permissions.enterprise`,
+    },
+  },
+  enterprise_policies: {
+    logs: {
+      id: `${scope}.enterprise.logs`,
+    },
+    permissions: {
+      id: `${scope}.enterprise.permissions`,
+    },
+    sso: {
+      id: `${scope}.enterprise.sso`,
+    },
+    calendar: {
+      id: `${scope}.enterprise.calendar`,
+    },
+    resources: {
+      id: `${scope}.enterprise.resources`,
+    },
+    diversity: {
+      id: `${scope}.enterprise.diversity`,
+    },
+    branding: {
+      id: `${scope}.enterprise.branding`,
+    },
+    metrics: {
+      id: `${scope}.enterprise.metrics`,
+    },
+    users: {
+      id: `${scope}.enterprise.users`,
+    },
+    segments: {
+      id: `${scope}.enterprise.segments`,
+    },
+    mentorship: {
+      id: `${scope}.enterprise.mentorship`,
+    },
+    settings: {
+      id: `${scope}.enterprise.settings`,
+    },
+  },
   snackbars: {
     errors: {
       policy: {
