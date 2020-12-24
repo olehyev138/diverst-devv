@@ -6,7 +6,9 @@
   <span style="font-weight: 600">Events</span>
   <% @groups_info[:initiatives].each do |initiative| %>
     <p><%= link_to initiative.name, group_event_url(initiative.owner_group.id, initiative.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <p>Participating groups <span style="font-weight: 600"><%= initiative.participating_groups.pluck(:name).join(', ') %></span></p>
+    <% if initiative.participating_groups.present? %>
+      <p>Participating groups <span style="font-weight: 600"><%= initiative.participating_groups.pluck(:name).join(', ') %></span></p>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -15,7 +17,9 @@
   <span style="font-weight: 600">News Items</span>
   <% @groups_info[:news_links].each do |news_link| %>
     <p><%= link_to news_link.title, comments_group_news_link_url(news_link.group, news_link.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <p>Shared with <span style="font-weight: 600"><%= Group.where(id: news_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% if news_link.news_feed_link.shared_news_feeds.present? %>
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: news_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -24,7 +28,9 @@
   <span style="font-weight: 600">Social Media Posts</span>
   <% @groups_info[:social_links].each do |social_link| %>
     <p><%= link_to pluralize(@groups_info[:social_links].size, ' Social Media Post'), group_social_links_url(social_link.group_id, saml_for_enterprise: @user.enterprise.id) %></p>
-    <p>Shared with <span style="font-weight: 600"><%= Group.where(id: social_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% if social_link.news_feed_link.shared_news_feeds.present? %>  
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: social_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -33,7 +39,9 @@
   <span style="font-weight: 600">Group Messages</span>
   <% @groups_info[:messages].each do |message| %>
     <p><%= link_to message.subject, group_group_message_url(message.group_id, message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <p>Shared with <span style="font-weight: 600"><%= Group.where(id: message.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% if message.news_feed_link.shared_news_feeds.present? %>
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: message.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>  
   <% end %>
 <% end %>
 
