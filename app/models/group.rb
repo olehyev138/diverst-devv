@@ -251,6 +251,10 @@ class Group < BaseClass
     name.split.map(&:capitalize).join(' ')
   end
 
+  def symbolize_name
+    name.underscore.split(' ').join('_').to_sym
+  end
+
   def contact_email
     group_leader = group_leaders.find_by(default_group_contact: true)&.user
     group_leader&.email
