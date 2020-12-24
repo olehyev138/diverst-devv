@@ -3,7 +3,7 @@ class RefreshBudgetSumsJob < ApplicationJob
 
   def read_data
     {
-        budget_users_sums: BudgetUserSums.order(:budget_user_id).as_json,
+        budget_users_sums: BudgetUserSums.order(:budget_user_id).all.as_json,
         budget_items_sums: BudgetItemSums.order(:budget_item_id).all.as_json,
         budgets_sums: BudgetSums.order(:budget_id).all.as_json,
         annual_budgets_sums: AnnualBudgetSums.order(:annual_budget_id).all.as_json,
