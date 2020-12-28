@@ -166,14 +166,23 @@ export default defineMessages({
     search: {
       id: `${scope}.selectorDialog.search`,
     },
+    searchPlaceholder: {
+      id: `${scope}.selectorDialog.searchPlaceholder`,
+    },
     save: {
       id: `${scope}.selectorDialog.save`,
     },
     clear: {
       id: `${scope}.selectorDialog.clear`,
+      confirm: {
+        id: `${scope}.selectorDialog.clear.confirm`,
+      },
     },
     close: {
       id: `${scope}.selectorDialog.close`,
+    },
+    empty: {
+      id: `${scope}.selectorDialog.empty`,
     },
   },
   categorizeCollapsable: {
