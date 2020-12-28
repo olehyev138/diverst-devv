@@ -45,7 +45,7 @@ class Api::V1::GroupsController < DiverstController
     response = AnnualBudget.pager_with_query(
       item.aggregate_budget_data,
       params,
-      use_orderP: false
+      use_order: false
     )
 
     render status: 200, json: response, **diverst_request.options
