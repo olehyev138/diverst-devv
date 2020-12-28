@@ -15,7 +15,6 @@ import {
   updateEnterpriseSuccess, updateEnterpriseError
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import messages from './messages';
 
 export function* getEnterprise(action) {
