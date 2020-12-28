@@ -101,6 +101,7 @@ export function SocialLinkListItem(props) {
           totalLikes={newsItem.total_likes}
           likeNewsItemBegin={props.likeNewsItemBegin}
           unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+          customTexts={props.customTexts}
         />
       )}
       {props.pinNewsItemBegin && (
@@ -159,7 +160,7 @@ export function SocialLinkListItem(props) {
                 className={classes.errorButton}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete social link?'))
+                  if (confirm(intl.formatMessage(messages.social_delete_confirm, props.customTexts)))
                     props.deleteSocialLinkBegin(newsItem.social_link);
                 }}
               >
@@ -224,6 +225,7 @@ SocialLinkListItem.propTypes = {
   unlikeNewsItemBegin: PropTypes.func,
   approveNewsItemBegin: PropTypes.func,
   enableLikes: PropTypes.bool,
+  customTexts: PropTypes.object,
 };
 
 export default compose(

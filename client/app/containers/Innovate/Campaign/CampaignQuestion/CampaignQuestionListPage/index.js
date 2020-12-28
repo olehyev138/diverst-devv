@@ -18,7 +18,7 @@ import {
   selectPaginatedQuestions, selectQuestionTotal,
   selectIsFetchingQuestions
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

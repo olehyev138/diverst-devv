@@ -68,7 +68,7 @@ export function ImportForm({ handleSubmit, handleChange, handleBlur, values, set
               id='import_file'
               name='import_file'
               margin='normal'
-              label='Import your file'
+              label={<DiverstFormattedMessage {...messages.importFile} />}
               value={values.import_file}
             />
           </CardContent>

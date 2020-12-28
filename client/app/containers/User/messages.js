@@ -10,6 +10,9 @@ export const scope = 'diverst.containers.User';
 export const snackbar = 'diverst.snackbars.User';
 
 export default defineMessages({
+  importFile: {
+    id: `${scope}.import`,
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
@@ -154,7 +157,10 @@ export default defineMessages({
     },
     policy: {
       id: `${scope}.tab.policy`
-    }
+    },
+    import: {
+      id: `${scope}.tab.import`
+    },
   },
   members: {
     id: `${scope}.list.members`

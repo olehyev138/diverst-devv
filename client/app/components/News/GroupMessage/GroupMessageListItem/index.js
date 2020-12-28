@@ -67,7 +67,6 @@ export function GroupMessageListItem(props) {
     setPinned(false);
   }
 
-  // TODO : Add customText to intl.formatMessage
   return (
     <React.Fragment>
       <CardHeader
@@ -111,6 +110,7 @@ export function GroupMessageListItem(props) {
                     totalLikes={newsItem.total_likes}
                     likeNewsItemBegin={props.likeNewsItemBegin}
                     unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                    customTexts={props.customTexts}
                   />
                 )}
                 {props.pinNewsItemBegin && (

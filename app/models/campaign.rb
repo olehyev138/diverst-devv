@@ -40,13 +40,13 @@ class Campaign < ApplicationRecord
   validates :description, presence: true
   validates :start,       presence: true
   validates :end,         presence: true
-  validates :groups,      presence: { message: 'Please select at least 1 group' }
+  validates :groups,      presence: { message: I18n.t('errors.campaign.select_minimum') }
 
   validates :start,
-            date: { after: Proc.new { Date.today }, message: 'must be after today' },
+            date: { after: Proc.new { Date.today }, message: I18n.t('errors.campaign.next_day') },
             on: [:create, :update]
 
-  validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
+  validates :end, date: { after: :start, message: I18n.t('errors.campaign.start') }, on: [:create, :update]
 
   after_create :create_invites, :send_invitation_emails
 

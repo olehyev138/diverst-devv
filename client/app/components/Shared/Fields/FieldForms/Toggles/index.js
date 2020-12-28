@@ -41,7 +41,7 @@ export function Toggles({ handleSubmit, handleChange, handleBlur, values, setFie
             value={values.private}
           />
         )}
-        label='Hide From User'
+        label={<DiverstFormattedMessage {...messages.form.hide} />}
       />
     </FormControl>
   );
@@ -64,7 +64,7 @@ export function Toggles({ handleSubmit, handleChange, handleBlur, values, setFie
             value={values.show_on_vcard}
           />
         )}
-        label='Allow user to edit'
+        label={<DiverstFormattedMessage {...messages.form.edit} />}
       />
     </FormControl>
   );
@@ -87,7 +87,7 @@ export function Toggles({ handleSubmit, handleChange, handleBlur, values, setFie
             value={values.required}
           />
         )}
-        label='Set as required'
+        label={<DiverstFormattedMessage {...messages.form.required} />}
       />
     </FormControl>
   );
@@ -110,7 +110,7 @@ export function Toggles({ handleSubmit, handleChange, handleBlur, values, setFie
             value={values.add_to_member_list}
           />
         )}
-        label='Show field in Member List'
+        label={<DiverstFormattedMessage {...messages.form.show} />}
       />
     </FormControl>
   );

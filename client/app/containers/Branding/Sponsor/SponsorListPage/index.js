@@ -19,7 +19,7 @@ import {
   selectPaginatedSponsors, selectSponsorTotal,
   selectIsFetchingSponsors, selectHasChanged
 } from 'containers/Shared/Sponsors/selectors';
-import { selectCustomText, selectPermissions } from '../../../Shared/App/selectors';
+import { selectCustomText, selectPermissions } from 'containers/Shared/App/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

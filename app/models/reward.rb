@@ -22,6 +22,6 @@ class Reward < ApplicationRecord
   private
 
   def responsible_user
-    errors.add(:responsible_id, 'Invalid responsible') unless responsible.try(:enterprise) == enterprise
+    errors.add(:responsible_id, I18n.t('errors.reward.responsible_user')) unless responsible.try(:enterprise) == enterprise
   end
 end

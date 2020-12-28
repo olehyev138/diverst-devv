@@ -202,7 +202,7 @@ export function MentorList(props, context) {
       <Dialog open={formOpen} onClose={handleFormClose} aria-labelledby='form-dialog-title'>
         <form onSubmit={formik.handleSubmit}>
           <DialogTitle id='form-dialog-title'>
-            Mentorship Request
+            <DiverstFormattedMessage {...messages.title.mentorship_request} />
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -227,13 +227,13 @@ export function MentorList(props, context) {
               onClick={() => handleFormClose()}
               color='primary'
             >
-              Cancel
+              <DiverstFormattedMessage {...messages.form.button.cancel} />
             </Button>
             <Button
               type='submit'
               color='primary'
             >
-              Submit
+              <DiverstFormattedMessage {...messages.form.button.success} />
             </Button>
           </DialogActions>
         </form>
@@ -253,7 +253,7 @@ export function MentorList(props, context) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleProfileClose} color='primary'>
-            Close
+            <DiverstFormattedMessage {...messages.form.button.close} />
           </Button>
         </DialogActions>
       </Dialog>

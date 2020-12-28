@@ -61,6 +61,7 @@ import { permission } from 'utils/permissionsHelpers';
 import Scrollbar from 'components/Shared/Scrollbar';
 
 import { toggleAdminDrawer } from 'containers/Shared/App/actions';
+import messages from 'containers/Shared/App/messages';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -372,7 +373,7 @@ export function AdminLinks(props) {
                   <PlanGroupBudgetsIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <DiverstFormattedMessage {...{ id: 'diverst.containers.Routes.admin.plan.group_budgets' }} />
+                  <DiverstFormattedMessage {...messages.budgetRoute} />
                 </ListItemText>
               </MenuPermission>
             </List>
@@ -429,7 +430,10 @@ export function AdminLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.admin.include.polls.index.path()}
             activeClassName={classes.navLinkActive}
-            show={permission(props, 'polls_create')}
+            show={
+              props?.enterprise?.scope_module_enabled
+              && permission(props, 'polls_create')
+            }
           >
             <ListItemIcon>
               <IncludeIcon />

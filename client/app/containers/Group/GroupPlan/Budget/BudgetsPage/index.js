@@ -32,7 +32,7 @@ import {
   selectHasChanged
 } from 'containers/Group/GroupPlan/Budget/selectors';
 import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
-import { selectCustomText } from '../../../../Shared/App/selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import permissionMessages from 'containers/Shared/Permissions/messages';
 

@@ -14,30 +14,52 @@ import {
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import ListIcon from '@material-ui/icons/ListAlt';
+
 import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups, selectGroupIsLoading, selectGroupTotal } from 'containers/Group/selectors';
 import { useInjectReducer } from 'utils/injectReducer';
-import { union, difference, intersection } from 'utils/arrayHelpers';
+import { union, difference } from 'utils/arrayHelpers';
 import reducer from 'containers/Group/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
-import { Grid, Button } from '@material-ui/core';
+
 import DiverstDialog from 'components/Shared/DiverstDialog';
 import GroupListSelector from 'components/Shared/GroupSelector/dialog';
 import messages from 'containers/Group/messages';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { selectPermissions } from 'containers/Shared/App/selectors';
+import { selectCustomText, selectPermissions } from 'containers/Shared/App/selectors';
+
+import { injectIntl, intlShape } from 'react-intl';
+
+const styles = theme => ({
+  selectButton: {
+    marginTop: 28,
+  },
+  selectButtonIcon: {
+    fontSize: '24px !important',
+  },
+});
 
 const GroupSelector = (props) => {
-  const { handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
+  const { classes, intl, customTexts, handleChange, values, groupField, setFieldValue, dialogSelector, groups, label, queryScopes, forceReload, dialogNoChildren, ...rest } = props;
 
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   const [dialogSearch, setDialogSearch] = useState(false);
   const [dialogSelectedGroups, setDialogSelectedGroups] = useState([]);
 
+  const [displayParentUI, setDisplayParentUI] = useState(false);
+  const [parentData, setParentData] = useState(undefined);
+
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
+
+  const handleParentExpand = (id, name) => setParentData({ id, name });
+
+  const handleFinishExitTransition = () => setDisplayParentUI(true);
 
   function groupCompare(g1, g2) {
     return g1.value === g2.value;
@@ -105,6 +127,10 @@ const GroupSelector = (props) => {
       {dialogSelector && (
         <Grid item>
           <Button
+            className={classes.selectButton}
+            color='primary'
+            variant='contained'
+            startIcon={<ListIcon className={classes.selectButtonIcon} />}
             onClick={() => {
               setDialogSelectedGroups(values[groupField]);
               setDialogSearch(true);
@@ -117,6 +143,7 @@ const GroupSelector = (props) => {
       <DiverstDialog
         open={dialogSearch}
         title={<DiverstFormattedMessage {...messages.selectorDialog.title} />}
+        titleDivider
         handleYes={() => {
           onChange(dialogSelectedGroups);
           setDialogSearch(false);
@@ -124,10 +151,13 @@ const GroupSelector = (props) => {
         textYes={<DiverstFormattedMessage {...messages.selectorDialog.save} />}
         handleNo={() => setDialogSearch(false)}
         textNo={<DiverstFormattedMessage {...messages.selectorDialog.close} />}
+        actionsDivider
+        keepMounted
         extraActions={[
           {
             key: 'clear groups',
-            func: () => setDialogSelectedGroups([]),
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            func: () => confirm(intl.formatMessage(messages.selectorDialog.clear.confirm)) && setDialogSelectedGroups([]),
             label: <DiverstFormattedMessage {...messages.selectorDialog.clear} />,
             color: 'secondary'
           }
@@ -135,8 +165,8 @@ const GroupSelector = (props) => {
         paperProps={{
           style: {
             maxHeight: '90%',
-            minHeight: '90%',
-            minWidth: '40%',
+            minHeight: '85%',
+            minWidth: '50%',
           }
         }}
         content={(
@@ -154,6 +184,14 @@ const GroupSelector = (props) => {
             dialogNoChildren={props.dialogNoChildren}
             queryScopes={props.queryScopes}
             dialogQueryScopes={props.dialogQueryScopes}
+            parentData={parentData}
+            setParentData={setParentData}
+            displayParentUI={displayParentUI}
+            setDisplayParentUI={setDisplayParentUI}
+            isDisplayingChildren={!!parentData?.name}
+            handleParentExpand={handleParentExpand}
+            handleFinishExitTransition={handleFinishExitTransition}
+            customTexts={customTexts}
           />
         )}
       />
@@ -163,7 +201,9 @@ const GroupSelector = (props) => {
 };
 
 GroupSelector.propTypes = {
+  classes: PropTypes.object,
   permissions: PropTypes.object,
+  customTexts: PropTypes.object,
   dialogSelector: PropTypes.bool,
   dialogQueryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   dialogNoChildren: PropTypes.bool,
@@ -182,8 +222,9 @@ GroupSelector.propTypes = {
   getGroupsSuccess: PropTypes.func.isRequired,
   groups: PropTypes.array,
   extraParams: PropTypes.object,
-
   inputCallback: PropTypes.func,
+
+  intl: intlShape.isRequired,
 };
 
 GroupSelector.defaultProps = {
@@ -191,7 +232,7 @@ GroupSelector.defaultProps = {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      minimal: true,
+      with_children: false,
       query_scopes: props.queryScopes || [],
       ...props.extraParams,
       ...params,
@@ -205,6 +246,7 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
   isLoading: selectGroupIsLoading(),
   permissions: selectPermissions(),
+  customTexts: selectCustomText(),
 });
 
 const mapDispatchToProps = {
@@ -219,6 +261,8 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
+  withStyles(styles),
   withConnect,
   memo,
 )(GroupSelector);

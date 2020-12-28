@@ -221,7 +221,7 @@ export function FolderPage(props) {
       )}
       { valid === true && (
         <React.Fragment>
-          <DiverstNestedBreadcrumbs nestedNavigation={parents} isLoading={props.isLoading} />
+          <DiverstNestedBreadcrumbs nestedNavigation={parents} isLoading={props.isLoading} customTexts={props.customTexts} />
           <Folder
             currentUserId={currentUser.id}
             currentGroup={props.currentGroup}

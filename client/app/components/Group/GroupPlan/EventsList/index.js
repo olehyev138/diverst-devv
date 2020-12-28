@@ -184,7 +184,7 @@ EventsList.propTypes = {
     outcomeIndex: PropTypes.string,
     eventNew: PropTypes.string,
     eventManage: PropTypes.func,
-  })
+  }),
 };
 
 export default compose(

@@ -98,7 +98,7 @@ class GroupMessage < ApplicationRecord
   end
 
   def owner_name
-    return 'Unknown' if owner.blank?
+    return I18n.t('errors.group.unknown') if owner.blank?
 
     owner.first_name + owner.last_name
   end

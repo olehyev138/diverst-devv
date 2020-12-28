@@ -106,7 +106,7 @@ class ApplicationRecord < ActiveRecord::Base
     left = all
     right = right_raw.all
 
-    raise ::ArgumentError.new('Can only `or` between two queries of the same Klass') unless left.klass == right.klass
+    raise ::ArgumentError.new(I18n.t('errors.application.only_or')) unless left.klass == right.klass
 
     merged = left.merge(right)
 
@@ -126,7 +126,7 @@ class ApplicationRecord < ActiveRecord::Base
           case j
           when Arel::Nodes::Join
             inner_joins.append Arel::Nodes::OuterJoin.new(j.left, j.right)
-          when String then raise ::ArgumentError.new("Can't `or` when joins are defined by strings")
+          when String then raise ::ArgumentError.new(I18n.t('errors.application.strings_joined'))
           else left_joins.append j
           end
         end

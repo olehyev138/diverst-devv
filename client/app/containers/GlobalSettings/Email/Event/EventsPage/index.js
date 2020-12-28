@@ -90,6 +90,7 @@ export function EventsPage(props) {
       eventsTotal={props.eventsTotal}
       links={links}
       isLoading={isFetching}
+      customTexts={props.customTexts}
     />
   );
 }

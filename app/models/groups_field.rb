@@ -10,7 +10,7 @@ class GroupsField < Field
   def format_value_name(value)
     Group.find(value).name
   rescue
-    'Deleted ERG'
+    I18n.t('errors.group.deleted')
   end
 
   private
