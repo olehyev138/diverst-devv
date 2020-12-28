@@ -5,12 +5,16 @@ import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomText } from 'containers/Shared/App/selectors';
 import { compose } from 'redux';
+
+import Scrollbar from 'components/Shared/Scrollbar';
 
 const styles = {
   dialog: {
@@ -22,16 +26,23 @@ const styles = {
     margin: 'auto',
   },
   content: {
+    paddingTop: '10px !important',
     height: '100%',
     display: 'flex',
     flex: 1,
     flexFlow: 'column',
   },
+  scrollbarContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    height: '100%',
+  },
 };
 
 
 export function DiverstDialog(props) {
-  const { title, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, extraActions } = props;
+  const { title, titleDivider, open, handleYes, textYes, handleNo, textNo, content, classes, paperProps, actionsDivider, extraActions, ...rest } = props;
 
   return (
     <Dialog
@@ -44,11 +55,18 @@ export function DiverstDialog(props) {
         ...paperProps,
       }}
       className={classes.dialog}
+      {...rest}
     >
       {title && <DialogTitle id='alert-dialog-title'>{ title.id ? props.intl.formatMessage(title, props.customText) : title }</DialogTitle>}
-      <DialogContent className={classes.content}>
-        {content.id ? props.intl.formatMessage(content, props.customText) : content}
-      </DialogContent>
+      {titleDivider && <Divider />}
+      <Scrollbar useFlexContainer>
+        <Box className={classes.scrollbarContent}>
+          <DialogContent className={classes.content}>
+            {content.id ? props.intl.formatMessage(content, props.customText) : content}
+          </DialogContent>
+        </Box>
+      </Scrollbar>
+      {actionsDivider && <Divider />}
       {(handleYes || handleNo || extraActions.length > 0) && (
         <DialogActions>
           {handleYes && textYes && (
@@ -77,6 +95,7 @@ export function DiverstDialog(props) {
 DiverstDialog.propTypes = {
   title: PropTypes.object,
   subTitle: PropTypes.node,
+  titleDivider: PropTypes.bool,
   open: PropTypes.bool,
   handleYes: PropTypes.func,
   textYes: PropTypes.node,
@@ -86,6 +105,7 @@ DiverstDialog.propTypes = {
   content: PropTypes.any,
   classes: PropTypes.object.isRequired,
   paperProps: PropTypes.object,
+  actionsDivider: PropTypes.bool,
   extraActions: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     func: PropTypes.func,

@@ -11,6 +11,7 @@ describe('groupsReducer', () => {
   beforeEach(() => {
     state = {
       isLoading: true,
+      isColorGroupsLoading: true,
       isFormLoading: true,
       isCommitting: false,
       groupColorList: [],

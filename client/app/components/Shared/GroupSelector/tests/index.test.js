@@ -7,10 +7,15 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import GroupSelector from '../index';
+
+import { intl } from 'tests/mocks/react-intl';
+
 import configureStore from 'redux-mock-store';
 const mockStore = configureStore([]);
+
+loadTranslation('./app/translations/en.json');
 
 const props = {
   groupField: '',
@@ -26,7 +31,7 @@ const props = {
 describe('<GroupSelector />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallow(<GroupSelector classes={{}} {...props} store={mockStore()} />);
+    const wrapper = shallowWithIntl(<GroupSelector classes={{}} {...props} store={mockStore()} intl={intl} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
