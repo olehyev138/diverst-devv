@@ -33,11 +33,13 @@ module MaterializedTable
     end
 
     def trigger_wrapper
-      <<~SQL.gsub(/\s+/, ' ').strip
-        #{get_old_sums}
-        #{yield}
-        #{set_new_sums}
-      SQL
+      if sums_tables_exist?
+        <<~SQL.gsub(/\s+/, ' ').strip
+          #{get_old_sums}
+          #{yield}
+          #{set_new_sums}
+        SQL
+      end
     end
 
     def expense_adder
@@ -118,6 +120,10 @@ module MaterializedTable
       sql += 'SET @new_approved = @old_approved + @requested; '
       sql += 'END IF; '
       sql + set_rest('approved', 'finalized_expenditures')
+    end
+
+    def sums_tables_exist?
+      AnnualBudgetSums.table_exists? && BudgetSums.table_exists? && BudgetItemSums.table_exists? && BudgetUserSums.table_exists?
     end
 
     def expense_inserted

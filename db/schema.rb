@@ -489,7 +489,6 @@ ActiveRecord::Schema.define(version: 2020_12_21_182556) do
     t.boolean "enable_outlook", default: false
     t.text "onboarding_consent_message"
     t.boolean "virtual_events_enabled", default: false
-    t.boolean "force_parent_child_coupling"
   end
 
   create_table "expense_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1117,6 +1116,10 @@ ActiveRecord::Schema.define(version: 2020_12_21_182556) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
+    t.bigint "author_id_id"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
+    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1399,10 +1402,6 @@ ActiveRecord::Schema.define(version: 2020_12_21_182556) do
     t.index ["segment_id"], name: "index_polls_segments_on_segment_id"
   end
 
-  create_table "prints", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.string "message"
-  end
-
   create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -1637,11 +1636,6 @@ ActiveRecord::Schema.define(version: 2020_12_21_182556) do
     t.datetime "updated_at", null: false
     t.integer "resource_id"
     t.index ["name"], name: "index_tags_on_name"
-  end
-
-  create_table "test", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "id"
-    t.integer "val"
   end
 
   create_table "themes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
