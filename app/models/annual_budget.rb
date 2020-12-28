@@ -37,6 +37,8 @@ class AnnualBudget < ApplicationRecord
       ).left_joins(:annual_budget_sums)
   end
 
+  scope :yeared, -> { where.not(year: nil) }
+
   define_relation_method :count do |*args|
     query = self.all
     if query.group_values.blank?
@@ -57,7 +59,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def self.data_of(group:, year: nil, quarter: nil, current: false)
-    query = AnnualBudget.from(group.child_budgets.with_expenses, :annual_budgets).group(:year, :quarter)
+    query = AnnualBudget.from(group.child_budgets.yeared.with_expenses, :annual_budgets).group(:year, :quarter)
     query = query.where(year: year) if year.present?
     query = query.where(quarter: quarter) if quarter.present?
     query = query.select(
@@ -73,7 +75,7 @@ class AnnualBudget < ApplicationRecord
       'MIN(`closed`) as closed',
       "#{group.id} as budget_head_id",
       '"Group" as budget_head_type',
-    )
+    ).order(year: :desc, quarter: :desc)
     query = query.having('NOT `closed`') if current
     query
   end

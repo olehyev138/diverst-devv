@@ -59,18 +59,22 @@ module BasePager
       Page.new(items, total, sum)
     end
 
-    def pager_with_query(query, params = {})
+    def pager_with_query(query, params = {}, use_order: true)
       set_defaults
 
-      raise Exception.new if @default_order_by.blank?
-      raise Exception.new if @default_order.blank?
+      raise Exception.new if @default_order_by.blank? && use_order
+      raise Exception.new if @default_order.blank? && use_order
 
       # set the parameters
       item_page, item_count, offset, order_by, order = get_params(params)
       # search
       total = query.unscope(:select).count
       items = query
-                .order("#{order_by} #{order}")
+      if use_order
+        items = items.order("#{order_by} #{order}")
+      end
+
+      items = items
                 .limit(item_count)
                 .offset(offset)
 

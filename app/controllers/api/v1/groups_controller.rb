@@ -42,11 +42,10 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    response = AnnualBudget.index(
-      self.diverst_request,
-      params, :return_base,
-      policy: @policy,
-      base: item.aggregate_budget_data
+    response = AnnualBudget.pager_with_query(
+      item.aggregate_budget_data,
+      params,
+      use_orderP: false
     )
 
     render status: 200, json: response, **diverst_request.options
