@@ -45,7 +45,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    (!private? && index?) || is_an_accepted_member?
+    (!private? && index?) || is_an_accepted_member? || manage?
   end
 
   def initiatives?
