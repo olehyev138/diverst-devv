@@ -5,7 +5,7 @@ RSpec.describe SegmentFieldRule, type: :model do
     let(:segment_field_rule) { build_stubbed(:segment_field_rule) }
 
     it { expect(segment_field_rule).to belong_to(:field) }
-    it { expect(segment_field_rule).to belong_to(:segment).dependent(:delete) }
+    it { expect(segment_field_rule).to belong_to(:segment).dependent(:destroy) }
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
