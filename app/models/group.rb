@@ -282,7 +282,7 @@ class Group < ApplicationRecord
   end
 
   def all_annual_budgets
-    other = immediate_parent&.all_annual_budgets
+    other = immediate_parent&.all_annual_budgets if AnnualBudget.current_aggregate_type != :all
     !other.nil? ? other.union(annual_budgets_raw) : annual_budgets_raw
   end
 
