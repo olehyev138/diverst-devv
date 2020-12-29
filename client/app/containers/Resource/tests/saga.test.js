@@ -274,7 +274,7 @@ describe('Tests for folders', () => {
       };
       jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
 
-      const results = [deleteFolderSuccess(), push(null), notified];
+      const results = [push(null), deleteFolderSuccess(), notified];
 
       const initialAction = { payload: {
         id: 1,
