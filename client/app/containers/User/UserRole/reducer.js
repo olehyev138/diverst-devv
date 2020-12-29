@@ -10,7 +10,8 @@ import {
   GET_USER_ROLES_ERROR, GET_USER_ROLE_SUCCESS, USER_ROLE_UNMOUNT,
   CREATE_USER_ROLE_BEGIN, CREATE_USER_ROLE_SUCCESS, CREATE_USER_ROLE_ERROR,
   UPDATE_USER_ROLE_BEGIN, UPDATE_USER_ROLE_SUCCESS, UPDATE_USER_ROLE_ERROR,
-  GET_USER_ROLE_BEGIN, GET_USER_ROLE_ERROR,
+  GET_USER_ROLE_BEGIN, GET_USER_ROLE_ERROR, DELETE_USER_ROLE_BEGIN, DELETE_USER_ROLE_ERROR,
+  DELETE_USER_ROLE_SUCCESS,
 } from 'containers/User/UserRole/constants';
 
 export const initialState = {
@@ -20,6 +21,7 @@ export const initialState = {
   userRoleTotal: null,
   currentUserRole: null,
   isFetchingUserRoles: true,
+  hasChanged: false,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -39,6 +41,9 @@ function usersReducer(state = initialState, action) {
       case GET_USER_ROLES_ERROR:
         draft.isFetchingUserRoles = false;
         return;
+      case DELETE_USER_ROLE_SUCCESS:
+        draft.hasChanged = true;
+        break;
       case GET_USER_ROLE_BEGIN:
         draft.isFormLoading = true;
         break;
@@ -51,12 +56,15 @@ function usersReducer(state = initialState, action) {
         break;
       case CREATE_USER_ROLE_BEGIN:
       case UPDATE_USER_ROLE_BEGIN:
+      case DELETE_USER_ROLE_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
       case CREATE_USER_ROLE_SUCCESS:
       case UPDATE_USER_ROLE_SUCCESS:
       case CREATE_USER_ROLE_ERROR:
       case UPDATE_USER_ROLE_ERROR:
+      case DELETE_USER_ROLE_ERROR:
         draft.isCommitting = false;
         break;
       case USER_ROLE_UNMOUNT:
