@@ -1218,7 +1218,7 @@ RSpec.describe Group, type: :model do
     it 'returns budget items' do
       group = create(:group)
       group.create_annual_budget
-      create(:budget, annual_budget: AnnualBudget.first)
+      create(:budget, annual_budget: AnnualBudget.first, group: group)
       expect(group.current_budget_items.count).to eq 3
     end
   end
