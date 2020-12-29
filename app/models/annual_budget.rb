@@ -213,6 +213,12 @@ class AnnualBudget < ApplicationRecord
       end
     end
 
+    private def ensure_no_repeat_time_period(year, quarter, enterprise_id)
+      raise BadRequestException.new("Year's Budget is already initialized") if quarter.nil? && AnnualBudget.where(enterprise_id: enterprise_id, year: year).exists? 
+      raise BadRequestException.new("Year's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: nil).exists?
+      raise BadRequestException.new("Year and Quarter's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: quarter).exists?
+    end
+
     def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:, period_override: nil)
       old_year, old_quarter = period_override&.any? ? [nil, nil] : current_budget_period
 
@@ -223,6 +229,8 @@ class AnnualBudget < ApplicationRecord
       else
         [default_year, init_quarter ? default_quarter : nil]
       end
+
+      ensure_no_repeat_time_period(new_year, new_quarter, enterprise_id)
 
       AnnualBudget.update_all(closed: true)
 

@@ -6,6 +6,15 @@ class Api::V1::AnnualBudgetsController < DiverstController
   def reset_budgets
     base_authorize(klass)
 
+    override = if params.key?(:period_override)
+      if params[:period_override].blank?
+        [nil, nil]
+      else
+        params[:period_override]
+      end
+    else
+      nil
+    end
     new_period = [nil, nil]
 
     AnnualBudget.transaction do
@@ -13,7 +22,7 @@ class Api::V1::AnnualBudgetsController < DiverstController
         amount: params[:amount] || 0,
         init_quarter: to_bool(params[:init_quarter]),
         type_override: params[:type]&.downcase&.to_sym,
-        period_override: params[:period_override],
+        period_override: override,
         enterprise_id: current_user.enterprise_id
       )
     end
