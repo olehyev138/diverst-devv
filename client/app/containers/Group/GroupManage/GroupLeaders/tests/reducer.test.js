@@ -16,6 +16,7 @@ describe('groupLeaderReducer', () => {
       groupLeaderTotal: null,
       isFetchingGroupLeaders: true,
       currentGroupLeader: null,
+      hasChanged: false,
     };
   });
 

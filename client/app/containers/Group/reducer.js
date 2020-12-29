@@ -58,6 +58,7 @@ import {
 
 export const initialState = {
   isLoading: true,
+  isColorGroupsLoading: true,
   isFormLoading: true,
   isCommitting: false,
   groupList: [],
@@ -87,9 +88,12 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_BEGIN:
-      case GET_COLORS_BEGIN:
       case GET_ANNUAL_BUDGETS_BEGIN:
         draft.isLoading = true;
+        break;
+
+      case GET_COLORS_BEGIN:
+        draft.isColorGroupsLoading = true;
         break;
 
       case GET_GROUPS_SUCCESS:
@@ -100,7 +104,7 @@ function groupsReducer(state = initialState, action) {
 
       case GET_COLORS_SUCCESS:
         draft.groupColorList = action.payload.items;
-        draft.isLoading = false;
+        draft.isColorGroupsLoading = false;
         break;
 
       case GET_ANNUAL_BUDGETS_SUCCESS:
@@ -110,9 +114,12 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_ERROR:
-      case GET_COLORS_ERROR:
       case GET_ANNUAL_BUDGETS_ERROR:
         draft.isLoading = false;
+        break;
+
+      case GET_COLORS_ERROR:
+        draft.isColorGroupsLoading = false;
         break;
 
       case CREATE_GROUP_BEGIN:
@@ -160,6 +167,7 @@ function groupsReducer(state = initialState, action) {
 
       case GROUP_LIST_UNMOUNT:
         draft.isLoading = true;
+        draft.isColorGroupsLoading = true;
         draft.groupList = [];
         draft.groupColorList = [];
         draft.groupTotal = null;
