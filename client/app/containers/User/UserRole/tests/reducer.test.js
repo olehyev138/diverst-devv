@@ -16,6 +16,7 @@ describe('userRoleReducer', () => {
       userRoleTotal: null,
       currentUserRole: null,
       isFetchingUserRoles: true,
+      hasChanged: false,
     };
   });
 
