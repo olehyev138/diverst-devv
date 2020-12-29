@@ -17,7 +17,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import {
   selectPaginatedUserRoles, selectUserRoleTotal,
-  selectIsFetchingUserRoles
+  selectIsFetchingUserRoles, selectHasChanged
 } from '../selectors';
 import {
   getUserRolesBegin, userRoleUnmount, deleteUserRoleBegin
@@ -45,7 +45,7 @@ export function UserRoleListPage(props) {
     return () => {
       props.userRoleUnmount();
     };
-  }, []);
+  }, [props.hasChanged]);
 
   const links = {
     userRoleNew: ROUTES.admin.system.users.roles.new.path(),
@@ -93,6 +93,7 @@ UserRoleListPage.propTypes = {
   deleteUserRoleBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func.isRequired,
   handleVisitUserRoleEdit: PropTypes.func,
+  hasChanged: PropTypes.bool,
   customTexts: PropTypes.object
 };
 
@@ -102,6 +103,7 @@ const mapStateToProps = createStructuredSelector({
   isFetchingUserRoles: selectIsFetchingUserRoles(),
   permissions: selectPermissions(),
   customTexts: selectCustomText(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = dispatch => ({

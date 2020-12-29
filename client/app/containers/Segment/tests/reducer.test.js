@@ -19,7 +19,8 @@ describe('segmentReducer', () => {
       segmentMemberList: [],
       segmentMemberTotal: null,
       isFetchingSegmentMembers: true,
-      isSegmentBuilding: false
+      isSegmentBuilding: false,
+      hasChanged: false,
     };
   });
 

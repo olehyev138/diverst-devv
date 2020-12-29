@@ -2,7 +2,6 @@ import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/Segment/reducer';
 import produce from 'immer';
 
-import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
 import { deserializeFields } from 'utils/selectorHelpers';
 
 const selectSegmentsDomain = state => state.segments || initialState;
@@ -104,6 +103,10 @@ const selectIsCommitting = () => createSelector(
   segmentsState => segmentsState.isCommitting
 );
 
+const selectHasChanged = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.hasChanged
+);
 
 export {
   selectSegmentsDomain, selectPaginatedSegments, selectPaginatedSelectSegments,
@@ -111,5 +114,5 @@ export {
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
   selectFormSegment, selectIsLoading, selectIsCommitting,
-  selectIsFormLoading,
+  selectIsFormLoading, selectHasChanged
 };
