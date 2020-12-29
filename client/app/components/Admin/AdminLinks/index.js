@@ -444,7 +444,10 @@ export function AdminLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.admin.include.polls.index.path()}
             activeClassName={classes.navLinkActive}
-            show={permission(props, 'polls_create')}
+            show={
+              props?.enterprise?.scope_module_enabled
+              && permission(props, 'polls_create')
+            }
           >
             <ListItemIcon>
               <IncludeIcon />

@@ -16,7 +16,7 @@ const selectPaginatedGroups = () => createSelector(
  *  looks like: [ { value: <>, label: <> } ... ]
  */
 
-export const groupMapper = group => ({ value: group.id, label: group.name, logo_data: group.logo_data, children: (group.children || []).map(groupMapper) });
+export const groupMapper = group => ({ value: group.id, label: group.name, logo_data: group.logo_data, is_parent_group: group.is_parent_group });
 
 const selectPaginatedSelectGroups = () => createSelector(
   selectGroupsDomain,
@@ -66,6 +66,11 @@ const selectGroupIsLoading = () => createSelector(
   groupsState => groupsState.isLoading
 );
 
+const selectColorGroupsIsLoading = () => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.isColorGroupsLoading
+);
+
 const selectGroupIsFormLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isFormLoading
@@ -110,6 +115,7 @@ export {
   selectGroup,
   selectFormGroup,
   selectGroupIsLoading,
+  selectColorGroupsIsLoading,
   selectGroupIsFormLoading,
   selectGroupIsCommitting,
   selectHasChanged,
