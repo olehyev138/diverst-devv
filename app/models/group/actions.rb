@@ -50,6 +50,17 @@ module Group::Actions
       ['all_children', 'possible_children', 'all_parents', 'no_children', 'children_of', 'is_private', 'replace_with_children', 'except_id', 'joined_groups', 'non_regioned_children']
     end
 
+    def lookup(params = {}, diverst_request = nil, base: self, policy: nil)
+      aggregate_type = AnnualBudget.current_aggregate_type
+      items = super
+      if diverst_request.action == 'current_annual_budgets'
+        items = items.preload(:regions) if aggregate_type == :region
+        items = items.preload(:children) if aggregate_type == :all
+        items = items.joins(:regions)
+      end
+      items
+    end
+
     # List of all attributes to preload.
     # Used when serializing a group itself
     def base_preloads(diverst_request)

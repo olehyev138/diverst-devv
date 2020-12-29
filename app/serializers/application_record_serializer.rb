@@ -142,6 +142,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
                     super()
                   rescue NoMethodError => e
                     warn(e)
+                    warn(e.backtrace.filter {|a| a.include?(Rails.root.to_s)})
                     nil
                   end
                 else
