@@ -296,7 +296,7 @@ export function AnnualBudgetListItem(props) {
           </>
         )}
       </CardContent>
-      {props.type === 'overview' && (
+      {false && props.type === 'overview' && (
         <Collapse in={initList}>
           <InitiativeList
             initiatives={props.initiatives}
