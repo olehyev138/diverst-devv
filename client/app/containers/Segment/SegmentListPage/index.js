@@ -18,7 +18,7 @@ import reducer from 'containers/Segment/reducer';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
+import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading, selectHasChanged } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
 import { selectEnterprise, selectPermissions, selectCustomText } from 'containers/Shared/App/selectors';
 
@@ -44,7 +44,7 @@ export function SegmentListPage(props) {
     return () => {
       props.segmentUnmount();
     };
-  }, []);
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -94,7 +94,7 @@ SegmentListPage.propTypes = {
   deleteSegmentBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   handleSegmentEdit: PropTypes.func,
-
+  hasChanged: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -108,6 +108,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   permissions: selectPermissions(),
   customTexts: selectCustomText(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = dispatch => ({
