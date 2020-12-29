@@ -292,7 +292,7 @@ class Group < ApplicationRecord
   end
 
   def current_budget_items
-    current_annual_budget&.budget_items || BudgetItem.none
+    budget_items.current
   end
 
   def reload

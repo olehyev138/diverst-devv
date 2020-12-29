@@ -24,6 +24,7 @@ class BudgetItem < ApplicationRecord
   scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
   scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
+  scope :current, -> { joins(:annual_budget).where(annual_budgets: { closed: false }) }
   scope :with_expenses, -> do
     select(
         '`budget_items`.*',
