@@ -214,7 +214,7 @@ class AnnualBudget < ApplicationRecord
     end
 
     private def ensure_no_repeat_time_period(year, quarter, enterprise_id)
-      raise BadRequestException.new("Year's Budget is already initialized") if quarter.nil? && AnnualBudget.where(enterprise_id: enterprise_id, year: year).exists? 
+      raise BadRequestException.new("Year's Budget is already initialized") if quarter.nil? && AnnualBudget.where(enterprise_id: enterprise_id, year: year).exists?
       raise BadRequestException.new("Year's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: nil).exists?
       raise BadRequestException.new("Year and Quarter's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: quarter).exists?
     end

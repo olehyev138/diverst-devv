@@ -7,11 +7,7 @@ class Api::V1::AnnualBudgetsController < DiverstController
     base_authorize(klass)
 
     override = if params.key?(:period_override)
-      if params[:period_override].blank?
-        [nil, nil]
-      else
-        params[:period_override]
-      end
+      params[:period_override].presence || [nil, nil]
     else
       nil
     end
