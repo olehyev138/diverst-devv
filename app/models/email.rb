@@ -25,13 +25,17 @@ class Email < ApplicationRecord
     hash = {}
 
     strings.each do |string|
-      keys = string.split('.')
-      object = objects[keys.first.to_sym]
-      value = object if keys.second.nil?
-      value = object.send(keys.second) if keys.second
-      next if value.nil?
-
-      hash.merge!({ "#{string}": value })
+      if variables.pluck(:key).include?(string)
+        keys = string.split('.')
+        object = objects[keys.first.to_sym]
+        value = object if keys.second.nil?
+        value = object.send(keys.second) if keys.second
+      else
+        value = "%{#{string}}"
+      end
+    rescue
+    ensure
+      hash.merge!({ "#{string}": value || "%{ERROR}" })
     end
     hash
   end
