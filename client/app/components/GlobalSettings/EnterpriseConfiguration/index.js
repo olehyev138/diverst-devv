@@ -12,9 +12,6 @@ import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
