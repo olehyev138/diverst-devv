@@ -238,6 +238,14 @@ class Group < ApplicationRecord
     region || parent
   end
 
+  def is_child_of(obj)
+    case obj
+    when Group then obj.id == parent_id
+    when Region then obj.id == region_id
+    else false
+    end
+  end
+
   def create_annual_budget
     AnnualBudget.create(group: self, closed: false)
   end
