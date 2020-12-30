@@ -35,7 +35,7 @@ class Email < ApplicationRecord
       end
     rescue
     ensure
-      hash.merge!({ "#{string}": value || "%{ERROR}" })
+      hash.merge!({ "#{string}": value || '{ERROR}' })
     end
     hash
   end
