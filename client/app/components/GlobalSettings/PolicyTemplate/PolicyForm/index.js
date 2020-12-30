@@ -132,10 +132,14 @@ export function PolicyFormInner({
       [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'segments_manage',
     },
     // TODO : Disabled module
+    //    [intl.formatMessage(messages.enterprise_policies.mentorship, props.customTexts)]: {
+    //      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'mentorship_manage',
     //    [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
-    //      [intl.formatMessage(messages.permissions.auto_archive, props.customTexts)]: 'auto_archive_manage',
-    //      [intl.formatMessage(messages.permissions.enterprise, props.customTexts)]: 'enterprise_manage',
     //    },
+    [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.auto_archive, props.customTexts)]: 'auto_archive_manage',
+      [intl.formatMessage(messages.permissions.enterprise, props.customTexts)]: 'enterprise_manage',
+    },
   });
 
   const generalPolicies = Object.freeze({
