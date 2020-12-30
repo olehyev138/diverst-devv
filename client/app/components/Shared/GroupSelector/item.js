@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -8,35 +8,37 @@ import {
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import DiverstSelect from '../DiverstSelect';
 import { createStructuredSelector } from 'reselect';
 import { selectPaginatedSelectGroups, selectGroupIsLoading } from 'containers/Group/selectors';
-import DiverstPagination from 'components/Shared/DiverstPagination';
 import {
   Box,
-  Card,
   CardActionArea,
   CardContent,
-  Collapse,
-  Divider,
   Grid,
   Hidden,
-  Link,
   Typography,
-  ButtonBase
 } from '@material-ui/core';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstImg from 'components/Shared/DiverstImg';
-import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
-import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import CheckBoxOutlineBlankRoundedIcon from '@material-ui/icons/CheckBoxOutlineBlankRounded';
 import CheckBoxRoundedIcon from '@material-ui/icons/CheckBoxRounded';
 import { withStyles, lighten } from '@material-ui/core/styles';
-import useClickPreventionOnDoubleClick from 'utils/customHooks/doubleClickHelper';
+import classNames from 'classnames';
 
 const styles = theme => ({
+  itemContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    maxHeight: 140,
+    borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+  },
+  itemContainerLast: {
+    borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+  },
+  itemGridContainer: {
+    flex: 1,
+  },
   errorButton: {
     color: theme.palette.error.main,
   },
@@ -56,6 +58,9 @@ const styles = theme => ({
   groupCardTitle: {
     verticalAlign: 'middle',
     width: '100%'
+  },
+  groupCardTitleNoChildren: {
+    paddingRight: 58, // Compensate for children expand button & icon
   },
   groupCardIcon: {
     verticalAlign: 'middle',
@@ -97,65 +102,68 @@ const styles = theme => ({
     fontSize: 34,
   },
   buttonBase: {
+    height: '100%',
     width: '100%',
+    textAlign: 'justify',
   },
   cardContentSelected: {
+    display: 'flex',
     paddingTop: 10,
     paddingBottom: 10,
+    height: '100%',
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.primary.main,
+    background: lighten(theme.palette.primary.main, 0.85),
     borderRightWidth: 1,
     borderRightStyle: 'solid',
     borderRightColor: theme.custom.colors.lightGrey,
-    background: lighten(theme.palette.primary.main, 0.85),
   },
   cardContentNotSelected: {
+    display: 'flex',
     paddingTop: 10,
     paddingBottom: 10,
+    height: '100%',
     width: '100%',
     borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.secondary.main,
     borderRightWidth: 1,
     borderRightStyle: 'solid',
     borderRightColor: theme.custom.colors.lightGrey,
-  }
+  },
 });
 
 const GroupSelectorItem = (props) => {
-  const { group, classes, doubleClickWait, ...rest } = props;
-  const { getGroupsBegin, groupListUnmount, groupSelectAction, setExpandedGroups, expandedGroups } = rest;
+  const { group, classes, ...rest } = props;
+  const { getGroupsBegin, groupListUnmount, groupSelectAction } = rest;
 
-  const [handleClick, handleDoubleClick] = useClickPreventionOnDoubleClick(
-    () => {
-      if (props.isSelected(props.group))
-        props.removeGroup(props.group);
-      else
-        props.addGroup(props.group);
-    },
-    () => {
-      if (props.isSelected(props.group))
-        props.removeGroup(...[props.group, ...props.group.children]);
-      else
-        props.addGroup(...[props.group, ...props.group.children]);
-    },
-    doubleClickWait,
-  );
+  const handleClick = () => {
+    if (props.isSelected(props.group))
+      props.removeGroup(props.group);
+    else
+      props.addGroup(props.group);
+  };
 
   const imageDimensions = props.large ? '80px' : '30px';
 
+  const groupCardClasses = props.isSelected(group) ? classes.cardContentSelected : classes.cardContentNotSelected;
+  let groupCardTitleClasses = classes.groupCardTitle;
+  let groupCardShortDescriptionClasses = classes.groupCardTitle;
+
+  if (group.is_parent_group !== true)
+    if (props.large) groupCardShortDescriptionClasses = classNames(groupCardShortDescriptionClasses, classes.groupCardTitleNoChildren);
+    else groupCardTitleClasses = classNames(groupCardTitleClasses, classes.groupCardTitleNoChildren);
+
   return (
-    <React.Fragment>
-      <Divider />
-      <Grid container>
+    <Box className={classNames(classes.itemContainer, props.isLastGroup === true && classes.itemContainerLast)}>
+      <Grid container alignItems='stretch' className={classes.itemGridContainer}>
         <Grid item xs>
-          <ButtonBase
+          <CardActionArea
             onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
             className={classes.buttonBase}
           >
-            <CardContent className={props.isSelected(props.group) ? classes.cardContentSelected : classes.cardContentNotSelected}>
-              <Grid container spacing={2} alignItems='center' alignContent='flex-start'>
+            <CardContent className={groupCardClasses}>
+              <Grid container spacing={2} alignItems='center' alignContent='center'>
                 <Hidden xsDown>
                   <Grid item xs='auto'>
                     <DiverstImg
@@ -175,11 +183,11 @@ const GroupSelectorItem = (props) => {
                   </Grid>
                 )}
                 <Grid item xs>
-                  <Typography variant='h5' component='h2' className={classes.groupCardTitle}>
+                  <Typography variant='h6' component='h2' className={groupCardTitleClasses}>
                     {group.label || group.name}
                   </Typography>
                   {props.large && (
-                    <Typography variant='body1' component='h3' className={classes.groupCardTitle} color='secondary'>
+                    <Typography variant='body1' component='h3' className={groupCardShortDescriptionClasses} color='secondary'>
                       {group.short_description}
                     </Typography>
                   )}
@@ -187,43 +195,21 @@ const GroupSelectorItem = (props) => {
               </Grid>
 
             </CardContent>
-          </ButtonBase>
+          </CardActionArea>
         </Grid>
-        {!props.dialogNoChildren && group.children && group.children.length > 0 && (
+        {(!props.dialogNoChildren && group.is_parent_group === true) && (
           <Grid item className={props.isSelected(props.group) ? classes.expandActionAreaContainerSelected : classes.expandActionAreaContainer}>
             <CardActionArea
               className={classes.expandActionArea}
-              onClick={() => {
-                setExpandedGroups({
-                  ...expandedGroups,
-                  [group.value || group.id]: !expandedGroups[group.value || group.id]
-                });
-              }}
+              onClick={() => props.handleParentExpand(group.value || group.id, group.label || group.name)}
             >
-              {expandedGroups[group.value || group.id] ? (
-                <RemoveIcon color='primary' className={classes.expandIcon} />
-              ) : (
-                <AddIcon color='primary' className={classes.expandIcon} />
-              )}
+              <AddIcon color='primary' className={classes.expandIcon} />
             </CardActionArea>
           </Grid>
         )}
       </Grid>
-      <Divider />
-      <Collapse in={expandedGroups[`${group.value || group.id}`]}>
-        <Grid container>
-          <Grid item xs={1} />
-          <Grid item xs={11}>
-            {group.children && group.children.map((childGroup, i) => (
-              <React.Fragment key={childGroup.value || childGroup.id}>
-                <GroupSelectorItem {...props} group={childGroup} child />
-              </React.Fragment>
-            ))}
-          </Grid>
-        </Grid>
-      </Collapse>
       {props.large && !props.child ? <Box mb={1} /> : <React.Fragment />}
-    </React.Fragment>
+    </Box>
   );
 };
 
@@ -232,8 +218,14 @@ GroupSelectorItem.propTypes = {
   group: PropTypes.shape({
     value: PropTypes.number,
     label: PropTypes.string,
-    children: PropTypes.arrayOf(PropTypes.object)
+    is_parent_group: PropTypes.bool,
   }).isRequired,
+
+  parentData: PropTypes.object,
+  displayParentUI: PropTypes.bool,
+  handleParentExpand: PropTypes.func,
+
+  isLastGroup: PropTypes.bool,
 
   dialogNoChildren: PropTypes.bool,
   inputCallback: PropTypes.func,
@@ -242,15 +234,11 @@ GroupSelectorItem.propTypes = {
   isSelected: PropTypes.func,
   large: PropTypes.bool,
   child: PropTypes.bool,
-  doubleClickWait: PropTypes.number,
   selected: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.object),
-    PropTypes.object
+    PropTypes.object,
+    PropTypes.string,
   ]),
-};
-
-GroupSelectorItem.defaultProps = {
-  doubleClickWait: 200,
 };
 
 const mapStateToProps = createStructuredSelector({

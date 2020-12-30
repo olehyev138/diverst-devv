@@ -126,6 +126,7 @@ export function GroupFormInner({ classes, formikProps, buttonText, ...props }) {
               isMulti
               disabled={props.isCommitting}
               queryScopes={[['possible_children', values.id]]}
+              dialogQueryScopes={[]}
               {...formikProps}
             />
           </CardContent>
