@@ -2,7 +2,7 @@ import {
   selectUserRoleDomain, selectPaginatedUserRoles,
   selectUserRoleTotal, selectUserRole, selectIsFetchingUserRoles,
   selectIsCommitting, selectIsFormLoading, selectFormUserRole,
-  selectPaginatedSelectUserRoles,
+  selectPaginatedSelectUserRoles, selectHasChanged,
 } from '../selectors';
 
 import { initialState } from '../reducer';
@@ -37,6 +37,15 @@ describe('UserRole selectors', () => {
     it('should select the \'is committing\' flag', () => {
       const mockedState = { isCommitting: true };
       const selected = selectIsCommitting().resultFunc(mockedState);
+
+      expect(selected).toEqual(true);
+    });
+  });
+
+  describe('selectHasChanged', () => {
+    it('should select the \'has changed\' flag', () => {
+      const mockedState = { hasChanged: true };
+      const selected = selectHasChanged().resultFunc(mockedState);
 
       expect(selected).toEqual(true);
     });
