@@ -32,7 +32,7 @@ class AnnualBudgetPolicy < GroupBasePolicy
       false
     end
   end
-  
+
   def base_index_permission
     'groups_budgets_index'
   end
