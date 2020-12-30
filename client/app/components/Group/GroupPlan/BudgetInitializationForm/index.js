@@ -58,7 +58,7 @@ export function BudgetInitializationForm(props, context) {
     const date = new Date();
     const currYear = date.getFullYear();
     const from0to10 = [...Array(10).keys()];
-    const yearRange = from0to10.map(n => currYear + n - 2);
+    const yearRange = from0to10.map(n => currYear + n);
     return [
       { label: props.intl.formatMessage(messages.initializationForm.currentYear, props.customTexts), value: null }
     ].concat(
