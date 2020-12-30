@@ -47,7 +47,7 @@ class AnnualBudgetPolicy < GroupBasePolicy
 
   def group_of(object)
     g = params[:group_id].present? ? Group.find(params[:group_id]) : object.group
-    return nil unless g.is_child_of(object.budget_head) || g == object.budget_head
+    return nil unless g&.is_child_of(object.budget_head) || g == object.budget_head
 
     g
   end
