@@ -7,30 +7,16 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography,
-  Card,
-  CardHeader,
-  CardActions,
-  CardContent,
-  TextField,
-  Grid,
-  Divider,
-  Box,
-  Button,
-  Checkbox,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
+  Typography, Card, CardActions, CardContent, Grid, Divider, Box,
+  Checkbox, FormLabel, FormGroup, FormControlLabel,
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/UserPolicy/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -86,12 +72,12 @@ export function PolicyFormInner({
             name={policy[key]}
             margin='normal'
             disabled={props.isCommitting}
-            label={underToSpace(key)}
+            label={key}
             value={values[policy[key]]}
             checked={values[policy[key]]}
           />
         )}
-        label={underToSpace(key)}
+        label={key}
         key={key}
       />
     ));
@@ -100,7 +86,7 @@ export function PolicyFormInner({
   function policiesRender(policies) {
     return Object.keys(policies).map(key => (
       <Grid item xs={12} sm={6} md={3} key={key}>
-        <FormLabel component='legend'>{underToSpace(key)}</FormLabel>
+        <FormLabel component='legend'>{key}</FormLabel>
         <FormGroup>
           {policyRender(policies[key])}
         </FormGroup>
@@ -109,107 +95,104 @@ export function PolicyFormInner({
   }
 
   const enterprisePolicies = Object.freeze({
-    Logs: {
-      View: 'logs_view',
+    [intl.formatMessage(messages.enterprise_policies.logs, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'logs_view',
     },
-    Permissions: {
-      Manage: 'permissions_manage',
+    [intl.formatMessage(messages.enterprise_policies.permissions, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'permissions_manage',
     },
-    SSO: {
-      Manage: 'sso_manage',
+    [intl.formatMessage(messages.enterprise_policies.sso, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'sso_manage',
     },
-    Global_Calendar: {
-      View: 'global_calendar',
+    [intl.formatMessage(messages.enterprise_policies.calendar, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'global_calendar',
     },
-    Enterprise_Resources: {
-      View: 'enterprise_resources_index',
-      Create: 'enterprise_resources_create',
-      Manage: 'enterprise_resources_manage',
+    [intl.formatMessage(messages.enterprise_policies.resources, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'enterprise_resources_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'enterprise_resources_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'enterprise_resources_manage',
     },
-    Diversity_and_Culture_Index: {
-      Manage: 'diversity_manage',
+    [intl.formatMessage(messages.enterprise_policies.diversity, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'diversity_manage',
     },
-    Branding: {
-      Manage: 'branding_manage',
+    [intl.formatMessage(messages.enterprise_policies.branding, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'branding_manage',
     },
-    Metrics_Dashboards: {
-      View: 'metrics_dashboards_index',
-      Create: 'metrics_dashboards_create',
+    [intl.formatMessage(messages.enterprise_policies.metrics, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'metrics_dashboards_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'metrics_dashboards_create',
     },
-    Users: {
-      View: 'users_index',
-      Manage: 'users_manage',
+    [intl.formatMessage(messages.enterprise_policies.users, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'users_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'users_manage',
     },
-    Segments: {
-      View: 'segments_index',
-      Create: 'segments_create',
-      Manage: 'segments_manage',
+    [intl.formatMessage(messages.enterprise_policies.segments, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'segments_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'segments_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'segments_manage',
     },
     // TODO : Disabled module
-    // Mentorship: {
-    //   Manage: 'mentorship_manage',
-    // },
-    Settings: {
-      Manage_Auto_Archive_Settings: 'auto_archive_manage',
-      Manage_Enterprise: 'enterprise_manage',
-    },
+    //    [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
+    //      [intl.formatMessage(messages.permissions.auto_archive, props.customTexts)]: 'auto_archive_manage',
+    //      [intl.formatMessage(messages.permissions.enterprise, props.customTexts)]: 'enterprise_manage',
+    //    },
   });
 
   const generalPolicies = Object.freeze({
     // TODO : Disabled module
-    // Campaigns: {
-    //   View: 'campaigns_index',
-    //   Create: 'campaigns_create',
-    //   Manage: 'campaigns_manage',
-    // },
-    Surveys: {
-      View: 'polls_index',
-      Create: 'polls_create',
-      Manage: 'polls_manage',
+    //   [intl.formatMessage(messages.general_policies.campaigns, props.customTexts)]: {
+    //      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'campaigns_index',
+    //      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'campaigns_create',
+    //      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'campaigns_manage',
+    //    },
+    [intl.formatMessage(messages.general_policies.surveys, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'polls_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'polls_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'polls_manage',
     },
-    Groups: {
-      View: 'groups_index',
-      Create: 'groups_create',
-      Manage: 'groups_manage',
+    [intl.formatMessage(messages.general_policies.groups, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'groups_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_manage',
     },
   });
 
   const groupPolicies = Object.freeze({
-    Events: {
-      View: 'initiatives_index',
-      Create: 'initiatives_create',
-      Manage: 'initiatives_manage',
+    [intl.formatMessage(messages.group_policies.events, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'initiatives_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'initiatives_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'initiatives_manage',
     },
-    Resource: {
-      View: 'group_resources_index',
-      Create: 'group_resources_create',
-      Manage: 'group_resources_manage',
+    [intl.formatMessage(messages.group_policies.resource, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_resources_index',
+      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'group_resources_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'group_resources_manage',
     },
-    News: {
-      View: 'group_posts_index',
-      Create_Message: 'group_messages_create',
-      Create_News_Link: 'news_links_create',
-      Create_Social_Link: 'social_links_create',
-      Manage: 'manage_posts',
+    [intl.formatMessage(messages.group_policies.news, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_posts_index',
+      [intl.formatMessage(messages.permissions.message, props.customTexts)]: 'group_messages_create',
+      [intl.formatMessage(messages.permissions.news_link, props.customTexts)]: 'news_links_create',
+      [intl.formatMessage(messages.permissions.social_link, props.customTexts)]: 'social_links_create',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'manage_posts',
     },
-    Budgets: {
-      View: 'groups_budgets_index',
-      Request: 'groups_budgets_request',
-      Approval: 'budget_approval',
-      Manage: 'groups_budgets_manage',
+    [intl.formatMessage(messages.group_policies.budgets, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_budgets_index',
+      [intl.formatMessage(messages.permissions.request, props.customTexts)]: 'groups_budgets_request',
+      [intl.formatMessage(messages.permissions.approval, props.customTexts)]: 'budget_approval',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_budgets_manage',
     },
-    Members: {
-      View: 'groups_members_index',
-      Manage: 'groups_members_manage',
+    [intl.formatMessage(messages.group_policies.members, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'groups_members_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'groups_members_manage',
     },
-    Leaders: {
-      View: 'group_leader_index',
-      Manage: 'group_leader_manage',
+    [intl.formatMessage(messages.group_policies.leaders, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'group_leader_index',
+      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'group_leader_manage',
     },
-    Settings: {
-      Manage_Group_Settings: 'group_settings_manage',
-      Manage_Layouts: 'groups_layouts_manage',
-      Manage_Insights: 'groups_insights_manage',
+    [intl.formatMessage(messages.group_policies.settings, props.customTexts)]: {
+      [intl.formatMessage(messages.permissions.settings, props.customTexts)]: 'group_settings_manage',
+      [intl.formatMessage(messages.permissions.layouts, props.customTexts)]: 'groups_layouts_manage',
+      [intl.formatMessage(messages.permissions.insights, props.customTexts)]: 'groups_insights_manage',
     },
   });
 
@@ -394,6 +377,7 @@ PolicyFormInner.propTypes = {
   }),
 
   classes: PropTypes.object,
+  customTexts: PropTypes.object,
   intl: intlShape.isRequired,
 };
 
