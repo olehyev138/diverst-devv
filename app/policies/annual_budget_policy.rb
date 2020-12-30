@@ -4,8 +4,8 @@ class AnnualBudgetPolicy < GroupBasePolicy
     if group
       @parent = group.parent
       if @parent
-        @parent_leader = user.policy_group_leader(@parent.id)
-        @parent_member = user.policy_user_group(@parent.id)
+        @parent_leader = @user.policy_group_leader(@parent.id)
+        @parent_member = @user.policy_user_group(@parent.id)
       end
     end
   end
