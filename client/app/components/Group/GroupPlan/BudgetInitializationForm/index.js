@@ -163,6 +163,7 @@ export function BudgetInitializationForm(props, context) {
                   <Field
                     component={Switch}
                     onChange={handleChange}
+                    color='primary'
                     id='with_quarter'
                     name='with_quarter'
                     margin='normal'
