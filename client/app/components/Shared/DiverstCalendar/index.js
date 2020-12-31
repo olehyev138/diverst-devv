@@ -33,6 +33,7 @@ const styles = theme => ({
     left: '50%',
     marginTop: -12,
     marginLeft: -12,
+    zIndex: 5,
   },
   legend: {
     float: 'right',

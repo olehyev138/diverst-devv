@@ -1,7 +1,8 @@
 import {
   selectFormGroupLeaders, selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
   selectGroupLeaderTotal, selectIsFetchingGroupLeaders, selectIsCommitting,
-  selectFormGroupLeader, selectPaginatedSelectGroupLeaders, selectIsFormLoading
+  selectFormGroupLeader, selectPaginatedSelectGroupLeaders, selectIsFormLoading,
+  selectHasChanged
 } from '../selectors';
 
 import { initialState } from '../reducer';
@@ -27,6 +28,15 @@ describe('GroupLeader selectors', () => {
     it('should select the \'is committing\' flag', () => {
       const mockedState = { isCommitting: true };
       const selected = selectIsCommitting().resultFunc(mockedState);
+
+      expect(selected).toEqual(true);
+    });
+  });
+
+  describe('selectHasChanged', () => {
+    it('should select the \'has changed\' flag', () => {
+      const mockedState = { hasChanged: true };
+      const selected = selectHasChanged().resultFunc(mockedState);
 
       expect(selected).toEqual(true);
     });

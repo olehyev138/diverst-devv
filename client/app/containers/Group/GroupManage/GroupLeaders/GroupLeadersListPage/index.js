@@ -16,7 +16,7 @@ import {
 
 import {
   selectPaginatedGroupLeaders, selectGroupLeaderTotal,
-  selectIsFetchingGroupLeaders,
+  selectIsFetchingGroupLeaders, selectHasChanged
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { selectCustomText } from 'containers/Shared/App/selectors';
 
@@ -43,7 +43,7 @@ export function GroupLeadersListPage(props) {
     return () => {
       props.groupLeadersUnmount();
     };
-  }, []);
+  }, [props.hasChanged]);
 
   const links = {
     groupLeaderNew: ROUTES.group.manage.leaders.new.path(groupId),
@@ -91,6 +91,7 @@ GroupLeadersListPage.propTypes = {
   handleVisitGroupLeaderEdit: PropTypes.func,
   currentGroup: PropTypes.object,
   customTexts: PropTypes.object,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -98,6 +99,7 @@ const mapStateToProps = createStructuredSelector({
   groupLeaderTotal: selectGroupLeaderTotal(),
   isFetchingGroupLeaders: selectIsFetchingGroupLeaders(),
   customTexts: selectCustomText(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = dispatch => ({
