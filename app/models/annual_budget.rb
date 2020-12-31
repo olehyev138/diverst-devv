@@ -175,6 +175,33 @@ class AnnualBudget < ApplicationRecord
       [year, where(year: year).maximum(:quarter)]
     end
 
+    def aggregate_type_of(year:)
+      type_row = AnnualBudget
+        .select(
+          :year,
+          :quarter,
+          "MIN(`annual_budgets`.`budget_head_type` = 'Region') as region_type",
+          'MAX(`groups`.`id`) IS NOT NULL AND MIN(`groups`.`parent_id` IS NULL) as parent_type'
+        ).joins(
+          "LEFT JOIN `groups` ON `groups`.`id` = `annual_budgets`.`budget_head_id` && `annual_budgets`.`budget_head_type` = 'Group'")
+        .group(:year, :quarter)
+        .order(year: :desc)
+        .order(quarter: :desc)
+        .where(year: year)
+        .limit(1)
+        .to_a.first
+
+      if type_row.nil?
+        :none
+      elsif type_row.region_type == 1
+        :region
+      elsif type_row.parent_type == 1
+        :parent
+      else
+        :all
+      end
+    end
+
     def current_aggregate_type
       type_row = AnnualBudget
         .select(
@@ -219,6 +246,10 @@ class AnnualBudget < ApplicationRecord
       raise BadRequestException.new("Year and Quarter's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: quarter).exists?
     end
 
+    private def ensure_some_type_for_year(year:, type:)
+      raise BadRequestException.new("Can't mix Budget Type in the same year") unless [:none, type].include?(aggregate_type_of(year: year))
+    end
+
     def reset_budgets(amount: 0, init_quarter: false, type_override: nil, enterprise_id:, period_override: nil)
       old_year, old_quarter = period_override&.any? ? [nil, nil] : current_budget_period
 
@@ -230,11 +261,14 @@ class AnnualBudget < ApplicationRecord
         [default_year, init_quarter ? default_quarter : nil]
       end
 
+      new_aggregate_type = type_override.presence || current_aggregate_type
+
       ensure_no_repeat_time_period(new_year, new_quarter, enterprise_id)
+      ensure_some_type_for_year(year: new_year, type: new_aggregate_type)
 
       AnnualBudget.update_all(closed: true)
 
-      case type_override.presence || current_aggregate_type
+      case new_aggregate_type
       when :region
         initialize_regions_budgets(amount: amount, year: new_year, quarter: new_quarter, enterprise_id: enterprise_id)
       when :parent
