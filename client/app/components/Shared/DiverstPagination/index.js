@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, useTheme } from '@material-ui/core/styles';
-import { TablePagination, IconButton } from '@material-ui/core';
+import { TablePagination, IconButton, Hidden } from '@material-ui/core';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -163,25 +163,33 @@ export function DiverstPagination(props) {
 
   return (
     <div className={classes.paginationContainer}>
-      <TablePagination
-        ref={paginationComponentRef}
-        className={paginationClassName}
-        ActionsComponent={PaginationActionsComponent}
-        component='div'
-        page={page}
-        rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
-        rowsPerPage={rowsPerPage || 0}
-        intl={props.intl}
-        count={props.count || 0}
-        onChangePage={props.onChangePage || handleChangePage}
-        onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
-        }}
-        nextIconButtonProps={{
-          'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
-        }}
-      />
+      {/*
+          Use Hidden with CSS implementation here so that the component & ref don't unmount,
+          while still hiding the pagination when data is loading
+      */}
+      <Hidden
+        implementation='css'
+        smUp={props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0}
+      >
+        <TablePagination
+          ref={paginationComponentRef}
+          ActionsComponent={PaginationActionsComponent}
+          component='div'
+          page={page}
+          rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
+          rowsPerPage={rowsPerPage || 0}
+          intl={props.intl}
+          count={props.count || 0}
+          onChangePage={props.onChangePage || handleChangePage}
+          onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
+          backIconButtonProps={{
+            'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
+          }}
+          nextIconButtonProps={{
+            'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
+          }}
+        />
+      </Hidden>
     </div>
   );
 }
