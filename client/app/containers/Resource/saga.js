@@ -109,8 +109,8 @@ export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
 
-    yield put(deleteFolderSuccess());
     yield put(push(getParentPage(action.payload.folder)));
+    yield put(deleteFolderSuccess());
     yield put(showSnackbar({
       message: messages.snackbars.success.delete_folder,
       options: { variant: 'success' }
