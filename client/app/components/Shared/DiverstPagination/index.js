@@ -115,10 +115,10 @@ export function DiverstPagination(props) {
   const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
   const [doScrollToBottom, setDoScrollToBottom] = useState(false);
 
-  const paginationClassName = `pagination-${paginationKey}`;
+  const paginationComponent = paginationComponentRef?.current;
 
   // Get the closest scrollbar container for the pagination to scroll
-  const closestScrollbarContainer = paginationComponentRef?.current?.closest(`.${CONTENT_SCROLL_CLASS_NAME}`);
+  const closestScrollbarContainer = paginationComponent?.closest(`.${CONTENT_SCROLL_CLASS_NAME}`);
 
   const handleChangePage = (event, newPage) => {
     let scroll = true;
