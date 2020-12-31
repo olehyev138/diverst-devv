@@ -279,7 +279,7 @@ export function AnnualBudgetListItem(props) {
             </Typography>
           </Grid>
         </Grid>
-        {props.type === 'overview' && (
+        {false && props.type === 'overview' && (
           <>
             <Box mb={2} />
             <Permission show={permission(props.currentGroup, 'events_view?')}>
