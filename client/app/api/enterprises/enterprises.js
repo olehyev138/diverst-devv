@@ -17,6 +17,9 @@ Object.assign(Enterprises, {
   updateSSO(payload) {
     return axios.put(`${this.url}/update_sso`, payload);
   },
+  updateBranding(payload) {
+    return axios.put(`${this.url}/update_branding`, payload);
+  },
   getSsoLink(id, payload) {
     return axios.post(`${this.url}/${id}/sso_link`, payload);
   },

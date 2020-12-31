@@ -3,7 +3,8 @@ import {
   getEnterpriseBegin, getEnterpriseError,
   getEnterpriseSuccess, updateEnterpriseBegin,
   updateEnterpriseSuccess, updateEnterpriseError,
-  configurationUnmount } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
+  configurationUnmount, updateBrandingBegin, updateBrandingError,
+  updateBrandingSuccess } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 import enterpriseReducer from '../reducer';
 
 
@@ -69,43 +70,47 @@ describe('enterpriseReducer', () => {
     ).toEqual(expected);
   });
 
-  it('handles the updateEnterpriseBegin action correctly', () => {
-    const expected = produce(state, (draft) => {
-      draft.isCommitting = true;
-    });
+  [updateEnterpriseBegin, updateBrandingBegin].forEach((action) => {
+    it(`handles the ${action.name} action correctly`, () => {
+      const expected = produce(state, (draft) => {
+        draft.isCommitting = true;
+      });
 
-    expect(
-      enterpriseReducer(
-        state,
-        updateEnterpriseBegin({
-          isCommitting: true
-        })
-      )
-    ).toEqual(expected);
+      expect(
+        enterpriseReducer(
+          state,
+          updateEnterpriseBegin({
+            isCommitting: true
+          })
+        )
+      ).toEqual(expected);
+    });
   });
 
-  it('handles the updateEnterpriseSuccess, updateEnterpriseError action correctly', () => {
-    const expected = produce(state, (draft) => {
-      draft.isCommitting = false;
+  [updateEnterpriseSuccess, updateEnterpriseError, updateBrandingSuccess, updateBrandingError].forEach((action) => {
+    it(`handles the ${action.name} action correctly`, () => {
+      const expected = produce(state, (draft) => {
+        draft.isCommitting = false;
+      });
+
+      expect(
+        enterpriseReducer(
+          state,
+          action({
+            isCommitting: false
+          })
+        )
+      ).toEqual(expected);
+
+      expect(
+        enterpriseReducer(
+          state,
+          updateEnterpriseError({
+            isCommitting: false
+          })
+        )
+      ).toEqual(expected);
     });
-
-    expect(
-      enterpriseReducer(
-        state,
-        updateEnterpriseSuccess({
-          isCommitting: false
-        })
-      )
-    ).toEqual(expected);
-
-    expect(
-      enterpriseReducer(
-        state,
-        updateEnterpriseError({
-          isCommitting: false
-        })
-      )
-    ).toEqual(expected);
   });
 
   it('handles the configurationUnmount action correctly', () => {

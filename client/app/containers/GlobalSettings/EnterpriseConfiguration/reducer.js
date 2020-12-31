@@ -8,7 +8,9 @@ import produce from 'immer/dist/immer';
 import {
   GET_ENTERPRISE_BEGIN, GET_ENTERPRISE_ERROR,
   GET_ENTERPRISE_SUCCESS, UPDATE_ENTERPRISE_BEGIN,
-  UPDATE_ENTERPRISE_SUCCESS, UPDATE_ENTERPRISE_ERROR, CONFIGURATION_UNMOUNT,
+  UPDATE_ENTERPRISE_SUCCESS, UPDATE_ENTERPRISE_ERROR,
+  UPDATE_BRANDING_BEGIN, UPDATE_BRANDING_SUCCESS, UPDATE_BRANDING_ERROR,
+  CONFIGURATION_UNMOUNT,
 } from 'containers/GlobalSettings/EnterpriseConfiguration/constants';
 
 export const initialState = {
@@ -34,10 +36,13 @@ function enterpriseReducer(state = initialState, action) {
         draft.isLoading = true;
         break;
       case UPDATE_ENTERPRISE_BEGIN:
+      case UPDATE_BRANDING_BEGIN:
         draft.isCommitting = true;
         break;
       case UPDATE_ENTERPRISE_SUCCESS:
       case UPDATE_ENTERPRISE_ERROR:
+      case UPDATE_BRANDING_SUCCESS:
+      case UPDATE_BRANDING_ERROR:
         draft.isCommitting = false;
         break;
       case CONFIGURATION_UNMOUNT:
