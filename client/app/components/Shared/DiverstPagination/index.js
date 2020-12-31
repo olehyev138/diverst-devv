@@ -111,7 +111,6 @@ export function DiverstPagination(props) {
   const { classes, ...rest } = props;
 
   const paginationComponentRef = useRef();
-  const [paginationKey] = useState(Math.random().toString(36).substring(10));
   const [page, setPage] = useState(props.page || 0);
   const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
   const [doScrollToBottom, setDoScrollToBottom] = useState(false);
