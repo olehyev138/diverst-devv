@@ -14,6 +14,7 @@ class SegmentsField < Field
   private
 
   def init
+    # To be verified : what exactly is the title property for? Is it displayed to the user on the frontend?
     self.title = I18n.t('default_text_values.segments_fields.segments')
     self.elasticsearch_only = true
   end
