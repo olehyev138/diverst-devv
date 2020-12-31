@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useRef } from 'react';
+import React, { memo, useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -130,7 +130,8 @@ export function DiverstPagination(props) {
     setPage(newPage);
     props.handlePagination({ count: rowsPerPage, page: newPage });
 
-    if (scroll)
+    // Scroll to top when page is increased
+    if (closestScrollbarContainer && scroll)
       animateScrollTo(0, {
         elementToScroll: closestScrollbarContainer
       });
@@ -142,12 +143,21 @@ export function DiverstPagination(props) {
     props.handlePagination({ count: +event.target.value, page: 0 });
   };
 
-  useEffect(() => {
-    if (props.isLoading === false && doScrollToBottom === true) {
+  // useLayoutEffect instead of useEffect in order to wait for DOM mutations, etc.
+  useLayoutEffect(() => {
+    // Scroll to bottom when page is decreased
+    if (paginationComponent && props.isLoading === false && doScrollToBottom === true) {
       setDoScrollToBottom(false);
-      animateScrollTo(document.querySelector(`.${paginationClassName}`), {
-        elementToScroll: closestScrollbarContainer
-      });
+      // Wait to scroll for everything to be properly rendered
+      //
+      // Note: this timeout value isn't intended to wait for the network request to return (which may be inconsistent),
+      // as that is already done via this hook dependent on 'isLoading'. This is just to account for useLayoutEffect
+      // seemingly not waiting for all the DOM mutations in this case, like the list items rendering.
+      setTimeout(() => {
+        animateScrollTo(paginationComponent, {
+          elementToScroll: closestScrollbarContainer
+        });
+      }, 100);
     }
   }, [props.isLoading]);
 
