@@ -56,7 +56,7 @@ module Group::Actions
       if diverst_request.action == 'current_annual_budgets'
         items = items.preload(:regions) if aggregate_type == :region
         items = items.preload(:children) if aggregate_type == :all
-        items = items.joins(:regions)
+        items = items.joins(:regions) if aggregate_type == :region
       end
       items
     end
