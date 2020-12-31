@@ -95,7 +95,7 @@ export function TemplatesList(props) {
           isLoading={props.isLoading}
           rowsPerPage={5}
           params={props.params}
-          dataArray={props.templates && props.templates.map(policy => ({ id: policy.id, permissions: policy.permissions, name: intl.formatMessage(messages.policy_template, { name: policy.name }) }))}
+          dataArray={props.templates?.map(policy => ({ id: policy.id, permissions: policy.permissions, name: intl.formatMessage(messages.policy_template, { name: policy.name }) }))}
           dataTotal={props.templatesTotal}
           columns={columns}
           actions={actions}
