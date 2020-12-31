@@ -37,6 +37,10 @@ class BudgetUser < ApplicationRecord
     budgetable&.group
   end
 
+  def group_id
+    budgetable&.group_id
+  end
+
   def user_path
     budgetable.path
   end
