@@ -115,10 +115,10 @@ RSpec.describe UserGroup do
 
     describe '.accepted_users' do
       let(:enterprise) { create :enterprise }
+      let(:group) { create :group, enterprise: enterprise }
       let(:user1) { create :user, enterprise: enterprise }
       let(:user2) { create :user, enterprise: enterprise }
 
-      let(:group) { create :group, enterprise: enterprise }
 
       let(:user_group1) { create :user_group, user: user1, group: group, accepted_member: true }
       let(:user_group2) { create :user_group, user: user2, group: group, accepted_member: false }

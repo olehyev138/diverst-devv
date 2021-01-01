@@ -10,7 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
 import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
 import {
-  updateEnterpriseBegin,
+  updateBrandingBegin,
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
 import BrandingHome from 'components/Branding/BrandingHome';
@@ -30,7 +30,7 @@ export function BrandingHomePage(props) {
   return (
     <React.Fragment>
       <BrandingHome
-        enterpriseAction={props.updateEnterpriseBegin}
+        enterpriseAction={props.updateBrandingBegin}
         enterprise={props.enterprise}
         customTexts={props.customTexts}
       />
@@ -41,7 +41,7 @@ export function BrandingHomePage(props) {
 BrandingHomePage.propTypes = {
   intl: intlShape.isRequired,
   enterprise: PropTypes.object,
-  updateEnterpriseBegin: PropTypes.func,
+  updateBrandingBegin: PropTypes.func,
   customTexts: PropTypes.object,
 };
 
@@ -52,7 +52,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  updateEnterpriseBegin,
+  updateBrandingBegin,
 };
 
 const withConnect = connect(
