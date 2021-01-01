@@ -102,8 +102,8 @@ export function EmailFormInner({
         <Box mb={2} />
         <Card>
           <CardHeader
-            title=<DiverstFormattedMessage {...messages.variables.title} />
-            subheader=<DiverstFormattedMessage {...messages.variables.subTitle} />
+            title={<DiverstFormattedMessage {...messages.variables.title} />}
+            subheader={<DiverstFormattedMessage {...messages.variables.subTitle} />}
           />
           {/* eslint-disable-next-line array-callback-return */}
           {props.email && Object.values(props.email.variables).map(variable => (
