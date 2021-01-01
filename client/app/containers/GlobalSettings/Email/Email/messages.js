@@ -54,6 +54,9 @@ export default defineMessages({
       id: `${scope}.index.empty`,
     },
   },
+  policy_template: {
+    id: `${scope}.policy_template`
+  },
   policies: {
     id: `${scope}.policies`
   },

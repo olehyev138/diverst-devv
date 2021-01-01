@@ -460,6 +460,7 @@
   "diverst.containers.GlobalSettings.EmailEvents.index.empty": "There are no Email Events",
   "diverst.containers.GlobalSettings.EmailLinks.events": "Email Events",
   "diverst.containers.GlobalSettings.EmailLinks.layouts": "Email Layouts",
+  "diverst.containers.GlobalSettings.Emails.policy_template": "{name} Policy Template",
   "diverst.containers.GlobalSettings.Emails.form.cancel": "Cancel",
   "diverst.containers.GlobalSettings.Emails.form.content": "Content",
   "diverst.containers.GlobalSettings.Emails.form.subject": "Subject",

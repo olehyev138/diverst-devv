@@ -849,26 +849,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe '#title_with_leftover_amount' do
-    it 'returns title_with_leftover_amount' do
-      group = create(:group)
-      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved_budget, annual_budget: annual_budget, estimated_amount: BUDGET_ITEM_AMOUNT, number_of_items: 1)
-      initiative = create(
-        :initiative,
-        owner_group: group,
-        budget_users: build_list(
-          :budget_user,
-          1,
-          estimated: INITIATIVE_ESTIMATE,
-          budget_item: budget.budget_items.first
-        ))
-      create(:initiative_expense, budget_user: initiative.budget_users.first, amount: EXPENSE_AMOUNT)
-
-      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
-    end
-  end
-
   describe '#sync_yammer_users' do
     it 'subscribe yammer users to group' do
       yammer = double('YammerClient')

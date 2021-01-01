@@ -557,14 +557,6 @@ class Group < ApplicationRecord
     report.to_csv
   end
 
-  def title_with_leftover_amount
-    if annual_budget_spent > 0
-      "Create event from #{name} leftover ($%.2f)" % (annual_budget_remaining == 0 ? 0 : annual_budget_available).round(2)
-    else
-      "Create event from #{name} ($#{annual_budget_available})"
-    end
-  end
-
   def pending_comments_count
     message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end
