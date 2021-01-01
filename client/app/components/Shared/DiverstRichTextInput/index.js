@@ -1,8 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
-import { withStyles, withTheme } from '@material-ui/core/styles';
+import { withStyles, withTheme, makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+
 import { FormControl, FormLabel, Box, CircularProgress, Grid } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -98,7 +98,8 @@ export function DiverstRichTextInput(props) {
       props.onChange(
         value
       );
-  });
+    }
+  );
     
 
   const onEditorStateChange = (newEditorState) => {
@@ -134,18 +135,18 @@ export function DiverstRichTextInput(props) {
         />
       </div>
       {pendingChanges() ? (
-          <Grid container justify='center' alignContent='center'>
-            <Grid item>
-              <CircularProgress size={20} thickness={1.5} className={classes.buttonProgress} />
-            </Grid>
+        <Grid container justify='center' alignContent='center'>
+          <Grid item>
+            <CircularProgress size={20} thickness={1.5} className={classes.buttonProgress} />
           </Grid>
-        ) : (
-          <Grid container justify='center' alignContent='center'>
-            <Grid item>
-              <CheckCircleIcon className={classes.buttonProgress} color='primary' />
-            </Grid>
+        </Grid>
+      ) : (
+        <Grid container justify='center' alignContent='center'>
+          <Grid item>
+            <CheckCircleIcon className={classes.buttonProgress} color='primary' />
           </Grid>
-        )}
+        </Grid>
+      )}
     </FormControl>
   );
 }

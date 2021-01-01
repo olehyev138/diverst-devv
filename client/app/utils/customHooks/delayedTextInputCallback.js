@@ -24,9 +24,7 @@ const useDelayedTextInputCallback = (inputChange, wait = 300) => {
     return args[0];
   };
 
-  const pendingChanges = () => {
-    return inProgress
-  }
+  const pendingChanges = () => inProgress;
 
   return [handleInputChange, pendingChanges];
 };
