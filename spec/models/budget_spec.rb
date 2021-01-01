@@ -135,24 +135,6 @@ RSpec.describe Budget, type: :model do
 
       it 'contain Leftover item'
     end
-
-    describe 'pre_approved_events_for_select' do
-      let!(:group) { create(:group) }
-      let!(:annual_budget) { create(:annual_budget, group: group) }
-      let!(:related_budgets) { create_list(:budget, 3, annual_budget: annual_budget, is_approved: true) }
-      let!(:approved) { create :approved_budget, annual_budget: annual_budget }
-
-      subject { described_class }
-
-      it 'expect 12 budget_items' do
-        expect(subject.pre_approved_events(group).count).to eq 12
-      end
-
-      it 'select_items contain Leftover item' do
-        select_items = subject.pre_approved_events_for_select(group)
-        expect(select_items).to include [group.title_with_leftover_amount, -1]
-      end
-    end
   end
 
   describe 'status_title' do

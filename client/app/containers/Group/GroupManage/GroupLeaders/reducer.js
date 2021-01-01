@@ -10,6 +10,7 @@ import {
   GET_GROUP_LEADERS_SUCCESS, GET_GROUP_LEADER_BEGIN, GET_GROUP_LEADER_SUCCESS,
   GET_GROUP_LEADER_ERROR, GROUP_LEADERS_UNMOUNT,
   CREATE_GROUP_LEADER_BEGIN, CREATE_GROUP_LEADER_SUCCESS, CREATE_GROUP_LEADER_ERROR,
+  DELETE_GROUP_LEADER_BEGIN, DELETE_GROUP_LEADER_ERROR, DELETE_GROUP_LEADER_SUCCESS
 } from './constants';
 
 export const initialState = {
@@ -19,6 +20,7 @@ export const initialState = {
   groupLeaderTotal: null,
   isFetchingGroupLeaders: true,
   currentGroupLeader: null,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign, consistent-return  */
@@ -42,6 +44,7 @@ function groupLeadersReducer(state = initialState, action) {
         break;
       case CREATE_GROUP_LEADER_SUCCESS:
       case CREATE_GROUP_LEADER_ERROR:
+      case DELETE_GROUP_LEADER_ERROR:
         draft.isCommitting = false;
         break;
       case GET_GROUP_LEADER_BEGIN:
@@ -53,6 +56,12 @@ function groupLeadersReducer(state = initialState, action) {
         break;
       case GET_GROUP_LEADER_ERROR:
         draft.isFormLoading = false;
+        break;
+      case DELETE_GROUP_LEADER_SUCCESS:
+        draft.hasChanged = true;
+        break;
+      case DELETE_GROUP_LEADER_BEGIN:
+        draft.hasChanged = false;
         break;
       case GROUP_LEADERS_UNMOUNT:
         return initialState;
