@@ -16,6 +16,7 @@ class GroupsField < Field
   private
 
   def init
+    # To be verified : what exactly is the title property for? Is it displayed to the user on the frontend?
     self.title = 'ERGs'
     self.elasticsearch_only = true
   end
