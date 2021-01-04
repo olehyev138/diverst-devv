@@ -8,7 +8,7 @@ class EmailVariable < ApplicationRecord
 
   def format(value)
     return '' unless value.respond_to? :to_s
-    
+
     string = value.to_s
     string = string.pluralize! if pluralize
     string.downcase! if downcase
