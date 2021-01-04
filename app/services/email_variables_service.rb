@@ -3,7 +3,8 @@ class EmailVariablesService
     'user_group_mailer' => [
       'user.name',
       'enterprise.id',
-      'enterprise.name'
+      'enterprise.name',
+      'custom_text.erg_text',
     ],
     'budget_mailer' => [
       'user.name',
