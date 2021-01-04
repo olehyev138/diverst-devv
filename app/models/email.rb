@@ -21,11 +21,11 @@ class Email < ApplicationRecord
   def process(text, objects)
     # get all the interpolated strings
     strings = text.scan(/{([^}]*)}/).flatten
-
+    valid_variables = variables.pluck(:key)
     hash = {}
 
     strings.each do |string|
-      if variables.pluck(:key).include?(string)
+      if valid_variables.include?(string)
         keys = string.split('.')
         object = objects[keys.first.to_sym]
         value = object if keys.second.nil?
