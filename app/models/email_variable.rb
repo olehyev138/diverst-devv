@@ -10,9 +10,9 @@ class EmailVariable < ApplicationRecord
     return '' unless value.respond_to? :to_s
 
     string = value.to_s
-    string = string.pluralize! if pluralize
+    string = string.pluralize if pluralize
     string.downcase! if downcase
-    string = string.titleize! if titleize
+    string = string.titleize if titleize
     string.upcase! if upcase
     string
   end

@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
   end
 
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "group_id"
-    t.bigint "deprecated_enterprise_id"
+    t.bigint "deprecated_group_id"
+    t.bigint "enterprise_id"
     t.decimal "amount", precision: 20, scale: 4, default: "0.0", null: false
     t.boolean "closed", default: false
     t.decimal "deprecated_available_budget", precision: 20, scale: 4, default: "0.0"
@@ -63,8 +63,22 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "event_name"
-    t.index ["deprecated_enterprise_id"], name: "index_annual_budgets_on_deprecated_enterprise_id"
-    t.index ["group_id"], name: "index_annual_budgets_on_group_id"
+    t.string "budget_head_type"
+    t.bigint "budget_head_id"
+    t.integer "year"
+    t.integer "quarter"
+    t.index ["budget_head_type", "budget_head_id"], name: "index_annual_budgets_on_budget_head_type_and_budget_head_id"
+    t.index ["deprecated_group_id"], name: "index_annual_budgets_on_deprecated_group_id"
+    t.index ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id"
+  end
+
+  create_table "annual_budgets_sums", primary_key: "annual_budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "user_estimates", precision: 20, scale: 4
+    t.decimal "finalized_expenditures", precision: 20, scale: 4
+    t.decimal "requested_amount", precision: 20, scale: 4
+    t.decimal "approved", precision: 20, scale: 4
   end
 
   create_table "answer_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -161,6 +175,29 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.index ["budget_id"], name: "fk_rails_6135db3849"
   end
 
+  create_table "budget_items_sums", primary_key: "budget_item_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "user_estimates", precision: 20, scale: 4
+    t.decimal "finalized_expenditures", precision: 20, scale: 4
+  end
+
+  create_table "budget_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "budgetable_type"
+    t.bigint "budgetable_id"
+    t.bigint "budget_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "finished_expenses"
+    t.decimal "estimated", precision: 20, scale: 4, default: "0.0"
+    t.index ["budget_item_id"], name: "index_budget_users_on_budget_item_id"
+    t.index ["budgetable_type", "budgetable_id"], name: "index_budget_users_on_budgetable_type_and_budgetable_id"
+  end
+
+  create_table "budget_users_sums", primary_key: "budget_user_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.decimal "spent", precision: 20, scale: 4
+  end
+
   create_table "budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "description"
     t.boolean "is_approved"
@@ -168,7 +205,7 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.datetime "updated_at", null: false
     t.bigint "approver_id"
     t.bigint "requester_id"
-    t.integer "deprecated_group_id"
+    t.integer "group_id"
     t.text "comments"
     t.string "decline_reason"
     t.integer "budget_items_count"
@@ -176,6 +213,14 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.index ["annual_budget_id"], name: "fk_rails_81cba7294a"
     t.index ["approver_id"], name: "fk_rails_a057b1443a"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
+  end
+
+  create_table "budgets_sums", primary_key: "budget_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.decimal "spent", precision: 20, scale: 4
+    t.decimal "reserved", precision: 20, scale: 4
+    t.decimal "user_estimates", precision: 20, scale: 4
+    t.decimal "finalized_expenditures", precision: 20, scale: 4
+    t.decimal "requested_amount", precision: 20, scale: 4
   end
 
   create_table "business_impacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -764,6 +809,8 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "deprecated_annual_budget_id"
+    t.bigint "budget_user_id"
+    t.index ["budget_user_id"], name: "index_initiative_expenses_on_budget_user_id"
     t.index ["deprecated_annual_budget_id"], name: "fk_rails_a6322afeec"
     t.index ["initiative_id"], name: "index_initiative_expenses_on_initiative_id"
   end
@@ -827,7 +874,7 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
     t.string "name"
     t.datetime "start"
     t.datetime "end"
-    t.decimal "estimated_funding", precision: 20, scale: 4, default: "0.0", null: false
+    t.integer "estimated_funding", default: 0
     t.decimal "deprecated_actual_funding", precision: 20, scale: 4
     t.integer "owner_id"
     t.integer "pillar_id"
@@ -1861,8 +1908,8 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "annual_budgets", "enterprises", column: "deprecated_enterprise_id"
-  add_foreign_key "annual_budgets", "groups"
+  add_foreign_key "annual_budgets", "enterprises"
+  add_foreign_key "annual_budgets", "groups", column: "deprecated_group_id"
   add_foreign_key "answers", "groups", column: "contributing_group_id"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budget_items", "budgets"
@@ -1933,21 +1980,21 @@ ActiveRecord::Schema.define(version: 2020_12_30_200536) do
   add_foreign_key "views", "users"
 
   create_view "duplicate_page_names", sql_definition: <<-SQL
-      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) > 1)
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
   SQL
   create_view "unique_page_names", sql_definition: <<-SQL
-      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) = 1)
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) = 1))
   SQL
   create_view "page_visitation_by_names", sql_definition: <<-SQL
-      select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_name` union all select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`
+      select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name` union all select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`
   SQL
   create_view "page_visitations", sql_definition: <<-SQL
-      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`))
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
   SQL
   create_view "total_page_visitation_by_names", sql_definition: <<-SQL
-      select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_name`,`c`.`enterprise_id` union all select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+      select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id` union all select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
-      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
 end
