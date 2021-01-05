@@ -31,6 +31,15 @@ export default defineMessages({
     position: {
       id: `${scope}.leader.form.position`,
     },
+    pending_member_notifications_enabled: {
+      id: `${scope}.leader.form.pending_member_notifications_enabled`,
+    },
+    pending_comments_notifications_enabled: {
+      id: `${scope}.leader.form.pending_comments_notifications_enabled`,
+    },
+    pending_posts_notifications_enabled: {
+      id: `${scope}.leader.form.pending_posts_notifications_enabled`,
+    },
     new: {
       id: `${scope}.leader.list.new`,
     },
@@ -48,7 +57,7 @@ export default defineMessages({
     },
     column_position: {
       id: `${scope}.leader.list.position`,
-    },
+    }
   },
   links: {
     settings: {
