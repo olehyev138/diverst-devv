@@ -1,6 +1,13 @@
 class BudgetSerializer < ApplicationRecordSerializer
-  attributes :approver, :requested_amount, :available_amount, :group_id, :annual_budget_id,
-             :status, :requested_at, :item_count, :description, :requester, :permissions, :currency
+  attributes :id, :approver, :requested_amount, :available, :group_id, :annual_budget_id,
+             :status, :requested_at, :item_count, :description, :requester, :permissions, :currency,
+             :is_approved, :decline_reason
+
+  [:spent, :reserved, :requested_amount, :user_estimates, :finalized_expenditures, :available, :unspent, :approved_amount].each do |method|
+    define_method(method) do
+      object.send(method) if object.respond_to?(method)
+    end
+  end
 
   attributes_with_permission :budget_items, if: :singular_action?
 
@@ -23,6 +30,6 @@ class BudgetSerializer < ApplicationRecordSerializer
   end
 
   def serialize_all_fields
-    true
+    false # true
   end
 end
