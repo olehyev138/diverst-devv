@@ -39,6 +39,7 @@ class AnnualBudget < ApplicationRecord
 
   scope :yeared, -> { where.not(year: nil) }
 
+  # Overrides count method to fix with bug when dealing with complex `from` and `group` ActiveRecordRelation queries
   define_relation_method :count do |*args|
     query = self.all
     if query.group_values.blank?
@@ -58,6 +59,7 @@ class AnnualBudget < ApplicationRecord
       [:amount, *(with_expenses.select_values.map { |a| a.split(' as ').second }.filter(&:itself))]
   end
 
+  # Gets the aggregate annual budget data for a given group optionally filtered on year, quater, and openess
   def self.data_of(group:, year: nil, quarter: nil, current: false)
     query = AnnualBudget.from(group.child_budgets.yeared.with_expenses, :annual_budgets).group(:year, :quarter)
     query = query.where(year: year) if year.present?
@@ -246,7 +248,7 @@ class AnnualBudget < ApplicationRecord
       raise BadRequestException.new("Year and Quarter's Budget is already initialized") if AnnualBudget.where(enterprise_id: enterprise_id, year: year, quarter: quarter).exists?
     end
 
-    private def ensure_some_type_for_year(year:, type:)
+    private def ensure_same_type_for_year(year:, type:)
       raise BadRequestException.new("Can't mix Budget Type in the same year") unless [:none, type].include?(aggregate_type_of(year: year))
     end
 
@@ -264,7 +266,7 @@ class AnnualBudget < ApplicationRecord
       new_aggregate_type = type_override.presence || current_aggregate_type
 
       ensure_no_repeat_time_period(new_year, new_quarter, enterprise_id)
-      ensure_some_type_for_year(year: new_year, type: new_aggregate_type)
+      ensure_same_type_for_year(year: new_year, type: new_aggregate_type)
 
       AnnualBudget.update_all(closed: true)
 

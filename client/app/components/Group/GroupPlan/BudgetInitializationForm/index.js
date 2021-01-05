@@ -69,6 +69,7 @@ export function BudgetInitializationForm(props, context) {
   const quarterOptions = useMemo(() => [
     { label: props.intl.formatMessage(messages.initializationForm.currentQuarter, props.customTexts), value: null }
   ].concat(
+    // ...Array(4).keys()] => Hack to get values from 0 to n
     [...Array(4).keys()].map(a => ({ label: formatQuarter(a + 1), value: a + 1 }))
   ), [intl]);
 

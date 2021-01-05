@@ -1,3 +1,5 @@
+# Reads the current budget sum data, recalculates the data, then reports if there is a change
+# to protect against errors in our triggers
 class RefreshBudgetSumsJob < ApplicationJob
   queue_as :default
 
@@ -30,7 +32,9 @@ class RefreshBudgetSumsJob < ApplicationJob
       end
 
       if Rails.env.development? || Rails.env.test?
-        File.write("#{Rails.root}/log/budget_diff_#{Time.now}.json", diff.to_json)
+        filename = "#{Rails.root}/log/budget_diff_#{Time.now}.json"
+        File.write(filename, diff.to_json)
+        raise StandardError.new("Budgets Desynced:\nCheck #{filename}")
       else
         e = StandardError.new("Budgets Desynced:\n#{diff.to_json}")
         Rollbar.warn(e)

@@ -4,6 +4,7 @@ module BaseSearcher
   end
 
   module ClassMethods
+    # An alternative for :lookup method. Does NO filtering, just returns the base as given
     def return_base(params = {}, diverst_request = nil, base: self, policy: nil)
       base
     end

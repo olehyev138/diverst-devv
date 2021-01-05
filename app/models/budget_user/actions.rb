@@ -1,6 +1,3 @@
-require 'base64'
-require 'rqrcode'
-
 module BudgetUser::Actions
   def self.included(klass)
     klass.extend ClassMethods

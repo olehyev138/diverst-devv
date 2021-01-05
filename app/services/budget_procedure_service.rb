@@ -1,5 +1,6 @@
 class BudgetProcedureService
   class Queries
+    # Queries to Calculate the proper sums for the budget models
     BUDGET_USERS_SUMS = InitiativeExpense.select(
         :budget_user_id,
         'SUM(`amount`) as spent'
@@ -30,6 +31,7 @@ class BudgetProcedureService
       ).from(Budget.with_expenses).group(:annual_budget_id)
   end
 
+  # Methods to delete the old sums, then add back the correct sums
   def self.refresh_budget_users_sums
     connection.execute('TRUNCATE TABLE `budget_users_sums`;')
     connection.execute(<<~SQL.gsub(/\s+/, ' ').strip
