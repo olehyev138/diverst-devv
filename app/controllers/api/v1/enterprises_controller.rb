@@ -81,7 +81,33 @@ class Api::V1::EnterprisesController < DiverstController
 
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
-    render status: 200, json: updated_item
+    render status: 200, json: updated_item, serializer: AuthenticatedEnterpriseSerializer
+  rescue => e
+    case e
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
+  end
+
+  def update_branding
+    params[klass.symbol] = branding_payload
+    params[:id] = diverst_request.user.enterprise.id
+    item = Enterprise.find(diverst_request.user.enterprise.id)
+    base_authorize(item)
+
+    item.banner.purge_later if params[:enterprise].key?(:banner) && params[:enterprise][:banner].blank? && item.banner.attached?
+
+    if item.theme.present? &&
+        params[:enterprise].key?(:theme_attributes) &&
+        params[:enterprise][:theme_attributes].key?(:logo) &&
+        params[:enterprise][:theme_attributes][:logo].blank? &&
+        item.theme.logo.attached?
+      item.theme.logo.purge_later
+    end
+
+    updated_item = klass.update(self.diverst_request, params)
+    track_activity(updated_item)
+    render status: 200, json: updated_item, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     case e
     when InvalidInputException, Pundit::NotAuthorizedError then raise
@@ -101,6 +127,25 @@ class Api::V1::EnterprisesController < DiverstController
             :saml_first_name_mapping,
             :saml_last_name_mapping,
             :has_enabled_saml,
+          )
+  end
+
+  def branding_payload
+    params
+        .require(klass.symbol)
+        .permit(
+            :banner,
+            :home_message,
+            :onboarding_consent_enabled,
+            :onboarding_consent_message,
+            :privacy_statement,
+            theme_attributes: [
+                :logo,
+                :logo_redirect_url,
+                :primary_color,
+                :secondary_color,
+                :use_secondary_color,
+            ]
           )
   end
 

@@ -201,4 +201,36 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe '#update branding' do
+    it 'update the branding settings' do
+      put "/api/v1/#{route}/update_branding", params: { "#{route.singularize}" => {
+          'id' => item.id,
+          'home_message' => 'home_message',
+          'onboarding_consent_enabled' => true,
+          'onboarding_consent_message' => 'onboarding_consent_message',
+          'privacy_statement' => 'privacy_statement',
+          'theme_attributes' => {
+            'primary_color' => 'FFFFFF',
+            'secondary_color' => '000000',
+            'use_secondary_color' => true,
+          },
+      } }, headers: headers
+      expect(response).to have_http_status(:ok)
+      item.reload
+      expect(item.home_message).to eq('home_message')
+      expect(item.onboarding_consent_enabled).to eq(true)
+      expect(item.onboarding_consent_message).to eq('onboarding_consent_message')
+      expect(item.privacy_statement).to eq('privacy_statement')
+      expect(item.theme.primary_color).to eq('FFFFFF')
+      expect(item.theme.secondary_color).to eq('000000')
+      expect(item.theme.use_secondary_color).to eq(true)
+    end
+
+    it 'captures the error' do
+      allow(model.constantize).to receive(:find).and_raise(BadRequestException)
+      get "/api/v1/#{route}/update_branding", headers: headers
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end
