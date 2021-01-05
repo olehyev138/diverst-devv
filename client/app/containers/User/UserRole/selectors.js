@@ -59,9 +59,14 @@ const selectIsCommitting = () => createSelector(
   roleState => roleState.isCommitting
 );
 
+const selectHasChanged = () => createSelector(
+  selectUserRoleDomain,
+  roleState => roleState.hasChanged
+);
+
 export {
   selectUserRoleDomain, selectPaginatedUserRoles,
   selectUserRoleTotal, selectUserRole, selectIsFetchingUserRoles,
   selectIsCommitting, selectIsFormLoading, selectFormUserRole,
-  selectPaginatedSelectUserRoles,
+  selectPaginatedSelectUserRoles, selectHasChanged
 };

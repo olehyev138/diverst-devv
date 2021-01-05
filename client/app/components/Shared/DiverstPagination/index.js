@@ -1,9 +1,9 @@
-import React, { memo, useState, useEffect, useRef } from 'react';
+import React, { memo, useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles, useTheme } from '@material-ui/core/styles';
-import { TablePagination, IconButton } from '@material-ui/core';
+import { TablePagination, IconButton, Hidden } from '@material-ui/core';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -111,15 +111,14 @@ export function DiverstPagination(props) {
   const { classes, ...rest } = props;
 
   const paginationComponentRef = useRef();
-  const [paginationKey] = useState(Math.random().toString(36).substring(10));
   const [page, setPage] = useState(props.page || 0);
   const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
   const [doScrollToBottom, setDoScrollToBottom] = useState(false);
 
-  const paginationClassName = `pagination-${paginationKey}`;
+  const paginationComponent = paginationComponentRef?.current;
 
   // Get the closest scrollbar container for the pagination to scroll
-  const closestScrollbarContainer = paginationComponentRef?.current?.closest(`.${CONTENT_SCROLL_CLASS_NAME}`);
+  const closestScrollbarContainer = paginationComponent?.closest(`.${CONTENT_SCROLL_CLASS_NAME}`);
 
   const handleChangePage = (event, newPage) => {
     let scroll = true;
@@ -131,7 +130,8 @@ export function DiverstPagination(props) {
     setPage(newPage);
     props.handlePagination({ count: rowsPerPage, page: newPage });
 
-    if (scroll)
+    // Scroll to top when page is increased
+    if (closestScrollbarContainer && scroll)
       animateScrollTo(0, {
         elementToScroll: closestScrollbarContainer
       });
@@ -143,12 +143,21 @@ export function DiverstPagination(props) {
     props.handlePagination({ count: +event.target.value, page: 0 });
   };
 
-  useEffect(() => {
-    if (props.isLoading === false && doScrollToBottom === true) {
+  // useLayoutEffect instead of useEffect in order to wait for DOM mutations, etc.
+  useLayoutEffect(() => {
+    // Scroll to bottom when page is decreased
+    if (paginationComponent && props.isLoading === false && doScrollToBottom === true) {
       setDoScrollToBottom(false);
-      animateScrollTo(document.querySelector(`.${paginationClassName}`), {
-        elementToScroll: closestScrollbarContainer
-      });
+      // Wait to scroll for everything to be properly rendered
+      //
+      // Note: this timeout value isn't intended to wait for the network request to return (which may be inconsistent),
+      // as that is already done via this hook dependent on 'isLoading'. This is just to account for useLayoutEffect
+      // seemingly not waiting for all the DOM mutations in this case, like the list items rendering.
+      setTimeout(() => {
+        animateScrollTo(paginationComponent, {
+          elementToScroll: closestScrollbarContainer
+        });
+      }, 100);
     }
   }, [props.isLoading]);
 
@@ -162,30 +171,35 @@ export function DiverstPagination(props) {
       setRowsPerPage(props.rowsPerPage);
   }, [props.rowsPerPage]);
 
-  if (props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0)
-    return <React.Fragment />;
-
   return (
     <div className={classes.paginationContainer}>
-      <TablePagination
-        ref={paginationComponentRef}
-        className={paginationClassName}
-        ActionsComponent={PaginationActionsComponent}
-        component='div'
-        page={page}
-        rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
-        rowsPerPage={rowsPerPage || 0}
-        intl={props.intl}
-        count={props.count || 0}
-        onChangePage={props.onChangePage || handleChangePage}
-        onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
-        }}
-        nextIconButtonProps={{
-          'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
-        }}
-      />
+      {/*
+          Use Hidden with CSS implementation here so that the component & ref don't unmount,
+          while still hiding the pagination when data is loading
+      */}
+      <Hidden
+        implementation='css'
+        smUp={props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0}
+      >
+        <TablePagination
+          ref={paginationComponentRef}
+          ActionsComponent={PaginationActionsComponent}
+          component='div'
+          page={page}
+          rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
+          rowsPerPage={rowsPerPage || 0}
+          intl={props.intl}
+          count={props.count || 0}
+          onChangePage={props.onChangePage || handleChangePage}
+          onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
+          backIconButtonProps={{
+            'aria-label': props.intl.formatMessage(messages.prev, props.customTexts),
+          }}
+          nextIconButtonProps={{
+            'aria-label': props.intl.formatMessage(messages.next, props.customTexts),
+          }}
+        />
+      </Hidden>
     </div>
   );
 }
