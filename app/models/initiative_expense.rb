@@ -11,7 +11,7 @@ class InitiativeExpense < ApplicationRecord
 
   validates_length_of :description, maximum: 191
   validates :budget_user, presence: true
-  
+
   validates :owner, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate -> { initiative_is_not_finalized }

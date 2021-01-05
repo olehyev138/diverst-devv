@@ -38,7 +38,7 @@ class Budget < ApplicationRecord
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
-  
+
 
   delegate :currency, to: :annual_budget
 

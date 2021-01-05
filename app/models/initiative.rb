@@ -167,8 +167,8 @@ class Initiative < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
-  
-  
+
+
 
   # ActiveStorage
   has_one_attached :picture
@@ -185,7 +185,7 @@ class Initiative < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
-  
+
   validate :segment_enterprise
   validates_presence_of :pillar
   validates_presence_of :owner_group
