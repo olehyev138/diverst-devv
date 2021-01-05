@@ -42,6 +42,8 @@
 #   To pass the count: `t('translation_key', count: N)`
 #
 
+# To remove preprended values from messages, pass in :base instead of the attribute
+
 en:
   custom_text:
     erg: Group
@@ -74,12 +76,12 @@ en:
     }
   errors:
     invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
-    invalid_linkedin_url: "Not a valid LinkedIn URL"
+    invalid_linkedin_url: "Not a valid L inkedIn URL"
     invalid_url: "Not a valid URL"
     destroy_user: "Users older then 14 days cannot be destroyed"
     role_validity: "Cannot set user role to a group role"
     unique_email: "The email entered is already used"
-    format_email: "The email entered is not valid"
+    format_email_redirection: "The redirection email entered is not valid"
     confirmation: "do not match"
     blank: "can't be blank"
     uniqueness: "The %{attribute} entered has already been created, please enter a unique %{attribute}"

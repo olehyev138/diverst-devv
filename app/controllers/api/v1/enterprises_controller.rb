@@ -68,7 +68,7 @@ class Api::V1::EnterprisesController < DiverstController
   rescue => e
     case e
     when InvalidInputException
-      raise
+      raise InvalidInputException.new(e.message)
     else
       raise BadRequestException.new(e.message)
     end
