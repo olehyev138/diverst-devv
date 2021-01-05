@@ -61,7 +61,7 @@ class Api::V1::EnterprisesController < DiverstController
     end
 
     params[:id] = enterprise.id
-    klass.update(self.diverst_request ,params)
+    klass.update(self.diverst_request, params)
     track_activity(enterprise)
 
     render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
