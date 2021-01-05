@@ -1,4 +1,48 @@
-# Module to include Models which uses FieldData, containing needed functions and callbacks
+# Module for the purposes of creating triggers to create psudo materialized tables
+
+# To elaborate, I'm going to give a broad example of how this works using the trigger of the insertion of an initiative expense
+#
+# First a brief overview of the methos used by all triggers/matrialized tables
+#
+# These methods are only for the purpose of create a string representing a sql trigger, and don't by themselves do anything
+# `relevant_columns`: return the list of columns save for the id. These will be used to indicate which column values to be loaded
+# `get_old_sums`: for each relevant_column, takes the old data and stores them into variables @old_{column_name}
+# `set_new_sums`: for each relevant_column, take the values @new_{column_name} and replaces them into the materialized table
+# `set_rest`: for each relevant_column *not* given as an argument, set @new_{column_name} = @old_{column_name}
+# `trigger_wrapper`: wraps the passed block's sql around the `get_old` and `set_new` string
+#
+# Next are trigger specific methods: These are the main logic for a specific trigger
+# These usually comes in two parts, the primary logic (which sets all the @new values), and the full read and write sql
+# For expense insertion the logic method is `expense_adder`:
+#     which is used to increase a rows `spent` column by the amount of the inserted expense, as well as keeping every other column the same
+# The full read write method `expense_inserted` simply calls trigger_wrapper on the above method
+#
+# Once you have the methods, you go to the Model which will have the trigger and procede to do two things
+# 1) define a `self.get_foreign_keys(old_or_new = 'NEW')` method.
+#     This method should retirive and set all matial tables foriegn keys that the trigger might use and set them as sql variables.
+#
+# 2) Define the trigger itself
+#    trigger.after(:insert) do
+#      <<~SQL.gsub(/\s+/, ' ').strip
+#      #{get_foreign_keys}
+#      #{BudgetUserSums.expense_inserted}
+#      #{BudgetItemSums.expense_inserted}
+#      #{BudgetSums.expense_inserted}
+#      #{AnnualBudgetSums.expense_inserted}
+#      SQL
+#    end
+#
+# This will be the full sql that will run on each insert.
+# You will see that when an expense is inserted, we want to update multiple sums. Make sure for each one you retireve the needed key with `get_foreign_keys`
+#
+# The trigger will start by getting the needed keys, then run the sql defined by `expense_inserted` for BudgetUserSum, which was read all the current data into @old_{data}
+# Set @new_spent = @old_spent + NEW.spent, and set all the other @new_{data} to be the same as the old. Then lastly replace that data back into the sum table.
+# Repeate for each sum table.
+#
+# Make sure that whenever you change the triggers, run the command
+# `rake db:generate_trigger_migration`
+# to create a migration that updates the triggers
+
 module MaterializedTable
   extend ActiveSupport::Concern
 
