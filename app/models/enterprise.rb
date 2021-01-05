@@ -815,8 +815,7 @@ class Enterprise < ApplicationRecord
 
   def redirection_email
     if redirect_all_emails && redirect_email_contact !=~ /\A[^@\s]+@[^@\s]+\z/
-      p "???"
-      errors.add(:data, I18n.t('errors.field.blank'))
+      errors.add(:redirect_email_contact, I18n.t('errors.field.blank'))
     end
     true
   end

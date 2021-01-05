@@ -60,7 +60,8 @@ class Api::V1::EnterprisesController < DiverstController
       end
     end
 
-    enterprise.update(params[:enterprise])
+    params[:id] = enterprise.id
+    klass.update(self.diverst_request ,params)
     track_activity(enterprise)
 
     render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
@@ -109,6 +110,7 @@ class Api::V1::EnterprisesController < DiverstController
     .require(klass.symbol)
     .permit(
       :name,
+      :id,
       :sp_entity_id,
       :idp_entity_id,
       :idp_sso_target_url,
