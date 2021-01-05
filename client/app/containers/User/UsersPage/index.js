@@ -55,9 +55,9 @@ export function UserListPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
   const [type, setType] = React.useState('all');
 
-  const getUsers = (scope, params = params) => {
+  const getUsers = (scope, userParams = params) => {
     const newParams = {
-      ...params,
+      ...userParams,
       query_scopes: [scope]
     };
     props.getUsersBegin(newParams);

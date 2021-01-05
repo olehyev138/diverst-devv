@@ -12,4 +12,8 @@ export const UPDATE_ENTERPRISE_BEGIN = 'app/EnterpriseConfiguration/UPDATE_ENTER
 export const UPDATE_ENTERPRISE_SUCCESS = 'app/EnterpriseConfiguration/UPDATE_ENTERPRISE_SUCCESS';
 export const UPDATE_ENTERPRISE_ERROR = 'app/EnterpriseConfiguration/UPDATE_ENTERPRISE_ERROR';
 
+export const UPDATE_BRANDING_BEGIN = 'app/EnterpriseConfiguration/UPDATE_BRANDING_BEGIN';
+export const UPDATE_BRANDING_SUCCESS = 'app/EnterpriseConfiguration/UPDATE_BRANDING_SUCCESS';
+export const UPDATE_BRANDING_ERROR = 'app/EnterpriseConfiguration/UPDATE_BRANDING_ERROR';
+
 export const CONFIGURATION_UNMOUNT = 'app/EnterpriseConfiguration/GROUP_LIST_UNMOUNT';

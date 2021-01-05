@@ -12,7 +12,7 @@ import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
 import { selectEnterpriseTheme, selectEnterpriseIsCommitting, selectEnterpriseIsLoading } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
-  updateEnterpriseBegin,
+  updateBrandingBegin,
   configurationUnmount
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
@@ -39,7 +39,7 @@ export function BrandingThemePage(props) {
   return (
     <React.Fragment>
       <BrandingTheme
-        enterpriseAction={props.updateEnterpriseBegin}
+        enterpriseAction={props.updateBrandingBegin}
         theme={props.theme}
         isLoading={props.isLoading}
         isCommitting={props.isCommitting}
@@ -54,7 +54,7 @@ BrandingThemePage.propTypes = {
   intl: intlShape.isRequired,
   theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
-  updateEnterpriseBegin: PropTypes.func,
+  updateBrandingBegin: PropTypes.func,
   configurationUnmount: PropTypes.func,
   isLoading: PropTypes.bool,
   isCommitting: PropTypes.bool,
@@ -71,7 +71,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getEnterpriseBegin,
-  updateEnterpriseBegin,
+  updateBrandingBegin,
   configurationUnmount,
 };
 
