@@ -100,6 +100,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='default_from_email_address'
                 name='default_from_email_address'
                 margin='normal'
+                type='email'
                 label={<DiverstFormattedMessage {...messages.from_email} />}
                 value={values.default_from_email_address}
               />
@@ -124,6 +125,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='redirect_email_contact'
                 name='redirect_email_contact'
                 margin='normal'
+                type='email'
                 label={<DiverstFormattedMessage {...messages.redirect_email_contact} />}
                 value={values.redirect_email_contact}
               />
