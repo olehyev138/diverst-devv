@@ -76,7 +76,7 @@ group :development, :test do
   gem 'shoulda-matchers', '4.0.1'
   gem 'timecop', '~> 0.8.1'
   gem 'clipboard', '~> 1.3', '>= 1.3.3'
-  gem 'awesome_print', '~> 1.8'
+  gem 'amazing_print'
   gem 'active_record_query_trace', '>= 1.7'
   gem 'yard', '~> 0.8.7.6'
 end
