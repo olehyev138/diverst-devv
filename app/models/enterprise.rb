@@ -113,7 +113,7 @@ class Enterprise < ApplicationRecord
   validates_length_of :onboarding_consent_message, maximum: 65535
 
   validates :idp_sso_target_url, url: { allow_blank: true }
-  validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
+  # validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # ActiveStorage
   has_one_attached :banner
@@ -126,6 +126,8 @@ class Enterprise < ApplicationRecord
   has_one_attached :onboarding_sponsor_media
 
   validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
+
+  validate :redirection_email
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :banner_paperclip
@@ -809,5 +811,13 @@ class Enterprise < ApplicationRecord
   def create_elasticsearch_only_fields
     fields << GroupsField.create
     fields << SegmentsField.create
+  end
+
+  def redirection_email
+    if redirect_all_emails && redirect_email_contact !=~ /\A[^@\s]+@[^@\s]+\z/
+      p "???"
+      errors.add(:data, I18n.t('errors.field.blank'))
+    end
+    true
   end
 end
