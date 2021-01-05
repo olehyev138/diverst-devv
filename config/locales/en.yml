@@ -76,7 +76,7 @@ en:
     }
   errors:
     invalid_linkedin_profile: "Not a valid LinkedIn profile URL"
-    invalid_linkedin_url: "Not a valid L inkedIn URL"
+    invalid_linkedin_url: "Not a valid LinkedIn URL"
     invalid_url: "Not a valid URL"
     destroy_user: "Users older then 14 days cannot be destroyed"
     role_validity: "Cannot set user role to a group role"

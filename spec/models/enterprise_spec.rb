@@ -665,34 +665,34 @@ RSpec.describe Enterprise, type: :model do
     describe '#redirection_email' do
       let!(:enterprise) { build(:enterprise) }
       context 'redirect_all_emails is true' do
-        it 'input is blank' do
+        it 'redirection email is blank' do
           enterprise.update redirect_all_emails: true, redirect_email_contact: ""
           expect(enterprise).to_not be_valid
         end
 
-        it 'input is not an email' do
+        it 'redirection email is not an email' do
           enterprise.update redirect_all_emails: true, redirect_email_contact: "abc123"
           expect(enterprise).to_not be_valid
         end
 
-        it 'input is a valid email' do
+        it 'redirection email is a valid email' do
           enterprise.update redirect_all_emails: true, redirect_email_contact: "info@diverst.com"
           expect(enterprise).to be_valid
         end
       end
 
       context 'redirect_all_emails is false' do
-        it 'input is blank' do
+        it 'redirection email is blank' do
           enterprise.update redirect_all_emails: false, redirect_email_contact: ""
           expect(enterprise).to be_valid
         end
 
-        it 'input is not an email' do
+        it 'redirection email is not an email' do
           enterprise.update redirect_all_emails: false, redirect_email_contact: "abc123"
           expect(enterprise).to be_valid
         end
 
-        it 'input is a valid email' do
+        it 'redirection email is a valid email' do
           enterprise.update redirect_all_emails: false, redirect_email_contact: "info@diverst.com"
           expect(enterprise).to be_valid
         end

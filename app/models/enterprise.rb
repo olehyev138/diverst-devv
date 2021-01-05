@@ -113,7 +113,6 @@ class Enterprise < ApplicationRecord
   validates_length_of :onboarding_consent_message, maximum: 65535
 
   validates :idp_sso_target_url, url: { allow_blank: true }
-  # validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # ActiveStorage
   has_one_attached :banner
