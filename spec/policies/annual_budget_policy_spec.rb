@@ -243,7 +243,7 @@ RSpec.describe AnnualBudgetPolicy, type: :policy do
           end
 
           it 'returns false' do
-            expect(subject.create?).to eq false
+            expect(subject.create?).to be_falsey
           end
         end
 

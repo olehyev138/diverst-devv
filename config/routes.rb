@@ -22,7 +22,11 @@ Diverst::Application.routes.draw do
           get 'export_csv'
         end
       end
-      resources :annual_budgets
+      resources :annual_budgets do
+        collection do
+          post 'reset', to: 'annual_budgets#reset_budgets'
+        end
+      end
       resources :answers
       resources :answer_comments
       resources :answer_expenses
@@ -37,6 +41,11 @@ Diverst::Application.routes.draw do
       resources :budget_items, only: [:index] do
         member do
           post 'close', to: 'budget_items#close_budget'
+        end
+      end
+      resources :budget_users, only: [:index] do
+        member do
+          post '/finalize_expenses', to: 'budget_users#finish_expenses'
         end
       end
       resources :campaigns
@@ -99,6 +108,8 @@ Diverst::Application.routes.draw do
 
 
           get '/annual_budget', to: 'groups#current_annual_budget'
+          get '/current_child_budgets', to: 'groups#current_child_budget'
+          get '/aggregate_budgets', to: 'groups#aggregate_budgets'
           post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
           post '/reset_annual_budget', to: 'groups#reset_annual_budget'
           post '/update_categories', to: 'groups#update_categories'

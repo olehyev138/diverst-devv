@@ -47,6 +47,9 @@ export default defineMessages({
     amount: {
       id: `${scope}.form.amount`,
     },
+    budgetItem: {
+      id: `${scope}.form.budgetItem`,
+    },
     title: {
       id: `${scope}.form.title`,
     },
