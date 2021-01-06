@@ -40,25 +40,21 @@ module BaseBuilder
       item
     end
 
-    def show(diverst_request, params)
+    def show(diverst_request, params, base: self)
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
 
       # get the item
-      item = self
-      item = item.preload(base_preloads(diverst_request)) if respond_to? 'base_preloads'
-      item = item.find(params[:id])
-
-      # check if the user can read it
-
-      item
+      query = base
+      query = query.preload(base_preloads(diverst_request)) if respond_to? 'base_preloads'
+      query.find(params[:id])
     end
 
-    def update(diverst_request, params)
+    def update(diverst_request, params, base: self)
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 
       # get the item being updated
-      item = find(params[:id])
+      item = base.find(params[:id])
 
       # check if the user can update the item
 

@@ -114,10 +114,15 @@ class Group < ApplicationRecord
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
   has_many :leaders, -> { unscope(:order) }, through: :group_leaders, source: :user
 
-  has_many :annual_budgets, dependent: :destroy
-  has_many :budgets, dependent: :destroy, through: :annual_budgets
-  has_many :budget_items, dependent: :destroy, through: :budgets
-  has_many :initiative_expenses, through: :annual_budgets
+  has_many :annual_budgets, -> { with_expenses }, as: :budget_head
+  has_many :annual_budgets_raw, dependent: :destroy, as: :budget_head, class_name: 'AnnualBudget'
+  has_many :budgets, dependent: :destroy
+  has_many :budget_items, through: :budgets
+  has_many :budget_users, through: :budget_items
+  has_many :expenses, through: :budget_users
+
+  delegate :budgets, :budget_items, :budget_users, :spent, prefix: 'child', to: :annual_budgets
+  delegate :budgets, :budget_items, :budget_users, :spent, prefix: 'current', to: :current_annual_budget
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
@@ -150,15 +155,8 @@ class Group < ApplicationRecord
   delegate :news_feed_links,        to: :news_feed
   delegate :shared_news_feed_links, to: :news_feed
 
-  delegate :leftover, BUDGET_DELEGATE_OPTIONS
-  delegate :remaining, BUDGET_DELEGATE_OPTIONS
-  delegate :approved, BUDGET_DELEGATE_OPTIONS
-  delegate :expenses, BUDGET_DELEGATE_OPTIONS
-  delegate :available, BUDGET_DELEGATE_OPTIONS
-  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
-  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
-  delegate :reset!, BUDGET_DELEGATE_OPTIONS
-  delegate :currency, BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, :remaining, :approved, :spent, :available, :finalized_expenditure, :currency, BUDGET_DELEGATE_OPTIONS
+  delegate :carryover!, :reset!, BUDGET_DELEGATE_OPTIONS
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -236,20 +234,64 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  def immediate_parent
+    region || parent
+  end
+
+  def is_child_of(obj)
+    case obj
+    when Group then obj.id == parent_id
+    when Region then obj.id == region_id
+    else false
+    end
+  end
+
   def create_annual_budget
     AnnualBudget.create(group: self, closed: false)
   end
 
-  def current_annual_budget
-    if annual_budgets.loaded?
-      @current_annual_budget ||= annual_budgets.find { |ab| ab.closed == false }
-    else
-      @current_annual_budget ||= annual_budgets.where(closed: false).last
-    end
+  # OLD BUDGET SYSTEM
+  # def current_annual_budget
+  #   if annual_budgets.loaded?
+  #     @current_annual_budget ||= annual_budgets.find { |ab| ab.closed == false }
+  #   else
+  #     @current_annual_budget ||= annual_budgets.where(closed: false).last
+  #   end
+  # end
+  #
+  # def current_annual_budget!
+  #   current_annual_budget || create_annual_budget
+  # end
+
+  def current_child_budgets
+    @current_child_budgets ||= child_budgets.where(closed: false)
   end
 
-  def current_annual_budget!
-    current_annual_budget || create_annual_budget
+  def child_budgets
+    @child_budgets ||=
+      AnnualBudget.where(budget_head_id: regions.ids, budget_head_type: 'Region').or(
+      AnnualBudget.where(budget_head_id: [*(children.ids), self.id], budget_head_type: 'Group')
+    ).with_expenses
+  end
+
+  def aggregate_budget_data
+    AnnualBudget.data_of(group: self)
+  end
+
+  def current_aggregate_budget_data
+    AnnualBudget.data_of(group: self, current: true).last
+  end
+
+  def current_annual_budget
+    @current_annual_budget ||=
+      annual_budgets.where(closed: false).last ||
+      immediate_parent&.current_annual_budget ||
+      AnnualBudget.data_of(group: self, current: true).order(:year).order(:quarter).last
+  end
+
+  def all_annual_budgets
+    other = immediate_parent&.all_annual_budgets if AnnualBudget.current_aggregate_type != :all
+    !other.nil? ? other.union(annual_budgets_raw) : annual_budgets_raw
   end
 
   def current_annual_budget=(annual_budget)
@@ -258,7 +300,7 @@ class Group < ApplicationRecord
   end
 
   def current_budget_items
-    current_annual_budget&.budget_items || BudgetItem.none
+    budget_items.current
   end
 
   def reload
@@ -267,27 +309,15 @@ class Group < ApplicationRecord
   end
 
   def annual_budget
-    current_annual_budget!.amount
+    current_annual_budget&.amount || 0
   end
 
   def annual_budget=(new_budget)
-    ab = current_annual_budget!
+    ab = current_annual_budget
+    raise StandardError, 'No Annual Budget' unless ab&.budget_head == self
+
     ab&.amount = new_budget
     ab&.save
-  end
-
-  def self.load_sums
-    select(
-        '`groups`.*,'\
-        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
-        ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
-        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
-        .left_joins(:initiative_expenses)
-        .group(Group.column_names).each do |g|
-      g.current_annual_budget.instance_variable_set(:@expenses, g.expenses_sum)
-      g.current_annual_budget.instance_variable_set(:@approved, g.approved_sum)
-      g.current_annual_budget.instance_variable_set(:@reserved, g.reserved_sum)
-    end
   end
 
   def logo_location(expires_in: 3600, default_style: :medium)
@@ -505,7 +535,7 @@ class Group < ApplicationRecord
     CSV.generate do |csv|
       csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
       self.budgets.order(created_at: :desc).each do |budget|
-        csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+        csv << [budget.requested_amount, budget.available, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
       end
     end
   end

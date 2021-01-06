@@ -7,39 +7,55 @@ RSpec.describe Budget::Actions, type: :model do
   end
 
   describe 'approval_blocker' do
-    let!(:budget) { create(:budget) }
-
-    it 'returns error message if annual_budget is not set' do
-      expect(budget.approval_blocker).to eq 'Please set an annual budget for this group'
+    context 'no annual budget' do
+      let!(:temp_budget) { create(:budget) }
+      let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
+      it 'returns error message if annual_budget is not set' do
+        expect(budget.approval_blocker).to eq 'Please set an annual budget for this group'
+      end
     end
 
-    it 'returns error message if annual_budget is closed' do
-      budget.annual_budget.update(amount: 100, closed: true)
-      expect(budget.approval_blocker).to eq 'Annual Budget is Closed'
+    context 'closed annual budget' do
+      let!(:annual_budget) { create(:annual_budget, amount: 100, closed: true) }
+      let!(:temp_budget) { create(:budget, annual_budget: annual_budget) }
+      let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
+      it 'returns error message if annual_budget is closed' do
+        expect(budget.approval_blocker).to eq 'Annual Budget is Closed'
+      end
     end
 
-    it 'it returns error message if budget exceeds the annual budget' do
-      budget.annual_budget.update(amount: 100, closed: false)
-      budget.budget_items[0].update(estimated_amount: 101)
-      expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
+    context 'budget exceeds the annual budget' do
+      let!(:annual_budget) { create(:annual_budget, amount: 100, closed: false) }
+      let!(:temp_budget) { create(:budget, annual_budget: annual_budget, budget_items: build_list(:budget_item, 1, estimated_amount: 101)) }
+      let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
+      it 'it returns error message if budget exceeds the annual budget' do
+        expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
+      end
     end
 
-    it 'it returns true if budget is exactly the annual budget' do
-      budget.annual_budget.update(amount: 100, closed: false)
-      budget.budget_items[0].update(estimated_amount: 100)
-      expect(budget.approval_blocker).to eq 'This budget exceeds the annual budget'
+    context 'budget equals annual budget' do
+      let!(:annual_budget) { create(:annual_budget, amount: 100, closed: false) }
+      let!(:temp_budget) { create(:budget, annual_budget: annual_budget, budget_items: build_list(:budget_item, 1, estimated_amount: 100)) }
+      let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
+      it 'it returns true if budget is exactly the annual budget' do
+        expect(budget.approval_blocker).to eq nil
+      end
     end
 
-    it 'returns nil' do
-      budget.annual_budget.update(amount: 100, closed: false)
-      budget.budget_items.update_all(estimated_amount: 0)
-      expect(budget.approval_blocker).to eq nil
+    context 'budget item estimate is 0' do
+      let!(:annual_budget) { create(:annual_budget, amount: 100, closed: false) }
+      let!(:temp_budget) { create(:budget, annual_budget: annual_budget, budget_items: build_list(:budget_item, 1, estimated_amount: 0)) }
+      let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
+      it 'returns nil' do
+        expect(budget.approval_blocker).to eq nil
+      end
     end
   end
 
   describe 'approve' do
     let!(:approver) { create(:user) }
-    let!(:budget) { create(:budget, requester: create(:user)) }
+    let!(:temp_budget) { create(:budget, requester: create(:user), budget_items: build_list(:budget_item, 3, estimated_amount: 0)) }
+    let!(:budget) { Budget.with_expenses.find(temp_budget.id) }
 
     it 'raises an exception' do
       expect { budget.approve(approver) }.to raise_error(InvalidInputException)

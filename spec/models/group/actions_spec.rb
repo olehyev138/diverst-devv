@@ -130,7 +130,7 @@ RSpec.describe Group::Actions, type: :model do
     end
   end
 
-  describe 'carryover_annual_budget' do
+  describe 'carryover_annual_budget', skip: 'Deprecated' do
     it 'raises an exception if id is missing ' do
       group_without_id = build(:group, id: nil)
       expect { group_without_id.carryover_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)
@@ -155,7 +155,7 @@ RSpec.describe Group::Actions, type: :model do
     end
   end
 
-  describe 'reset_annual_budget' do
+  describe 'reset_annual_budget', skip: 'Deprecated' do
     it 'raises an exception if id is missing' do
       group_without_id = build(:group, id: nil)
       expect { group_without_id.reset_annual_budget(Request.create_request(create(:user))) }.to raise_error(BadRequestException)

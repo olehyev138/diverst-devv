@@ -10,7 +10,7 @@ const selectPaginatedBudgetItems = () => createSelector(
 
 const selectPaginatedSelectBudgetItems = () => createSelector(
   selectBudgetItemDomain,
-  usersState => Object.values(usersState.budgetItemList).map(item => ({ label: item.title_with_amount, value: item.id, available: item.available_amount }))
+  usersState => Object.values(usersState.budgetItemList).map(item => ({ label: item.title_with_amount, value: item.id, available: item.available }))
 );
 
 const selectBudgetItemsTotal = () => createSelector(

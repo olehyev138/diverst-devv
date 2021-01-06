@@ -91,8 +91,10 @@ import {
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
   AdminAnnualBudgetPage,
+  AdminInitializeBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
+  AnnualBudgetAggregatesPage,
   BudgetsPage,
   BudgetPage,
   BudgetRequestPage,
@@ -406,6 +408,8 @@ export default function Routes(props) {
                                 <RouteWithProps exact path={ROUTES.group.plan.budget.editAnnualBudget.path()}><AnnualBudgetEditPage /></RouteWithProps>
                                 {/* Overview */}
                                 <RouteWithProps exact path={ROUTES.group.plan.budget.overview.path()}><AnnualBudgetsPage /></RouteWithProps>
+                                {/* Aggregate */}
+                                <RouteWithProps exact path={ROUTES.group.plan.budget.aggregate.path()}><AnnualBudgetAggregatesPage /></RouteWithProps>
                               </SwitchWithProps>
                             </GroupBudgetLayout>
                           </RouteWithProps>
@@ -531,6 +535,8 @@ export default function Routes(props) {
                     { /* Manage - Calendar */ }
                     <RouteWithProps path={ROUTES.admin.manage.calendar.index.path()}><AdminCalendarPage /></RouteWithProps>
 
+                    { /* Plan - Budget - Initialize */ }
+                    <RouteWithProps path={ROUTES.admin.plan.budgeting.initialize.path()}><AdminInitializeBudgetPage /></RouteWithProps>
                     { /* Plan - Budget */ }
                     <RouteWithProps path={ROUTES.admin.plan.budgeting.index.path()}><AdminAnnualBudgetPage /></RouteWithProps>
 

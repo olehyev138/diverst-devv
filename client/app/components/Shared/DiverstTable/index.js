@@ -66,7 +66,13 @@ export function DiverstTable(props) {
         totalCount={dataTotal || 0}
         page={currentPage()}
         icons={tableIcons}
-        title={(props.intl.formatMessage(title, props.customText)) || <DiverstFormattedMessage {...messages.title} />}
+        title={
+          props.intl.formatMessage(
+            title,
+            { ...props.customText, ...props.extraTitleProps }
+          )
+          || <DiverstFormattedMessage {...messages.title} />
+        }
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
@@ -94,7 +100,7 @@ DiverstTable.propTypes = {
   dataTotal: PropTypes.number,
   columns: PropTypes.array.isRequired,
   actions: PropTypes.array,
-  handlePagination: PropTypes.func.isRequired,
+  handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleSearching: PropTypes.func,
   handleRowClick: PropTypes.func,
@@ -105,7 +111,12 @@ DiverstTable.propTypes = {
   isStatic: PropTypes.bool,
   tableOptions: PropTypes.object,
   customText: PropTypes.object,
+  extraTitleProps: PropTypes.object,
   intl: intlShape.isRequired
+};
+
+DiverstTable.defaultProps = {
+  extraTitleProps: {}
 };
 
 const mapStateToProps = createStructuredSelector({

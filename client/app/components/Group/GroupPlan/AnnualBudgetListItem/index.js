@@ -113,7 +113,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 
 export function AnnualBudgetListItem(props) {
   const { classes, links, item, intl } = props;
-  const { expenses, amount, available, approved, remaining, estimated, unspent, currency } = item;
+  const { spent, amount, available, approved, remaining, user_estimates, unspent, currency, closed, year, quarter } = item;
 
   const [initList, setInitList] = useState(false);
 
@@ -127,9 +127,7 @@ export function AnnualBudgetListItem(props) {
     <Card>
       <CardContent>
         <Typography variant='h5' align='left' color='primary'>
-          {item.closed
-            ? <DiverstFormattedMessage {...itemMessages.pastTitle} />
-            : <DiverstFormattedMessage {...itemMessages.currentTitle} />}
+          {<DiverstFormattedMessage {...itemMessages.title(year, quarter, closed)} values={{ year, quarter }} />}
         </Typography>
         <Box mb={2} />
         <Grid
@@ -146,43 +144,47 @@ export function AnnualBudgetListItem(props) {
           <Grid item>
             <Divider orientation='vertical' />
           </Grid>
-          <Permission show={permission(props.currentGroup, 'budgets_view?')}>
-            <Grid item>
-              <Link
-                className={classes.eventLink}
-                component={WrappedNavLink}
-                to={{
-                  pathname: props.links.budgetsIndex(item.id),
-                  annualBudget: item
-                }}
-              >
-                <Typography color='primary' variant='body1' component='h2'>
-                  <DiverstFormattedMessage {...itemMessages.viewRequests} />
-                </Typography>
-              </Link>
-            </Grid>
-          </Permission>
-          {permission(props.currentGroup, 'budgets_view?') && permission(props.currentGroup, 'budgets_create?') && !item.closed && (
-            <Grid item>
-              <Divider orientation='vertical' />
-            </Grid>
+          {props.type === 'overview' && (
+            <>
+              <Permission show={permission(props.currentGroup, 'budgets_view?')}>
+                <Grid item>
+                  <Link
+                    className={classes.eventLink}
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: props.links.budgetsIndex(item.id),
+                      annualBudget: item
+                    }}
+                  >
+                    <Typography color='primary' variant='body1' component='h2'>
+                      <DiverstFormattedMessage {...itemMessages.viewRequests} />
+                    </Typography>
+                  </Link>
+                </Grid>
+              </Permission>
+              {permission(props.currentGroup, 'budgets_view?') && permission(props.currentGroup, 'budgets_create?') && !item.closed && (
+                <Grid item>
+                  <Divider orientation='vertical' />
+                </Grid>
+              )}
+              <Permission show={permission(props.currentGroup, 'budgets_create?') && !item.closed}>
+                <Grid item>
+                  <Link
+                    className={classes.eventLink}
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: props.links.newRequest(item.id),
+                      annualBudget: item
+                    }}
+                  >
+                    <Typography color='primary' variant='body1' component='h2'>
+                      <DiverstFormattedMessage {...itemMessages.createRequests} />
+                    </Typography>
+                  </Link>
+                </Grid>
+              </Permission>
+            </>
           )}
-          <Permission show={permission(props.currentGroup, 'budgets_create?') && !item.closed}>
-            <Grid item>
-              <Link
-                className={classes.eventLink}
-                component={WrappedNavLink}
-                to={{
-                  pathname: props.links.newRequest(item.id),
-                  annualBudget: item
-                }}
-              >
-                <Typography color='primary' variant='body1' component='h2'>
-                  <DiverstFormattedMessage {...itemMessages.createRequests} />
-                </Typography>
-              </Link>
-            </Grid>
-          </Permission>
         </Grid>
         <Grid
           alignItems='center'
@@ -195,12 +197,12 @@ export function AnnualBudgetListItem(props) {
               <DiverstFormattedMessage {...itemMessages.expenses} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2'>
-              {toCurrencyString(props.intl, expenses || 0, currency)}
+              {toCurrencyString(props.intl, spent || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={8} md={10}>
             <DiverstProgress
-              number={expenses}
+              number={spent}
               buffer={approved}
               total={amount}
               overflow
@@ -268,7 +270,7 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={6}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {toCurrencyString(props.intl, estimated || 0, currency)}
+              {toCurrencyString(props.intl, user_estimates || 0, currency)}
             </Typography>
           </Grid>
           <Grid item xs={6}>
@@ -277,31 +279,38 @@ export function AnnualBudgetListItem(props) {
             </Typography>
           </Grid>
         </Grid>
-        <Box mb={2} />
-        <Permission show={permission(props.currentGroup, 'events_view?')}>
-          <Button
-            color='primary'
-            variant='contained'
-            onClick={() => {
-              toggleList();
-            }}
-          >
-            <DiverstFormattedMessage {...eventMessages.title} />
-          </Button>
-        </Permission>
+        {false && props.type === 'overview' && (
+          <>
+            <Box mb={2} />
+            <Permission show={permission(props.currentGroup, 'events_view?')}>
+              <Button
+                color='primary'
+                variant='contained'
+                onClick={() => {
+                  toggleList();
+                }}
+              >
+                <DiverstFormattedMessage {...eventMessages.title} />
+              </Button>
+            </Permission>
+          </>
+        )}
       </CardContent>
-      <Collapse in={initList}>
-        <InitiativeList
-          initiatives={props.initiatives}
-          initiativeCount={props.initiativesTotal}
-          isLoading={props.initiativesLoading}
-          handlePagination={props.handlePagination}
-          handleOrdering={props.handleOrdering}
-          closeAction={() => setInitList(false)}
-          links={links}
-          intl={intl}
-        />
-      </Collapse>
+      {false && props.type === 'overview' && (
+        <Collapse in={initList}>
+          <InitiativeList
+            initiatives={props.initiatives}
+            initiativeCount={props.initiativesTotal}
+            isLoading={props.initiativesLoading}
+            handlePagination={props.handlePagination}
+            handleOrdering={props.handleOrdering}
+            closeAction={() => setInitList(false)}
+            links={links}
+            intl={intl}
+          />
+        </Collapse>
+      )}
+
     </Card>
   );
 }
@@ -316,8 +325,13 @@ AnnualBudgetListItem.propTypes = {
   initiativesTotal: PropTypes.number,
   initiativesLoading: PropTypes.bool,
   handlePagination: PropTypes.func.isRequired,
-  handleOrdering: PropTypes.func.isRequired,
-  customTexts: PropTypes.object
+  handleOrdering: PropTypes.func,
+  customTexts: PropTypes.object,
+  type: PropTypes.string,
+};
+
+AnnualBudgetListItem.defaultProps = {
+  type: 'overview'
 };
 
 InitiativeList.propTypes = {

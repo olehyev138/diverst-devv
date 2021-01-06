@@ -6,13 +6,13 @@
  */
 
 import React, {
-  memo
+  memo, useMemo, useCallback
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Grid,
+  Grid, Button, Box
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,7 +25,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import { permission } from 'utils/permissionsHelpers';
 import { toCurrencyString } from 'utils/currencyHelpers';
-import DiverstFormattedMessage from '../../../Shared/DiverstFormattedMessage';
+import Permission from 'components/Shared/DiverstPermission';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const { adminList: listMessages } = messages;
 
@@ -39,10 +40,18 @@ const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
   },
+  buttons: {
+    float: 'right',
+  },
 });
 
 export function AnnualBudgetList(props, context) {
   const { classes, intl } = props;
+
+  const budgetPeriodObject = useMemo(
+    () => ({ year: props.budgetPeriod?.[0], quarter: props.budgetPeriod?.[1] }),
+    [props.budgetPeriod]
+  );
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -50,6 +59,26 @@ export function AnnualBudgetList(props, context) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
+
+  const annualRowRender = useCallback(
+    rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet, props.customTexts),
+    [props.intl]
+  );
+
+  const leftoverRowRender = useCallback(
+    rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency),
+    [props.intl]
+  );
+
+  const approvedRowRender = useCallback(
+    rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency),
+    [props.intl]
+  );
+
+  const rowStyle = useCallback(
+    (value, rowData) => (props.budgetType !== 'region' || rowData.parent_coded_id) ? {} : { fontWeight: 'bold' },
+    [props.budgetType]
+  );
 
   const columns = [
     {
@@ -61,19 +90,22 @@ export function AnnualBudgetList(props, context) {
       title: intl.formatMessage(listMessages.columns.budget, props.customTexts),
       field: 'annual_budget',
       sorting: false,
-      render: rowData => rowData.annual_budget ? toCurrencyString(props.intl, rowData.annual_budget) : intl.formatMessage(listMessages.notSet, props.customTexts),
+      cellStyle: rowStyle,
+      render: annualRowRender,
     },
     {
       title: intl.formatMessage(listMessages.columns.leftover, props.customTexts),
       field: 'annual_budget_leftover',
       sorting: false,
-      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_leftover || 0, rowData.currency)
+      cellStyle: rowStyle,
+      render: leftoverRowRender
     },
     {
       title: intl.formatMessage(listMessages.columns.approved, props.customTexts),
       field: 'annual_budget_approved',
       sorting: false,
-      render: rowData => toCurrencyString(props.intl, rowData.annual_budget_approved || 0, rowData.currency)
+      cellStyle: rowStyle,
+      render: approvedRowRender
     },
   ];
 
@@ -84,44 +116,37 @@ export function AnnualBudgetList(props, context) {
       icon: () => <EditIcon />,
       tooltip: intl.formatMessage(listMessages.actions.edit, props.customTexts),
       onClick: (_, rowData) => {
-        props.handleVisitEditPage(rowData.id);
+        props.handleVisitEditPage(rowData.budget_manager_id);
       },
       disabled: !permission(rowData, 'annual_budgets_manage?')
     })
   );
 
-  actions.push(
-    rowData => ({
-      icon: () => <RedoIcon />,
-      tooltip: <DiverstFormattedMessage {...listMessages.actions.carryover} />,
-      onClick: (_, rowData) => {
-        /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl.formatMessage(messages.carryoverConfirm, props.customTexts)))
-          props.carryBudget(rowData.id);
-      },
-      // disabled: !permission(rowData, 'carryover_annual_budget?')
-    })
-  );
-
-  actions.push(
-    rowData => ({
-      icon: () => <LoopIcon />,
-      tooltip: <DiverstFormattedMessage {...listMessages.actions.reset} />,
-      onClick: (_, rowData) => {
-        /* eslint-disable-next-line no-alert, no-restricted-globals */
-        if (confirm(intl.formatMessage(messages.resetConfirm, props.customTexts)))
-          props.resetBudget(rowData.id);
-      },
-      // disabled: !permission(rowData, 'reset_annual_budget?')
-    })
-  );
-
   return (
     <React.Fragment>
+      <Permission show={permission(props, 'manage_all_budgets')}>
+        <Grid container alignContent='flex-end' alignItems='flex-end'>
+          <Grid item xs>
+            <Button
+              onClick={() => props.resetAll()}
+              color='primary'
+              variant='contained'
+              className={classes.buttons}
+              disabled={props.budgetPeriod[0] == null}
+            >
+              { props.budgetPeriod?.[1]
+                ? <DiverstFormattedMessage {...messages.adminList.initializeQuarter} />
+                : <DiverstFormattedMessage {...messages.adminList.initializeYear} /> }
+            </Button>
+          </Grid>
+        </Grid>
+        <Box mb={2} />
+      </Permission>
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={listMessages.title}
+            title={listMessages.title(...props.budgetPeriod)}
+            extraTitleProps={budgetPeriodObject}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             handleSearching={props.handleSearching}
@@ -131,7 +156,7 @@ export function AnnualBudgetList(props, context) {
             dataTotal={props.annualBudgetTotal}
             columns={columns}
             actions={actions}
-            parentChildData={(row, rows) => rows.find(a => a.id === row.parent_id)}
+            parentChildData={(row, rows) => row.coded_id && rows.find(a => a.coded_id === row.parent_coded_id)}
           />
         </Grid>
       </Grid>
@@ -153,8 +178,11 @@ AnnualBudgetList.propTypes = {
   handleChangeScope: PropTypes.func,
   carryBudget: PropTypes.func,
   resetBudget: PropTypes.func,
+  resetAll: PropTypes.func,
   handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
+  budgetPeriod: PropTypes.array.isRequired,
+  budgetType: PropTypes.string,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,
     annualBudgetEdit: PropTypes.func

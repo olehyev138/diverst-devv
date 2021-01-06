@@ -28,12 +28,18 @@ class GroupPolicy < ApplicationPolicy
     update? || annual_budgets_view?
   end
 
+  def current_child_budget?
+    budget_super? && (update? || annual_budgets_view?)
+  end
+
+  alias_method :aggregate_budgets?, :current_child_budget?
+
   def carryover_annual_budget?
-    update?
+    budget_owner? && update?
   end
 
   def reset_annual_budget?
-    update?
+    budget_owner? && update?
   end
 
   def annual_budgets?
@@ -45,7 +51,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    (!private? && index?) || is_an_accepted_member?
+    (!private? && index?) || is_an_accepted_member? || manage?
   end
 
   def initiatives?
@@ -203,6 +209,18 @@ class GroupPolicy < ApplicationPolicy
 
   def leave?
     UserGroupPolicy.new(self, UserGroup).leave?
+  end
+
+  def budget_owner?
+    record.current_annual_budget&.budget_head == record
+  end
+
+  def budget_super?
+    record.current_child_budgets.any?
+  end
+
+  def parent_budgets?
+    record.all_annual_budgets.any?
   end
 
   # ========================================

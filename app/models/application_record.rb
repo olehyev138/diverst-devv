@@ -12,8 +12,18 @@ class ApplicationRecord < ActiveRecord::Base
 
   scope :except_id, -> (id) { where.not(id: id.presence) }
 
+  # Hack to define/overide methods on ActiveRecord queries as opposed to just the model
+  def self.define_relation_method(name, &block)
+    self.all.class.define_method(name, &block)
+  end
+
   if Rails.env.development? || Rails.env.test?
     ActiveRecordQueryTrace.enabled = false
+  end
+
+  # Adds the model name and id to make an identifier that is model independent
+  def coded_id
+    "#{self.class.name}##{id}"
   end
 
   def time_since_creation

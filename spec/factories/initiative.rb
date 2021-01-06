@@ -11,27 +11,17 @@ FactoryBot.define do
     f.owner { FactoryBot.create(:user) }
     trait :with_budget_item do
       before(:create) do |initiative, evaluator|
-        estimate_funding = initiative.estimated_funding
-        budget = create(
-            :budget,
-            estimated_amount: estimate_funding,
-            annual_budget:
-                create(
-                    :annual_budget,
-                    group: initiative.group,
-                    amount: 3000 + estimate_funding * 5
-                  )
+        initiative.budget_users << create(
+          :budget_user,
+          finished_expenses: false,
+          budget_item: create(
+            :budget_item,
+            budget: create(
+              :budget,
+              group: initiative.group
+            )
           )
-
-        initiative.budget_item = budget.budget_items.first
-        budget.approve(initiative.owner)
-
-        unless estimate_funding > 0
-          initiative.estimated_funding = rand(1..initiative.budget_item.available_amount)
-        end
-
-        initiative.owner_group = initiative.budget_item.group
-        initiative.pillar = initiative.budget_item.group.pillars.first
+        )
       end
     end
   end
