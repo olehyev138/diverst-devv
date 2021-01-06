@@ -2,10 +2,7 @@ class UndeprecateEnterpriseIdInAnnualBudgets < ActiveRecord::Migration[5.2]
   def change
     reversible do |dir|
       dir.up do
-        remove_foreign_key :annual_budgets, column: :deprecated_enterprise_id
-      end
-      dir.down do
-        add_foreign_key :annual_budgets, :enterprises, column: :deprecated_enterprise_id
+        remove_foreign_key :annual_budgets, column: :deprecated_enterprise_id if foreign_key_exists?(:annual_budgets, column: :deprecated_enterprise_id)
       end
     end
     rename_column :annual_budgets, :deprecated_enterprise_id, :enterprise_id
