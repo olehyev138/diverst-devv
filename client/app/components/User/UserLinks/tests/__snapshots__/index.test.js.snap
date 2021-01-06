@@ -51,6 +51,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
+    show={false}
     to="/campaigns"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -131,6 +132,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
+    show={false}
     to="/mentorship/:user_id"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -171,6 +173,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
+    show={false}
     to="/campaigns"
   >
     <Hidden
@@ -261,6 +264,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
+    show={false}
     to="/mentorship/:user_id"
   >
     <Hidden
