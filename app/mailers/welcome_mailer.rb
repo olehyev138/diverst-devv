@@ -27,6 +27,6 @@ class WelcomeMailer < ApplicationMailer
   end
 
   def url
-    group_url(@group)
+    ReactRoutes.group.home(@group)
   end
 end
