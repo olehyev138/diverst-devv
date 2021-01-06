@@ -84,7 +84,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'Unauthorized access' do
-      delete "/api/v1/#{route}/#{item.id}", headers: headers
+      approved_item = create(:budget, is_approved: true)
+      delete "/api/v1/#{route}/#{approved_item.id}", headers: headers
       expect(response).to have_http_status(:unauthorized)
     end
   end

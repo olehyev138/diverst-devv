@@ -68,6 +68,12 @@ class Api::V1::InitiativesController < DiverstController
           :options_text,
           :alternative_layout
         ],
+        budget_users_attributes: [
+          :id,
+          :budget_item_id,
+          :estimated,
+          :_destroy
+        ],
         checklist_items_attributes: [
           :id,
           :title,

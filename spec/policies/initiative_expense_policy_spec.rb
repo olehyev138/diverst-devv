@@ -9,9 +9,17 @@ RSpec.describe InitiativeExpensePolicy, type: :policy do
   let(:annual_budget) { create :annual_budget, group_id: group.id, amount: 10000 }
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
-  let(:budget) { create(:approved_budget, annual_budget: annual_budget) }
-  let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user, budget_item: budget.budget_items.first }
-  let(:initiative_expense) { create(:initiative_expense, initiative: initiative, owner: user) }
+  let(:budget) { create(:approved_budget, annual_budget: annual_budget, group: annual_budget.group) }
+  let(:initiative) { create :initiative,
+                            pillar: pillar,
+                            owner_group: group,
+                            owner: user,
+                            budget_users: build_list(:budget_user,
+                                                     1,
+                                                     budget_item: budget.budget_items.first
+                                                    )
+  }
+  let(:initiative_expense) { create(:initiative_expense, budget_user: initiative.budget_users.first, owner: user) }
   let(:policy_scope) { InitiativeExpensePolicy::Scope.new(user, InitiativeExpense).resolve }
 
   subject { described_class.new(user, initiative_expense) }

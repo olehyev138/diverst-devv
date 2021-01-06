@@ -13,25 +13,30 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
-import { selectCustomText, selectPermissions, selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectHasChanged as budgetHasChanged } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
 import { getAnnualBudgetsBegin, groupAllUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
+import { resetAnnualBudgetBegin } from 'containers/Group/GroupPlan/AnnualBudget/actions';
 
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import Conditional from 'components/Compositions/Conditional';
-
+import { selectEnterprise, selectPermissions, selectBudgetPeriod, selectCustomText, selectBudgetType } from 'containers/Shared/App/selectors';
 import permissionMessages from 'containers/Shared/Permissions/messages';
+import annualBudgetReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
+import annualBudgetSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
 
 const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
 
 export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+  useInjectReducer({ key: 'annualBudgets', reducer: annualBudgetReducer });
+  useInjectSaga({ key: 'annualBudgets', saga: annualBudgetSaga });
 
   const [params, setParams] = useState({ count: 10, page: 0, order: 'asc', query_scopes: ['all_parents'] });
 
@@ -64,11 +69,11 @@ export function AdminAnnualBudgetPage(props) {
   }, []);
 
   useEffect(() => {
-    if (props.hasChanged)
+    if (props.hasChanged || props.budgetHasChanged)
       props.getAnnualBudgetsBegin(params);
 
     return () => props.groupAllUnmount();
-  }, [props.hasChanged]);
+  }, [props.hasChanged, props.budgetHasChanged]);
 
   return (
     <AnnualBudgetList
@@ -81,7 +86,11 @@ export function AdminAnnualBudgetPage(props) {
       handleSearching={handleSearching}
       carryBudget={props.carryBudgetBegin}
       resetBudget={props.resetBudgetBegin}
+      resetAll={props.resetAnnualBudgetBegin}
       handleVisitEditPage={props.handleVisitEditPage}
+      permissions={props.permissions}
+      budgetPeriod={props.budgetPeriod}
+      budgetType={props.budgetType}
       customTexts={props.customTexts}
     />
   );
@@ -96,9 +105,14 @@ AdminAnnualBudgetPage.propTypes = {
   isFetchingAnnualBudgets: PropTypes.bool,
   enterprise: PropTypes.object,
   hasChanged: PropTypes.bool,
+  budgetHasChanged: PropTypes.bool,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
+  resetAnnualBudgetBegin: PropTypes.func,
+  permissions: PropTypes.object,
+  budgetPeriod: PropTypes.array,
+  budgetType: PropTypes.string,
   customTexts: PropTypes.object,
 };
 
@@ -108,7 +122,10 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),
+  budgetHasChanged: budgetHasChanged(),
   permissions: selectPermissions(),
+  budgetPeriod: selectBudgetPeriod(),
+  budgetType: selectBudgetType(),
   customTexts: selectCustomText()
 });
 
@@ -117,6 +134,7 @@ const mapDispatchToProps = {
   carryBudgetBegin,
   resetBudgetBegin,
   groupAllUnmount,
+  resetAnnualBudgetBegin,
   handleVisitEditPage,
 };
 

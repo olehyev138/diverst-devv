@@ -27,6 +27,7 @@ import groupCategoryTypes from 'api/group_category_types/group_category_types';
 import annualBudgets from 'api/annual_budgets/annual_budgets';
 import budgets from 'api/budgets/budgets';
 import budgetItems from 'api/budget_items/budget_items';
+import budgetUsers from 'api/budget_users/budget_users';
 import updates from 'api/updates/updates';
 import outcomes from 'api/outcomes/outcomes';
 import pillars from 'api/pillars/pillars';
@@ -92,6 +93,7 @@ const Api = {
   annualBudgets,
   budgets,
   budgetItems,
+  budgetUsers,
   updates,
   policyGroups,
   policyTemplates,
