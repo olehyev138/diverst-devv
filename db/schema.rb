@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_12_28_210444) do
     t.integer "year"
     t.integer "quarter"
     t.index ["budget_head_type", "budget_head_id"], name: "index_annual_budgets_on_budget_head_type_and_budget_head_id"
+    t.index ["deprecated_group_id"], name: "index_annual_budgets_on_deprecated_group_id"
     t.index ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id"
   end
 
@@ -1907,7 +1908,6 @@ ActiveRecord::Schema.define(version: 2020_12_28_210444) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "annual_budgets", "enterprises"
   add_foreign_key "answers", "groups", column: "contributing_group_id"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budget_items", "budgets"
