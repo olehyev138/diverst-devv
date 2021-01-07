@@ -2,7 +2,7 @@
 class GroupCustomEmailsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_custom_email, only: [:show, :edit, :update, :destroy]
+  before_action :set_custom_email, only: [:show, :edit, :update, :destroy, :deliver]
   #before_action :set_field, only: [:time_series]
   after_action :verify_authorized
 
@@ -73,6 +73,20 @@ class GroupCustomEmailsController < ApplicationController
     else
       flash[:alert] = 'Your custom email could not be deleted.'
     end
+    redirect_to group_group_custom_emails_path(@group)
+  end
+
+  def deliver
+    # TODO authenticate
+
+    plaintext_emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
+    receivers_groups_ids = custom_email_params[:receiver_groups_ids]
+
+    CustomEmailMailer.custom(@custom_email.id, plaintext_emails, current_user.id, receivers_groups_ids).deliver_later
+
+    # TODO calculate how manu users got an email
+    flash[:notice] = 'Your email has been sent.'
+
     redirect_to group_group_custom_emails_path(@group)
   end
 
