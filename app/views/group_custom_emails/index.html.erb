@@ -1,0 +1,7 @@
+<div class="content__header">
+  <h2 class="h1-styling">Custom Emails</h2>
+  <%= link_to "New Custom Email", new_group_group_custom_email_path(@group), class: "btn btn--primary hidden-xs" %>
+  <%= link_to "New Custom Email", new_group_group_custom_email_path(@group), class: "btn btn-primary visible-xs" %>
+</div>
+
+<%= render 'emails_table' %>
