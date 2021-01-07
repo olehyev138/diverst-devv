@@ -9,17 +9,17 @@ class GroupCustomEmailsController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group
+    authorize @group, :edit?
 
     @custom_emails = @group.custom_emails
   end
 
   def show
-    authorize @group
+    authorize @group, :edit?
   end
 
   def new
-    authorize @group
+    authorize @group, :edit?
 
     @custom_email = @group.custom_emails.new
 
@@ -28,7 +28,7 @@ class GroupCustomEmailsController < ApplicationController
   end
 
   def create
-    authorize @group
+    authorize @group, :edit?
 
     @custom_email = @group.custom_emails.new(custom_email_params)
 
@@ -43,14 +43,14 @@ class GroupCustomEmailsController < ApplicationController
   end
 
   def edit
-    authorize @group
+    authorize @group, :edit?
 
     @submit_url = group_group_custom_email_path(@group, @custom_email)
     @submit_method = 'patch'
   end
 
   def update
-    authorize @group, :edit_email?
+    authorize @group, :edit?
 
     if @custom_email.update(custom_email_params)
       flash[:notice] = 'Your custom email was updated'
@@ -64,7 +64,7 @@ class GroupCustomEmailsController < ApplicationController
   end
 
   def destroy
-    authorize @group
+    authorize @group, :edit?
     # TODO track activity
 
     # oOnly custom emails can be destroyed by userss
@@ -77,6 +77,7 @@ class GroupCustomEmailsController < ApplicationController
   end
 
   def deliver
+    authorize @group, :edit?
     # TODO authenticate
 
     plaintext_emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
