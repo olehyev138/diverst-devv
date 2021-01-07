@@ -65,10 +65,12 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:group_leaders).dependent(:destroy) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
 
-    it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
-    it { expect(group).to have_many(:budgets).dependent(:destroy).through(:annual_budgets) }
-    it { expect(group).to have_many(:budget_items).dependent(:destroy).through(:budgets) }
-    it { expect(group).to have_many(:initiative_expenses).through(:annual_budgets) }
+    it { expect(group).to have_many(:annual_budgets) }
+    it { expect(group).to have_many(:annual_budgets_raw).dependent(:destroy).class_name('AnnualBudget') }
+    it { expect(group).to have_many(:budgets).dependent(:destroy) }
+    it { expect(group).to have_many(:budget_items).through(:budgets) }
+    it { expect(group).to have_many(:budget_users).through(:budget_items) }
+    it { expect(group).to have_many(:expenses).through(:budget_users) }
 
     it { expect(group).to have_many(:fields).dependent(:destroy) }
     it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
@@ -112,7 +114,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to delegate_method(:leftover).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:remaining).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:approved).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
-    it { expect(group).to delegate_method(:expenses).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
+    it { expect(group).to delegate_method(:spent).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:available).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:finalized_expenditure).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
     it { expect(group).to delegate_method(:carryover!).to(:current_annual_budget).allow_nil.with_prefix('annual_budget') }
@@ -655,12 +657,11 @@ RSpec.describe Group, type: :model do
       expect(group.annual_budget_approved).to eq(nil)
     end
     it 'returns approved budget' do
-      group = create(:group, annual_budget: 2000)
-      annual_budget = create(:annual_budget, group: group, closed: false, amount: 2000)
-      budget = create(:budget, group: group, is_approved: true, annual_budget_id: annual_budget.id)
-      budget.budget_items.update_all(estimated_amount: 500, is_done: true)
+      group = create(:group, :with_annual_budget, amount: 2000)
+      budget = create(:budget, group: group, is_approved: false, annual_budget_id: group.current_annual_budget.id, estimated_amount: 500)
+      budget.approve(nil)
 
-      expect(group.annual_budget_approved).to eq 1500
+      expect(group.reload.annual_budget_approved).to eq 1500
     end
   end
 
@@ -677,11 +678,11 @@ RSpec.describe Group, type: :model do
     end
 
     it 'returns available budget' do
-      group = create(:group, annual_budget: ANNUAL_BUDGET)
-      budget = create(:budget, group: group, is_approved: true)
+      group = create(:group, :with_annual_budget, amount: ANNUAL_BUDGET)
+      budget = create(:budget, group: group, is_approved: true, annual_budget: group.current_annual_budget)
       create(:budget_item, budget: budget, estimated_amount: 5000)
 
-      expect(group.annual_budget_available).to eq(group.annual_budget_approved - group.annual_budget_expenses)
+      expect(group.annual_budget_available).to eq(group.annual_budget_approved - group.annual_budget_spent)
     end
   end
 
@@ -689,25 +690,33 @@ RSpec.describe Group, type: :model do
     it 'returns 0 with annual expenses' do
       group = build(:group)
       group.create_annual_budget
-      expect(group.annual_budget_expenses).to eq(0)
+      expect(group.annual_budget_spent).to eq(0)
     end
 
     it 'returns nil without annual budget' do
       group = build(:group)
-      expect(group.annual_budget_expenses).to eq(nil)
+      expect(group.annual_budget_spent).to eq(nil)
     end
 
     it 'returns expenses budget' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
       budget = create(:approved_budget, annual_budget_id: annual_budget.id)
-      initiative = create(:initiative, owner_group: group,
-                                       estimated_funding: budget.budget_items.first.available_amount,
-                                       budget_item_id: budget.budget_items.first.id)
-      create(:initiative_expense, initiative_id: initiative.id, amount: 10)
+      initiative = create(
+        :initiative,
+        owner_group: group,
+        budget_users: build_list(
+          :budget_user,
+          1,
+          estimated: budget.budget_items.first.available,
+          budget_item_id: budget.budget_items.first.id
+        )
+      )
+
+      create(:initiative_expense, budget_user: initiative.budget_users.first, amount: 10)
       initiative.finish_expenses!
 
-      expect(group.annual_budget_expenses).to eq 10
+      expect(group.annual_budget_spent).to eq 10
     end
   end
 
@@ -837,20 +846,6 @@ RSpec.describe Group, type: :model do
       create(:update, updatable: group, report_date: 30.days.ago)
       data = group.highcharts_history(field: field)
       expect(data.length).to eq(1)
-    end
-  end
-
-  describe '#title_with_leftover_amount' do
-    it 'returns title_with_leftover_amount' do
-      group = create(:group)
-      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
-      budget_item = budget.budget_items.first
-      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
-      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
-      build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT)
-
-      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
     end
   end
 
@@ -1013,7 +1008,7 @@ RSpec.describe Group, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      group = create(:group, annual_budget: 10000)
+      group = create(:group, :with_annual_budget, amount: 10000)
       news_feed = create(:news_feed, group: group)
       user_group = create(:user_group, group: group)
       groups_poll = create(:groups_poll, group: group)
@@ -1194,8 +1189,8 @@ RSpec.describe Group, type: :model do
 
   describe 'current_annual_budget' do
     it 'returns current annual budget' do
-      group = create(:group)
-      expect(group.current_annual_budget!).to eq AnnualBudget.first
+      group = create(:group, :with_annual_budget)
+      expect(group.current_annual_budget).to eq AnnualBudget.first
     end
   end
 
@@ -1203,7 +1198,7 @@ RSpec.describe Group, type: :model do
     it 'returns budget items' do
       group = create(:group)
       group.create_annual_budget
-      create(:budget, annual_budget: AnnualBudget.first)
+      create(:budget, annual_budget: AnnualBudget.first, group: group)
       expect(group.current_budget_items.count).to eq 3
     end
   end
@@ -1228,22 +1223,6 @@ RSpec.describe Group, type: :model do
       group.annual_budget = 100
       group.reload
       expect(group.annual_budget).to eq 100
-    end
-  end
-
-  describe 'load_sums' do
-    it 'returns load sums' do
-      group = create(:group)
-      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
-      budget = create(:approved_budget, :zero_budget, annual_budget: annual_budget)
-      budget_item = budget.budget_items.first
-      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
-      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
-      create(:initiative_expense, initiative: initiative, amount: INITIATIVE_EXPENSE)
-      sum = Group.load_sums.first
-      expect(sum.expenses_sum).to eq INITIATIVE_EXPENSE
-      expect(sum.approved_sum).to eq BUDGET_ITEM_AMOUNT
-      expect(sum.reserved_sum).to eq INITIATIVE_ESTIMATE
     end
   end
 

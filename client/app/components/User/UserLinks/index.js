@@ -132,7 +132,8 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.innovate.path()}
         activeClassName={classes.mobileNavLinkActive}
-        show={enterprise?.collaborate_module_enabled}
+        // TODO : Disabled module
+        show={false && enterprise?.collaborate_module_enabled}
       >
         <ListItemIcon>
           <LightbulbIcon className={classes.lightbulbIcon} />
@@ -182,7 +183,8 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         component={WrappedNavLink}
         to={ROUTES.user.mentorship.show.path(user?.user_id)}
         activeClassName={classes.mobileNavLinkActive}
-        show={enterprise?.mentorship_module_enabled}
+        // TODO : Disabled module
+        show={false && enterprise?.mentorship_module_enabled}
       >
         <ListItemIcon>
           <UsersCircleIcon />
@@ -215,7 +217,8 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.innovate.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={enterprise?.collaborate_module_enabled}
+        // TODO : Disabled module
+        show={false && enterprise?.collaborate_module_enabled}
       >
         <Hidden smDown>
           <LightbulbIcon className={classes.lightbulbIcon} />
@@ -274,7 +277,8 @@ export function NavLinks({ classes, enterprise, permissions, user }) {
         to={ROUTES.user.mentorship.show.path(user?.user_id)}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
-        show={enterprise?.mentorship_module_enabled}
+        // TODO : Disabled module
+        show={false && enterprise?.mentorship_module_enabled}
       >
         <Hidden smDown>
           <UsersCircleIcon className={classes.navIcon} />

@@ -14,7 +14,11 @@ module BudgetItem::Actions
   end
 
   module ClassMethods
-    def base_includes(diverst_request)
+    def base_preload(diverst_request)
+      [ :budget ]
+    end
+
+    def base_left_joins(diverst_request)
       [ :budget ]
     end
 

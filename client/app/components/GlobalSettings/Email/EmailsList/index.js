@@ -62,7 +62,9 @@ export function EmailsList(props) {
       <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */}
-          {props.emails && props.emails.map((item, i) => {
+          {props.emails && props.emails.map((item) => {
+            if (item.mailer_name === 'campaign_mailer')
+              return (<React.Fragment key={item.id} />);
             return (
               <Grid item key={item.id} className={classes.emailListItem}>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

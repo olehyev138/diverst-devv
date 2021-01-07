@@ -3,15 +3,19 @@ class InitiativeSerializer < ApplicationRecordSerializer
              :full?, :permissions, :picture, :picture_file_name, :picture_data,
              :is_attending, :group, :group_id
 
-  attributes_with_permission :pillar, :outcome, :initiative_users, :budget_item,
-                             :qr_code, :qr_code_file_name, :qr_code_data, if: :singular_action?
+  attributes_with_permission :pillar, :outcome, :initiative_users,
+                             :qr_code, :qr_code_file_name, :qr_code_data, :budget_users, if: :singular_action?
 
-  attributes_with_permission :budget, :budget_status, :expenses_status, :current_expenses_sum,
-                             :leftover, :budget_item, if: :with_budget?
+  attributes_with_permission :budget_status, :expenses_status, :current_expenses_sum,
+                             :leftover, if: :with_budget?
 
   attributes_with_permission :total_comments, :comments, if: :with_comments?
 
   attributes_with_permission :total_attendees, if: :view_attendees?
+
+  def budget
+    budgets.first
+  end
 
   def with_budget?
     instance_options[:with_budget] && singular_action?
@@ -51,9 +55,15 @@ class InitiativeSerializer < ApplicationRecordSerializer
     end
   end
 
-  def budget_item
-    BudgetItemSerializer.new(object.budget_item, scope: scope, event: object).as_json if object.budget_item.present?
+  def budget_users
+    object.budget_users.map do |budget_user|
+      BudgetUserSerializer.new(budget_user, event: object, **instance_options.except(:with_budget?)).as_json
+    end
   end
+
+  # def budget_item
+  #   BudgetItemSerializer.new(object.budget_item, scope: scope, event: object).as_json if object.budget_item.present?
+  # end
 
   def serialize_all_fields
     true

@@ -14,7 +14,6 @@ class Initiative < ApplicationRecord
            as: :field_definer,
            dependent: :destroy,
            after_add: :add_missing_field_background_job
-  has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_many :user_reward_actions
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
@@ -29,9 +28,12 @@ class Initiative < ApplicationRecord
   # update admin fields to save new fields as well
   # change name in admin to initiatives
 
-  belongs_to :budget_item
-  has_one :budget, through: :budget_item
-  has_one :annual_budget, through: :budget
+  has_many :budget_users, -> { with_expenses }, as: :budgetable, dependent: :destroy
+  has_many :budget_items, through: :budget_users
+  has_many :budgets, through: :budget_items
+  has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense', through: :budget_users
+
+  accepts_nested_attributes_for :budget_users, allow_destroy: true
 
   has_many :checklists, dependent: :destroy
   has_many :resources, dependent: :destroy
@@ -77,7 +79,13 @@ class Initiative < ApplicationRecord
     .where(initiative_conditions.join(' OR '))
   }
   scope :of_annual_budget, ->(budget_id) {
-    joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
+    joins(:budgets).where('`budgets`.`id` = ?', Budget.where(annual_budget_id: budget_id).pluck(:id))
+  }
+  scope :with_expenses, -> {
+    new_query = select_values.present? ? self : select('`initiatives`.*')
+    new_query.select('`estimated_funding` AS estimated')
+        .select('@spent := (SELECT COALESCE(SUM(`amount`), 0) FROM `initiative_expenses` WHERE `initiative_id` = `initiatives`.`id`) AS spent')
+        .select('CASE `finished_expenses` WHEN TRUE THEN @spent ELSE `estimated_funding` END AS reserved')
   }
   scope :joined_events_for_user, ->(user_id) {
     user = User.find user_id
@@ -159,8 +167,8 @@ class Initiative < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
-  validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
-  validate -> { budget_item_is_approved }
+
+
 
   # ActiveStorage
   has_one_attached :picture
@@ -177,7 +185,7 @@ class Initiative < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
-  validate :check_budget
+
   validate :segment_enterprise
   validates_presence_of :pillar
   validates_presence_of :owner_group
@@ -203,6 +211,14 @@ class Initiative < ApplicationRecord
   end
 
   delegate :currency, to: :annual_budget, allow_nil: true
+
+  def annual_budget
+    budgets.first&.annual_budget
+  end
+
+  def path
+    "#{group.name}/#{name}"
+  end
 
   def ended?
     self.end < Time.now
@@ -287,7 +303,7 @@ class Initiative < ApplicationRecord
   end
 
   def budget_status
-    budget.try(:status_title) || 'Not attached'
+    budgets.first.try(:status_title) || 'Not attached'
   end
 
   def expenses_status
@@ -296,18 +312,6 @@ class Initiative < ApplicationRecord
     else
       I18n.t('errors.initiative.progress')
     end
-  end
-
-  def approved?
-    # If there is no budget for event then it is considered approved
-    return true if budget.nil?
-
-    # Check if budget is approved
-    budget.is_approved
-  end
-
-  def pending?
-    !approved?
   end
 
   def finish_expenses!
@@ -427,9 +431,9 @@ class Initiative < ApplicationRecord
 
   def expenses_highcharts_history(from: 1.year.ago, to: Time.current)
     highcharts_expenses = self.expenses
-    .where('created_at >= ?', from)
-    .where('created_at <= ?', to)
-    .order(created_at: :asc)
+    .where('`initiative_expenses`.created_at >= ?', from)
+    .where('`initiative_expenses`.created_at <= ?', to)
+    .order('`initiative_expenses`.created_at ASC')
     .map do |expense|
       [
         expense.created_at.to_time.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
@@ -527,10 +531,6 @@ class Initiative < ApplicationRecord
     end
   end
 
-  def budget_item_is_approved
-    errors.add(:budget_item, I18n.t('errors.initiative.budget_item_not_approved')) unless budget_item.blank? || budget.is_approved?
-  end
-
   def allocate_budget_funds
     self.estimated_funding = 0.0 if self.estimated_funding.nil?
 
@@ -538,7 +538,7 @@ class Initiative < ApplicationRecord
     update_column(:estimated_funding, 0) unless new_record?
     self.estimated_funding = temp
 
-    if budget_item.present? && estimated_funding > budget_item.available_amount
+    if budget_item.present? && estimated_funding > budget_item.available
       errors.add(:budget_item_id, I18n.t('errors.initiative.lack_of_funds_2'))
       false
     elsif funded_by_leftover?
