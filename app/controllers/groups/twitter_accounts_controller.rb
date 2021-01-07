@@ -9,6 +9,7 @@ class Groups::TwitterAccountsController < ApplicationController
   layout 'erg'
 
   def index
+    authorize [@group], :index?, policy_class: GroupTwitterFeedPolicy
     @accounts = sorted_accounts
   end
 

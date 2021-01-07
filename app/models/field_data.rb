@@ -15,6 +15,8 @@ module FieldData
     fields.each do |field|
       form_data_value = form_data[field.id.to_s] || form_data[field.id] # Try both integer and string key
 
+      next if form_data_value.nil? 
+      
       self[field] = field.process_field_value form_data_value
     end
   end
