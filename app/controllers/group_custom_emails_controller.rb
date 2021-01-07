@@ -2,7 +2,7 @@
 class GroupCustomEmailsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_custom_email, only: [:edit, :update]
+  before_action :set_custom_email, only: [:show, :edit, :update, :destroy]
   #before_action :set_field, only: [:time_series]
   after_action :verify_authorized
 
@@ -12,6 +12,10 @@ class GroupCustomEmailsController < ApplicationController
     authorize @group
 
     @custom_emails = @group.custom_emails
+  end
+
+  def show
+    authorize @group
   end
 
   def new
@@ -57,6 +61,19 @@ class GroupCustomEmailsController < ApplicationController
       flash[:alert] = 'Your custom email was not updated. Please fix the errors'
       render :edit
     end
+  end
+
+  def destroy
+    authorize @group
+    # TODO track activity
+
+    # oOnly custom emails can be destroyed by userss
+    if @custom_email.custom? && @custom_email.destroy
+      flash[:notice] = 'Your custom email was deleted'
+    else
+      flash[:alert] = 'Your custom email could not be deleted.'
+    end
+    redirect_to group_group_custom_emails_path(@group)
   end
 
 

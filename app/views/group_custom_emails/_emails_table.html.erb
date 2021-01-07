@@ -14,9 +14,9 @@
               <td><%= link_to email.subject[0..50], edit_group_group_custom_email_path(@group, email.id) %></td>
               <td><%= time_ago_in_words(email.updated_at) %> ago</td>
               <td>
-                <%= link_to('Prepare for sending', 'custom_email_path(email)' ) %>
+                <%= link_to('Prepare for sending', group_group_custom_email_path(@group, email) ) %>
                 |
-                <%= link_to('Remove', 'custom_email_path(email)', class: 'error', data: { confirm: "Are you sure?" }, method: :delete)  %>
+                <%= link_to('Remove', group_group_custom_email_path(@group, email), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)  %>
               </td>
             </tr>
           <% end %>
