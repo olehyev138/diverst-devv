@@ -372,12 +372,11 @@ Rails.application.routes.draw do
       end
     end
 
-    member do
-      get 'settings'
+    resources :group_custom_emails
 
-      get 'emails'
-      get 'new_email'
-      post 'create_new_email'
+    member do
+      #resources :group_custom_emails, controller: 'groups/custom_emails', only: [:index]#, path: 'CustomEmailsController'
+      get 'settings'
 
       get 'layouts'
       get 'plan_overview'
