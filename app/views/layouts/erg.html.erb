@@ -200,7 +200,7 @@
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
           <li>
-            <%= active_link_to "Emails", emails_group_path(@group) %>
+            <%= active_link_to "Emails", group_group_custom_emails_path(@group) %>
           </li>
           <% if @group.enterprise.slack_enabled? %>
             <% if @group.slack_auth_data.present? %>
