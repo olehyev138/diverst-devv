@@ -68,7 +68,7 @@ export function BudgetsPage(props) {
 
   useEffect(() => {
     if (!annualBudget || annualBudget.id !== annualBudgetId)
-      props.getAnnualBudgetBegin({ id: annualBudgetId });
+      props.getAnnualBudgetBegin({ id: annualBudgetId, group_id: groupId });
     else
       props.getAnnualBudgetSuccess({ annual_budget: annualBudget });
     getBudget(params);

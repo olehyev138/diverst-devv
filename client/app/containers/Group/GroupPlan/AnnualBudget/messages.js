@@ -24,6 +24,9 @@ export default defineMessages({
     overview: {
       id: `${scope}.tabs.overview`,
     },
+    aggregate: {
+      id: `${scope}.tabs.aggregate`,
+    },
   },
   item: {
     pastTitle: {
@@ -31,6 +34,11 @@ export default defineMessages({
     },
     currentTitle: {
       id: `${scope}.item.currentTitle`,
+    },
+    title(year = null, quarter = null, closed = true) {
+      if (year && quarter) return { id: `${scope}.item.titleQuarter` };
+      if (year) return { id: `${scope}.item.titleYear` };
+      return { id: `${scope}.item.${closed ? 'pastTitle' : 'currentTitle'}` };
     },
     budget: {
       id: `${scope}.item.budget`,
@@ -99,6 +107,53 @@ export default defineMessages({
       id: `${scope}.form.button.cancel`,
     },
   },
+  initializationForm: {
+    amount: {
+      id: `${scope}.initialization.form.amount`,
+    },
+    type: {
+      id: `${scope}.initialization.form.type`,
+    },
+    types: {
+      id: `${scope}.initialization.form.types`,
+    },
+    year: {
+      id: `${scope}.initialization.form.year`,
+    },
+    withQuarter: {
+      id: `${scope}.initialization.form.withQuarter`,
+    },
+    quarter: {
+      id: `${scope}.initialization.form.quarter`,
+    },
+    parentType: {
+      id: `${scope}.initialization.form.parentType`,
+    },
+    regionType: {
+      id: `${scope}.initialization.form.regionType`,
+    },
+    allType: {
+      id: `${scope}.initialization.form.allType`,
+    },
+    parentTypeExplanation: {
+      id: `${scope}.initialization.form.parentTypeExplanation`,
+    },
+    regionTypeExplanation: {
+      id: `${scope}.initialization.form.regionTypeExplanation`,
+    },
+    allTypeExplanation: {
+      id: `${scope}.initialization.form.allTypeExplanation`,
+    },
+    currentYear: {
+      id: `${scope}.initialization.form.currentYear`,
+    },
+    currentQuarter: {
+      id: `${scope}.initialization.form.currentQuarter`,
+    },
+    initialize: {
+      id: `${scope}.initialization.form.initialize`,
+    },
+  },
   adminList: {
     columns: {
       group: {
@@ -131,11 +186,19 @@ export default defineMessages({
         id: `${scope}.adminList.actions.resetConfirm`,
       },
     },
-    title: {
-      id: `${scope}.adminList.title`,
+    title(year = null, quarter = null) {
+      if (year && quarter) return { id: `${scope}.adminList.titleQuarter` };
+      if (year) return { id: `${scope}.adminList.titleYear` };
+      return { id: `${scope}.adminList.title` };
     },
     notSet: {
       id: `${scope}.adminList.notSet`,
+    },
+    initializeYear: {
+      id: `${scope}.adminList.initializeYear`,
+    },
+    initializeQuarter: {
+      id: `${scope}.adminList.initializeQuarter`,
     },
   },
   snackbars: {

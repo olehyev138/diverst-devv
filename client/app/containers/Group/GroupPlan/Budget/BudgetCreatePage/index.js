@@ -42,7 +42,7 @@ export function BudgetCreatePage(props) {
   };
 
   useEffect(() => {
-    props.getAnnualBudgetBegin({ id: annualBudgetId });
+    props.getAnnualBudgetBegin({ id: annualBudgetId, group_id: groupId });
   }, []);
 
   return (

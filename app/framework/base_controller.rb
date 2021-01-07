@@ -5,7 +5,7 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    response = klass.index(self.diverst_request, params, policy: @policy)
+    response = klass.index(self.diverst_request, params, policy: @policy, base: index_base)
     response = { page: response.as_json } if diverst_request.minimal
 
     render status: 200, json: response, **diverst_request.options
@@ -33,7 +33,7 @@ module BaseController
     params[klass.symbol] = payload
     base_authorize(klass)
 
-    new_item = klass.build(self.diverst_request, params)
+    new_item = klass.build(self.diverst_request, params, base: show_base)
     track_activity(new_item)
     render status: 201, json: new_item
   rescue => e
@@ -47,7 +47,7 @@ module BaseController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: klass.show(self.diverst_request, params), **diverst_request.options
+    render status: 200, json: klass.show(self.diverst_request, params, base: show_base), **diverst_request.options
   end
 
   def update
@@ -65,7 +65,7 @@ module BaseController
           item.send(attachment).purge_later if params[klass.symbol].key?(attachment) && params[attachment].blank? && item.send(attachment).attached?
         end
 
-    updated_item = klass.update(self.diverst_request, params)
+    updated_item = klass.update(self.diverst_request, params, base: show_base)
     track_activity(updated_item)
     render status: 200, json: updated_item
   rescue => e
@@ -125,6 +125,14 @@ module BaseController
   def klass
     controller_name.classify.constantize
   end
+
+  def base
+    klass
+  end
+
+  def index_base; base end
+
+  def show_base; base end
 
   # Accepts a model instance or class
   # If there is a policy it checks authorization for the current action

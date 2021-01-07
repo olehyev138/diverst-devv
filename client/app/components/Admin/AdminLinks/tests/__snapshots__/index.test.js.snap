@@ -266,7 +266,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
-                to="/admin/plan/budgeting"
+                to="/admin/plan/budgeting/list"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
                   <AttachMoneyIcon />
@@ -274,6 +274,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <WithStyles(ForwardRef(ListItemText))>
                   <Memo(Connect(DiverstFormattedMessage))
                     id="diverst.containers.Routes.admin.plan.group_budgets"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/plan/budgeting/initialize"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <AttachMoneyIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.plan.budget_initialize"
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>
@@ -741,7 +759,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                     "render": [Function],
                   }
                 }
-                to="/admin/plan/budgeting"
+                to="/admin/plan/budgeting/list"
               >
                 <WithStyles(ForwardRef(ListItemIcon))>
                   <AttachMoneyIcon />
@@ -749,6 +767,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <WithStyles(ForwardRef(ListItemText))>
                   <Memo(Connect(DiverstFormattedMessage))
                     id="diverst.containers.Routes.admin.plan.group_budgets"
+                  />
+                </WithStyles(ForwardRef(ListItemText))>
+              </WrappedComponent>
+              <WrappedComponent
+                component={
+                  Object {
+                    "$$typeof": Symbol(react.forward_ref),
+                    "render": [Function],
+                  }
+                }
+                to="/admin/plan/budgeting/initialize"
+              >
+                <WithStyles(ForwardRef(ListItemIcon))>
+                  <AttachMoneyIcon />
+                </WithStyles(ForwardRef(ListItemIcon))>
+                <WithStyles(ForwardRef(ListItemText))>
+                  <Memo(Connect(DiverstFormattedMessage))
+                    id="diverst.containers.Routes.admin.plan.budget_initialize"
                   />
                 </WithStyles(ForwardRef(ListItemText))>
               </WrappedComponent>

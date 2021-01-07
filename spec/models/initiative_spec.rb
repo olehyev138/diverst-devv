@@ -19,9 +19,9 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to validate_length_of(:description).is_at_most(65535) }
     it { expect(initiative).to validate_length_of(:name).is_at_most(191) }
 
-    it { expect(initiative).to belong_to(:budget_item) }
-    it { expect(initiative).to have_one(:budget).through(:budget_item) }
-    it { expect(initiative).to have_one(:annual_budget).through(:budget) }
+    it { expect(initiative).to have_many(:budget_items) }
+    it { expect(initiative).to have_many(:budgets).through(:budget_items) }
+    it { expect(initiative).to_not have_one(:annual_budget) }
 
     it { expect(initiative).to have_many(:checklists).dependent(:destroy) }
     it { expect(initiative).to have_many(:resources).dependent(:destroy) }
@@ -143,7 +143,14 @@ RSpec.describe Initiative, type: :model do
     context 'initiative::of_annual_budget' do
       let!(:annual_budget) { create :annual_budget, id: 100 }
       let!(:budget) { create(:approved_budget, annual_budget: annual_budget) }
-      let!(:annual_budget_initiative) { create :initiative, budget_item: budget.budget_items.first }
+      let!(:annual_budget_initiative) { create(
+        :initiative,
+        budget_users: build_list(
+          :budget_user,
+          1,
+          budget_item: budget.budget_items.first
+        ))
+      }
 
       it 'returns initiative of_annual_budget' do
         expect(Initiative.of_annual_budget(100)).to eq([annual_budget_initiative])
@@ -425,7 +432,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#approved?' do
+  describe '#approved?', skip: 'Deprecated' do
     it 'returns true if no budget exists' do
       initiative = create(:initiative)
 
@@ -449,7 +456,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#pending?' do
+  describe '#pending?', skip: 'Deprecated' do
     it 'returns false' do
       initiative = create(:initiative)
       expect(initiative.pending?).to eq(false)
@@ -481,7 +488,7 @@ RSpec.describe Initiative, type: :model do
 
     it 'returns true' do
       enterprise = create(:enterprise)
-      group = create(:group, enterprise: enterprise, annual_budget: 10000)
+      group = create(:group, :with_annual_budget, enterprise: enterprise, amount: 10000)
       annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
       budget = create(:approved_budget, annual_budget: annual_budget)
       initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
@@ -538,15 +545,6 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe 'test callbacks' do
-    let!(:new_initiative) { build(:initiative) }
-
-    it '#allocate_budget_funds' do
-      expect(new_initiative).to receive(:allocate_budget_funds)
-      new_initiative.save
-    end
-  end
-
   describe 'budgeting' do
     let(:group) { create(:group) }
 
@@ -559,39 +557,22 @@ RSpec.describe Initiative, type: :model do
     end
 
     context 'with funds' do
-      let(:initiative) { build(:initiative, owner_group: group, estimated_funding: 100) }
-
-      context 'without budget' do
-        it 'is not valid' do
-          expect(initiative).to_not be_valid
-        end
-      end
-
-      context 'with incorrect budget' do
-        let(:new_budget) { build(:budget) }
-
-        before { initiative.budget = new_budget }
-
-        it 'is not valid' do
-          expect(initiative).to_not be_valid
-        end
-      end
-
       context 'with correct budget item' do
         let!(:initiative) { create(:initiative, :with_budget_item, estimated_funding: 1000) }
+        let!(:budget_user) { initiative.budget_users.first }
 
         context 'with enough budget money' do
-          let!(:estimated_funding) { initiative.estimated_funding }
-          let!(:available_amount) { initiative.budget_item.available_amount }
+          let!(:estimated_funding) { budget_user.estimated }
+          let!(:available) { budget_user.budget_item.available }
 
           it 'saves initiative with correct funding' do
-            expect(initiative).to_not be_new_record
+            expect(budget_user).to_not be_new_record
 
-            expect(initiative.estimated_funding).to eq estimated_funding
+            expect(budget_user.estimated).to eq estimated_funding
           end
 
           it 'substracts estimated funding from budget item' do
-            expect(initiative.budget_item.available_amount).to eq 0
+            expect(budget_user.reload.budget_item.available).to eq 0
           end
 
           it 'marks budget item as done', skip: 'redefine IsDone later' do
@@ -658,7 +639,7 @@ RSpec.describe Initiative, type: :model do
   describe '#expenses_highcharts_history' do
     it 'returns expenses_highcharts_history' do
       initiative = create(:initiative, :with_budget_item)
-      create(:initiative_expense, initiative: initiative)
+      create(:initiative_expense, budget_user: initiative.budget_users.first)
       data = initiative.expenses_highcharts_history
       expect(data.length).to eq(1)
     end
@@ -711,13 +692,13 @@ RSpec.describe Initiative, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      group = create(:group, annual_budget: 10000)
+      group = create(:group, :with_annual_budget, amount: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       budget = create(:approved_budget, annual_budget: annual_budget)
-      initiative = create(:initiative, owner_group_id: group.id, budget_item: budget.budget_items.first)
+      initiative = create(:initiative, owner_group_id: group.id, budget_users: build_list(:budget_user, 1, budget_item: budget.budget_items.first))
       initiative_update = create(:update, updatable: initiative)
       field = create(:field, field_definer: initiative)
-      initiative_expense = create(:initiative_expense, initiative: initiative)
+      initiative_expense = create(:initiative_expense, budget_user: initiative.budget_users.first)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
       checklist_item = create(:checklist_item, initiative: initiative)
@@ -756,7 +737,7 @@ RSpec.describe Initiative, type: :model do
       end
     end
 
-    describe 'check_budget' do
+    describe 'check_budget', skip: 'DEPRECATED' do
       it 'returns true if estimated_funding is 0' do
         initiative = build(:initiative)
         expect(initiative.send(:check_budget)).to eq true
@@ -783,24 +764,6 @@ RSpec.describe Initiative, type: :model do
       it 'returns error message if no budget' do
         initiative = build(:initiative, estimated_funding: 10)
         expect(initiative.send(:check_budget)).to eq ['Can not create event with funds but without budget']
-      end
-    end
-
-    describe 'budget_item_is_approved' do
-      it 'returns nil' do
-        initiative = create(:initiative)
-        expect(initiative.send(:budget_item_is_approved)).to be nil
-      end
-
-      it 'returns nil' do
-        initiative = create(:initiative, :with_budget_item)
-        expect(initiative.send(:budget_item_is_approved)).to be nil
-      end
-
-      it 'returns error' do
-        initiative = create(:initiative, :with_budget_item)
-        initiative.budget.update(is_approved: false)
-        expect(initiative.send(:budget_item_is_approved)).to eq ['Budget Item is not approved']
       end
     end
   end
@@ -833,14 +796,14 @@ RSpec.describe Initiative, type: :model do
 
   describe 'Initiative.to_csv' do
     let!(:enterprise) { create(:enterprise) }
-    let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
+    let!(:group) { create :group, :with_annual_budget, :without_outcomes, enterprise: enterprise, amount: 10000 }
     let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
     let!(:budget) { create(:approved_budget, annual_budget_id: annual_budget.id) }
     let!(:outcome) { create :outcome, group_id: group.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,
                                             owner_group: group,
-                                            estimated_funding: budget.budget_items.first.available_amount,
+                                            estimated_funding: budget.budget_items.first.available,
                                             budget_item_id: budget.budget_items.first.id)
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }

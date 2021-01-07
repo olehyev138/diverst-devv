@@ -44,8 +44,17 @@ const selectFormEvent = () => createSelector(
         draft.budget_item = {
           label: eventsState.currentEvent.budget_item.title_with_amount,
           value: eventsState.currentEvent.budget_item.id,
-          available: eventsState.currentEvent.budget_item.available_amount
+          available: eventsState.currentEvent.budget_item.available
         };
+      if (draft.budget_users)
+        draft.budget_users = draft.budget_users.map(budget_user => ({
+          ...budget_user,
+          budget_item_id: {
+            label: budget_user.budget_item.title_with_amount,
+            value: budget_user.budget_item.id,
+            available: budget_user.budget_item.available
+          }
+        }));
       draft.participating_group = eventsState.currentEvent.participating_groups.map(group => mapSelectField(group));
     }
   })
