@@ -16,10 +16,10 @@ class UpdatePolicy < ApplicationPolicy
   end
 
   def params_parent_policy
-    if params[:group_id]
-      GroupUpdatePolicy.new(user, record, params)
-    elsif params[:initiative_id]
+    if params[:initiative_id]
       InitiativeUpdatePolicy.new(user, record, params)
+    elsif params[:group_id]
+      GroupUpdatePolicy.new(user, record, params)
     else
       nil
     end
