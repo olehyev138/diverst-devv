@@ -1,6 +1,6 @@
 /**
  *
- * User Form Component
+ * Sign Up Form Component
  *
  */
 
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form, ErrorMessage, FastField } from 'formik';
+import { Field, Formik, Form, FastField } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
   Divider, CardHeader, Box, Typography, Checkbox, FormControlLabel, FormGroup
@@ -30,7 +30,7 @@ import Logo from 'components/Shared/Logo';
 import LargeSponsorCard from 'components/Branding/Sponsor/SponsorCard/large';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
-import GroupSelectorItem from 'components/Shared/GroupSelector/item';
+import GroupSelector from 'components/Shared/GroupSelector';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import DiverstDialog from 'components/Shared/DiverstDialog';
 
@@ -265,19 +265,24 @@ export function SignUpFormInner({ formikProps, buttonText, errors, ...props }) {
                   <DiverstFormattedMessage {...signUpMessages.group_select} />
                 </Typography>
                 <Box mb={2} />
-                {(props.groups || []).map(group => (
-                  <GroupSelectorItem
-                    key={group.id}
-                    isSelected={isSelected}
-                    addGroup={addGroup}
-                    removeGroup={removeGroup}
-                    group={group}
-                    expandedGroups={expandedGroups}
-                    setExpandedGroups={setExpandedGroups}
-                    doubleClickWait={0}
-                    large
-                  />
-                ))}
+                <GroupSelector
+                  groupField='groupIds'
+                  inlineDialogContent
+                  isOnboardingForm
+
+                  isRemoteData
+                  remoteGetGroupsBegin={props.getOnboardingGroupsBegin}
+                  remoteGetGroupsSuccess={props.getOnboardingGroupsSuccess}
+                  isLoadingRemoteData={props.isGroupsLoading}
+                  remoteGroups={props.groups}
+                  remoteGroupTotal={props.groupsTotal}
+
+                  isMulti
+                  disabled={props.isCommitting}
+                  handleChange={handleChange}
+                  values={values}
+                  setFieldValue={setFieldValue}
+                />
               </CardContent>
             </Card>
             <Box mb={2} />
@@ -382,16 +387,20 @@ SignUpForm.propTypes = {
   submitAction: PropTypes.func,
   user: PropTypes.object,
   groups: PropTypes.arrayOf(PropTypes.object),
+  groupsTotal: PropTypes.number,
   enterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
   isLoading: PropTypes.bool,
+  isGroupsLoading: PropTypes.bool,
   token: PropTypes.string,
   buttonText: PropTypes.object,
   errors: PropTypes.object,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
-  })
+  }),
+  getOnboardingGroupsBegin: PropTypes.func,
+  getOnboardingGroupsSuccess: PropTypes.func,
 };
 
 SignUpFormInner.propTypes = {
