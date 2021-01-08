@@ -92,10 +92,11 @@ RSpec.describe Budget, type: :model do
 
     context 'on budget creation' do
       context 'when is_approved is true' do
-        it 'sends email request' do
+        it 'does not send email request' do
           budget.is_approved = true
           budget.save
-          expect(budget).to have_received(:send_approval_notification)
+          expect(budget).to_not have_received(:send_approval_notification)
+          expect(budget).to_not have_received(:send_approval_request)
         end
       end
 
@@ -103,7 +104,8 @@ RSpec.describe Budget, type: :model do
         it 'does not send email request' do
           budget.is_approved = false
           budget.save
-          expect(budget).to have_received(:send_denial_notification)
+          expect(budget).to_not have_received(:send_denial_notification)
+          expect(budget).to_not have_received(:send_approval_request)
         end
       end
     end
