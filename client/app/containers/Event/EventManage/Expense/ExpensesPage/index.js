@@ -29,38 +29,37 @@ import {
   selectExpensesTotal,
   selectIsFetchingExpenses,
   selectIsCommitting,
-  selectHasChanged, selectExpenseListSum,
-} from '../selectors';
+  selectExpenseListSum,
+  selectHasChanged as selectExpenseHasChanged } from '../selectors';
 import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
   expensesUnmount, deleteExpenseBegin
 } from '../actions';
-import {
-  finalizeExpensesBegin
-} from 'containers/Event/actions';
+import { getBudgetUsersBegin, finalizeExpensesBegin } from 'containers/Group/GroupPlan/BudgetUser/actions';
 
 import reducer from '../reducer';
 import saga from '../saga';
+import budgetUserReducer from 'containers/Group/GroupPlan/BudgetUser/reducer';
+import budgetUserSaga from 'containers/Group/GroupPlan/BudgetUser/saga';
 
-import ExpenseList from 'components/Event/EventManage/ExpensesList';
+import BudgetList from 'components/Event/EventManage/BudgetList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
+
 import { selectCustomText } from 'containers/Shared/App/selectors';
+import {
+  selectIsFetchingBudgetUsers,
+  selectHasChanged,
+  selectPaginatedBudgetUsers
+} from 'containers/Group/GroupPlan/BudgetUser/selectors';
 
 const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
 
 export function ExpenseListPage(props) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
-
-  const [params, setParams] = useState(
-    {
-      count: 5,
-      page: 0,
-      order: 'asc',
-      orderBy: 'initiative_expenses.id',
-    }
-  );
+  useInjectReducer({ key: 'budgetUsers', reducer: budgetUserReducer });
+  useInjectSaga({ key: 'budgetUsers', saga: budgetUserSaga });
 
   const links = {
     newExpense: ROUTES.group.plan.events.manage.expenses.new.path(props.currentGroup.id, props.currentEvent.id),
@@ -68,81 +67,58 @@ export function ExpenseListPage(props) {
     initiativeManage: ROUTES.group.plan.events.index.path(props.currentGroup.id, props.currentEvent.id),
   };
 
-  function getExpenses(params) {
-    props.getExpensesBegin({
-      ...params,
-      initiative_id: props.currentEvent.id,
-      sum: 'amount'
+  function getBudgetUsers() {
+    props.getBudgetUsersBegin({
+      count: -1,
+      order: 'asc',
+      initiative_id: props.currentEvent.id
     });
   }
 
   useEffect(() => {
-    getExpenses(params);
-
-    return () => {
-      props.expensesUnmount();
-    };
-  }, []);
+    getBudgetUsers();
+  }, [props.currentEvent]);
 
   useEffect(() => {
     if (props.hasChanged)
-      getExpenses(params);
+      getBudgetUsers();
+  }, [props.currentEvent]);
 
-    return () => {
-      props.expensesUnmount();
-    };
-  }, [props.hasChanged]);
-
-  const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
-
-    getExpenses(newParams);
-    setParams(newParams);
-  };
-
-  const handleOrdering = (payload) => {
-    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
-
-    getExpenses(newParams);
-    setParams(newParams);
-  };
+  useEffect(() => {
+    if (props.expensesHasChanged)
+      getBudgetUsers();
+  }, [props.expensesHasChanged]);
 
   return (
     <React.Fragment>
-      <ExpenseList
+      <BudgetList
+        budgetUsers={props.budgetUsers}
+        isLoading={props.isLoading}
         initiative={props.currentEvent}
         currentGroup={props.currentGroup}
-        expenses={props.expenses}
-        expenseTotal={props.expenseTotal}
-        expenseSumTotal={props.expenseSumTotal}
-        isFetchingExpenses={props.isLoading}
-        handlePagination={handlePagination}
-        handleOrdering={handleOrdering}
         handleVisitEditPage={props.handleVisitEditPage}
         deleteExpenseBegin={props.deleteExpenseBegin}
         finalizeExpensesBegin={props.finalizeExpensesBegin}
         links={links}
         customTexts={props.customTexts}
+        isCommitting={props.isCommitting}
       />
     </React.Fragment>
   );
 }
 
 ExpenseListPage.propTypes = {
-  getExpensesBegin: PropTypes.func.isRequired,
   createExpenseBegin: PropTypes.func.isRequired,
+  getBudgetUsersBegin: PropTypes.func.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
   finalizeExpensesBegin: PropTypes.func.isRequired,
-  expenses: PropTypes.array,
-  expenseTotal: PropTypes.number,
-  expenseSumTotal: PropTypes.string,
-  isLoading: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
   expensesUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   hasChanged: PropTypes.bool,
+  isLoading: PropTypes.bool,
   currentEvent: PropTypes.shape({
     id: PropTypes.number
   }),
@@ -150,22 +126,26 @@ ExpenseListPage.propTypes = {
     id: PropTypes.number
   }),
   customTexts: PropTypes.object,
+  budgetUsers: PropTypes.array,
+  expensesHasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
+  budgetUsers: selectPaginatedBudgetUsers(),
+  isLoading: selectIsFetchingBudgetUsers(),
   expenses: selectPaginatedExpenses(),
   expenseTotal: selectExpensesTotal(),
   expenseSumTotal: selectExpenseListSum(),
-  isLoading: selectIsFetchingExpenses(),
   isCommitting: selectIsCommitting(),
   currentEvent: selectEvent(),
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
   customTexts: selectCustomText(),
+  expensesHasChanged: selectExpenseHasChanged(),
 });
 
 const mapDispatchToProps = {
-  getExpensesBegin,
+  getBudgetUsersBegin,
   createExpenseBegin,
   updateExpenseBegin,
   deleteExpenseBegin,

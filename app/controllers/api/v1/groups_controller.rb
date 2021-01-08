@@ -23,9 +23,37 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.current_annual_budget!
+    render status: 200, json: item.current_annual_budget
   rescue => e
     raise BadRequestException.new(e.message)
+  end
+
+  def current_child_budget
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200,
+           json: Page.of(item.current_child_budgets)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def aggregate_budgets
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    response = AnnualBudget.pager_with_query(
+      item.aggregate_budget_data,
+      params,
+      use_order: false
+    )
+
+    render status: 200, json: response, **diverst_request.options
+  rescue => e
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   def current_annual_budgets
@@ -33,7 +61,14 @@ class Api::V1::GroupsController < DiverstController
     params[:parent_id] = nil
     diverst_request.options[:budgets] = true
     diverst_request.options[:with_children] = true
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), budgets: true, with_children: true
+    render status: 200,
+           json: klass.index(
+             self.diverst_request,
+             params.permit!,
+           ),
+           budgets: true,
+           with_children: true,
+           use_serializer: AdminGroupBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -110,11 +145,6 @@ class Api::V1::GroupsController < DiverstController
   end
 
   private
-
-  def load_sums(result)
-    result.items = result.items.load_sums
-    result
-  end
 
   def leaders_payload
     params

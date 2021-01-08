@@ -128,7 +128,7 @@ export function EventFormInner({
                 name='at'
                 margin='normal'
                 onChange={(value) => {
-                  setFieldValue('at', value.toLocaleString(DateTime.TIME_24_SIMPLE));
+                  setFieldValue('at', value == null ? '' : value.toLocaleString(DateTime.TIME_24_SIMPLE));
                   setFieldTouched('at', true);
                 }}
                 onBlur={() => setFieldTouched('at', true)}

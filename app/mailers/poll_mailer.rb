@@ -3,10 +3,13 @@ class PollMailer < ApplicationMailer
     @user = user
     @poll = poll
     @enterprise = @user.enterprise
-    @user_poll_token = poll.user_poll_tokens.find_by(user: user)
-    @token = PollTokenService.email_jwt_token(@user_poll_token)
+
     return if @enterprise.disable_emails?
+
+    @user_poll_token = poll.user_poll_tokens.find_by(user: user)
     return if @user_poll_token.blank?
+
+    @token = PollTokenService.email_jwt_token(@user_poll_token)
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email_for_notification
