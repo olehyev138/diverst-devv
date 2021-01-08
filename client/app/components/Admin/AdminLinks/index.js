@@ -376,6 +376,20 @@ export function AdminLinks(props) {
                   <DiverstFormattedMessage {...messages.budgetRoute} />
                 </ListItemText>
               </MenuPermission>
+              <MenuPermission
+                component={WrappedNavLink}
+                to={ROUTES.admin.plan.budgeting.initialize.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+                show={permission(props, 'manage_all_budgets')}
+              >
+                <ListItemIcon>
+                  <PlanGroupBudgetsIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...{ id: 'diverst.containers.Routes.admin.plan.budget_initialize' }} />
+                </ListItemText>
+              </MenuPermission>
             </List>
           </Collapse>
           { /* Disable Innovate */ }

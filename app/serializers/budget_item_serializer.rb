@@ -1,5 +1,5 @@
 class BudgetItemSerializer < ApplicationRecordSerializer
-  attributes :title_with_amount, :available_amount
+  attributes :title_with_amount, :available
 
   def title_with_amount
     object.title_with_amount(event)

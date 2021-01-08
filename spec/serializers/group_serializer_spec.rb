@@ -5,10 +5,11 @@ RSpec.describe GroupSerializer, type: :serializer do
     @enterprise = create(:enterprise)
     @group_category = create(:group_category, enterprise: @enterprise)
     @group_category_type = create(:group_category_type, enterprise: @enterprise)
-    @group = create(:group, logo: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
-                            banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }, enterprise: @enterprise,
-                            group_category_id: @group_category.id, group_category_type_id: @group_category_type.id,
-                            annual_budget: 1000)
+    @group = create(:group, :with_annual_budget,
+                    logo: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
+                    banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' }, enterprise: @enterprise,
+                    group_category_id: @group_category.id, group_category_type_id: @group_category_type.id,
+                    amount: 1000)
     create(:group, enterprise: @group.enterprise, parent_id: @group.id)
     create(:group, enterprise: @group.enterprise, parent_id: @group.id)
     @group.reload

@@ -35,6 +35,10 @@ export function buildValues(object, valueSchemas) {
   return values;
 }
 
+export function buildValuesOfArray(array, valueSchemas) {
+  return array.map(object => buildValues(object, valueSchemas));
+}
+
 /*
  * Checks if the attributes array exists, is empty, or contains *only* destroyed values objects
  * @attributesArray - the array of values objects to check

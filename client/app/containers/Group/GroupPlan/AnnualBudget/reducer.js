@@ -15,12 +15,21 @@ import {
   GET_ANNUAL_BUDGETS_BEGIN,
   GET_ANNUAL_BUDGETS_SUCCESS,
   GET_ANNUAL_BUDGETS_ERROR,
+  GET_CHILD_BUDGETS_BEGIN,
+  GET_CHILD_BUDGETS_SUCCESS,
+  GET_CHILD_BUDGETS_ERROR,
+  GET_AGGREGATE_BUDGETS_BEGIN,
+  GET_AGGREGATE_BUDGETS_SUCCESS,
+  GET_AGGREGATE_BUDGETS_ERROR,
   CREATE_ANNUAL_BUDGET_BEGIN,
   CREATE_ANNUAL_BUDGET_SUCCESS,
   CREATE_ANNUAL_BUDGET_ERROR,
   UPDATE_ANNUAL_BUDGET_BEGIN,
   UPDATE_ANNUAL_BUDGET_SUCCESS,
   UPDATE_ANNUAL_BUDGET_ERROR,
+  RESET_ANNUAL_BUDGET_BEGIN,
+  RESET_ANNUAL_BUDGET_SUCCESS,
+  RESET_ANNUAL_BUDGET_ERROR,
   ANNUAL_BUDGETS_UNMOUNT,
 } from './constants';
 
@@ -67,34 +76,43 @@ function annualBudgetReducer(state = initialState, action) {
         break;
 
       case GET_ANNUAL_BUDGETS_BEGIN:
+      case GET_AGGREGATE_BUDGETS_BEGIN:
+      case GET_CHILD_BUDGETS_BEGIN:
         draft.isFetchingAnnualBudgets = true;
         draft.hasChanged = false;
         break;
 
       case GET_ANNUAL_BUDGETS_SUCCESS:
+      case GET_AGGREGATE_BUDGETS_SUCCESS:
+      case GET_CHILD_BUDGETS_SUCCESS:
         draft.annualBudgetList = action.payload.items;
         draft.annualBudgetListTotal = action.payload.total;
         draft.isFetchingAnnualBudgets = false;
         break;
 
       case GET_ANNUAL_BUDGETS_ERROR:
+      case GET_AGGREGATE_BUDGETS_ERROR:
+      case GET_CHILD_BUDGETS_ERROR:
         draft.isFetchingAnnualBudgets = false;
         break;
 
       case CREATE_ANNUAL_BUDGET_BEGIN:
       case UPDATE_ANNUAL_BUDGET_BEGIN:
+      case RESET_ANNUAL_BUDGET_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
 
       case CREATE_ANNUAL_BUDGET_SUCCESS:
       case UPDATE_ANNUAL_BUDGET_SUCCESS:
+      case RESET_ANNUAL_BUDGET_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
 
       case CREATE_ANNUAL_BUDGET_ERROR:
       case UPDATE_ANNUAL_BUDGET_ERROR:
+      case RESET_ANNUAL_BUDGET_ERROR:
         draft.isCommitting = false;
         break;
 

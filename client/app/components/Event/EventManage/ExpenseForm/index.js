@@ -4,12 +4,12 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { Form, Formik } from 'formik';
 import { Box, CardContent, Divider, Grid, Paper, TextField } from '@material-ui/core';
-import { buildValues } from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstCancel from 'components/Shared/DiverstCancel';
 
@@ -17,11 +17,16 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Event/EventManage/Expense/messages';
 import { getCurrency } from 'utils/currencyHelpers';
 import DiverstMoneyField from 'components/Shared/DiverstMoneyField';
+import DiverstSelect from 'components/Shared/DiverstSelect';
 const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
 export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+
+  const budgetItemOptions = useMemo(() => props.currentEvent?.budget_users?.map(budgetUser => (
+    { label: budgetUser.budget_item.title, value: budgetUser.budget_item.id }
+  )), [props.currentEvent]);
 
   return (
     <React.Fragment>
@@ -40,6 +45,19 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
               value={values.description}
               disabled={props.isCommitting}
               label={<DiverstFormattedMessage {...formMessages.description} />}
+            />
+            <Box mb={2} />
+            <Divider />
+            <Box mb={2} />
+            <DiverstSelect
+              name='budget_item_id'
+              fullWidth
+              id='budget_item_id'
+              label={<DiverstFormattedMessage {...formMessages.budgetItem} />}
+              options={budgetItemOptions}
+              value={values.budget_item_id}
+              onChange={v => setFieldValue('budget_item_id', v)}
+              hideHelperText
             />
             <Box mb={2} />
             <Divider />
@@ -84,6 +102,7 @@ export function ExpenseForm(props) {
 
   const initialValues = buildValues(expense, {
     id: { default: '' },
+    budget_item: { default: props.budgetItem || { label: '', value: '' }, customKey: 'budget_item_id' },
     description: { default: '' },
     amount: { default: '' },
   });
@@ -93,7 +112,7 @@ export function ExpenseForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.expenseAction({ path: props.links.index, initiative_id: props.initiativeId, ...values });
+        props.expenseAction({ path: props.links.index, initiative_id: props.initiativeId, ...mapFields(values, ['budget_item_id']) });
       }}
     >
       {formikProps => <ExpenseFormInner {...props} formikProps={formikProps} />}
@@ -104,6 +123,7 @@ export function ExpenseForm(props) {
 ExpenseForm.propTypes = {
   expenseAction: PropTypes.func.isRequired,
   initiativeId: PropTypes.number,
+  budgetItem: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
   edit: PropTypes.bool,
@@ -116,6 +136,7 @@ ExpenseFormInner.propTypes = {
   expense: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
+  budgetItem: PropTypes.object,
 
   formikProps: PropTypes.object,
 
