@@ -69,7 +69,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/utils": "^4.10.2",
     "animated-scroll-to": "^2.0.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chalk": "2.4.2",
     "classnames": "^2.2.6",
     "compression": "1.7.4",
