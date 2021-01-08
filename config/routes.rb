@@ -305,6 +305,7 @@ Diverst::Application.routes.draw do
           get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
           post '/sign_up_token', to: 'users#sign_up_token'
+          post '/sign_up_groups', to: 'users#sign_up_groups'
           post '/sign_up', to: 'users#sign_up'
           post '/reset_password_request', to: 'users#reset_password_request'
           post '/reset_password_token', to: 'users#reset_password_token'
