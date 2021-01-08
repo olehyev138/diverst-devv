@@ -56,6 +56,6 @@ class BudgetMailer < ApplicationMailer
   end
 
   def url
-    ReactRoutes.group.plan.budget.budgets.show(@group, @budget)
+    ReactRoutes.group.plan.budget.budgets.show(@group, @budget.annual_budget_id, @budget)
   end
 end
