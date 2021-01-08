@@ -91,6 +91,7 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    overflow: 'hidden',
   },
   nested: {
     paddingLeft: theme.spacing(4),
