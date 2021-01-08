@@ -131,7 +131,7 @@ export function DiverstPagination(props) {
     props.handlePagination({ count: rowsPerPage, page: newPage });
 
     // Scroll to top when page is increased
-    if (closestScrollbarContainer && scroll)
+    if (!props.disableAutomaticTopScrolling && closestScrollbarContainer && scroll)
       animateScrollTo(0, {
         elementToScroll: closestScrollbarContainer
       });
@@ -146,7 +146,7 @@ export function DiverstPagination(props) {
   // useLayoutEffect instead of useEffect in order to wait for DOM mutations, etc.
   useLayoutEffect(() => {
     // Scroll to bottom when page is decreased
-    if (paginationComponent && props.isLoading === false && doScrollToBottom === true) {
+    if (!props.disableAutomaticBottomScrolling && paginationComponent && props.isLoading === false && doScrollToBottom === true) {
       setDoScrollToBottom(false);
       // Wait to scroll for everything to be properly rendered
       //
@@ -220,6 +220,8 @@ DiverstPagination.propTypes = {
   rowsPerPage: PropTypes.number,
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
+  disableAutomaticTopScrolling: PropTypes.bool,
+  disableAutomaticBottomScrolling: PropTypes.bool,
   isLoading: PropTypes.bool,
   customTexts: PropTypes.object,
   intl: intlShape.isRequired,
