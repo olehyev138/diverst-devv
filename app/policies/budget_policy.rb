@@ -38,9 +38,9 @@ class BudgetPolicy < GroupBasePolicy
 
   def destroy?
     if @record.is_approved?
-      manage_all? || policy_group.enterprise_manage?
+      false
     else
-      @record.requester == @user
+      @record.requester == @user || manage_all?
     end
   end
 

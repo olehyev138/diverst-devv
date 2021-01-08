@@ -450,6 +450,12 @@ const ROUTES = {
             titleMessage: messages.groups.plan.budget.overview,
           }
         },
+        aggregate: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/aggregate`,
+          data: {
+            titleMessage: messages.groups.plan.budget.aggregate,
+          }
+        },
         budgets: {
           index: {
             path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets`,
@@ -810,7 +816,13 @@ const ROUTES = {
       budgeting: {
         pathPrefix: '/admin/plan/budgeting',
         index: {
-          path: () => '/admin/plan/budgeting',
+          path: () => '/admin/plan/budgeting/list',
+          data: {
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
+        initialize: {
+          path: () => '/admin/plan/budgeting/initialize',
           data: {
             titleMessage: messages.admin.manage.groups,
           }

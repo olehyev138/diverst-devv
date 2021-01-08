@@ -171,7 +171,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#updates' do
-    let!(:update) { create(:initiative_update2, initiative: item) }
+    let!(:update) { create(:initiative_update, initiative: item) }
 
     it 'gets updates' do
       get "/api/v1/#{route}/#{item.id}/updates", params: {}, headers: headers
@@ -191,7 +191,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update_prototype' do
-    let!(:update) { create(:initiative_update2, initiative: item) }
+    let!(:update) { create(:initiative_update, initiative: item) }
 
     it 'updates prototype' do
       get "/api/v1/#{route}/#{item.id}/update_prototype", params: {}, headers: headers
@@ -211,7 +211,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create_update' do
-    let!(:new_item) { build(:initiative_update2) }
+    let!(:new_item) { build(:initiative_update) }
 
     it 'creates an update' do
       post "/api/v1/#{route}/#{item.id}/create_update", params: { 'update' => new_item.attributes }, headers: headers

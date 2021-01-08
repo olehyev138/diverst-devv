@@ -6,7 +6,7 @@ FactoryBot.define do
     data { }
     report_date { Faker::Date.forward(2) }
 
-    factory :initiative_update2 do
+    factory :initiative_update do
       association :updatable, factory: :initiative
     end
 

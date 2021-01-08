@@ -113,7 +113,7 @@ describe('AnnualBudget Saga', () => {
         initialAction
       );
 
-      expect(api.annualBudgets.get).toHaveBeenCalledWith(initialAction.payload.id);
+      expect(api.annualBudgets.get).toHaveBeenCalledWith(initialAction.payload.id, {});
       expect(dispatched).toEqual(results);
       expect(Notifiers.showSnackbar).toHaveBeenCalledWith({ message: messages.snackbars.errors.annualBudget, options: { variant: 'warning' } });
     });

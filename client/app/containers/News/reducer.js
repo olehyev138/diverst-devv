@@ -108,52 +108,39 @@ function newsReducer(state = initialState, action) {
         draft.isFormLoading = false;
         break;
       case UPDATE_NEWS_ITEM_BEGIN:
-        draft.isCommitting = true;
-        break;
-      case UPDATE_NEWS_ITEM_SUCCESS:
-        draft.isCommitting = false;
-        break;
-      case UPDATE_NEWS_ITEM_ERROR:
-        draft.isCommitting = false;
-        break;
       case CREATE_GROUP_MESSAGE_BEGIN:
       case UPDATE_GROUP_MESSAGE_BEGIN:
       case CREATE_GROUP_MESSAGE_COMMENT_BEGIN:
-        draft.isCommitting = true;
-        break;
-      case CREATE_GROUP_MESSAGE_SUCCESS:
-      case UPDATE_GROUP_MESSAGE_SUCCESS:
-      case CREATE_GROUP_MESSAGE_COMMENT_SUCCESS:
-      case CREATE_GROUP_MESSAGE_ERROR:
-      case UPDATE_GROUP_MESSAGE_ERROR:
-      case CREATE_GROUP_MESSAGE_COMMENT_ERROR:
       case CREATE_NEWSLINK_BEGIN:
       case UPDATE_NEWSLINK_BEGIN:
       case CREATE_NEWSLINK_COMMENT_BEGIN:
-        draft.isCommitting = true;
-        break;
-      case CREATE_NEWSLINK_SUCCESS:
-      case UPDATE_NEWSLINK_SUCCESS:
-      case CREATE_NEWSLINK_COMMENT_SUCCESS:
-      case CREATE_NEWSLINK_ERROR:
-      case UPDATE_NEWSLINK_ERROR:
-      case CREATE_NEWSLINK_COMMENT_ERROR:
-        draft.isCommitting = false;
-        break;
       case CREATE_SOCIALLINK_BEGIN:
       case UPDATE_SOCIALLINK_BEGIN:
       case CREATE_SOCIALLINK_COMMENT_BEGIN:
         draft.isCommitting = true;
         break;
+      case UPDATE_NEWS_ITEM_SUCCESS:
+      case CREATE_GROUP_MESSAGE_SUCCESS:
+      case UPDATE_GROUP_MESSAGE_SUCCESS:
+      case CREATE_GROUP_MESSAGE_COMMENT_SUCCESS:
+      case CREATE_NEWSLINK_SUCCESS:
+      case UPDATE_NEWSLINK_SUCCESS:
+      case CREATE_NEWSLINK_COMMENT_SUCCESS:
       case CREATE_SOCIALLINK_SUCCESS:
       case UPDATE_SOCIALLINK_SUCCESS:
       case CREATE_SOCIALLINK_COMMENT_SUCCESS:
+        draft.isCommitting = false;
+        break;
+      case UPDATE_NEWS_ITEM_ERROR:
+      case CREATE_GROUP_MESSAGE_ERROR:
+      case UPDATE_GROUP_MESSAGE_ERROR:
+      case CREATE_GROUP_MESSAGE_COMMENT_ERROR:
+      case CREATE_NEWSLINK_ERROR:
+      case UPDATE_NEWSLINK_ERROR:
+      case CREATE_NEWSLINK_COMMENT_ERROR:
       case CREATE_SOCIALLINK_ERROR:
       case UPDATE_SOCIALLINK_ERROR:
       case CREATE_SOCIALLINK_COMMENT_ERROR:
-      case ARCHIVE_NEWS_ITEM_ERROR:
-      case PIN_NEWS_ITEM_ERROR:
-      case UNPIN_NEWS_ITEM_ERROR:
         draft.isCommitting = false;
         break;
       case NEWS_FEED_UNMOUNT:
@@ -192,6 +179,9 @@ function newsReducer(state = initialState, action) {
       case ARCHIVE_NEWS_ITEM_SUCCESS:
       case PIN_NEWS_ITEM_SUCCESS:
       case UNPIN_NEWS_ITEM_SUCCESS:
+      case ARCHIVE_NEWS_ITEM_ERROR:
+      case PIN_NEWS_ITEM_ERROR:
+      case UNPIN_NEWS_ITEM_ERROR:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;

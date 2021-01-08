@@ -49,7 +49,7 @@ const styles = theme => ({
 });
 
 export function ExpenseList(props, context) {
-  const { classes, initiative, intl } = props;
+  const { classes, initiative, budgetUser, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -68,7 +68,7 @@ export function ExpenseList(props, context) {
       title: intl.formatMessage(messages.columns.amount, props.customTexts),
       field: 'amount',
       query_field: 'amount',
-      render: rowData => toCurrencyString(props.intl, rowData.amount || 0, initiative.currency),
+      render: rowData => toCurrencyString(props.intl, rowData.amount || 0, budgetUser.currency),
     },
     {
       title: intl.formatMessage(messages.columns.createdAt, props.customTexts),
@@ -80,7 +80,7 @@ export function ExpenseList(props, context) {
 
   const actions = [];
 
-  if (initiative && !initiative.finished_expenses) {
+  if (budgetUser && !budgetUser.finished_expenses) {
     actions.push({
       icon: () => <EditIcon />,
       tooltip: intl.formatMessage(messages.actions.edit, props.customTexts),
@@ -99,7 +99,7 @@ export function ExpenseList(props, context) {
   }
 
   return (
-    initiative && (initiative.budget_item ? (
+    budgetUser && (budgetUser.budget_item ? (
       <React.Fragment>
         <CardContent>
           <Grid
@@ -109,13 +109,14 @@ export function ExpenseList(props, context) {
             alignItems='flex-end'
             justify='flex-end'
           >
-            { initiative && !initiative.finished_expenses ? (
+            { budgetUser && !budgetUser.finished_expenses ? (
               <React.Fragment>
                 <Grid item align='right'>
                   <Button
                     color='primary'
                     variant='contained'
-                    to={props.links.newExpense}
+                    to={{ pathname: props.links.newExpense,
+                      state: { budgetItem: { value: budgetUser.budget_item.id, label: budgetUser.budget_item.title } } }}
                     component={WrappedNavLink}
                     startIcon={<AddIcon />}
                   >
@@ -130,7 +131,7 @@ export function ExpenseList(props, context) {
                       onClick={() => {
                         // eslint-disable-next-line no-restricted-globals,no-alert
                         if (intl.formatMessage(messages.buttons.closeConfirm, props.customTexts))
-                          props.finalizeExpensesBegin({ id: props.initiative.id });
+                          props.finalizeExpensesBegin({ id: props.budgetUser.id });
                       }}
                     >
                       <DiverstFormattedMessage {...messages.buttons.close} />
@@ -152,8 +153,6 @@ export function ExpenseList(props, context) {
           <Grid item xs>
             <DiverstTable
               title={messages.title}
-              handlePagination={props.handlePagination}
-              onOrderChange={handleOrderChange}
               isLoading={props.isFetchingExpenses}
               rowsPerPage={5}
               dataArray={Object.values(props.expenses)}
@@ -181,19 +180,19 @@ export function ExpenseList(props, context) {
             >
               <Grid item xs={1}>
                 <Typography color='primary' variant='body1' component='h2'>
-                  {initiative.finished_expenses
+                  {budgetUser.finished_expenses
                     ? <DiverstFormattedMessage {...messages.final} />
                     : <DiverstFormattedMessage {...messages.total} />}
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2'>
-                  {toCurrencyString(props.intl, props.expenseSumTotal || 0, initiative.currency)}
+                  {toCurrencyString(props.intl, props.expenseSumTotal || 0, budgetUser.currency)}
                 </Typography>
               </Grid>
               <Grid item xs={10}>
                 {props.expenseSumTotal && (
                   <DiverstProgress
                     number={props.expenseSumTotal}
-                    total={props.initiative.estimated_funding}
+                    total={props.budgetUser.estimated}
                     overflow
                   />
                 )}
@@ -203,7 +202,7 @@ export function ExpenseList(props, context) {
                   <DiverstFormattedMessage {...messages.estimated} />
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2' align='right'>
-                  {toCurrencyString(props.intl, props.initiative.estimated_funding || 0, initiative.currency)}
+                  {toCurrencyString(props.intl, props.budgetUser.estimated || 0, budgetUser.currency)}
                 </Typography>
               </Grid>
             </Grid>
@@ -224,14 +223,13 @@ ExpenseList.propTypes = {
   intl: intlShape.isRequired,
   classes: PropTypes.object,
   initiative: PropTypes.object,
+  budgetUser: PropTypes.object,
   currentGroup: PropTypes.object,
   expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
   expenseSumTotal: PropTypes.string,
   isFetchingExpenses: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
-  handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func,
   handleVisitExpenseEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
   expenseType: PropTypes.string,

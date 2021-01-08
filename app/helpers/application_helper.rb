@@ -125,7 +125,7 @@ module ApplicationHelper
     annual_budget = options[:annual_budget]
 
     return initiative.expenses.sum(:amount) > initiative.estimated_funding if options[:initiative]
-    return annual_budget.expenses > annual_budget.amount if options[:annual_budget]
+    return annual_budget.spent > annual_budget.amount if options[:annual_budget]
   end
 
   def default_path
