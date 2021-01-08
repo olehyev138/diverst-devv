@@ -6,6 +6,7 @@ class Email < BaseClass
 
   # associations
   belongs_to :enterprise
+  belongs_to :group
 
   attr_accessor :receivers
   attr_accessor :receiver_groups_ids

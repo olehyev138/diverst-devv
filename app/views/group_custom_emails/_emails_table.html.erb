@@ -1,0 +1,30 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+    <% if @custom_emails.any? %>
+      <table class="table--has-border" id="custom-emails-table">
+        <thead>
+          <th>Subject</th>
+          <th>Last update</th>
+          <th>Status</th>
+        </thead>
+        <tbody>
+          <% @custom_emails.each do |email| %>
+            <tr>
+              <td><%= link_to email.subject[0..50], edit_group_group_custom_email_path(@group, email.id) %></td>
+              <td><%= time_ago_in_words(email.updated_at) %> ago</td>
+              <td>
+                <%= link_to('Prepare for sending', group_group_custom_email_path(@group, email) ) %>
+                |
+                <%= link_to('Remove', group_group_custom_email_path(@group, email), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)  %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+        No custom emails yet. You can <%= link_to('create one', new_email_group_path(@group)) %>
+      <% end %>
+    </div>
+  </div>
+</div>

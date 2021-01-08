@@ -100,6 +100,8 @@ class Group < BaseClass
   has_many :views, dependent: :destroy
   has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 
+  has_many :custom_emails, -> { where custom: true }, class_name: 'Email', dependent: :destroy
+
   has_many :fields, -> { where field_type: 'regular' },
            dependent: :delete_all
   has_many :survey_fields, -> { where field_type: 'group_survey' },

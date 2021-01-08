@@ -425,7 +425,6 @@ class GroupsController < ApplicationController
     render nothing: true, status: :ok
   end
 
-
   protected
 
   def set_users_to_invite
@@ -479,7 +478,8 @@ class GroupsController < ApplicationController
 
   def resolve_layout
     case action_name
-    when 'show', 'layouts', 'settings', 'plan_overview', 'metrics', 'edit_fields'
+    when 'show', 'layouts', 'settings', 'plan_overview',
+          'metrics', 'edit_fields', 'emails', 'new_email'
       'erg'
     when 'close_budgets'
       'plan'
@@ -589,6 +589,19 @@ class GroupsController < ApplicationController
             :_destroy
           ]
         )
+  end
+
+  def custom_email_params
+    params
+      .require(:email)
+      .permit(
+        :name,
+        :description,
+        :content,
+        :subject,
+        :receivers,
+        receiver_groups_ids: []
+      )
   end
 
   def visit_page

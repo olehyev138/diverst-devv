@@ -372,8 +372,16 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :group_custom_emails do
+      member do
+        post :deliver
+      end
+    end
+
     member do
+      #resources :group_custom_emails, controller: 'groups/custom_emails', only: [:index]#, path: 'CustomEmailsController'
       get 'settings'
+
       get 'layouts'
       get 'plan_overview'
       get 'export_csv'
