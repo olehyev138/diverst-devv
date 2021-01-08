@@ -7,6 +7,7 @@
 import {
   GET_ENTERPRISE_BEGIN, GET_ENTERPRISE_SUCCESS, GET_ENTERPRISE_ERROR,
   UPDATE_ENTERPRISE_BEGIN, UPDATE_ENTERPRISE_SUCCESS, UPDATE_ENTERPRISE_ERROR,
+  UPDATE_BRANDING_BEGIN, UPDATE_BRANDING_SUCCESS, UPDATE_BRANDING_ERROR,
   CONFIGURATION_UNMOUNT
 } from 'containers/GlobalSettings/EnterpriseConfiguration/constants';
 
@@ -52,6 +53,27 @@ export function updateEnterpriseSuccess(payload) {
 export function updateEnterpriseError(error) {
   return {
     type: UPDATE_ENTERPRISE_ERROR,
+    error,
+  };
+}
+
+export function updateBrandingBegin(payload) {
+  return {
+    type: UPDATE_BRANDING_BEGIN,
+    payload,
+  };
+}
+
+export function updateBrandingSuccess(payload) {
+  return {
+    type: UPDATE_BRANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function updateBrandingError(error) {
+  return {
+    type: UPDATE_BRANDING_ERROR,
     error,
   };
 }

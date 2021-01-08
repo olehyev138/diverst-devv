@@ -4,7 +4,11 @@ RSpec.describe AnnualBudgetSerializer, type: :serializer do
   let(:enterprise) { create(:enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
   let(:annual_budget) { create(:annual_budget, enterprise: enterprise, group: group) }
-  let(:serializer) { AnnualBudgetSerializer.new(annual_budget, scope: serializer_scopes(create(:user))) }
+  let(:serializer) do
+    AnnualBudgetSerializer.new(
+      AnnualBudget.with_expenses.find(annual_budget.id), scope: serializer_scopes(create(:user))
+    )
+  end
 
   it 'returns all fields' do
     expect(serializer.serializable_hash[:id]).to_not be nil

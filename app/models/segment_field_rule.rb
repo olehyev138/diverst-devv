@@ -2,7 +2,7 @@
 # Segment rule to filter users based on custom user fields
 #
 class SegmentFieldRule < ApplicationRecord
-  belongs_to :segment
+  belongs_to :segment, dependent: :destroy
   belongs_to :field
 
   validates :field, presence: true

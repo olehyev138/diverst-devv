@@ -17,7 +17,7 @@ const styles = theme => ({
 });
 
 function DiverstLoader(props) {
-  const { classes, isLoading, transitionProps, children, noTransition, transition: Transition } = props;
+  const { classes, isLoading, transitionProps, wrapperProps, children, noTransition, transition: Transition } = props;
   return (
     <React.Fragment>
       {noTransition ? (
@@ -26,7 +26,7 @@ function DiverstLoader(props) {
         </div>
       ) : (
         <Transition direction='left' in={!isLoading} mountOnEnter unmountOnExit {...transitionProps}>
-          <div>
+          <div {...wrapperProps}>
             {children}
           </div>
         </Transition>
@@ -51,6 +51,7 @@ DiverstLoader.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   transitionProps: PropTypes.object,
+  wrapperProps: PropTypes.object,
   children: PropTypes.node.isRequired,
   noTransition: PropTypes.bool,
   transition: PropTypes.elementType,

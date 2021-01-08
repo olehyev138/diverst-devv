@@ -12,9 +12,6 @@ import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
@@ -137,7 +134,9 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                   <Card variant='outlined'>
                     <CardContent>
                       <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.module_setting} /></Typography>
-                      <FormControl>
+
+                      {/* TODO : Disabled module
+                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'
                           label={<DiverstFormattedMessage {...messages.mentorship_module} />}
@@ -172,7 +171,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                             />
                           )}
                         />
-                      </FormControl>
+                      </FormControl> */}
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'

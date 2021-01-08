@@ -4,7 +4,7 @@ import {
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
   selectFormSegment, selectIsLoading, selectIsCommitting,
-  selectIsFormLoading,
+  selectIsFormLoading, selectHasChanged,
 } from '../selectors';
 
 import { initialState } from '../reducer';
@@ -145,6 +145,15 @@ describe('segment selectors', () => {
     it('should select the \'is loading\' flag', () => {
       const mockedState = { isLoading: true };
       const selected = selectIsLoading().resultFunc(mockedState);
+
+      expect(selected).toEqual(true);
+    });
+  });
+
+  describe('selectHasChanged', () => {
+    it('should select the \'has changed\' flag', () => {
+      const mockedState = { hasChanged: true };
+      const selected = selectHasChanged().resultFunc(mockedState);
 
       expect(selected).toEqual(true);
     });

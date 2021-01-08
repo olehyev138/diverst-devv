@@ -38,11 +38,16 @@ import { selectGroup } from 'containers/Group/selectors';
 import ExpenseForm from 'components/Event/EventManage/ExpenseForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/EventManage/Expense/messages';
+import { useLocation } from 'react-router-dom';
+
 const { form: formMessages } = messages;
 
 export function ExpenseCreatePage({ intl, ...props }) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
+
+  const location = useLocation();
+  const budgetItem = location.state?.budgetItem;
 
   const [params, setParams] = useState(
     {
@@ -68,6 +73,7 @@ export function ExpenseCreatePage({ intl, ...props }) {
         isCommitting={props.isCommitting}
         expenseAction={props.createExpenseBegin}
         buttonText={formMessages.create}
+        budgetItem={budgetItem}
         links={links}
       />
     </React.Fragment>

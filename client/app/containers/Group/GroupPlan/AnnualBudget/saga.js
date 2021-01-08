@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -11,8 +11,11 @@ import {
   GET_CURRENT_ANNUAL_BUDGET_BEGIN,
   GET_ANNUAL_BUDGET_BEGIN,
   GET_ANNUAL_BUDGETS_BEGIN,
+  GET_CHILD_BUDGETS_BEGIN,
+  GET_AGGREGATE_BUDGETS_BEGIN,
   CREATE_ANNUAL_BUDGET_BEGIN,
   UPDATE_ANNUAL_BUDGET_BEGIN,
+  RESET_ANNUAL_BUDGET_BEGIN,
 } from './constants';
 
 import {
@@ -21,7 +24,10 @@ import {
   getAnnualBudgetsSuccess, getAnnualBudgetsError,
   createAnnualBudgetSuccess, createAnnualBudgetError,
   updateAnnualBudgetSuccess, updateAnnualBudgetError,
+  getAggregateBudgetsSuccess, getAggregateBudgetsError,
+  resetAnnualBudgetSuccess, resetAnnualBudgetError,
 } from './actions';
+import { setUserData } from 'containers/Shared/App/actions';
 
 export function* getCurrentAnnualBudget(action) {
   try {
@@ -37,7 +43,8 @@ export function* getCurrentAnnualBudget(action) {
 
 export function* getAnnualBudget(action) {
   try {
-    const response = yield call(api.annualBudgets.get.bind(api.annualBudgets), action.payload.id);
+    const { id, ...payload } = action.payload;
+    const response = yield call(api.annualBudgets.get.bind(api.annualBudgets), id, payload);
 
     yield put(getAnnualBudgetSuccess(response.data));
   } catch (err) {
@@ -69,6 +76,30 @@ export function* createAnnualBudget(action) {
   }
 }
 
+export function* getAggregateBudgets(action) {
+  try {
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.aggregateBudgets.bind(api.groups), groupId, payload);
+
+    yield put(getAggregateBudgetsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getAggregateBudgetsError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
+  }
+}
+
+export function* getChildBudgets(action) {
+  try {
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.currentChildBudgets.bind(api.groups), groupId, payload);
+
+    yield put(getAnnualBudgetsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getAnnualBudgetsError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.annualBudgets), options: { variant: 'warning' } }));
+  }
+}
+
 export function* updateAnnualBudget(action) {
   try {
     const payload = { annual_budget: action.payload };
@@ -82,10 +113,29 @@ export function* updateAnnualBudget(action) {
   }
 }
 
+export function* resetAnnualBudget(action) {
+  try {
+    const { payload } = action;
+    const response = yield call(api.annualBudgets.currentChildBudgets.bind(api.annualBudgets), payload);
+
+    yield put(resetAnnualBudgetSuccess());
+
+    yield put(setUserData({ current_budget_period: response.data }, true));
+
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.success.update), options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(resetAnnualBudgetError(err));
+    yield put(showSnackbar({ message: intl.formatMessage(messages.snackbars.errors.update), options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* annualBudgetSaga() {
   yield takeLatest(GET_CURRENT_ANNUAL_BUDGET_BEGIN, getCurrentAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGET_BEGIN, getAnnualBudget);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
+  yield takeLatest(GET_CHILD_BUDGETS_BEGIN, getChildBudgets);
+  yield takeLatest(GET_AGGREGATE_BUDGETS_BEGIN, getAggregateBudgets);
   yield takeLatest(UPDATE_ANNUAL_BUDGET_BEGIN, updateAnnualBudget);
+  yield takeLatest(RESET_ANNUAL_BUDGET_BEGIN, resetAnnualBudget);
 }

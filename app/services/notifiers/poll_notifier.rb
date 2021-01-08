@@ -2,6 +2,7 @@ class Notifiers::PollNotifier
   def initialize(poll)
     @poll = poll
     @initiative = poll.initiative
+    @enterprise = poll.enterprise
   end
 
   def notify!
@@ -24,7 +25,7 @@ class Notifiers::PollNotifier
   private
 
   def should_notify?
-    @poll.published? && initiative_ended_up?
+    !@enterprise.disable_emails? && @poll.published? && initiative_ended_up?
   end
 
   def initiative_ended_up?
