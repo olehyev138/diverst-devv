@@ -425,37 +425,6 @@ class GroupsController < ApplicationController
     render nothing: true, status: :ok
   end
 
-  def emails
-    authorize @group
-
-    @custom_emails = @group.custom_emails
-  end
-
-  def new_email
-    authorize @group
-
-    @custom_email = @group.custom_emails.new
-
-    @submit_url = create_new_email_group_path(@group)
-    @submit_method = 'post'
-  end
-
-  def create_new_email
-    authorize @group, :new_email?
-
-    @custom_email = @group.custom_emails.new(custom_email_params)
-
-    if @custom_email.save
-      # TODO track activity
-      flash[:notice] = 'Your custom email was created'
-      redirect_to emails_group_path(@group)
-    else
-      flash.now[:alert] = 'Your custom email was not created, please fix errors'
-      render :new_email
-    end
-  end
-
-
   protected
 
   def set_users_to_invite
