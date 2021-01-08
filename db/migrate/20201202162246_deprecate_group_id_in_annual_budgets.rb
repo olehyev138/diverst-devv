@@ -2,7 +2,7 @@ class DeprecateGroupIdInAnnualBudgets < ActiveRecord::Migration[5.2]
   def change
     reversible do |dir|
       dir.up do
-        remove_foreign_key :annual_budgets, column: :group_id
+        remove_foreign_key :annual_budgets, column: :group_id if foreign_key_exists?(:annual_budgets, column: :group_id)
       end
       dir.down do
         add_foreign_key :annual_budgets, :groups, column: :group_id

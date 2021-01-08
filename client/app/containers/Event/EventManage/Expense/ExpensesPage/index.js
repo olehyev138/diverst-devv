@@ -30,7 +30,7 @@ import {
   selectIsFetchingExpenses,
   selectIsCommitting,
   selectExpenseListSum,
-} from '../selectors';
+  selectHasChanged as selectExpenseHasChanged } from '../selectors';
 import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
   expensesUnmount, deleteExpenseBegin
@@ -45,6 +45,7 @@ import budgetUserSaga from 'containers/Group/GroupPlan/BudgetUser/saga';
 import BudgetList from 'components/Event/EventManage/BudgetList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
+
 import { selectCustomText } from 'containers/Shared/App/selectors';
 import {
   selectIsFetchingBudgetUsers,
@@ -82,6 +83,11 @@ export function ExpenseListPage(props) {
     if (props.hasChanged)
       getBudgetUsers();
   }, [props.currentEvent]);
+
+  useEffect(() => {
+    if (props.expensesHasChanged)
+      getBudgetUsers();
+  }, [props.expensesHasChanged]);
 
   return (
     <React.Fragment>
@@ -121,6 +127,7 @@ ExpenseListPage.propTypes = {
   }),
   customTexts: PropTypes.object,
   budgetUsers: PropTypes.array,
+  expensesHasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -134,6 +141,7 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
   customTexts: selectCustomText(),
+  expensesHasChanged: selectExpenseHasChanged(),
 });
 
 const mapDispatchToProps = {

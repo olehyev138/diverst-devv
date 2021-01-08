@@ -16,6 +16,7 @@ describe('groupCategoryReducer', () => {
       groupCategoriesList: {},
       groupTotal: null,
       currentGroup: null,
+      hasChanged: false,
     };
   });
 
