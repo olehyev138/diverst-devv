@@ -9,7 +9,7 @@ RSpec.describe InitiativeUpdatePolicy, type: :policy do
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
   let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user }
-  let(:initiative_update) { create(:initiative_update, initiative: initiative, owner: user) }
+  let(:initiative_update) { create(:initiative_update, updatable: initiative, owner: user) }
   let(:policy_scope) { InitiativeUpdatePolicy::Scope.new(user, InitiativeUpdate).resolve }
 
   subject { described_class.new(user, initiative_update) }
@@ -22,15 +22,31 @@ RSpec.describe InitiativeUpdatePolicy, type: :policy do
   }
 
   permissions '.scope' do
-    context 'when manage_all is true' do
+    context 'when initiative_id is not provided' do
       before do
         user.policy_group.update manage_all: true
         initiative_update
       end
 
       it 'shows only initiative_updates with outcomes belonging to users group' do
-        expect(policy_scope).to eq [initiative_update]
+        expect(policy_scope).to eq []
       end
+    end
+  end
+
+  context 'only get updates for given ID and manage_all is true' do
+    let!(:initiative1) { create :initiative, pillar: pillar, owner_group: group, owner: user }
+    let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, owner: user }
+    let!(:initiative_update1) { create(:initiative_update, updatable: initiative1, owner: user) }
+    let!(:initiative_update) { create(:initiative_update, updatable: initiative2, owner: user) }
+    let(:policy_scope) { UpdatePolicy::Scope.new(user, InitiativeUpdate, params: { initiative_id: initiative1.id }).resolve }
+
+    before do
+      user.policy_group.update manage_all: true
+    end
+
+    it 'shows only initiative_updates with outcomes belonging to users group' do
+      expect(policy_scope).to eq [initiative_update1]
     end
   end
 
@@ -64,7 +80,7 @@ RSpec.describe InitiativeUpdatePolicy, type: :policy do
           user.policy_group.update manage_all: true
         end
 
-        it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
+        it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
       end
     end
 
