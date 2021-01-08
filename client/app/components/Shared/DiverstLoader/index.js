@@ -5,14 +5,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Slide } from '@material-ui/core';
 
+import classNames from 'classnames';
+
 const styles = theme => ({
   progress: {
-    margin: theme.spacing(8),
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+    marginLeft: -40,
   },
 });
 
