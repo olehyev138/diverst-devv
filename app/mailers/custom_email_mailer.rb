@@ -8,15 +8,14 @@ class CustomEmailMailer < ApplicationMailer
 
     set_defaults(enterprise, 'custom')
 
-    emails = members_from_groups(custom_email_id, group_ids)
+    emails = members_from_groups(custom_email_id, group_ids, enterprise)
 
 
     # TODO check emails are unique
     mail(from: @from_address, to: current_user.email, bcc: emails, subject: @custom_email.subject)
   end
 
-  def members_from_groups(custom_email_id, group_ids)
-    enterprise = Email.find_by_id(custom_email_id)&.enterprise
+  def members_from_groups(custom_email_id, group_ids, enterprise)
     groups = enterprise&.groups&.where(id: group_ids)
     return [] if groups.empty?
 
