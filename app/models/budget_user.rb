@@ -71,7 +71,7 @@ class BudgetUser < ApplicationRecord
   BUDGET_KEYS = ['budget_item_id', 'budget_id', 'annual_budget_id']
 
   def self.get_foreign_keys(old_or_new = 'NEW')
-    return '' unless AnnualBudgetSum.sums_tables_exist?
+    return '' unless AnnualBudgetSums.sums_tables_exist?
 
     <<~SQL.gsub(/\s+/, ' ').strip
     #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
