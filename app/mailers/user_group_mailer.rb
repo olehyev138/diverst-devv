@@ -14,10 +14,10 @@ class UserGroupMailer < ApplicationMailer
     }
 
     @groups.each do |group|
-      @groups_info[:initiatives] << group.events
-      @groups_info[:news_links] << group.news
-      @groups_info[:messages] << group.messages
-      @groups_info[:social_links] << group.social_links
+      @groups_info[:initiatives] << group[:events]
+      @groups_info[:news_links] << group[:news]
+      @groups_info[:messages] << group[:messages]
+      @groups_info[:social_links] << group[:social_links]
     end
 
     @groups_info[:initiatives].flatten!
