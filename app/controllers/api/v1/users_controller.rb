@@ -349,7 +349,6 @@ class Api::V1::UsersController < DiverstController
     params
         .require(:user)
         .permit(
-            :email,
             :avatar,
             :first_name,
             :last_name,
