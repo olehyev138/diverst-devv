@@ -150,7 +150,12 @@ function groupsReducer(state = initialState, action) {
       case RESET_BUDGET_SUCCESS:
       case GROUP_CATEGORIZE_SUCCESS:
       case JOIN_SUBGROUPS_SUCCESS:
+      case JOIN_GROUP_SUCCESS:
+      case LEAVE_GROUP_SUCCESS:
       case UPDATE_GROUP_POSITION_SUCCESS:
+      case JOIN_SUBGROUPS_ERROR:
+      case LEAVE_GROUP_ERROR:
+      case UPDATE_GROUP_POSITION_ERROR:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
