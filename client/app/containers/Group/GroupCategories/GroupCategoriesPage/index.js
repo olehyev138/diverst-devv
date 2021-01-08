@@ -15,7 +15,7 @@ import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
 import { getGroupCategoriesBegin, categoriesUnmount, deleteGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectIsLoading } from 'containers/Group/GroupCategories/selectors';
+import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectIsLoading, selectHasChanged } from 'containers/Group/GroupCategories/selectors';
 import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategoriesList';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -33,6 +33,11 @@ export function GroupCategoriesPage(props) {
 
     return () => props.categoriesUnmount();
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged === true)
+      props.getGroupCategoriesBegin(params);
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -63,7 +68,8 @@ GroupCategoriesPage.propTypes = {
   isLoading: PropTypes.bool,
   groupCategories: PropTypes.object,
   groupCategoriesTotal: PropTypes.number,
-  customTexts: PropTypes.object
+  customTexts: PropTypes.object,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -71,6 +77,7 @@ const mapStateToProps = createStructuredSelector({
   groupCategories: selectPaginatedGroupCategories(),
   groupCategoriesTotal: selectGroupCategoriesTotal(),
   customTexts: selectCustomText(),
+  hasChanged: selectHasChanged(),
 });
 const mapDispatchToProps = {
   getGroupCategoriesBegin,
