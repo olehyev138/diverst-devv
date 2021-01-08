@@ -632,6 +632,7 @@ Rails.application.routes.draw do
   resources :mentorings
   resources :mentoring_interests
   resources :mentoring_requests
+  resources :mentoring_types
   resources :mentoring_sessions do
     member do
       get 'start'

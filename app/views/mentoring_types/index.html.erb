@@ -1,0 +1,28 @@
+<div class="content__header">
+  <h1>Mentoring Types</h1>
+  <div class='flex-row__cell'>
+    <%= link_to 'Create Mentoring Type', new_mentoring_type_path, class: 'btn btn--primary pull-right hidden-xs' if MentoringInterestPolicy.new(current_user, MentoringInterest).new?  %>
+    <%= link_to 'Create Mentoring Type', new_mentoring_type_path, class: "btn btn-primary visible-xs" if MentoringInterestPolicy.new(current_user, MentoringInterest).new? %>
+  </div>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="policy-groups-templates-table">
+        <thead>
+          <th>Name</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% @types.each do |type| %>
+            <tr>
+              <td><%= link_to type.name, edit_mentoring_type_path(type) %></td>
+              <td><td><%= link_to "Delete", mentoring_type_path(type), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

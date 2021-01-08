@@ -4,8 +4,10 @@ class DiverstMailer < Devise::Mailer
   def invitation_instructions(record, token, opts = {})
     @record = record
     @token = token
+    
     return if @record.enterprise.disable_emails?
-
+    
+    @enterprise = record.enterprise
     set_defaults(record.enterprise, method_name)
     super
   end
@@ -13,6 +15,7 @@ class DiverstMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts = {})
     return if record.enterprise.disable_emails?
 
+    @enterprise = record.enterprise
     set_defaults(record.enterprise, method_name)
     super
   end

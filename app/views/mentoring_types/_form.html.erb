@@ -1,0 +1,11 @@
+<div class="content__main">
+  <%= simple_form_for @type do |f| %>
+    <div class="card">
+      <div class="card__section">
+            <%= f.input :name, label: 'Name' %>
+            <%= f.button :submit %>        
+       </div>
+    </div>
+  </div>
+  <% end %>
+</div>

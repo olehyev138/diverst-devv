@@ -1,4 +1,5 @@
 class Group < BaseClass
+  REGEX_HEX_CODE = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i
   include PublicActivity::Common
   include CustomTextHelpers
 
@@ -190,6 +191,10 @@ class Group < BaseClass
 
   attr_accessor :start_date, :end_date
 
+  def valid_calendar_color?
+    '#' << calendar_color =~ REGEX_HEX_CODE
+  end
+
   def logo_description
     value = "#{name} logo"
     return value if self[:logo_alt_text_desc].nil?
@@ -246,6 +251,10 @@ class Group < BaseClass
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
+  end
+
+  def symbolize_name
+    name.underscore.split(' ').join('_').to_sym
   end
 
   def contact_email

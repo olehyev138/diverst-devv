@@ -2,42 +2,48 @@
 
 <% number_of_named_items = 2 %>
 
-<% @groups.each do |group| %>
-  <% if (group[:events_count ].to_i > 0 || group[:participating_events_count].to_i > 0 || group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
-    <strong><%= group[:group].name %></strong><br>
-  <% end %>
-
-  <% if group[:events_count].to_i > 0 %>
-    <em>Events</em>
-    <% group[:events].each do |event| %>
-      <p><%= link_to event.name, group_event_url(group[:group].try(:id), event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-  <% end %>
-
-  <% if group[:messages_count].to_i > 0 %>
-    <em>Messages</em>
-    <% group[:messages].each do |message| %>
-      <p><%= link_to message.subject, group_group_message_url(message.group, message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-  <% end %>
-
-  <% if group[:news_count].to_i > 0 %>
-    <em>News Links</em>
-    <% group[:news].each do |new| %>
-      <p><%= link_to new.title, comments_group_news_link_url(new.group, new.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-  <% end %>
-
-  <% if group[:social_links_count].to_i > 0 %>
-    <em>Social Links</em>
-    <p><%= link_to pluralize(group[:social_links_count], ' news item'), group_social_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
-  <% end %>
-
-  <% if group[:participating_events_count].to_i > 0 %>
-    <em>Participating Events</em>
-    <% group[:participating_events].each do |p_event| %>
-      <p><%= link_to p_event.name, group_event_url(p_event.group_id, p_event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
+<% if @groups_info[:initiatives].present? %>
+  <span style="font-weight: 600">Events</span>
+  <% @groups_info[:initiatives].each do |initiative| %>
+    <p><%= link_to initiative.name, group_event_url(initiative.owner_group.id, initiative.id, saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if initiative.participating_groups.present? %>
+      <p>Participating groups <span style="font-weight: 600"><%= initiative.participating_groups.pluck(:name).join(', ') %></span></p>
     <% end %>
   <% end %>
 <% end %>
+
+<% if @groups_info[:news_links].present? %>
+  <br>
+  <span style="font-weight: 600">News Items</span>
+  <% @groups_info[:news_links].each do |news_link| %>
+    <p><%= link_to news_link.title, comments_group_news_link_url(news_link.group, news_link.id, saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if news_link.news_feed_link.shared_news_feeds.present? %>
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: news_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @groups_info[:social_links].present? %>
+  <br>
+  <span style="font-weight: 600">Social Media Posts</span>
+  <% @groups_info[:social_links].each do |social_link| %>
+    <p><%= link_to pluralize(@groups_info[:social_links].size, ' Social Media Post'), group_social_links_url(social_link.group_id, saml_for_enterprise: @user.enterprise.id) %></p>
+    <% if social_link.news_feed_link.shared_news_feeds.present? %>  
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: social_link.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @groups_info[:messages].present? %>
+  <br>
+  <span style="font-weight: 600">Group Messages</span>
+  <% @groups_info[:messages].each do |message| %>
+    <p><%= link_to message.subject, group_group_message_url(message.group_id, message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if message.news_feed_link.shared_news_feeds.present? %>
+      <p>Shared with <span style="font-weight: 600"><%= Group.where(id: message.news_feed_link.shared_news_feeds.map(&:group_id)).pluck(:name).join(', ') %></span></p>
+    <% end %>  
+  <% end %>
+<% end %>
+
+<br>
 Email notification options may be changed <%= link_to "here", edit_user_user_url(@user, anchor: 'user_group_notifications') %>
