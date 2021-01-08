@@ -12,6 +12,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { union } from 'utils/arrayHelpers';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
 import { injectIntl, intlShape } from 'react-intl';
+import classNames from 'classnames';
 
 const styles = {
   search: {
@@ -21,6 +22,10 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    minHeight: 70,
+  },
+  containerInline: {
+    minHeight: 575,
   },
   list: {
     display: 'flex',
@@ -55,9 +60,9 @@ const GroupListSelector = (props) => {
   const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
-    if (props.open)
+    if (props.open || props.inlineDialogContent)
       groupSearchAction(searchKey, params, false);
-  }, [props.open]);
+  }, [props.open, props.getGroupsBegin]);
 
   useEffect(() => {
     if (parentData === undefined || !parentData?.id) return;
@@ -166,7 +171,7 @@ const GroupListSelector = (props) => {
     >
       {(groups || []).map((group, index) => (
         <GroupSelectorItem
-          key={group.value}
+          key={group.value || group.id}
           {...rest}
           group={group}
           dialogNoChildren={props.dialogNoChildren}
@@ -187,21 +192,22 @@ const GroupListSelector = (props) => {
       rowsPerPageOptions={[10]}
       count={props.groupTotal}
       page={params.page}
+      isLoading={props.isLoading}
       handlePagination={(payload) => {
         const newParams = { ...params, count: payload.count, page: payload.page };
 
         groupSearchAction(searchKey, newParams);
       }}
+      {...props.paginationProps}
     />
   );
 
   return (
     <React.Fragment>
-      {props.isMulti && !props.dialogNoChildren && header}
       <div className={classes.search}>
         {searchBar}
       </div>
-      <Box className={classes.container}>
+      <Box className={props.inlineDialogContent ? classNames(classes.container, classes.containerInline) : classes.container}>
         <div className={classes.list}>
           {list}
         </div>
@@ -220,6 +226,8 @@ GroupListSelector.propTypes = {
   isMulti: PropTypes.bool,
   dialogNoChildren: PropTypes.bool,
 
+  inlineDialogContent: PropTypes.bool,
+
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
   queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
@@ -234,6 +242,8 @@ GroupListSelector.propTypes = {
   isDisplayingChildren: PropTypes.bool,
   handleParentExpand: PropTypes.func,
   handleFinishExitTransition: PropTypes.func,
+
+  paginationProps: PropTypes.object,
 
   open: PropTypes.bool,
   addGroup: PropTypes.func.isRequired,

@@ -49,6 +49,7 @@ const GroupSelector = (props) => {
 
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+
   const [dialogSearch, setDialogSearch] = useState(false);
   const [dialogSelectedGroups, setDialogSelectedGroups] = useState([]);
 
@@ -56,6 +57,11 @@ const GroupSelector = (props) => {
   const [parentData, setParentData] = useState(undefined);
 
   const { getGroupsBegin, groupListUnmount, ...selectProps } = rest;
+
+  const paginationProps = props.inlineDialogContent ? {
+    disableAutomaticTopScrolling: true,
+    disableAutomaticBottomScrolling: true,
+  } : {};
 
   const handleParentExpand = (id, name) => setParentData({ id, name });
 
@@ -92,18 +98,53 @@ const GroupSelector = (props) => {
   })();
 
   const groupSelectAction = (searchKey = '') => {
-    if (props.forceReload)
-      props.getGroupsSuccess({ items: [] });
+    const action = props.isRemoteData ? props.remoteGetGroupsSuccess : props.getGroupsSuccess;
+
+    if (props.forceReload && action)
+      action({ items: [] });
+
     props.inputCallback(props, searchKey);
   };
 
   useEffect(() => {
-    if (props.permissions.groups_view) groupSelectAction();
+    if (!props.inlineDialogContent && (props.permissions?.groups_view || props.isRemoteData)) groupSelectAction();
 
     return () => groupListUnmount();
-  }, []);
+  }, [props.remoteGetGroupsBegin, props.getGroupsBegin]);
 
-  if (!props.permissions.groups_view) return <React.Fragment />;
+  if (!props.permissions?.groups_view && !props.isOnboardingForm) return <React.Fragment />;
+
+  const groupListSelectorComponent = (
+    <GroupListSelector
+      {...rest}
+      groups={props.remoteGroups || groups}
+      groupTotal={props.remoteGroupTotal || rest.groupTotal}
+      isLoading={props.isRemoteData ? props.isLoadingRemoteData : props.isLoading}
+      inputCallback={props.inputCallback}
+      inlineDialogContent={props.inlineDialogContent}
+      getGroupsBegin={props.isRemoteData ? props.remoteGetGroupsBegin : props.getGroupsBegin}
+      open={dialogSearch}
+      addGroup={addGroup}
+      removeGroup={removeGroup}
+      isSelected={isSelected}
+      selected={values[groupField]}
+      dialogNoChildren={props.dialogNoChildren}
+      queryScopes={props.queryScopes}
+      dialogQueryScopes={props.dialogQueryScopes}
+      parentData={parentData}
+      setParentData={setParentData}
+      displayParentUI={displayParentUI}
+      setDisplayParentUI={setDisplayParentUI}
+      isDisplayingChildren={!!parentData?.name}
+      handleParentExpand={handleParentExpand}
+      handleFinishExitTransition={handleFinishExitTransition}
+      customTexts={customTexts}
+      paginationProps={paginationProps}
+    />
+  );
+
+  if (props.inlineDialogContent)
+    return (groupListSelectorComponent);
 
   return (
     <Grid container alignContent='center' alignItems='center' spacing={2}>
@@ -115,7 +156,7 @@ const GroupSelector = (props) => {
           label={label}
           fullWidth
           forceReload={forceReload}
-          options={groups}
+          options={props.remoteGroups || groups}
           value={values[groupField]}
           onChange={onChange}
           onInputChange={groupSelectAction}
@@ -169,34 +210,9 @@ const GroupSelector = (props) => {
             minWidth: '50%',
           }
         }}
-        content={(
-          <GroupListSelector
-            groups={groups}
-            groupTotal={rest.groupTotal}
-            isLoading={rest.isLoading}
-            inputCallback={props.inputCallback}
-            getGroupsBegin={props.getGroupsBegin}
-            open={dialogSearch}
-            addGroup={addGroup}
-            removeGroup={removeGroup}
-            isSelected={isSelected}
-            selected={values[groupField]}
-            dialogNoChildren={props.dialogNoChildren}
-            queryScopes={props.queryScopes}
-            dialogQueryScopes={props.dialogQueryScopes}
-            parentData={parentData}
-            setParentData={setParentData}
-            displayParentUI={displayParentUI}
-            setDisplayParentUI={setDisplayParentUI}
-            isDisplayingChildren={!!parentData?.name}
-            handleParentExpand={handleParentExpand}
-            handleFinishExitTransition={handleFinishExitTransition}
-            customTexts={customTexts}
-          />
-        )}
+        content={groupListSelectorComponent}
       />
     </Grid>
-
   );
 };
 
@@ -209,18 +225,31 @@ GroupSelector.propTypes = {
   dialogNoChildren: PropTypes.bool,
   forceReload: PropTypes.bool,
 
+  inlineDialogContent: PropTypes.bool,
+  isOnboardingForm: PropTypes.bool,
+
   groupField: PropTypes.string.isRequired,
-  label: PropTypes.node.isRequired,
+  label: PropTypes.node,
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
   queryScopes: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   isLoading: PropTypes.bool,
+  isLoadingRemoteData: PropTypes.bool,
+
+  isRemoteData: PropTypes.bool,
+
+  groups: PropTypes.array,
+  groupTotal: PropTypes.number,
+  remoteGroups: PropTypes.array,
+  remoteGroupTotal: PropTypes.number,
 
   getGroupsBegin: PropTypes.func.isRequired,
-  groupListUnmount: PropTypes.func.isRequired,
   getGroupsSuccess: PropTypes.func.isRequired,
-  groups: PropTypes.array,
+  remoteGetGroupsBegin: PropTypes.func,
+  remoteGetGroupsSuccess: PropTypes.func,
+
+  groupListUnmount: PropTypes.func.isRequired,
   extraParams: PropTypes.object,
   inputCallback: PropTypes.func,
 
@@ -229,7 +258,10 @@ GroupSelector.propTypes = {
 
 GroupSelector.defaultProps = {
   inputCallback: (props, searchKey = '', params = {}) => {
-    props.getGroupsBegin({
+    const fetchAction = props.isRemoteData ? props.remoteGetGroupsBegin : props.getGroupsBegin;
+    if (!fetchAction) return;
+
+    fetchAction({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       with_children: false,
@@ -252,7 +284,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getGroupsBegin,
   groupListUnmount,
-  getGroupsSuccess
+  getGroupsSuccess,
 };
 
 const withConnect = connect(
