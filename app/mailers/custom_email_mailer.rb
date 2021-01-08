@@ -3,11 +3,13 @@ class CustomEmailMailer < ApplicationMailer
     @custom_email = Email.find custom_email_id
     return unless @custom_email.custom?
 
-    set_defaults(@custom_email.enterprise, 'custom')
+    current_user = User.find_by_id current_user_id
+    enterprise = current_user.enterprise
+
+    set_defaults(enterprise, 'custom')
 
     emails = members_from_groups(custom_email_id, group_ids)
 
-    current_user = User.find_by_id current_user_id
 
     # TODO check emails are unique
     mail(from: @from_address, to: current_user.email, bcc: emails, subject: @custom_email.subject)
