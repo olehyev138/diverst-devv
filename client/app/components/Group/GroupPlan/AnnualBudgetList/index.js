@@ -52,9 +52,10 @@ export function AnnualBudgetList(props) {
               initiatives={initiatives[annualBudget.id]}
               initiativesTotal={initiativesTotals[annualBudget.id]}
               initiativesLoading={initiativesLoading[annualBudget.id]}
-              handlePagination={handleInitiativePagination(annualBudget.id)}
-              handleOrdering={handleInitiativeOrdering(annualBudget.id)}
+              handlePagination={handleInitiativePagination?.(annualBudget.id)}
+              handleOrdering={handleInitiativeOrdering?.(annualBudget.id)}
               currentGroup={props.currentGroup}
+              type={props.type}
               customTexts={props.customTexts}
             />
             <Box mb={2} />
@@ -85,7 +86,12 @@ AnnualBudgetList.propTypes = {
   links: PropTypes.object,
   currentGroup: PropTypes.object,
   isLoading: PropTypes.bool,
-  customTexts: PropTypes.object
+  customTexts: PropTypes.object,
+  type: PropTypes.string,
+};
+
+AnnualBudgetList.defaultProps = {
+  type: 'overview'
 };
 
 export default compose(

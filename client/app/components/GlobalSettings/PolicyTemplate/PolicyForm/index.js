@@ -131,9 +131,11 @@ export function PolicyFormInner({
       [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'segments_create',
       [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'segments_manage',
     },
-    [intl.formatMessage(messages.enterprise_policies.mentorship, props.customTexts)]: {
-      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'mentorship_manage',
-    },
+    // TODO : Disabled module
+    //    [intl.formatMessage(messages.enterprise_policies.mentorship, props.customTexts)]: {
+    //      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'mentorship_manage',
+    //    [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
+    //    },
     [intl.formatMessage(messages.enterprise_policies.settings, props.customTexts)]: {
       [intl.formatMessage(messages.permissions.auto_archive, props.customTexts)]: 'auto_archive_manage',
       [intl.formatMessage(messages.permissions.enterprise, props.customTexts)]: 'enterprise_manage',
@@ -141,11 +143,12 @@ export function PolicyFormInner({
   });
 
   const generalPolicies = Object.freeze({
-    [intl.formatMessage(messages.general_policies.campaigns, props.customTexts)]: {
-      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'campaigns_index',
-      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'campaigns_create',
-      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'campaigns_manage',
-    },
+    // TODO : Disabled module
+    //   [intl.formatMessage(messages.general_policies.campaigns, props.customTexts)]: {
+    //      [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'campaigns_index',
+    //      [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'campaigns_create',
+    //      [intl.formatMessage(messages.permissions.manage, props.customTexts)]: 'campaigns_manage',
+    //    },
     [intl.formatMessage(messages.general_policies.surveys, props.customTexts)]: {
       [intl.formatMessage(messages.permissions.view, props.customTexts)]: 'polls_index',
       [intl.formatMessage(messages.permissions.create, props.customTexts)]: 'polls_create',

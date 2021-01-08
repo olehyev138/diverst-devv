@@ -86,9 +86,9 @@ export function Budget(props) {
     },
     {
       title: intl.formatMessage(messages.columns.available, props.customTexts),
-      field: 'available_amount',
-      query_field: 'budget_items.available_amount',
-      render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
+      field: 'available',
+      query_field: 'budget_items.available',
+      render: rowData => toCurrencyString(props.intl, rowData.available || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.endDate, props.customTexts),
@@ -108,19 +108,6 @@ export function Budget(props) {
       }
     },
   ];
-
-  const actions = [];
-
-  actions.push(rowData => ({
-    icon: () => <CloseIcon />,
-    tooltip: intl.formatMessage(messages.actions.close, props.customTexts),
-    onClick: (_, rowData) => {
-      // eslint-disable-next-line no-restricted-globals,no-alert
-      if (confirm(intl.formatMessage(messages.actions.closeConfirm, props.customTexts)))
-        props.closeBudgetAction({ id: rowData.id });
-    },
-    disabled: rowData.is_done,
-  }));
 
   const [formOpen, setFormOpen] = React.useState(false);
 
@@ -275,7 +262,6 @@ export function Budget(props) {
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}
-          actions={actions}
           handlePagination={() => null}
           handleOrdering={() => null}
           rowsPerPage={Math.min((budgetItems || []).length, 5)}

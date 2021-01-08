@@ -15,7 +15,9 @@ loadTranslation('./app/translations/en.json');
 const props = {
   annualBudgets: [],
   links: {},
-  customTexts: { erg: 'aa' }
+  classes: {},
+  customTexts: { erg: 'aa' },
+  budgetPeriod: [null, null]
 };
 describe('<AnnualBudgetList />', () => {
   it('Expect to not log errors in console', () => {

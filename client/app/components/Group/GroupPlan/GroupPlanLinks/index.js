@@ -47,9 +47,9 @@ export function GroupPlanLinks(props) {
             />
           ) }
           {(
-            permission(props.currentGroup, 'annual_budgets_view?')
-            || permission(props.currentGroup, 'budgets_create?')
-            || permission(props.currentGroup, 'annual_budgets_index?')
+            (permission(currentGroup, 'annual_budgets_view?') && permission(currentGroup, 'parent_budgets?'))
+            || (permission(currentGroup, 'annual_budgets_view?') && permission(currentGroup, 'budget_super?'))
+            || (permission(currentGroup, 'annual_budgets_manage?') && permission(currentGroup, 'budget_super?'))
           ) && (
             <Tab
               component={WrappedNavLink}

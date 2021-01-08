@@ -21,7 +21,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
 
     context 'when an initiative with estimated funding and expenses made exists' do
       let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
+      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available,
                                               budget_item_id: budget.budget_items.first.id)
       }
       let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
@@ -99,7 +99,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
 
       AnnualBudgetManager.new(group).approve
 
-      approved = budget.budget_items.sum(:available_amount)
+      approved = budget.budget_items.sum(:available)
       expect(annual_budget.reload.approved).to eq approved
     end
   end
@@ -115,7 +115,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
 
     context 'when existing annual_budget has leftover' do
       let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
+      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available,
                                               budget_item_id: budget.budget_items.first.id)
       }
       let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
@@ -139,7 +139,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
 
   describe '#re_assign_annual_budget' do
     let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-    let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
+    let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available,
                                             budget_item_id: budget.budget_items.first.id)
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
@@ -153,7 +153,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
       # the second annual_budget is gotten from calling carryover on AnnualBudgetManager
       let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
       let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
-      let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available_amount,
+      let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available,
                                                budget_item_id: budget1.budget_items.first.id)
       }
 
