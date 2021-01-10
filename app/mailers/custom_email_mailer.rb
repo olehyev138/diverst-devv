@@ -33,7 +33,7 @@ class CustomEmailMailer < ApplicationMailer
 
   def variables
     {
-      enterprise: @custom_email.enterprise
+      enterprise: @enterprise
     }
   end
 end
