@@ -14,6 +14,8 @@ class CustomEmailMailer < ApplicationMailer
       emails = members_from_groups(custom_email_id, group_ids, @enterprise)
     end
 
+    @mailer_text = @custom_email.process_content(@custom_email.variables)
+
     # TODO check emails are unique
     mail(from: @from_address, to: current_user.email, bcc: emails, subject: @custom_email.subject)
   end
@@ -33,7 +35,7 @@ class CustomEmailMailer < ApplicationMailer
 
   def variables
     {
-      enterprise: @custom_email.enterprise
+      enterprise: @enterprise
     }
   end
 end

@@ -379,7 +379,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      #resources :group_custom_emails, controller: 'groups/custom_emails', only: [:index]#, path: 'CustomEmailsController'
       get 'settings'
 
       get 'layouts'
