@@ -106,6 +106,13 @@ const GroupSelector = (props) => {
     props.inputCallback(props, searchKey);
   };
 
+  // Update selected group values when they're changed if dialog is inline
+  useEffect(() => {
+    if (!props.inlineDialogContent) return;
+
+    onChange(dialogSelectedGroups);
+  }, [dialogSelectedGroups]);
+
   useEffect(() => {
     if (!props.inlineDialogContent && (props.permissions?.groups_view || props.isRemoteData)) groupSelectAction();
 
