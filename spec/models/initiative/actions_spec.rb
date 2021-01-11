@@ -11,7 +11,8 @@ RSpec.describe Initiative::Actions, type: :model do
           :participating_groups,
           :qr_code_attachment,
           :qr_code_blob,
-          :initiative_users
+          :initiative_users,
+          :budget_users, { budget_users: [:budget_item] }
       ]
     }
 

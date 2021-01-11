@@ -830,7 +830,7 @@
 	"diverst.containers.Event.form.input.picture": "Imagen",
 	"diverst.containers.Event.form.input.image": "Imagen del evento",
 	"diverst.containers.Event.form.input.goal": "Choosing which {program} this event will participate in (Requires Translation)",
-	"diverst.containers.Event.form.input.budgetName": "Adjunte un presupuesto al evento",
+	"diverst.containers.Event.form.input.addBudgets": "Adjunte un presupuesto al evento",
 	"diverst.containers.Event.form.input.budgetAmount": "Specify amount to deduct from budget (Requires Translation)",
 	"diverst.containers.Event.form.input.freeEvent": "Create new free event ($0.00) (Requires Translation)",
 	"diverst.containers.Event.show.date_and_time": "Fecha y hora",

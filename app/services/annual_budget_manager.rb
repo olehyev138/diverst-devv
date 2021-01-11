@@ -80,7 +80,7 @@ class AnnualBudgetManager
   def find_or_create_annual_budget_and_update
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
     annual_budget.update(amount: group.annual_budget, available: group.annual_budget_available,
-                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_expenses,
+                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_spent,
                          approved: group.annual_budget_approved, enterprise_id: group.enterprise_id)
   end
 

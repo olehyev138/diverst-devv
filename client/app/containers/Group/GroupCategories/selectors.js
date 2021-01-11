@@ -42,6 +42,11 @@ const selectIsCommitting = () => createSelector(
   groupCategoriesState => groupCategoriesState.isCommitting
 );
 
+const selectHasChanged = () => createSelector(
+  selectGroupCategoriesDomain,
+  groupCategoriesState => groupCategoriesState.hasChanged
+);
+
 const selectFormGroupCategories = () => createSelector(
   selectGroupCategoriesDomain,
   (groupCategoriesState) => {
@@ -60,5 +65,5 @@ const selectFormGroupCategories = () => createSelector(
 export {
   selectGroupCategoriesDomain, selectPaginatedGroupCategories, selectPaginatedSelectGroupCategories,
   selectGroupCategoriesTotal, selectGroupCategories, selectFormGroupCategories, selectIsLoading,
-  selectIsCommitting, selectIsFormLoading
+  selectIsCommitting, selectIsFormLoading, selectHasChanged
 };

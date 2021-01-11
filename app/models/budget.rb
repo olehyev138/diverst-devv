@@ -2,18 +2,34 @@ class Budget < ApplicationRecord
   include PublicActivity::Common
   include Budget::Actions
 
-  belongs_to :annual_budget
+  belongs_to :annual_budget, -> { with_expenses }
+  belongs_to :group
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
-  has_one :group, through: :annual_budget
+  has_one :parent_group, through: :annual_budget, source: :budget_head, source_type: Group
+  has_one :region, through: :annual_budget, source: :budget_head, source_type: Region
+  has_one :budget_sums, class_name: 'BudgetSums'
 
   has_many :checklists, dependent: :destroy
-  has_many :budget_items, dependent: :destroy
+  has_many :budget_items, -> { with_expenses }, dependent: :destroy, inverse_of: :budget
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false) }
   scope :pending, -> { where(is_approved: nil) }
+  scope :with_expenses, -> do
+    select(
+        '`budgets`.*',
+        'COALESCE(`spent`, 0) as spent',
+        'COALESCE(`reserved`, 0) as reserved',
+        'COALESCE(`requested_amount`, 0) as requested_amount',
+        'COALESCE(`user_estimates`, 0) as user_estimates',
+        'COALESCE(`finalized_expenditures`, 0) as finalized_expenditures',
+        'COALESCE(IF(`is_approved` = TRUE, `requested_amount`, 0) - `reserved`, 0) as available',
+        'COALESCE(COALESCE(`requested_amount`, 0) - `spent`, 0) as unspent',
+        'IF(`is_approved` = TRUE, `requested_amount`, 0) as approved_amount'
+      ).left_joins(:budget_sums, :annual_budget)
+  end
 
   # scope :with_available_funds, -> { where('available_amount > 0')}
 
@@ -22,27 +38,43 @@ class Budget < ApplicationRecord
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
-  validates :budget_items, presence: true
+
 
   delegate :currency, to: :annual_budget
 
   def group_id
-    group.id
+    group&.id
   end
 
-  def requested_amount
-    @requested_amount ||= budget_items.sum(:estimated_amount)
+  [:spent, :reserved, :requested_amount, :user_estimates, :finalized_expenditures].each do |method|
+    define_method method do
+      if attributes.include? method.to_s
+        self[method.to_s]
+      else
+        budget_sums&.send(method) || 0
+      end
+    end
   end
 
-  def available_amount
+  def available
     return 0 unless is_approved
 
-    @available_amount ||= budget_items.available.to_a.sum(&:available_amount)
+    requested_amount - reserved
+  end
+
+  def unspent
+    requested_amount - spent
+  end
+
+  def approved_amount
+    return 0 unless is_approved
+
+    requested_amount
   end
 
   def reload
     @requested_amount = nil
-    @available_amount = nil
+    @available = nil
     super
   end
 
@@ -130,5 +162,29 @@ class Budget < ApplicationRecord
 
   def send_denial_notification
     BudgetMailer.budget_declined(self).deliver_later if self.requester
+  end
+
+  BUDGET_KEYS = ['budget_id', 'annual_budget_id']
+
+  def self.get_foreign_keys(old_or_new = 'NEW')
+    return '' unless AnnualBudgetSums.sums_tables_exist?
+
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
+    #{Budget.select(
+        '`budgets`.`id`',
+        '`budgets`.`annual_budget_id`'
+      ).where(
+        "`budgets`.`id` = #{old_or_new}.`id`"
+      ).to_sql}
+    INTO #{BUDGET_KEYS.map { |col| "@#{col}" }.join(", ")};
+    SQL
+  end
+
+  trigger.after(:update).of(:is_approved) do
+    <<~SQL.gsub(/\s+/, ' ').strip
+    #{get_foreign_keys}
+    #{AnnualBudgetSums.budget_approved}
+    SQL
   end
 end

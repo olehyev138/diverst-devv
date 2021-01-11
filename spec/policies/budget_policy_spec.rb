@@ -160,7 +160,7 @@ RSpec.describe BudgetPolicy, type: :policy do
         context 'when admin?' do
           before { allow(subject).to receive(:manage_all?).and_return(true) }
 
-          it { is_expected.to permit_action(:destroy) }
+          it { is_expected.to forbid_action(:destroy) }
         end
       end
     end

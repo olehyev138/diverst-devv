@@ -65,9 +65,9 @@ export function BudgetList(props, context) {
     },
     {
       title: intl.formatMessage(messages.columns.available, props.customTexts),
-      field: 'available_amount',
+      field: 'available',
       sorting: false,
-      render: rowData => toCurrencyString(props.intl, rowData.available_amount || 0, rowData.currency),
+      render: rowData => toCurrencyString(props.intl, rowData.available || 0, rowData.currency),
     },
     {
       title: intl.formatMessage(messages.columns.status, props.customTexts),

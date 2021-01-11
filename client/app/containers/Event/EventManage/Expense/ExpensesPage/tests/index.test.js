@@ -17,6 +17,7 @@ const props = {
   updateExpenseBegin: jest.fn(),
   handleVisitEditPage: jest.fn(),
   finalizeExpensesBegin: jest.fn(),
+  getBudgetUsersBegin: jest.fn(),
   expensesUnmount: jest.fn(),
   currentGroup: {},
   currentEvent: {}

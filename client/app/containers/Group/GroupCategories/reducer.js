@@ -21,6 +21,7 @@ export const initialState = {
   groupCategoriesList: {},
   groupTotal: null,
   currentGroup: null,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -31,6 +32,7 @@ function groupCategoriesReducer(state = initialState, action) {
     switch (action.type) {
       case GET_GROUP_CATEGORY_BEGIN:
         draft.isFormLoading = true;
+        draft.hasChanged = false;
         break;
       case GET_GROUP_CATEGORY_SUCCESS:
         draft.currentGroupCategory = action.payload.group_category_type;
@@ -54,14 +56,19 @@ function groupCategoriesReducer(state = initialState, action) {
       case CREATE_GROUP_CATEGORIES_BEGIN:
       case UPDATE_GROUP_CATEGORIES_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
       case CREATE_GROUP_CATEGORIES_SUCCESS:
       case UPDATE_GROUP_CATEGORIES_SUCCESS:
       case CREATE_GROUP_CATEGORIES_ERROR:
       case UPDATE_GROUP_CATEGORIES_ERROR:
+      case DELETE_GROUP_CATEGORIES_ERROR:
         draft.isCommitting = false;
+        draft.hasChanged = false;
         break;
-
+      case DELETE_GROUP_CATEGORIES_SUCCESS:
+        draft.hasChanged = true;
+        break;
       case CATEGORIES_UNMOUNT:
         return initialState;
     }

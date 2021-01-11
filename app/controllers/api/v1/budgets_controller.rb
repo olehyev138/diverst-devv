@@ -7,6 +7,7 @@ class Api::V1::BudgetsController < DiverstController
             :approver_id,
             :annual_budget_id,
             :requester_id,
+            :group_id,
             budget_items_attributes: [
                 :title,
                 :estimated_amount,
@@ -14,6 +15,10 @@ class Api::V1::BudgetsController < DiverstController
                 :is_private,
             ],
           )
+  end
+
+  def base
+    super.with_expenses
   end
 
   def create
@@ -24,7 +29,7 @@ class Api::V1::BudgetsController < DiverstController
   end
 
   def approve
-    item = klass.find(params[:id])
+    item = show_base.find(params[:id])
     base_authorize(item)
 
     item.approve(current_user)
