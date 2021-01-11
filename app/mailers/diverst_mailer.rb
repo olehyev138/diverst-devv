@@ -8,9 +8,10 @@ class DiverstMailer < ApplicationMailer
     return if @enterprise.disable_emails?
     return unless @enterprise.has_enabled_onboarding_email?
 
+    @email = @user.email
     set_defaults(@enterprise, method_name)
 
-    mail(from: @from_address, to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def new_email_update(user_id, new_email_address)
@@ -18,8 +19,10 @@ class DiverstMailer < ApplicationMailer
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
+    @email = new_email_address
     set_defaults(@enterprise, method_name)
-    mail(from: @from_address, to: new_email_address, subject: @subject)
+
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def old_email_update(user_id, old_email_address)
@@ -27,8 +30,10 @@ class DiverstMailer < ApplicationMailer
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
+    @email = old_email_address
     set_defaults(@enterprise, method_name)
-    mail(from: @from_address, to: old_email_address, subject: @subject)
+
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def variables
