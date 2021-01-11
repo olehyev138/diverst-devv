@@ -14,16 +14,16 @@ class UserGroupMailer < ApplicationMailer
     }
 
     @groups.each do |group|
-      @groups_info[:initiatives] << group.initiatives 
-      @groups_info[:news_links] << group.news_links
-      @groups_info[:messages] << group.messages
-      @groups_info[:social_links] << group.social_links
+      @groups_info[:initiatives] << group[:events]
+      @groups_info[:news_links] << group[:news]
+      @groups_info[:messages] << group[:messages]
+      @groups_info[:social_links] << group[:social_links]
     end
 
-    @groups_info[:initiatives] = @groups_info[:initiatives].flatten
-    @groups_info[:news_links] = @groups_info[:news_links].flatten
-    @groups_info[:messages] = @groups_info[:messages].flatten
-    @groups_info[:social_links] = @groups_info[:social_links].flatten
+    @groups_info[:initiatives].flatten!
+    @groups_info[:news_links].flatten!
+    @groups_info[:messages].flatten!
+    @groups_info[:social_links].flatten!
 
     @enterprise = @user.enterprise
     set_defaults(@enterprise, method_name)
