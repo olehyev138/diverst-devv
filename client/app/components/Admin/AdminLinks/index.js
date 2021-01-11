@@ -115,6 +115,7 @@ export function AdminLinks(props) {
   const location = useLocation();
 
   const [state, setState] = useState({
+    /*
     analyze: {
       open: !!matchPath(location.pathname, {
         path: ROUTES.admin.analyze.index.data.pathPrefix,
@@ -122,6 +123,7 @@ export function AdminLinks(props) {
         strict: false
       }),
     },
+    */
     manage: {
       open: !!matchPath(location.pathname, {
         path: ROUTES.admin.manage.index.data.pathPrefix,
@@ -183,6 +185,7 @@ export function AdminLinks(props) {
       <Divider />
       <Scrollbar>
         <List>
+          { /*
           <ListPermission button onClick={handleAnalyzeClick} show={permission(props, 'metrics_overview')}>
             <ListItemIcon>
               <AnalyzeIcon />
@@ -253,6 +256,7 @@ export function AdminLinks(props) {
               </MenuPermission>
             </List>
           </Collapse>
+          */}
 
           <ListPermission
             button

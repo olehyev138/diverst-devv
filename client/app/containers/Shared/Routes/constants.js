@@ -624,6 +624,7 @@ const ROUTES = {
   admin: {
     get root() { return this.manage.groups.index; },
     pathPrefix: '/admin',
+    /*
     analyze: {
       index: {
         data: {
@@ -676,6 +677,8 @@ const ROUTES = {
         },
       },
     },
+
+     */
     manage: {
       index: {
         data: {
