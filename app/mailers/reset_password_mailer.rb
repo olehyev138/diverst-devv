@@ -7,9 +7,10 @@ class ResetPasswordMailer < ApplicationMailer
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
+    @email = @user.email
     set_defaults(@enterprise, method_name)
 
-    mail(from: @from_address, to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def variables
