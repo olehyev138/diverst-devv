@@ -38,6 +38,10 @@ class UsersController < ApplicationController
       @users = current_user.enterprise.users.where(active: false)
     end
 
+    if params[:mentorship] = 'true'
+      @users = current_user.enterprise.users.mentors_and_mentees
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
