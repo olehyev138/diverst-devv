@@ -22,6 +22,13 @@ class EmailVariablesService
       'campaign.title',
     ],
     'group_leader_post_notification_mailer' => [
+      'user.name',
+      'count',
+      'group.name',
+      'enterprise.id',
+      'enterprise.name',
+      'custom_text.erg_text',
+      'click_here',
     ],
     'poll_mailer' => [
       'user.name',
