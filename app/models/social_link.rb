@@ -17,6 +17,7 @@ class SocialLink < BaseClass
   validate :correct_url?
 
   validates :author_id, presence: true
+  validate :url_uniqueness
 
   before_create :build_default_link, :add_trailing_slash
   after_create :hack_temp_solution
@@ -66,6 +67,12 @@ class SocialLink < BaseClass
 
   def add_trailing_slash
     self.url = File.join(self.url, '')
+  end
+
+  def url_uniqueness
+    if self.class.all.pluck(:url).include?(File.join(self.url, ''))
+      errors.add(:url, 'this url has already been taken')
+    end
   end
 
   def hack_temp_solution
