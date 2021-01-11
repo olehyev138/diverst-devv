@@ -55,7 +55,7 @@
         <div class="card__section">
           <div class="row row--spacing-bottom">
             <div class="col md-12">
-              <p class="field__hint">In what areas are you interested in providing mentorship or being mentored in?</p>
+              <p class="field__hint">As a <em>Mentor</em>, which topics are you interested in?</p>
               <%= f.association :mentoring_interests,
                   collection: @user.enterprise.mentoring_interests.map { |int| int.name.capitalize! ; int}.sort_by { |int| int.name },
                   input_html: { class: "select2" },
@@ -63,8 +63,17 @@
             </div>
           </div>
           <div class="row row--spacing-bottom">
+            <div class="col md-12">
+              <p class="field__hint">As a <em>Mentee</em>, which topics are you interested in?</p>
+              <%= f.association :mentee_interests,
+                  collection: @user.enterprise.mentee_interests.map { |int| int.name.capitalize! ; int}.sort_by { |int| int.name },
+                  input_html: { class: "select2" },
+                  label: false %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
             <div class="col-xs-12">
-              <p class="field__hint">Please describe specifically why you want to be mentored:</p>
+              <p class="field__hint">Please describe your personal goals.</p>
               <%= f.input :mentorship_description, label: false, input_html: { class: "full-width" } %>
             </div>
           </div>

@@ -1,0 +1,18 @@
+<div class="content__main">
+  <%= simple_form_for @topic do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <div class="row row--spacing-bottom">
+          <div class="col md-6">
+            <%= f.input :name, label: 'Name' %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card__section card__section--border">
+        <%= f.button :submit %>        
+      </div>
+    </div>
+  <% end %>
+</div>

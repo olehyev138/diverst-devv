@@ -1,6 +1,6 @@
 class Initiative < BaseClass
-  URL_REGEXP = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
   include PublicActivity::Common
+  URL_REGEXP = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 

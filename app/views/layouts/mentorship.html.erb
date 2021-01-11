@@ -10,7 +10,8 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Topics", mentoring_interests_path %>
+        <%= active_link_to "Mentoring Topics", mentoring_interests_path %>
+        <%= active_link_to "Mentee Topics", mentee_interests_path %>
         <%= active_link_to 'Types', mentoring_types_path %>
         <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).update? %>
       </li>
@@ -19,7 +20,8 @@
 </div>
 
 <div class="menu menu--desktop">
-  <%= active_link_to "Topics", mentoring_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["mentoring_interests"], []] %>
+  <%= active_link_to "Mentoring Topics", mentoring_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["mentoring_interests"], []] %>
+  <%= active_link_to "Mentee Topics", mentee_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["mentee_interests"], []] %>
   <%= active_link_to 'Types', mentoring_types_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["mentoring_types"], []] %>
   <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [["algorithm"], []] if EnterprisePolicy.new(current_user, current_user.enterprise).update? %>
 </div>

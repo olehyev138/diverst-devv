@@ -40,6 +40,7 @@ class User < BaseClass
   # many to many
   has_many :mentorship_interests
   has_many :mentoring_interests, through: :mentorship_interests
+  has_many :mentee_interests, through: :mentorship_interests
 
   has_many :mentorship_sessions
   has_many :mentoring_sessions, through: :mentorship_sessions

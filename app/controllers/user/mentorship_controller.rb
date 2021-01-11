@@ -20,7 +20,7 @@ class User::MentorshipController < ApplicationController
 
   def update
     authorize @user
-
+    
     @user.assign_attributes(user_params)
     if @user.save
       track_activity(@user, :update_mentorship_profile)
@@ -79,6 +79,7 @@ class User::MentorshipController < ApplicationController
       :accepting_mentor_requests,
       :accepting_mentee_requests,
       mentoring_interest_ids: [],
+      mentee_interest_ids: [],
       mentoring_type_ids: [],
       availabilities_attributes: [:day, :start, :end, :_destroy, :id]
     )
