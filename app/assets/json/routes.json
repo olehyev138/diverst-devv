@@ -151,21 +151,6 @@
   },
   "admin": {
     "root": "/admin/manage/groups",
-    "analyze": {
-      "overview": "/admin/analyze",
-      "users": "/admin/analyze/users",
-      "groups": "/admin/analyze/groups",
-      "custom": {
-        "index": "/admin/analyze/custom",
-        "new": "/admin/analyze/custom/new",
-        "edit": "/admin/analyze/custom/:metrics_dashboard_id/edit",
-        "show": "/admin/analyze/custom/:metrics_dashboard_id",
-        "graphs": {
-          "new": "/admin/analyze/custom/:metrics_dashboard_id/graphs/new",
-          "edit": "/admin/analyze/custom/:metrics_dashboard_id/graphs/:graph_id/edit"
-        }
-      }
-    },
     "manage": {
       "groups": {
         "index": "/admin/manage/groups",

@@ -5,14 +5,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Grid, Slide } from '@material-ui/core';
 
+import classNames from 'classnames';
+
 const styles = theme => ({
   progress: {
-    margin: theme.spacing(8),
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+    marginLeft: -40,
   },
 });
 
@@ -38,7 +36,7 @@ function DiverstLoader(props) {
             <CircularProgress
               size={80}
               thickness={1.5}
-              className={classes.progress}
+              className={classNames(classes.progress, props.progressStyles)}
             />
           </Grid>
         </Grid>
@@ -49,6 +47,7 @@ function DiverstLoader(props) {
 
 DiverstLoader.propTypes = {
   classes: PropTypes.object,
+  progressStyles: PropTypes.object,
   isLoading: PropTypes.bool,
   transitionProps: PropTypes.object,
   wrapperProps: PropTypes.object,

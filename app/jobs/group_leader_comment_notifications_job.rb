@@ -2,6 +2,9 @@ class GroupLeaderCommentNotificationsJob < ActiveJob::Base
   queue_as :mailers
 
   def perform(group_id)
+    # TODO: Temporarily disable mailer until pending comments is properly implemented
+    return nil
+
     group = Group.find_by_id(group_id)
     return if group.nil?
 

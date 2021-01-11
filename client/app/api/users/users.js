@@ -12,6 +12,9 @@ Object.assign(Users, {
   getInvitedUser(payload) {
     return axios.post(`${this.url}/sign_up_token`, payload);
   },
+  getOnboardingGroups(payload) {
+    return axios.post(`${this.url}/sign_up_groups`, payload);
+  },
   signUpUser(payload) {
     return axios.post(`${this.url}/sign_up`, payload);
   },

@@ -40,6 +40,7 @@ class UserGroup < ApplicationRecord
   before_destroy :remove_leader_role
 
   after_create { update_mentor_fields(true) }
+  after_create { WelcomeNotificationJob.perform_later(group_id, user_id) }
   after_destroy { update_mentor_fields(false) }
 
   settings do

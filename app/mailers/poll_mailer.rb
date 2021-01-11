@@ -3,6 +3,7 @@ class PollMailer < ApplicationMailer
     @user = user
     @poll = poll
     @enterprise = @user.enterprise
+
     return if @enterprise.disable_emails?
 
     @user_poll_token = poll.user_poll_tokens.find_by(user: user)

@@ -9,7 +9,7 @@ RSpec.describe EmailVariable do
 
   describe '#format' do
     it 'returns empty string when value is not string' do
-      expect(subject.format(1)).to eq('')
+      expect(subject.format(1)).to eq('1')
     end
 
     it 'returns pluralized string' do
