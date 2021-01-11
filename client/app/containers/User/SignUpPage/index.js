@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -18,10 +18,13 @@ import {
   selectIsCommitting,
   selectFormErrors,
   selectGroups,
+  selectGroupsTotal,
+  selectGroupsIsLoading,
 } from './selectors';
 
 import {
   getUserByTokenBegin,
+  getOnboardingGroupsBegin,
   submitPasswordBegin,
   signUpUnmount,
 } from './actions';
@@ -33,19 +36,19 @@ import SignUpForm from 'components/User/SignUpForm';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 import messages from '../messages';
 
-
 export function SignUpPage(props) {
   useInjectReducer({ key: 'signUp', reducer });
   useInjectSaga({ key: 'signUp', saga });
 
   const { token } = useParams();
 
+  const [handleGetOnboardingGroupsBegin, setHandleGetOnboardingGroupsBegin] = useState(null);
+
   useEffect(() => {
-    if (token)
-      props.getUserByTokenBegin({
-        token
-      });
-    else {
+    if (token) {
+      props.getUserByTokenBegin({ token });
+      setHandleGetOnboardingGroupsBegin(() => params => props.getOnboardingGroupsBegin({ ...params, token }));
+    } else {
       props.showSnackbar({
         message: messages.token,
         options: { variant: 'warning' }
@@ -59,11 +62,15 @@ export function SignUpPage(props) {
     <SignUpForm
       user={props.user}
       isLoading={props.isLoading}
+      isGroupsLoading={props.isGroupsLoading}
       isCommitting={props.isCommitting}
       token={props.token}
       errors={props.formErrors}
       enterprise={props.enterprise}
       groups={props.groups}
+      groupsTotal={props.groupsTotal}
+      getOnboardingGroupsBegin={handleGetOnboardingGroupsBegin}
+      getOnboardingGroupsSuccess={props.getOnboardingGroupsSuccess}
 
       submitAction={props.submitPasswordBegin}
     />
@@ -72,6 +79,8 @@ export function SignUpPage(props) {
 
 SignUpPage.propTypes = {
   getUserByTokenBegin: PropTypes.func,
+  getOnboardingGroupsBegin: PropTypes.func,
+  getOnboardingGroupsSuccess: PropTypes.func,
   submitPasswordBegin: PropTypes.func,
   signUpUnmount: PropTypes.func,
   showSnackbar: PropTypes.func,
@@ -81,8 +90,10 @@ SignUpPage.propTypes = {
   token: PropTypes.string,
   user: PropTypes.object,
   groups: PropTypes.arrayOf(PropTypes.object),
+  groupsTotal: PropTypes.number,
   enterprise: PropTypes.object,
   isLoading: PropTypes.bool,
+  isGroupsLoading: PropTypes.bool,
   formErrors: PropTypes.object,
 };
 
@@ -93,11 +104,14 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   formErrors: selectFormErrors(),
   groups: selectGroups(),
+  groupsTotal: selectGroupsTotal(),
+  isGroupsLoading: selectGroupsIsLoading(),
   enterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {
   getUserByTokenBegin,
+  getOnboardingGroupsBegin,
   submitPasswordBegin,
   signUpUnmount,
   showSnackbar,

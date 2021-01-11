@@ -2,6 +2,7 @@ class Api::V1::UsersController < DiverstController
   skip_before_action :verify_jwt_token, only: [
       :find_user_enterprise_by_email,
       :sign_up_token,
+      :sign_up_groups,
       :sign_up,
       :reset_password_request,
       :reset_password_token,
@@ -133,20 +134,9 @@ class Api::V1::UsersController < DiverstController
   private def token(token_service, with_associations: false, groups: false)
     token, user = token_service.form_token(params[:token])
 
-    groups_scope = if groups
-      Group
-          .preload(Group.base_preloads(Request.create_request(user, action: 'index', with_children: true)))
-          .where(parent_id: nil, private: false, enterprise_id: user.enterprise_id)
-    else
-      Group.none
-    end
-
     render status: 200, json: {
         token: token,
         user: InvitedUserSerializer.new(user, with_associations: with_associations).as_json,
-        groups: groups_scope.map do |group|
-          GroupOnboardingSerializer.new(group, scope: { current_user: user }).as_json
-        end
     }
   rescue => e
     raise BadRequestException.new(e.message)
@@ -158,6 +148,16 @@ class Api::V1::UsersController < DiverstController
 
   def sign_up_token
     token(InviteTokenService, groups: true, with_associations: true)
+  end
+
+  def sign_up_groups
+    _, user = InviteTokenService.form_token(params[:token])
+
+    response = Group.index(Request.create_request(user, action: 'index', with_children: false), params)
+
+    render status: 200, json: response, family: true
+  rescue => e
+    raise BadRequestException.new(e.message)
   end
 
   def sign_up

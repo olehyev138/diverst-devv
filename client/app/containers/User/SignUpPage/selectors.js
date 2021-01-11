@@ -4,6 +4,7 @@ import produce from 'immer';
 
 import { initialState } from './reducer';
 import { deserializeFields, timezoneMap } from 'utils/selectorHelpers';
+import { groupMapper } from 'containers/Group/selectors';
 
 const selectSignUpDomain = state => state.signUp || initialState;
 
@@ -33,7 +34,19 @@ const selectUser = () => createSelector(
 
 const selectGroups = () => createSelector(
   selectSignUpDomain,
-  usersState => usersState.groups
+  usersState => Object
+    .values(usersState.groupList)
+    .map(groupMapper)
+);
+
+const selectGroupsTotal = () => createSelector(
+  selectSignUpDomain,
+  usersState => usersState.groupTotal
+);
+
+const selectGroupsIsLoading = () => createSelector(
+  selectSignUpDomain,
+  usersState => usersState.isGroupsLoading
 );
 
 const selectIsLoading = () => createSelector(
@@ -54,5 +67,6 @@ const selectFormErrors = () => createSelector(
 export {
   selectSignUpDomain, selectToken,
   selectIsLoading, selectUser, selectFormErrors,
-  selectIsCommitting, selectGroups
+  selectIsCommitting, selectGroups, selectGroupsTotal,
+  selectGroupsIsLoading,
 };
