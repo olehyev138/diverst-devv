@@ -14,6 +14,7 @@ class GroupPolicy < ApplicationPolicy
   def index?
     return true if create?
     return true if has_group_leader_permissions?('groups_index')
+    return true if user.invitation_accepted_at.nil? # If user is in onboarding phase, allow them to list groups
 
     @policy_group.groups_index?
   end

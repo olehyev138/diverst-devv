@@ -239,43 +239,43 @@ export default function Routes(props) {
                     {/* Profile */}
                     <RouteWithProps path={ROUTES.user.show.path()}><UserProfilePage /></RouteWithProps>
 
-                    {/* Mentorship */}
-                    <RouteWithProps path={ROUTES.user.mentorship.pathPrefix}>
+                    {/* Mentorship -- Disabled */}
+                    {/* <RouteWithProps path={ROUTES.user.mentorship.pathPrefix}>
                       <MentorshipLayout>
                         <SwitchWithProps>
-                          {/* Profile Edit */}
+                           Profile Edit
                           <RouteWithProps path={ROUTES.user.mentorship.edit.path()}><MentorshipEditProfilePage /></RouteWithProps>
 
-                          {/* Mentors */}
+                           Mentors
                           <RouteWithProps path={ROUTES.user.mentorship.mentors.path()}><MentorsPage /></RouteWithProps>
-                          {/* Mentees */}
+                           Mentees
                           <RouteWithProps path={ROUTES.user.mentorship.mentees.path()}><MentorsPage /></RouteWithProps>
 
-                          {/* Proposals */}
+                           Proposals
                           <RouteWithProps path={ROUTES.user.mentorship.proposals.path()}><MentorRequestsPage /></RouteWithProps>
-                          {/* Requests */}
+                           Requests
                           <RouteWithProps path={ROUTES.user.mentorship.requests.path()}><MentorRequestsPage /></RouteWithProps>
 
-                          {/* Session Schedule */}
+                           Session Schedule
                           <RouteWithProps path={ROUTES.user.mentorship.sessions.schedule.path()}><SessionsEditPage /></RouteWithProps>
-                          {/* Session Edit */}
+                           Session Edit
                           <RouteWithProps path={ROUTES.user.mentorship.sessions.edit.path()}><SessionsEditPage /></RouteWithProps>
 
-                          {/* Session Hosting */}
+                           Session Hosting
                           <RouteWithProps path={ROUTES.user.mentorship.sessions.hosting.path()}><SessionsPage /></RouteWithProps>
-                          {/* Session Participating */}
+                           Session Participating
                           <RouteWithProps path={ROUTES.user.mentorship.sessions.participating.path()}><SessionsPage /></RouteWithProps>
 
-                          {/* Session Show */}
+                           Session Show
                           <RouteWithProps path={ROUTES.user.mentorship.sessions.show.path()}><SessionPage /></RouteWithProps>
 
-                          {/* Profile */}
+                           Profile
                           <RouteWithProps path={ROUTES.user.mentorship.show.path()}><MentorshipProfilePage /></RouteWithProps>
-                          {/* Profile */}
+                           Profile
                           <RouteWithProps path={ROUTES.user.mentorship.home.path()}><MentorshipProfilePage /></RouteWithProps>
                         </SwitchWithProps>
                       </MentorshipLayout>
-                    </RouteWithProps>
+                    </RouteWithProps> */}
                   </SwitchWithProps>
                 </UserLayout>
               </Route>
@@ -468,25 +468,17 @@ export default function Routes(props) {
               <Route path={ROUTES.admin.pathPrefix}>
                 <AdminLayout>
                   <SwitchWithProps>
-                    { /* Analyze - Overview */ }
+                    { /*
                     <RouteWithProps exact path={ROUTES.admin.analyze.overview.path()}><PlaceholderPage /></RouteWithProps>
-                    { /* Analyze - Users */ }
                     <RouteWithProps path={ROUTES.admin.analyze.users.path()}><UserDashboardPage /></RouteWithProps>
-                    { /* Analyze - Groups */ }
                     <RouteWithProps path={ROUTES.admin.analyze.groups.path()}><GroupDashboardPage /></RouteWithProps>
-
-                    { /* Analyze - Custom */ }
                     <RouteWithProps exact path={ROUTES.admin.analyze.custom.index.path()}><MetricsDashboardListPage /></RouteWithProps>
-                    { /* Analyze - Custom Edit */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.edit.path()}><MetricsDashboardEditPage /></RouteWithProps>
-                    { /* Analyze - Custom Create */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.new.path()}><MetricsDashboardCreatePage /></RouteWithProps>
-                    { /* Analyze - Custom Show */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.show.path()}><MetricsDashboardPage /></RouteWithProps>
-                    { /* Analyze - Custom - Graphs - New */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.new.path()}><CustomGraphCreatePage /></RouteWithProps>
-                    { /* Analyze - Custom - Graphs - Edit */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.edit.path()}><CustomGraphEditPage /></RouteWithProps>
+                    /* }
 
                     { /* Manage - Groups */ }
                     <RouteWithProps exact path={ROUTES.admin.manage.groups.index.path()}><AdminGroupListPage /></RouteWithProps>

@@ -1,6 +1,6 @@
 /*
  *
- * HomePage actions
+ * SignUp actions
  *
  */
 
@@ -8,6 +8,9 @@ import {
   GET_USER_BY_TOKEN_BEGIN,
   GET_USER_BY_TOKEN_SUCCESS,
   GET_USER_BY_TOKEN_ERROR,
+  GET_ONBOARDING_GROUPS_BEGIN,
+  GET_ONBOARDING_GROUPS_SUCCESS,
+  GET_ONBOARDING_GROUPS_ERROR,
   SUBMIT_PASSWORD_BEGIN,
   SUBMIT_PASSWORD_SUCCESS,
   SUBMIT_PASSWORD_ERROR,
@@ -31,6 +34,27 @@ export function getUserByTokenSuccess(payload) {
 export function getUserByTokenError(error) {
   return {
     type: GET_USER_BY_TOKEN_ERROR,
+    error
+  };
+}
+
+export function getOnboardingGroupsBegin(payload) {
+  return {
+    type: GET_ONBOARDING_GROUPS_BEGIN,
+    payload
+  };
+}
+
+export function getOnboardingGroupsSuccess(payload) {
+  return {
+    type: GET_ONBOARDING_GROUPS_SUCCESS,
+    payload
+  };
+}
+
+export function getOnboardingGroupsError(error) {
+  return {
+    type: GET_ONBOARDING_GROUPS_ERROR,
     error
   };
 }

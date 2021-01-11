@@ -27,7 +27,7 @@ RSpec.describe GroupLeaderMemberNotificationsJob, type: :job do
         subject.perform(group.id)
       end
 
-      it 'sends an email of notification to leader because pending_member_notifications_enabled is true and there is a pending member' do
+      it 'sends an email of notification to leader because pending_member_notifications_enabled is true and there is a pending member', pending: 'until pending members is implemented' do
         enterprise = create(:enterprise)
         member = create(:user, enterprise: enterprise, user_role: enterprise.user_roles.where(role_type: 'admin').first)
         create(:user_group, group: group, user: member, accepted_member: false)

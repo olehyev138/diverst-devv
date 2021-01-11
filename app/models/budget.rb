@@ -140,14 +140,7 @@ class Budget < ApplicationRecord
   private
 
   def send_email_notification
-    case is_approved
-    when true # it was accepted
-      send_approval_notification
-    when false # it was declined
-      send_denial_notification
-    else # it was just created
-      send_approval_request
-    end
+    send_approval_request if is_approved.nil?
   end
 
   def send_approval_request
@@ -167,6 +160,8 @@ class Budget < ApplicationRecord
   BUDGET_KEYS = ['budget_id', 'annual_budget_id']
 
   def self.get_foreign_keys(old_or_new = 'NEW')
+    return '' unless AnnualBudgetSums.sums_tables_exist?
+
     <<~SQL.gsub(/\s+/, ' ').strip
     #{BUDGET_KEYS.map { |col| "SET @#{col} = -1;" }.join(' ')}
     #{Budget.select(

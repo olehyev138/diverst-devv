@@ -1,4 +1,4 @@
-after 'development:enterprise' do
+after 'production:enterprise' do
   spinner = TTY::Spinner.new(":spinner Populating enterprises with email templates...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|

@@ -1,6 +1,6 @@
 /*
  *
- * HomePage reducer
+ * SignUp reducer
  *
  */
 import produce from 'immer';
@@ -8,6 +8,9 @@ import {
   GET_USER_BY_TOKEN_BEGIN,
   GET_USER_BY_TOKEN_SUCCESS,
   GET_USER_BY_TOKEN_ERROR,
+  GET_ONBOARDING_GROUPS_BEGIN,
+  GET_ONBOARDING_GROUPS_SUCCESS,
+  GET_ONBOARDING_GROUPS_ERROR,
   SUBMIT_PASSWORD_BEGIN,
   SUBMIT_PASSWORD_SUCCESS,
   SUBMIT_PASSWORD_ERROR,
@@ -17,9 +20,11 @@ import {
 export const initialState = {
   token: null,
   isLoading: true,
+  isGroupsLoading: true,
   isCommitting: false,
   user: null,
-  groups: [],
+  groupList: [],
+  groupTotal: null,
   errors: null,
 };
 
@@ -34,11 +39,21 @@ function signUpReducer(state = initialState, action) {
       case GET_USER_BY_TOKEN_SUCCESS:
         draft.isLoading = false;
         draft.user = action.payload.user;
-        draft.groups = action.payload.groups;
         draft.token = action.payload.token;
         break;
       case GET_USER_BY_TOKEN_ERROR:
         draft.isLoading = false;
+        break;
+      case GET_ONBOARDING_GROUPS_BEGIN:
+        draft.isGroupsLoading = true;
+        break;
+      case GET_ONBOARDING_GROUPS_SUCCESS:
+        draft.isGroupsLoading = false;
+        draft.groupList = action.payload.items;
+        draft.groupTotal = action.payload.total;
+        break;
+      case GET_ONBOARDING_GROUPS_ERROR:
+        draft.isGroupsLoading = false;
         break;
       case SUBMIT_PASSWORD_BEGIN:
         draft.isCommitting = true;

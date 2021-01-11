@@ -26,6 +26,6 @@ class GroupLeaderPostNotificationMailer < ApplicationMailer
   end
 
   def url
-    group_posts_url(@group)
+    ReactRoutes.group.news.index(@group)
   end
 end

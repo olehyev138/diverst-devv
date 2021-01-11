@@ -1,14 +1,16 @@
 import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
+import { withStyles, withTheme, makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, FormLabel, Box } from '@material-ui/core';
+
+import { FormControl, FormLabel, Box, CircularProgress, Grid } from '@material-ui/core';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import useDelayedTextInputCallback from 'utils/customHooks/delayedTextInputCallback';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const wrapperStyle = {
   border: '1px solid lightgray',
@@ -39,10 +41,25 @@ const useStyles = makeStyles({
   },
 });
 
-export function DiverstRichTextInput(props) {
-  const { label, value, fullWidth, onChange, height, borderSize, field, form, ...rest } = props;
+const styles = theme => ({
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '90%',
+    left: '90%',
+    marginTop: -12,
+    marginLeft: -12,
+    zIndex: 5,
+  }
+});
 
-  const classes = useStyles({ height, borderSize });
+export function DiverstRichTextInput(props) {
+  const { classes, label, value, fullWidth, onChange, height, borderSize, field, form, ...rest } = props;
+
+  const editorClasses = useStyles({ height, borderSize });
 
   const [editorStyle, setEditorStyle] = useState(getEditorStyle(height, borderSize));
 
@@ -75,11 +92,15 @@ export function DiverstRichTextInput(props) {
     }
   }, [value]);
 
-  const delayedOnChange = useDelayedTextInputCallback(
-    () => props.onChange(
-      draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    )
+  const [delayedOnChange, pendingChanges] = useDelayedTextInputCallback(
+    (newState) => {
+      const value = draftToHtml(convertToRaw(newState.getCurrentContent()));
+      props.onChange(
+        value
+      );
+    }
   );
+    
 
   const onEditorStateChange = (newEditorState) => {
     if (initialValue)
@@ -88,7 +109,7 @@ export function DiverstRichTextInput(props) {
 
     if (props.onChange)
       if (editorState.getCurrentContent().getPlainText().trim() !== '') {
-        delayedOnChange();
+        delayedOnChange(newEditorState);
       } else {
         props.onChange('');
       }
@@ -101,21 +122,37 @@ export function DiverstRichTextInput(props) {
         {label}
       </FormLabel>
       <Box mb={1} />
-      <Editor
-        toolbar={{
-          options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'remove', 'history']
-        }}
-        editorState={editorState}
-        onEditorStateChange={onEditorStateChange}
-        wrapperStyle={wrapperStyle}
-        editorStyle={editorStyle}
-        editorClassName={classes.editorContainer}
-      />
+      <div className={classes.wrapper}>
+        <Editor
+          toolbar={{
+            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'remove', 'history']
+          }}
+          editorState={editorState}
+          onEditorStateChange={onEditorStateChange}
+          wrapperStyle={wrapperStyle}
+          editorStyle={editorStyle}
+          editorClassName={editorClasses.editorContainer}
+        />
+      </div>
+      {pendingChanges() ? (
+        <Grid container justify='center' alignContent='center'>
+          <Grid item>
+            <CircularProgress size={20} thickness={1.5} className={classes.buttonProgress} />
+          </Grid>
+        </Grid>
+      ) : (
+        <Grid container justify='center' alignContent='center'>
+          <Grid item>
+            <CheckCircleIcon className={classes.buttonProgress} color='primary' />
+          </Grid>
+        </Grid>
+      )}
     </FormControl>
   );
 }
 
 DiverstRichTextInput.propTypes = {
+  classes: PropTypes.object,
   onChange: PropTypes.func,
   value: PropTypes.string,
   height: PropTypes.number.isRequired,
@@ -133,4 +170,5 @@ DiverstRichTextInput.defaultProps = {
 
 export default compose(
   memo,
+  withStyles(styles)
 )(DiverstRichTextInput);
