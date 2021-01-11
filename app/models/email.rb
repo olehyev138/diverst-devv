@@ -21,17 +21,21 @@ class Email < ApplicationRecord
   def process(text, objects)
     # get all the interpolated strings
     strings = text.scan(/{([^}]*)}/).flatten
-
+    valid_variables = variables.pluck(:key)
     hash = {}
 
     strings.each do |string|
-      keys = string.split('.')
-      object = objects[keys.first.to_sym]
-      value = object if keys.second.nil?
-      value = object.send(keys.second) if keys.second
-      next if value.nil?
-
-      hash.merge!({ "#{string}": value })
+      if valid_variables.include?(string)
+        keys = string.split('.')
+        object = objects[keys.first.to_sym]
+        value = object if keys.second.nil?
+        value = object.send(keys.second) if keys.second
+      else
+        value = "%{#{string}}"
+      end
+    rescue
+    ensure
+      hash.merge!({ "#{string}": value || '{ERROR}' })
     end
     hash
   end
