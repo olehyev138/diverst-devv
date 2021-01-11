@@ -47,5 +47,8 @@
     init_select2(".select2-field-new-members", "<%= users_path(:limit => 10, format: :json) %>", function(item) {
         return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
     });
+    init_select2(".select2-field-mentors-and-mentees", "<%= users_path(:limit => 10, active: 1, mentorship: true, format: :json) %>", function(item) {
+        return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
+    });
   });
 </script>
