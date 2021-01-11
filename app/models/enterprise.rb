@@ -125,8 +125,7 @@ class Enterprise < ApplicationRecord
   has_one_attached :onboarding_sponsor_media
 
   validates :expiry_age_for_resources, numericality: { greater_than_or_equal_to: 0 }
-
-  validate :redirection_email
+  validates :redirect_email_contact, format: { with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false }, if: -> { :redirect_all_emails === true }
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :banner_paperclip
@@ -810,12 +809,5 @@ class Enterprise < ApplicationRecord
   def create_elasticsearch_only_fields
     fields << GroupsField.create
     fields << SegmentsField.create
-  end
-
-  def redirection_email
-    if redirect_all_emails && redirect_email_contact !~ /\A[^@\s]+@[^@\s]+\z/
-      errors.add(:base, I18n.t('errors.format_email_redirection'))
-    end
-    true
   end
 end

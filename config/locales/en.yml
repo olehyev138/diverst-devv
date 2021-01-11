@@ -81,7 +81,6 @@ en:
     destroy_user: "Users older then 14 days cannot be destroyed"
     role_validity: "Cannot set user role to a group role"
     unique_email: "The email entered is already used"
-    format_email_redirection: "The redirection email entered is not valid"
     confirmation: "do not match"
     blank: "can't be blank"
     uniqueness: "The %{attribute} entered has already been created, please enter a unique %{attribute}"
