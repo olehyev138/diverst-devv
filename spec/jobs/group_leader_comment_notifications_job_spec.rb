@@ -42,7 +42,7 @@ RSpec.describe GroupLeaderCommentNotificationsJob, type: :job do
         subject.perform(group.id)
       end
 
-      it 'sends an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is true' do
+      it 'sends an email of notification to leader because enable_pending_comments is true and pending_post_notifications_enabled is true', pending: 'until pending comments is implemented' do
         enterprise.enable_pending_comments = true
         enterprise.save!
         group_message = create(:group_message, group: group)

@@ -7,7 +7,7 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
-  Button, Card, CardActions, CardContent, Divider, Grid, TextField
+  FormControlLabel, Card, CardActions, CardContent, Divider, Grid, TextField, Checkbox, FormGroup
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -83,6 +83,62 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               onChange={handleChange}
               onBlur={() => setFieldTouched('position_name', true)}
             />
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <FormGroup>
+              <FormControlLabel
+                control={(
+                  <Field
+                    component={Checkbox}
+                    onChange={handleChange}
+                    id='pending_member_notifications_enabled'
+                    name='pending_member_notifications_enabled'
+                    margin='normal'
+                    disabled={props.isCommitting}
+                    label={<DiverstFormattedMessage {...messages.leader.pending_member_notifications_enabled} />}
+                    value='pending_member_notifications_enabled'
+                    checked={values.pending_member_notifications_enabled}
+                    color='primary'
+                  />
+                )}
+                label={<DiverstFormattedMessage {...messages.leader.pending_member_notifications_enabled} />}
+              />
+              <FormControlLabel
+                control={(
+                  <Field
+                    component={Checkbox}
+                    onChange={handleChange}
+                    id='pending_posts_notifications_enabled'
+                    name='pending_posts_notifications_enabled'
+                    margin='normal'
+                    disabled={props.isCommitting}
+                    label={<DiverstFormattedMessage {...messages.leader.pending_posts_notifications_enabled} />}
+                    value='pending_posts_notifications_enabled'
+                    checked={values.pending_posts_notifications_enabled}
+                    color='primary'
+                  />
+                )}
+                label={<DiverstFormattedMessage {...messages.leader.pending_posts_notifications_enabled} />}
+              />
+              <FormControlLabel
+                control={(
+                  <Field
+                    component={Checkbox}
+                    onChange={handleChange}
+                    id='pending_comments_notifications_enabled'
+                    name='pending_comments_notifications_enabled'
+                    margin='normal'
+                    disabled={props.isCommitting}
+                    label={<DiverstFormattedMessage {...messages.leader.pending_comments_notifications_enabled} />}
+                    value='pending_comments_notifications_enabled'
+                    checked={values.pending_comments_notifications_enabled}
+                    color='primary'
+                  />
+                )}
+                label={<DiverstFormattedMessage {...messages.leader.pending_comments_notifications_enabled} />}
+              />
+            </FormGroup>
           </CardContent>
           <Divider />
           <CardActions>
