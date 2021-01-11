@@ -8,7 +8,7 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone, :privacy_statement,
              :onboarding_consent_enabled, :onboarding_consent_message
 
-  attributes_with_permission :sponsors, if: :singular_action?
+  attributes_with_permission :sponsors, :custom_text, if: :singular_action?
 
   def singular_action?
     super || scope[:action] == 'get_auth_enterprise'
@@ -17,6 +17,10 @@ class EnterpriseSerializer < ApplicationRecordSerializer
   belongs_to :theme
 
   # Custom Attributes
+
+  def custom_text
+    CustomTextSerializer.new(object.custom_text).as_json
+  end
 
   def sponsors
     object.sponsors.map { |sp| SponsorSerializer.new(sp, **instance_options).as_json }

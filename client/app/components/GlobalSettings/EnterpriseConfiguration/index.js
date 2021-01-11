@@ -251,6 +251,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                           )}
                         />
                       </FormControl>
+                      {/*
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'
@@ -269,6 +270,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                           )}
                         />
                       </FormControl>
+                      */}
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'

@@ -304,7 +304,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                     type='number'
                     InputProps={{ inputProps: { min: 0 } }}
                     margin='normal'
-                    label={<DiverstFormattedMessage {...messages.settings.expiry_events} />}
+                    label={<DiverstFormattedMessage {...messages.settings.expiry_news} />}
                     value={values.expiry_age_for_news}
                     onChange={value => setFieldValue('expiry_age_for_news', value.target.value)}
                   />

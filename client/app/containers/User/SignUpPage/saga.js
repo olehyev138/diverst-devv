@@ -6,14 +6,18 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_USER_BY_TOKEN_BEGIN,
+  GET_ONBOARDING_GROUPS_BEGIN,
   SUBMIT_PASSWORD_BEGIN,
 } from './constants';
 
 import {
   getUserByTokenSuccess, getUserByTokenError,
+  getOnboardingGroupsSuccess, getOnboardingGroupsError,
   submitPasswordSuccess, submitPasswordError
 } from './actions';
+
 import { loginBegin, logoutBegin } from 'containers/Shared/App/actions';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUserByToken(action) {
@@ -25,6 +29,17 @@ export function* getUserByToken(action) {
     yield put(getUserByTokenError());
     yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
     yield put(push(ROUTES.session.login.path()));
+  }
+}
+
+export function* getOnboardingGroups(action) {
+  try {
+    const response = yield call(api.users.getOnboardingGroups.bind(api.users), action.payload);
+
+    yield put(getOnboardingGroupsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getOnboardingGroupsError());
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
   }
 }
 
@@ -53,5 +68,6 @@ export function* submitPassword(action) {
 
 export default function* usersSaga() {
   yield takeLatest(GET_USER_BY_TOKEN_BEGIN, getUserByToken);
+  yield takeLatest(GET_ONBOARDING_GROUPS_BEGIN, getOnboardingGroups);
   yield takeLatest(SUBMIT_PASSWORD_BEGIN, submitPassword);
 }
