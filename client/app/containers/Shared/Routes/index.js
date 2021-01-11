@@ -468,25 +468,17 @@ export default function Routes(props) {
               <Route path={ROUTES.admin.pathPrefix}>
                 <AdminLayout>
                   <SwitchWithProps>
-                    { /* Analyze - Overview */ }
+                    { /*
                     <RouteWithProps exact path={ROUTES.admin.analyze.overview.path()}><PlaceholderPage /></RouteWithProps>
-                    { /* Analyze - Users */ }
                     <RouteWithProps path={ROUTES.admin.analyze.users.path()}><UserDashboardPage /></RouteWithProps>
-                    { /* Analyze - Groups */ }
                     <RouteWithProps path={ROUTES.admin.analyze.groups.path()}><GroupDashboardPage /></RouteWithProps>
-
-                    { /* Analyze - Custom */ }
                     <RouteWithProps exact path={ROUTES.admin.analyze.custom.index.path()}><MetricsDashboardListPage /></RouteWithProps>
-                    { /* Analyze - Custom Edit */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.edit.path()}><MetricsDashboardEditPage /></RouteWithProps>
-                    { /* Analyze - Custom Create */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.new.path()}><MetricsDashboardCreatePage /></RouteWithProps>
-                    { /* Analyze - Custom Show */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.show.path()}><MetricsDashboardPage /></RouteWithProps>
-                    { /* Analyze - Custom - Graphs - New */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.new.path()}><CustomGraphCreatePage /></RouteWithProps>
-                    { /* Analyze - Custom - Graphs - Edit */ }
                     <RouteWithProps path={ROUTES.admin.analyze.custom.graphs.edit.path()}><CustomGraphEditPage /></RouteWithProps>
+                    /* }
 
                     { /* Manage - Groups */ }
                     <RouteWithProps exact path={ROUTES.admin.manage.groups.index.path()}><AdminGroupListPage /></RouteWithProps>

@@ -1,7 +1,7 @@
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const NameToPathMap = Object.freeze({
-  metrics_overview: ROUTES.admin.analyze.overview,
+  // metrics_overview: ROUTES.admin.analyze.overview,
   groups_create: ROUTES.admin.manage.groups.index,
   segments_create: ROUTES.admin.manage.segments.index,
   groups_calendars: ROUTES.admin.manage.calendar.index,
