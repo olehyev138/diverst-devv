@@ -37,7 +37,7 @@ import DiverstDialog from 'components/Shared/DiverstDialog';
 const submitGenerator = (action, token) => (values, actions) => {
   const payload = mapFields(values, ['time_zone']);
   payload.field_data_attributes = serializeFieldDataWithFieldId(values.fieldData);
-  payload.group_ids = Object.keys(payload.groupIds).filter(key => payload.groupIds[key]);
+  payload.group_ids = values.groupIds.map(group => group.value);
   delete payload.fieldData;
   delete payload.groupIds;
   action({ token, ...payload });
