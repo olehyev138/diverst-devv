@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201204133041) do
+ActiveRecord::Schema.define(version: 20210111142023) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -787,6 +788,15 @@ ActiveRecord::Schema.define(version: 20201204133041) do
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
+  create_table "mentee_interests", force: :cascade do |t|
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "mentee_interests", ["enterprise_id"], name: "index_mentee_interests_on_enterprise_id", using: :btree
+
   create_table "mentoring_interests", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
     t.string   "name",          limit: 191, null: false
@@ -872,10 +882,13 @@ ActiveRecord::Schema.define(version: 20201204133041) do
 
   create_table "mentorship_interests", force: :cascade do |t|
     t.integer  "user_id",               limit: 4, null: false
-    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.integer  "mentoring_interest_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "mentee_interest_id",    limit: 4
   end
+
+  add_index "mentorship_interests", ["mentee_interest_id"], name: "index_mentorship_interests_on_mentee_interest_id", using: :btree
 
   create_table "mentorship_ratings", force: :cascade do |t|
     t.integer  "rating",               limit: 4,                     null: false
@@ -1680,9 +1693,11 @@ ActiveRecord::Schema.define(version: 20201204133041) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentee_interests", "enterprises"
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
+  add_foreign_key "mentorship_interests", "mentee_interests"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

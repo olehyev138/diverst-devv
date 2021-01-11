@@ -50,6 +50,7 @@ class Enterprise < BaseClass
 
   # mentorship
   has_many :mentoring_interests, dependent: :destroy
+  has_many :mentee_interests, dependent: :destroy
   has_many :mentoring_requests, dependent: :destroy
   has_many :mentoring_sessions, dependent: :destroy
   has_many :mentoring_types, dependent: :destroy
