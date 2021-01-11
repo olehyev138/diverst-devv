@@ -112,7 +112,7 @@ class Group < ApplicationRecord
   has_many :initiatives, through: :pillars
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy, as: :leader_of
-  has_many :leaders, through: :group_leaders, source: :user
+  has_many :leaders, -> { unscope(:order) }, through: :group_leaders, source: :user
 
   has_many :annual_budgets, -> { with_expenses }, as: :budget_head
   has_many :annual_budgets_raw, dependent: :destroy, as: :budget_head, class_name: 'AnnualBudget'

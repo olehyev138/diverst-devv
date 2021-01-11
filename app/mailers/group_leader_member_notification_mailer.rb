@@ -26,6 +26,6 @@ class GroupLeaderMemberNotificationMailer < ApplicationMailer
   end
 
   def url
-    pending_group_group_members_url(@group)
+    ReactRoutes.group.members.index(@group)
   end
 end
