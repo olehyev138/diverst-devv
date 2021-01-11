@@ -52,7 +52,7 @@ const GroupListSelector = (props) => {
     props.inputCallback(props, searchKey, params);
   };
 
-  const delayedSearchAction = useDelayedTextInputCallback(groupSearchAction);
+  const [delayedSearchAction, pendingChanges] = useDelayedTextInputCallback(groupSearchAction);
 
   useEffect(() => {
     if (props.open)
