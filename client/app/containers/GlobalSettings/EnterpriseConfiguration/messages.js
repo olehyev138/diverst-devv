@@ -61,6 +61,9 @@ export default defineMessages({
   all_emails: {
     id: `${scope}.switch.all_emails`,
   },
+  redirect_emails: {
+    id: `${scope}.switch.redirect_emails`,
+  },
   rewards: {
     id: `${scope}.switch.rewards`,
   },

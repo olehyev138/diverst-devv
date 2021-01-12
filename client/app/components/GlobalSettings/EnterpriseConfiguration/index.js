@@ -100,6 +100,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='default_from_email_address'
                 name='default_from_email_address'
                 margin='normal'
+                type='email'
                 label={<DiverstFormattedMessage {...messages.from_email} />}
                 value={values.default_from_email_address}
               />
@@ -124,6 +125,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='redirect_email_contact'
                 name='redirect_email_contact'
                 margin='normal'
+                type='email'
                 label={<DiverstFormattedMessage {...messages.redirect_email_contact} />}
                 value={values.redirect_email_contact}
               />
@@ -317,6 +319,25 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       <FormControl>
                         <FormControlLabel
                           labelPlacement='end'
+                          label={<Typography color='error'><DiverstFormattedMessage {...messages.redirect_emails} /></Typography>}
+                          control={(
+                            <Field
+                              className={values.redirect_all_emails ? classes.errorSwitch : undefined}
+                              component={Switch}
+                              onChange={handleChange}
+                              color='primary'
+                              id='redirect_all_emails'
+                              name='redirect_all_emails'
+                              margin='normal'
+                              checked={values.redirect_all_emails}
+                              value={values.redirect_all_emails}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <FormControlLabel
+                          labelPlacement='end'
                           label={<Typography color='error'><DiverstFormattedMessage {...messages.all_emails} /></Typography>}
                           control={(
                             <Field
@@ -429,7 +450,8 @@ export function EnterpriseConfiguration(props) {
     time_zone: { default: null },
     expiry_age_for_resources: { default: 0 },
     unit_of_expiry_age: { default: '' },
-    auto_archive: { default: false }
+    auto_archive: { default: false },
+    redirect_all_emails: { default: false }
   });
   const [open, setOpen] = React.useState(false);
 

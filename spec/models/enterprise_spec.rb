@@ -87,9 +87,6 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_numericality_of(:expiry_age_for_resources).is_greater_than_or_equal_to(0) }
 
     it { expect(enterprise).to allow_value('').for(:idp_sso_target_url) }
-    it { expect(enterprise).to allow_value('').for(:redirect_email_contact) }
-    it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
-    it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
   end
 
   describe 'Enterprise emails' do
@@ -664,27 +661,42 @@ RSpec.describe Enterprise, type: :model do
     end
   end
 
-  describe '#redirect_email_contact' do
-    it 'does not save bad email' do
-      enterprise = build(:enterprise, redirect_email_contact: 'fkakaodsd')
-      enterprise.save
+  describe '#validations' do
+    describe '#redirection_email' do
+      let!(:enterprise) { build(:enterprise) }
+      context 'redirect_all_emails is true' do
+        it 'redirection email is blank' do
+          enterprise.update redirect_all_emails: true, redirect_email_contact: ''
+          expect(enterprise).to_not be_valid
+        end
 
-      expect(enterprise.errors.full_messages.count).to eq(1)
-      expect(enterprise.errors.full_messages.first).to eq('Redirect email contact is invalid')
-    end
+        it 'redirection email is not an email' do
+          enterprise.update redirect_all_emails: true, redirect_email_contact: 'abc123'
+          expect(enterprise).to_not be_valid
+        end
 
-    it 'does save email' do
-      enterprise = build(:enterprise, redirect_email_contact: 'test@gmail.com')
-      enterprise.save
+        it 'redirection email is a valid email' do
+          enterprise.update redirect_all_emails: true, redirect_email_contact: 'info@diverst.com'
+          expect(enterprise).to be_valid
+        end
+      end
 
-      expect(enterprise.errors.full_messages.count).to eq(0)
-    end
+      context 'redirect_all_emails is false' do
+        it 'redirection email is blank' do
+          enterprise.update redirect_all_emails: false, redirect_email_contact: ''
+          expect(enterprise).to be_valid
+        end
 
-    it 'allows blank email' do
-      enterprise = build(:enterprise, redirect_email_contact: '')
-      enterprise.save
+        it 'redirection email is not an email' do
+          enterprise.update redirect_all_emails: false, redirect_email_contact: 'abc123'
+          expect(enterprise).to be_valid
+        end
 
-      expect(enterprise.errors.full_messages.count).to eq(0)
+        it 'redirection email is a valid email' do
+          enterprise.update redirect_all_emails: false, redirect_email_contact: 'info@diverst.com'
+          expect(enterprise).to be_valid
+        end
+      end
     end
 
     describe '#archive_switch' do
