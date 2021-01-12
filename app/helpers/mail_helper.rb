@@ -1,6 +1,5 @@
 module MailHelper
   def set_defaults(enterprise, method_name)
-    @embedded_enterprise_logo = inline_enterprise_logo
     if enterprise.redirect_all_emails? && enterprise.redirect_email_contact.present?
       @email = enterprise.redirect_email_contact
     elsif enterprise.redirect_all_emails? && enterprise.redirect_email_contact.blank?
@@ -28,30 +27,5 @@ module MailHelper
 
   def method_name
     caller[0] =~ (/`([^']*)'/) && $1
-  end
-
-  def enterprise_logo_url(enterprise = nil)
-    enterprise_logo_or_default_('diverst-logo.svg', enterprise)
-  end
-
-  def inline_enterprise_logo
-    if @enterprise && @enterprise.theme.present? && @enterprise.theme.logo.present?
-      attachments.inline[@enterprise.theme.logo_file_name] = File.read(@enterprise.theme.logo.path)
-      attachments[@enterprise.theme.logo_file_name].url
-    else
-      attachments.inline['diverst-logo.svg'] = File.read(File.join(Rails.root, 'app', 'assets', 'images', 'diverst-logo.svg'))
-      attachments['diverst-logo.svg'].url
-    end
-  end
-
-
-  private
-
-  def enterprise_logo_or_default_(default_logo_name, enterprise = nil)
-    if enterprise && enterprise.theme.present? && enterprise.theme.logo.present?
-      image_url(enterprise.theme.logo.expiring_url(3601))
-    else
-      image_url(default_logo_name)
-    end
   end
 end
