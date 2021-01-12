@@ -76,6 +76,9 @@ export default defineMessages({
   xml_sso_config: {
     id: `${scope}.xml_sso_config`,
   },
+  xml_sso_fields_label: {
+    id: `${scope}.xml_sso_fields_label`,
+  },
   idp_url: {
     id: `${scope}.idp_url`,
   },
