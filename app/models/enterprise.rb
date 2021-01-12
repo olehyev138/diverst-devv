@@ -197,12 +197,14 @@ class Enterprise < ApplicationRecord
 
     settings.assertion_consumer_service_url = "#{ENV['BACKEND_DOMAIN']}/api/v1/enterprises/#{id}/sso_login"
 
-    # override xml file settings with enterprise settings, if they are present
-    settings.issuer = sp_entity_id                    if sp_entity_id.present?
-    settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
-    settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
-    settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
-    settings.idp_cert = idp_cert                      if idp_cert.present?
+    # use enterprise settings, if they are present and xml file isn't attached
+    unless xml_sso_config.attached?
+      settings.issuer = sp_entity_id                    if sp_entity_id.present?
+      settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
+      settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
+      settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
+      settings.idp_cert = idp_cert                      if idp_cert.present?
+    end
 
     settings.security[:authn_requests_signed] = false
     settings.security[:logout_requests_signed] = false
