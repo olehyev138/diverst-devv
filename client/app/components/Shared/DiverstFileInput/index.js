@@ -20,7 +20,8 @@ import messages from 'components/Shared/DiverstFileInput/messages';
 
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
-import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileMessages, getSupportedImageFileMessages } from 'utils/fileInputHelpers';
+import { getSupportedImageFileTypes, getAllSupportedFileTypes, getAllSupportedFileMessages,
+  getSupportedImageFileMessages, getSupportedXMLFileTypes, getSupportedXMLFileMessages } from 'utils/fileInputHelpers';
 
 const styles = theme => ({
   fileInput: {
@@ -117,8 +118,23 @@ export function DiverstFileInput(props) {
   } = rest;
 
   const [notAcceptedFile, setNotAcceptedFile] = useState(false);
-  const acceptFileTypes = fileType === 'image' ? getSupportedImageFileTypes() : getAllSupportedFileTypes();
-  const acceptFileTypeNames = fileType === 'image' ? getSupportedImageFileMessages() : getAllSupportedFileMessages();
+  let acceptFileTypes;
+  let acceptFileTypeNames;
+
+  switch (fileType) {
+    case 'image':
+      acceptFileTypes = getSupportedImageFileTypes();
+      acceptFileTypeNames = getSupportedImageFileMessages();
+      break;
+    case 'text/xml':
+      acceptFileTypes = getSupportedXMLFileTypes();
+      acceptFileTypeNames = getSupportedXMLFileMessages();
+      break;
+    default:
+      acceptFileTypes = getAllSupportedFileTypes();
+      acceptFileTypeNames = getAllSupportedFileMessages();
+  }
+
   // TODO : Add customTExts to intl.formatMessage
   return (
     <React.Fragment>
