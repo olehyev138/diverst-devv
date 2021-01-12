@@ -2,7 +2,9 @@
    <div class="flex-row__cell" style="padding-bottom: 1%">
      <h1 style="background-color: <%= @enterprise&.theme&.primary_color || '' %> !important;
                 height: 76px;">
-       <%= image_tag(@embedded_enterprise_logo, height: '60%', width: 'auto', alt: "#{@enterprise&.name} logo" ) %> 
+       <% if @enterprise&.theme&.logo.present? %>
+         <%= image_tag(@embedded_enterprise_logo, height: '60%', width: 'auto', alt: "#{@enterprise&.name} logo" ) %> 
+       <% end %>  
      </h1>
    </div>  
  </header>
