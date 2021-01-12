@@ -73,6 +73,9 @@ export default defineMessages({
   plan_module: {
     id: `${scope}.switch.plan_module`,
   },
+  xml_sso_config: {
+    id: `${scope}.xml_sso_config`,
+  },
   idp_url: {
     id: `${scope}.idp_url`,
   },

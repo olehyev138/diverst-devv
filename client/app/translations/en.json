@@ -405,6 +405,7 @@
   "diverst.containers.GlobalSettings.Configurations.certificate": "Certificate",
   "diverst.containers.GlobalSettings.Configurations.from_display_name": "Default from email display name",
   "diverst.containers.GlobalSettings.Configurations.from_email": "Default from email",
+  "diverst.containers.GlobalSettings.Configurations.xml_sso_config": "XML Config File (overrides below settings)",
   "diverst.containers.GlobalSettings.Configurations.idp_url": "IdP Metadata URL",
   "diverst.containers.GlobalSettings.Configurations.label.archive_setting": "Archive Settings",
   "diverst.containers.GlobalSettings.Configurations.label.email_setting": "Email Settings",
