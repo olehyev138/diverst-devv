@@ -1,10 +1,7 @@
  <header class="primary-header" style="height: 10%;">
    <div class="flex-row__cell" style="padding-bottom: 1%">
      <h1 style="background-color: <%= @enterprise&.theme&.primary_color || '' %> !important;
-                height: 76px;">
-       <% if @enterprise&.theme&.logo.present? %>
-         <%= image_tag(@embedded_enterprise_logo, height: '60%', width: 'auto', alt: "#{@enterprise&.name} logo" ) %> 
-       <% end %>  
+                height: 76px;"> 
      </h1>
    </div>  
  </header>
