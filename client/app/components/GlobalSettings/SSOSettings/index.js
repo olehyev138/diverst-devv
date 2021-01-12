@@ -19,6 +19,8 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
+
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -30,6 +32,21 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
   return (
     <Card>
       <Form>
+        <CardContent>
+          <Field
+            component={DiverstFileInput}
+            fileName={props.enterprise && props.enterprise.xml_sso_config_file_name}
+            disabled={props.isCommitting}
+            fullWidth
+            id='xml_sso_config'
+            name='xml_sso_config'
+            margin='normal'
+            label={<DiverstFormattedMessage {...messages.xml_sso_config} />}
+            value={values.xml_sso_config}
+            fileType='text/xml'
+          />
+        </CardContent>
+        <Divider />
         <CardContent>
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
@@ -137,6 +154,7 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
 export function SSOSettings(props) {
   const initialValues = buildValues(props.enterprise, {
     id: { default: '' },
+    xml_sso_config: { default: null },
     idp_entity_id: { default: '' },
     idp_sso_target_url: { default: '' },
     idp_slo_target_url: { default: '' },
@@ -187,7 +205,8 @@ SSOSettingsInner.propTypes = {
   values: PropTypes.object,
   isCommitting: PropTypes.bool,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  enterprise: PropTypes.object,
 };
 
 export default compose(

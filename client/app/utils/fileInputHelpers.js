@@ -40,3 +40,15 @@ export function getSupportedImageFileKeys() {
 export function getSupportedImageFileMessages() {
   return Object.values(supportedFiles).filter(item => item.category === 'image').map(item => item.message);
 }
+
+export function getSupportedXMLFileTypes() {
+  return Object.values(supportedFiles).filter(item => item.type === 'text/xml').map(item => item.type);
+}
+
+export function getSupportedXMLFileKeys() {
+  return Object.keys(supportedFiles).filter(key => supportedFiles[key].type === 'text/xml');
+}
+
+export function getSupportedXMLFileMessages() {
+  return Object.values(supportedFiles).filter(item => item.type === 'text/xml').map(item => item.message);
+}

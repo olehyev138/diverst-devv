@@ -80,6 +80,7 @@ class Api::V1::EnterprisesController < DiverstController
     item = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(item)
 
+    item.xml_sso_config.purge_later if item.xml_sso_config.attached? && params[:xml_sso_config].blank?
     updated_item = klass.update(self.diverst_request, params)
     track_activity(updated_item)
     render status: 200, json: updated_item, serializer: AuthenticatedEnterpriseSerializer
@@ -121,6 +122,7 @@ class Api::V1::EnterprisesController < DiverstController
         .require(klass.symbol)
         .permit(
             :sp_entity_id,
+            :xml_sso_config,
             :idp_entity_id,
             :idp_sso_target_url,
             :idp_slo_target_url,
@@ -156,6 +158,7 @@ class Api::V1::EnterprisesController < DiverstController
     .permit(
       :name,
       :id,
+      :xml_sso_config,
       :sp_entity_id,
       :idp_entity_id,
       :idp_sso_target_url,

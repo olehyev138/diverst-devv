@@ -11,7 +11,8 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :unit_of_expiry_age, :auto_archive, :theme, :timezones, :time_zone,
              :banner, :banner_file_name, :banner_data, :banner_content_type, :onboarding_consent_enabled, :onboarding_consent_message
 
-  attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, :sponsors, if: :singular_action?
+  attributes_with_permission :custom_text, :mentoring_types, :mentoring_interests, :sponsors,
+                             :xml_sso_config, :xml_sso_config_file_name, :xml_sso_config_data, :xml_sso_config_content_type, if: :singular_action?
 
   def custom_text
     CustomTextSerializer.new(object.custom_text).as_json
@@ -35,6 +36,22 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
 
   def banner_content_type
     AttachmentHelper.attachment_content_type(object.banner)
+  end
+
+  def xml_sso_config
+    AttachmentHelper.attachment_signed_id(object.xml_sso_config)
+  end
+
+  def xml_sso_config_file_name
+    AttachmentHelper.attachment_file_name(object.xml_sso_config)
+  end
+
+  def xml_sso_config_data
+    AttachmentHelper.attachment_data_string(object.xml_sso_config)
+  end
+
+  def xml_sso_config_content_type
+    AttachmentHelper.attachment_data_string(object.xml_sso_config)
   end
 
   def theme
