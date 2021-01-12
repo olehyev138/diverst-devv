@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Card, CardActions, CardContent, Grid,
+  Card, CardActions, CardContent, Grid, Box,
   TextField, Divider, Typography, FormControl, FormControlLabel, Switch,
 } from '@material-ui/core';
 import { Field, Formik, Form } from 'formik';
@@ -25,6 +25,12 @@ const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
   },
+  noTopPadding: {
+    paddingTop: '0 !important',
+  },
+  xmlSSOFieldsLabel: {
+    fontSize: 16,
+  },
 });
 
 /* eslint-disable object-curly-newline */
@@ -32,6 +38,28 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
   return (
     <Card>
       <Form>
+        <CardContent>
+          <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.saml_setting} /></Typography>
+          <FormControl>
+            <FormControlLabel
+              labelPlacement='end'
+              label={<DiverstFormattedMessage {...messages.saml_enable} />}
+              control={(
+                <Field
+                  component={Switch}
+                  onChange={handleChange}
+                  color='primary'
+                  id='has_enabled_saml'
+                  name='has_enabled_saml'
+                  margin='normal'
+                  checked={values.has_enabled_saml}
+                  value={values.has_enabled_saml}
+                />
+              )}
+            />
+          </FormControl>
+        </CardContent>
+        <Divider />
         <CardContent>
           <Field
             component={DiverstFileInput}
@@ -46,8 +74,15 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
             fileType='text/xml'
           />
         </CardContent>
+        <Box mb={3} />
         <Divider />
         <CardContent>
+          <Typography variant='h6' color='secondary' className={classes.xmlSSOFieldsLabel}>
+            <DiverstFormattedMessage {...messages.xml_sso_fields_label} />
+          </Typography>
+        </CardContent>
+        <Divider />
+        <CardContent className={classes.noTopPadding}>
           <Grid container>
             <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
@@ -115,29 +150,6 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
             </Grid>
           </Grid>
         </CardContent>
-        <Card variant='outlined'>
-          <CardContent>
-            <Typography variant='h6' color='primary'><DiverstFormattedMessage {...messages.saml_setting} /></Typography>
-            <FormControl>
-              <FormControlLabel
-                labelPlacement='end'
-                label={<DiverstFormattedMessage {...messages.saml_enable} />}
-                control={(
-                  <Field
-                    component={Switch}
-                    onChange={handleChange}
-                    color='primary'
-                    id='has_enabled_saml'
-                    name='has_enabled_saml'
-                    margin='normal'
-                    checked={values.has_enabled_saml}
-                    value={values.has_enabled_saml}
-                  />
-                )}
-              />
-            </FormControl>
-          </CardContent>
-        </Card>
         <Divider />
         <CardActions>
           <DiverstSubmit
