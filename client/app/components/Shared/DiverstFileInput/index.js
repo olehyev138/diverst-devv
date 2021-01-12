@@ -85,7 +85,7 @@ const styles = theme => ({
   }
 });
 
-const apiURL = new URL(config.apiUrl);
+const apiURL = new URL(config.apiUrl || 'http://localhost:3000/api/v1');
 
 export function DiverstFileInput(props) {
   const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, intl, fileType, ...rest } = props;
