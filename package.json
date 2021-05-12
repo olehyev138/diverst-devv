@@ -3,7 +3,7 @@
     "@claviska/jquery-dropdown": "2.0.3",
     "bootstrap": "3.3.7",
     "bootstrap-timepicker": "0.5.2",
-    "codemirror": "5.44.0",
+    "codemirror": "5.58.2",
     "d3": "3.5.4",
     "datatables.net": "1.10.19",
     "firebase": "5.9.0",
