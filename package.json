@@ -5,7 +5,7 @@
     "bootstrap-timepicker": "0.5.2",
     "codemirror": "5.44.0",
     "d3": "3.5.4",
-    "datatables.net": "1.10.19",
+    "datatables.net": "1.11.3",
     "firebase": "5.9.0",
     "firepad": "1.5.3",
     "flip": "nnattawat/flip",
