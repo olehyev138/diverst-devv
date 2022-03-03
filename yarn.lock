@@ -1452,10 +1452,10 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-urijs@1.18.2:
-  version "1.18.2"
-  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.18.2.tgz#c2791fa9fb52f4603caf36032d9666432a1dda33"
-  integrity sha1-wnkfqftS9GA8rzYDLZZmQyod2jM=
+urijs@1.19.9:
+  version "1.19.9"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.9.tgz#3b15844835de3732866d420768c16f24be7d3e65"
+  integrity sha512-v0V+v5F3NQFt6TX0GpA2NKyrpythDJI+PHRo66sUIDP/U6cXbm6NqLVcXylQGwiwW5VYNj+OAei3EU0ALj9AWg==
 
 util-deprecate@~1.0.1:
   version "1.0.2"
