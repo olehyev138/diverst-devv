@@ -15,7 +15,7 @@
     "jquery-embedly": "https://github.com/embedly/embedly-jquery",
     "jscolor": "https://github.com/EastDesire/jscolor",
     "jsdom": "12.2.0",
-    "moment": "2.15.2",
+    "moment": "2.29.4",
     "nvd3": "1.8.6",
     "pikaday-time": "https://github.com/owenmead/Pikaday#1.5.1",
     "rangeslider.js": "2.2.1",
