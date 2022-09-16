@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@claviska/jquery-dropdown": "2.0.3",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "bootstrap-timepicker": "0.5.2",
     "codemirror": "5.44.0",
     "d3": "3.5.4",
